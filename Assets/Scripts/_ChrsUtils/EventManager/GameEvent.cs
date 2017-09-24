@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 /*--------------------------------------------------------------------------------------*/
@@ -16,14 +14,62 @@ public abstract class GameEvent
 
 public class ButtonPressed : GameEvent
 {
-    public string button;
-    public int playerNum;
+    public readonly string button;
+    public readonly int playerNum;
     public ButtonPressed(string _button, int _playerNum)
     {
         button = _button;
         playerNum = _playerNum;
     }
 }
+
+public class TriggerAxisEvent : GameEvent
+{
+    public readonly float rightAxis;
+    public readonly float leftAxis;
+    public readonly int playerNum;
+    public TriggerAxisEvent(float _rightAxis, float _leftAxis, int _playerNum)
+    {
+        rightAxis = _rightAxis;
+        leftAxis = _leftAxis;
+        playerNum = _playerNum;
+    }
+}
+
+public class LeftStickAxisEvent : GameEvent
+{
+    public readonly IntVector2 leftStickAxis;
+    public readonly int playerNum;
+    public LeftStickAxisEvent(IntVector2 _leftStickAxis, int _playerNum)
+    {
+        leftStickAxis = _leftStickAxis;
+        playerNum = _playerNum;
+    }
+}
+
+public class DPadAxisEvent : GameEvent
+{
+    public readonly IntVector2 dPadAxis;
+    public readonly int playerNum;
+    public DPadAxisEvent(IntVector2 _dPadAxis, int _playerNum)
+    {
+        dPadAxis = _dPadAxis;
+        playerNum = _playerNum;
+    }
+}
+
+public class RightStickAxisEvent : GameEvent
+{
+    public readonly IntVector2 rightStickAxis;
+    public readonly int playerNum;
+    public RightStickAxisEvent(IntVector2 _rightStickAxis, int _playerNum)
+    {
+        rightStickAxis = _rightStickAxis;
+        playerNum = _playerNum;
+    }
+}
+
+
 
 public class KeyPressedEvent : GameEvent
 {

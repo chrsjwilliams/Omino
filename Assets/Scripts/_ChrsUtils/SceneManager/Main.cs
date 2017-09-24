@@ -78,13 +78,15 @@ public class Main : MonoBehaviour
     {
         Services.Main = this;
 
+        Services.GameEventManager = new GameEventsManager();
+
         Services.GameManager = GetComponent<GameManager>();
-        Services.GameManager.Init();
+        Services.GameManager.Init(2);
 
         Services.MapManager = GetComponent<MapManager>();
         Services.MapManager.Init();
 
-        Services.GameEventManager = new GameEventsManager();
+        
         Services.GeneralTaskManager = new TaskManager();
         Services.Prefabs = Resources.Load<PrefabDB>("Prefabs/PrefabDB");
         Services.InputManager = new InputManager();

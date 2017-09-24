@@ -7,17 +7,29 @@ public class Player : MonoBehaviour
      *      This class will hold color info and total
      *      number of tiles controlled by that color.
      * 
-     */ 
-    [SerializeField] private Color _activeTilePrimaryColor;
-    public Color ActiveTilePrimaryColor
+     */
+    [SerializeField] private int _xCoord;
+    public int XCoord
     {
-        get { return _activeTilePrimaryColor; }
+        get { return _xCoord; }
     }
 
-    [SerializeField] private Color _activeTileSecondaryColor;
-    public Color ActiveTileSecondaryColor
+    [SerializeField] private int _yCoord;
+    public int YCoord
     {
-        get { return _activeTileSecondaryColor; }
+        get { return _yCoord; }
+    }
+
+    [SerializeField] private Color[] _activeTilePrimaryColors = new Color[2];
+    public Color[] ActiveTilePrimaryColors
+    {
+        get { return _activeTilePrimaryColors; }
+    }
+
+    [SerializeField] private Color[] _activeTileSecondaryColors = new Color[2];
+    public Color[] ActiveTileSecondaryColors
+    {
+        get { return _activeTileSecondaryColors; }
     }
 
     [SerializeField] private int _tilesControlled;
@@ -32,14 +44,33 @@ public class Player : MonoBehaviour
         get { return _strongholdsBuilt; }
     }
 
+    private CursorPosition position;
+
     // Use this for initialization
-    void Start ()
+    public void Init(Color[] colorScheme, int posOffset)
     {
-        
-	}
-	
-	// Update is called once per frame
-	void Update ()
+        _activeTilePrimaryColors[0] = colorScheme[0];
+        _activeTilePrimaryColors[1] = colorScheme[1];
+
+        _activeTileSecondaryColors[0] = colorScheme[2];
+        _activeTileSecondaryColors[1] = colorScheme[3];
+
+        position = GetComponent<CursorPosition>();
+        position.SetPosition(posOffset * (Services.MapManager.MapWidth - 1), posOffset * (Services.MapManager.MapLength - 1));
+    }
+
+    public void MovePlayerLeftStick(IntVector2 axis)
+    {
+        position.LeftStickMotion(axis);
+    }
+
+    public void MovePlayerDPad(IntVector2 axis)
+    {
+        position.DPadMotion(axis);
+    }
+
+    // Update is called once per frame
+    void Update ()
     {
 		
 	}

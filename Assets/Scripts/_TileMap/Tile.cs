@@ -6,35 +6,10 @@ public class Tile : MonoBehaviour
 {
     [SerializeField] private bool _isActive;
     public bool isActive
-    {   get { return _isActive; }
-        set
-        {
-            _isActive = value;
-            if (_isActive)
-            {
-                //  Need to change this based on which player activates a tile
-                if ((coord.x + coord.y) % 2 == 0)
-                {
-                    material.color = Services.GameManager.PlayerColorScheme[0];
-                }
-                else
-                {
-                    material.color = Services.GameManager.PlayerColorScheme[0];
-                }
-            }
-            else
-            {
-                if ((coord.x + coord.y) % 2 == 0)
-                {
-                    material.color = Services.GameManager.MapColorScheme[0];
-                }
-                else
-                {
-                    material.color = Services.GameManager.MapColorScheme[1];
-                }
-            }
-        }
+    {
+        get { return _isActive; }
     }
+
     public Coord coord { get; private set; }
     public BoxCollider boxCol { get; private set; }
     public Material material { get; set; }
@@ -69,5 +44,32 @@ public class Tile : MonoBehaviour
             material.color = color2;
         }
         boxCol = GetComponent<BoxCollider>();
+    }
+
+    public void ActivateTile(Player player)
+    {
+        _isActive = true;
+ 
+        if ((coord.x + coord.y) % 2 == 0)
+        {
+            material.color = player.ActiveTilePrimaryColors[0];
+        }
+        else
+        {
+            material.color = player.ActiveTilePrimaryColors[1];
+        }
+    }
+
+    public void DeactivateTile()
+    {
+        _isActive = false;
+        if ((coord.x + coord.y) % 2 == 0)
+        {
+            material.color = Services.GameManager.MapColorScheme[0];
+        }
+        else
+        {
+            material.color = Services.GameManager.MapColorScheme[1];
+        }
     }
 }

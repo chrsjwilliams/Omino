@@ -52,7 +52,7 @@ public class MapManager : MonoBehaviour
                 tile.name = "Tile [X: " + i + ", Y: " + j + "]";
             }
         }
-        Map[0, 0].isActive = true;
+        
     }
 
     public IntVector2 CenterIndexOfGrid()
@@ -60,11 +60,40 @@ public class MapManager : MonoBehaviour
         return new IntVector2(_mapWidth / 2, _mapLength / 2);
     }
 
-    public void ActivateTile(Tile tile)
+    public void ActivateBase(Player player)
+    {
+        for(int x = 0; x < Services.GameManager.baseWidth; x++)
+        {
+            for ( int y = 0; y < Services.GameManager.baseLength; y++)
+            {
+                ForceActivateTile(Map[x, y], player);
+            }
+        }
+    }
+
+    public void ForceActivateTile(Tile tile, Player player)
+    {
+        tile.ActivateTile(player);
+    }
+
+    public void ForceDeactivateTile(Tile tile)
+    {
+        tile.DeactivateTile();
+    }
+
+    public void ActivateTile(Tile tile, Player player)
     {
         if (ValidateTile(tile))
         {
-            tile.isActive = !tile.isActive;
+            tile.ActivateTile(player);
+        }
+    }
+
+    public void DeactivateTile(Tile tile)
+    {
+        if (ValidateTile(tile))
+        {
+            tile.DeactivateTile();
         }
     }
 

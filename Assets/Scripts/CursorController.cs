@@ -25,6 +25,7 @@ public class CursorController : MonoBehaviour
     private int _mirrorRotationIndex;
     private int[] _mirrorRotationPossibilities = new int[2];
 
+    private Player _player;
     private CursorPosition _location;
 
     // Use this for initialization
@@ -40,6 +41,7 @@ public class CursorController : MonoBehaviour
         _mirrorRotationPossibilities[0] = 0;
         _mirrorRotationPossibilities[1] = 180;
 
+        _player = GetComponent<Player>();
         _location = GetComponent<CursorPosition>();
 
         _cursorIndex = 0;
@@ -64,7 +66,7 @@ public class CursorController : MonoBehaviour
         if(e.key == KeyCode.Z && CursorIndex % Services.Prefabs.Cursors.Length == 0)
         {
             //  This can be used to place peices
-            Services.MapManager.ActivateTile(Services.MapManager.Map[_location.X, _location.Y]);
+            Services.MapManager.ActivateTile(Services.MapManager.Map[_location.X, _location.Y], _player);
         }
 
         if (e.key == rotateRight)
@@ -108,7 +110,6 @@ public class CursorController : MonoBehaviour
         _currentCursor.name = cursorName;
 
         _currentCursor.transform.parent = transform;
-        _currentCursor.GetComponent<CursorPosition>().SetPosition(_location.X, _location.Y);
     }
 
     private void RotateCursor(int rotationIndex)

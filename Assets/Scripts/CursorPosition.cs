@@ -42,6 +42,8 @@ public class CursorPosition : MonoBehaviour
         }
     }
 
+    private bool resetLeftStick = false;
+    private bool resetDPad = false;
     private float _worldSpaceOffset;
 
     [SerializeField] private KeyCode upKey = KeyCode.UpArrow;
@@ -83,6 +85,27 @@ public class CursorPosition : MonoBehaviour
         if (e.button == "X") { }
 
         if (e.button == "Y") { }
+    }
+
+    public void LeftStickMotion(IntVector2 axis)
+    {
+        resetLeftStick = !resetLeftStick;
+        if (resetLeftStick && !_disableMovement)
+        {
+            X -= axis.x;
+            Y += axis.y;         
+        }
+    }
+
+    public void DPadMotion(IntVector2 axis)
+    {
+
+        resetDPad = !resetDPad;
+        if (resetDPad && !_disableMovement)
+        {
+            X -= axis.x;
+            Y -= axis.y;
+        }
     }
 
     private void OnKeyPressed(KeyPressedEvent e)

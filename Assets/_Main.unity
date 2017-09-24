@@ -224,8 +224,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1393678244}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -258,7 +257,10 @@ MonoBehaviour:
   _numPlayers: 0
   _mainCamera: {fileID: 0}
   _players: []
-  _playerColorScheme: []
+  baseWidth: 0
+  baseLength: 0
+  _player1ColorScheme: []
+  _player2ColorScheme: []
   _mapColorScheme: []
 --- !u!114 &1356268955
 MonoBehaviour:
@@ -273,58 +275,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mapWidth: 0
   _mapLength: 0
---- !u!1001 &1393678243
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1356268952}
-    m_Modifications:
-    - target: {fileID: 4547974140374762, guid: 07341db1ddf8c844f9bef1a983e6c745, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4547974140374762, guid: 07341db1ddf8c844f9bef1a983e6c745, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4547974140374762, guid: 07341db1ddf8c844f9bef1a983e6c745, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4547974140374762, guid: 07341db1ddf8c844f9bef1a983e6c745, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4547974140374762, guid: 07341db1ddf8c844f9bef1a983e6c745, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4547974140374762, guid: 07341db1ddf8c844f9bef1a983e6c745, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4547974140374762, guid: 07341db1ddf8c844f9bef1a983e6c745, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4547974140374762, guid: 07341db1ddf8c844f9bef1a983e6c745, type: 2}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114610247839054130, guid: 07341db1ddf8c844f9bef1a983e6c745,
-        type: 2}
-      propertyPath: m_Text
-      value: RTS Blokus
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 07341db1ddf8c844f9bef1a983e6c745, type: 2}
-  m_IsPrefabParent: 0
---- !u!4 &1393678244 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 4547974140374762, guid: 07341db1ddf8c844f9bef1a983e6c745,
-    type: 2}
-  m_PrefabInternal: {fileID: 1393678243}
 --- !u!1 &1409279516
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 33997929482726280}
   - component: {fileID: 65755490851825576}
   - component: {fileID: 23996839768851384}
-  - component: {fileID: 114381615135432740}
   m_Layer: 0
   m_Name: Cursor
   m_TagString: Untagged
@@ -94,21 +93,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114381615135432740
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1085283573192790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7c9c84276379444fa4112b8946ac484, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _disableMovement: 0
-  offsetX: 0
-  offsetY: 0
-  upKey: 273
-  downKey: 274
-  leftKey: 276
-  rightKey: 275

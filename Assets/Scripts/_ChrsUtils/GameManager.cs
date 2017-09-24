@@ -37,10 +37,19 @@ public class GameManager : MonoBehaviour
         get { return _players; }
     }
 
-    [SerializeField] private Color[] _playerColorScheme;
-    public Color[] PlayerColorScheme
+    public int baseWidth;
+    public int baseLength;
+
+    [SerializeField] private Color[] _player1ColorScheme;
+    public Color[] Player1ColorScheme
     {
-        get { return _playerColorScheme; }
+        get { return _player1ColorScheme; }
+    }
+
+    [SerializeField] private Color[] _player2ColorScheme;
+    public Color[] Player2ColorScheme
+    {
+        get { return _player2ColorScheme; }
     }
 
     [SerializeField] private Color[] _mapColorScheme;
@@ -49,57 +58,102 @@ public class GameManager : MonoBehaviour
         get { return _mapColorScheme; }
     }
 
+    private void Awake()
+    {
+        Services.GameEventManager.Register<LeftStickAxisEvent>(OnLeftStickMoved);
+        Services.GameEventManager.Register<DPadAxisEvent>(OnDPadPressed);
+    }
+
     public void Init()
     {
+        baseWidth = 3;
+        baseLength = 3;
         NumPlayers = 1;
         _mainCamera = Camera.main;
 
         _players = new Player[NumPlayers];
         InitGameColors();
+        
     }
 
 	// Use this for initialization
 	public void Init (int players)
     {
-        NumPlayers = players;
+        baseWidth = 3;
+        baseLength = 3;
+        _numPlayers = players;
         _mainCamera = Camera.main;
         _players = new Player[NumPlayers];
-        InitPlayers();
         InitGameColors();
     }
 
     public void InitPlayers()
     {
-        for(int i = 0; i < NumPlayers; i++)
+        int xCoord = Services.MapManager.MapWidth - 1;
+        int yCoord = Services.MapManager.MapLength - 1;
+
+        for (int i = 0; i < NumPlayers; i++)
         {
+
             _players[i] = Instantiate(  Services.Prefabs.Player, 
-                                        Services.MapManager.Map[0,0].gameObject.transform.position, 
+                                        Services.MapManager.Map[0, 0].gameObject.transform.position, 
                                         Quaternion.identity, 
                                         Services.Main.transform).GetComponent<Player>();
 
-            _players[i].name = PLAYER + " " + i + 1;
+            int playerNum = i + 1;
+            _players[i].name = PLAYER + " " + playerNum;
+            _players[i].transform.parent = Services.Scenes.CurrentScene.transform;
+            switch (i)
+            {
+                case 0:
+                    _players[0].Init(_player1ColorScheme, 0);
+                    break;
+                case 1:
+                    _players[1].Init(_player2ColorScheme, 1);
+                    break;
+                default:
+                    break;
+            }
         }
+
+        Services.MapManager.ActivateBase(_players[0]);
     }
 	
-
     private void InitGameColors()
     {
-        _playerColorScheme = new Color[4];
+        _player1ColorScheme = new Color[4];
 
-        _playerColorScheme[0] = Color.red;
-        _playerColorScheme[1] = Color.yellow;
-        _playerColorScheme[2] = Color.green;
-        _playerColorScheme[3] = Color.blue;
+        _player1ColorScheme[0] = new Color(0.667f, 0.224f, 0.224f);
+        _player1ColorScheme[1] = new Color(0.831f, 0.416f, 0.416f);
+        _player1ColorScheme[2] = new Color(0.780f, 0.780f, 0.129f);
+        _player1ColorScheme[3] = new Color(0.996f, 0.996f, 0.467f);
+
+        _player2ColorScheme = new Color[4];
+
+        _player2ColorScheme[0] = new Color(0.376f, 0.694f, 0.114f);
+        _player2ColorScheme[1] = new Color(0.627f, 0.886f, 0.416f);
+        _player2ColorScheme[2] = new Color(0.149f, 0.196f, 0.537f);
+        _player2ColorScheme[3] = new Color(0.369f, 0.404f, 0.686f);
 
         _mapColorScheme = new Color[2];
 
-        _mapColorScheme[0] = new Color(0.3f, 0.3f, 0.3f);
-        _mapColorScheme[1] = new Color(0.7f, 0.7f, 0.7f);
+        _mapColorScheme[0] = new Color(0.5f, 0.5f, 0.5f);
+        _mapColorScheme[1] = new Color(0.8f, 0.8f, 0.8f);
     }
 
     public void ChangeCameraTo(Camera camera)
     {
         _mainCamera = camera;
+    }
+
+    private void OnLeftStickMoved(LeftStickAxisEvent e)
+    {
+        Player[e.playerNum - 1].MovePlayerLeftStick(e.leftStickAxis);
+    }
+
+    private void OnDPadPressed(DPadAxisEvent e)
+    {
+        Player[e.playerNum - 1].MovePlayerDPad(e.dPadAxis);
     }
 
     // Update is called once per frame
