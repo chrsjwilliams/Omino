@@ -115,8 +115,11 @@ public class GameManager : MonoBehaviour
                     break;
             }
         }
+        IntVector2 player1BasePos = new IntVector2(0, 0);
+        Services.MapManager.ActivateBase(_players[0], player1BasePos);
 
-        Services.MapManager.ActivateBase(_players[0]);
+        IntVector2 player2BasePos = new IntVector2(17, 17);
+        Services.MapManager.ActivateBase(_players[1], player2BasePos);
     }
 	
     private void InitGameColors()

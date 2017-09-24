@@ -60,11 +60,11 @@ public class MapManager : MonoBehaviour
         return new IntVector2(_mapWidth / 2, _mapLength / 2);
     }
 
-    public void ActivateBase(Player player)
+    public void ActivateBase(Player player, IntVector2 offset)
     {
-        for(int x = 0; x < Services.GameManager.baseWidth; x++)
+        for(int x = offset.x; x < Services.GameManager.baseWidth + offset.x; x++)
         {
-            for ( int y = 0; y < Services.GameManager.baseLength; y++)
+            for ( int y = offset.y; y < Services.GameManager.baseLength + offset.y; y++)
             {
                 ForceActivateTile(Map[x, y], player);
             }

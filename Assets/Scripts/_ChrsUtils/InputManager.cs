@@ -33,7 +33,7 @@ public class InputManager
             {
                 if (Input.GetButtonDown(button + "_P" + playerNum))
                 {
-                    Debug.Log(button);
+                    Debug.Log(button + playerNum);
                     Services.GameEventManager.Fire(new ButtonPressed(button, playerNum));
                 }
             }

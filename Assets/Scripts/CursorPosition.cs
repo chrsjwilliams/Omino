@@ -92,9 +92,10 @@ public class CursorPosition : MonoBehaviour
         resetLeftStick = !resetLeftStick;
         if (resetLeftStick && !_disableMovement)
         {
-            X -= axis.x;
-            Y += axis.y;         
+            X += axis.x;
+            Y -= axis.y;         
         }
+        AdjustTilePos();
     }
 
     public void DPadMotion(IntVector2 axis)
@@ -103,9 +104,10 @@ public class CursorPosition : MonoBehaviour
         resetDPad = !resetDPad;
         if (resetDPad && !_disableMovement)
         {
-            X -= axis.x;
-            Y -= axis.y;
+            X += axis.x;
+            Y += axis.y;
         }
+        AdjustTilePos();
     }
 
     private void OnKeyPressed(KeyPressedEvent e)
@@ -114,23 +116,32 @@ public class CursorPosition : MonoBehaviour
         {
             if(e.key == upKey)
             {
-                Y--;
+                Y++;
             }
             else if(e.key == downKey)
             {
-                Y++;
+                Y--;
             }
 
             if(e.key == leftKey)
             {
-                X++;
+                X--;
             }
             else if (e.key == rightKey)
             {
-                X--;
+                X++;
             }
         }
 
+        Vector3 tilePos = Services.MapManager.Map[X, Y].transform.position;
+
+        //  Places the cursor slight above the grid map
+        tilePos = new Vector3(tilePos.x, tilePos.y + _worldSpaceOffset, tilePos.z);
+        transform.position = tilePos;
+    }
+
+    private void AdjustTilePos()
+    {
         Vector3 tilePos = Services.MapManager.Map[X, Y].transform.position;
 
         //  Places the cursor slight above the grid map

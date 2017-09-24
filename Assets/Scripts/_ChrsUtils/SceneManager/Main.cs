@@ -4,7 +4,6 @@ using UnityEngine.Assertions;
 #region Main.cs Overview
 /************************************************************************************************************************/
 /*                                                                                                                      */
-/*     Seneca starts running fdorm this script.                                                                         */
 /*                                                                                                                      */
 /*    Main.cs is responsible  for:                                                                                      */
 /*    Instantiating the ScenePrefab Database which holds a prefab for all scenes in the game.                           */
