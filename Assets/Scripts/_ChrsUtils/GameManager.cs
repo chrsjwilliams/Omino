@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour
         get { return _players; }
     }
 
+    public GameObject ownedByPlayer1;
+    public GameObject ownedByPlayer2;
+
     public int baseWidth;
     public int baseLength;
 
@@ -89,6 +92,9 @@ public class GameManager : MonoBehaviour
 
     public void InitPlayers()
     {
+        ownedByPlayer1 = GameObject.Find("Owner: Player1");
+        ownedByPlayer2 = GameObject.Find("Owner: Player2");
+
         int xCoord = Services.MapManager.MapWidth - 1;
         int yCoord = Services.MapManager.MapLength - 1;
 

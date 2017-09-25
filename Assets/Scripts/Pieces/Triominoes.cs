@@ -5,18 +5,23 @@ using UnityEngine;
 
 public class Triominoes : Polyominoes
 {
-    protected override void Start()
+    public Triominoes()
     {
         variations = 2;
         width = 3;
         length = 3;
+
+        holder = new GameObject();
+        string holderName = "TriominoHolder";
+        holder.name = holderName;
+
+        GenerateTemplate();
+
+        Services.GameEventManager.Register<PlacePieceEvent>(OnPlacePiece);
     }
 
     public override void GenerateTemplate()
     {
-        variations = 2;
-        width = 3;
-        length = 3;
         piece = new int[2, 3, 3] 
         { 
             //  ###
@@ -34,27 +39,5 @@ public class Triominoes : Polyominoes
                 {0,0,0 }
             }
         };
-    }
-
-    public override void InitTemplate()
-    {
-
-    }
-
-    public override void Create(int index)
-    {
-        if (index < 0)
-            index = 0;
-
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < length; y++)
-            {
-                if (piece[index, x, y] == 1)
-                {
-                    //  Instantiate Tile
-                }
-            }
-        }
     }
 }

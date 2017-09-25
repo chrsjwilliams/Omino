@@ -47,7 +47,7 @@ public class MapManager : MonoBehaviour
                     .GetComponent<Tile>();
                 tile.transform.parent = GameSceneScript.tileMapHolder;
                 
-                tile.Init(new Coord(i, j));
+                tile.Init(new Coord(i, j), 0);
                 _map[i, j] = tile;
                 tile.name = "Tile [X: " + i + ", Y: " + j + "]";
             }

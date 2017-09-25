@@ -5,18 +5,24 @@ using UnityEngine;
 
 public class Pentominoes : Polyominoes
 {
-    protected override void Start()
+    public Pentominoes()
     {
         variations = 12;
         width = 5;
         length = 5;
+
+        holder = new GameObject();
+        string holderName = "PentominoHolder";
+        holder.name = holderName;
+
+        GenerateTemplate();
+
+        Services.GameEventManager.Register<PlacePieceEvent>(OnPlacePiece);
+
     }
 
     public override void GenerateTemplate()
     {
-        variations = 12;
-        width = 5;
-        length = 5;
         piece = new int[12, 5, 5]
         { 
             //  F Shape
@@ -155,27 +161,5 @@ public class Pentominoes : Polyominoes
             }
 
         };
-    }
-
-    public override void InitTemplate()
-    {
-
-    }
-
-    public override void Create(int index)
-    {
-        if (index < 0)
-            index = 0;
-
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < length; y++)
-            {
-                if (piece[index, x, y] == 1)
-                {
-                    //  Instantiate Tile
-                }
-            }
-        }
     }
 }

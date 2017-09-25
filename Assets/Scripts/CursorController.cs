@@ -45,22 +45,24 @@ public class CursorController : MonoBehaviour
         _location = GetComponent<CursorPosition>();
 
         _cursorIndex = 0;
-        ToggleCursor(CursorIndex);
 
         Services.GameEventManager.Register<KeyPressedEvent>(OnKeyPressed);
 	}
+
+    private void OnDestroy()
+    {
+        Services.GameEventManager.Unregister<KeyPressedEvent>(OnKeyPressed);
+    }
 
     private void OnKeyPressed(KeyPressedEvent e)
     {
         if (e.key == KeyCode.LeftShift)
         {
             _cursorIndex = _cursorIndex + 1;
-            ToggleCursor(CursorIndex);
         }
         else if (e.key == KeyCode.RightShift)
         {
             _cursorIndex = _cursorIndex + Services.Prefabs.Cursors.Length - 1;
-            ToggleCursor(CursorIndex);
         }
 
         if(e.key == KeyCode.Z && CursorIndex % Services.Prefabs.Cursors.Length == 0)
@@ -92,24 +94,6 @@ public class CursorController : MonoBehaviour
             _mirrorRotationIndex = _mirrorRotationIndex + _mirrorRotationPossibilities.Length - 1;
             MirrorCursor(_mirrorRotationIndex, false);
         }
-    }
-
-    //  This can be used to cycle through the piece options
-    private void ToggleCursor(int cursorIndex)
-    {
-        if (_currentCursor != null)
-        {
-            Destroy(_currentCursor);
-        }
-
-        _currentCursor = Instantiate(Services.Prefabs.Cursors[cursorIndex % Services.Prefabs.Cursors.Length]);
-
-        _currentCursor.transform.position = transform.position;
-
-        string cursorName = _currentCursor.name.Replace("(Clone)", "");
-        _currentCursor.name = cursorName;
-
-        _currentCursor.transform.parent = transform;
     }
 
     private void RotateCursor(int rotationIndex)

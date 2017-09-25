@@ -3,18 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tetronminoes : Polyominoes
+public class Tetrominoes : Polyominoes
 {
-    protected override void Start()
+    public Tetrominoes()
     {
         variations = 5;
         width = 4;
         length = 4;
+
+        holder = new GameObject();
+        string holderName = "TetrominoHolder";
+        holder.name = holderName;
+
+        GenerateTemplate();
+
+        Services.GameEventManager.Register<PlacePieceEvent>(OnPlacePiece);
     }
 
     public override void GenerateTemplate()
     {
-        //piece = new int[variations, width, length];
         piece = new int[5, 4, 4]
         { 
             //  ####
@@ -60,27 +67,5 @@ public class Tetronminoes : Polyominoes
             }
 
         };
-    }
-
-    public override void InitTemplate()
-    {
-
-    }
-
-    public override void Create(int index)
-    {
-        if (index < 0)
-            index = 0;
-
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < length; y++)
-            {
-                if (piece[index, x, y] == 1)
-                {
-                    //  Instantiate Tile
-                }
-            }
-        }
     }
 }

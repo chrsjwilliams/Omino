@@ -24,6 +24,7 @@ public class InputManager
         validKeyCodes = (KeyCode[])System.Enum.GetValues(typeof(KeyCode));
     }
 
+    //  BUG: Button Presses Register twice for both players
     public void GetInput()
     {
         for (int i = 0; i < Services.GameManager.NumPlayers; i++)

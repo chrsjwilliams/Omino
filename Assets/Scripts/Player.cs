@@ -8,17 +8,11 @@ public class Player : MonoBehaviour
      *      number of tiles controlled by that color.
      * 
      */
-    [SerializeField] private int _xCoord;
-    public int XCoord
-    {
-        get { return _xCoord; }
-    }
+    public int playerNum { get; private set; }
+    public CursorPosition cursorPos { get; private set; }
+    public Transform cursor { get; private set; }
 
-    [SerializeField] private int _yCoord;
-    public int YCoord
-    {
-        get { return _yCoord; }
-    }
+    public Coord Coord { get; private set; }
 
     [SerializeField] private Color[] _activeTilePrimaryColors = new Color[2];
     public Color[] ActiveTilePrimaryColors
@@ -44,34 +38,77 @@ public class Player : MonoBehaviour
         get { return _strongholdsBuilt; }
     }
 
-    private CursorPosition position;
-
     // Use this for initialization
     public void Init(Color[] colorScheme, int posOffset)
     {
+        playerNum = posOffset + 1;
+
         _activeTilePrimaryColors[0] = colorScheme[0];
         _activeTilePrimaryColors[1] = colorScheme[1];
 
         _activeTileSecondaryColors[0] = colorScheme[2];
         _activeTileSecondaryColors[1] = colorScheme[3];
 
-        position = GetComponent<CursorPosition>();
-        position.SetPosition(posOffset * (Services.MapManager.MapWidth - 1), posOffset * (Services.MapManager.MapLength - 1));
+        cursorPos = GetComponent<CursorPosition>();
+        cursorPos.SetPosition(posOffset * (Services.MapManager.MapWidth - 1), posOffset * (Services.MapManager.MapLength - 1));
+
+        Coord = new Coord(posOffset * (Services.MapManager.MapWidth - 1), posOffset * (Services.MapManager.MapLength - 1));
+
+        cursor = transform.GetChild(0);
+
+        Services.GameEventManager.Register<ButtonPressed>(OnButtonPressed);
+    }
+
+    private void OnDestroy()
+    {
+        Services.GameEventManager.Unregister<ButtonPressed>(OnButtonPressed);
     }
 
     public void MovePlayerLeftStick(IntVector2 axis)
     {
-        position.LeftStickMotion(axis);
+        cursorPos.LeftStickMotion(axis);
+        UpdatePlayerCoord();
     }
 
     public void MovePlayerDPad(IntVector2 axis)
     {
-        position.DPadMotion(axis);
+        cursorPos.DPadMotion(axis);
+        UpdatePlayerCoord();
+    }
+
+    private void UpdatePlayerCoord()
+    {
+        Coord = new Coord(cursorPos.X, cursorPos.Y);
+    }
+
+    private Pentominoes test;
+
+    void OnButtonPressed(ButtonPressed e)
+    {
+        if (e.button == "B"){   }
+
+        if (e.button == "A")
+        {
+            //  BUG: Button Presses Register twice for both players
+            if (cursor.childCount == 0)
+            {
+                test = new Pentominoes();
+                test.Create(0, this);
+            }
+            else
+            {
+                Services.GameEventManager.Fire(new PlacePieceEvent(this));
+            }
+        }
+
+        if (e.button == "X") { }
+
+        if (e.button == "Y") { }
     }
 
     // Update is called once per frame
     void Update ()
     {
-		
+
 	}
 }

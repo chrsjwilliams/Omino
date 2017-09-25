@@ -54,7 +54,7 @@ public class CursorPosition : MonoBehaviour
     void Start()
     {
         _disableMovement = false;
-        _worldSpaceOffset = 0.3f;
+        _worldSpaceOffset = 1.1f;
         maxX = Services.MapManager.MapWidth - 1;
         maxY = Services.MapManager.MapLength - 1;
 

@@ -14,10 +14,10 @@ public class Tile : MonoBehaviour
     public BoxCollider boxCol { get; private set; }
     public Material material { get; set; }
 
-    public void Init(Coord coord_)
+    public void Init(Coord coord_, int yOffset)
     {
         coord = coord_;
-        transform.position = new Vector3(coord.x, 0, coord.y);
+        transform.position = new Vector3(coord.x, yOffset, coord.y);
         material = GetComponent<MeshRenderer>().material;
         if ((coord.x + coord.y) % 2 == 0)
         {
@@ -42,6 +42,20 @@ public class Tile : MonoBehaviour
         else
         {
             material.color = color2;
+        }
+        boxCol = GetComponent<BoxCollider>();
+    }
+
+    public void Create()
+    {
+        material = GetComponent<MeshRenderer>().material;
+        if ((coord.x + coord.y) % 2 == 0)
+        {
+            material.color = Services.GameManager.MapColorScheme[0];
+        }
+        else
+        {
+            material.color = Services.GameManager.MapColorScheme[1];
         }
         boxCol = GetComponent<BoxCollider>();
     }
