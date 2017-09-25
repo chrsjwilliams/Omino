@@ -80,8 +80,8 @@ public abstract class Polyominoes
                     Coord myCoord = new Coord(player.cursorPos.X + x, player.cursorPos.Y + y);
                     newpiece.Init(myCoord, player.playerNum);
 
-                    string peiceName = newpiece.name.Replace("(Clone)", "") + "[X: " + x + ", Y: " + y + "]";
-                    newpiece.name = peiceName;
+                    string pieceName = newpiece.name.Replace("(Clone)", "") + "[X: " + x + ", Y: " + y + "]";
+                    newpiece.name = pieceName;
 
                     newpiece.transform.parent = holder.transform;
 

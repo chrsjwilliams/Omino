@@ -85,25 +85,32 @@ public class Player : MonoBehaviour
 
     void OnButtonPressed(ButtonPressed e)
     {
-        if (e.button == "B"){   }
-
-        if (e.button == "A")
+        switch (e.button)
         {
-            //  BUG: Button Presses Register twice for both players
-            if (cursor.childCount == 0)
-            {
-                test = new Pentominoes();
-                test.Create(0, this);
-            }
-            else
-            {
-                Services.GameEventManager.Fire(new PlacePieceEvent(this));
-            }
+            case "A":
+                if (cursor.childCount == 0) CreatePolyomino();
+                else PlacePolyomino();
+                break;
+            case "B":
+                break;
+            case "X":
+                break;
+            case "Y":
+                break;
+            default:
+                break;
         }
+    }
 
-        if (e.button == "X") { }
+    void CreatePolyomino()
+    {
+        test = new Pentominoes();
+        test.Create(0, this);
+    }
 
-        if (e.button == "Y") { }
+    void PlacePolyomino()
+    {
+        Services.GameEventManager.Fire(new PlacePieceEvent(this));
     }
 
     // Update is called once per frame
