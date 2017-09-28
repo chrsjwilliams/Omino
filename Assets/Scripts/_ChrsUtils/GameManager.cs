@@ -1,5 +1,6 @@
 ﻿using UnityEngine.Assertions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -65,6 +66,7 @@ public class GameManager : MonoBehaviour
     {
         Services.GameEventManager.Register<LeftStickAxisEvent>(OnLeftStickMoved);
         Services.GameEventManager.Register<DPadAxisEvent>(OnDPadPressed);
+        Services.GameEventManager.Register<Reset>(Reset);
     }
 
     public void Init()
@@ -169,5 +171,10 @@ public class GameManager : MonoBehaviour
     void Update ()
     {
         Services.InputManager.Update();
+    }
+
+    private void Reset(Reset e)
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

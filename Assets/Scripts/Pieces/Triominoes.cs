@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Triominoes : Polyominoes
+public class Triominoes : Polyomino
 {
     public Triominoes()
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Polyominoes
+public abstract class Polyomino
 {
     public List<Tile> tiles = new List<Tile>();
     public GameObject holder { get; protected set; }
@@ -91,4 +91,37 @@ public abstract class Polyominoes
             }
         }
     }
+
+    public void PlaceAtCurrentLocation()
+    {
+        //place the piece on the board where it's being hovered now
+        OnPlace();
+    }
+
+    public virtual bool IsPlacementLegal()
+    {
+        //determine if the pieces current location is a legal placement
+        //CONDITIONS:
+        //is contiguous with a structure connected to either the base or a fortification
+        //doesn't overlap with any existing pieces or is a destructor
+        return false;
+    }
+
+    protected virtual void OnPlace()
+    {
+        //do whatever special stuff this piece does when you place it 
+        //(e.g. destroy overlapping pieces for a destructor)
+    }
+
+    public void Reposition(Vector3 pos)
+    {
+        //change localposition of the piece container in player UI to value
+    }
+
+    public void MakePhysicalPiece()
+    {
+        //create all the tile gameobjects for the physical representation of the piece
+        //put them inside a container to move around
+    }
+    
 }

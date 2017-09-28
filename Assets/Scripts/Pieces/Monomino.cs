@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class Monomino : Polyominoes
+public class Monomino : Polyomino
 {
     public Monomino()
     {

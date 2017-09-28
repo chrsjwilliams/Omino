@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
-//  Currently Not Used for RTS_Blokus
 public class Player : MonoBehaviour
 {
     /*
@@ -38,6 +38,17 @@ public class Player : MonoBehaviour
         get { return _strongholdsBuilt; }
     }
 
+    public List<Polyomino> deck { get; private set; }
+    public List<Polyomino> hand { get; private set; }
+    private Polyomino selectedPiece;
+    private Polyomino hoveredPiece;
+    private bool placeMode;
+    private bool placementAvailable;
+    [SerializeField]
+    private Vector3 handSpacing;
+    [SerializeField]
+    private int startingHandSize;
+
     // Use this for initialization
     public void Init(Color[] colorScheme, int posOffset)
     {
@@ -57,11 +68,88 @@ public class Player : MonoBehaviour
         cursor = transform.GetChild(0);
 
         Services.GameEventManager.Register<ButtonPressed>(OnButtonPressed);
+
+        InitializeDeck();
+        DrawPieces(startingHandSize);
     }
 
     private void OnDestroy()
     {
         Services.GameEventManager.Unregister<ButtonPressed>(OnButtonPressed);
+    }
+
+    void InitializeDeck()
+    {
+        deck = new List<Polyomino>();
+        for (int numPieces = 3; numPieces <= 5; numPieces++)
+        {
+            //int numTypes = Polyomino.pieceTypes[numPieces].Length;
+            //for (int index = 0; index < numTypes; index++)
+            //{
+            //    deck.Add(new Polyomino(numPieces, index, this));
+            //}
+        }
+    }
+
+    public void DrawPieces(int numPiecesToDraw)
+    {
+        for (int i = 0; i < numPiecesToDraw; i++)
+        {
+            DrawPiece();
+        }
+    }
+
+    void DrawPiece()
+    {
+        if (deck.Count == 0) InitializeDeck();
+        Polyomino piece = GetRandomPieceFromDeck();
+        deck.Remove(piece);
+        hand.Add(piece);
+        piece.MakePhysicalPiece();
+    }
+
+    Polyomino GetRandomPieceFromDeck()
+    {
+        int index = Random.Range(0, deck.Count);
+        return deck[index];
+    }
+
+    void OrganizeHand()
+    {
+        for (int i = 0; i < hand.Count; i++)
+        {
+            hand[i].Reposition(handSpacing * i);
+        }
+    }
+
+    void SelectPiece()
+    {
+        selectedPiece = hoveredPiece;
+        placeMode = true;
+        hand.Remove(selectedPiece);
+        OrganizeHand();
+    }
+
+    void TryToPlayPiece()
+    {
+        if (selectedPiece.IsPlacementLegal() && placementAvailable) PlaySelectedPiece();
+    }
+
+    void MoveToSelectMode()
+    {
+        placeMode = false;
+        if (selectedPiece != null)
+        {
+            hand.Remove(selectedPiece);
+            OrganizeHand();
+        }
+    }
+
+    void PlaySelectedPiece()
+    {
+        selectedPiece.PlaceAtCurrentLocation();
+        selectedPiece = null;
+        MoveToSelectMode();
     }
 
     public void MovePlayerLeftStick(IntVector2 axis)

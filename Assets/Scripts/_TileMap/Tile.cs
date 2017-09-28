@@ -17,7 +17,7 @@ public class Tile : MonoBehaviour
     public void Init(Coord coord_, int yOffset)
     {
         coord = coord_;
-        transform.position = new Vector3(coord.x, yOffset, coord.y);
+        transform.position = new Vector3(coord.x, coord.y, 0);
         material = GetComponent<MeshRenderer>().material;
         if ((coord.x + coord.y) % 2 == 0)
         {
@@ -33,7 +33,7 @@ public class Tile : MonoBehaviour
     public void Init(Coord coord_, Color color1, Color color2)
     {
         coord = coord_;
-        transform.position = new Vector3(coord.x, 0, coord.y);
+        transform.position = new Vector3(coord.x, coord.y, 0);
         material = GetComponent<MeshRenderer>().material;
         if ((coord.x + coord.y) % 2 == 0)
         {
