@@ -62,13 +62,17 @@ public class MapManager : MonoBehaviour
 
     public void ActivateBase(Player player, IntVector2 offset)
     {
-        for(int x = offset.x; x < Services.GameManager.baseWidth + offset.x; x++)
-        {
-            for ( int y = offset.y; y < Services.GameManager.baseLength + offset.y; y++)
-            {
-                ForceActivateTile(Map[x, y], player);
-            }
-        }
+        Polyomino playerBase = new Polyomino(9, 0, player);
+        playerBase.MakePhysicalPiece();
+        playerBase.SetPosition(offset);
+
+        //for(int x = offset.x; x < Services.GameManager.baseWidth + offset.x; x++)
+        //{
+        //    for ( int y = offset.y; y < Services.GameManager.baseLength + offset.y; y++)
+        //    {
+        //        ForceActivateTile(Map[x, y], player);
+        //    }
+        //}
     }
 
     public void ForceActivateTile(Tile tile, Player player)
@@ -136,10 +140,10 @@ public class MapManager : MonoBehaviour
         {
             east = 0;
         }
-        bool isValid =  Map[tile.coord.x, north       ].isActive ||
-                        Map[tile.coord.x, south       ].isActive ||
-                        Map[west        , tile.coord.y].isActive ||
-                        Map[east        , tile.coord.y].isActive;
+        bool isValid =  Map[tile.coord.x, north       ].IsOccupied() ||
+                        Map[tile.coord.x, south       ].IsOccupied() ||
+                        Map[west        , tile.coord.y].IsOccupied() ||
+                        Map[east        , tile.coord.y].IsOccupied();
 
         return isValid;
     }

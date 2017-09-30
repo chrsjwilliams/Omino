@@ -3,11 +3,6 @@ using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
-    /*
-     *      This class will hold color info and total
-     *      number of tiles controlled by that color.
-     * 
-     */
     public int playerNum { get; private set; }
     public CursorPosition cursorPos { get; private set; }
     public Transform cursor { get; private set; }
@@ -24,18 +19,6 @@ public class Player : MonoBehaviour
     public Color[] ActiveTileSecondaryColors
     {
         get { return _activeTileSecondaryColors; }
-    }
-
-    [SerializeField] private int _tilesControlled;
-    public int TotalTilesControlled
-    {
-        get { return _tilesControlled; }
-    }
-
-    [SerializeField] private int _strongholdsBuilt;
-    public int TotalStrongholdsBuilt
-    {
-        get { return _strongholdsBuilt; }
     }
 
     public List<Polyomino> deck { get; private set; }
@@ -69,8 +52,9 @@ public class Player : MonoBehaviour
 
         Services.GameEventManager.Register<ButtonPressed>(OnButtonPressed);
 
-        InitializeDeck();
-        DrawPieces(startingHandSize);
+        Debug.Log(Polyomino.pieceTypes[0]);
+        //InitializeDeck();
+        //DrawPieces(startingHandSize);
     }
 
     private void OnDestroy()
@@ -81,13 +65,13 @@ public class Player : MonoBehaviour
     void InitializeDeck()
     {
         deck = new List<Polyomino>();
-        for (int numPieces = 3; numPieces <= 5; numPieces++)
+        for (int numBlocks = 3; numBlocks <= 5; numBlocks++)
         {
-            //int numTypes = Polyomino.pieceTypes[numPieces].Length;
-            //for (int index = 0; index < numTypes; index++)
-            //{
-            //    deck.Add(new Polyomino(numPieces, index, this));
-            //}
+            int numTypes = Polyomino.pieceTypes[numBlocks];
+            for (int index = 0; index < numTypes; index++)
+            {
+                deck.Add(new Polyomino(numBlocks, index, this));
+            }
         }
     }
 
@@ -140,9 +124,10 @@ public class Player : MonoBehaviour
         placeMode = false;
         if (selectedPiece != null)
         {
-            hand.Remove(selectedPiece);
+            hand.Add(selectedPiece);
             OrganizeHand();
         }
+        //move cursor over to ui
     }
 
     void PlaySelectedPiece()
@@ -169,8 +154,6 @@ public class Player : MonoBehaviour
         Coord = new Coord(cursorPos.X, cursorPos.Y);
     }
 
-    private Pentominoes test;
-
     void OnButtonPressed(ButtonPressed e)
     {
         switch (e.button)
@@ -192,8 +175,7 @@ public class Player : MonoBehaviour
 
     void CreatePolyomino()
     {
-        test = new Pentominoes();
-        test.Create(0, this);
+        Polyomino newPiece = new Polyomino(4, 0, this);
     }
 
     void PlacePolyomino()

@@ -13,6 +13,7 @@ public class Tile : MonoBehaviour
     public Coord coord { get; private set; }
     public BoxCollider boxCol { get; private set; }
     public Material material { get; set; }
+    public Polyomino occupyingPiece { get; private set; }
 
     public void Init(Coord coord_, int yOffset)
     {
@@ -63,7 +64,6 @@ public class Tile : MonoBehaviour
     public void ActivateTile(Player player)
     {
         _isActive = true;
- 
         if ((coord.x + coord.y) % 2 == 0)
         {
             material.color = player.ActiveTilePrimaryColors[0];
@@ -84,6 +84,29 @@ public class Tile : MonoBehaviour
         else
         {
             material.color = Services.GameManager.MapColorScheme[1];
+        }
+    }
+
+    public void SetOccupyingPiece(Polyomino piece)
+    {
+        occupyingPiece = piece;
+        Debug.Log(piece.holder.name);
+    }
+
+    public bool IsOccupied()
+    {
+        return occupyingPiece == null;
+    }
+
+    public Polyomino OccupiedBy()
+    {
+        if(IsOccupied())
+        {
+            return occupyingPiece;
+        }
+        else
+        {
+            return null;
         }
     }
 }
