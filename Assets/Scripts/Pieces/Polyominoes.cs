@@ -7,92 +7,110 @@ public class Polyomino
     public bool isBase;
     public List<Tile> tiles = new List<Tile>();
     public GameObject holder { get; protected set; }
-
+    private string holderName;
 
     protected int index;
     protected int variations;
-    protected int width;
-    protected int length;
     protected int[,,] piece;
     protected Player owner;
+    public Coord centerCoord;
 
-    protected static int[,,] monomino = new int[1, 1, 1]
+    protected readonly IntVector2 Center = new IntVector2(2, 2);
+
+    protected static int[,,] monomino = new int[1, 5, 5]
     {   
             //  These hashes represent what the piece will look like
             //  #
             {
-                { 1}
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 },
+                { 0,0,1,0,0 },                
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 }
             }
     };
 
-    protected static int[,,] domino = new int[1, 1, 2]
+    protected static int[,,] domino = new int[1, 5, 5]
         { 
             //  ##
             {
-                { 1 ,  1}
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 },
+                { 0,0,1,1,0 },
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 }
             }
         };
 
-    protected static int[,,] triomino = new int[2, 3, 3]
+    protected static int[,,] triomino = new int[2, 5, 5]
         { 
             //  ###
             {
-                {1,1,1 },
-                {0,0,0 },
-                {0,0,0 }
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 },
+                { 0,1,1,1,0 },
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 }
             },
             //  #
             //  ##
             {
 
-                {1,0,0 },
-                {1,1,0 },
-                {0,0,0 }
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 },
+                { 0,0,1,0,0 },
+                { 0,0,1,1,0 },
+                { 0,0,0,0,0 }
             }
         };
 
-    protected static int[,,] tetromino = new int[5, 4, 4]
+    protected static int[,,] tetromino = new int[5, 5, 5]
         { 
             //  ####
             {
-                {1,1,1,1 },
-                {0,0,0,0 },
-                {0,0,0,0 },
-                {0,0,0,0 }
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 },
+                { 0,1,1,1,1 },
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 }
             },
             //  #
             //  #
             //  ##
             {
-                {1,0,0,0 },
-                {1,0,0,0 },
-                {1,1,0,0 },
-                {0,0,0,0 }
+                { 0,0,0,0,0 },
+                { 0,0,1,0,0 },
+                { 0,0,1,0,0 },
+                { 0,0,1,1,0 },
+                { 0,0,0,0,0 }
             },
             //  #
             //  ##
             //  #
             {
-                {1,0,0,0 },
-                {1,1,0,0 },
-                {1,0,0,0 },
-                {0,0,0,0 }
+                { 0,0,0,0,0 },
+                { 0,0,1,0,0 },
+                { 0,0,1,1,0 },
+                { 0,0,1,0,0 },
+                { 0,0,0,0,0 }
             },
             //  ##
             //   ##
             {
-                {1,1,0,0 },
-                {0,1,1,0 },
-                {0,0,0,0 },
-                {0,0,0,0 }
+                { 0,0,0,0,0 },
+                { 0,1,1,0,0 },
+                { 0,0,1,1,0 },
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 }
             },
             //  ##
             //  ##
             {
-                {1,1,0,0 },
-                {1,1,0,0 },
-                {0,0,0,0 },
-                {0,0,0,0 }
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 },
+                { 0,0,1,1,0 },
+                { 0,0,1,1,0 },
+                { 0,0,0,0,0 }
             }
         };
 
@@ -103,10 +121,10 @@ public class Polyomino
             //  ##
             //   #
             {
-                {0,1,1,0,0 },
-                {1,1,0,0,0 },
-                {0,1,0,0,0 },
                 {0,0,0,0,0 },
+                {0,0,1,1,0 },
+                {0,1,1,0,0 },
+                {0,0,1,0,0 },
                 {0,0,0,0,0 }
             },
             //  I Shape
@@ -116,11 +134,11 @@ public class Polyomino
             //  #
             //  #
             {
-                {1,0,0,0,0 },
-                {1,0,0,0,0 },
-                {1,0,0,0,0 },
-                {1,0,0,0,0 },
-                {1,0,0,0,0 }
+                {0,0,1,0,0 },
+                {0,0,1,0,0 },
+                {0,0,1,0,0 },
+                {0,0,1,0,0 },
+                {0,0,1,0,0 }
             },
             //  L Shape
             //  #
@@ -128,20 +146,20 @@ public class Polyomino
             //  #
             //  ##
             {
-                {1,0,0,0,0 },
-                {1,0,0,0,0 },
-                {1,0,0,0,0 },
-                {1,1,0,0,0 },
+                {0,0,1,0,0 },
+                {0,0,1,0,0 },
+                {0,0,1,0,0 },
+                {0,0,1,1,0 },
                 {0,0,0,0,0 }
             },
             //  N Shape
             //  ###
             //    ##
             {
+                {0,0,0,0,0 },
+                {0,0,0,0,0 },
                 {1,1,1,0,0 },
                 {0,0,1,1,0 },
-                {0,0,0,0,0 },
-                {0,0,0,0,0 },
                 {0,0,0,0,0 }
             },
             //  P Shape
@@ -149,10 +167,10 @@ public class Polyomino
             //  ##
             //  #
             {
-                {1,1,0,0,0 },
-                {1,1,0,0,0 },
-                {1,0,0,0,0 },
                 {0,0,0,0,0 },
+                {0,0,1,1,0 },
+                {0,0,1,1,0 },
+                {0,0,1,0,0 },
                 {0,0,0,0,0 }
             },
             //  T Shape
@@ -160,19 +178,19 @@ public class Polyomino
             //   #
             //   #
             {
-                {1,1,1,0,0 },
-                {0,1,0,0,0 },
-                {0,1,0,0,0 },
                 {0,0,0,0,0 },
+                {0,1,1,1,0 },
+                {0,0,1,0,0 },
+                {0,0,1,0,0 },
                 {0,0,0,0,0 }
             },
             //  U Shape
             //  # #
             //  ###
             {
-                {1,0,1,0,0 },
-                {1,1,1,0,0 },
                 {0,0,0,0,0 },
+                {0,1,0,1,0 },
+                {0,1,1,1,0 },
                 {0,0,0,0,0 },
                 {0,0,0,0,0 }
             },
@@ -181,10 +199,10 @@ public class Polyomino
             //  #
             //  ###
             {
-                {1,0,0,0,0 },
-                {1,0,0,0,0 },
-                {1,1,1,0,0 },
                 {0,0,0,0,0 },
+                {0,0,1,0,0 },
+                {0,0,1,0,0 },
+                {0,0,1,1,1 },
                 {0,0,0,0,0 }
             },
             //  W Shape
@@ -192,10 +210,10 @@ public class Polyomino
             //  ##
             //   ##
             {
-                {1,0,0,0,0 },
-                {1,1,0,0,0 },
-                {0,1,1,0,0 },
                 {0,0,0,0,0 },
+                {0,1,0,0,0 },
+                {0,1,1,0,0 },
+                {0,0,1,1,0 },
                 {0,0,0,0,0 }
             },
             //  X Shape
@@ -203,10 +221,10 @@ public class Polyomino
             //  ###
             //   #
             {
-                {0,1,0,0,0 },
-                {1,1,1,0,0 },
-                {0,1,0,0,0 },
                 {0,0,0,0,0 },
+                {0,0,1,0,0 },
+                {0,1,1,1,0 },
+                {0,0,1,0,0 },
                 {0,0,0,0,0 }
             },
             //  Y Shape
@@ -215,35 +233,37 @@ public class Polyomino
             //   #
             //   #
             {
-                {0,1,0,0,0 },
-                {1,1,0,0,0 },
-                {0,1,0,0,0 },
-                {0,1,0,0,0 },
-                {0,0,0,0,0 }
+                {0,0,0,0,0 },
+                {0,0,1,0,0 },
+                {0,1,1,0,0 },
+                {0,0,1,0,0 },
+                {0,0,1,0,0 }
             },
             //  Z Shape
             //  ##
             //   #
             //   ##
             {
-                {1,1,0,0,0 },
-                {0,1,0,0,0 },
-                {0,1,1,0,0 },
                 {0,0,0,0,0 },
+                {0,1,1,0,0 },
+                {0,0,1,0,0 },
+                {0,0,1,1,0 },
                 {0,0,0,0,0 }
             }
         };
 
-    protected static int[,,] playerBase = new int[1, 3, 3]
+    protected static int[,,] playerBase = new int[1, 5, 5]
     {   
             //  These hashes represent what the piece will look like
             //  ###
             //  ###
             //  ###
             {
-                {1, 1, 1},
-                {1, 1, 1},
-                {1, 1, 1 }
+                { 0,0,0,0,0 },
+                { 0,1,1,1,0 },
+                { 0,1,1,1,0 },
+                { 0,1,1,1,0 },
+                { 0,0,0,0,0 }
             }
     };
 
@@ -256,11 +276,6 @@ public class Polyomino
 
     public Polyomino(int _units, int _index, Player _player)
     {
-
-        holder = new GameObject();
-        holder.transform.position = Vector3.zero;
-        string holderName = "";
-
         index = _index;
         owner = _player;
 
@@ -271,46 +286,31 @@ public class Polyomino
             case 1:
                 holderName = "MonominoHolder";
                 piece = monomino;
-                width = 1;
-                length = 1;
                 break;
             case 2:
                 holderName = "DominoHolder";
                 piece = domino;
-                width = 1;
-                length = 2;
                 break;
             case 3:
                 holderName = "TriominoHolder";
                 piece = triomino;
-                width = 3;
-                length = 3;
                 break;
             case 4:
                 holderName = "TetrominoHolder";
                 piece = tetromino;
-                width = 4;
-                length = 4;
                 break;
             case 5:
                 holderName = "PentominoHolder";
                 piece = pentomino;
-                width = 5;
-                length = 5;
                 break;
             case 9:
                 holderName = "Player " + owner.playerNum + " Base";
                 isBase = true;
                 piece = playerBase;
-                width = 3;
-                length = 3;
                 break;
             default:
                 break;
         }
-
-        holder.name = holderName;
-        Services.GameEventManager.Register<PlacePieceEvent>(OnPlacePiece);
     }
 
     ~Polyomino()
@@ -419,53 +419,51 @@ public class Polyomino
 
     public void Reposition(Vector3 pos)
     {
+        holder.transform.localPosition = pos;
         //change localposition of the piece container in player UI to value
     }
 
     public void SetBasePosition(IntVector2 pos)
     {
         float worldSpaceOffset = 2.0f;
-        Coord myCoord = new Coord(pos.x, pos.y);
-        Vector3 tilePos = Services.MapManager.Map[pos.x, pos.y].transform.position;
+        centerCoord = new Coord(pos.x, pos.y);
+        Vector3 tilePos = Services.MapManager.Map[centerCoord.x, centerCoord.y].transform.position;
         tilePos = new Vector3(tilePos.x, tilePos.y , tilePos.z - worldSpaceOffset);
         holder.transform.position = tilePos;
     }
 
     public void MakePhysicalPiece()
     {
+        holder = new GameObject();
+        holder.transform.position = Vector3.zero;
+
+        holder.name = holderName;
+        Services.GameEventManager.Register<PlacePieceEvent>(OnPlacePiece);
+
         if (piece == null) return;
         if (isBase)
             GivePlayerOwnershipOfBase();
         else
         {
-            holder.transform.parent = owner.cursor;
+            holder.transform.parent = owner.uiArea;
             holder.transform.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
         }
         
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < 5; x++)
         {
-            for (int y = 0; y < length; y++)
+            for (int y = 0; y < 5; y++)
             {
                 if (piece[index, x, y] == 1)
                 {
                     Tile newpiece = MonoBehaviour.Instantiate(Services.Prefabs.Tile);
 
-                    Coord myCoord;
-                    if (isBase)
-                    {
-                        myCoord = new Coord(x, y);
-                    }
-                    else
-                    {
-                        myCoord = new Coord(owner.cursorPos.X + x, owner.cursorPos.Y + y);
-                    }
-
+                    Coord myCoord = new Coord(-2 + x, -2 + y);
+                    newpiece.transform.parent = holder.transform;
                     newpiece.Init(myCoord, owner.playerNum);
 
                     string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;
 
-                    newpiece.transform.parent = holder.transform;
 
                     newpiece.ActivateTile(owner);
                     tiles.Add(newpiece);

@@ -33,15 +33,12 @@ public class MapManager : MonoBehaviour
         _center = Services.MapManager.CenterIndexOfGrid();
     }
 
-    public void GenerateMap(int width, int length)
+    public void GenerateMap()
     {
-        _mapWidth = width;
-        _mapLength = length;
-
-        _map = new Tile[_mapWidth, _mapLength];
-        for (int i = 0; i < _mapWidth; i++)
+        _map = new Tile[MapWidth, MapWidth];
+        for (int i = 0; i < MapWidth; i++)
         {
-            for (int j = 0; j < _mapLength; j++)
+            for (int j = 0; j < MapLength; j++)
             {
                 Tile tile = Instantiate(Services.Prefabs.Tile, Services.Main.transform)
                     .GetComponent<Tile>();
@@ -57,7 +54,7 @@ public class MapManager : MonoBehaviour
 
     public IntVector2 CenterIndexOfGrid()
     {
-        return new IntVector2(_mapWidth / 2, _mapLength / 2);
+        return new IntVector2(MapWidth / 2, MapLength / 2);
     }
 
     public void ActivateBase(Player player, IntVector2 offset)
@@ -100,7 +97,7 @@ public class MapManager : MonoBehaviour
 
     public Tile GetRandomTile()
     {
-		return _map[Random.Range(0, _mapWidth), Random.Range(0, _mapLength) ];
+		return _map[Random.Range(0, MapWidth), Random.Range(0, MapLength) ];
     }
 
     public Tile GetRandomEmptyTile()

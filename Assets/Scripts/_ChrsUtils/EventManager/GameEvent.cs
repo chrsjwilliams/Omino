@@ -38,9 +38,9 @@ public class TriggerAxisEvent : GameEvent
 
 public class LeftStickAxisEvent : GameEvent
 {
-    public readonly IntVector2 leftStickAxis;
+    public readonly Vector2 leftStickAxis;
     public readonly int playerNum;
-    public LeftStickAxisEvent(IntVector2 _leftStickAxis, int _playerNum)
+    public LeftStickAxisEvent(Vector2 _leftStickAxis, int _playerNum)
     {
         leftStickAxis = _leftStickAxis;
         playerNum = _playerNum;
@@ -60,9 +60,9 @@ public class DPadAxisEvent : GameEvent
 
 public class RightStickAxisEvent : GameEvent
 {
-    public readonly IntVector2 rightStickAxis;
+    public readonly Vector2 rightStickAxis;
     public readonly int playerNum;
-    public RightStickAxisEvent(IntVector2 _rightStickAxis, int _playerNum)
+    public RightStickAxisEvent(Vector2 _rightStickAxis, int _playerNum)
     {
         rightStickAxis = _rightStickAxis;
         playerNum = _playerNum;

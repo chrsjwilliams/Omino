@@ -115,8 +115,14 @@ MonoBehaviour:
   _activeTileSecondaryColors:
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 0, g: 0, b: 0, a: 0}
-  handSpacing: {x: 0, y: 0, z: 0}
-  startingHandSize: 0
+  handSpacing: {x: 0, y: -6, z: 0}
+  handOrigin: {x: 0, y: 11, z: 0}
+  startingHandSize: 4
+  uiCursorOffset: {x: 0, y: 0, z: 0}
+  uiCursorMovementCooldown: 0.2
+  placementCursorBaseSpeed: 1
+  placementCursorAccel: 2
+  placementCursorDrag: 0.8
 --- !u!114 &114746844571664838
 MonoBehaviour:
   m_ObjectHideFlags: 1

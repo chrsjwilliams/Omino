@@ -14,8 +14,8 @@ public class InputManager
     private float leftTriggerAxis;
     private float rightTriggerAxis;
 
-    private IntVector2 leftStickAxis;
-    private IntVector2 rightStickAxis;
+    private Vector2 leftStickAxis;
+    private Vector2 rightStickAxis;
     private IntVector2 dPadAxis;
 
     public InputManager()
@@ -46,16 +46,16 @@ public class InputManager
                 Services.GameEventManager.Fire(new TriggerAxisEvent(rightTriggerAxis, leftTriggerAxis,playerNum));
             }
 
-            leftStickAxis = new IntVector2((int)Input.GetAxis("LeftStickX_P" + playerNum),
-                                           (int)Input.GetAxis("LeftStickY_P" + playerNum));
-            if (leftStickAxis.x != 0 || leftStickAxis.y != 0)
+            leftStickAxis = new Vector2(Input.GetAxis("LeftStickX_P" + playerNum),
+                                           Input.GetAxis("LeftStickY_P" + playerNum));
+            if (leftStickAxis.magnitude > 0.1f)
             {
                 Services.GameEventManager.Fire(new LeftStickAxisEvent(leftStickAxis, playerNum));
             }
 
-            rightStickAxis = new IntVector2((int)Input.GetAxis("RightStickX_P" + playerNum),
-                                            (int)Input.GetAxis("RightStickY_P" + playerNum));
-            if (rightStickAxis.x != 0 || rightStickAxis.y != 0)
+            rightStickAxis = new Vector2(Input.GetAxis("RightStickX_P" + playerNum),
+                                            Input.GetAxis("RightStickY_P" + playerNum));
+            if (rightStickAxis.magnitude > 0.1f)
             {
                 Services.GameEventManager.Fire(new RightStickAxisEvent(rightStickAxis, playerNum));
             }

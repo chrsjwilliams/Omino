@@ -123,10 +123,12 @@ public class GameManager : MonoBehaviour
                     break;
             }
         }
-        IntVector2 player1BasePos = new IntVector2(0, 0);
+        IntVector2 player1BasePos = new IntVector2(1, 1);
         Services.MapManager.ActivateBase(_players[0], player1BasePos);
 
-        IntVector2 player2BasePos = new IntVector2(17, 17);
+        IntVector2 player2BasePos = new IntVector2(
+            Services.MapManager.MapWidth - 2,
+            Services.MapManager.MapLength - 2);
         Services.MapManager.ActivateBase(_players[1], player2BasePos);
     }
 	
@@ -159,7 +161,9 @@ public class GameManager : MonoBehaviour
 
     private void OnLeftStickMoved(LeftStickAxisEvent e)
     {
-        Player[e.playerNum - 1].MovePlayerLeftStick(e.leftStickAxis);
+        Player[e.playerNum - 1].MovePlayerLeftStick(new IntVector2(
+            (int)Mathf.Sign(e.leftStickAxis.x),
+            (int)Mathf.Sign(e.leftStickAxis.y)));
     }
 
     private void OnDPadPressed(DPadAxisEvent e)

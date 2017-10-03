@@ -11,13 +11,18 @@ public class GameSceneScript : Scene<TransitionData>
 
     private Color _backgroundColor;
 
+    public Transform[] uiAreas;
+
+    public GameObject[] placementCursors;
+
     internal override void OnEnter(TransitionData data)
     {
         tileMapHolder = GameObject.Find(TILE_MAP_HOLDER).transform;
+        Services.GameScene = this;
 
         _colorChangeTime = 0f;
         _backgroundColor = new Color(0.449f, 0.820f, 0.867f);
-        Services.MapManager.GenerateMap(20, 20);
+        Services.MapManager.GenerateMap();
         Services.GameManager.InitPlayers();
     }
 

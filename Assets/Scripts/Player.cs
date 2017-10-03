@@ -26,13 +26,70 @@ public class Player : MonoBehaviour
     private Polyomino selectedPiece;
     private Polyomino hoveredPiece;
     private Polyomino pieceToBePlayed;
-    private bool placeMode;
+    private bool placeMode_;
+    private bool placeMode
+    {
+        get { return placeMode_; }
+        set
+        {
+            if (value != placeMode_)
+            {
+                placeMode_ = value;
+                uiCursor.SetActive(!placeMode_);
+                placementCursor.SetActive(placeMode_);
+                if (placeMode_)
+                {
+                    Services.GameEventManager
+                        .Unregister<LeftStickAxisEvent>(MoveUICursorOnJoystickInput);
+                    Services.GameEventManager
+                        .Register<LeftStickAxisEvent>(MovePlacementCursor);
+                    SetPlacementCursorPosition(new Coord(
+                        Services.MapManager.MapWidth / 2,
+                        Services.MapManager.MapLength / 2));
+                }
+                else
+                {
+                    Services.GameEventManager
+                        .Register<LeftStickAxisEvent>(MoveUICursorOnJoystickInput);
+                    Services.GameEventManager
+                        .Unregister<LeftStickAxisEvent>(MovePlacementCursor);
+                }
+            }
+        }
+    }
     private bool placementAvailable;
     [SerializeField]
     private Vector3 handSpacing;
     [SerializeField]
+    private Vector3 handOrigin;
+    [SerializeField]
     private int startingHandSize;
-
+    public Transform uiArea { get; private set; }
+    private GameObject uiCursor;
+    private int uiCursorPos;
+    [SerializeField]
+    private Vector3 uiCursorOffset;
+    [SerializeField]
+    private float uiCursorMovementCooldown;
+    private float timeSinceUICursorMovement;
+    private GameObject placementCursor;
+    private Coord placementCursorPos;
+    [SerializeField]
+    private float placementCursorBaseSpeed;
+    private float placementCursorSpeed;
+    [SerializeField]
+    private float placementCursorAccel;
+    [SerializeField]
+    private float placementCursorDrag;
+    private float placementCursorMovementCooldown
+    {
+        get
+        {
+            return 1 / placementCursorSpeed;
+        }
+    }
+    private float timeSincePlacementCursorMovement;
+    private Coord lastMovementDirection;
     // Use this for initialization
     public void Init(Color[] colorScheme, int posOffset)
     {
@@ -50,11 +107,34 @@ public class Player : MonoBehaviour
         Coord = new Coord(posOffset * (Services.MapManager.MapWidth - 1), posOffset * (Services.MapManager.MapLength - 1));
 
         cursor = transform.GetChild(0);
+        uiArea = Services.GameScene.uiAreas[playerNum - 1];
+        uiCursor = uiArea.transform.GetChild(0).gameObject;
+        placementCursor = Services.GameScene.placementCursors[playerNum - 1];
+        placementCursorSpeed = placementCursorBaseSpeed;
 
         Services.GameEventManager.Register<ButtonPressed>(OnButtonPressed);
 
-        //InitializeDeck();
-        //DrawPieces(startingHandSize);
+        hand = new List<Polyomino>();
+
+        InitializeDeck();
+        DrawPieces(startingHandSize);
+
+        SetUICursorPosition(0);
+        placeMode = true;
+        placeMode = false; // this looks silly but it's meant to trigger the property changes
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (placeMode)
+        {
+            timeSincePlacementCursorMovement += Time.deltaTime;
+            placementCursorSpeed = Mathf.Max(
+                    placementCursorBaseSpeed, placementCursorSpeed * placementCursorDrag);
+            Debug.Log(placementCursorSpeed);
+        }
+        else timeSinceUICursorMovement += Time.deltaTime;
     }
 
     private void OnDestroy()
@@ -90,6 +170,7 @@ public class Player : MonoBehaviour
         deck.Remove(piece);
         hand.Add(piece);
         piece.MakePhysicalPiece();
+        OrganizeHand();
     }
 
     Polyomino GetRandomPieceFromDeck()
@@ -102,7 +183,7 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < hand.Count; i++)
         {
-            hand[i].Reposition(handSpacing * i);
+            hand[i].Reposition(handOrigin + handSpacing * i);
         }
     }
 
@@ -111,6 +192,8 @@ public class Player : MonoBehaviour
         selectedPiece = hoveredPiece;
         placeMode = true;
         hand.Remove(selectedPiece);
+        selectedPiece.holder.transform.parent = placementCursor.transform;
+        selectedPiece.Reposition(Vector3.zero);
         OrganizeHand();
     }
 
@@ -161,8 +244,8 @@ public class Player : MonoBehaviour
             switch (e.button)
             {
                 case "A":
-                    if (cursor.childCount == 0) CreatePolyomino();
-                    else PlacePolyomino();
+                    if (placeMode) PlaySelectedPiece();
+                    else SelectPiece();
                     break;
                 case "B":
                     break;
@@ -188,9 +271,71 @@ public class Player : MonoBehaviour
         Services.GameEventManager.Fire(new PlacePieceEvent(this));
     }
 
-    // Update is called once per frame
-    void Update ()
-    {
+    
 
-	}
+    void SetUICursorPosition(int pos)
+    {
+        uiCursorPos = pos;
+        uiCursor.transform.localPosition = (pos * handSpacing) + handOrigin + uiCursorOffset;
+        timeSinceUICursorMovement = 0;
+        hoveredPiece = hand[pos];
+    }
+
+    void MoveUICursorOnJoystickInput(LeftStickAxisEvent e)
+    {
+        if(e.playerNum == playerNum && timeSinceUICursorMovement > uiCursorMovementCooldown)
+        {
+            if (e.leftStickAxis.y > 0 && uiCursorPos > 0)
+            {
+                SetUICursorPosition(uiCursorPos - 1);
+            }
+            else if (e.leftStickAxis.y < 0 && uiCursorPos < hand.Count - 1)
+            {
+                SetUICursorPosition(uiCursorPos + 1);
+            }
+        }
+    }
+
+    void MovePlacementCursor(LeftStickAxisEvent e)
+    {
+        if (e.playerNum == playerNum)
+        {
+            Coord movementDirection = new Coord(0, 0);
+            if (e.leftStickAxis.y < 0 && placementCursorPos.y > 0)
+            {
+                movementDirection = movementDirection.Add(new Coord(0, -1));
+            }
+            else if (e.leftStickAxis.y > 0 && placementCursorPos.y < Services.MapManager.MapLength - 1)
+            {
+                movementDirection = movementDirection.Add(new Coord(0, 1));
+            }
+            if (e.leftStickAxis.x < 0 && placementCursorPos.x > 0)
+            {
+                movementDirection = movementDirection.Add(new Coord(-1, 0));
+            }
+            else if (e.leftStickAxis.x > 0 && placementCursorPos.x < Services.MapManager.MapWidth - 1)
+            {
+                movementDirection = movementDirection.Add(new Coord(1, 0));
+            }
+            if (movementDirection == lastMovementDirection)
+            {
+                placementCursorSpeed += placementCursorAccel;
+            }
+            lastMovementDirection = movementDirection;
+            if(timeSincePlacementCursorMovement > placementCursorMovementCooldown)
+            {
+                SetPlacementCursorPosition(placementCursorPos.Add(movementDirection));
+
+            }
+        }
+    }
+
+    void SetPlacementCursorPosition(Coord pos)
+    {
+        placementCursorPos = pos;
+        placementCursor.transform.position = 
+            Services.MapManager.Map[pos.x, pos.y].transform.position + 5 * Vector3.back;
+        timeSincePlacementCursorMovement = 0;
+        if(selectedPiece != null) selectedPiece.centerCoord = pos;
+    }
 }

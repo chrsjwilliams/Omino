@@ -21,7 +21,7 @@ public class Tile : MonoBehaviour
     {
         isOccupied = false;
         coord = coord_;
-        transform.position = new Vector3(coord.x, coord.y, 2);
+        transform.localPosition = new Vector3(coord.x, coord.y, 0);
         material = GetComponent<MeshRenderer>().material;
         if ((coord.x + coord.y) % 2 == 0)
         {
@@ -37,7 +37,7 @@ public class Tile : MonoBehaviour
     public void Init(Coord coord_, Color color1, Color color2)
     {
         coord = coord_;
-        transform.position = new Vector3(coord.x, coord.y, 0);
+        transform.localPosition = new Vector3(coord.x, coord.y, 0);
         material = GetComponent<MeshRenderer>().material;
         if ((coord.x + coord.y) % 2 == 0)
         {
@@ -99,7 +99,6 @@ public class Tile : MonoBehaviour
     {
         occupyingPiece = piece;
         isOccupied = true;
-        Debug.Log(piece.holder.name);
     }
 
     public bool IsOccupied()
