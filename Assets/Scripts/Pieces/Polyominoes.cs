@@ -64,8 +64,8 @@ public class Polyomino
             {
                 {1,0,0,0 },
                 {1,0,0,0 },
-                {1,0,0,0 },
-                {1,1,0,0 }
+                {1,1,0,0 },
+                {0,0,0,0 }
             },
             //  #
             //  ##
@@ -201,9 +201,9 @@ public class Polyomino
             //  ###
             //   #
             {
-                {0,0,0,0,0 },
-                {0,0,0,0,0 },
-                {0,0,0,0,0 },
+                {0,1,0,0,0 },
+                {1,1,1,0,0 },
+                {0,1,0,0,0 },
                 {0,0,0,0,0 },
                 {0,0,0,0,0 }
             },
@@ -283,7 +283,7 @@ public class Polyomino
                 length = 3;
                 break;
             case 4:
-                holderName = "TetraominoHolder";
+                holderName = "TetrominoHolder";
                 piece = tetromino;
                 width = 4;
                 length = 4;
