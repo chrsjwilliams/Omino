@@ -64,15 +64,12 @@ public class MapManager : MonoBehaviour
     {
         Polyomino playerBase = new Polyomino(9, 0, player);
         playerBase.MakePhysicalPiece();
-        playerBase.SetPosition(offset);
+        playerBase.SetBasePosition(offset);
 
-        //for(int x = offset.x; x < Services.GameManager.baseWidth + offset.x; x++)
-        //{
-        //    for ( int y = offset.y; y < Services.GameManager.baseLength + offset.y; y++)
-        //    {
-        //        ForceActivateTile(Map[x, y], player);
-        //    }
-        //}
+        foreach(Tile tile in playerBase.tiles)
+        {
+            Map[tile.coord.x + offset.x, tile.coord.y + offset.y].SetOccupyingPiece(playerBase);
+        }
     }
 
     public void ForceActivateTile(Tile tile, Player player)
@@ -113,7 +110,7 @@ public class MapManager : MonoBehaviour
         return randomTile;
     }
 
-    bool ValidateTile(Tile tile)
+    public bool ValidateTile(Tile tile)
     {
         int north = tile.coord.y + 1;
         int south = tile.coord.y - 1;
@@ -140,10 +137,18 @@ public class MapManager : MonoBehaviour
         {
             east = 0;
         }
-        bool isValid =  Map[tile.coord.x, north       ].IsOccupied() ||
-                        Map[tile.coord.x, south       ].IsOccupied() ||
-                        Map[west        , tile.coord.y].IsOccupied() ||
-                        Map[east        , tile.coord.y].IsOccupied();
+
+        bool n = Map[tile.coord.x, north].IsOccupied();
+        bool s = Map[tile.coord.x, south].IsOccupied();
+        bool w = Map[west, tile.coord.y].IsOccupied();
+        bool e = Map[east, tile.coord.y].IsOccupied();
+
+
+
+        bool isValid =  n ||
+                        s ||
+                        w ||
+                        w;
 
         return isValid;
     }

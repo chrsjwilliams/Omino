@@ -42,9 +42,13 @@ public class CursorPosition : MonoBehaviour
         }
     }
 
+    public Polyomino heldPiece;
+
     private bool resetLeftStick = false;
     private bool resetDPad = false;
     private float _worldSpaceOffset;
+    private int pastXCoord;
+    private int pastYCoord;
 
     [SerializeField] private KeyCode upKey = KeyCode.UpArrow;
     [SerializeField] private KeyCode downKey = KeyCode.DownArrow;
@@ -54,7 +58,7 @@ public class CursorPosition : MonoBehaviour
     void Start()
     {
         _disableMovement = false;
-        _worldSpaceOffset = 1.1f;
+        _worldSpaceOffset = 2.0f;
         maxX = Services.MapManager.MapWidth - 1;
         maxY = Services.MapManager.MapLength - 1;
 
@@ -101,11 +105,43 @@ public class CursorPosition : MonoBehaviour
     public void DPadMotion(IntVector2 axis)
     {
 
+
         resetDPad = !resetDPad;
         if (resetDPad && !_disableMovement)
         {
             X += axis.x;
             Y += axis.y;
+
+            //  This logic below will be moved down into the Polymino class
+            if (heldPiece != null)
+            {
+                foreach(Tile tile in heldPiece.tiles)
+                {
+                    //  Notes to self: Consider ways to do this without creating all
+                    //  these objects
+                    IntVector2 newCoord = new IntVector2(tile.coord.x, tile.coord.y);
+                    int tileXCoord = tile.coord.x + axis.x;
+                    int tileYCoord = tile.coord.y + axis.y;
+                    if (X != pastXCoord && Y != pastYCoord)
+                    {
+                        newCoord = new IntVector2(tileXCoord, tileYCoord);
+                    }
+                    else if (X != pastXCoord)
+                    {
+                        newCoord = new IntVector2(tileXCoord, tile.coord.y);
+                    }
+                    else if (Y != pastYCoord)
+                    {
+                        newCoord = new IntVector2(tile.coord.x, tileYCoord);
+                    }
+
+                    tile.SetCoord(newCoord);
+                }
+            }
+            pastXCoord = X;
+            pastYCoord = Y;
+            //  The above logic will be moved into the Polyomino class
+
         }
         AdjustTilePos();
     }
@@ -136,7 +172,7 @@ public class CursorPosition : MonoBehaviour
         Vector3 tilePos = Services.MapManager.Map[X, Y].transform.position;
 
         //  Places the cursor slight above the grid map
-        tilePos = new Vector3(tilePos.x, tilePos.y + _worldSpaceOffset, tilePos.z);
+        tilePos = new Vector3(tilePos.x, tilePos.y, tilePos.z - _worldSpaceOffset);
         transform.position = tilePos;
     }
 
@@ -145,7 +181,7 @@ public class CursorPosition : MonoBehaviour
         Vector3 tilePos = Services.MapManager.Map[X, Y].transform.position;
 
         //  Places the cursor slight above the grid map
-        tilePos = new Vector3(tilePos.x, tilePos.y + _worldSpaceOffset, tilePos.z);
+        tilePos = new Vector3(tilePos.x, tilePos.y, tilePos.z - _worldSpaceOffset);
         transform.position = tilePos;
     }
 

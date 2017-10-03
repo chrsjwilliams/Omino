@@ -4,8 +4,10 @@ using UnityEngine;
 public class Polyomino
 {
 
+    public bool isBase;
     public List<Tile> tiles = new List<Tile>();
     public GameObject holder { get; protected set; }
+
 
     protected int index;
     protected int variations;
@@ -256,11 +258,13 @@ public class Polyomino
     {
 
         holder = new GameObject();
-
+        holder.transform.position = Vector3.zero;
         string holderName = "";
 
         index = _index;
         owner = _player;
+
+        isBase = false;
 
         switch (_units)
         {
@@ -296,6 +300,7 @@ public class Polyomino
                 break;
             case 9:
                 holderName = "Player " + owner.playerNum + " Base";
+                isBase = true;
                 piece = playerBase;
                 width = 3;
                 length = 3;
@@ -305,17 +310,27 @@ public class Polyomino
         }
 
         holder.name = holderName;
+        Services.GameEventManager.Register<PlacePieceEvent>(OnPlacePiece);
     }
 
-    public bool WithinBounds()
+    ~Polyomino()
+    {
+        Services.GameEventManager.Unregister<PlacePieceEvent>(OnPlacePiece);
+    }
+
+    public bool IsWithinBounds()
     {
         bool withinBounds = false;
-        for (int i = 0; i < tiles.Count; i++)
+        foreach (Tile tile in tiles)
         {
-            if (0 < tiles[i].coord.x && tiles[i].coord.x < Services.MapManager.MapWidth - 1 &&
-               0 < tiles[i].coord.y && tiles[i].coord.y < Services.MapManager.MapLength - 1)
+            if (0 <= tile.coord.x && tile.coord.x < Services.MapManager.MapWidth &&
+               0 <= tile.coord.y && tile.coord.y < Services.MapManager.MapLength)
             {
                 withinBounds = true;
+            }
+            else
+            {
+                withinBounds = false;
             }
         }
 
@@ -326,9 +341,16 @@ public class Polyomino
     {
         //  This stops the pieces from being connected to the player
         //  Check if all pieces are on the map
-
-        if (WithinBounds())
+        //  Debug.Log("Bounds: " + IsWithinBounds() + "| Legal: " + IsPlacementLegal() + "| Base: " + isBase);
+        if (IsWithinBounds() && IsPlacementLegal() && !isBase)
         {
+            //  Will put the logic below in a method to set occupancy
+            foreach(Tile tile in tiles)
+            {
+                Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(this);
+            }
+            //  Will put logic above in a method to set occupancy
+
             if (e.player.playerNum == 1)
             {
                 holder.transform.parent = Services.GameManager.ownedByPlayer1.transform;
@@ -337,6 +359,7 @@ public class Polyomino
             {
                 holder.transform.parent = Services.GameManager.ownedByPlayer2.transform;
             }
+            Services.GameEventManager.Unregister<PlacePieceEvent>(OnPlacePiece);
         }
         else
         {
@@ -354,6 +377,7 @@ public class Polyomino
         {
             holder.transform.parent = Services.GameManager.ownedByPlayer2.transform;
         }
+        Services.GameEventManager.Unregister<PlacePieceEvent>(OnPlacePiece);
     }
 
     public void PlaceAtCurrentLocation()
@@ -367,13 +391,24 @@ public class Polyomino
         //determine if the pieces current location is a legal placement
         //CONDITIONS:
         //is contiguous with a structure connected to either the base or a fortification
-        //doesn't overlap with any existing pieces or is a destructor
+        //doesn't overlap with any existing pieces or is a destructor\
+        bool isLegal = false;
         foreach(Tile tile in tiles)
         {
+            if (Services.MapManager.ValidateTile(tile))
+            {
+                isLegal = true;
+            }
 
+            Debug.Log(Services.MapManager.ValidateTile(tile));
+
+            if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied())
+            {
+                return false;
+            }
         }
 
-        return false;
+        return isLegal;
     }
 
     protected virtual void OnPlace()
@@ -387,9 +422,9 @@ public class Polyomino
         //change localposition of the piece container in player UI to value
     }
 
-    public void SetPosition(IntVector2 pos)
+    public void SetBasePosition(IntVector2 pos)
     {
-        float worldSpaceOffset = 1.0f;
+        float worldSpaceOffset = 2.0f;
         Coord myCoord = new Coord(pos.x, pos.y);
         Vector3 tilePos = Services.MapManager.Map[pos.x, pos.y].transform.position;
         tilePos = new Vector3(tilePos.x, tilePos.y , tilePos.z - worldSpaceOffset);
@@ -398,29 +433,25 @@ public class Polyomino
 
     public void MakePhysicalPiece()
     {
-        //create all the tile gameobjects for the physical representation of the piece
-        //put them inside a container to move around 
         if (piece == null) return;
-        //  Parents the polyomino to the player so the player
-        //  can move around the board with the piece
-        if (holder.name.Contains("Base"))
+        if (isBase)
             GivePlayerOwnershipOfBase();
         else
+        {
             holder.transform.parent = owner.cursor;
-
+            holder.transform.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
+        }
+        
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < length; y++)
             {
                 if (piece[index, x, y] == 1)
                 {
-                    //  A pieces is created like this to prevent ArrayOutOfBounds Exceptions 
-                    //  This way the player cursor can move to any space on the map with any
-                    //  any piece
                     Tile newpiece = MonoBehaviour.Instantiate(Services.Prefabs.Tile);
 
                     Coord myCoord;
-                    if (holder.name.Contains("Base"))
+                    if (isBase)
                     {
                         myCoord = new Coord(x, y);
                     }
@@ -431,11 +462,10 @@ public class Polyomino
 
                     newpiece.Init(myCoord, owner.playerNum);
 
-                    string pieceName = newpiece.name.Replace("(Clone)", "") + "[X: " + (owner.cursorPos.X + x) + ", Y: " + (owner.cursorPos.Y + y) + "]";
+                    string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;
 
                     newpiece.transform.parent = holder.transform;
-                    Services.MapManager.Map[x, y].SetOccupyingPiece(this);
 
                     newpiece.ActivateTile(owner);
                     tiles.Add(newpiece);
@@ -443,5 +473,4 @@ public class Polyomino
             }
         }
     }
-    
 }

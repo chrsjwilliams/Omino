@@ -30,7 +30,7 @@ public class TitleSceneScript : Scene<TransitionData>
 
     private void OnButtonPressed(ButtonPressed e)
     {
-        if((e.button == "Start" || e.button == "A") && e.playerNum == 1)
+        if((e.button == "Start" || e.button == "A"))
         {
             StartGame();
         }

@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     public List<Polyomino> hand { get; private set; }
     private Polyomino selectedPiece;
     private Polyomino hoveredPiece;
+    private Polyomino pieceToBePlayed;
     private bool placeMode;
     private bool placementAvailable;
     [SerializeField]
@@ -52,7 +53,6 @@ public class Player : MonoBehaviour
 
         Services.GameEventManager.Register<ButtonPressed>(OnButtonPressed);
 
-        Debug.Log(Polyomino.pieceTypes[0]);
         //InitializeDeck();
         //DrawPieces(startingHandSize);
     }
@@ -156,26 +156,31 @@ public class Player : MonoBehaviour
 
     void OnButtonPressed(ButtonPressed e)
     {
-        switch (e.button)
+        if (e.playerNum == playerNum)
         {
-            case "A":
-                if (cursor.childCount == 0) CreatePolyomino();
-                else PlacePolyomino();
-                break;
-            case "B":
-                break;
-            case "X":
-                break;
-            case "Y":
-                break;
-            default:
-                break;
+            switch (e.button)
+            {
+                case "A":
+                    if (cursor.childCount == 0) CreatePolyomino();
+                    else PlacePolyomino();
+                    break;
+                case "B":
+                    break;
+                case "X":
+                    break;
+                case "Y":
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
     void CreatePolyomino()
     {
-        Polyomino newPiece = new Polyomino(4, 0, this);
+        Polyomino newPolyomino = new Polyomino(4, 0, this);
+        cursorPos.heldPiece = newPolyomino;
+        newPolyomino.MakePhysicalPiece();
     }
 
     void PlacePolyomino()
