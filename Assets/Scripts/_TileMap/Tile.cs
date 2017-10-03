@@ -64,9 +64,9 @@ public class Tile : MonoBehaviour
         boxCol = GetComponent<BoxCollider>();
     }
 
-    public void SetCoord(IntVector2 newCoord)
+    public void SetCoord(Coord newCoord)
     {
-        coord = new Coord(newCoord.x, newCoord.y);
+        coord = newCoord;
     }
 
     public void ActivateTile(Player player)

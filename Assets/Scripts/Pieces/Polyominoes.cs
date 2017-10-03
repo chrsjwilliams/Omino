@@ -6,6 +6,7 @@ public class Polyomino
 
     public bool isBase;
     public List<Tile> tiles = new List<Tile>();
+    private Dictionary<Coord, Tile> tileRelativeCoords;
     public GameObject holder { get; protected set; }
     private string holderName;
 
@@ -384,6 +385,7 @@ public class Polyomino
     {
         //place the piece on the board where it's being hovered now
         OnPlace();
+        holder.transform.parent = Services.MapManager.Map[centerCoord.x, centerCoord.y].transform;
     }
 
     public virtual bool IsPlacementLegal()
@@ -393,17 +395,16 @@ public class Polyomino
         //is contiguous with a structure connected to either the base or a fortification
         //doesn't overlap with any existing pieces or is a destructor\
         bool isLegal = false;
+        Debug.Log("tile count: " + tiles.Count);
         foreach(Tile tile in tiles)
         {
-            if (Services.MapManager.ValidateTile(tile))
-            {
-                isLegal = true;
-            }
-
-            Debug.Log(Services.MapManager.ValidateTile(tile));
+            isLegal = Services.MapManager.ValidateTile(tile);
+            Debug.Log("testing tile");
+            Debug.Log(isLegal);
 
             if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied())
             {
+                Debug.Log("space occupied");
                 return false;
             }
         }
@@ -432,6 +433,15 @@ public class Polyomino
         holder.transform.position = tilePos;
     }
 
+    public void SetTileCoords(Coord centerPos)
+    {
+        centerCoord = centerPos;
+        foreach(KeyValuePair<Coord,Tile> tileCoord in tileRelativeCoords)
+        {
+            tileCoord.Value.SetCoord(tileCoord.Key.Add(centerPos));
+        }
+    }
+
     public void MakePhysicalPiece()
     {
         holder = new GameObject();
@@ -448,7 +458,9 @@ public class Polyomino
             holder.transform.parent = owner.uiArea;
             holder.transform.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
         }
-        
+
+        tileRelativeCoords = new Dictionary<Coord, Tile>();
+
         for (int x = 0; x < 5; x++)
         {
             for (int y = 0; y < 5; y++)
@@ -460,6 +472,7 @@ public class Polyomino
                     Coord myCoord = new Coord(-2 + x, -2 + y);
                     newpiece.transform.parent = holder.transform;
                     newpiece.Init(myCoord, owner.playerNum);
+                    tileRelativeCoords[myCoord] = newpiece;
 
                     string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;

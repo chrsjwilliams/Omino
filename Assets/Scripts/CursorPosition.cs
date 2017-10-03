@@ -119,20 +119,20 @@ public class CursorPosition : MonoBehaviour
                 {
                     //  Notes to self: Consider ways to do this without creating all
                     //  these objects
-                    IntVector2 newCoord = new IntVector2(tile.coord.x, tile.coord.y);
+                    Coord newCoord = tile.coord;
                     int tileXCoord = tile.coord.x + axis.x;
                     int tileYCoord = tile.coord.y + axis.y;
                     if (X != pastXCoord && Y != pastYCoord)
                     {
-                        newCoord = new IntVector2(tileXCoord, tileYCoord);
+                        newCoord = new Coord(tileXCoord, tileYCoord);
                     }
                     else if (X != pastXCoord)
                     {
-                        newCoord = new IntVector2(tileXCoord, tile.coord.y);
+                        newCoord = new Coord(tileXCoord, tile.coord.y);
                     }
                     else if (Y != pastYCoord)
                     {
-                        newCoord = new IntVector2(tile.coord.x, tileYCoord);
+                        newCoord = new Coord(tile.coord.x, tileYCoord);
                     }
 
                     tile.SetCoord(newCoord);

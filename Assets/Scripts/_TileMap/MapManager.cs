@@ -109,44 +109,15 @@ public class MapManager : MonoBehaviour
 
     public bool ValidateTile(Tile tile)
     {
-        int north = tile.coord.y + 1;
-        int south = tile.coord.y - 1;
-        int west = tile.coord.x + 1;
-        int east = tile.coord.x - 1;
-        
-
-        if (north > MapLength - 1)
+        foreach(Coord direction in Coord.Directions())
         {
-            north = MapLength - 1;
+            Coord adjacentCoord = tile.coord.Add(direction);
+            if(adjacentCoord.x >= 0 && adjacentCoord.x < MapWidth &&
+                adjacentCoord.y >= 0 && adjacentCoord.y < MapLength)
+            {
+                if (Map[adjacentCoord.x, adjacentCoord.y].isOccupied) return true;
+            }
         }
-
-        if (south < 0)
-        {
-            south = 0;
-        }
-
-        if (west > MapLength - 1)
-        {
-            west = MapLength - 1;
-        }
-
-        if (east < 0)
-        {
-            east = 0;
-        }
-
-        bool n = Map[tile.coord.x, north].IsOccupied();
-        bool s = Map[tile.coord.x, south].IsOccupied();
-        bool w = Map[west, tile.coord.y].IsOccupied();
-        bool e = Map[east, tile.coord.y].IsOccupied();
-
-
-
-        bool isValid =  n ||
-                        s ||
-                        w ||
-                        w;
-
-        return isValid;
+        return false;
     }
 }

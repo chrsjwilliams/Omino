@@ -122,6 +122,9 @@ public class Player : MonoBehaviour
         SetUICursorPosition(0);
         placeMode = true;
         placeMode = false; // this looks silly but it's meant to trigger the property changes
+
+        //for now just allow placement always
+        placementAvailable = true;
     }
 
     // Update is called once per frame
@@ -132,7 +135,6 @@ public class Player : MonoBehaviour
             timeSincePlacementCursorMovement += Time.deltaTime;
             placementCursorSpeed = Mathf.Max(
                     placementCursorBaseSpeed, placementCursorSpeed * placementCursorDrag);
-            Debug.Log(placementCursorSpeed);
         }
         else timeSinceUICursorMovement += Time.deltaTime;
     }
@@ -199,7 +201,9 @@ public class Player : MonoBehaviour
 
     void TryToPlayPiece()
     {
+        Debug.Log("trying to place");
         if (selectedPiece.IsPlacementLegal() && placementAvailable) PlaySelectedPiece();
+        else Debug.Log("invalid placement");
     }
 
     void MoveToSelectMode()
@@ -218,6 +222,7 @@ public class Player : MonoBehaviour
         selectedPiece.PlaceAtCurrentLocation();
         selectedPiece = null;
         MoveToSelectMode();
+        Debug.Log("placing");
     }
 
     public void MovePlayerLeftStick(IntVector2 axis)
@@ -244,7 +249,7 @@ public class Player : MonoBehaviour
             switch (e.button)
             {
                 case "A":
-                    if (placeMode) PlaySelectedPiece();
+                    if (placeMode) TryToPlayPiece();
                     else SelectPiece();
                     break;
                 case "B":
@@ -336,6 +341,6 @@ public class Player : MonoBehaviour
         placementCursor.transform.position = 
             Services.MapManager.Map[pos.x, pos.y].transform.position + 5 * Vector3.back;
         timeSincePlacementCursorMovement = 0;
-        if(selectedPiece != null) selectedPiece.centerCoord = pos;
+        if (selectedPiece != null) selectedPiece.SetTileCoords(pos);
     }
 }
