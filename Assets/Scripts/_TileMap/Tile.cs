@@ -10,6 +10,8 @@ public class Tile : MonoBehaviour
         get { return _isActive; }
     }
 
+
+    public bool isOccupied;
     public Coord coord { get; private set; }
     public BoxCollider boxCol { get; private set; }
     public Material material { get; set; }
@@ -17,8 +19,9 @@ public class Tile : MonoBehaviour
 
     public void Init(Coord coord_, int yOffset)
     {
+        isOccupied = false;
         coord = coord_;
-        transform.position = new Vector3(coord.x, coord.y, 0);
+        transform.position = new Vector3(coord.x, coord.y, 2);
         material = GetComponent<MeshRenderer>().material;
         if ((coord.x + coord.y) % 2 == 0)
         {
@@ -61,6 +64,11 @@ public class Tile : MonoBehaviour
         boxCol = GetComponent<BoxCollider>();
     }
 
+    public void SetCoord(IntVector2 newCoord)
+    {
+        coord = new Coord(newCoord.x, newCoord.y);
+    }
+
     public void ActivateTile(Player player)
     {
         _isActive = true;
@@ -90,12 +98,13 @@ public class Tile : MonoBehaviour
     public void SetOccupyingPiece(Polyomino piece)
     {
         occupyingPiece = piece;
+        isOccupied = true;
         Debug.Log(piece.holder.name);
     }
 
     public bool IsOccupied()
     {
-        return occupyingPiece == null;
+        return occupyingPiece != null;
     }
 
     public Polyomino OccupiedBy()
