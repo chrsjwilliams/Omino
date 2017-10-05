@@ -398,9 +398,8 @@ public class Polyomino
         Debug.Log("tile count: " + tiles.Count);
         foreach(Tile tile in tiles)
         {
-            isLegal = Services.MapManager.ValidateTile(tile);
-            Debug.Log("testing tile");
-            Debug.Log(isLegal);
+            if (!isLegal && Services.MapManager.ValidateTile(tile))
+                isLegal = true;
 
             if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied())
             {
