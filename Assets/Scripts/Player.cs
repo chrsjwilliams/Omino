@@ -23,41 +23,9 @@ public class Player : MonoBehaviour
 
     public List<Polyomino> deck { get; private set; }
     public List<Polyomino> hand { get; private set; }
-    private Polyomino selectedPiece;
-    private Polyomino hoveredPiece;
+    public Polyomino selectedPiece { get; private set; }
     private Polyomino pieceToBePlayed;
-    private bool placeMode_;
-    private bool placeMode
-    {
-        get { return placeMode_; }
-        set
-        {
-            if (value != placeMode_)
-            {
-                placeMode_ = value;
-                uiCursor.SetActive(!placeMode_);
-                placementCursor.SetActive(placeMode_);
-                if (placeMode_)
-                {
-                    Services.GameEventManager
-                        .Unregister<LeftStickAxisEvent>(MoveUICursorOnJoystickInput);
-                    Services.GameEventManager
-                        .Register<LeftStickAxisEvent>(MovePlacementCursor);
-                    SetPlacementCursorPosition(new Coord(
-                        Services.MapManager.MapWidth / 2,
-                        Services.MapManager.MapLength / 2));
-                }
-                else
-                {
-                    Services.GameEventManager
-                        .Register<LeftStickAxisEvent>(MoveUICursorOnJoystickInput);
-                    Services.GameEventManager
-                        .Unregister<LeftStickAxisEvent>(MovePlacementCursor);
-                }
-            }
-        }
-    }
-    private bool placementAvailable;
+    public bool placementAvailable { get; private set; }
     [SerializeField]
     private Vector3 handSpacing;
     [SerializeField]
@@ -65,31 +33,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int startingHandSize;
     public Transform uiArea { get; private set; }
-    private GameObject uiCursor;
-    private int uiCursorPos;
-    [SerializeField]
-    private Vector3 uiCursorOffset;
-    [SerializeField]
-    private float uiCursorMovementCooldown;
-    private float timeSinceUICursorMovement;
-    private GameObject placementCursor;
-    private Coord placementCursorPos;
-    [SerializeField]
-    private float placementCursorBaseSpeed;
-    private float placementCursorSpeed;
-    [SerializeField]
-    private float placementCursorAccel;
-    [SerializeField]
-    private float placementCursorDrag;
-    private float placementCursorMovementCooldown
-    {
-        get
-        {
-            return 1 / placementCursorSpeed;
-        }
-    }
-    private float timeSincePlacementCursorMovement;
-    private Coord lastMovementDirection;
+
     // Use this for initialization
     public void Init(Color[] colorScheme, int posOffset)
     {
@@ -101,27 +45,12 @@ public class Player : MonoBehaviour
         _activeTileSecondaryColors[0] = colorScheme[2];
         _activeTileSecondaryColors[1] = colorScheme[3];
 
-        cursorPos = GetComponent<CursorPosition>();
-        cursorPos.SetPosition(posOffset * (Services.MapManager.MapWidth - 1), posOffset * (Services.MapManager.MapLength - 1));
-
-        Coord = new Coord(posOffset * (Services.MapManager.MapWidth - 1), posOffset * (Services.MapManager.MapLength - 1));
-
-        cursor = transform.GetChild(0);
         uiArea = Services.GameScene.uiAreas[playerNum - 1];
-        uiCursor = uiArea.transform.GetChild(0).gameObject;
-        placementCursor = Services.GameScene.placementCursors[playerNum - 1];
-        placementCursorSpeed = placementCursorBaseSpeed;
-
-        Services.GameEventManager.Register<ButtonPressed>(OnButtonPressed);
 
         hand = new List<Polyomino>();
 
         InitializeDeck();
         DrawPieces(startingHandSize);
-
-        SetUICursorPosition(0);
-        placeMode = true;
-        placeMode = false; // this looks silly but it's meant to trigger the property changes
 
         //for now just allow placement always
         placementAvailable = true;
@@ -130,20 +59,10 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (placeMode)
-        {
-            timeSincePlacementCursorMovement += Time.deltaTime;
-            placementCursorSpeed = Mathf.Max(
-                    placementCursorBaseSpeed, placementCursorSpeed * placementCursorDrag);
-        }
-        else timeSinceUICursorMovement += Time.deltaTime;
+
     }
 
-    private void OnDestroy()
-    {
-        Services.GameEventManager.Unregister<ButtonPressed>(OnButtonPressed);
-    }
-
+    #region DECK FUNCTIONS
     void InitializeDeck()
     {
         deck = new List<Polyomino>();
@@ -188,159 +107,25 @@ public class Player : MonoBehaviour
             hand[i].Reposition(handOrigin + handSpacing * i);
         }
     }
+    #endregion
 
-    void SelectPiece()
+    public void OnPieceSelected(Polyomino piece)
     {
-        selectedPiece = hoveredPiece;
-        placeMode = true;
-        hand.Remove(selectedPiece);
-        selectedPiece.holder.transform.parent = placementCursor.transform;
-        selectedPiece.Reposition(Vector3.zero);
+        if (selectedPiece != null) CancelSelectedPiece();
+        selectedPiece = piece;
+        hand.Remove(piece);
         OrganizeHand();
     }
 
-    void TryToPlayPiece()
+    public void OnPiecePlaced()
     {
-        Debug.Log("trying to place");
-        if (selectedPiece.IsPlacementLegal() && placementAvailable) PlaySelectedPiece();
-        else Debug.Log("invalid placement");
-    }
-
-    void MoveToSelectMode()
-    {
-        placeMode = false;
-        if (selectedPiece != null)
-        {
-            hand.Add(selectedPiece);
-            OrganizeHand();
-        }
-        //move cursor over to ui
-    }
-
-    void PlaySelectedPiece()
-    {
-        selectedPiece.PlaceAtCurrentLocation();
         selectedPiece = null;
-        MoveToSelectMode();
-        Debug.Log("placing");
     }
 
-    public void MovePlayerLeftStick(IntVector2 axis)
+    public void CancelSelectedPiece()
     {
-        cursorPos.LeftStickMotion(axis);
-        UpdatePlayerCoord();
-    }
-
-    public void MovePlayerDPad(IntVector2 axis)
-    {
-        cursorPos.DPadMotion(axis);
-        UpdatePlayerCoord();
-    }
-
-    private void UpdatePlayerCoord()
-    {
-        Coord = new Coord(cursorPos.X, cursorPos.Y);
-    }
-
-    void OnButtonPressed(ButtonPressed e)
-    {
-        if (e.playerNum == playerNum)
-        {
-            switch (e.button)
-            {
-                case "A":
-                    if (placeMode) TryToPlayPiece();
-                    else SelectPiece();
-                    break;
-                case "B":
-                    break;
-                case "X":
-                    break;
-                case "Y":
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    void CreatePolyomino()
-    {
-        Polyomino newPolyomino = new Polyomino(4, 0, this);
-        cursorPos.heldPiece = newPolyomino;
-        newPolyomino.MakePhysicalPiece();
-    }
-
-    void PlacePolyomino()
-    {
-        Services.GameEventManager.Fire(new PlacePieceEvent(this));
-    }
-
-    
-
-    void SetUICursorPosition(int pos)
-    {
-        uiCursorPos = pos;
-        uiCursor.transform.localPosition = (pos * handSpacing) + handOrigin + uiCursorOffset;
-        timeSinceUICursorMovement = 0;
-        hoveredPiece = hand[pos];
-    }
-
-    void MoveUICursorOnJoystickInput(LeftStickAxisEvent e)
-    {
-        if(e.playerNum == playerNum && timeSinceUICursorMovement > uiCursorMovementCooldown)
-        {
-            if (e.leftStickAxis.y > 0 && uiCursorPos > 0)
-            {
-                SetUICursorPosition(uiCursorPos - 1);
-            }
-            else if (e.leftStickAxis.y < 0 && uiCursorPos < hand.Count - 1)
-            {
-                SetUICursorPosition(uiCursorPos + 1);
-            }
-        }
-    }
-
-    void MovePlacementCursor(LeftStickAxisEvent e)
-    {
-        if (e.playerNum == playerNum)
-        {
-            Coord movementDirection = new Coord(0, 0);
-            if (e.leftStickAxis.y < 0 && placementCursorPos.y > 0)
-            {
-                movementDirection = movementDirection.Add(new Coord(0, -1));
-            }
-            else if (e.leftStickAxis.y > 0 && placementCursorPos.y < Services.MapManager.MapLength - 1)
-            {
-                movementDirection = movementDirection.Add(new Coord(0, 1));
-            }
-            if (e.leftStickAxis.x < 0 && placementCursorPos.x > 0)
-            {
-                movementDirection = movementDirection.Add(new Coord(-1, 0));
-            }
-            else if (e.leftStickAxis.x > 0 && placementCursorPos.x < Services.MapManager.MapWidth - 1)
-            {
-                movementDirection = movementDirection.Add(new Coord(1, 0));
-            }
-            if (movementDirection == lastMovementDirection)
-            {
-                placementCursorSpeed += placementCursorAccel;
-            }
-            lastMovementDirection = movementDirection;
-            if(timeSincePlacementCursorMovement > placementCursorMovementCooldown)
-            {
-                SetPlacementCursorPosition(placementCursorPos.Add(movementDirection));
-
-            }
-        }
-    }
-
-    void SetPlacementCursorPosition(Coord pos)
-    {
-        placementCursorPos = pos;
-        placementCursor.transform.position = 
-            Services.MapManager.Map[pos.x, pos.y].transform.position + 5 * Vector3.back;
-        timeSincePlacementCursorMovement = 0;
-        if (selectedPiece != null) selectedPiece.SetTileCoords(pos);
+        hand.Add(selectedPiece);
+        OrganizeHand();
+        selectedPiece = null;
     }
 }

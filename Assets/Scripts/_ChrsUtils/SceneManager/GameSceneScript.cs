@@ -13,8 +13,6 @@ public class GameSceneScript : Scene<TransitionData>
 
     public Transform[] uiAreas;
 
-    public GameObject[] placementCursors;
-
     internal override void OnEnter(TransitionData data)
     {
         tileMapHolder = GameObject.Find(TILE_MAP_HOLDER).transform;

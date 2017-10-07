@@ -64,8 +64,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Services.GameEventManager.Register<LeftStickAxisEvent>(OnLeftStickMoved);
-        Services.GameEventManager.Register<DPadAxisEvent>(OnDPadPressed);
         Services.GameEventManager.Register<Reset>(Reset);
     }
 
@@ -157,18 +155,6 @@ public class GameManager : MonoBehaviour
     public void ChangeCameraTo(Camera camera)
     {
         _mainCamera = camera;
-    }
-
-    private void OnLeftStickMoved(LeftStickAxisEvent e)
-    {
-        Player[e.playerNum - 1].MovePlayerLeftStick(new IntVector2(
-            (int)Mathf.Sign(e.leftStickAxis.x),
-            (int)Mathf.Sign(e.leftStickAxis.y)));
-    }
-
-    private void OnDPadPressed(DPadAxisEvent e)
-    {
-        Player[e.playerNum - 1].MovePlayerDPad(e.dPadAxis);
     }
 
     // Update is called once per frame

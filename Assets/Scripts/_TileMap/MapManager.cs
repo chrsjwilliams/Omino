@@ -44,7 +44,7 @@ public class MapManager : MonoBehaviour
                     .GetComponent<Tile>();
                 tile.transform.parent = GameSceneScript.tileMapHolder;
                 
-                tile.Init(new Coord(i, j), 0);
+                tile.Init(new Coord(i, j));
                 _map[i, j] = tile;
                 tile.name = "Tile [X: " + i + ", Y: " + j + "]";
             }
@@ -107,15 +107,20 @@ public class MapManager : MonoBehaviour
         return randomTile;
     }
 
+    public bool IsCoordContainedInMap(Coord coord)
+    {
+        return coord.x >= 0 && coord.x < MapWidth &&
+                coord.y >= 0 && coord.y < MapLength;
+    }
+
     public bool ValidateTile(Tile tile)
     {
         foreach(Coord direction in Coord.Directions())
         {
             Coord adjacentCoord = tile.coord.Add(direction);
-            if(adjacentCoord.x >= 0 && adjacentCoord.x < MapWidth &&
-                adjacentCoord.y >= 0 && adjacentCoord.y < MapLength)
+            if (IsCoordContainedInMap(adjacentCoord))
             {
-                if (Map[adjacentCoord.x, adjacentCoord.y].isOccupied) return true;
+                if (Map[adjacentCoord.x, adjacentCoord.y].IsOccupied()) return true;
             }
         }
         return false;

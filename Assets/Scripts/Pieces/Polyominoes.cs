@@ -15,6 +15,7 @@ public class Polyomino
     protected int[,,] piece;
     protected Player owner;
     public Coord centerCoord;
+    public bool selected { get; protected set; }
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -385,7 +386,11 @@ public class Polyomino
     {
         //place the piece on the board where it's being hovered now
         OnPlace();
-        holder.transform.parent = Services.MapManager.Map[centerCoord.x, centerCoord.y].transform;
+        foreach(Tile tile in tiles)
+        {
+            Coord tileCoord = tile.coord;
+            Services.MapManager.Map[tileCoord.x, tileCoord.y].SetOccupyingPiece(this);
+        }
     }
 
     public virtual bool IsPlacementLegal()
@@ -398,9 +403,8 @@ public class Polyomino
         Debug.Log("tile count: " + tiles.Count);
         foreach(Tile tile in tiles)
         {
-            if (!isLegal && Services.MapManager.ValidateTile(tile))
-                isLegal = true;
-
+            if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
+            if (Services.MapManager.ValidateTile(tile)) isLegal = true;
             if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied())
             {
                 Debug.Log("space occupied");
@@ -470,7 +474,7 @@ public class Polyomino
 
                     Coord myCoord = new Coord(-2 + x, -2 + y);
                     newpiece.transform.parent = holder.transform;
-                    newpiece.Init(myCoord, owner.playerNum);
+                    newpiece.Init(myCoord, this);
                     tileRelativeCoords[myCoord] = newpiece;
 
                     string pieceName = newpiece.name.Replace("(Clone)", "");
@@ -482,5 +486,40 @@ public class Polyomino
                 }
             }
         }
+    }
+
+    public void OnInputDown()
+    {
+        if (!selected)
+        {
+            selected = true;
+            owner.OnPieceSelected(this);
+        }
+    }
+
+    public void OnInputUp()
+    {
+        if (selected)
+        {
+            selected = false;
+            if (IsPlacementLegal() && owner.placementAvailable)
+            {
+                PlaceAtCurrentLocation();
+                owner.OnPiecePlaced();
+            }
+            else owner.CancelSelectedPiece();
+        }
+    }
+
+    public void OnInputDrag(Vector3 inputPos)
+    {
+        Coord roundedInputCoord = new Coord(
+            Mathf.RoundToInt(inputPos.x), 
+            Mathf.RoundToInt(inputPos.y));
+        SetTileCoords(roundedInputCoord);
+        holder.transform.position = new Vector3(
+            roundedInputCoord.x,
+            roundedInputCoord.y,
+            holder.transform.position.z);
     }
 }
