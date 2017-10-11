@@ -19,8 +19,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4344842224644880}
-  - component: {fileID: 114954421657601144}
-  - component: {fileID: 114746844571664838}
   - component: {fileID: 114385512323381820}
   m_Layer: 0
   m_Name: Player
@@ -115,49 +113,13 @@ MonoBehaviour:
   _activeTileSecondaryColors:
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 0, g: 0, b: 0, a: 0}
-  handSpacing: {x: 0, y: -6, z: 0}
-  handOrigin: {x: 0, y: 11, z: 0}
+  handSpacing: {x: 6, y: -6, z: 0}
+  handOrigin: {x: -3, y: 9, z: 0}
   startingHandSize: 4
-  uiCursorOffset: {x: 0, y: 0, z: 0}
-  uiCursorMovementCooldown: 0.2
-  placementCursorBaseSpeed: 1
-  placementCursorAccel: 2
-  placementCursorDrag: 0.8
---- !u!114 &114746844571664838
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1103035195019150}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d258df8c8eb27a41b45044630429588, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _currentCursor: {fileID: 1103035195019150}
-  _cursorIndex: 0
-  rotateRight: 61
-  rotateLeft: 45
-  reflectX: 91
-  reflectY: 93
---- !u!114 &114954421657601144
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1103035195019150}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7c9c84276379444fa4112b8946ac484, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _disableMovement: 0
-  _offsetX: 0
-  _offsetY: 0
-  upKey: 273
-  downKey: 274
-  leftKey: 276
-  rightKey: 275
+  maxHandSize: 8
+  piecesPerHandColumn: 4
+  baseDrawPeriod: 10
+  basePlayPeriod: 10
 --- !u!212 &212260773991372538
 SpriteRenderer:
   m_ObjectHideFlags: 1

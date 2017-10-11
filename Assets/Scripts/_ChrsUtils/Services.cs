@@ -15,4 +15,5 @@ public class Services
     public static MapManager MapManager { get; set; }
 
     public static GameSceneScript GameScene { get; set; }
+    public static UIManager UIManager { get; set; }
 }

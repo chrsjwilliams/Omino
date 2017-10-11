@@ -79,21 +79,21 @@ public class MapManager : MonoBehaviour
         tile.DeactivateTile();
     }
 
-    public void ActivateTile(Tile tile, Player player)
-    {
-        if (ValidateTile(tile))
-        {
-            tile.ActivateTile(player);
-        }
-    }
+    //public void ActivateTile(Tile tile, Player player)
+    //{
+    //    if (ValidateTile(tile))
+    //    {
+    //        tile.ActivateTile(player);
+    //    }
+    //}
 
-    public void DeactivateTile(Tile tile)
-    {
-        if (ValidateTile(tile))
-        {
-            tile.DeactivateTile();
-        }
-    }
+    //public void DeactivateTile(Tile tile)
+    //{
+    //    if (ValidateTile(tile))
+    //    {
+    //        tile.DeactivateTile();
+    //    }
+    //}
 
     public Tile GetRandomTile()
     {
@@ -113,14 +113,16 @@ public class MapManager : MonoBehaviour
                 coord.y >= 0 && coord.y < MapLength;
     }
 
-    public bool ValidateTile(Tile tile)
+    public bool ValidateTile(Tile tile, Player owner)
     {
         foreach(Coord direction in Coord.Directions())
         {
             Coord adjacentCoord = tile.coord.Add(direction);
             if (IsCoordContainedInMap(adjacentCoord))
             {
-                if (Map[adjacentCoord.x, adjacentCoord.y].IsOccupied()) return true;
+                if (Map[adjacentCoord.x, adjacentCoord.y].IsOccupied() &&
+                    Map[adjacentCoord.x, adjacentCoord.y].occupyingPiece.owner == owner)
+                    return true;
             }
         }
         return false;

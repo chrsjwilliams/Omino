@@ -68,7 +68,7 @@ public class CursorController : MonoBehaviour
         if(e.key == KeyCode.Z && CursorIndex % Services.Prefabs.Cursors.Length == 0)
         {
             //  This can be used to place peices
-            Services.MapManager.ActivateTile(Services.MapManager.Map[_location.X, _location.Y], _player);
+            //Services.MapManager.ActivateTile(Services.MapManager.Map[_location.X, _location.Y], _player);
         }
 
         if (e.key == rotateRight)

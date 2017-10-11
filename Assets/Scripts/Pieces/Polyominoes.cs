@@ -13,9 +13,10 @@ public class Polyomino
     protected int index;
     protected int variations;
     protected int[,,] piece;
-    protected Player owner;
+    public Player owner { get; protected set; }
     public Coord centerCoord;
     public bool selected { get; protected set; }
+    private bool placed;
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -315,11 +316,6 @@ public class Polyomino
         }
     }
 
-    ~Polyomino()
-    {
-        Services.GameEventManager.Unregister<PlacePieceEvent>(OnPlacePiece);
-    }
-
     public bool IsWithinBounds()
     {
         bool withinBounds = false;
@@ -339,52 +335,11 @@ public class Polyomino
         return withinBounds;
     }
 
-    protected void OnPlacePiece(PlacePieceEvent e)
-    {
-        //  This stops the pieces from being connected to the player
-        //  Check if all pieces are on the map
-        //  Debug.Log("Bounds: " + IsWithinBounds() + "| Legal: " + IsPlacementLegal() + "| Base: " + isBase);
-        if (IsWithinBounds() && IsPlacementLegal() && !isBase)
-        {
-            //  Will put the logic below in a method to set occupancy
-            foreach(Tile tile in tiles)
-            {
-                Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(this);
-            }
-            //  Will put logic above in a method to set occupancy
-
-            if (e.player.playerNum == 1)
-            {
-                holder.transform.parent = Services.GameManager.ownedByPlayer1.transform;
-            }
-            else if (e.player.playerNum == 2)
-            {
-                holder.transform.parent = Services.GameManager.ownedByPlayer2.transform;
-            }
-            Services.GameEventManager.Unregister<PlacePieceEvent>(OnPlacePiece);
-        }
-        else
-        {
-            //  Some sort of negative feedback
-        }
-    }
-
-    private void GivePlayerOwnershipOfBase()
-    {
-        if (owner.playerNum == 1)
-        {
-            holder.transform.parent = Services.GameManager.ownedByPlayer1.transform;
-        }
-        else if (owner.playerNum == 2)
-        {
-            holder.transform.parent = Services.GameManager.ownedByPlayer2.transform;
-        }
-        Services.GameEventManager.Unregister<PlacePieceEvent>(OnPlacePiece);
-    }
-
     public void PlaceAtCurrentLocation()
     {
         //place the piece on the board where it's being hovered now
+        holder.transform.parent = Services.GameScene.transform; // placeholder until we decide somewhere else to put it
+        placed = true;
         OnPlace();
         foreach(Tile tile in tiles)
         {
@@ -400,14 +355,12 @@ public class Polyomino
         //is contiguous with a structure connected to either the base or a fortification
         //doesn't overlap with any existing pieces or is a destructor\
         bool isLegal = false;
-        Debug.Log("tile count: " + tiles.Count);
         foreach(Tile tile in tiles)
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
-            if (Services.MapManager.ValidateTile(tile)) isLegal = true;
+            if (Services.MapManager.ValidateTile(tile, owner)) isLegal = true;
             if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied())
             {
-                Debug.Log("space occupied");
                 return false;
             }
         }
@@ -451,11 +404,10 @@ public class Polyomino
         holder.transform.position = Vector3.zero;
 
         holder.name = holderName;
-        Services.GameEventManager.Register<PlacePieceEvent>(OnPlacePiece);
 
         if (piece == null) return;
         if (isBase)
-            GivePlayerOwnershipOfBase();
+            holder.transform.parent = Services.GameScene.transform; // placeholder parent for now
         else
         {
             holder.transform.parent = owner.uiArea;
@@ -493,7 +445,7 @@ public class Polyomino
         if (!selected)
         {
             selected = true;
-            owner.OnPieceSelected(this);
+            if(!placed) owner.OnPieceSelected(this);
         }
     }
 
@@ -502,24 +454,30 @@ public class Polyomino
         if (selected)
         {
             selected = false;
-            if (IsPlacementLegal() && owner.placementAvailable)
+            if (!placed)
             {
-                PlaceAtCurrentLocation();
-                owner.OnPiecePlaced();
+                if (IsPlacementLegal() && owner.placementAvailable)
+                {
+                    PlaceAtCurrentLocation();
+                    owner.OnPiecePlaced();
+                }
+                else owner.CancelSelectedPiece();
             }
-            else owner.CancelSelectedPiece();
         }
     }
 
     public void OnInputDrag(Vector3 inputPos)
     {
-        Coord roundedInputCoord = new Coord(
-            Mathf.RoundToInt(inputPos.x), 
-            Mathf.RoundToInt(inputPos.y));
-        SetTileCoords(roundedInputCoord);
-        holder.transform.position = new Vector3(
-            roundedInputCoord.x,
-            roundedInputCoord.y,
-            holder.transform.position.z);
+        if (!placed)
+        {
+            Coord roundedInputCoord = new Coord(
+                Mathf.RoundToInt(inputPos.x),
+                Mathf.RoundToInt(inputPos.y));
+            SetTileCoords(roundedInputCoord);
+            holder.transform.position = new Vector3(
+                roundedInputCoord.x,
+                roundedInputCoord.y,
+                holder.transform.position.z);
+        }
     }
 }

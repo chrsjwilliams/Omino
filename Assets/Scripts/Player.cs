@@ -32,7 +32,19 @@ public class Player : MonoBehaviour
     private Vector3 handOrigin;
     [SerializeField]
     private int startingHandSize;
+    [SerializeField]
+    private int maxHandSize;
+    [SerializeField]
+    private int piecesPerHandColumn;
     public Transform uiArea { get; private set; }
+    [SerializeField]
+    private float baseDrawPeriod;
+    private float drawRate { get { return 1 / baseDrawPeriod; } }
+    private float drawMeter;
+    [SerializeField]
+    private float basePlayPeriod;
+    private float playRate { get { return 1 / basePlayPeriod; } }
+    private float playMeter;
 
     // Use this for initialization
     public void Init(Color[] colorScheme, int posOffset)
@@ -59,7 +71,30 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        UpdateDrawMeter();
+        UpdatePlayMeter();
+    }
 
+    void UpdateDrawMeter()
+    {
+        drawMeter += drawRate * Time.deltaTime;
+        Services.UIManager.UpdateDrawMeter(playerNum, drawMeter);
+        if (drawMeter >= 1)
+        {
+            DrawPieces(1);
+            drawMeter -= 1;
+        }
+    }
+
+    void UpdatePlayMeter()
+    {
+        playMeter += playRate * Time.deltaTime;
+        if (playMeter >= 1)
+        {
+            placementAvailable = true;
+            playMeter -= 1;
+        }
+        Services.UIManager.UpdatePlayMeter(playerNum, playMeter, placementAvailable);
     }
 
     #region DECK FUNCTIONS
@@ -78,7 +113,10 @@ public class Player : MonoBehaviour
 
     public void DrawPieces(int numPiecesToDraw)
     {
-        for (int i = 0; i < numPiecesToDraw; i++)
+        int handSpace = maxHandSize - hand.Count;
+        if (selectedPiece != null) handSpace -= 1;
+        int drawsAllowed = Mathf.Min(handSpace, numPiecesToDraw);
+        for (int i = 0; i < drawsAllowed; i++)
         {
             DrawPiece();
         }
@@ -104,7 +142,10 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < hand.Count; i++)
         {
-            hand[i].Reposition(handOrigin + handSpacing * i);
+            Vector3 newPos = new Vector3(
+                handSpacing.x * (i / piecesPerHandColumn),
+                handSpacing.y * (i % piecesPerHandColumn), 0) + handOrigin;
+            hand[i].Reposition(newPos);
         }
     }
     #endregion
@@ -120,6 +161,7 @@ public class Player : MonoBehaviour
     public void OnPiecePlaced()
     {
         selectedPiece = null;
+        placementAvailable = false;
     }
 
     public void CancelSelectedPiece()

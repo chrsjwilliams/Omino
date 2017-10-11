@@ -17,6 +17,7 @@ public class GameSceneScript : Scene<TransitionData>
     {
         tileMapHolder = GameObject.Find(TILE_MAP_HOLDER).transform;
         Services.GameScene = this;
+        Services.UIManager = GetComponentInChildren<UIManager>();
 
         _colorChangeTime = 0f;
         _backgroundColor = new Color(0.449f, 0.820f, 0.867f);
