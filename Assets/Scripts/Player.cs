@@ -4,8 +4,6 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
     public int playerNum { get; private set; }
-    public CursorPosition cursorPos { get; private set; }
-    public Transform cursor { get; private set; }
 
     public Coord Coord { get; private set; }
 
