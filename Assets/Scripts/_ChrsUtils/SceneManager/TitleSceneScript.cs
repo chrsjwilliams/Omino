@@ -10,22 +10,19 @@ public class TitleSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
-        Services.GameEventManager.Register<KeyPressedEvent>(OnKeyPressed);
+        Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<ButtonPressed>(OnButtonPressed);
     }
 
     internal override void OnExit()
     {
-        Services.GameEventManager.Unregister<KeyPressedEvent>(OnKeyPressed);
+        Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
         Services.GameEventManager.Unregister<ButtonPressed>(OnButtonPressed);
     }
 
-    private void OnKeyPressed(KeyPressedEvent e)
+    private void OnTouchDown(TouchDown e)
     {
-        if(e.key == startGame)
-        {
-            StartGame();
-        }
+        StartGame();
     }
 
     private void OnButtonPressed(ButtonPressed e)
