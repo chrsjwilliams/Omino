@@ -12,6 +12,27 @@ public abstract class GameEvent
 }
 
 
+public class TouchDown : GameEvent
+{
+    public Touch touch;
+
+    public TouchDown(Touch touch_)
+    {
+        touch = touch_;
+    }
+}
+
+public class TouchUp : GameEvent
+{
+    public Touch touch;
+
+    public TouchUp(Touch touch_)
+    {
+        touch = touch_;
+    }
+}
+
+
 public class ButtonPressed : GameEvent
 {
     public readonly string button;

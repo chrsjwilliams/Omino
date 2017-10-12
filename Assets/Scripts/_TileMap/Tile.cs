@@ -16,6 +16,7 @@ public class Tile : MonoBehaviour
     public Material material { get; set; }
     public Polyomino occupyingPiece { get; private set; }
     public Polyomino pieceParent { get; private set; }
+    private int touchID;
 
     public void Init(Coord coord_)
     {
@@ -31,6 +32,9 @@ public class Tile : MonoBehaviour
             material.color = Services.GameManager.MapColorScheme[1];
         }
         boxCol = GetComponent<BoxCollider>();
+        touchID = -1;
+        Services.GameEventManager.Register<TouchDown>(OnTouchDown);
+        Services.GameEventManager.Register<TouchUp>(OnTouchUp);
     }
 
     public void Init(Coord coord_, Polyomino pieceParent_)
@@ -137,6 +141,33 @@ public class Tile : MonoBehaviour
         Vector3 inputPos = 
             Services.GameManager.MainCamera.ScreenToWorldPoint(Input.mousePosition);
         OnInputDrag(inputPos);
+    }
+
+    private void Update()
+    {
+        if(touchID != -1)
+        {
+            Touch touch = Input.GetTouch(touchID);
+            OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(touch.position));
+        }
+    }
+
+    void OnTouchDown(TouchDown e)
+    {
+        if (boxCol.bounds.Contains(e.touch.position))
+        {
+            touchID = e.touch.fingerId;
+            OnInputDown();
+        }
+    }
+
+    void OnTouchUp(TouchUp e)
+    {
+        if(e.touch.fingerId == touchID)
+        {
+            touchID = -1;
+            OnInputUp();
+        }
     }
 
     void OnInputDown()
