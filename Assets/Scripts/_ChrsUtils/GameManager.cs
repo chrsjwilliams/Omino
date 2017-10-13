@@ -6,9 +6,6 @@ public class GameManager : MonoBehaviour
 {
     public string PLAYER = "Player";
 
-    public int PLAYER_ONE = 0;
-    public int PLAYER_TWO = 1;
-
     [SerializeField] private int _numPlayers;
     public int NumPlayers
     {
@@ -38,12 +35,6 @@ public class GameManager : MonoBehaviour
         get { return _players; }
     }
 
-    public GameObject ownedByPlayer1;
-    public GameObject ownedByPlayer2;
-
-    public int baseWidth;
-    public int baseLength;
-
     [SerializeField] private Color[] _player1ColorScheme;
     public Color[] Player1ColorScheme
     {
@@ -69,35 +60,23 @@ public class GameManager : MonoBehaviour
 
     public void Init()
     {
-        baseWidth = 3;
-        baseLength = 3;
         NumPlayers = 1;
         _mainCamera = Camera.main;
 
         _players = new Player[NumPlayers];
-        InitGameColors();
         
     }
 
 	// Use this for initialization
 	public void Init (int players)
     {
-        baseWidth = 3;
-        baseLength = 3;
         _numPlayers = players;
         _mainCamera = Camera.main;
         _players = new Player[NumPlayers];
-        InitGameColors();
     }
 
     public void InitPlayers()
     {
-        ownedByPlayer1 = GameObject.Find("Owner: Player1");
-        ownedByPlayer2 = GameObject.Find("Owner: Player2");
-
-        int xCoord = Services.MapManager.MapWidth - 1;
-        int yCoord = Services.MapManager.MapLength - 1;
-
         for (int i = 0; i < NumPlayers; i++)
         {
 
@@ -128,28 +107,6 @@ public class GameManager : MonoBehaviour
             Services.MapManager.MapWidth - 2,
             Services.MapManager.MapLength - 2);
         Services.MapManager.ActivateBase(_players[1], player2BasePos);
-    }
-	
-    private void InitGameColors()
-    {
-        _player1ColorScheme = new Color[4];
-
-        _player1ColorScheme[0] = new Color(0.667f, 0.224f, 0.224f);
-        _player1ColorScheme[1] = new Color(0.831f, 0.416f, 0.416f);
-        _player1ColorScheme[2] = new Color(0.780f, 0.780f, 0.129f);
-        _player1ColorScheme[3] = new Color(0.996f, 0.996f, 0.467f);
-
-        _player2ColorScheme = new Color[4];
-
-        _player2ColorScheme[0] = new Color(0.376f, 0.694f, 0.114f);
-        _player2ColorScheme[1] = new Color(0.627f, 0.886f, 0.416f);
-        _player2ColorScheme[2] = new Color(0.149f, 0.196f, 0.537f);
-        _player2ColorScheme[3] = new Color(0.369f, 0.404f, 0.686f);
-
-        _mapColorScheme = new Color[2];
-
-        _mapColorScheme[0] = new Color(0.5f, 0.5f, 0.5f);
-        _mapColorScheme[1] = new Color(0.8f, 0.8f, 0.8f);
     }
 
     public void ChangeCameraTo(Camera camera)

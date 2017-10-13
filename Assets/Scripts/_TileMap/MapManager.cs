@@ -40,9 +40,8 @@ public class MapManager : MonoBehaviour
         {
             for (int j = 0; j < MapLength; j++)
             {
-                Tile tile = Instantiate(Services.Prefabs.Tile, Services.Main.transform)
+                Tile tile = Instantiate(Services.Prefabs.Tile, GameSceneScript.tileMapHolder)
                     .GetComponent<Tile>();
-                tile.transform.parent = GameSceneScript.tileMapHolder;
                 
                 tile.Init(new Coord(i, j));
                 _map[i, j] = tile;
@@ -68,32 +67,6 @@ public class MapManager : MonoBehaviour
             Map[tile.coord.x + offset.x, tile.coord.y + offset.y].SetOccupyingPiece(playerBase);
         }
     }
-
-    public void ForceActivateTile(Tile tile, Player player)
-    {
-        tile.ActivateTile(player);
-    }
-
-    public void ForceDeactivateTile(Tile tile)
-    {
-        tile.DeactivateTile();
-    }
-
-    //public void ActivateTile(Tile tile, Player player)
-    //{
-    //    if (ValidateTile(tile))
-    //    {
-    //        tile.ActivateTile(player);
-    //    }
-    //}
-
-    //public void DeactivateTile(Tile tile)
-    //{
-    //    if (ValidateTile(tile))
-    //    {
-    //        tile.DeactivateTile();
-    //    }
-    //}
 
     public Tile GetRandomTile()
     {

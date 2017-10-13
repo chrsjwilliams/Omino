@@ -6,24 +6,7 @@ using UnityEngine;
 
 public class InputManager
 {
-    private readonly string[] buttons = { "A", "B", "X", "Y" , "LB", "RB", "Start", "Back"};
-    static private KeyCode[] validKeyCodes;
-
-    private const float AXIS_THRESHOLD = 0.7f;
-
-    private float leftTriggerAxis;
-    private float rightTriggerAxis;
-
-    private Vector2 leftStickAxis;
-    private Vector2 rightStickAxis;
-    private IntVector2 dPadAxis;
     private Touch[] lastFrameTouches;
-
-    public InputManager()
-    {
-        if (validKeyCodes != null) return;
-        validKeyCodes = (KeyCode[])System.Enum.GetValues(typeof(KeyCode));
-    }
 
     //  BUG: Button Presses Register twice for both players
     public void GetInput()

@@ -9,9 +9,8 @@ public class GameSceneScript : Scene<TransitionData>
 
     private float _colorChangeTime;
 
+    [SerializeField]
     private Color _backgroundColor;
-
-    public Transform[] uiAreas;
 
     internal override void OnEnter(TransitionData data)
     {
@@ -20,7 +19,6 @@ public class GameSceneScript : Scene<TransitionData>
         Services.UIManager = GetComponentInChildren<UIManager>();
 
         _colorChangeTime = 0f;
-        _backgroundColor = new Color(0.449f, 0.820f, 0.867f);
         Services.MapManager.GenerateMap();
         Services.GameManager.InitPlayers();
     }

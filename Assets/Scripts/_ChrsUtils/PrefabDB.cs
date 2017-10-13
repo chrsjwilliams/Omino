@@ -22,16 +22,4 @@ public class PrefabDB : ScriptableObject
     {
         get { return _tile; }
     }
-
-    [SerializeField] private GameObject[] _cursors;
-    public GameObject[] Cursors
-    {
-        get { return _cursors; }
-    }
-
-    [SerializeField] private GameObject _netCursor;
-    public GameObject NetCursor
-    {
-        get { return _netCursor; }
-    }
 }

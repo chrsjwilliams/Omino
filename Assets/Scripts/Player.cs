@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Player : MonoBehaviour
 {
@@ -27,21 +27,39 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Vector3 handSpacing;
     [SerializeField]
-    private Vector3 handOrigin;
+    private Vector3 handOffset;
     [SerializeField]
     private int startingHandSize;
     [SerializeField]
     private int maxHandSize;
     [SerializeField]
     private int piecesPerHandColumn;
-    public Transform uiArea { get; private set; }
+    public RectTransform handZone { get; private set; }
+    [SerializeField]
+    private float factoryPlayRateIncrement;
+    private int factoryCount;
     [SerializeField]
     private float baseDrawPeriod;
-    private float drawRate { get { return 1 / baseDrawPeriod; } }
+    private float drawRate
+    {
+        get
+        {
+            return (1 / baseDrawPeriod) * (1 + factoryCount * factoryPlayRateIncrement);
+        }
+    }
     private float drawMeter;
     [SerializeField]
+    private float mineDrawRateIncrement;
+    private int mineCount;
+    [SerializeField]
     private float basePlayPeriod;
-    private float playRate { get { return 1 / basePlayPeriod; } }
+    private float playRate
+    {
+        get
+        {
+            return (1 / basePlayPeriod) * (1 + mineCount * mineDrawRateIncrement);
+        }
+    }
     private float playMeter;
 
     // Use this for initialization
@@ -52,15 +70,13 @@ public class Player : MonoBehaviour
         _activeTilePrimaryColors[0] = colorScheme[0];
         _activeTilePrimaryColors[1] = colorScheme[1];
 
-        _activeTileSecondaryColors[0] = colorScheme[2];
-        _activeTileSecondaryColors[1] = colorScheme[3];
-
-        uiArea = Services.GameScene.uiAreas[playerNum - 1];
+        handZone = Services.UIManager.handZones[playerNum - 1];
 
         hand = new List<Polyomino>();
 
         InitializeDeck();
         DrawPieces(startingHandSize);
+
 
         //for now just allow placement always
         placementAvailable = true;
@@ -138,11 +154,20 @@ public class Player : MonoBehaviour
 
     void OrganizeHand()
     {
+        Vector3 offset = handOffset;
+        float spacingMultiplier = 1;
+        if(playerNum == 2)
+        {
+            spacingMultiplier = -1;
+            offset = new Vector3(-handOffset.x, handOffset.y, handOffset.z);
+        }
+        offset += Services.GameManager.MainCamera.ScreenToWorldPoint(handZone.transform.position);
+        offset = new Vector3(offset.x, offset.y, 0);
         for (int i = 0; i < hand.Count; i++)
         {
             Vector3 newPos = new Vector3(
-                handSpacing.x * (i / piecesPerHandColumn),
-                handSpacing.y * (i % piecesPerHandColumn), 0) + handOrigin;
+                handSpacing.x * (i / piecesPerHandColumn) * spacingMultiplier,
+                handSpacing.y * (i % piecesPerHandColumn), 0) + offset;
             hand[i].Reposition(newPos);
         }
     }

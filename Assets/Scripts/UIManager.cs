@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
+    public RectTransform[] handZones;
     [SerializeField]
     private Image[] drawMeters;
     [SerializeField]
@@ -21,6 +22,7 @@ public class UIManager : MonoBehaviour {
     private string playAvailableText;
     [SerializeField]
     private string playUnavailableText;
+    public Transform canvas;
 
 	// Use this for initialization
 	void Start () {

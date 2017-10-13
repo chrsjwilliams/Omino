@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class Tile : MonoBehaviour
 {
@@ -9,10 +11,9 @@ public class Tile : MonoBehaviour
     {
         get { return _isActive; }
     }
-
-
     public Coord coord { get; private set; }
-    public BoxCollider boxCol { get; private set; }
+    public BoxCollider2D boxCol { get; private set; }
+    private SpriteRenderer sr;
     public Material material { get; set; }
     public Polyomino occupyingPiece { get; private set; }
     public Polyomino pieceParent { get; private set; }
@@ -21,17 +22,17 @@ public class Tile : MonoBehaviour
     public void Init(Coord coord_)
     {
         coord = coord_;
-        transform.localPosition = new Vector3(coord.x, coord.y, 0);
-        material = GetComponent<MeshRenderer>().material;
+        boxCol = GetComponent<BoxCollider2D>();
+        sr = GetComponent<SpriteRenderer>();
+        transform.position = new Vector3(coord.x, coord.y, 0);
         if ((coord.x + coord.y) % 2 == 0)
         {
-            material.color = Services.GameManager.MapColorScheme[0];
+            sr.color = Services.GameManager.MapColorScheme[0];
         }
         else
         {
-            material.color = Services.GameManager.MapColorScheme[1];
+            sr.color = Services.GameManager.MapColorScheme[1];
         }
-        boxCol = GetComponent<BoxCollider>();
         touchID = -1;
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<TouchUp>(OnTouchUp);
@@ -41,36 +42,6 @@ public class Tile : MonoBehaviour
     {
         pieceParent = pieceParent_;
         Init(coord_);
-    }
-
-    public void Init(Coord coord_, Color color1, Color color2)
-    {
-        coord = coord_;
-        transform.localPosition = new Vector3(coord.x, coord.y, 0);
-        material = GetComponent<MeshRenderer>().material;
-        if ((coord.x + coord.y) % 2 == 0)
-        {
-            material.color = color1;
-        }
-        else
-        {
-            material.color = color2;
-        }
-        boxCol = GetComponent<BoxCollider>();
-    }
-
-    public void Create()
-    {
-        material = GetComponent<MeshRenderer>().material;
-        if ((coord.x + coord.y) % 2 == 0)
-        {
-            material.color = Services.GameManager.MapColorScheme[0];
-        }
-        else
-        {
-            material.color = Services.GameManager.MapColorScheme[1];
-        }
-        boxCol = GetComponent<BoxCollider>();
     }
 
     public void SetCoord(Coord newCoord)
@@ -83,24 +54,11 @@ public class Tile : MonoBehaviour
         _isActive = true;
         if ((coord.x + coord.y) % 2 == 0)
         {
-            material.color = player.ActiveTilePrimaryColors[0];
+            sr.color = player.ActiveTilePrimaryColors[0];
         }
         else
         {
-            material.color = player.ActiveTilePrimaryColors[1];
-        }
-    }
-
-    public void DeactivateTile()
-    {
-        _isActive = false;
-        if ((coord.x + coord.y) % 2 == 0)
-        {
-            material.color = Services.GameManager.MapColorScheme[0];
-        }
-        else
-        {
-            material.color = Services.GameManager.MapColorScheme[1];
+            sr.color = player.ActiveTilePrimaryColors[1];
         }
     }
 
@@ -184,4 +142,6 @@ public class Tile : MonoBehaviour
     {
         if (pieceParent != null) pieceParent.OnInputDrag(inputPos);
     }
+
+
 }

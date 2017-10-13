@@ -168,7 +168,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 17
+  orthographic size: 22
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -191,7 +191,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 344098086}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.5, y: 14.5, z: -10}
+  m_LocalPosition: {x: 14.5, y: 16.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -314,18 +314,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PLAYER: Player
-  PLAYER_ONE: 0
-  PLAYER_TWO: 1
   _numPlayers: 0
   _mainCamera: {fileID: 0}
   _players: []
-  ownedByPlayer1: {fileID: 0}
-  ownedByPlayer2: {fileID: 0}
-  baseWidth: 0
-  baseLength: 0
-  _player1ColorScheme: []
-  _player2ColorScheme: []
-  _mapColorScheme: []
+  _player1ColorScheme:
+  - {r: 0.87058824, g: 0.41960785, b: 0.28235295, a: 1}
+  - {r: 0.87058824, g: 0.41960785, b: 0.28235295, a: 1}
+  _player2ColorScheme:
+  - {r: 0.49019608, g: 0.73333335, b: 0.7647059, a: 1}
+  - {r: 0.49019608, g: 0.73333335, b: 0.7647059, a: 1}
+  _mapColorScheme:
+  - {r: 0.9338235, g: 0.9338235, b: 0.9338235, a: 1}
+  - {r: 0.93333334, g: 0.93333334, b: 0.93333334, a: 1}
 --- !u!114 &1356268955
 MonoBehaviour:
   m_ObjectHideFlags: 0

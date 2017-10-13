@@ -338,7 +338,6 @@ public class Polyomino
     public void PlaceAtCurrentLocation()
     {
         //place the piece on the board where it's being hovered now
-        holder.transform.parent = Services.GameScene.transform; // placeholder until we decide somewhere else to put it
         placed = true;
         OnPlace();
         foreach(Tile tile in tiles)
@@ -376,17 +375,14 @@ public class Polyomino
 
     public void Reposition(Vector3 pos)
     {
-        holder.transform.localPosition = pos;
+        holder.transform.position = pos;
         //change localposition of the piece container in player UI to value
     }
 
     public void SetBasePosition(IntVector2 pos)
     {
-        float worldSpaceOffset = 2.0f;
         centerCoord = new Coord(pos.x, pos.y);
-        Vector3 tilePos = Services.MapManager.Map[centerCoord.x, centerCoord.y].transform.position;
-        tilePos = new Vector3(tilePos.x, tilePos.y , tilePos.z - worldSpaceOffset);
-        holder.transform.position = tilePos;
+        holder.transform.position = Services.MapManager.Map[centerCoord.x, centerCoord.y].transform.position;
     }
 
     public void SetTileCoords(Coord centerPos)
@@ -401,19 +397,10 @@ public class Polyomino
     public void MakePhysicalPiece()
     {
         holder = new GameObject();
-        holder.transform.position = Vector3.zero;
-
+        holder.transform.SetParent(Services.GameScene.transform);
         holder.name = holderName;
 
         if (piece == null) return;
-        if (isBase)
-            holder.transform.parent = Services.GameScene.transform; // placeholder parent for now
-        else
-        {
-            holder.transform.parent = owner.uiArea;
-            holder.transform.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
-        }
-
         tileRelativeCoords = new Dictionary<Coord, Tile>();
 
         for (int x = 0; x < 5; x++)
@@ -422,16 +409,15 @@ public class Polyomino
             {
                 if (piece[index, x, y] == 1)
                 {
-                    Tile newpiece = MonoBehaviour.Instantiate(Services.Prefabs.Tile);
+                    Tile newpiece = MonoBehaviour.Instantiate(Services.Prefabs.Tile, 
+                        holder.transform);
 
                     Coord myCoord = new Coord(-2 + x, -2 + y);
-                    newpiece.transform.parent = holder.transform;
                     newpiece.Init(myCoord, this);
                     tileRelativeCoords[myCoord] = newpiece;
 
                     string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;
-
 
                     newpiece.ActivateTile(owner);
                     tiles.Add(newpiece);
@@ -474,10 +460,10 @@ public class Polyomino
                 Mathf.RoundToInt(inputPos.x),
                 Mathf.RoundToInt(inputPos.y));
             SetTileCoords(roundedInputCoord);
-            holder.transform.position = new Vector3(
+            Reposition(new Vector3(
                 roundedInputCoord.x,
                 roundedInputCoord.y,
-                holder.transform.position.z);
+                holder.transform.position.z));
         }
     }
 }
