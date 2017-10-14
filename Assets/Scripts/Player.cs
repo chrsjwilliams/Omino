@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
         get { return _activeTileSecondaryColors; }
     }
 
+    [SerializeField]
+    private bool viewingHand;
     public List<Polyomino> deck { get; private set; }
     public List<Polyomino> hand { get; private set; }
     public Polyomino selectedPiece { get; private set; }
@@ -65,6 +67,7 @@ public class Player : MonoBehaviour
     // Use this for initialization
     public void Init(Color[] colorScheme, int posOffset)
     {
+        viewingHand = true;
         playerNum = posOffset + 1;
 
         _activeTilePrimaryColors[0] = colorScheme[0];
@@ -142,7 +145,7 @@ public class Player : MonoBehaviour
         Polyomino piece = GetRandomPieceFromDeck();
         deck.Remove(piece);
         hand.Add(piece);
-        piece.MakePhysicalPiece();
+        piece.MakePhysicalPiece(viewingHand);
         OrganizeHand();
     }
 
@@ -172,6 +175,15 @@ public class Player : MonoBehaviour
         }
     }
     #endregion
+
+    public void ToggleHandZoneView(bool viewPieces)
+    {
+        viewingHand = viewPieces;
+        foreach(Polyomino piece in hand)
+        {
+            piece.SetVisible(viewingHand);
+        }
+    }
 
     public void OnPieceSelected(Polyomino piece)
     {

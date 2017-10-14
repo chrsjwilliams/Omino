@@ -316,6 +316,15 @@ public class Polyomino
         }
     }
 
+    public void SetVisible(bool isVisible)
+    {
+        holder.SetActive(isVisible);
+        foreach(Tile tile in tiles)
+        {
+            tile.enabled = isVisible;
+        }
+    }
+
     public bool IsWithinBounds()
     {
         bool withinBounds = false;
@@ -394,7 +403,7 @@ public class Polyomino
         }
     }
 
-    public void MakePhysicalPiece()
+    public void MakePhysicalPiece(bool isViewable)
     {
         holder = new GameObject();
         holder.transform.SetParent(Services.GameScene.transform);
@@ -424,6 +433,8 @@ public class Polyomino
                 }
             }
         }
+
+        SetVisible(isViewable);
     }
 
     public void OnInputDown()

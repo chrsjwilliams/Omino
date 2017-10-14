@@ -59,7 +59,7 @@ public class MapManager : MonoBehaviour
     public void ActivateBase(Player player, IntVector2 offset)
     {
         Polyomino playerBase = new Polyomino(9, 0, player);
-        playerBase.MakePhysicalPiece();
+        playerBase.MakePhysicalPiece(true);
         playerBase.SetBasePosition(offset);
 
         foreach(Tile tile in playerBase.tiles)
