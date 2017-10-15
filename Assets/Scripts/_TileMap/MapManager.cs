@@ -101,4 +101,24 @@ public class MapManager : MonoBehaviour
         }
         return false;
     }
+
+    public bool CheckForWin(Polyomino piece)
+    {
+        foreach (Tile tile in piece.tiles)
+        {
+            foreach (Coord direction in Coord.Directions())
+            {
+                Coord adjacentCoord = tile.coord.Add(direction);
+                if (IsCoordContainedInMap(adjacentCoord))
+                {
+                    Tile adjTile = Map[adjacentCoord.x, adjacentCoord.y];
+                    if (adjTile.IsOccupied() &&
+                        adjTile.occupyingPiece.owner != piece.owner &&
+                        adjTile.occupyingPiece.buildingType == BuildingType.BASE)
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
 }

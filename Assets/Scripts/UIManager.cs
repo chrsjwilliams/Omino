@@ -22,11 +22,14 @@ public class UIManager : MonoBehaviour {
     private string playAvailableText;
     [SerializeField]
     private string playUnavailableText;
+    [SerializeField]
+    private Text gameWinText;
     public Transform canvas;
 
 	// Use this for initialization
 	void Start () {
-		
+        gameWinText = GameObject.Find("GameWinText").GetComponent<Text>();
+        gameWinText.gameObject.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -52,5 +55,12 @@ public class UIManager : MonoBehaviour {
             playAvailableIcons[playerNum - 1].color = playUnavailableColor;
             playAvailableTexts[playerNum - 1].text = playUnavailableText;
         }
+    }
+
+    public void SetGameWinText(Player winner)
+    {
+        gameWinText.gameObject.SetActive(true);
+        gameWinText.text = "PLAYER " + winner.playerNum + " WINS";
+        gameWinText.color = winner.ActiveTilePrimaryColors[0];
     }
 }

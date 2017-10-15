@@ -64,6 +64,7 @@ public class Player : MonoBehaviour
         }
     }
     private float playMeter;
+    public bool gameOver { get; private set; }
 
     // Use this for initialization
     public void Init(Color[] colorScheme, int posOffset)
@@ -95,8 +96,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateDrawMeter();
-        UpdatePlayMeter();
+        if (!gameOver)
+        {
+            UpdateDrawMeter();
+            UpdatePlayMeter();
+        }
     }
 
     void UpdateDrawMeter()
@@ -215,12 +219,14 @@ public class Player : MonoBehaviour
     }
 
 
-    public void OnPiecePlaced()
+    public void OnPiecePlaced(Polyomino piece)
     {
         BuildingType blueprintType = selectedPiece.buildingType;
         if (selectedPiece.buildingType == BuildingType.NONE) placementAvailable = false;
         else AddBluePrint(new Blueprint(blueprintType, this));
         selectedPiece = null;
+        placementAvailable = false;
+        if (Services.MapManager.CheckForWin(piece)) Services.GameScene.GameWin(this);
     }
 
     public void CancelSelectedPiece()
@@ -242,8 +248,12 @@ public class Player : MonoBehaviour
         mineCount += newMineCount;
     }
 
-    public void ToggleFactoryCount (int newFacotryCount)
+    public void ToggleFactoryCount(int newFacotryCount)
     {
         factoryCount += newFacotryCount;
+    }
+    public void OnGameOver()
+    {
+        gameOver = true;
     }
 }

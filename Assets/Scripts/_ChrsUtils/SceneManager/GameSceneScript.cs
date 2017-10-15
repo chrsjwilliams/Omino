@@ -34,4 +34,19 @@ public class GameSceneScript : Scene<TransitionData>
         _colorChangeTime += Time.deltaTime;
         Services.GameManager.MainCamera.backgroundColor = Color.Lerp(Color.black, _backgroundColor, _colorChangeTime);
     }
+
+    public void GameWin(Player winner)
+    {
+        Debug.Log("player " + winner.playerNum + " has won");
+        Services.UIManager.SetGameWinText(winner);
+        foreach(Player player in Services.GameManager.Players)
+        {
+            player.OnGameOver();
+        }
+    }
+
+    public void Reset()
+    {
+        Services.GameManager.Reset(new Reset());
+    }
 }

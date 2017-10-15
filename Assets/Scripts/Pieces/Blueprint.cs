@@ -161,7 +161,7 @@ public class Blueprint : Polyomino
                 if (IsPlacementLegal())
                 {
                     PlaceAtCurrentLocation();
-                    owner.OnPiecePlaced();
+                    owner.OnPiecePlaced(this);
                 }
                 else owner.CancelSelectedBlueprint();
             }
