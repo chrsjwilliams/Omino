@@ -128,9 +128,38 @@ public class Blueprint : Polyomino
         OnPlace();
         foreach (Tile tile in tiles)
         {
-            Coord tileCoord = tile.coord;
-            Services.MapManager.Map[tileCoord.x, tileCoord.y].SetOccupyingStructure(this);
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            mapTile.SetOccupyingStructure(this);
+            if (!mapTile.occupyingPiece.occupyingStructures.Contains(this))
+                mapTile.occupyingPiece.AddOccupyingStructure(this);
         }
+    }
+
+    public override void Remove()
+    {
+        switch (buildingType)
+        {
+            case BuildingType.FACTORY:
+                owner.ToggleMineCount(-1);
+                break;
+            case BuildingType.MINE:
+                owner.ToggleFactoryCount(-1);
+                break;
+            default:
+                break;
+        }
+        List<Polyomino> constituentPieces = new List<Polyomino>();
+        foreach(Tile tile in tiles)
+        {
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            if (!constituentPieces.Contains(mapTile.occupyingPiece))
+                constituentPieces.Add(mapTile.occupyingPiece);
+        }
+        for (int i = 0; i < constituentPieces.Count; i++)
+        {
+            constituentPieces[i].RemoveOccupyingStructure(this);
+        }
+        GameObject.Destroy(holder);
     }
 
     protected override void OnPlace()

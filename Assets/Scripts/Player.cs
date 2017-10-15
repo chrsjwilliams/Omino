@@ -134,7 +134,8 @@ public class Player : MonoBehaviour
             int numTypes = Polyomino.pieceTypes[numBlocks];
             for (int index = 0; index < numTypes; index++)
             {
-                deck.Add(new Polyomino(numBlocks, index, this));
+                if (numBlocks < 5) deck.Add(new Destructor(numBlocks, index, this, false));
+                else deck.Add(new Polyomino(numBlocks, index, this));
             }
         }
     }

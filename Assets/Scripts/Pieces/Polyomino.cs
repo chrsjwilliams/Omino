@@ -21,7 +21,7 @@ public class Polyomino
     public bool selected { get; protected set; }
     protected bool placed;
 
-    public Blueprint occupyingStructure { get; protected set; }
+    public List<Blueprint> occupyingStructures { get; protected set; }
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -287,6 +287,8 @@ public class Polyomino
         index = _index;
         owner = _player;
 
+        occupyingStructures = new List<Blueprint>();
+
         buildingType = BuildingType.NONE;
 
         switch (_units)
@@ -390,6 +392,19 @@ public class Polyomino
         //(e.g. destroy overlapping pieces for a destructor)
     }
 
+    public virtual void Remove()
+    {
+        for (int i = occupyingStructures.Count -1; i >= 0; i--)
+        {
+            occupyingStructures[i].Remove();
+        }
+        foreach (Tile tile in tiles)
+        {
+            Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(null);
+        }
+        GameObject.Destroy(holder);
+    }
+
     public void Reposition(Vector3 pos)
     {
         holder.transform.position = pos;
@@ -411,9 +426,14 @@ public class Polyomino
         }
     }
 
-    public virtual void SetOccupyingStructure(Blueprint blueprint)
+    public void AddOccupyingStructure(Blueprint blueprint)
     {
-        occupyingStructure = blueprint;
+        occupyingStructures.Add(blueprint);
+    }
+
+    public void RemoveOccupyingStructure(Blueprint blueprint)
+    {
+        occupyingStructures.Remove(blueprint);
     }
 
     public virtual void MakePhysicalPiece(bool isViewable)
