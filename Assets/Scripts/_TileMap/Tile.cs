@@ -125,7 +125,7 @@ public class Tile : MonoBehaviour
 
     void OnTouchDown(TouchDown e)
     {
-        if (boxCol.bounds.Contains(e.touch.position))
+        if (boxCol.bounds.Contains(e.touch.position) && touchID == -1)
         {
             touchID = e.touch.fingerId;
             OnInputDown();
