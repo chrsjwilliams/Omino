@@ -439,7 +439,7 @@ public class Polyomino
 
     public void OnInputDown()
     {
-        if (!selected)
+        if (!selected && !owner.gameOver)
         {
             selected = true;
             if(!placed) owner.OnPieceSelected(this);
@@ -453,10 +453,10 @@ public class Polyomino
             selected = false;
             if (!placed)
             {
-                if (IsPlacementLegal() && owner.placementAvailable)
+                if (IsPlacementLegal() && owner.placementAvailable && !owner.gameOver)
                 {
                     PlaceAtCurrentLocation();
-                    owner.OnPiecePlaced();
+                    owner.OnPiecePlaced(this);
                 }
                 else owner.CancelSelectedPiece();
             }
@@ -465,7 +465,7 @@ public class Polyomino
 
     public void OnInputDrag(Vector3 inputPos)
     {
-        if (!placed)
+        if (!placed && !owner.gameOver)
         {
             Coord roundedInputCoord = new Coord(
                 Mathf.RoundToInt(inputPos.x),

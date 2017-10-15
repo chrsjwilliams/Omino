@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     }
 
     [SerializeField] private Player[] _players;
-    public Player[] Player
+    public Player[] Players
     {
         get { return _players; }
     }
@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
         Services.InputManager.Update();
     }
 
-    private void Reset(Reset e)
+    public void Reset(Reset e)
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

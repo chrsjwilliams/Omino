@@ -113,15 +113,16 @@ MonoBehaviour:
   _activeTileSecondaryColors:
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 0, g: 0, b: 0, a: 0}
+  viewingHand: 0
   handSpacing: {x: 5.5, y: -8, z: 0}
   handOffset: {x: 4, y: 30, z: 0}
   startingHandSize: 4
   maxHandSize: 8
   piecesPerHandColumn: 4
   factoryPlayRateIncrement: 0.15
-  baseDrawPeriod: 10
+  baseDrawPeriod: 5
   mineDrawRateIncrement: 0.15
-  basePlayPeriod: 10
+  basePlayPeriod: 5
 --- !u!212 &212260773991372538
 SpriteRenderer:
   m_ObjectHideFlags: 1

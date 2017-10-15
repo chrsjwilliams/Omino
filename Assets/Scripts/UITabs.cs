@@ -11,11 +11,11 @@ public class UITabs : MonoBehaviour
     {
 	   if(name.Contains("P1"))
         {
-            player = Services.GameManager.Player[0];
+            player = Services.GameManager.Players[0];
         }
        else
         {
-            player = Services.GameManager.Player[1];
+            player = Services.GameManager.Players[1];
         }
 	}
 
