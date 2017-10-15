@@ -101,6 +101,11 @@ public class Player : MonoBehaviour
             UpdateDrawMeter();
             UpdatePlayMeter();
         }
+
+        if(Input.GetKeyDown(KeyCode.Space) && selectedPiece != null)
+        {
+            selectedPiece.Rotate();
+        }
     }
 
     void UpdateDrawMeter()

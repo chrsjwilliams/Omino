@@ -20,6 +20,7 @@ public class Polyomino
     public Coord centerCoord;
     public bool selected { get; protected set; }
     protected bool placed;
+    private const float rotationInputRadius = 5f;
 
     public List<Blueprint> occupyingStructures { get; protected set; }
 
@@ -478,6 +479,7 @@ public class Polyomino
         {
             selected = true;
             if(!placed) owner.OnPieceSelected(this);
+            Services.GameEventManager.Register<TouchDown>(CheckTouchForRotateInput);
         }
     }
 
@@ -486,6 +488,7 @@ public class Polyomino
         if (selected)
         {
             selected = false;
+            Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
             if (!placed)
             {
                 if (IsPlacementLegal() && owner.placementAvailable && !owner.gameOver)
@@ -528,6 +531,38 @@ public class Polyomino
                 }
             }
             tile.SetSprite(spriteIndex);
+        }
+    }
+
+    void CheckTouchForRotateInput(TouchDown e)
+    {
+        if(Vector2.Distance(
+            Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position), 
+            holder.transform.position) < rotationInputRadius)
+        {
+            Rotate();
+        }
+    }
+
+    public void Rotate()
+    {
+        float rotAngle = 90 * Mathf.Deg2Rad;
+        foreach (Tile tile in tiles)
+        {
+            Coord prevRelCoord = tileRelativeCoords[tile];
+            int newXCoord = Mathf.RoundToInt(
+                prevRelCoord.x * Mathf.Cos(rotAngle)
+                - (prevRelCoord.y * Mathf.Sin(rotAngle)));
+            int newYCoord = Mathf.RoundToInt(
+                prevRelCoord.x * Mathf.Sin(rotAngle)
+                + (prevRelCoord.y * Mathf.Cos(rotAngle)));
+            tileRelativeCoords[tile] = new Coord(newXCoord, newYCoord);
+        }
+        SetTileCoords(centerCoord);
+        SetTileSprites();
+        foreach (Tile tile in tiles)
+        {
+            tile.transform.position = new Vector3(tile.coord.x, tile.coord.y);
         }
     }
 }
