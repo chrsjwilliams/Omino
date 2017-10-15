@@ -17,6 +17,7 @@ public class Tile : MonoBehaviour
     public Material material { get; set; }
     public Polyomino occupyingPiece { get; private set; }
     public Polyomino pieceParent { get; private set; }
+    public Blueprint occupyingStructure { get; private set; }
     private int touchID;
 
     public void Init(Coord coord_)
@@ -49,17 +50,16 @@ public class Tile : MonoBehaviour
         coord = newCoord;
     }
 
-    public void ActivateTile(Player player)
+    public void SetColor(Color color)
+    {
+        sr.color = color;
+    }
+
+    public void ActivateTile(Player player, BuildingType buildingType)
     {
         _isActive = true;
-        if ((coord.x + coord.y) % 2 == 0)
-        {
-            sr.color = player.ActiveTilePrimaryColors[0];
-        }
-        else
-        {
-            sr.color = player.ActiveTilePrimaryColors[1];
-        }
+        if(buildingType == BuildingType.NONE) sr.color = player.ActiveTilePrimaryColors[0];
+        else sr.color = player.ActiveTilePrimaryColors[1];
     }
 
     public void SetOccupyingPiece(Polyomino piece)
@@ -67,9 +67,19 @@ public class Tile : MonoBehaviour
         occupyingPiece = piece;
     }
 
+    public void SetOccupyingStructure(Blueprint blueprint)
+    {
+        occupyingStructure = blueprint;
+    }
+
     public bool IsOccupied()
     {
         return occupyingPiece != null;
+    }
+
+    public bool PartOfStructure()
+    {
+        return occupyingStructure != null;
     }
 
     public Polyomino OccupiedBy()

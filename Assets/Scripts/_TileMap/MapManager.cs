@@ -65,6 +65,7 @@ public class MapManager : MonoBehaviour
         foreach(Tile tile in playerBase.tiles)
         {
             Map[tile.coord.x + offset.x, tile.coord.y + offset.y].SetOccupyingPiece(playerBase);
+            Map[tile.coord.x + offset.x, tile.coord.y + offset.y].SetColor(player.ActiveTilePrimaryColors[1]);
         }
     }
 

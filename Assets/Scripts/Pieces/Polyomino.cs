@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public enum BuildingType
+{ BASE,FACTORY, MINE, NONE }
+
+
 public class Polyomino
 {
-
-    public bool isBase;
     public List<Tile> tiles = new List<Tile>();
-    private Dictionary<Coord, Tile> tileRelativeCoords;
+    protected Dictionary<Coord, Tile> tileRelativeCoords;
     public GameObject holder { get; protected set; }
-    private string holderName;
+    protected string holderName;
+    public BuildingType buildingType { get; protected set; }
 
     protected int index;
     protected int variations;
@@ -16,7 +19,9 @@ public class Polyomino
     public Player owner { get; protected set; }
     public Coord centerCoord;
     public bool selected { get; protected set; }
-    private bool placed;
+    protected bool placed;
+
+    public Blueprint occupyingStructure { get; protected set; }
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -282,7 +287,7 @@ public class Polyomino
         index = _index;
         owner = _player;
 
-        isBase = false;
+        buildingType = BuildingType.NONE;
 
         switch (_units)
         {
@@ -308,7 +313,7 @@ public class Polyomino
                 break;
             case 9:
                 holderName = "Player " + owner.playerNum + " Base";
-                isBase = true;
+                buildingType = BuildingType.BASE;
                 piece = playerBase;
                 break;
             default:
@@ -318,10 +323,13 @@ public class Polyomino
 
     public void SetVisible(bool isVisible)
     {
-        holder.SetActive(isVisible);
-        foreach(Tile tile in tiles)
+        if (!placed)
         {
-            tile.enabled = isVisible;
+            holder.SetActive(isVisible);
+            foreach (Tile tile in tiles)
+            {
+                tile.enabled = isVisible;
+            }
         }
     }
 
@@ -344,7 +352,7 @@ public class Polyomino
         return withinBounds;
     }
 
-    public void PlaceAtCurrentLocation()
+    public virtual void PlaceAtCurrentLocation()
     {
         //place the piece on the board where it's being hovered now
         placed = true;
@@ -403,7 +411,12 @@ public class Polyomino
         }
     }
 
-    public void MakePhysicalPiece(bool isViewable)
+    public virtual void SetOccupyingStructure(Blueprint blueprint)
+    {
+        occupyingStructure = blueprint;
+    }
+
+    public virtual void MakePhysicalPiece(bool isViewable)
     {
         holder = new GameObject();
         holder.transform.SetParent(Services.GameScene.transform);
@@ -428,7 +441,9 @@ public class Polyomino
                     string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;
 
-                    newpiece.ActivateTile(owner);
+
+                    newpiece.ActivateTile(owner, buildingType);
+
                     tiles.Add(newpiece);
                 }
             }
@@ -437,7 +452,7 @@ public class Polyomino
         SetVisible(isViewable);
     }
 
-    public void OnInputDown()
+    public virtual void OnInputDown()
     {
         if (!selected)
         {
@@ -446,7 +461,7 @@ public class Polyomino
         }
     }
 
-    public void OnInputUp()
+    public virtual void OnInputUp()
     {
         if (selected)
         {

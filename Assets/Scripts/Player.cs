@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     private bool viewingHand;
     public List<Polyomino> deck { get; private set; }
     public List<Polyomino> hand { get; private set; }
+    public List<Blueprint> blueprints { get; private set; }
     public Polyomino selectedPiece { get; private set; }
     private Polyomino pieceToBePlayed;
     public bool placementAvailable { get; private set; }
@@ -39,7 +40,7 @@ public class Player : MonoBehaviour
     public RectTransform handZone { get; private set; }
     [SerializeField]
     private float factoryPlayRateIncrement;
-    private int factoryCount;
+    public int factoryCount { get; private set; }
     [SerializeField]
     private float baseDrawPeriod;
     private float drawRate
@@ -52,7 +53,7 @@ public class Player : MonoBehaviour
     private float drawMeter;
     [SerializeField]
     private float mineDrawRateIncrement;
-    private int mineCount;
+    public int mineCount { get; private set; }
     [SerializeField]
     private float basePlayPeriod;
     private float playRate
@@ -76,9 +77,15 @@ public class Player : MonoBehaviour
         handZone = Services.UIManager.handZones[playerNum - 1];
 
         hand = new List<Polyomino>();
+        blueprints = new List<Blueprint>();
 
         InitializeDeck();
         DrawPieces(startingHandSize);
+        Blueprint factory = new Blueprint(BuildingType.FACTORY, this);
+        AddBluePrint(factory);
+
+        Blueprint mine = new Blueprint(BuildingType.MINE, this);
+        AddBluePrint(mine);
 
 
         //for now just allow placement always
@@ -146,7 +153,7 @@ public class Player : MonoBehaviour
         deck.Remove(piece);
         hand.Add(piece);
         piece.MakePhysicalPiece(viewingHand);
-        OrganizeHand();
+        OrganizeHand(hand);
     }
 
     Polyomino GetRandomPieceFromDeck()
@@ -155,7 +162,14 @@ public class Player : MonoBehaviour
         return deck[index];
     }
 
-    void OrganizeHand()
+    public void AddBluePrint(Blueprint blueprint)
+    {
+        blueprints.Add(blueprint);
+        blueprint.MakePhysicalPiece(viewingHand);
+        OrganizeHand(blueprints);
+    }
+
+    void OrganizeHand<T>(List<T> heldpieces) where T :Polyomino
     {
         Vector3 offset = handOffset;
         float spacingMultiplier = 1;
@@ -166,12 +180,12 @@ public class Player : MonoBehaviour
         }
         offset += Services.GameManager.MainCamera.ScreenToWorldPoint(handZone.transform.position);
         offset = new Vector3(offset.x, offset.y, 0);
-        for (int i = 0; i < hand.Count; i++)
+        for (int i = 0; i < heldpieces.Count; i++)
         {
             Vector3 newPos = new Vector3(
                 handSpacing.x * (i / piecesPerHandColumn) * spacingMultiplier,
                 handSpacing.y * (i % piecesPerHandColumn), 0) + offset;
-            hand[i].Reposition(newPos);
+            heldpieces[i].Reposition(newPos);
         }
     }
     #endregion
@@ -183,26 +197,56 @@ public class Player : MonoBehaviour
         {
             piece.SetVisible(viewingHand);
         }
+
+        foreach(Blueprint blueprint in blueprints)
+        {
+            blueprint.SetVisible(!viewingHand);
+        }
     }
 
     public void OnPieceSelected(Polyomino piece)
     {
         if (selectedPiece != null) CancelSelectedPiece();
         selectedPiece = piece;
-        hand.Remove(piece);
-        OrganizeHand();
+        if (piece.buildingType == BuildingType.NONE) hand.Remove(piece);
+        else blueprints.Remove((Blueprint)piece);
+
+        OrganizeHand(hand);
     }
+
 
     public void OnPiecePlaced()
     {
+        BuildingType blueprintType = selectedPiece.buildingType;
+        if (selectedPiece.buildingType == BuildingType.NONE) placementAvailable = false;
+        else AddBluePrint(new Blueprint(blueprintType, this));
         selectedPiece = null;
-        placementAvailable = false;
+
+        //if (blueprintType != BuildingType.NONE)
+            //
     }
 
     public void CancelSelectedPiece()
     {
         hand.Add(selectedPiece);
-        OrganizeHand();
+        OrganizeHand(hand);
         selectedPiece = null;
+    }
+
+    public void CancelSelectedBlueprint()
+    {
+        blueprints.Add((Blueprint)selectedPiece);
+        OrganizeHand(blueprints);
+        selectedPiece = null;
+    }
+
+    public void ToggleMineCount(int newMineCount)
+    {
+        mineCount += newMineCount;
+    }
+
+    public void ToggleFactoryCount (int newFacotryCount)
+    {
+        factoryCount += newFacotryCount;
     }
 }
