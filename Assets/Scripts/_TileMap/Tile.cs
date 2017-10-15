@@ -11,6 +11,8 @@ public class Tile : MonoBehaviour
     {
         get { return _isActive; }
     }
+    [SerializeField]
+    private Sprite[] sprites;
     public Coord coord { get; private set; }
     public BoxCollider2D boxCol { get; private set; }
     private SpriteRenderer sr;
@@ -43,6 +45,7 @@ public class Tile : MonoBehaviour
     {
         pieceParent = pieceParent_;
         Init(coord_);
+        sr.sortingOrder += 5;
     }
 
     public void SetCoord(Coord newCoord)
@@ -153,5 +156,20 @@ public class Tile : MonoBehaviour
         if (pieceParent != null) pieceParent.OnInputDrag(inputPos);
     }
 
+
+    public void SetSprite(int spriteIndex)
+    {
+        sr.sprite = sprites[spriteIndex];
+    }
+
+    public void SetAlpha(float alpha)
+    {
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);
+    }
+
+    public void IncrementSortingOrder(int inc)
+    {
+        sr.sortingOrder += inc;
+    }
 
 }

@@ -8,7 +8,7 @@ public enum BuildingType
 public class Polyomino
 {
     public List<Tile> tiles = new List<Tile>();
-    protected Dictionary<Coord, Tile> tileRelativeCoords;
+    protected Dictionary<Tile, Coord> tileRelativeCoords;
     public GameObject holder { get; protected set; }
     protected string holderName;
     public BuildingType buildingType { get; protected set; }
@@ -420,9 +420,9 @@ public class Polyomino
     public void SetTileCoords(Coord centerPos)
     {
         centerCoord = centerPos;
-        foreach(KeyValuePair<Coord,Tile> tileCoord in tileRelativeCoords)
+        foreach(KeyValuePair<Tile,Coord> tileCoord in tileRelativeCoords)
         {
-            tileCoord.Value.SetCoord(tileCoord.Key.Add(centerPos));
+            tileCoord.Key.SetCoord(tileCoord.Value.Add(centerPos));
         }
     }
 
@@ -443,7 +443,7 @@ public class Polyomino
         holder.name = holderName;
 
         if (piece == null) return;
-        tileRelativeCoords = new Dictionary<Coord, Tile>();
+        tileRelativeCoords = new Dictionary<Tile, Coord>();
 
         for (int x = 0; x < 5; x++)
         {
@@ -456,7 +456,7 @@ public class Polyomino
 
                     Coord myCoord = new Coord(-2 + x, -2 + y);
                     newpiece.Init(myCoord, this);
-                    tileRelativeCoords[myCoord] = newpiece;
+                    tileRelativeCoords[newpiece] = myCoord;
 
                     string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;
@@ -468,7 +468,7 @@ public class Polyomino
                 }
             }
         }
-
+        SetTileSprites();
         SetVisible(isViewable);
     }
 
@@ -510,6 +510,24 @@ public class Polyomino
                 roundedInputCoord.x,
                 roundedInputCoord.y,
                 holder.transform.position.z));
+        }
+    }
+
+    protected void SetTileSprites()
+    {
+        foreach(Tile tile in tiles)
+        {
+            int spriteIndex = 15;
+            Coord[] directions = Coord.Directions();
+            for (int i = 0; i < directions.Length; i++)
+            {
+                Coord adjCoord = tileRelativeCoords[tile].Add(directions[i]);
+                if (tileRelativeCoords.ContainsValue(adjCoord))
+                {
+                    spriteIndex -= Mathf.RoundToInt(Mathf.Pow(2, i));
+                }
+            }
+            tile.SetSprite(spriteIndex);
         }
     }
 }

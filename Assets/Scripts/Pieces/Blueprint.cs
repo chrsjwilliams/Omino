@@ -95,7 +95,7 @@ public class Blueprint : Polyomino
         holder.name = holderName;
 
         if (piece == null) return;
-        tileRelativeCoords = new Dictionary<Coord, Tile>();
+        tileRelativeCoords = new Dictionary<Tile, Coord>();
 
         for (int x = 0; x < 5; x++)
         {
@@ -108,18 +108,20 @@ public class Blueprint : Polyomino
 
                     Coord myCoord = new Coord(-2 + x, -2 + y);
                     newpiece.Init(myCoord, this);
-                    tileRelativeCoords[myCoord] = newpiece;
+                    tileRelativeCoords[newpiece] = myCoord;
 
                     string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;
-
                     newpiece.ActivateTile(owner, buildingType);
+                    newpiece.SetAlpha(0.75f);
+                    newpiece.IncrementSortingOrder(5);
                     tiles.Add(newpiece);
                 }
             }
         }
 
         SetVisible(!isViewable);
+        SetTileSprites();
     }
 
     public override void PlaceAtCurrentLocation()
