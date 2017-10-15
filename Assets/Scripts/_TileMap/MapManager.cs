@@ -61,7 +61,7 @@ public class MapManager : MonoBehaviour
         Polyomino playerBase = new Polyomino(9, 0, player);
         playerBase.MakePhysicalPiece(true);
         playerBase.SetBasePosition(offset);
-
+        playerBase.SetPlaced(true);
         foreach(Tile tile in playerBase.tiles)
         {
             Map[tile.coord.x + offset.x, tile.coord.y + offset.y].SetOccupyingPiece(playerBase);
