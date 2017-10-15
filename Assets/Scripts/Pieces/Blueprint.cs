@@ -142,10 +142,10 @@ public class Blueprint : Polyomino
         switch (buildingType)
         {
             case BuildingType.FACTORY:
-                owner.ToggleMineCount(-1);
+                owner.ToggleFactoryCount(-1);
                 break;
             case BuildingType.MINE:
-                owner.ToggleFactoryCount(-1);
+                owner.ToggleMineCount(-1);
                 break;
             default:
                 break;
@@ -169,17 +169,14 @@ public class Blueprint : Polyomino
         switch (buildingType)
         {
             case BuildingType.FACTORY:
-                owner.ToggleMineCount(1);
+                owner.ToggleFactoryCount(1);
                 break;
             case BuildingType.MINE:
-                owner.ToggleFactoryCount(1);
+                owner.ToggleMineCount(1);
                 break;
             default:
                 break;
         }
-        
-        //  If Factory increase player's playrate
-        //  If Mine increase player's draw rate
     }
 
     public override void OnInputUp()

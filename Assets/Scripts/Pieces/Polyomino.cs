@@ -323,6 +323,11 @@ public class Polyomino
         }
     }
 
+    public void SetPlaced(bool isPlaceed)
+    {
+        placed = isPlaceed;
+    }
+
     public void SetVisible(bool isVisible)
     {
         if (!placed)
