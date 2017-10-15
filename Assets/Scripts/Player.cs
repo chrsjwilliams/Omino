@@ -221,9 +221,6 @@ public class Player : MonoBehaviour
         if (selectedPiece.buildingType == BuildingType.NONE) placementAvailable = false;
         else AddBluePrint(new Blueprint(blueprintType, this));
         selectedPiece = null;
-
-        //if (blueprintType != BuildingType.NONE)
-            //
     }
 
     public void CancelSelectedPiece()

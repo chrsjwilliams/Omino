@@ -162,8 +162,6 @@ public class Blueprint : Polyomino
                 {
                     PlaceAtCurrentLocation();
                     owner.OnPiecePlaced();
-                    //Blueprint replacement = new Blueprint(buildingType, owner);
-                    //owner.AddBluePrint(replacement);
                 }
                 else owner.CancelSelectedBlueprint();
             }
