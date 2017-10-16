@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Services.GameEventManager.Register<Reset>(Reset);
+        Input.simulateMouseWithTouches = false;
     }
 
     public void Init()
