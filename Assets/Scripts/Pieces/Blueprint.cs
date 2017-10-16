@@ -77,7 +77,7 @@ public class Blueprint : Polyomino
             if (Services.MapManager.Map[tile.coord.x, tile.coord.y].PartOfStructure()) return false;
             if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied())
             {
-                return true;
+				isLegal = true;
             }
             else
             {
@@ -153,7 +153,8 @@ public class Blueprint : Polyomino
         List<Polyomino> constituentPieces = new List<Polyomino>();
         foreach(Tile tile in tiles)
         {
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+			tile.OnRemove ();
+			Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (!constituentPieces.Contains(mapTile.occupyingPiece))
                 constituentPieces.Add(mapTile.occupyingPiece);
         }
@@ -186,7 +187,9 @@ public class Blueprint : Polyomino
             selected = false;
             if (!placed)
             {
-                if (IsPlacementLegal())
+				Services.GameEventManager.Unregister<TouchDown> (CheckTouchForRotateInput);
+				Services.GameEventManager.Unregister<TouchMove> (OnTouchMove);
+				if (IsPlacementLegal())
                 {
                     PlaceAtCurrentLocation();
                     owner.OnPiecePlaced(this);

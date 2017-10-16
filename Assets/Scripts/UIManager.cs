@@ -25,6 +25,8 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private Text gameWinText;
     public Transform canvas;
+	[SerializeField]
+	private Text touchCount;
 
 	// Use this for initialization
 	void Start () {
@@ -36,6 +38,14 @@ public class UIManager : MonoBehaviour {
 	void Update () {
 		
 	}
+
+	//public void UpdateTouchCount(Touch[] touches){
+	//	string newText = "";
+	//	for (int i = 0; i < touches.Length; i++) {
+	//		newText += "touch "+ touches[i].fingerId + " at :" + touches [i].position.x + ", " + touches [i].position.y + "\n";
+	//	}
+	//	touchCount.text = newText;
+	//}
 
     public void UpdateDrawMeter(int playerNum, float fillProportion)
     {

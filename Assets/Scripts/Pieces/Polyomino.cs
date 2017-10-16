@@ -20,7 +20,9 @@ public class Polyomino
     public Coord centerCoord;
     public bool selected { get; protected set; }
     protected bool placed;
-    private const float rotationInputRadius = 5f;
+    private const float rotationInputRadius = 8f;
+	public int touchID;
+	private readonly Vector3 dragOffset = 2f * Vector3.up;
 
     public List<Blueprint> occupyingStructures { get; protected set; }
 
@@ -394,7 +396,7 @@ public class Polyomino
 
     public void TurnOffGlow()
     {
-        foreach(Tile tile in tiles)
+        foreach (Tile tile in tiles)
         {
             tile.SetGlowOutLine(0);
         }
@@ -402,7 +404,7 @@ public class Polyomino
 
     public void SetGlow(Color color)
     {
-        foreach(Tile tile in tiles)
+        foreach (Tile tile in tiles)
         {
             tile.SetGlowOutLine(10);
             tile.SetGlowColor(color);
@@ -417,13 +419,16 @@ public class Polyomino
 
     public virtual void Remove()
     {
-        for (int i = occupyingStructures.Count -1; i >= 0; i--)
+		Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
+		Services.GameEventManager.Unregister<TouchMove> (OnTouchMove);
+		for (int i = occupyingStructures.Count -1; i >= 0; i--)
         {
             occupyingStructures[i].Remove();
         }
         foreach (Tile tile in tiles)
         {
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(null);
+			tile.OnRemove ();
         }
         GameObject.Destroy(holder);
     }
@@ -497,23 +502,34 @@ public class Polyomino
 
     public virtual void OnInputDown()
     {
-        if (!selected && !owner.gameOver)
+		if (!selected && !owner.gameOver && owner.selectedPiece == null)
         {
             selected = true;
-            if(!placed) owner.OnPieceSelected(this);
-            Services.GameEventManager.Register<TouchDown>(CheckTouchForRotateInput);
+			if (!placed) {
+				owner.OnPieceSelected (this);
+				Services.GameEventManager.Register<TouchDown> (CheckTouchForRotateInput);
+				Services.GameEventManager.Register<TouchMove> (OnTouchMove);
+				OnInputDrag (holder.transform.position);
+			}
         }
     }
+
+	protected void OnTouchMove(TouchMove e){
+		if (e.touch.fingerId == touchID) {
+			OnInputDrag (Services.GameManager.MainCamera.ScreenToWorldPoint (e.touch.position));
+		}
+	}
 
     public virtual void OnInputUp()
     {
         if (selected)
         {
             selected = false;
-            Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
             if (!placed)
             {
-                if (IsPlacementLegal() && owner.placementAvailable && !owner.gameOver)
+				Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
+				Services.GameEventManager.Unregister<TouchMove> (OnTouchMove);
+				if (IsPlacementLegal() && owner.placementAvailable && !owner.gameOver)
                 {
                     PlaceAtCurrentLocation();
                     owner.OnPiecePlaced(this);
@@ -527,9 +543,10 @@ public class Polyomino
     {
         if (!placed && !owner.gameOver)
         {
-            Coord roundedInputCoord = new Coord(
-                Mathf.RoundToInt(inputPos.x),
-                Mathf.RoundToInt(inputPos.y));
+			Vector3 offsetInputPos = inputPos + dragOffset;
+			Coord roundedInputCoord = new Coord(
+				Mathf.RoundToInt(offsetInputPos.x),
+				Mathf.RoundToInt(offsetInputPos.y));
             SetTileCoords(roundedInputCoord);
             Reposition(new Vector3(
                 roundedInputCoord.x,
@@ -537,7 +554,7 @@ public class Polyomino
                 holder.transform.position.z));
         }
 
-        if(owner.placementAvailable)
+        if (owner.placementAvailable)
         {
             if (IsPlacementLegal())
             {
@@ -546,7 +563,7 @@ public class Polyomino
             else
             {
                 SetGlow(new Color(1.5f, 0.2f, 0.2f));
-            }  
+            }
         }
     }
 
@@ -568,7 +585,7 @@ public class Polyomino
         }
     }
 
-    void CheckTouchForRotateInput(TouchDown e)
+    protected void CheckTouchForRotateInput(TouchDown e)
     {
         if(Vector2.Distance(
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position), 

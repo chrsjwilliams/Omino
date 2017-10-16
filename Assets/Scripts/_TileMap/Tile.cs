@@ -42,6 +42,9 @@ public class Tile : MonoBehaviour
         touchID = -1;
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<TouchUp>(OnTouchUp);
+		Services.GameEventManager.Register<MouseDown> (OnMouseDownEvent);
+		//if (pieceParent != null)
+			//Debug.Log ("bounds from :" + boxCol.bounds.min + " to " + boxCol.bounds.max);
     }
 
     public void Init(Coord coord_, Polyomino pieceParent_)
@@ -50,6 +53,12 @@ public class Tile : MonoBehaviour
         Init(coord_);
         sr.sortingOrder += 5;
     }
+
+	public void OnRemove(){
+		Services.GameEventManager.Unregister<TouchDown> (OnTouchDown);
+		Services.GameEventManager.Unregister<TouchUp> (OnTouchUp);
+		Services.GameEventManager.Unregister<MouseDown> (OnMouseDownEvent);
+	}
 
     public void SetCoord(Coord newCoord)
     {
@@ -132,15 +141,26 @@ public class Tile : MonoBehaviour
         if(touchID != -1)
         {
             Touch touch = Input.GetTouch(touchID);
-            OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(touch.position));
+            //OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(touch.position));
         }
     }
 
+	void OnMouseDownEvent(MouseDown e){
+		Vector3 touchWorldPos = Services.GameManager.MainCamera.ScreenToWorldPoint (e.mousePos);
+		Vector3 projectedTouchPos = new Vector3 (touchWorldPos.x, touchWorldPos.y, transform.position.z);
+		float dist = Vector3.Distance (projectedTouchPos, transform.position);
+		if(dist < 0.5f) Debug.Log (dist);
+	}
+
     void OnTouchDown(TouchDown e)
     {
-        if (boxCol.bounds.Contains(e.touch.position) && touchID == -1)
+		Vector3 touchWorldPos = Services.GameManager.MainCamera.ScreenToWorldPoint (e.touch.position);
+		Vector3 projectedTouchPos = new Vector3 (touchWorldPos.x, touchWorldPos.y, transform.position.z);
+		if (Vector3.Distance(projectedTouchPos, transform.position) < 0.5f && touchID == -1)
         {
             touchID = e.touch.fingerId;
+			if (pieceParent != null)
+				pieceParent.touchID = e.touch.fingerId;
             OnInputDown();
         }
     }
@@ -150,6 +170,8 @@ public class Tile : MonoBehaviour
         if(e.touch.fingerId == touchID)
         {
             touchID = -1;
+			if (pieceParent != null)
+				pieceParent.touchID = -1;
             OnInputUp();
         }
     }
@@ -181,8 +203,7 @@ public class Tile : MonoBehaviour
     }
 
     public void IncrementSortingOrder(int inc)
-    {
-        sr.sortingOrder += inc;
-    }
-
+	{
+		sr.sortingOrder += inc;
+	}
 }

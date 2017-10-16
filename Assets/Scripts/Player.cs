@@ -134,7 +134,7 @@ public class Player : MonoBehaviour
 
     void MakeAllPiecesGlow(bool makeGlow)
     {
-        if(makeGlow)
+        if (makeGlow)
         {
             foreach (Polyomino piece in hand)
             {
