@@ -4,7 +4,7 @@ public class TitleSceneScript : Scene<TransitionData>
 {
     public KeyCode startGame = KeyCode.Space;
 
-    private const float SECONDS_TO_WAIT = 0.15f;
+    private const float SECONDS_TO_WAIT = 0.01f;
 
     private TaskManager _tm = new TaskManager();
 

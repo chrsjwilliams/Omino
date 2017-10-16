@@ -174,6 +174,14 @@ public class Player : MonoBehaviour
         {
             DrawPiece();
         }
+        if (placementAvailable)
+        {
+            MakeAllPiecesGlow(true);
+        }
+        else
+        {
+            MakeAllPiecesGlow(false);
+        }
     }
 
     void DrawPiece()

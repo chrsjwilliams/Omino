@@ -149,14 +149,14 @@ public class Tile : MonoBehaviour
 		Vector3 touchWorldPos = Services.GameManager.MainCamera.ScreenToWorldPoint (e.mousePos);
 		Vector3 projectedTouchPos = new Vector3 (touchWorldPos.x, touchWorldPos.y, transform.position.z);
 		float dist = Vector3.Distance (projectedTouchPos, transform.position);
-		if(dist < 0.5f) Debug.Log (dist);
+		//if(dist < 0.5f) Debug.Log (dist);
 	}
 
     void OnTouchDown(TouchDown e)
     {
 		Vector3 touchWorldPos = Services.GameManager.MainCamera.ScreenToWorldPoint (e.touch.position);
 		Vector3 projectedTouchPos = new Vector3 (touchWorldPos.x, touchWorldPos.y, transform.position.z);
-		if (Vector3.Distance(projectedTouchPos, transform.position) < 0.5f && touchID == -1)
+		if (Vector3.Distance(projectedTouchPos, transform.position) < 0.7f && touchID == -1)
         {
             touchID = e.touch.fingerId;
 			if (pieceParent != null)
