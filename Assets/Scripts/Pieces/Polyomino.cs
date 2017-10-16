@@ -392,6 +392,23 @@ public class Polyomino
         return isLegal;
     }
 
+    public void TurnOffGlow()
+    {
+        foreach(Tile tile in tiles)
+        {
+            tile.SetGlowOutLine(0);
+        }
+    }
+
+    public void SetGlow(Color color)
+    {
+        foreach(Tile tile in tiles)
+        {
+            tile.SetGlowOutLine(10);
+            tile.SetGlowColor(color);
+        }
+    }
+
     protected virtual void OnPlace()
     {
         //do whatever special stuff this piece does when you place it 
@@ -518,6 +535,18 @@ public class Polyomino
                 roundedInputCoord.x,
                 roundedInputCoord.y,
                 holder.transform.position.z));
+        }
+
+        if(owner.placementAvailable)
+        {
+            if (IsPlacementLegal())
+            {
+                SetGlow(new Color(0.2f, 1.5f, 0.2f));
+            }
+            else
+            {
+                SetGlow(new Color(1.5f, 0.2f, 0.2f));
+            }  
         }
     }
 

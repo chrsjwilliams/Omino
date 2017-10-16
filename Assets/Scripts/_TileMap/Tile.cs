@@ -16,6 +16,7 @@ public class Tile : MonoBehaviour
     public Coord coord { get; private set; }
     public BoxCollider2D boxCol { get; private set; }
     private SpriteRenderer sr;
+    private SpriteGlow glow;
     public Material material { get; set; }
     public Polyomino occupyingPiece { get; private set; }
     public Polyomino pieceParent { get; private set; }
@@ -27,6 +28,8 @@ public class Tile : MonoBehaviour
         coord = coord_;
         boxCol = GetComponent<BoxCollider2D>();
         sr = GetComponent<SpriteRenderer>();
+        glow = GetComponent<SpriteGlow>();
+        glow.OutlineWidth = 0;
         transform.position = new Vector3(coord.x, coord.y, 0);
         if ((coord.x + coord.y) % 2 == 0)
         {
@@ -56,6 +59,16 @@ public class Tile : MonoBehaviour
     public void SetColor(Color color)
     {
         sr.color = color;
+    }
+
+    public void SetGlowOutLine(int i)
+    {
+        glow.OutlineWidth = i;
+    }
+
+    public void SetGlowColor(Color color)
+    {
+        glow.GlowColor = color;
     }
 
     public void ActivateTile(Player player, BuildingType buildingType)

@@ -91,6 +91,7 @@ public class Player : MonoBehaviour
 
         //for now just allow placement always
         placementAvailable = true;
+        MakeAllPiecesGlow(true);
     }
 
     // Update is called once per frame
@@ -125,9 +126,28 @@ public class Player : MonoBehaviour
         if (playMeter >= 1)
         {
             placementAvailable = true;
+            MakeAllPiecesGlow(true);
             playMeter -= 1;
         }
         Services.UIManager.UpdatePlayMeter(playerNum, playMeter, placementAvailable);
+    }
+
+    void MakeAllPiecesGlow(bool makeGlow)
+    {
+        if(makeGlow)
+        {
+            foreach (Polyomino piece in hand)
+            {
+                piece.SetGlow(new Color(1.3f, 1.3f, 0.9f));
+            }
+        }
+        else
+        {
+            foreach (Polyomino piece in hand)
+            {
+                piece.TurnOffGlow();
+            }
+        }
     }
 
     #region DECK FUNCTIONS
@@ -230,14 +250,24 @@ public class Player : MonoBehaviour
         BuildingType blueprintType = selectedPiece.buildingType;
         if (selectedPiece.buildingType == BuildingType.NONE) placementAvailable = false;
         else AddBluePrint(new Blueprint(blueprintType, this));
+        piece.TurnOffGlow();
         selectedPiece = null;
         placementAvailable = false;
+        MakeAllPiecesGlow(false);
         if (Services.MapManager.CheckForWin(piece)) Services.GameScene.GameWin(this);
     }
 
     public void CancelSelectedPiece()
     {
         hand.Add(selectedPiece);
+        if (placementAvailable)
+        {
+            MakeAllPiecesGlow(true);
+        }
+        else
+        {
+            MakeAllPiecesGlow(false);
+        }
         OrganizeHand(hand);
         selectedPiece = null;
     }
