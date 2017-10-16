@@ -275,6 +275,7 @@ public class Player : MonoBehaviour
     public void CancelSelectedBlueprint()
     {
         blueprints.Add((Blueprint)selectedPiece);
+        selectedPiece.TurnOffGlow();
         OrganizeHand(blueprints);
         selectedPiece = null;
     }
