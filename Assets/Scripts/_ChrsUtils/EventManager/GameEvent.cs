@@ -19,6 +19,24 @@ public class MouseDown : GameEvent{
 	}
 }
 
+public class MouseUp : GameEvent
+{
+    public Vector3 mousePos;
+    public MouseUp(Vector3 mousePos_)
+    {
+        mousePos = mousePos_;
+    }
+}
+
+public class MouseMove : GameEvent
+{
+    public Vector3 mousePos;
+    public MouseMove(Vector3 mousePos_)
+    {
+        mousePos = mousePos_;
+    }
+}
+
 public class TouchMove : GameEvent{
 	public Touch touch;
 	public TouchMove(Touch touch_){

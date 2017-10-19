@@ -11,18 +11,6 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private Image[] playMeters;
     [SerializeField]
-    private Image[] playAvailableIcons;
-    [SerializeField]
-    private Text[] playAvailableTexts;
-    [SerializeField]
-    private Color playAvailableColor;
-    [SerializeField]
-    private Color playUnavailableColor;
-    [SerializeField]
-    private string playAvailableText;
-    [SerializeField]
-    private string playUnavailableText;
-    [SerializeField]
     private Text gameWinText;
     public Transform canvas;
 	[SerializeField]
@@ -55,16 +43,6 @@ public class UIManager : MonoBehaviour {
     public void UpdatePlayMeter(int playerNum, float fillProportion, bool playAvailable)
     {
         playMeters[playerNum - 1].fillAmount = fillProportion;
-        if (playAvailable)
-        {
-            playAvailableIcons[playerNum - 1].color = playAvailableColor;
-            playAvailableTexts[playerNum - 1].text = playAvailableText;
-        }
-        else
-        {
-            playAvailableIcons[playerNum - 1].color = playUnavailableColor;
-            playAvailableTexts[playerNum - 1].text = playUnavailableText;
-        }
     }
 
     public void SetGameWinText(Player winner)

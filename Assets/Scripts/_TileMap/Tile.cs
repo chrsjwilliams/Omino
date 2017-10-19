@@ -40,9 +40,6 @@ public class Tile : MonoBehaviour
             sr.color = Services.GameManager.MapColorScheme[1];
         }
         touchID = -1;
-        Services.GameEventManager.Register<TouchDown>(OnTouchDown);
-        Services.GameEventManager.Register<TouchUp>(OnTouchUp);
-		Services.GameEventManager.Register<MouseDown> (OnMouseDownEvent);
 		//if (pieceParent != null)
 			//Debug.Log ("bounds from :" + boxCol.bounds.min + " to " + boxCol.bounds.max);
     }
@@ -55,9 +52,6 @@ public class Tile : MonoBehaviour
     }
 
 	public void OnRemove(){
-		Services.GameEventManager.Unregister<TouchDown> (OnTouchDown);
-		Services.GameEventManager.Unregister<TouchUp> (OnTouchUp);
-		Services.GameEventManager.Unregister<MouseDown> (OnMouseDownEvent);
 	}
 
     public void SetCoord(Coord newCoord)
@@ -119,76 +113,9 @@ public class Tile : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
-    {
-        OnInputDown();
-    }
-
-    private void OnMouseUp()
-    {
-        OnInputUp();
-    }
-
-    private void OnMouseDrag()
-    {
-        Vector3 inputPos = 
-            Services.GameManager.MainCamera.ScreenToWorldPoint(Input.mousePosition);
-        OnInputDrag(inputPos);
-    }
-
     private void Update()
     {
-        if(touchID != -1)
-        {
-            Touch touch = Input.GetTouch(touchID);
-            //OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(touch.position));
-        }
-    }
 
-	void OnMouseDownEvent(MouseDown e){
-		Vector3 touchWorldPos = Services.GameManager.MainCamera.ScreenToWorldPoint (e.mousePos);
-		Vector3 projectedTouchPos = new Vector3 (touchWorldPos.x, touchWorldPos.y, transform.position.z);
-		float dist = Vector3.Distance (projectedTouchPos, transform.position);
-		//if(dist < 0.5f) Debug.Log (dist);
-	}
-
-    void OnTouchDown(TouchDown e)
-    {
-		Vector3 touchWorldPos = Services.GameManager.MainCamera.ScreenToWorldPoint (e.touch.position);
-		Vector3 projectedTouchPos = new Vector3 (touchWorldPos.x, touchWorldPos.y, transform.position.z);
-		if (Vector3.Distance(projectedTouchPos, transform.position) < 0.7f && touchID == -1)
-        {
-            touchID = e.touch.fingerId;
-			if (pieceParent != null)
-				pieceParent.touchID = e.touch.fingerId;
-            OnInputDown();
-        }
-    }
-
-    void OnTouchUp(TouchUp e)
-    {
-        if(e.touch.fingerId == touchID)
-        {
-            touchID = -1;
-			if (pieceParent != null)
-				pieceParent.touchID = -1;
-            OnInputUp();
-        }
-    }
-
-    void OnInputDown()
-    {
-        if (pieceParent != null) pieceParent.OnInputDown();
-    }
-
-    void OnInputUp()
-    {
-        if (pieceParent != null) pieceParent.OnInputUp();
-    }
-
-    void OnInputDrag(Vector3 inputPos)
-    {
-        if (pieceParent != null) pieceParent.OnInputDrag(inputPos);
     }
 
 

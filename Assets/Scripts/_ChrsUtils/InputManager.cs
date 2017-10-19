@@ -7,6 +7,7 @@ using UnityEngine;
 public class InputManager
 {
     private Touch[] lastFrameTouches;
+    private Vector3 lastMousePos;
 
     //  BUG: Button Presses Register twice for both players
     public void GetInput()
@@ -37,8 +38,21 @@ public class InputManager
 				break;
             }
         }
-		if (Input.GetMouseButtonDown (0))
-			Services.GameEventManager.Fire (new MouseDown (Input.mousePosition));
+        if (Input.GetMouseButtonDown(0)) {
+            Services.GameEventManager.Fire(new MouseDown(Input.mousePosition));
+            lastMousePos = Input.mousePosition;
+        }
+
+        if (Input.GetMouseButton(0) && Input.mousePosition != lastMousePos)
+        {
+            Services.GameEventManager.Fire(new MouseMove(Input.mousePosition));
+            lastMousePos = Input.mousePosition;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            Services.GameEventManager.Fire(new MouseUp(Input.mousePosition));
+        }
 		//if (Services.UIManager != null)
 		//	Services.UIManager.UpdateTouchCount (Input.touches);
     }

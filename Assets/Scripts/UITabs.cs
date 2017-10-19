@@ -1,13 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UITabs : MonoBehaviour
 {
     [SerializeField] private Player player;
+    private Image handZoneUI;
+    [SerializeField]
+    private Image handTab;
+    [SerializeField]
+    private Image blueprintTab;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
 	   if(name.Contains("P1"))
         {
@@ -17,10 +23,19 @@ public class UITabs : MonoBehaviour
         {
             player = Services.GameManager.Players[1];
         }
+        handZoneUI = GetComponent<Image>();
 	}
 
     public void ToggleHandZoneView(bool isViewable)
     {
         player.ToggleHandZoneView(isViewable);
+        if(isViewable)
+        {
+            handZoneUI.color = handTab.color;
+        }
+        else
+        {
+            handZoneUI.color = blueprintTab.color;
+        }
     }
 }
