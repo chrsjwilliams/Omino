@@ -18,10 +18,9 @@ public class Polyomino
     protected int[,,] piece;
     public Player owner { get; protected set; }
     public Coord centerCoord;
-    public bool selected { get; protected set; }
     protected bool placed;
     private const float rotationInputRadius = 8f;
-	public int touchID;
+	private int touchID;
 	private readonly Vector3 dragOffset = 2f * Vector3.up;
     private readonly Vector3 unselectedScale = 0.675f * Vector3.one;
 
@@ -500,11 +499,16 @@ public class Polyomino
         SetTileSprites();
         SetVisible(isViewable);
 
-        Services.GameEventManager.Register<TouchDown>(OnTouchDown);
-        Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
-
-        if(buildingType != BuildingType.BASE) holder.transform.localScale = unselectedScale;
+		EnterUnselectedState ();
     }
+
+	void EnterUnselectedState(){
+		Services.GameEventManager.Register<TouchDown>(OnTouchDown);
+		Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
+		touchID = -1;
+
+		if(buildingType != BuildingType.BASE) holder.transform.localScale = unselectedScale;
+	}
 
     bool IsPointContainedWithinHolderArea(Vector3 point)
     {
@@ -518,9 +522,7 @@ public class Polyomino
     {
         Vector3 touchWorldPos = 
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position);
-        Vector3 projectedTouchPos = 
-            new Vector3(touchWorldPos.x, touchWorldPos.y, holder.transform.position.z);
-        if (IsPointContainedWithinHolderArea(projectedTouchPos) && touchID == -1)
+		if (IsPointContainedWithinHolderArea(touchWorldPos) && touchID == -1 && owner.selectedPiece == null)
         {
             touchID = e.touch.fingerId;
             OnInputDown();
@@ -531,9 +533,7 @@ public class Polyomino
     {
         Vector3 mouseWorldPos =
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos);
-        Vector3 projectedMousePos =
-            new Vector3(mouseWorldPos.x, mouseWorldPos.y, holder.transform.position.z);
-        if (IsPointContainedWithinHolderArea(projectedMousePos))
+		if (IsPointContainedWithinHolderArea(mouseWorldPos) && owner.selectedPiece == null)
         {
             OnInputDown();
         }
@@ -555,9 +555,8 @@ public class Polyomino
 
     public virtual void OnInputDown()
     {
-		if (!selected && !owner.gameOver && owner.selectedPiece == null)
+		if (!owner.gameOver)
         {
-            selected = true;
             holder.transform.localScale = Vector3.one;
 			if (!placed) {
 				owner.OnPieceSelected (this);
@@ -588,31 +587,21 @@ public class Polyomino
 
     public virtual void OnInputUp()
     {
-        if (selected)
-        {
-            selected = false;
-            if (!placed)
-            {
-                Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
-                Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
-                Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
+		if (!placed) {
+			Services.GameEventManager.Unregister<TouchMove> (OnTouchMove);
+			Services.GameEventManager.Unregister<TouchUp> (OnTouchUp);
+			Services.GameEventManager.Unregister<TouchDown> (CheckTouchForRotateInput);
 
-                Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
-                Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
-                if (IsPlacementLegal() && owner.placementAvailable && !owner.gameOver)
-                {
-                    PlaceAtCurrentLocation();
-                    owner.OnPiecePlaced(this);
-                }
-                else
-                {
-                    owner.CancelSelectedPiece();
-                    Services.GameEventManager.Register<TouchDown>(OnTouchDown);
-                    Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
-                    holder.transform.localScale = unselectedScale;
-                }
-            }
-        }
+			Services.GameEventManager.Unregister<MouseMove> (OnMouseMoveEvent);
+			Services.GameEventManager.Unregister<MouseUp> (OnMouseUpEvent);
+			if (IsPlacementLegal () && owner.placementAvailable && !owner.gameOver) {
+				PlaceAtCurrentLocation ();
+				owner.OnPiecePlaced (this);
+			} else {
+				owner.CancelSelectedPiece ();
+				EnterUnselectedState ();
+			}
+		}
     }
 
     public void OnInputDrag(Vector3 inputPos)
