@@ -142,7 +142,6 @@ public class MapManager : MonoBehaviour
                 }
             }
         }
-        Debug.Log(piecesToCheck.Count + " pieces to check after " + checkedPieces.Count + " checked pieces and " + calls + " calls");
         for (int i = 0; i < piecesToCheck.Count; i++)
         {
             calls++;

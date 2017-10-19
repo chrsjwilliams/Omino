@@ -345,6 +345,14 @@ public class Polyomino
             {
                 tile.enabled = isVisible;
             }
+            if (isVisible)
+            {
+                EnterUnselectedState();
+            }
+            else
+            {
+                HideFromInput();
+            }
         }
     }
 
@@ -522,9 +530,14 @@ public class Polyomino
 		Services.GameEventManager.Register<TouchDown>(OnTouchDown);
 		Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
 		touchID = -1;
-        Debug.Log("unselecting at time " + Time.time);
 		if(buildingType != BuildingType.BASE) holder.localScale = unselectedScale;
 	}
+
+    protected void HideFromInput()
+    {
+        Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
+        Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
+    }
 
     bool IsPointContainedWithinHolderArea(Vector3 point)
     {
@@ -552,7 +565,6 @@ public class Polyomino
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos);
 		if (IsPointContainedWithinHolderArea(mouseWorldPos) && owner.selectedPiece == null)
         {
-            Debug.Log("valid mouse down event at time " + Time.time);
             OnInputDown();
         }
     }
@@ -576,7 +588,6 @@ public class Polyomino
 		if (!owner.gameOver && !placed)
         {
 			if (!placed) {
-                Debug.Log("selected at time " + Time.time);
                 holder.localScale = Vector3.one;
                 owner.OnPieceSelected (this);
 				OnInputDrag (holder.position);
@@ -625,7 +636,6 @@ public class Polyomino
 
     public void OnInputDrag(Vector3 inputPos)
     {
-        Debug.Log("selected - drag input at time " + Time.time);
         if (!placed && !owner.gameOver)
         {
 			Vector3 offsetInputPos = inputPos + dragOffset;
@@ -637,16 +647,11 @@ public class Polyomino
                 roundedInputCoord.x,
                 roundedInputCoord.y,
                 holder.position.z));
-            Debug.Log("moving to pos " + holder.position);
         }
 
         if (owner.placementAvailable)
         {
             bool isLegal = IsPlacementLegal();
-            if(isLegal)
-            {
-                Debug.Log("Should be okey to let go... " + Time.time);
-            }
             if (isLegal)
             {
                 SetGlow(new Color(0.2f, 1.5f, 0.2f));
@@ -656,8 +661,6 @@ public class Polyomino
                 SetGlow(new Color(1.5f, 0.2f, 0.2f));
             }
         }
-        Debug.Log("at pos " + holder.position + " later in the function");
-
     }
 
     protected void SetTileSprites()
