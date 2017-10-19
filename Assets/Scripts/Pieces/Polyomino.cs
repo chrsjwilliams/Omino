@@ -24,7 +24,9 @@ public class Polyomino
 	public int touchID;
 	private readonly Vector3 dragOffset = 2f * Vector3.up;
 
+    public bool connectedToBase;
     public List<Blueprint> occupyingStructures { get; protected set; }
+    
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -291,6 +293,7 @@ public class Polyomino
         owner = _player;
 
         occupyingStructures = new List<Blueprint>();
+        connectedToBase = false;
 
         buildingType = BuildingType.NONE;
 
@@ -319,6 +322,7 @@ public class Polyomino
             case 9:
                 holderName = "Player " + owner.playerNum + " Base";
                 buildingType = BuildingType.BASE;
+                connectedToBase = true;
                 piece = playerBase;
                 break;
             default:
@@ -385,13 +389,23 @@ public class Polyomino
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
             if (Services.MapManager.ValidateTile(tile, owner)) isLegal = true;
-            if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied())
+            if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>(), 0)) return false;
+            if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied()) return false;
+        }
+        return isLegal;
+    }
+
+    public bool ShareTilesWith(Tile tile)
+    {
+        foreach(Tile myTiles in tiles)
+        {
+            if (myTiles == tile)
             {
-                return false;
+                return true;
             }
         }
 
-        return isLegal;
+        return false;
     }
 
     public void TurnOffGlow()
@@ -556,7 +570,12 @@ public class Polyomino
 
         if (owner.placementAvailable)
         {
-            if (IsPlacementLegal())
+            bool isLegal = IsPlacementLegal();
+            if(isLegal)
+            {
+                Debug.Log("Should be okey to let go... " + Time.time);
+            }
+            if (isLegal)
             {
                 SetGlow(new Color(0.2f, 1.5f, 0.2f));
             }

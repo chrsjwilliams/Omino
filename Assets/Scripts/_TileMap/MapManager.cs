@@ -102,6 +102,55 @@ public class MapManager : MonoBehaviour
         return false;
     }
 
+	public bool ConnectedToBase(Polyomino piece, List<Polyomino> checkedPieces, int count)
+    {
+        //  We should take in a list of tiles becasue on the second pass of the recursion we
+        //  ignore the second pic
+        //  How is connectedOiecees getting us to the base case?
+        int calls = count;
+
+        checkedPieces.Add(piece);
+
+        List<Polyomino> piecesToCheck = new List<Polyomino>();
+        foreach (Tile tile in piece.tiles)
+        {
+            foreach (Coord direction in Coord.Directions())
+            {
+                Coord adjacentCoord = tile.coord.Add(direction);
+                if (IsCoordContainedInMap(adjacentCoord))
+                {
+                    Tile adjTile = Map[adjacentCoord.x, adjacentCoord.y];
+                    if (adjTile.IsOccupied() &&
+                        adjTile.occupyingPiece.owner == piece.owner &&
+                        adjTile.occupyingPiece != piece &&
+                        adjTile.occupyingPiece.buildingType == BuildingType.BASE)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        if (adjTile.occupyingPiece != null)
+                        {
+                            if (!checkedPieces.Contains(adjTile.occupyingPiece) &&
+                                !piecesToCheck.Contains(adjTile.occupyingPiece) &&
+                                adjTile.occupyingPiece.owner == piece.owner)
+                            {
+                                piecesToCheck.Add(adjTile.occupyingPiece);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Debug.Log(piecesToCheck.Count + " pieces to check after " + checkedPieces.Count + " checked pieces and " + calls + " calls");
+        for (int i = 0; i < piecesToCheck.Count; i++)
+        {
+            calls++;
+            if (ConnectedToBase(piecesToCheck[i], checkedPieces, calls)) return true;
+        }
+        return false;
+    }
+
     public bool CheckForWin(Polyomino piece)
     {
         foreach (Tile tile in piece.tiles)
