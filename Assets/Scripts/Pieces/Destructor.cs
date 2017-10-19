@@ -18,6 +18,7 @@ public class Destructor : Polyomino
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
             if (Services.MapManager.ValidateTile(tile, owner)) isLegal = true;
+            if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>(), 0)) return false;
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner)
             {
