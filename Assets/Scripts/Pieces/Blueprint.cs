@@ -77,7 +77,7 @@ public class Blueprint : Polyomino
             if (Services.MapManager.Map[tile.coord.x, tile.coord.y].PartOfStructure()) return false;
             if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied())
             {
-				isLegal = true;
+                isLegal = true;
             }
             else
             {
@@ -90,9 +90,10 @@ public class Blueprint : Polyomino
 
     public override void MakePhysicalPiece(bool isViewable)
     {
-        holder = new GameObject();
-        holder.transform.SetParent(Services.GameScene.transform);
-        holder.name = holderName;
+        holder = GameObject.Instantiate(Services.Prefabs.PieceHolder,
+            Services.GameScene.transform).transform;
+        holder.gameObject.name = holderName;
+        holderSr = holder.gameObject.GetComponent<SpriteRenderer>();
 
         if (piece == null) return;
         tileRelativeCoords = new Dictionary<Tile, Coord>();
@@ -103,8 +104,7 @@ public class Blueprint : Polyomino
             {
                 if (piece[index, x, y] == 1)
                 {
-                    Tile newpiece = MonoBehaviour.Instantiate(Services.Prefabs.Tile,
-                        holder.transform);
+                    Tile newpiece = MonoBehaviour.Instantiate(Services.Prefabs.Tile, holder);
 
                     Coord myCoord = new Coord(-2 + x, -2 + y);
                     newpiece.Init(myCoord, this);
@@ -122,6 +122,8 @@ public class Blueprint : Polyomino
 
         SetVisible(!isViewable);
         SetTileSprites();
+
+        EnterUnselectedState();
     }
 
     public override void PlaceAtCurrentLocation()
@@ -151,10 +153,10 @@ public class Blueprint : Polyomino
                 break;
         }
         List<Polyomino> constituentPieces = new List<Polyomino>();
-        foreach(Tile tile in tiles)
+        foreach (Tile tile in tiles)
         {
-			tile.OnRemove ();
-			Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            tile.OnRemove();
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (!constituentPieces.Contains(mapTile.occupyingPiece))
                 constituentPieces.Add(mapTile.occupyingPiece);
         }
@@ -162,7 +164,7 @@ public class Blueprint : Polyomino
         {
             constituentPieces[i].RemoveOccupyingStructure(this);
         }
-        GameObject.Destroy(holder);
+        GameObject.Destroy(holder.gameObject);
     }
 
     protected override void OnPlace()
@@ -182,19 +184,23 @@ public class Blueprint : Polyomino
 
     public override void OnInputUp()
     {
-        if (selected)
+        if (!placed)
         {
-            selected = false;
-            if (!placed)
+            Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
+            Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
+            Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
+
+            Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
+            Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
+            if (IsPlacementLegal() && !owner.gameOver)
             {
-				Services.GameEventManager.Unregister<TouchDown> (CheckTouchForRotateInput);
-				Services.GameEventManager.Unregister<TouchMove> (OnTouchMove);
-				if (IsPlacementLegal())
-                {
-                    PlaceAtCurrentLocation();
-                    owner.OnPiecePlaced(this);
-                }
-                else owner.CancelSelectedBlueprint();
+                PlaceAtCurrentLocation();
+                owner.OnPiecePlaced(this);
+            }
+            else
+            {
+                owner.CancelSelectedBlueprint();
+                EnterUnselectedState();
             }
         }
     }
