@@ -22,4 +22,10 @@ public class PrefabDB : ScriptableObject
     {
         get { return _tile; }
     }
+
+    [SerializeField] private GameObject pieceHolder;
+    public GameObject PieceHolder
+    {
+        get { return pieceHolder; }
+    }
 }

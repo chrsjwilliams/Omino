@@ -23,6 +23,7 @@ public class Polyomino
     private const float rotationInputRadius = 8f;
 	public int touchID;
 	private readonly Vector3 dragOffset = 2f * Vector3.up;
+    private readonly Vector3 unselectedScale = 0.675f * Vector3.one;
 
     public List<Blueprint> occupyingStructures { get; protected set; }
 
@@ -466,8 +467,8 @@ public class Polyomino
 
     public virtual void MakePhysicalPiece(bool isViewable)
     {
-        holder = new GameObject();
-        holder.transform.SetParent(Services.GameScene.transform);
+        holder = GameObject.Instantiate(Services.Prefabs.PieceHolder, 
+            Services.GameScene.transform);
         holder.name = holderName;
 
         if (piece == null) return;
@@ -498,6 +499,58 @@ public class Polyomino
         }
         SetTileSprites();
         SetVisible(isViewable);
+
+        Services.GameEventManager.Register<TouchDown>(OnTouchDown);
+        Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
+
+        if(buildingType != BuildingType.BASE) holder.transform.localScale = unselectedScale;
+    }
+
+    bool IsPointContainedWithinHolderArea(Vector3 point)
+    {
+        Vector3 extents = holder.GetComponent<SpriteRenderer>().bounds.extents;
+        Vector3 centerPoint = holder.transform.position;
+        return point.x >= centerPoint.x - extents.x && point.x <= centerPoint.x + extents.x &&
+            point.y >= centerPoint.y - extents.y && point.y <= centerPoint.y + extents.y;
+    }
+
+    void OnTouchDown(TouchDown e)
+    {
+        Vector3 touchWorldPos = 
+            Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position);
+        Vector3 projectedTouchPos = 
+            new Vector3(touchWorldPos.x, touchWorldPos.y, holder.transform.position.z);
+        if (IsPointContainedWithinHolderArea(projectedTouchPos) && touchID == -1)
+        {
+            touchID = e.touch.fingerId;
+            OnInputDown();
+        }
+    }
+
+    void OnMouseDownEvent(MouseDown e)
+    {
+        Vector3 mouseWorldPos =
+            Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos);
+        Vector3 projectedMousePos =
+            new Vector3(mouseWorldPos.x, mouseWorldPos.y, holder.transform.position.z);
+        if (IsPointContainedWithinHolderArea(projectedMousePos))
+        {
+            OnInputDown();
+        }
+    }
+
+    void OnTouchUp(TouchUp e)
+    {
+        if (e.touch.fingerId == touchID)
+        {
+            touchID = -1;
+            OnInputUp();
+        }
+    }
+
+    void OnMouseUpEvent(MouseUp e)
+    {
+        OnInputUp();
     }
 
     public virtual void OnInputDown()
@@ -505,13 +558,26 @@ public class Polyomino
 		if (!selected && !owner.gameOver && owner.selectedPiece == null)
         {
             selected = true;
+            holder.transform.localScale = Vector3.one;
 			if (!placed) {
 				owner.OnPieceSelected (this);
-				Services.GameEventManager.Register<TouchDown> (CheckTouchForRotateInput);
-				Services.GameEventManager.Register<TouchMove> (OnTouchMove);
 				OnInputDrag (holder.transform.position);
-			}
+
+                Services.GameEventManager.Register<TouchUp>(OnTouchUp);
+                Services.GameEventManager.Register<TouchMove>(OnTouchMove);
+                Services.GameEventManager.Register<TouchDown>(CheckTouchForRotateInput);
+                Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
+
+                Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
+                Services.GameEventManager.Register<MouseMove>(OnMouseMoveEvent);
+                Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
+            }
         }
+    }
+
+    void OnMouseMoveEvent(MouseMove e)
+    {
+        OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos));
     }
 
 	protected void OnTouchMove(TouchMove e){
@@ -527,14 +593,24 @@ public class Polyomino
             selected = false;
             if (!placed)
             {
-				Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
-				Services.GameEventManager.Unregister<TouchMove> (OnTouchMove);
-				if (IsPlacementLegal() && owner.placementAvailable && !owner.gameOver)
+                Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
+                Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
+                Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
+
+                Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
+                Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
+                if (IsPlacementLegal() && owner.placementAvailable && !owner.gameOver)
                 {
                     PlaceAtCurrentLocation();
                     owner.OnPiecePlaced(this);
                 }
-                else owner.CancelSelectedPiece();
+                else
+                {
+                    owner.CancelSelectedPiece();
+                    Services.GameEventManager.Register<TouchDown>(OnTouchDown);
+                    Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
+                    holder.transform.localScale = unselectedScale;
+                }
             }
         }
     }
