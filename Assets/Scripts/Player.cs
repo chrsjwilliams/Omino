@@ -301,4 +301,13 @@ public class Player : MonoBehaviour
     {
         gameOver = true;
     }
+
+    public void AddPieceToHand(SuperDestructorResource resource)
+    {
+        Destructor newPiece = new Destructor(resource.units, resource.index, this, true);
+        resource.Remove();
+        hand.Add(newPiece);
+        newPiece.MakePhysicalPiece(viewingHand);
+        OrganizeHand(hand);
+    }
 }

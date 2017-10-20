@@ -14,7 +14,8 @@ public class Polyomino
     protected string holderName;
     public BuildingType buildingType { get; protected set; }
 
-    protected int index;
+    public int index { get; protected set; }
+    public int units { get; protected set; }
     protected int variations;
     protected int[,,] piece;
     public Player owner { get; protected set; }
@@ -291,6 +292,7 @@ public class Polyomino
     public Polyomino(int _units, int _index, Player _player)
     {
         index = _index;
+        units = _units;
         owner = _player;
 
         occupyingStructures = new List<Blueprint>();
@@ -331,9 +333,9 @@ public class Polyomino
         }
     }
 
-    public void SetPlaced(bool isPlaceed)
+    public void SetPlaced(bool isPlaced)
     {
-        placed = isPlaceed;
+        placed = isPlaced;
     }
 
     public void SetVisible(bool isVisible)
@@ -393,15 +395,13 @@ public class Polyomino
         //CONDITIONS:
         //is contiguous with a structure connected to either the base or a fortification
         //doesn't overlap with any existing pieces or is a destructor\
-        bool isLegal = false;
         foreach(Tile tile in tiles)
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
-            if (Services.MapManager.ValidateTile(tile, owner)) isLegal = true;
             if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>(), 0)) return false;
             if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied()) return false;
         }
-        return isLegal;
+        return true;
     }
 
     public bool ShareTilesWith(Tile tile)
@@ -438,6 +438,14 @@ public class Polyomino
     {
         //do whatever special stuff this piece does when you place it 
         //(e.g. destroy overlapping pieces for a destructor)
+        foreach(Tile tile in tiles)
+        {
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            if (mapTile.HasResource())
+            {
+                owner.AddPieceToHand(mapTile.occupyingResource);
+            }
+        }
     }
 
     public virtual void Remove()
@@ -493,7 +501,6 @@ public class Polyomino
             Services.GameScene.transform).transform;
         holder.gameObject.name = holderName;
         holderSr = holder.gameObject.GetComponent<SpriteRenderer>();
-        Debug.Assert(holderSr != null);
 
         if (piece == null) return;
         tileRelativeCoords = new Dictionary<Tile, Coord>();
@@ -711,5 +718,15 @@ public class Polyomino
         {
             tile.transform.position = new Vector3(tile.coord.x, tile.coord.y);
         }
+    }
+
+    public virtual void PlaceAtLocation(Coord centerCoordLocation)
+    {
+        SetTileCoords(centerCoordLocation);
+        Reposition(new Vector3(
+            centerCoordLocation.x, 
+            centerCoordLocation.y, 
+            holder.position.z));
+        PlaceAtCurrentLocation();
     }
 }

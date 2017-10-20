@@ -53,6 +53,10 @@ public class GameManager : MonoBehaviour
         get { return _mapColorScheme; }
     }
 
+    [SerializeField]
+    private Color superDestructorResourceColor;
+    public Color SuperDestructorResourceColor { get { return superDestructorResourceColor; } }
+
     private void Awake()
     {
         Services.GameEventManager.Register<Reset>(Reset);

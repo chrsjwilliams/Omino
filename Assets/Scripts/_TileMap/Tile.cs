@@ -21,6 +21,7 @@ public class Tile : MonoBehaviour
     public Polyomino occupyingPiece { get; private set; }
     public Polyomino pieceParent { get; private set; }
     public Blueprint occupyingStructure { get; private set; }
+    public SuperDestructorResource occupyingResource { get; private set; }
     private int touchID;
 
     public void Init(Coord coord_)
@@ -77,7 +78,8 @@ public class Tile : MonoBehaviour
     public void ActivateTile(Player player, BuildingType buildingType)
     {
         _isActive = true;
-        if(buildingType == BuildingType.NONE) sr.color = player.ActiveTilePrimaryColors[0];
+        if (player == null) sr.color = Services.GameManager.SuperDestructorResourceColor;
+        else if(buildingType == BuildingType.NONE) sr.color = player.ActiveTilePrimaryColors[0];
         else sr.color = player.ActiveTilePrimaryColors[1];
     }
 
@@ -91,6 +93,11 @@ public class Tile : MonoBehaviour
         occupyingStructure = blueprint;
     }
 
+    public void SetOccupyingResource(SuperDestructorResource resource)
+    {
+        occupyingResource = resource;
+    }
+
     public bool IsOccupied()
     {
         return occupyingPiece != null;
@@ -99,6 +106,11 @@ public class Tile : MonoBehaviour
     public bool PartOfStructure()
     {
         return occupyingStructure != null;
+    }
+
+    public bool HasResource()
+    {
+        return occupyingResource != null;
     }
 
     public Polyomino OccupiedBy()

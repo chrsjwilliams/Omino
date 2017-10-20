@@ -28,6 +28,21 @@ public class MapManager : MonoBehaviour
         get { return _center; }
     }
 
+    private List<SuperDestructorResource> resourcesOnMap;
+    [SerializeField]
+    private int resourceDistMin;
+    [SerializeField]
+    private int resourceRadiusMin;
+    [SerializeField]
+    private int resourceBorderMin;
+    [SerializeField]
+    private int resourceSizeMin;
+    [SerializeField]
+    private int resourceSizeMax;
+    [SerializeField]
+    private int startingResourceCount;
+    [SerializeField]
+    private int procGenTriesMax;
     public void Init()
     {
         _center = Services.MapManager.CenterIndexOfGrid();
@@ -48,7 +63,98 @@ public class MapManager : MonoBehaviour
                 tile.name = "Tile [X: " + i + ", Y: " + j + "]";
             }
         }
-        
+
+        GenerateResources();
+    }
+
+    void GenerateResources()
+    {
+        resourcesOnMap = new List<SuperDestructorResource>();
+        for (int i = 0; i < startingResourceCount / 2; i++)
+        {
+            List<SuperDestructorResource> resources = GenerateResourceAndMirroredResource();
+            if (resources == null) break;
+            foreach (SuperDestructorResource resource in resources)
+            {
+                resourcesOnMap.Add(resource);
+            }
+        }
+    }
+
+    List<SuperDestructorResource> GenerateResourceAndMirroredResource()
+    {
+        Coord resourceCoord = GenerateValidResourceCoord();
+        Coord mirroredCoord = MirroredCoord(resourceCoord);
+        List<SuperDestructorResource> resources = new List<SuperDestructorResource>();
+        if (resourceCoord != new Coord(-1, -1))
+        {
+            int tileCount = Random.Range(resourceSizeMin, resourceSizeMax + 1);
+            int shapeTypeCount = Polyomino.pieceTypes[tileCount];
+            int tileIndex = Random.Range(0, shapeTypeCount);
+            int numRotations = Random.Range(0, 4);
+            SuperDestructorResource resource = 
+                new SuperDestructorResource(tileCount, tileIndex);
+            SuperDestructorResource mirroredResource =
+                new SuperDestructorResource(tileCount, tileIndex);
+            resource.MakePhysicalPiece(true);
+            mirroredResource.MakePhysicalPiece(true);
+
+            for (int i = 0; i < numRotations; i++)
+            {
+                resource.Rotate();
+            }
+            for (int i = 0; i < numRotations + 2; i++)
+            {
+                mirroredResource.Rotate();
+            }
+
+            resource.PlaceAtLocation(resourceCoord);
+            mirroredResource.PlaceAtLocation(mirroredCoord);
+            resources.Add(resource);
+            resources.Add(mirroredResource);
+            return resources;
+        }
+        return null;
+    }
+
+    Coord GenerateValidResourceCoord()
+    {
+        Coord nullCoord = new Coord(-1, -1);
+        for (int i = 0; i < procGenTriesMax; i++)
+        {
+            Coord candidateCoord = GenerateRandomCoord();
+            Coord mirroredCoord = MirroredCoord(candidateCoord);
+            if (IsResourceCoordValid(candidateCoord) &&
+                IsResourceCoordValid(mirroredCoord) &&
+                candidateCoord.Distance(mirroredCoord) >= resourceDistMin)
+                return candidateCoord;
+        }
+        return nullCoord;
+    }
+
+    Coord MirroredCoord(Coord coord)
+    {
+        return new Coord((MapWidth - 1) - coord.x, (MapLength - 1) - coord.y);
+    }
+
+    bool IsResourceCoordValid(Coord candidateCoord)
+    {
+        if (candidateCoord.Distance(new Coord(0, 0)) < resourceRadiusMin ||
+            candidateCoord.Distance(new Coord(MapWidth - 1, MapLength - 1))
+            < resourceRadiusMin)
+            return false;
+        for (int i = 0; i < resourcesOnMap.Count; i++)
+        {
+            if (candidateCoord.Distance(resourcesOnMap[i].centerCoord) < resourceDistMin)
+                return false;
+        }
+        return true;
+    }
+
+    Coord GenerateRandomCoord()
+    {
+        return new Coord(Random.Range(resourceBorderMin, MapWidth - resourceBorderMin),
+            Random.Range(resourceBorderMin, MapLength - resourceBorderMin));
     }
 
     public IntVector2 CenterIndexOfGrid()
@@ -71,7 +177,7 @@ public class MapManager : MonoBehaviour
 
     public Tile GetRandomTile()
     {
-		return _map[Random.Range(0, MapWidth), Random.Range(0, MapLength) ];
+        return _map[Random.Range(0, MapWidth), Random.Range(0, MapLength)];
     }
 
     public Tile GetRandomEmptyTile()
@@ -169,4 +275,6 @@ public class MapManager : MonoBehaviour
         }
         return false;
     }
+
+
 }
