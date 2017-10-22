@@ -26,7 +26,16 @@ public class Player : MonoBehaviour
     public List<Blueprint> blueprints { get; private set; }
     public Polyomino selectedPiece { get; private set; }
     private Polyomino pieceToBePlayed;
-    public bool placementAvailable { get; private set; }
+    public bool placementAvailable
+    {
+        get { return placementAvailable_; }
+        private set
+        {
+            placementAvailable_ = value;
+            SetHandStatus(placementAvailable_);
+        }
+    }
+    private bool placementAvailable_;
     [SerializeField]
     private Vector3 handSpacing;
     [SerializeField]
@@ -91,7 +100,6 @@ public class Player : MonoBehaviour
 
         //for now just allow placement always
         placementAvailable = true;
-        MakeAllPiecesGlow(true);
     }
 
     // Update is called once per frame
@@ -126,27 +134,25 @@ public class Player : MonoBehaviour
         if (playMeter >= 1)
         {
             placementAvailable = true;
-            MakeAllPiecesGlow(true);
             playMeter -= 1;
         }
         Services.UIManager.UpdatePlayMeter(playerNum, playMeter, placementAvailable);
     }
 
+    void SetHandStatus(bool playAvailable)
+    {
+        MakeAllPiecesGlow(playAvailable);
+        for (int i = 0; i < hand.Count; i++)
+        {
+            hand[i].SetPieceState(playAvailable);
+        }
+    }
+
     void MakeAllPiecesGlow(bool makeGlow)
     {
-        if (makeGlow)
+        foreach (Polyomino piece in hand)
         {
-            foreach (Polyomino piece in hand)
-            {
-                piece.SetGlow(new Color(1.3f, 1.3f, 0.9f));
-            }
-        }
-        else
-        {
-            foreach (Polyomino piece in hand)
-            {
-                piece.TurnOffGlow();
-            }
+            piece.SetGlowState(makeGlow);
         }
     }
 
@@ -174,14 +180,7 @@ public class Player : MonoBehaviour
         {
             DrawPiece();
         }
-        if (placementAvailable)
-        {
-            MakeAllPiecesGlow(true);
-        }
-        else
-        {
-            MakeAllPiecesGlow(false);
-        }
+        SetHandStatus(placementAvailable);
     }
 
     void DrawPiece()
@@ -258,24 +257,16 @@ public class Player : MonoBehaviour
         BuildingType blueprintType = selectedPiece.buildingType;
         if (selectedPiece.buildingType == BuildingType.NONE) placementAvailable = false;
         else AddBluePrint(new Blueprint(blueprintType, this));
-        piece.TurnOffGlow();
         selectedPiece = null;
         placementAvailable = false;
-        MakeAllPiecesGlow(false);
+        piece.SetGlowState(false);
         if (Services.MapManager.CheckForWin(piece)) Services.GameScene.GameWin(this);
     }
 
     public void CancelSelectedPiece()
     {
         hand.Add(selectedPiece);
-        if (placementAvailable)
-        {
-            MakeAllPiecesGlow(true);
-        }
-        else
-        {
-            MakeAllPiecesGlow(false);
-        }
+        SetHandStatus(placementAvailable);
         OrganizeHand(hand);
         selectedPiece = null;
     }
@@ -283,7 +274,7 @@ public class Player : MonoBehaviour
     public void CancelSelectedBlueprint()
     {
         blueprints.Add((Blueprint)selectedPiece);
-        selectedPiece.TurnOffGlow();
+        selectedPiece.SetGlowState(false);
         OrganizeHand(blueprints);
         selectedPiece = null;
     }

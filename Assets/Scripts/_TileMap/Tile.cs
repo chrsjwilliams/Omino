@@ -22,7 +22,6 @@ public class Tile : MonoBehaviour
     public Polyomino pieceParent { get; private set; }
     public Blueprint occupyingStructure { get; private set; }
     public SuperDestructorResource occupyingResource { get; private set; }
-    private int touchID;
 
     public void Init(Coord coord_)
     {
@@ -40,9 +39,6 @@ public class Tile : MonoBehaviour
         {
             sr.color = Services.GameManager.MapColorScheme[1];
         }
-        touchID = -1;
-		//if (pieceParent != null)
-			//Debug.Log ("bounds from :" + boxCol.bounds.min + " to " + boxCol.bounds.max);
     }
 
     public void Init(Coord coord_, Polyomino pieceParent_)

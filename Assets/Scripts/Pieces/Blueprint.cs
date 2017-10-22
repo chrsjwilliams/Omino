@@ -122,8 +122,6 @@ public class Blueprint : Polyomino
 
         SetVisible(!isViewable);
         SetTileSprites();
-
-        EnterUnselectedState();
     }
 
     public override void PlaceAtCurrentLocation()

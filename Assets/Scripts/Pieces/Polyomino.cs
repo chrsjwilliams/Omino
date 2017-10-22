@@ -417,7 +417,13 @@ public class Polyomino
         return false;
     }
 
-    public void TurnOffGlow()
+    public void SetGlowState(bool playAvailable)
+    {
+        if (playAvailable) SetGlow(new Color(1.3f, 1.3f, 0.9f));
+        else TurnOffGlow();
+    }
+
+    protected void TurnOffGlow()
     {
         foreach (Tile tile in tiles)
         {
@@ -425,7 +431,7 @@ public class Polyomino
         }
     }
 
-    public void SetGlow(Color color)
+    protected void SetGlow(Color color)
     {
         foreach (Tile tile in tiles)
         {
@@ -528,16 +534,20 @@ public class Polyomino
             }
         }
         SetTileSprites();
-        SetVisible(isViewable);
+        if (buildingType != BuildingType.BASE) SetVisible(isViewable);
+    }
 
-		EnterUnselectedState ();
+    public void SetPieceState(bool playAvailable)
+    {
+        if (playAvailable) EnterUnselectedState();
+        else HideFromInput();
     }
 
 	protected void EnterUnselectedState(){
 		Services.GameEventManager.Register<TouchDown>(OnTouchDown);
 		Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
 		touchID = -1;
-		if(buildingType != BuildingType.BASE) holder.localScale = unselectedScale;
+		holder.localScale = unselectedScale;
 	}
 
     protected void HideFromInput()
@@ -559,7 +569,8 @@ public class Polyomino
     {
         Vector3 touchWorldPos = 
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position);
-		if (IsPointContainedWithinHolderArea(touchWorldPos) && touchID == -1 && owner.selectedPiece == null)
+		if (IsPointContainedWithinHolderArea(touchWorldPos) && touchID == -1 
+            && owner.selectedPiece == null)
         {
             touchID = e.touch.fingerId;
             OnInputDown();
@@ -592,22 +603,23 @@ public class Polyomino
 
     public virtual void OnInputDown()
     {
-		if (!owner.gameOver && !placed)
+        Debug.Log("input down at time " + Time.time);
+        if (!owner.gameOver && !placed)
         {
-			if (!placed) {
-                holder.localScale = Vector3.one;
-                owner.OnPieceSelected (this);
-				OnInputDrag (holder.position);
+            Debug.Log("selecting at time " + Time.time);
+            holder.localScale = Vector3.one;
+            owner.OnPieceSelected(this);
+            OnInputDrag(holder.position);
 
-                Services.GameEventManager.Register<TouchUp>(OnTouchUp);
-                Services.GameEventManager.Register<TouchMove>(OnTouchMove);
-                Services.GameEventManager.Register<TouchDown>(CheckTouchForRotateInput);
-                Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
+            Services.GameEventManager.Register<TouchUp>(OnTouchUp);
+            Services.GameEventManager.Register<TouchMove>(OnTouchMove);
+            Services.GameEventManager.Register<TouchDown>(CheckTouchForRotateInput);
+            Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
 
-                Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
-                Services.GameEventManager.Register<MouseMove>(OnMouseMoveEvent);
-                Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
-            }
+            Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
+            Services.GameEventManager.Register<MouseMove>(OnMouseMoveEvent);
+            Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
+
         }
     }
 
@@ -643,6 +655,7 @@ public class Polyomino
 
     public void OnInputDrag(Vector3 inputPos)
     {
+        Debug.Log("dragging " + holder.name);
         if (!placed && !owner.gameOver)
         {
 			Vector3 offsetInputPos = inputPos + dragOffset;
