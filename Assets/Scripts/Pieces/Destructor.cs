@@ -26,6 +26,7 @@ public class Destructor : Polyomino
 
     protected override void OnPlace()
     {
+        base.OnPlace();
         List<Polyomino> piecesToRemove = new List<Polyomino>();
         foreach (Tile tile in tiles)
         {
