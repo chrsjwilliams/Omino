@@ -388,6 +388,11 @@ public class Polyomino
             Services.MapManager.Map[tileCoord.x, tileCoord.y].SetOccupyingPiece(this);
         }
 
+        CheckForFortification();
+    }
+
+    public void CheckForFortification()
+    {
         List<Tile> emptyAdjacentTiles = new List<Tile>();
 
         foreach (Tile tile in tiles)
@@ -398,7 +403,7 @@ public class Polyomino
                 if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
                 {
                     Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
-                    if(!adjTile.IsOccupied() && !emptyAdjacentTiles.Contains(adjTile))
+                    if (!adjTile.IsOccupied() && !emptyAdjacentTiles.Contains(adjTile))
                     {
                         emptyAdjacentTiles.Add(adjTile);
                     }
@@ -487,6 +492,7 @@ public class Polyomino
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(null);
 			tile.OnRemove ();
         }
+        CheckForFortification();
         GameObject.Destroy(holder.gameObject);
     }
 

@@ -33,6 +33,7 @@ public class Destructor : Polyomino
             if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>(), 0)) return false;
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner) return false;
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner != owner && (mapTile.occupyingPiece.isFortified && !isSuper)) return false;
         }
 
         return true;

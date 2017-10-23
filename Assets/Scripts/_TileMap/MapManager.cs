@@ -299,17 +299,27 @@ public class MapManager : MonoBehaviour
 
     public void CheckForFortification(Polyomino piece, List<Tile> emptyTiles)
     {
-        Debug.Log(emptyTiles.Count);
-        foreach(Tile tile in emptyTiles)
+        foreach (Tile tile in emptyTiles)
         {
-            //  Fortification check is similar to Validation check
-            if (ValidateEyeProperty(tile, piece.owner))
+            foreach (Coord direction in Coord.Directions())
             {
-                foreach (Coord direction in Coord.Directions())
+                Coord adjacentCoord = tile.coord.Add(direction);
+                if (IsCoordContainedInMap(adjacentCoord))
                 {
-                    Coord adjacentCoord = tile.coord.Add(direction);
                     Tile adjacentTile = Map[adjacentCoord.x, adjacentCoord.y];
-                    adjacentTile.occupyingPiece.isFortified = true;
+
+                    if (ValidateEyeProperty(tile, piece.owner))
+                    {
+                        Debug.Log("Is valid eye");
+                        adjacentTile.occupyingPiece.isFortified = true;
+                    }
+                    else
+                    {
+                        if (adjacentTile.IsOccupied())
+                            adjacentTile.occupyingPiece.isFortified = false;
+
+                        Debug.Log("Not valid eye");
+                    }
                 }
             }
         }
