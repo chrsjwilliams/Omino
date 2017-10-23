@@ -27,7 +27,7 @@ public class Polyomino
 	private readonly Vector3 dragOffset = 2f * Vector3.up;
     private readonly Vector3 unselectedScale = 0.675f * Vector3.one;
 
-    public bool connectedToBase;
+    public bool isFortified;
     public List<Blueprint> occupyingStructures { get; protected set; }
     
 
@@ -297,7 +297,7 @@ public class Polyomino
         owner = _player;
 
         occupyingStructures = new List<Blueprint>();
-        connectedToBase = false;
+        isFortified = false;
 
         buildingType = BuildingType.NONE;
 
@@ -326,7 +326,6 @@ public class Polyomino
             case 9:
                 holderName = "Player " + owner.playerNum + " Base";
                 buildingType = BuildingType.BASE;
-                connectedToBase = true;
                 piece = playerBase;
                 break;
             default:

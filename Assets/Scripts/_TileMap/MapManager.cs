@@ -208,6 +208,30 @@ public class MapManager : MonoBehaviour
         return false;
     }
 
+    public bool ValidateEyeProperty(Tile tile, Player player)
+    {
+        bool isValidEye = false;
+        foreach(Coord direction in Coord.Directions())
+        {
+            Coord adjacentCoord = tile.coord.Add(direction);
+            if(IsCoordContainedInMap(adjacentCoord))
+            {
+                Tile adjacentTile = Map[adjacentCoord.x, adjacentCoord.y];
+                if (adjacentTile.IsOccupied() &&
+                    adjacentTile.occupyingPiece.owner == player)
+                {
+                    isValidEye = true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        return isValidEye;
+    }
+
 	public bool ConnectedToBase(Polyomino piece, List<Polyomino> checkedPieces, int count)
     {
         int calls = count;
@@ -279,7 +303,15 @@ public class MapManager : MonoBehaviour
         foreach(Tile tile in emptyTiles)
         {
             //  Fortification check is similar to Validation check
-            Debug.Log(tile);
+            if (ValidateEyeProperty(tile, piece.owner))
+            {
+                foreach (Coord direction in Coord.Directions())
+                {
+                    Coord adjacentCoord = tile.coord.Add(direction);
+                    Tile adjacentTile = Map[adjacentCoord.x, adjacentCoord.y];
+                    adjacentTile.occupyingPiece.isFortified = true;
+                }
+            }
         }
     }
 }
