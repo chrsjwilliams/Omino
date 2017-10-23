@@ -13,8 +13,11 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private Text gameWinText;
     public Transform canvas;
-	[SerializeField]
-	private Text touchCount;
+    public Sprite destructorIcon;
+    public Sprite superDestructorIcon;
+    public Sprite factoryIcon;
+    public Sprite mineIcon;
+    public Sprite baseIcon;
 
 	// Use this for initialization
 	void Start () {

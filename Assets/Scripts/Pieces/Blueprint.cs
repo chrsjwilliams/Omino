@@ -122,6 +122,27 @@ public class Blueprint : Polyomino
 
         SetVisible(!isViewable);
         SetTileSprites();
+        SetIconSprite();
+    }
+
+    protected override void SetIconSprite()
+    {
+        base.SetIconSprite();
+        iconSr.enabled = true;
+        switch (buildingType)
+        {
+            case BuildingType.FACTORY:
+                iconSr.sprite = Services.UIManager.factoryIcon;
+                break;
+            case BuildingType.MINE:
+                iconSr.sprite = Services.UIManager.mineIcon;
+                break;
+            case BuildingType.NONE:
+                iconSr.enabled = false;
+                break;
+            default:
+                break;
+        }
     }
 
     public override void PlaceAtCurrentLocation()

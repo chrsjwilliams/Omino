@@ -11,6 +11,7 @@ public class Polyomino
     protected Dictionary<Tile, Coord> tileRelativeCoords;
     protected Transform holder;
     protected SpriteRenderer holderSr;
+    protected SpriteRenderer iconSr;
     protected string holderName;
     public BuildingType buildingType { get; protected set; }
 
@@ -534,7 +535,22 @@ public class Polyomino
             }
         }
         SetTileSprites();
+        SetIconSprite();
         if (buildingType != BuildingType.BASE) SetVisible(isViewable);
+    }
+
+    protected virtual void SetIconSprite()
+    {
+        iconSr = holder.gameObject.GetComponentsInChildren<SpriteRenderer>()[1];
+        Vector3 centerPos = Vector3.zero;
+        foreach (Tile tile in tiles)
+        {
+            centerPos += tile.transform.position;
+        }
+        centerPos /= tiles.Count;
+        iconSr.transform.position = centerPos;
+        if (buildingType == BuildingType.BASE) iconSr.sprite = Services.UIManager.baseIcon;
+        else iconSr.enabled = false;
     }
 
     public void SetPieceState(bool playAvailable)
@@ -603,10 +619,8 @@ public class Polyomino
 
     public virtual void OnInputDown()
     {
-        Debug.Log("input down at time " + Time.time);
         if (!owner.gameOver && !placed)
         {
-            Debug.Log("selecting at time " + Time.time);
             holder.localScale = Vector3.one;
             owner.OnPieceSelected(this);
             OnInputDrag(holder.position);
@@ -655,7 +669,6 @@ public class Polyomino
 
     public void OnInputDrag(Vector3 inputPos)
     {
-        Debug.Log("dragging " + holder.name);
         if (!placed && !owner.gameOver)
         {
 			Vector3 offsetInputPos = inputPos + dragOffset;
@@ -731,6 +744,7 @@ public class Polyomino
         {
             tile.transform.position = new Vector3(tile.coord.x, tile.coord.y);
         }
+        SetIconSprite();
     }
 
     public virtual void PlaceAtLocation(Coord centerCoordLocation)

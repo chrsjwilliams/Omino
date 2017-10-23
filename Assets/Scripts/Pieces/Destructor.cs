@@ -11,6 +11,20 @@ public class Destructor : Polyomino
         isSuper = _isSuper;
     }
 
+    protected override void SetIconSprite()
+    {
+        base.SetIconSprite();
+        iconSr.enabled = true;
+        if (isSuper)
+        {
+            iconSr.sprite = Services.UIManager.superDestructorIcon;
+        }
+        else
+        {
+            iconSr.sprite = Services.UIManager.destructorIcon;
+        }
+    }
+
     public override bool IsPlacementLegal()
     {
         foreach (Tile tile in tiles)
@@ -27,6 +41,7 @@ public class Destructor : Polyomino
     protected override void OnPlace()
     {
         base.OnPlace();
+        iconSr.enabled = false;
         List<Polyomino> piecesToRemove = new List<Polyomino>();
         foreach (Tile tile in tiles)
         {

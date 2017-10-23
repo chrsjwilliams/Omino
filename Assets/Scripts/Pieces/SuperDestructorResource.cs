@@ -21,6 +21,13 @@ public class SuperDestructorResource : Polyomino
         holder.localScale = Vector3.one;
     }
 
+    protected override void SetIconSprite()
+    {
+        base.SetIconSprite();
+        iconSr.enabled = true;
+        iconSr.sprite = Services.UIManager.superDestructorIcon;
+    }
+
     public override void Remove()
     {
         foreach(Tile tile in tiles)
