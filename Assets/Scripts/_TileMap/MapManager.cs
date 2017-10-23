@@ -210,9 +210,6 @@ public class MapManager : MonoBehaviour
 
 	public bool ConnectedToBase(Polyomino piece, List<Polyomino> checkedPieces, int count)
     {
-        //  We should take in a list of tiles becasue on the second pass of the recursion we
-        //  ignore the second pic
-        //  How is connectedOiecees getting us to the base case?
         int calls = count;
 
         checkedPieces.Add(piece);
@@ -276,5 +273,13 @@ public class MapManager : MonoBehaviour
         return false;
     }
 
-
+    public void CheckForFortification(Polyomino piece, List<Tile> emptyTiles)
+    {
+        Debug.Log(emptyTiles.Count);
+        foreach(Tile tile in emptyTiles)
+        {
+            //  Fortification check is similar to Validation check
+            Debug.Log(tile);
+        }
+    }
 }

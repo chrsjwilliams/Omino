@@ -388,6 +388,26 @@ public class Polyomino
             Coord tileCoord = tile.coord;
             Services.MapManager.Map[tileCoord.x, tileCoord.y].SetOccupyingPiece(this);
         }
+
+        List<Tile> emptyAdjacentTiles = new List<Tile>();
+
+        foreach (Tile tile in tiles)
+        {
+            foreach (Coord direction in Coord.Directions())
+            {
+                Coord adjacentCoord = tile.coord.Add(direction);
+                if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
+                {
+                    Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                    if(!adjTile.IsOccupied() && !emptyAdjacentTiles.Contains(adjTile))
+                    {
+                        emptyAdjacentTiles.Add(adjTile);
+                    }
+                }
+            }
+        }
+
+        Services.MapManager.CheckForFortification(this, emptyAdjacentTiles);
     }
 
     public virtual bool IsPlacementLegal()
