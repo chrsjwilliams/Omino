@@ -218,6 +218,7 @@ public class MapManager : MonoBehaviour
             {
                 Tile adjacentTile = Map[adjacentCoord.x, adjacentCoord.y];
                 if (adjacentTile.IsOccupied() &&
+                    adjacentTile.occupyingPiece.buildingType != BuildingType.BASE &&
                     adjacentTile.occupyingPiece.owner == player)
                 {
                     isValidEye = true;
@@ -297,8 +298,10 @@ public class MapManager : MonoBehaviour
         return false;
     }
 
-    public void CheckForFortification(Polyomino piece, List<Tile> emptyTiles)
+    public void CheckForFortification(Polyomino piece, List<Tile> emptyTiles, bool isBeingDestroyed)
     {
+        List<Polyomino> piecesToFortify = new List<Polyomino>();
+
         foreach (Tile tile in emptyTiles)
         {
             foreach (Coord direction in Coord.Directions())
@@ -310,18 +313,24 @@ public class MapManager : MonoBehaviour
 
                     if (ValidateEyeProperty(tile, piece.owner))
                     {
-                        Debug.Log("Is valid eye");
-                        adjacentTile.occupyingPiece.isFortified = true;
+                        piecesToFortify.Add(adjacentTile.occupyingPiece);
                     }
                     else
                     {
-                        if (adjacentTile.IsOccupied())
+                        if (adjacentTile.IsOccupied() && isBeingDestroyed && adjacentTile.occupyingPiece.owner != piece.owner)
+                        {
                             adjacentTile.occupyingPiece.isFortified = false;
-
-                        Debug.Log("Not valid eye");
+                            adjacentTile.occupyingPiece.TurnOffGlow();
+                        }
                     }
                 }
             }
+        }
+
+        foreach(Polyomino polyomino in piecesToFortify)
+        {
+            polyomino.isFortified = true;
+            polyomino.SetGlow(Color.blue);
         }
     }
 }

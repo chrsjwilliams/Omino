@@ -391,7 +391,7 @@ public class Polyomino
         CheckForFortification();
     }
 
-    public void CheckForFortification()
+    public virtual void CheckForFortification()
     {
         List<Tile> emptyAdjacentTiles = new List<Tile>();
 
@@ -411,7 +411,7 @@ public class Polyomino
             }
         }
 
-        Services.MapManager.CheckForFortification(this, emptyAdjacentTiles);
+        Services.MapManager.CheckForFortification(this, emptyAdjacentTiles, false);
     }
 
     public virtual bool IsPlacementLegal()
@@ -448,15 +448,17 @@ public class Polyomino
         else TurnOffGlow();
     }
 
-    protected void TurnOffGlow()
+    public void TurnOffGlow()
     {
+        if (placed && isFortified) return;
+
         foreach (Tile tile in tiles)
         {
             tile.SetGlowOutLine(0);
         }
     }
 
-    protected void SetGlow(Color color)
+    public void SetGlow(Color color)
     {
         foreach (Tile tile in tiles)
         {

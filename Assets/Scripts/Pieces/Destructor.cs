@@ -33,11 +33,46 @@ public class Destructor : Polyomino
             if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>(), 0)) return false;
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner) return false;
-            if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner != owner && (mapTile.occupyingPiece.isFortified && !isSuper)) return false;
+            if (CanDestoryPieceOn(mapTile)) return false;
         }
-
+        
         return true;
     }
+
+    public bool CanDestoryPieceOn(Tile mapTile)
+    {
+        Debug.Log("Super?" + isSuper);
+        if (isSuper) return false;
+        else
+        {
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece.isFortified) return true;
+            return false;
+        }
+    }
+
+    public override void CheckForFortification()
+    {
+        List<Tile> emptyAdjacentTiles = new List<Tile>();
+
+        foreach (Tile tile in tiles)
+        {
+            foreach (Coord direction in Coord.Directions())
+            {
+                Coord adjacentCoord = tile.coord.Add(direction);
+                if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
+                {
+                    Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                    if (!adjTile.IsOccupied() && !emptyAdjacentTiles.Contains(adjTile))
+                    {
+                        emptyAdjacentTiles.Add(adjTile);
+                    }
+                }
+            }
+        }
+
+        Services.MapManager.CheckForFortification(this, emptyAdjacentTiles, true);
+    }
+
 
     protected override void OnPlace()
     {
