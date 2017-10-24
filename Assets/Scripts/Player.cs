@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
     {
         get
         {
-            return (1 / baseDrawPeriod) * (1 + factoryCount * factoryPlayRateIncrement);
+            return (1 / baseDrawPeriod) * (1 + mineCount * mineDrawRateIncrement);
         }
     }
     private float drawMeter;
@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
     {
         get
         {
-            return (1 / basePlayPeriod) * (1 + mineCount * mineDrawRateIncrement);
+            return (1 / basePlayPeriod) * (1 + factoryCount * factoryPlayRateIncrement);
         }
     }
     private float playMeter;
@@ -284,9 +284,9 @@ public class Player : MonoBehaviour
         mineCount += newMineCount;
     }
 
-    public void ToggleFactoryCount(int newFacotryCount)
+    public void ToggleFactoryCount(int newFactoryCount)
     {
-        factoryCount += newFacotryCount;
+        factoryCount += newFactoryCount;
     }
     public void OnGameOver()
     {

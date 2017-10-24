@@ -85,7 +85,10 @@ Shader "Sprites/Outline"
 
                 // Looking for a transparent pixel (sprite border from inside) around computed fragment with given depth (_OutlineSize).
                 // Also checking if sampled fragment is out of the texture space (UV is out of 0-1 range); considering such fragment as sprite border.
-                [unroll(10)]
+                
+				#if defined(UNITY_COMPILER_HLSL)
+				[unroll(10)]
+				#endif
                 for (int i = 1; i < _OutlineSize + 1; i++)
                 {
                     float2 pixelUpTexCoord = texCoord + float2(0, i * _MainTex_TexelSize.y);
@@ -117,7 +120,9 @@ Shader "Sprites/Outline"
                 if (sampledColor.a > _AlphaThreshold) return 0;
 
                 // Looking for an opaque pixel (sprite border from outise) around computed fragment with given depth (_OutlineSize).
-                [unroll(10)]
+                #if defined(UNITY_COMPILER_HLSL)
+				[unroll(10)]
+				#endif
                 for (int i = 1; i < _OutlineSize + 1; i++)
                 {
                     float2 pixelUpTexCoord = texCoord + float2(0, i * _MainTex_TexelSize.y);
