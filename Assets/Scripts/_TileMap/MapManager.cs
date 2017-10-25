@@ -320,7 +320,7 @@ public class MapManager : MonoBehaviour
                         if (adjacentTile.IsOccupied() && isBeingDestroyed && adjacentTile.occupyingPiece.owner != piece.owner)
                         {
                             adjacentTile.occupyingPiece.isFortified = false;
-                            adjacentTile.occupyingPiece.TurnOffGlow();
+                            adjacentTile.occupyingPiece.SetTint(Color.white, 0);
                         }
                     }
                 }
@@ -330,7 +330,7 @@ public class MapManager : MonoBehaviour
         foreach(Polyomino polyomino in piecesToFortify)
         {
             polyomino.isFortified = true;
-            polyomino.SetGlow(Color.blue);
+            polyomino.SetTint(Color.magenta, 0.3f);
         }
     }
 }

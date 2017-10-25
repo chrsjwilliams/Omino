@@ -20,11 +20,12 @@ public class Polyomino
     protected int variations;
     protected int[,,] piece;
     public Player owner { get; protected set; }
+    private Color baseColor;
     public Coord centerCoord;
     protected bool placed;
     private const float rotationInputRadius = 8f;
 	private int touchID;
-	private readonly Vector3 dragOffset = 2f * Vector3.up;
+	private readonly Vector3 dragOffset = 2f * Vector3.right;
     private readonly Vector3 unselectedScale = 0.675f * Vector3.one;
 
     public bool isFortified;
@@ -298,6 +299,7 @@ public class Polyomino
 
         occupyingStructures = new List<Blueprint>();
         isFortified = false;
+        if(owner != null) baseColor = owner.ActiveTilePrimaryColors[0];
 
         buildingType = BuildingType.NONE;
 
@@ -450,7 +452,7 @@ public class Polyomino
 
     public void TurnOffGlow()
     {
-        if (placed && isFortified) return;
+        //if (placed && isFortified) return;
 
         foreach (Tile tile in tiles)
         {
@@ -464,6 +466,14 @@ public class Polyomino
         {
             tile.SetGlowOutLine(10);
             tile.SetGlowColor(color);
+        }
+    }
+
+    public void SetTint(Color color, float tintProportion)
+    {
+        foreach(Tile tile in tiles)
+        {
+            tile.SetColor((baseColor * (1 - tintProportion)) + (color * tintProportion));
         }
     }
 
@@ -698,8 +708,10 @@ public class Polyomino
     {
         if (!placed && !owner.gameOver)
         {
-			Vector3 offsetInputPos = inputPos + dragOffset;
-			Coord roundedInputCoord = new Coord(
+            Vector3 offsetInputPos = inputPos;
+            if (owner.playerNum == 1) offsetInputPos += dragOffset;
+            else offsetInputPos -= dragOffset;
+            Coord roundedInputCoord = new Coord(
 				Mathf.RoundToInt(offsetInputPos.x),
 				Mathf.RoundToInt(offsetInputPos.y));
             SetTileCoords(roundedInputCoord);
