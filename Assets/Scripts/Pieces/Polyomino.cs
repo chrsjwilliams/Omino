@@ -25,7 +25,7 @@ public class Polyomino
     protected bool placed;
     private const float rotationInputRadius = 8f;
 	private int touchID;
-	private readonly Vector3 dragOffset = 2f * Vector3.right;
+	private readonly Vector3 dragOffset = 4f * Vector3.right;
     private readonly Vector3 unselectedScale = 0.675f * Vector3.one;
 
     public bool isFortified;
@@ -474,6 +474,14 @@ public class Polyomino
         foreach(Tile tile in tiles)
         {
             tile.SetColor((baseColor * (1 - tintProportion)) + (color * tintProportion));
+        }
+    }
+
+    public void ToggleAltColor(bool useAlt)
+    {
+        foreach (Tile tile in tiles)
+        {
+            tile.ToggleAltColor(useAlt);
         }
     }
 

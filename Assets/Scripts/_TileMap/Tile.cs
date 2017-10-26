@@ -61,6 +61,12 @@ public class Tile : MonoBehaviour
         sr.color = color;
     }
 
+    public void ToggleAltColor(bool useAlt)
+    {
+        if (useAlt) sr.color = pieceParent.owner.ActiveTilePrimaryColors[1];
+        else sr.color = pieceParent.owner.ActiveTilePrimaryColors[0];
+    }
+
     public void SetGlowOutLine(int i)
     {
         glow.OutlineWidth = i;
