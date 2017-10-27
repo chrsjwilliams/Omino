@@ -497,6 +497,7 @@ public class Polyomino
                 owner.AddPieceToHand(mapTile.occupyingResource);
             }
         }
+        Services.AudioManager.CreateTempAudio(Services.Clips.PiecePlaced, 1);
     }
 
     public virtual void Remove()
@@ -669,6 +670,7 @@ public class Polyomino
             holder.localScale = Vector3.one;
             owner.OnPieceSelected(this);
             OnInputDrag(holder.position);
+            Services.AudioManager.CreateTempAudio(Services.Clips.PiecePicked, 1);
 
             Services.GameEventManager.Register<TouchUp>(OnTouchUp);
             Services.GameEventManager.Register<TouchMove>(OnTouchMove);

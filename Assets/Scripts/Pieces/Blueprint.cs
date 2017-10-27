@@ -192,6 +192,7 @@ public class Blueprint : Polyomino
         {
             case BuildingType.FACTORY:
                 owner.ToggleFactoryCount(1);
+                Services.AudioManager.CreateTempAudio(Services.Clips.FactoryPlaced, 1);
                 break;
             case BuildingType.MINE:
                 owner.ToggleMineCount(1);

@@ -88,6 +88,8 @@ public class Destructor : Polyomino
                     piecesToRemove.Add(mapTile.occupyingPiece);
             }
         }
+        if (piecesToRemove.Count > 0)
+            Services.AudioManager.CreateTempAudio(Services.Clips.PieceDestroyed, 1);
         for (int i = piecesToRemove.Count - 1; i >= 0; i--)
         {
             piecesToRemove[i].Remove();

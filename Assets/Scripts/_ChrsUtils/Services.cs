@@ -16,4 +16,7 @@ public class Services
 
     public static GameSceneScript GameScene { get; set; }
     public static UIManager UIManager { get; set; }
+
+    public static AudioManager AudioManager { get; set; }
+    public static ClipLibrary Clips { get; set; }
 }

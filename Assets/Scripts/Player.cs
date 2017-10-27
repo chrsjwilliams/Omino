@@ -135,6 +135,8 @@ public class Player : MonoBehaviour
         {
             placementAvailable = true;
             playMeter -= 1;
+            Services.AudioManager.CreateTempAudio(Services.Clips.PlayAvailable[playerNum -1], 
+                0.5f);
         }
         Services.UIManager.UpdatePlayMeter(playerNum, playMeter, placementAvailable);
     }
@@ -146,6 +148,7 @@ public class Player : MonoBehaviour
         {
             hand[i].SetPieceState(playAvailable);
         }
+        Services.UIManager.SetGreyOutBox(playerNum, !playAvailable);
     }
 
     void MakeAllPiecesGlow(bool makeGlow)
@@ -230,6 +233,8 @@ public class Player : MonoBehaviour
     public void ToggleHandZoneView(bool viewPieces)
     {
         viewingHand = viewPieces;
+        if (!viewingHand) Services.UIManager.SetGreyOutBox(playerNum, false);
+        else Services.UIManager.SetGreyOutBox(playerNum, !placementAvailable);
         foreach(Polyomino piece in hand)
         {
             piece.SetVisible(viewingHand);

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d679b194a83a31449bd9e084a5fa6813, type: 3}
+  m_Name: ClipLibrary
+  m_EditorClassIdentifier: 
+  mainTrackAudio: {fileID: 8300000, guid: 561ad2e4857671f4da94caca9eec3d94, type: 3}
+  piecePlaced: {fileID: 8300000, guid: 70f647caa3e3c6a4cbdcd9eea8e3706c, type: 3}
+  piecePicked: {fileID: 8300000, guid: f0b9b71ad314de842b31854a2fd99253, type: 3}
+  pieceDestroyed: {fileID: 8300000, guid: 52405cf7583df1942babd71d05f435a7, type: 3}
+  factoryPlaced: {fileID: 8300000, guid: 9d603a61153b3bd4ca1fbc2d182c8ba3, type: 3}
+  playAvailable:
+  - {fileID: 8300000, guid: 3a4b692fc25db714ea657f9ebde1826e, type: 3}
+  - {fileID: 8300000, guid: 9ef295ef485236945975ea59c5d7c819, type: 3}

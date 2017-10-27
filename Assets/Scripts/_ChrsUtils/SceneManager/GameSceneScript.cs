@@ -21,6 +21,7 @@ public class GameSceneScript : Scene<TransitionData>
         _colorChangeTime = 0f;
         Services.MapManager.GenerateMap();
         Services.GameManager.InitPlayers();
+        Services.AudioManager.SetMainTrack(Services.Clips.MainTrackAudio, 0.3f);
     }
 
     internal override void OnExit()

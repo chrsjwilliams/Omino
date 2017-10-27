@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private Image[] playMeters;
     [SerializeField]
+    private Image[] greyOutBoxes;
+    [SerializeField]
     private Text gameWinText;
     public Transform canvas;
     public Sprite destructorIcon;
@@ -23,6 +25,10 @@ public class UIManager : MonoBehaviour {
 	void Start () {
         gameWinText = GameObject.Find("GameWinText").GetComponent<Text>();
         gameWinText.gameObject.SetActive(false);
+        foreach(Image box in greyOutBoxes)
+        {
+            box.enabled = false;
+        }
 	}
 	
 	// Update is called once per frame
@@ -53,5 +59,10 @@ public class UIManager : MonoBehaviour {
         gameWinText.gameObject.SetActive(true);
         gameWinText.text = "PLAYER " + winner.playerNum + " WINS";
         gameWinText.color = winner.ActiveTilePrimaryColors[0];
+    }
+
+    public void SetGreyOutBox(int playerNum, bool status)
+    {
+        greyOutBoxes[playerNum - 1].enabled = status;
     }
 }
