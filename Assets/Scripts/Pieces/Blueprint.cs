@@ -196,6 +196,7 @@ public class Blueprint : Polyomino
                 break;
             case BuildingType.MINE:
                 owner.ToggleMineCount(1);
+                Services.AudioManager.CreateTempAudio(Services.Clips.FactoryPlaced, 1);
                 break;
             default:
                 break;
