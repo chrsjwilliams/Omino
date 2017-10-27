@@ -23,6 +23,7 @@ public class UITabs : MonoBehaviour
         {
             player = Services.GameManager.Players[1];
         }
+        player.InitializeUITabs(this);
         handZoneUI = GetComponent<Image>();
 	}
 

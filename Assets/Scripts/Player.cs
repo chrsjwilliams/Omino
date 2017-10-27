@@ -76,6 +76,7 @@ public class Player : MonoBehaviour
     }
     private float playMeter;
     public bool gameOver { get; private set; }
+    private UITabs uiTabs;
 
     // Use this for initialization
     public void Init(Color[] colorScheme, int posOffset)
@@ -151,6 +152,11 @@ public class Player : MonoBehaviour
             hand[i].SetPieceState(playAvailable);
         }
         Services.UIManager.SetGreyOutBox(playerNum, !playAvailable);
+    }
+
+    public void InitializeUITabs(UITabs tabs)
+    {
+        uiTabs = tabs;
     }
 
     void MakeAllPiecesGlow(bool makeGlow)
@@ -283,9 +289,13 @@ public class Player : MonoBehaviour
     {
         BuildingType blueprintType = selectedPiece.buildingType;
         if (selectedPiece.buildingType == BuildingType.NONE) placementAvailable = false;
-        else AddBluePrint(new Blueprint(blueprintType, this));
+        else
+        {
+            AddBluePrint(new Blueprint(blueprintType, this));
+            uiTabs.ToggleHandZoneView(true);
+        }
         selectedPiece = null;
-        placementAvailable = false;
+        //placementAvailable = false;
         piece.SetGlowState(false);
         if (Services.MapManager.CheckForWin(piece)) Services.GameScene.GameWin(this);
     }
