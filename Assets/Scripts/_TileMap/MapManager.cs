@@ -321,6 +321,7 @@ public class MapManager : MonoBehaviour
                         {
                             adjacentTile.occupyingPiece.isFortified = false;
                             adjacentTile.occupyingPiece.ToggleAltColor(false);
+                            adjacentTile.occupyingPiece.CheckForFortification();
                         }
                     }
                 }
