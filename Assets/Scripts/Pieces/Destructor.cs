@@ -50,28 +50,28 @@ public class Destructor : Polyomino
         }
     }
 
-    public override void CheckForFortification()
-    {
-        List<Tile> emptyAdjacentTiles = new List<Tile>();
+    //public override void CheckForFortification()
+    //{
+    //    List<Tile> emptyAdjacentTiles = new List<Tile>();
 
-        foreach (Tile tile in tiles)
-        {
-            foreach (Coord direction in Coord.Directions())
-            {
-                Coord adjacentCoord = tile.coord.Add(direction);
-                if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
-                {
-                    Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
-                    if (!adjTile.IsOccupied() && !emptyAdjacentTiles.Contains(adjTile))
-                    {
-                        emptyAdjacentTiles.Add(adjTile);
-                    }
-                }
-            }
-        }
+    //    foreach (Tile tile in tiles)
+    //    {
+    //        foreach (Coord direction in Coord.Directions())
+    //        {
+    //            Coord adjacentCoord = tile.coord.Add(direction);
+    //            if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
+    //            {
+    //                Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+    //                if (!adjTile.IsOccupied() && !emptyAdjacentTiles.Contains(adjTile))
+    //                {
+    //                    emptyAdjacentTiles.Add(adjTile);
+    //                }
+    //            }
+    //        }
+    //    }
 
-        Services.MapManager.CheckForFortification(this, emptyAdjacentTiles, true);
-    }
+    //    Services.MapManager.CheckForFortification(this, emptyAdjacentTiles, isSuper);
+    //}
 
 
     protected override void OnPlace()

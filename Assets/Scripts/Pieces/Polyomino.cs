@@ -390,10 +390,10 @@ public class Polyomino
             Services.MapManager.Map[tileCoord.x, tileCoord.y].SetOccupyingPiece(this);
         }
 
-        CheckForFortification();
+        CheckForFortification(false);
     }
 
-    public virtual void CheckForFortification()
+    public virtual void CheckForFortification(bool isBeingDestroyed)
     {
         List<Tile> emptyAdjacentTiles = new List<Tile>();
 
@@ -413,7 +413,7 @@ public class Polyomino
             }
         }
 
-        Services.MapManager.CheckForFortification(this, emptyAdjacentTiles, false);
+        Services.MapManager.CheckForFortification(this, emptyAdjacentTiles, isBeingDestroyed);
     }
 
     public virtual bool IsPlacementLegal()
@@ -513,7 +513,7 @@ public class Polyomino
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(null);
 			tile.OnRemove ();
         }
-        CheckForFortification();
+        CheckForFortification(true);
         GameObject.Destroy(holder.gameObject);
     }
 
