@@ -21,11 +21,13 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private bool viewingHand;
-    public List<Polyomino> deck { get; private set; }
-    public List<Polyomino> hand { get; private set; }
-    public List<Blueprint> blueprints { get; private set; }
+    private List<Polyomino> deck;
+    [SerializeField]
+    private int deckClumpCount;
+    private List<List<Polyomino>> deckClumped;
+    private List<Polyomino> hand;
+    private List<Blueprint> blueprints;
     public Polyomino selectedPiece { get; private set; }
-    private Polyomino pieceToBePlayed;
     public bool placementAvailable
     {
         get { return placementAvailable_; }
@@ -49,7 +51,7 @@ public class Player : MonoBehaviour
     public RectTransform handZone { get; private set; }
     [SerializeField]
     private float factoryPlayRateIncrement;
-    public int factoryCount { get; private set; }
+    private int factoryCount;
     [SerializeField]
     private float baseDrawPeriod;
     private float drawRate
@@ -62,7 +64,7 @@ public class Player : MonoBehaviour
     private float drawMeter;
     [SerializeField]
     private float mineDrawRateIncrement;
-    public int mineCount { get; private set; }
+    private int mineCount;
     [SerializeField]
     private float basePlayPeriod;
     private float playRate
@@ -162,15 +164,34 @@ public class Player : MonoBehaviour
     #region DECK FUNCTIONS
     void InitializeDeck()
     {
-        deck = new List<Polyomino>();
+        //deck = new List<Polyomino>();
+        deckClumped = new List<List<Polyomino>>();
+        List<Polyomino> destructors = new List<Polyomino>();
+        List<Polyomino> nonDestructors = new List<Polyomino>();
         for (int numBlocks = 3; numBlocks <= 5; numBlocks++)
         {
             int numTypes = Polyomino.pieceTypes[numBlocks];
             for (int index = 0; index < numTypes; index++)
             {
-                if (numBlocks < 5) deck.Add(new Destructor(numBlocks, index, this, false));
-                else deck.Add(new Polyomino(numBlocks, index, this));
+                if (numBlocks < 5) destructors.Add(new Destructor(numBlocks, index, this, false));
+                else nonDestructors.Add(new Polyomino(numBlocks, index, this));
             }
+        }
+        for (int i = 0; i < deckClumpCount; i++)
+        {
+            deckClumped.Add(new List<Polyomino>());
+        }
+        for (int i = 0; i < destructors.Count; i++)
+        {
+            Polyomino destructorToAdd = destructors[Random.Range(0, destructors.Count)];
+            deckClumped[i % deckClumpCount].Add(destructorToAdd);
+            destructors.Remove(destructorToAdd);
+        }
+        for (int i = 0; i < nonDestructors.Count; i++)
+        {
+            Polyomino nonDestructorToAdd = nonDestructors[Random.Range(0, nonDestructors.Count)];
+            deckClumped[i % deckClumpCount].Add(nonDestructorToAdd);
+            nonDestructors.Remove(nonDestructorToAdd);
         }
     }
 
@@ -188,9 +209,10 @@ public class Player : MonoBehaviour
 
     void DrawPiece()
     {
-        if (deck.Count == 0) InitializeDeck();
+        if (deckClumped.Count == 0) InitializeDeck();
         Polyomino piece = GetRandomPieceFromDeck();
-        deck.Remove(piece);
+        deckClumped[0].Remove(piece);
+        if (deckClumped[0].Count == 0) deckClumped.Remove(deckClumped[0]);
         hand.Add(piece);
         piece.MakePhysicalPiece(viewingHand);
         OrganizeHand(hand);
@@ -198,8 +220,8 @@ public class Player : MonoBehaviour
 
     Polyomino GetRandomPieceFromDeck()
     {
-        int index = Random.Range(0, deck.Count);
-        return deck[index];
+        int index = Random.Range(0, deckClumped[0].Count);
+        return deckClumped[0][index];
     }
 
     public void AddBluePrint(Blueprint blueprint)
