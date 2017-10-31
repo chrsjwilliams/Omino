@@ -77,6 +77,7 @@ public class Player : MonoBehaviour
     private float playMeter;
     public bool gameOver { get; private set; }
     private UITabs uiTabs;
+    private List<Polyomino> boardPieces;
 
     // Use this for initialization
     public void Init(Color[] colorScheme, int posOffset)
@@ -91,6 +92,7 @@ public class Player : MonoBehaviour
 
         hand = new List<Polyomino>();
         blueprints = new List<Blueprint>();
+        boardPieces = new List<Polyomino>();
 
         InitializeDeck();
         DrawPieces(startingHandSize);
@@ -100,7 +102,15 @@ public class Player : MonoBehaviour
         Blueprint mine = new Blueprint(BuildingType.MINE, this);
         AddBluePrint(mine);
 
-
+        Coord basePos;
+        if (playerNum == 1) basePos = new Coord(1, 1);
+        else
+        {
+            basePos = new Coord(
+                Services.MapManager.MapWidth - 2, 
+                Services.MapManager.MapLength - 2);
+        }
+        Services.MapManager.CreateBase(this, basePos);
         //for now just allow placement always
         placementAvailable = true;
     }
@@ -110,13 +120,18 @@ public class Player : MonoBehaviour
     {
         if (!gameOver)
         {
-            UpdateDrawMeter();
+            //UpdateDrawMeter();
             UpdatePlayMeter();
         }
 
         if(Input.GetKeyDown(KeyCode.Space) && selectedPiece != null)
         {
             selectedPiece.Rotate();
+        }
+
+        for (int i = 0; i < boardPieces.Count; i++)
+        {
+            boardPieces[i].Update();
         }
     }
 
@@ -287,17 +302,22 @@ public class Player : MonoBehaviour
 
     public void OnPiecePlaced(Polyomino piece)
     {
-        BuildingType blueprintType = selectedPiece.buildingType;
-        if (selectedPiece.buildingType == BuildingType.NONE) placementAvailable = false;
+        BuildingType blueprintType = piece.buildingType;
+        if (!(piece is Blueprint)) placementAvailable = false;
         else
         {
             AddBluePrint(new Blueprint(blueprintType, this));
             uiTabs.ToggleHandZoneView(true);
         }
         selectedPiece = null;
-        //placementAvailable = false;
         piece.SetGlowState(false);
+        boardPieces.Add(piece);
         if (Services.MapManager.CheckForWin(piece)) Services.GameScene.GameWin(this);
+    }
+
+    public void OnPieceRemoved(Polyomino piece)
+    {
+        boardPieces.Remove(piece);
     }
 
     public void CancelSelectedPiece()

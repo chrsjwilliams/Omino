@@ -156,6 +156,7 @@ public class Blueprint : Polyomino
             if (!mapTile.occupyingPiece.occupyingStructures.Contains(this))
                 mapTile.occupyingPiece.AddOccupyingStructure(this);
         }
+        owner.OnPiecePlaced(this);
     }
 
     public override void Remove()
@@ -183,6 +184,7 @@ public class Blueprint : Polyomino
         {
             constituentPieces[i].RemoveOccupyingStructure(this);
         }
+        owner.OnPieceRemoved(this);
         GameObject.Destroy(holder.gameObject);
     }
 

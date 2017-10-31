@@ -105,13 +105,6 @@ public class GameManager : MonoBehaviour
                     break;
             }
         }
-        IntVector2 player1BasePos = new IntVector2(1, 1);
-        Services.MapManager.ActivateBase(_players[0], player1BasePos);
-
-        IntVector2 player2BasePos = new IntVector2(
-            Services.MapManager.MapWidth - 2,
-            Services.MapManager.MapLength - 2);
-        Services.MapManager.ActivateBase(_players[1], player2BasePos);
     }
 
     public void ChangeCameraTo(Camera camera)

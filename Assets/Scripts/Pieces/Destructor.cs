@@ -41,7 +41,6 @@ public class Destructor : Polyomino
 
     public bool CanDestroyPieceOn(Tile mapTile)
     {
-        Debug.Log("Super?" + isSuper);
         if (isSuper) return false;
         else
         {

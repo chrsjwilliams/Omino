@@ -162,17 +162,11 @@ public class MapManager : MonoBehaviour
         return new IntVector2(MapWidth / 2, MapLength / 2);
     }
 
-    public void ActivateBase(Player player, IntVector2 offset)
+    public void CreateBase(Player player, Coord coord)
     {
-        Polyomino playerBase = new Polyomino(9, 0, player);
+        Base playerBase = new Base(9, 0, player);
         playerBase.MakePhysicalPiece(true);
-        playerBase.SetBasePosition(offset);
-        playerBase.SetPlaced(true);
-        foreach(Tile tile in playerBase.tiles)
-        {
-            Map[tile.coord.x + offset.x, tile.coord.y + offset.y].SetOccupyingPiece(playerBase);
-            Map[tile.coord.x + offset.x, tile.coord.y + offset.y].SetColor(player.ActiveTilePrimaryColors[1]);
-        }
+        playerBase.PlaceAtLocation(coord);
     }
 
     public Tile GetRandomTile()

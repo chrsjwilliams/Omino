@@ -29,4 +29,7 @@ public class PrefabDB : ScriptableObject
         get { return pieceHolder; }
     }
 
+    [SerializeField] private GameObject ringTimer;
+    public GameObject RingTimer { get { return ringTimer; } }
+
 }

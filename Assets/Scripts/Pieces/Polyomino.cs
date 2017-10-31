@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum BuildingType
 { BASE,FACTORY, MINE, NONE }
@@ -24,13 +25,14 @@ public class Polyomino
     public Coord centerCoord;
     protected bool placed;
     private const float rotationInputRadius = 8f;
-	private int touchID;
-	private readonly Vector3 dragOffset = 5f * Vector3.right;
+    private int touchID;
+    private readonly Vector3 dragOffset = 5f * Vector3.right;
     private readonly Vector3 unselectedScale = 0.675f * Vector3.one;
 
     public bool isFortified;
     public List<Blueprint> occupyingStructures { get; protected set; }
-    
+    protected Image ringTimer;
+
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -41,7 +43,7 @@ public class Polyomino
             {
                 { 0,0,0,0,0 },
                 { 0,0,0,0,0 },
-                { 0,0,1,0,0 },                
+                { 0,0,1,0,0 },
                 { 0,0,0,0,0 },
                 { 0,0,0,0,0 }
             }
@@ -299,7 +301,7 @@ public class Polyomino
 
         occupyingStructures = new List<Blueprint>();
         isFortified = false;
-        if(owner != null) baseColor = owner.ActiveTilePrimaryColors[0];
+        if (owner != null) baseColor = owner.ActiveTilePrimaryColors[0];
 
         buildingType = BuildingType.NONE;
 
@@ -349,7 +351,7 @@ public class Polyomino
             {
                 tile.enabled = isVisible;
             }
-            if (isVisible)
+            if (isVisible && owner != null && (owner.placementAvailable || this is Blueprint))
             {
                 EnterUnselectedState();
             }
@@ -384,12 +386,12 @@ public class Polyomino
         //place the piece on the board where it's being hovered now
         placed = true;
         OnPlace();
-        foreach(Tile tile in tiles)
+        foreach (Tile tile in tiles)
         {
             Coord tileCoord = tile.coord;
             Services.MapManager.Map[tileCoord.x, tileCoord.y].SetOccupyingPiece(this);
         }
-
+        owner.OnPiecePlaced(this);
         CheckForFortification(false);
     }
 
@@ -422,7 +424,7 @@ public class Polyomino
         //CONDITIONS:
         //is contiguous with a structure connected to either the base or a fortification
         //doesn't overlap with any existing pieces or is a destructor\
-        foreach(Tile tile in tiles)
+        foreach (Tile tile in tiles)
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
             if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>(), 0)) return false;
@@ -433,7 +435,7 @@ public class Polyomino
 
     public bool ShareTilesWith(Tile tile)
     {
-        foreach(Tile myTiles in tiles)
+        foreach (Tile myTiles in tiles)
         {
             if (myTiles == tile)
             {
@@ -471,7 +473,7 @@ public class Polyomino
 
     public void SetTint(Color color, float tintProportion)
     {
-        foreach(Tile tile in tiles)
+        foreach (Tile tile in tiles)
         {
             tile.SetColor((baseColor * (1 - tintProportion)) + (color * tintProportion));
         }
@@ -489,7 +491,7 @@ public class Polyomino
     {
         //do whatever special stuff this piece does when you place it 
         //(e.g. destroy overlapping pieces for a destructor)
-        foreach(Tile tile in tiles)
+        foreach (Tile tile in tiles)
         {
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.HasResource())
@@ -502,18 +504,20 @@ public class Polyomino
 
     public virtual void Remove()
     {
-		Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
-		Services.GameEventManager.Unregister<TouchMove> (OnTouchMove);
-		for (int i = occupyingStructures.Count -1; i >= 0; i--)
+        Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
+        Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
+        for (int i = occupyingStructures.Count - 1; i >= 0; i--)
         {
             occupyingStructures[i].Remove();
         }
         foreach (Tile tile in tiles)
         {
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(null);
-			tile.OnRemove ();
+            tile.OnRemove();
         }
         CheckForFortification(true);
+        if (ringTimer != null) RemoveTimerUI();
+        owner.OnPieceRemoved(this);
         GameObject.Destroy(holder.gameObject);
     }
 
@@ -532,7 +536,7 @@ public class Polyomino
     public void SetTileCoords(Coord centerPos)
     {
         centerCoord = centerPos;
-        foreach(KeyValuePair<Tile,Coord> tileCoord in tileRelativeCoords)
+        foreach (KeyValuePair<Tile, Coord> tileCoord in tileRelativeCoords)
         {
             tileCoord.Key.SetCoord(tileCoord.Value.Add(centerPos));
         }
@@ -550,7 +554,7 @@ public class Polyomino
 
     public virtual void MakePhysicalPiece(bool isViewable)
     {
-        holder = GameObject.Instantiate(Services.Prefabs.PieceHolder, 
+        holder = GameObject.Instantiate(Services.Prefabs.PieceHolder,
             Services.GameScene.transform).transform;
         holder.gameObject.name = holderName;
         holderSr = holder.gameObject.GetComponent<SpriteRenderer>();
@@ -572,8 +576,6 @@ public class Polyomino
 
                     string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;
-
-
                     newpiece.ActivateTile(owner, buildingType);
 
                     tiles.Add(newpiece);
@@ -605,12 +607,13 @@ public class Polyomino
         else HideFromInput();
     }
 
-	protected void EnterUnselectedState(){
-		Services.GameEventManager.Register<TouchDown>(OnTouchDown);
-		Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
-		touchID = -1;
-		holder.localScale = unselectedScale;
-	}
+    protected void EnterUnselectedState()
+    {
+        Services.GameEventManager.Register<TouchDown>(OnTouchDown);
+        Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
+        touchID = -1;
+        holder.localScale = unselectedScale;
+    }
 
     protected void HideFromInput()
     {
@@ -629,9 +632,9 @@ public class Polyomino
 
     protected void OnTouchDown(TouchDown e)
     {
-        Vector3 touchWorldPos = 
+        Vector3 touchWorldPos =
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position);
-		if (IsPointContainedWithinHolderArea(touchWorldPos) && touchID == -1 
+        if (IsPointContainedWithinHolderArea(touchWorldPos) && touchID == -1
             && owner.selectedPiece == null)
         {
             touchID = e.touch.fingerId;
@@ -643,7 +646,7 @@ public class Polyomino
     {
         Vector3 mouseWorldPos =
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos);
-		if (IsPointContainedWithinHolderArea(mouseWorldPos) && owner.selectedPiece == null)
+        if (IsPointContainedWithinHolderArea(mouseWorldPos) && owner.selectedPiece == null)
         {
             OnInputDown();
         }
@@ -689,29 +692,34 @@ public class Polyomino
         OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos));
     }
 
-	protected void OnTouchMove(TouchMove e){
-		if (e.touch.fingerId == touchID) {
-			OnInputDrag (Services.GameManager.MainCamera.ScreenToWorldPoint (e.touch.position));
-		}
-	}
+    protected void OnTouchMove(TouchMove e)
+    {
+        if (e.touch.fingerId == touchID)
+        {
+            OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position));
+        }
+    }
 
     public virtual void OnInputUp()
     {
-		if (!placed) {
-			Services.GameEventManager.Unregister<TouchMove> (OnTouchMove);
-			Services.GameEventManager.Unregister<TouchUp> (OnTouchUp);
-			Services.GameEventManager.Unregister<TouchDown> (CheckTouchForRotateInput);
+        if (!placed)
+        {
+            Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
+            Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
+            Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
 
-			Services.GameEventManager.Unregister<MouseMove> (OnMouseMoveEvent);
-			Services.GameEventManager.Unregister<MouseUp> (OnMouseUpEvent);
-			if (IsPlacementLegal () && owner.placementAvailable && !owner.gameOver) {
-				PlaceAtCurrentLocation ();
-				owner.OnPiecePlaced (this);
-			} else {
-				owner.CancelSelectedPiece ();
-				EnterUnselectedState ();
-			}
-		}
+            Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
+            Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
+            if (IsPlacementLegal() && owner.placementAvailable && !owner.gameOver)
+            {
+                PlaceAtCurrentLocation();
+            }
+            else
+            {
+                owner.CancelSelectedPiece();
+                EnterUnselectedState();
+            }
+        }
     }
 
     public void OnInputDrag(Vector3 inputPos)
@@ -722,8 +730,8 @@ public class Polyomino
             if (owner.playerNum == 1) offsetInputPos += dragOffset;
             else offsetInputPos -= dragOffset;
             Coord roundedInputCoord = new Coord(
-				Mathf.RoundToInt(offsetInputPos.x),
-				Mathf.RoundToInt(offsetInputPos.y));
+                Mathf.RoundToInt(offsetInputPos.x),
+                Mathf.RoundToInt(offsetInputPos.y));
             SetTileCoords(roundedInputCoord);
             Reposition(new Vector3(
                 roundedInputCoord.x,
@@ -747,7 +755,7 @@ public class Polyomino
 
     protected void SetTileSprites()
     {
-        foreach(Tile tile in tiles)
+        foreach (Tile tile in tiles)
         {
             int spriteIndex = 15;
             Coord[] directions = Coord.Directions();
@@ -765,9 +773,10 @@ public class Polyomino
 
     protected void CheckTouchForRotateInput(TouchDown e)
     {
-        if(Vector2.Distance(
-            Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position), 
-            holder.position) < rotationInputRadius)
+        if (Vector2.Distance(
+            Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position),
+            Services.GameManager.MainCamera.ScreenToWorldPoint(Input.GetTouch(touchID).position))
+            < rotationInputRadius)
         {
             Rotate();
         }
@@ -800,9 +809,26 @@ public class Polyomino
     {
         SetTileCoords(centerCoordLocation);
         Reposition(new Vector3(
-            centerCoordLocation.x, 
-            centerCoordLocation.y, 
+            centerCoordLocation.x,
+            centerCoordLocation.y,
             holder.position.z));
         PlaceAtCurrentLocation();
     }
+
+    protected void CreateTimerUI()
+    {
+        GameObject timerObj = GameObject.Instantiate(Services.Prefabs.RingTimer, 
+            Services.UIManager.canvas);
+        ringTimer = timerObj.GetComponentsInChildren<Image>()[1];
+        ringTimer.fillAmount = 0;
+        timerObj.transform.position =
+            Services.GameManager.MainCamera.WorldToScreenPoint(holder.transform.position);
+    }
+
+    protected void RemoveTimerUI()
+    {
+        GameObject.Destroy(ringTimer.transform.parent.gameObject);
+    }
+
+    public virtual void Update() { }
 }
