@@ -218,7 +218,6 @@ public class Blueprint : Polyomino
             if (IsPlacementLegal() && !owner.gameOver)
             {
                 PlaceAtCurrentLocation();
-                owner.OnPiecePlaced(this);
             }
             else
             {

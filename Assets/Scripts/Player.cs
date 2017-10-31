@@ -97,10 +97,10 @@ public class Player : MonoBehaviour
 
         InitializeDeck();
         DrawPieces(startingHandSize);
-        Blueprint factory = new Blueprint(BuildingType.FACTORY, this);
+        Factory factory = new Factory(this);
         AddBluePrint(factory);
 
-        Blueprint mine = new Blueprint(BuildingType.MINE, this);
+        Mine mine = new Mine(this);
         AddBluePrint(mine);
 
         Coord basePos;
@@ -339,7 +339,8 @@ public class Player : MonoBehaviour
         if (!(piece is Blueprint)) placementAvailable = false;
         else
         {
-            AddBluePrint(new Blueprint(blueprintType, this));
+            AddBluePrint(System.Activator.CreateInstance(
+                piece.GetType(), new Object[] { this }) as Blueprint);
             uiTabs.ToggleHandZoneView(true);
         }
         selectedPiece = null;
