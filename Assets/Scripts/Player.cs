@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     private int deckClumpCount;
     private List<List<Polyomino>> deckClumped;
     private List<Polyomino> hand;
+    public int handCount { get { return hand.Count; } }
     private List<Blueprint> blueprints;
     public Polyomino selectedPiece { get; private set; }
     public bool placementAvailable
@@ -34,7 +35,7 @@ public class Player : MonoBehaviour
         private set
         {
             placementAvailable_ = value;
-            SetHandStatus(placementAvailable_);
+            SetHandStatus();
         }
     }
     private bool placementAvailable_;
@@ -159,14 +160,14 @@ public class Player : MonoBehaviour
         Services.UIManager.UpdatePlayMeter(playerNum, playMeter, placementAvailable);
     }
 
-    void SetHandStatus(bool playAvailable)
+    void SetHandStatus()
     {
-        MakeAllPiecesGlow(playAvailable);
+        MakeAllPiecesGlow(placementAvailable);
         for (int i = 0; i < hand.Count; i++)
         {
-            hand[i].SetPieceState(playAvailable);
+            hand[i].SetPieceState(placementAvailable);
         }
-        Services.UIManager.SetGreyOutBox(playerNum, !playAvailable);
+        Services.UIManager.SetGreyOutBox(playerNum, !placementAvailable);
     }
 
     public void InitializeUITabs(UITabs tabs)
@@ -225,24 +226,50 @@ public class Player : MonoBehaviour
         {
             DrawPiece();
         }
-        SetHandStatus(placementAvailable);
+        SetHandStatus();
+    }
+
+    public void DrawPieces(int numPiecesToDraw, Vector3 startPos)
+    {
+        int handSpace = maxHandSize - hand.Count;
+        if (selectedPiece != null) handSpace -= 1;
+        int drawsAllowed = Mathf.Min(handSpace, numPiecesToDraw);
+        for (int i = 0; i < drawsAllowed; i++)
+        {
+            DrawPiece(startPos);
+        }
+        SetHandStatus();
     }
 
     void DrawPiece()
     {
-        if (deckClumped.Count == 0) InitializeDeck();
         Polyomino piece = GetRandomPieceFromDeck();
-        deckClumped[0].Remove(piece);
-        if (deckClumped[0].Count == 0) deckClumped.Remove(deckClumped[0]);
-        hand.Add(piece);
         piece.MakePhysicalPiece(viewingHand);
+        AddPieceToHand(piece);
+    }
+
+    void DrawPiece(Vector3 startPos)
+    {
+        Polyomino piece = GetRandomPieceFromDeck();
+        Task drawTask = new DrawTask(piece, startPos);
+        drawTask.Then(new ActionTask(SetHandStatus));
+        Services.GeneralTaskManager.Do(drawTask);
+    }
+
+    public void AddPieceToHand(Polyomino piece)
+    {
+        hand.Add(piece);
         OrganizeHand(hand);
     }
 
     Polyomino GetRandomPieceFromDeck()
     {
+        if (deckClumped.Count == 0) InitializeDeck();
         int index = Random.Range(0, deckClumped[0].Count);
-        return deckClumped[0][index];
+        Polyomino piece = deckClumped[0][index];
+        deckClumped[0].Remove(piece);
+        if (deckClumped[0].Count == 0) deckClumped.Remove(deckClumped[0]);
+        return piece;
     }
 
     public void AddBluePrint(Blueprint blueprint)
@@ -254,22 +281,28 @@ public class Player : MonoBehaviour
 
     void OrganizeHand<T>(List<T> heldpieces) where T :Polyomino
     {
+        for (int i = 0; i < heldpieces.Count; i++)
+        {
+            Vector3 newPos = GetHandPosition(i);
+            heldpieces[i].Reposition(newPos);
+        }
+    }
+
+    public Vector3 GetHandPosition(int handIndex)
+    {
         Vector3 offset = handOffset;
         float spacingMultiplier = 1;
-        if(playerNum == 2)
+        if (playerNum == 2)
         {
             spacingMultiplier = -1;
             offset = new Vector3(-handOffset.x, handOffset.y, handOffset.z);
         }
         offset += Services.GameManager.MainCamera.ScreenToWorldPoint(handZone.transform.position);
         offset = new Vector3(offset.x, offset.y, 0);
-        for (int i = 0; i < heldpieces.Count; i++)
-        {
-            Vector3 newPos = new Vector3(
-                handSpacing.x * (i / piecesPerHandColumn) * spacingMultiplier,
-                handSpacing.y * (i % piecesPerHandColumn), 0) + offset;
-            heldpieces[i].Reposition(newPos);
-        }
+        Vector3 newPos = new Vector3(
+                handSpacing.x * (handIndex / piecesPerHandColumn) * spacingMultiplier,
+                handSpacing.y * (handIndex % piecesPerHandColumn), 0) + offset;
+        return newPos;
     }
     #endregion
 
@@ -323,7 +356,7 @@ public class Player : MonoBehaviour
     public void CancelSelectedPiece()
     {
         hand.Add(selectedPiece);
-        SetHandStatus(placementAvailable);
+        SetHandStatus();
         OrganizeHand(hand);
         selectedPiece = null;
     }

@@ -28,6 +28,7 @@ public class Polyomino
     private int touchID;
     private readonly Vector3 dragOffset = 5f * Vector3.right;
     private readonly Vector3 unselectedScale = 0.675f * Vector3.one;
+    public const float drawAnimDur = 0.5f;
 
     public bool isFortified;
     public List<Blueprint> occupyingStructures { get; protected set; }

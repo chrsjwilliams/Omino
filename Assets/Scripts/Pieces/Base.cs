@@ -25,14 +25,13 @@ public class Base : Polyomino
         drawMeter += drawRate * Time.deltaTime;
         if (drawMeter >= 1)
         {
-            owner.DrawPieces(1);
+            owner.DrawPieces(1, holder.transform.position);
             drawMeter -= 1;
         }
     }
 
     protected override void OnPlace()
     {
-        base.OnPlace();
         CreateTimerUI();
     }
 }
