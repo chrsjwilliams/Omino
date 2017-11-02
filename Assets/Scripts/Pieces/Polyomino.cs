@@ -358,6 +358,7 @@ public class Polyomino
             }
             else
             {
+                EnterUnselectedState();
                 HideFromInput();
             }
         }

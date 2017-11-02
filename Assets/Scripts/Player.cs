@@ -389,8 +389,7 @@ public class Player : MonoBehaviour
     {
         Destructor newPiece = new Destructor(resource.units, resource.index, this, true);
         resource.Remove();
-        hand.Add(newPiece);
         newPiece.MakePhysicalPiece(viewingHand);
-        OrganizeHand(hand);
+        AddPieceToHand(newPiece);
     }
 }
