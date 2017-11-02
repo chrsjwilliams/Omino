@@ -49,6 +49,7 @@ public class Tile : MonoBehaviour
     }
 
 	public void OnRemove(){
+        Destroy(this);
 	}
 
     public void SetCoord(Coord newCoord)

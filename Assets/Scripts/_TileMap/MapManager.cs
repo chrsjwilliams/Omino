@@ -305,7 +305,7 @@ public class MapManager : MonoBehaviour
                 {
                     Tile adjacentTile = Map[adjacentCoord.x, adjacentCoord.y];
 
-                    if (ValidateEyeProperty(tile, piece.owner))
+                    if (ValidateEyeProperty(tile, piece.owner) && !piece.isFortified)
                     {
                         piecesToFortify.Add(adjacentTile.occupyingPiece);
                     }
@@ -313,8 +313,8 @@ public class MapManager : MonoBehaviour
                     {
                         if (adjacentTile.IsOccupied() && isBeingDestroyed && adjacentTile.occupyingPiece.owner != piece.owner)
                         {
-                            adjacentTile.occupyingPiece.isFortified = false;
-                            adjacentTile.occupyingPiece.ToggleAltColor(false);
+                            //adjacentTile.occupyingPiece.isFortified = false;
+                            //adjacentTile.occupyingPiece.ToggleAltColor(false);
                            // adjacentTile.occupyingPiece.CheckForFortification(false);
                         }
                     }
@@ -322,10 +322,21 @@ public class MapManager : MonoBehaviour
             }
         }
 
+        Player owner = piece.owner;
+
         foreach(Polyomino polyomino in piecesToFortify)
         {
-            polyomino.isFortified = true;
-            polyomino.ToggleAltColor(true);
+            List<Tile> tempTiles = polyomino.tiles;
+            polyomino.Remove(true);
+
+            foreach(Tile tile in tempTiles)
+            {
+                Polyomino fortifiedMonomino = new Polyomino(1, 0, owner);
+                fortifiedMonomino.isFortified = true;
+                fortifiedMonomino.MakePhysicalPiece(true);
+                fortifiedMonomino.PlaceAtLocation(tile.coord);
+                fortifiedMonomino.ToggleAltColor(true);
+            }
         }
     }
 }
