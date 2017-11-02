@@ -152,7 +152,6 @@ public class Blueprint : Polyomino
         foreach (Tile tile in tiles)
         {
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-            mapTile.SetOccupyingStructure(this);
             if (!mapTile.occupyingPiece.occupyingStructures.Contains(this))
                 mapTile.occupyingPiece.AddOccupyingStructure(this);
         }
