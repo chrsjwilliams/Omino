@@ -384,6 +384,11 @@ public class Polyomino
 
     public virtual void PlaceAtCurrentLocation()
     {
+        PlaceAtCurrentLocation(false);
+    }
+
+    public virtual void PlaceAtCurrentLocation(bool replace)
+    {
         //place the piece on the board where it's being hovered now
         placed = true;
         OnPlace();
@@ -392,8 +397,8 @@ public class Polyomino
             Coord tileCoord = tile.coord;
             Services.MapManager.Map[tileCoord.x, tileCoord.y].SetOccupyingPiece(this);
         }
-        owner.OnPiecePlaced(this);
-        CheckForFortification(false);
+        if (owner != null) owner.OnPiecePlaced(this);
+        if(!replace) CheckForFortification(false);
     }
 
     public virtual void CheckForFortification(bool isBeingDestroyed)
@@ -837,12 +842,17 @@ public class Polyomino
 
     public virtual void PlaceAtLocation(Coord centerCoordLocation)
     {
+        PlaceAtLocation(centerCoordLocation, false);
+    }
+
+    public virtual void PlaceAtLocation(Coord centerCoordLocation, bool replace)
+    {
         SetTileCoords(centerCoordLocation);
         Reposition(new Vector3(
             centerCoordLocation.x,
             centerCoordLocation.y,
             holder.position.z));
-        PlaceAtCurrentLocation();
+        PlaceAtCurrentLocation(replace);
     }
 
     protected void CreateTimerUI()

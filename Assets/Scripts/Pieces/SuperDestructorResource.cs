@@ -52,6 +52,11 @@ public class SuperDestructorResource : Polyomino
         }
     }
 
+    public override void PlaceAtCurrentLocation(bool replace)
+    {
+        PlaceAtCurrentLocation();
+    }
+
     protected override void OnPlace()
     {
     }
