@@ -503,20 +503,44 @@ public class Polyomino
         Services.AudioManager.CreateTempAudio(Services.Clips.PiecePlaced, 1);
     }
 
+    //  Have a fortification method
+    //  When I am fortified, replace me with monominos at my tiles locations, then delete me
+
+    public void FortifyPiece()
+    {
+        foreach (Tile tile in tiles)
+        {
+            Polyomino monomino = new Polyomino(1, 0, owner);
+            monomino.ToggleAltColor(true);
+            monomino.MakePhysicalPiece(true);
+            monomino.PlaceAtLocation(tile.coord);
+        }
+    }
+
     public virtual void Remove()
+    {
+        Remove(false);
+    }
+
+    public virtual void Remove(bool replace)
     {
         Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
         Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
-        for (int i = occupyingStructures.Count - 1; i >= 0; i--)
+        if (!replace)
         {
-            occupyingStructures[i].Remove();
+            for (int i = occupyingStructures.Count - 1; i >= 0; i--)
+            {
+                occupyingStructures[i].Remove();
+            }
         }
         foreach (Tile tile in tiles)
         {
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(null);
             tile.OnRemove();
         }
-        CheckForFortification(true);
+
+        //CheckForFortification(true);
+
         if (ringTimer != null) RemoveTimerUI();
         owner.OnPieceRemoved(this);
         GameObject.Destroy(holder.gameObject);

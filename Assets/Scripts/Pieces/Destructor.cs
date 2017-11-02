@@ -33,7 +33,8 @@ public class Destructor : Polyomino
             if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>(), 0)) return false;
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner) return false;
-            if (CanDestroyPieceOn(mapTile)) return false;
+            
+            //if (CanDestroyPieceOn(mapTile)) return false;
         }
         
         return true;
@@ -44,7 +45,7 @@ public class Destructor : Polyomino
         if (isSuper) return false;
         else
         {
-            if (mapTile.IsOccupied() && mapTile.occupyingPiece.isFortified) return true;
+            if (mapTile.IsOccupied() && !mapTile.occupyingPiece.isFortified) return true;
             return false;
         }
     }
