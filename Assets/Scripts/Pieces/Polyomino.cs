@@ -591,15 +591,20 @@ public class Polyomino
     protected virtual void SetIconSprite()
     {
         iconSr = holder.gameObject.GetComponentsInChildren<SpriteRenderer>()[1];
+        iconSr.transform.position = GetCenterpoint();
+        if (buildingType == BuildingType.BASE) iconSr.sprite = Services.UIManager.baseIcon;
+        else iconSr.enabled = false;
+    }
+
+    protected Vector3 GetCenterpoint()
+    {
         Vector3 centerPos = Vector3.zero;
         foreach (Tile tile in tiles)
         {
             centerPos += tile.transform.position;
         }
         centerPos /= tiles.Count;
-        iconSr.transform.position = centerPos;
-        if (buildingType == BuildingType.BASE) iconSr.sprite = Services.UIManager.baseIcon;
-        else iconSr.enabled = false;
+        return centerPos;
     }
 
     public void SetPieceState(bool playAvailable)
@@ -823,7 +828,7 @@ public class Polyomino
         ringTimer = timerObj.GetComponentsInChildren<Image>()[1];
         ringTimer.fillAmount = 0;
         timerObj.transform.position =
-            Services.GameManager.MainCamera.WorldToScreenPoint(holder.transform.position);
+            Services.GameManager.MainCamera.WorldToScreenPoint(GetCenterpoint());
     }
 
     protected void RemoveTimerUI()

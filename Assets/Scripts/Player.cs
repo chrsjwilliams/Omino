@@ -259,6 +259,7 @@ public class Player : MonoBehaviour
     public void AddPieceToHand(Polyomino piece)
     {
         hand.Add(piece);
+        piece.SetVisible(viewingHand);
         OrganizeHand(hand);
     }
 
