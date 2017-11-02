@@ -91,11 +91,6 @@ public class Tile : MonoBehaviour
         occupyingPiece = piece;
     }
 
-    public void SetOccupyingStructure(Blueprint blueprint)
-    {
-        occupyingStructure = blueprint;
-    }
-
     public void SetOccupyingResource(SuperDestructorResource resource)
     {
         occupyingResource = resource;
