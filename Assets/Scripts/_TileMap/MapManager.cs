@@ -29,6 +29,7 @@ public class MapManager : MonoBehaviour
     }
 
     private List<SuperDestructorResource> resourcesOnMap;
+    private List<Structure> structuresOnMap;
     [SerializeField]
     private int resourceDistMin;
     [SerializeField]
@@ -63,7 +64,7 @@ public class MapManager : MonoBehaviour
                 tile.name = "Tile [X: " + i + ", Y: " + j + "]";
             }
         }
-
+        GenerateStructures();
         GenerateResources();
     }
 
@@ -149,6 +150,14 @@ public class MapManager : MonoBehaviour
                 return false;
         }
         return true;
+    }
+
+    void GenerateStructures()
+    {
+        structuresOnMap = new List<Structure>();
+        Structure structure = new Structure(7, 0);
+        structure.MakePhysicalPiece(true);
+        structure.PlaceAtLocation(new Coord(4,4));
     }
 
     Coord GenerateRandomCoord()
@@ -306,7 +315,8 @@ public class MapManager : MonoBehaviour
                     Tile adjacentTile = Map[adjacentCoord.x, adjacentCoord.y];
 
                     if (ValidateEyeProperty(tile, piece.owner) && !piece.isFortified 
-                        && !piecesToFortify.Contains(adjacentTile.occupyingPiece))
+                        && !piecesToFortify.Contains(adjacentTile.occupyingPiece) &&
+                        adjacentTile.occupyingPiece.buildingType != BuildingType.STRUCTURE)
                     {
                         piecesToFortify.Add(adjacentTile.occupyingPiece);
                     }

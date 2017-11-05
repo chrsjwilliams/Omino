@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Base : Polyomino
+public class Base : Structure
 {
     private float drawMeter_;
     private float drawMeter
@@ -18,13 +18,17 @@ public class Base : Polyomino
 
     public Base(int _units, int _index, Player _player) : base(_units, _index, _player)
     {
+        owner = _player;
     }
+
+    public override void ActivateStructureCheck() { }
 
     public override void Update()
     {
         drawMeter += drawRate * Time.deltaTime;
         if (drawMeter >= 1)
         {
+            Debug.Log(owner.name);
             owner.DrawPieces(1, holder.transform.position);
             drawMeter -= 1;
         }
@@ -34,4 +38,6 @@ public class Base : Polyomino
     {
         CreateTimerUI();
     }
+
+    public override void OnInputUp() { }
 }

@@ -30,8 +30,8 @@ public class InputManager
 				Touch touchLastFrame = GetLastFrameTouch (touch.fingerId);
 				if (touchLastFrame.phase != TouchPhase.Ended) {
 					Services.GameEventManager.Fire (new TouchUp (touch));
-				}
-				break;
+                    }
+                    break;
 			case TouchPhase.Canceled:
 				break;
 			default:
@@ -53,8 +53,8 @@ public class InputManager
         {
             Services.GameEventManager.Fire(new MouseUp(Input.mousePosition));
         }
-		//if (Services.UIManager != null)
-		//	Services.UIManager.UpdateTouchCount (Input.touches);
+        //if (Services.UIManager != null)
+        //	Services.UIManager.UpdateTouchCount (Input.touches);
     }
 
     public void Update()
