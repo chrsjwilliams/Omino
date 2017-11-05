@@ -7,6 +7,8 @@ public class UIManager : MonoBehaviour {
 
     public RectTransform[] handZones;
     [SerializeField]
+    private Text[] resourceCounters;
+    [SerializeField]
     private Image[] drawMeters;
     [SerializeField]
     private Image[] playMeters;
@@ -64,5 +66,10 @@ public class UIManager : MonoBehaviour {
     public void SetGreyOutBox(int playerNum, bool status)
     {
         greyOutBoxes[playerNum - 1].enabled = status;
+    }
+
+    public void UpdateResourceCount(int resourceCount, Player player)
+    {
+        resourceCounters[player.playerNum - 1].text = resourceCount.ToString();
     }
 }

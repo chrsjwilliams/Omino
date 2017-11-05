@@ -94,6 +94,8 @@ public class Blueprint : Polyomino
             Services.GameScene.transform).transform;
         holder.gameObject.name = holderName;
         holderSr = holder.gameObject.GetComponent<SpriteRenderer>();
+        costText = holder.gameObject.GetComponentInChildren<TextMesh>();
+        ToggleCostUIStatus(false);
 
         if (piece == null) return;
         tileRelativeCoords = new Dictionary<Tile, Coord>();

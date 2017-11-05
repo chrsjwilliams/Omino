@@ -79,6 +79,20 @@ public class Player : MonoBehaviour
     public bool gameOver { get; private set; }
     private UITabs uiTabs;
     private List<Polyomino> boardPieces;
+    [SerializeField]
+    private int startingResources;
+    private int resources_;
+    public int resources {
+        get
+        {
+            return resources_;
+        }
+        private set
+        {
+            resources_ = value;
+            Services.UIManager.UpdateResourceCount(resources_, this);
+        }
+    }
 
     // Use this for initialization
     public void Init(Color[] colorScheme, int posOffset)
@@ -114,6 +128,7 @@ public class Player : MonoBehaviour
         Services.MapManager.CreateBase(this, basePos);
         //for now just allow placement always
         placementAvailable = true;
+        resources = startingResources;
     }
 
     // Update is called once per frame
@@ -122,18 +137,24 @@ public class Player : MonoBehaviour
         if (!gameOver)
         {
             //UpdateDrawMeter();
-            UpdatePlayMeter();
+            //UpdatePlayMeter();
+
+            if (Input.GetKeyDown(KeyCode.Space) && selectedPiece != null)
+            {
+                selectedPiece.Rotate();
+            }
+
+            for (int i = 0; i < boardPieces.Count; i++)
+            {
+                boardPieces[i].Update();
+            }
+
+            for (int i = 0; i < hand.Count; i++)
+            {
+                hand[i].SetAffordableStatus(this);
+            }
         }
 
-        if(Input.GetKeyDown(KeyCode.Space) && selectedPiece != null)
-        {
-            selectedPiece.Rotate();
-        }
-
-        for (int i = 0; i < boardPieces.Count; i++)
-        {
-            boardPieces[i].Update();
-        }
     }
 
     void UpdateDrawMeter()
@@ -337,7 +358,11 @@ public class Player : MonoBehaviour
     public void OnPiecePlaced(Polyomino piece)
     {
         BuildingType blueprintType = piece.buildingType;
-        if (!(piece is Blueprint)) placementAvailable = false;
+        if (!(piece is Blueprint))
+        {
+            //placementAvailable = false;
+            resources -= piece.cost;
+        }
         else
         {
             AddBluePrint(System.Activator.CreateInstance(
@@ -391,5 +416,10 @@ public class Player : MonoBehaviour
         resource.Remove();
         newPiece.MakePhysicalPiece(viewingHand);
         AddPieceToHand(newPiece);
+    }
+
+    public void GainResources(int numResources)
+    {
+        resources += numResources;
     }
 }

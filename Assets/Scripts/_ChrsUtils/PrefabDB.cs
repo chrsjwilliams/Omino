@@ -32,4 +32,7 @@ public class PrefabDB : ScriptableObject
     [SerializeField] private GameObject ringTimer;
     public GameObject RingTimer { get { return ringTimer; } }
 
+    [SerializeField] private GameObject floatingText;
+    public GameObject FloatingText { get { return floatingText; } }
+
 }

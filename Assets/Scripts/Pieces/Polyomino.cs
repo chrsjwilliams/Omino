@@ -34,6 +34,10 @@ public class Polyomino
     public List<Blueprint> occupyingStructures { get; protected set; }
     protected Image ringTimer;
 
+    public int cost { get; protected set; }
+    protected TextMesh costText;
+    private bool affordable;
+    private bool isVisible;
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -302,6 +306,7 @@ public class Polyomino
 
         occupyingStructures = new List<Blueprint>();
         isFortified = false;
+        cost = units * 10;
         if (owner != null) baseColor = owner.ActiveTilePrimaryColors[0];
 
         buildingType = BuildingType.NONE;
@@ -338,13 +343,30 @@ public class Polyomino
         }
     }
 
-    public void SetPlaced(bool isPlaced)
+    public void SetAffordableStatus(Player player)
     {
-        placed = isPlaced;
+        affordable = player.resources >= cost;
+        if (affordable)
+        {
+            costText.color = Color.green;
+            if (isVisible) EnterUnselectedState();
+        }
+        else
+        {
+            costText.color = Color.red;
+            HideFromInput();
+        }
+        SetGlowState(affordable);
     }
 
-    public void SetVisible(bool isVisible)
+    protected void ToggleCostUIStatus(bool status)
     {
+        costText.gameObject.SetActive(status);
+    }
+
+    public void SetVisible(bool isVisible_)
+    {
+        isVisible = isVisible_;
         if (!placed)
         {
             holder.gameObject.SetActive(isVisible);
@@ -352,7 +374,7 @@ public class Polyomino
             {
                 tile.enabled = isVisible;
             }
-            if (isVisible && owner != null && (owner.placementAvailable || this is Blueprint))
+            if (isVisible && owner != null && (affordable || this is Blueprint))
             {
                 EnterUnselectedState();
             }
@@ -507,6 +529,7 @@ public class Polyomino
             }
         }
         Services.AudioManager.CreateTempAudio(Services.Clips.PiecePlaced, 1);
+        ToggleCostUIStatus(false);
     }
 
     //  Have a fortification method
@@ -589,6 +612,8 @@ public class Polyomino
             Services.GameScene.transform).transform;
         holder.gameObject.name = holderName;
         holderSr = holder.gameObject.GetComponent<SpriteRenderer>();
+        costText = holder.gameObject.GetComponentInChildren<TextMesh>();
+        costText.text = cost.ToString();
 
         if (piece == null) return;
         tileRelativeCoords = new Dictionary<Tile, Coord>();
@@ -641,6 +666,7 @@ public class Polyomino
     {
         if (playAvailable) EnterUnselectedState();
         else HideFromInput();
+        SetGlowState(playAvailable);
     }
 
     protected void EnterUnselectedState()
@@ -709,6 +735,7 @@ public class Polyomino
             holder.localScale = Vector3.one;
             owner.OnPieceSelected(this);
             OnInputDrag(holder.position);
+            ToggleCostUIStatus(false);
             Services.AudioManager.CreateTempAudio(Services.Clips.PiecePicked, 1);
 
             Services.GameEventManager.Register<TouchUp>(OnTouchUp);
@@ -746,7 +773,7 @@ public class Polyomino
 
             Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
             Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
-            if (IsPlacementLegal() && owner.placementAvailable && !owner.gameOver)
+            if (IsPlacementLegal() && affordable && !owner.gameOver)
             {
                 PlaceAtCurrentLocation();
             }
@@ -754,6 +781,7 @@ public class Polyomino
             {
                 owner.CancelSelectedPiece();
                 EnterUnselectedState();
+                ToggleCostUIStatus(true);
             }
         }
     }
@@ -775,7 +803,7 @@ public class Polyomino
                 holder.position.z));
         }
 
-        if (owner.placementAvailable)
+        if (affordable)
         {
             bool isLegal = IsPlacementLegal();
             if (isLegal)
