@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum BuildingType
-{ BASE,FACTORY, MINE, NONE }
+{ BASE,FACTORY, MINE, STRUCTURE,NONE }
 
 
 public class Polyomino
@@ -420,8 +420,9 @@ public class Polyomino
             Coord tileCoord = tile.coord;
             Services.MapManager.Map[tileCoord.x, tileCoord.y].SetOccupyingPiece(this);
         }
+        
         if (owner != null) owner.OnPiecePlaced(this);
-        if(!replace) CheckForFortification(false);
+        if (!replace) CheckForFortification(false);
     }
 
     public virtual void CheckForFortification(bool isBeingDestroyed)
@@ -776,6 +777,7 @@ public class Polyomino
             if (IsPlacementLegal() && affordable && !owner.gameOver)
             {
                 PlaceAtCurrentLocation();
+                
             }
             else
             {
@@ -784,6 +786,10 @@ public class Polyomino
                 ToggleCostUIStatus(true);
             }
         }
+        //  I couldn't figure out another place to put this line.
+        //  This changes a structure's color as soon as a piece
+        //  is played.
+        Services.GameEventManager.Fire(new ResolveTouchUp());
     }
 
     public void OnInputDrag(Vector3 inputPos)
