@@ -33,7 +33,6 @@ public class Base : Structure
         drawMeter += drawRate * Time.deltaTime;
         if (drawMeter >= 1)
         {
-            Debug.Log(owner.name);
             owner.DrawPieces(1, holder.transform.position);
             drawMeter -= 1;
         }

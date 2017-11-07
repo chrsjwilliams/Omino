@@ -423,6 +423,38 @@ public class Polyomino
         
         if (owner != null) owner.OnPiecePlaced(this);
         if (!replace) CheckForFortification(false);
+        List<Structure> adjacentStructures = GetAdjacentStructures();
+        if(adjacentStructures.Count > 0)
+        {
+            foreach(Structure structure in adjacentStructures)
+            {
+                structure.ActivateStructureCheck();
+            }
+        }
+    }
+
+    public virtual List<Structure> GetAdjacentStructures()
+    {
+        List<Structure> adjacentStructures = new List<Structure>();
+
+        foreach (Tile tile in tiles)
+        {
+            foreach (Coord direction in Coord.Directions())
+            {
+                Coord adjacentCoord = tile.coord.Add(direction);
+                if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
+                {
+                    Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                    if (adjTile.IsOccupied() && adjTile.occupyingPiece.buildingType == BuildingType.STRUCTURE &&
+                        !adjacentStructures.Contains((Structure)adjTile.occupyingPiece))
+                    {
+                        adjacentStructures.Add((Structure)adjTile.occupyingPiece);
+                    }
+                }
+            }
+        }
+
+        return adjacentStructures;
     }
 
     public virtual void CheckForFortification(bool isBeingDestroyed)
@@ -786,10 +818,6 @@ public class Polyomino
                 ToggleCostUIStatus(true);
             }
         }
-        //  I couldn't figure out another place to put this line.
-        //  This changes a structure's color as soon as a piece
-        //  is played.
-        Services.GameEventManager.Fire(new ResolveTouchUp());
     }
 
     public void OnInputDrag(Vector3 inputPos)

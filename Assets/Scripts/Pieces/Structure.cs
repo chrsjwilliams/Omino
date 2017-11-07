@@ -30,8 +30,6 @@ public class Structure : Polyomino
         isFortified = true;
         placed = true;
 
-        Services.GameEventManager.Register<ResolveTouchUp>(OnResolveTouchUp);
-
         switch (_units)
         {
             case 1:
@@ -51,8 +49,6 @@ public class Structure : Polyomino
         isActivated = false;
         isFortified = true;
         placed = true;
-
-        Services.GameEventManager.Register<ResolveTouchUp>(OnResolveTouchUp);
 
         switch (_units)
         {
@@ -158,12 +154,5 @@ public class Structure : Polyomino
     protected override void OnPlace()
     {
         //CreateTimerUI();
-    }
-
-    public void OnResolveTouchUp(ResolveTouchUp res)
-    {
-        //  This needs to be called after the TouchUp/InputUp
-        //  methods so the sturture changes color automatically
-        ActivateStructureCheck();
     }
 }

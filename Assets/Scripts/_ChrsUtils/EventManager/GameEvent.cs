@@ -64,12 +64,6 @@ public class TouchUp : GameEvent
     }
 }
 
-public class ResolveTouchUp : GameEvent
-{
-    public ResolveTouchUp() { }
-}
-
-
 public class ButtonPressed : GameEvent
 {
     public readonly string button;
