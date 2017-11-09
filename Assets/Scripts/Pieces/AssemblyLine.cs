@@ -4,7 +4,10 @@ using System.Collections;
 public class AssemblyLine : Structure
 
 {
-    public AssemblyLine() : base(7, 1) { }
+    public AssemblyLine() : base(7, 1)
+    {
+        buildingType = BuildingType.ASSEMBLYLINE;
+    }
 
     protected override void OnClaim(Player player)
     {

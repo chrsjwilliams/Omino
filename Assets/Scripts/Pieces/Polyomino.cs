@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum BuildingType
-{ BASE,FACTORY, MINE, STRUCTURE,NONE, BOMBFACTORY }
+{ BASE,FACTORY, MINE, STRUCTURE,NONE, BOMBFACTORY, MININGDRILL, ASSEMBLYLINE }
 
 
 public class Polyomino
@@ -358,7 +358,8 @@ public class Polyomino
                 piece = pentomino;
                 break;
             case 9:
-                holderName = "Player " + owner.playerNum + " Base";
+                if (owner != null) holderName = "Player " + owner.playerNum + " Base";
+                else holderName = "Neutral Base";
                 buildingType = BuildingType.BASE;
                 piece = playerBase;
                 break;

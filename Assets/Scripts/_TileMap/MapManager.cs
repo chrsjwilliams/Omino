@@ -35,6 +35,10 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private int resourceRadiusMin;
     [SerializeField]
+    private int structDistMin;
+    [SerializeField]
+    private int structRadiusMin;
+    [SerializeField]
     private int resourceBorderMin;
     [SerializeField]
     private int resourceSizeMin;
@@ -42,6 +46,8 @@ public class MapManager : MonoBehaviour
     private int resourceSizeMax;
     [SerializeField]
     private int startingResourceCount;
+    [SerializeField]
+    private int startingStructCount;
     [SerializeField]
     private int procGenTriesMax;
     public void Init()
@@ -118,6 +124,54 @@ public class MapManager : MonoBehaviour
         return null;
     }
 
+    List<Structure> GenerateStructureAndMirroredStructure(BuildingType type)
+    {
+        Coord structCoord = GenerateValidStructureCoord();
+        Coord mirroredCoord = MirroredCoord(structCoord);
+        List<Structure> structures = new List<Structure>();
+        if (structCoord != new Coord(-1, -1))
+        {
+            int numRotations = Random.Range(0, 4);
+            Structure structure;
+            Structure mirroredStructure;
+            switch (type)
+            {
+                case BuildingType.BASE:
+                    structure = new Base(9, 0, null);
+                    mirroredStructure = new Base(9, 0, null);
+                    break;
+                case BuildingType.MININGDRILL:
+                    structure = new MiningDrill();
+                    mirroredStructure = new MiningDrill();
+                    break;
+                case BuildingType.ASSEMBLYLINE:
+                    structure = new AssemblyLine();
+                    mirroredStructure = new AssemblyLine();
+                    break;
+                default:
+                    return null;
+            }
+            structure.MakePhysicalPiece(true);
+            mirroredStructure.MakePhysicalPiece(true);
+
+            for (int i = 0; i < numRotations; i++)
+            {
+                structure.Rotate();
+            }
+            for (int i = 0; i < numRotations + 2; i++)
+            {
+                mirroredStructure.Rotate();
+            }
+
+            structure.PlaceAtLocation(structCoord);
+            mirroredStructure.PlaceAtLocation(mirroredCoord);
+            structures.Add(structure);
+            structures.Add(mirroredStructure);
+            return structures;
+        }
+        return null;
+    }
+
     Coord GenerateValidResourceCoord()
     {
         Coord nullCoord = new Coord(-1, -1);
@@ -133,9 +187,38 @@ public class MapManager : MonoBehaviour
         return nullCoord;
     }
 
+    Coord GenerateValidStructureCoord()
+    {
+        Coord nullCoord = new Coord(-1, -1);
+        for (int i = 0; i < procGenTriesMax; i++)
+        {
+            Coord candidateCoord = GenerateRandomCoord();
+            Coord mirroredCoord = MirroredCoord(candidateCoord);
+            if (IsStructureCoordValid(candidateCoord) &&
+                IsStructureCoordValid(mirroredCoord) &&
+                candidateCoord.Distance(mirroredCoord) >= structDistMin)
+                return candidateCoord;
+        }
+        return nullCoord;
+    }
+
     Coord MirroredCoord(Coord coord)
     {
         return new Coord((MapWidth - 1) - coord.x, (MapLength - 1) - coord.y);
+    }
+
+    bool IsStructureCoordValid(Coord candidateCoord)
+    {
+        if (candidateCoord.Distance(new Coord(0, 0)) < structRadiusMin ||
+            candidateCoord.Distance(new Coord(MapWidth - 1, MapLength - 1))
+            < structRadiusMin)
+            return false;
+        for (int i = 0; i < structuresOnMap.Count; i++)
+        {
+            if (candidateCoord.Distance(structuresOnMap[i].centerCoord) < structDistMin)
+                return false;
+        }
+        return true;
     }
 
     bool IsResourceCoordValid(Coord candidateCoord)
@@ -155,9 +238,24 @@ public class MapManager : MonoBehaviour
     void GenerateStructures()
     {
         structuresOnMap = new List<Structure>();
-        Structure structure = new MiningDrill();
-        structure.MakePhysicalPiece(true);
-        structure.PlaceAtLocation(new Coord(4,4));
+        List<BuildingType> structureTypes = new List<BuildingType>()
+        {
+            BuildingType.MININGDRILL,
+            BuildingType.ASSEMBLYLINE
+        };
+
+        for (int i = 0; i < startingStructCount / 2; i++)
+        {
+            BuildingType type;
+            if (i == 0) type = BuildingType.BASE;
+            else type = structureTypes[(i - 1) % structureTypes.Count];
+            List<Structure> structures = GenerateStructureAndMirroredStructure(type);
+            if (structures == null) break;
+            foreach (Structure structure in structures)
+            {
+                structuresOnMap.Add(structure);
+            }
+        }
     }
 
     Coord GenerateRandomCoord()

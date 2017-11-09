@@ -5,7 +5,7 @@ public class MiningDrill : Structure
 {
     public MiningDrill() : base(7, 0)
     {
-
+        buildingType = BuildingType.MININGDRILL;
     }
 
     protected override void OnClaim(Player player)
