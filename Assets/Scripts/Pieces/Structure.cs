@@ -6,7 +6,7 @@ public class Structure : Polyomino
 {
     protected bool isActivated;
     private TaskManager tm = new TaskManager();
-    private Color nuetralColor;
+    private Color neutralColor;
     protected static int[,,] structure = new int[1, 5, 5]
     {   
             //  These hashes represent what the piece will look like
@@ -62,17 +62,17 @@ public class Structure : Polyomino
         }
     }
 
-    public void SetToNuetralColor()
+    public void SetToNeutralColor()
     {
         foreach(Tile tile in tiles)
         {
-            tile.GetComponent<SpriteRenderer>().color = nuetralColor;
+            tile.GetComponent<SpriteRenderer>().color = neutralColor;
         }
     }
 
     public virtual void ActivateStructureCheck()
     {
-        List<Polyomino> adjacentPiecies = new List<Polyomino>();
+        List<Polyomino> adjacentPieces = new List<Polyomino>();
         foreach (Tile tile in tiles)
         {
             foreach (Coord direction in Coord.Directions())
@@ -81,18 +81,18 @@ public class Structure : Polyomino
                 if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
                 {
                     Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
-                    if (adjTile.IsOccupied() && !adjacentPiecies.Contains(adjTile.occupyingPiece) &&
+                    if (adjTile.IsOccupied() && !adjacentPieces.Contains(adjTile.occupyingPiece) &&
                         adjTile.occupyingPiece != this)
                     {
-                        adjacentPiecies.Add(adjTile.occupyingPiece);
+                        adjacentPieces.Add(adjTile.occupyingPiece);
                     }
                 }
             }
         }
 
-        if(adjacentPiecies.Count < 1)
+        if(adjacentPieces.Count < 1)
         {
-            SetToNuetralColor();
+            SetToNeutralColor();
             isActivated = false;
             owner = null;
             return;
@@ -100,7 +100,7 @@ public class Structure : Polyomino
 
         bool connectedToBase = false;
         
-        foreach (Polyomino piece in adjacentPiecies)
+        foreach (Polyomino piece in adjacentPieces)
         {
             connectedToBase = Services.MapManager.ConnectedToBase(piece, new List<Polyomino>(), 0);
             if (connectedToBase && owner == null)
@@ -113,7 +113,7 @@ public class Structure : Polyomino
             else if(connectedToBase && owner != piece.owner)
             {
                 List<Polyomino> recheck = new List<Polyomino>();
-                foreach(Polyomino newPiece in adjacentPiecies)
+                foreach(Polyomino newPiece in adjacentPieces)
                 {
                     if(newPiece != piece && !recheck.Contains(newPiece) &&
                        newPiece.owner != piece.owner)
@@ -137,7 +137,7 @@ public class Structure : Polyomino
 
         if (!connectedToBase)
         {
-            SetToNuetralColor();
+            SetToNeutralColor();
             isActivated = false;
             owner = null;
         }
@@ -148,11 +148,21 @@ public class Structure : Polyomino
         base.MakePhysicalPiece(isViewable);
         HideFromInput();
         holder.localScale = Vector3.one;
-        nuetralColor = tiles[0].GetComponent<SpriteRenderer>().color;
+        neutralColor = tiles[0].GetComponent<SpriteRenderer>().color;
     }
 
     protected override void OnPlace()
     {
         //CreateTimerUI();
+    }
+
+    protected virtual void OnClaim(Player player)
+    {
+        owner = player;
+    }
+
+    protected virtual void OnClaimLost()
+    {
+        owner = null;
     }
 }

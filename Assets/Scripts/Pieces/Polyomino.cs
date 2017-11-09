@@ -444,15 +444,18 @@ public class Polyomino
             Coord tileCoord = tile.coord;
             Services.MapManager.Map[tileCoord.x, tileCoord.y].SetOccupyingPiece(this);
         }
-        
-        if (owner != null) owner.OnPiecePlaced(this);
-        if (!replace) CheckForFortification(false);
-        List<Structure> adjacentStructures = GetAdjacentStructures();
-        if(adjacentStructures.Count > 0)
+
+        if (owner != null)
         {
-            foreach(Structure structure in adjacentStructures)
+            owner.OnPiecePlaced(this);
+            if (!replace) CheckForFortification(false);
+            List<Structure> adjacentStructures = GetAdjacentStructures();
+            if (adjacentStructures.Count > 0)
             {
-                structure.ActivateStructureCheck();
+                foreach (Structure structure in adjacentStructures)
+                {
+                    structure.ActivateStructureCheck();
+                }
             }
         }
     }

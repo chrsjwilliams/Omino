@@ -3,8 +3,6 @@ using System.Collections;
 
 public class Base : Structure
 {
-
-
     public Base(int _units, int _index, Player _player) : base(_units, _index, _player)
     {
         owner = _player;
