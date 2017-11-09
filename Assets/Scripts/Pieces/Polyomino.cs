@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum BuildingType
-{ BASE,FACTORY, MINE, STRUCTURE,NONE }
+{ BASE,FACTORY, MINE, STRUCTURE,NONE, BOMBFACTORY }
 
 
 public class Polyomino
@@ -372,12 +372,12 @@ public class Polyomino
         affordable = player.resources >= cost;
         if (affordable)
         {
-            costText.color = Color.green;
+            costText.color = (Color.green + Color.black) / 2;
             if (isVisible) EnterUnselectedState();
         }
         else
         {
-            costText.color = Color.red;
+            costText.color = (Color.red + Color.black) / 2;
             HideFromInput();
         }
         SetGlowState(affordable);
@@ -674,6 +674,12 @@ public class Polyomino
         holderSr = holder.gameObject.GetComponent<SpriteRenderer>();
         costText = holder.gameObject.GetComponentInChildren<TextMesh>();
         costText.text = cost.ToString();
+        if (owner != null)
+        {
+            Quaternion rot = owner.playerNum == 1 ?
+                Quaternion.Euler(0, 0, -90) : Quaternion.Euler(0, 0, 90);
+            costText.transform.localRotation = rot;
+        }
 
         if (piece == null) return;
         tileRelativeCoords = new Dictionary<Tile, Coord>();
@@ -967,9 +973,14 @@ public class Polyomino
         drawMeter += drawRate * Time.deltaTime;
         if (drawMeter >= 1)
         {
-            owner.DrawPieces(1, holder.transform.position);
+            OnDraw();
             drawMeter -= 1;
         }
+    }
+
+    protected virtual void OnDraw()
+    {
+        owner.DrawPieces(1, holder.transform.position);
     }
 
     protected void UpdateResourceMeter()

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Structure : Polyomino
+public abstract class Structure : Polyomino
 {
     protected bool isActivated;
     private TaskManager tm = new TaskManager();

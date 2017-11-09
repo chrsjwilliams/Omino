@@ -155,7 +155,7 @@ public class MapManager : MonoBehaviour
     void GenerateStructures()
     {
         structuresOnMap = new List<Structure>();
-        Structure structure = new Structure(7, 0);
+        Structure structure = new MiningDrill();
         structure.MakePhysicalPiece(true);
         structure.PlaceAtLocation(new Coord(4,4));
     }

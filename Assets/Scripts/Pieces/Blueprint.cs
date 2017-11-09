@@ -28,8 +28,22 @@ public class Blueprint : Polyomino
                 { 0,0,0,0,0 }
             }
     };
+    protected static int[,,] bombFactory = new int[1, 5, 5]
+    {       //  These hashes represent what the piece will look like
+            //    #
+            //   ###
+            //   ###
+            //   ###
+            {
+                { 0,0,1,0,0 },
+                { 0,1,1,1,0 },
+                { 0,1,1,1,0 },
+                { 0,1,1,1,0 },
+                { 0,0,0,0,0 }
+            }
+    };
 
-    public Blueprint(int _units, int _index, Player _player) : base(_units, _index, _player)
+public Blueprint(int _units, int _index, Player _player) : base(_units, _index, _player)
     {
     }
 
@@ -47,6 +61,10 @@ public class Blueprint : Polyomino
             case BuildingType.MINE:
                 holderName = "MineHolder";
                 piece = mine;
+                break;
+            case BuildingType.BOMBFACTORY:
+                holderName = "BombFactoryHolder";
+                piece = bombFactory;
                 break;
             default:
                 break;
@@ -138,6 +156,9 @@ public class Blueprint : Polyomino
                 break;
             case BuildingType.MINE:
                 iconSr.sprite = Services.UIManager.mineIcon;
+                break;
+            case BuildingType.BOMBFACTORY:
+                iconSr.sprite = Services.UIManager.superDestructorIcon;
                 break;
             case BuildingType.NONE:
                 iconSr.enabled = false;

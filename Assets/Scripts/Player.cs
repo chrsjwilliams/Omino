@@ -119,6 +119,9 @@ public class Player : MonoBehaviour
         Mine mine = new Mine(this);
         AddBluePrint(mine);
 
+        BombFactory bombFactory = new BombFactory(this);
+        AddBluePrint(bombFactory);
+
         Coord basePos;
         if (playerNum == 1) basePos = new Coord(1, 1);
         else
@@ -256,26 +259,31 @@ public class Player : MonoBehaviour
 
     public void DrawPieces(int numPiecesToDraw, Vector3 startPos)
     {
+        DrawPieces(numPiecesToDraw, startPos, false);
+    }
+
+    public void DrawPieces(int numPiecesToDraw, Vector3 startPos, bool onlyDestructors)
+    {
         int handSpace = maxHandSize - hand.Count;
         if (selectedPiece != null) handSpace -= 1;
         int drawsAllowed = Mathf.Min(handSpace, numPiecesToDraw);
         for (int i = 0; i < drawsAllowed; i++)
         {
-            DrawPiece(startPos);
+            DrawPiece(startPos, onlyDestructors);
         }
         SetHandStatus();
     }
 
     void DrawPiece()
     {
-        Polyomino piece = GetRandomPieceFromDeck();
+        Polyomino piece = GetRandomPieceFromDeck(false);
         piece.MakePhysicalPiece(viewingHand);
         AddPieceToHand(piece);
     }
 
-    void DrawPiece(Vector3 startPos)
+    void DrawPiece(Vector3 startPos, bool onlyDestructors)
     {
-        Polyomino piece = GetRandomPieceFromDeck();
+        Polyomino piece = GetRandomPieceFromDeck(onlyDestructors);
         Task drawTask = new DrawTask(piece, startPos);
         drawTask.Then(new ActionTask(SetHandStatus));
         Services.GeneralTaskManager.Do(drawTask);
@@ -288,13 +296,30 @@ public class Player : MonoBehaviour
         OrganizeHand(hand);
     }
 
-    Polyomino GetRandomPieceFromDeck()
+    Polyomino GetRandomPieceFromDeck(bool onlyDestructors)
     {
-        if (deckClumped.Count == 0) InitializeDeck();
-        int index = Random.Range(0, deckClumped[0].Count);
-        Polyomino piece = deckClumped[0][index];
-        deckClumped[0].Remove(piece);
-        if (deckClumped[0].Count == 0) deckClumped.Remove(deckClumped[0]);
+        Polyomino piece;
+        if (!onlyDestructors)
+        {
+            if (deckClumped.Count == 0) InitializeDeck();
+            int index = Random.Range(0, deckClumped[0].Count);
+            piece = deckClumped[0][index];
+            deckClumped[0].Remove(piece);
+            if (deckClumped[0].Count == 0) deckClumped.Remove(deckClumped[0]);
+        }
+        else
+        {
+            List<Polyomino> destructors = new List<Polyomino>();
+            for (int numBlocks = 3; numBlocks <= 4; numBlocks++)
+            {
+                int numTypes = Polyomino.pieceTypes[numBlocks];
+                for (int index = 0; index < numTypes; index++)
+                {
+                    destructors.Add(new Destructor(numBlocks, index, this, false));
+                }
+            }
+            piece = destructors[Random.Range(0,destructors.Count)];
+        }
         return piece;
     }
 

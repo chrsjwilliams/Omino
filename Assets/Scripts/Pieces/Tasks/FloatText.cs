@@ -30,6 +30,7 @@ public class FloatText : Task
             player.playerNum == 1 ? Quaternion.Euler(0, 0, -90) : Quaternion.Euler(0, 0, 90);
         textMesh = GameObject.Instantiate(Services.Prefabs.FloatingText, startPos,
             rot, Services.GameScene.transform).GetComponent<TextMesh>();
+        textMesh.GetComponent<MeshRenderer>().sortingOrder = 10;
         timeElapsed = 0;
         baseColor = textMesh.color;
         alphaOutColor = new Color(baseColor.r, baseColor.g, baseColor.b, 0);
