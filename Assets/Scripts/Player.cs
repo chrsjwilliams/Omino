@@ -387,12 +387,12 @@ public class Player : MonoBehaviour
     public void OnPiecePlaced(Polyomino piece)
     {
         BuildingType blueprintType = piece.buildingType;
-        if (!(piece is Blueprint))
+        if (!(piece is Blueprint) && piece.cost != 10)
         {
             //placementAvailable = false;
             resources -= piece.cost;
         }
-        else
+        else if(piece is Blueprint)
         {
             AddBluePrint(System.Activator.CreateInstance(
                 piece.GetType(), new Object[] { this }) as Blueprint);
