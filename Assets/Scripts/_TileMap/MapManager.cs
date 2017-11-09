@@ -137,8 +137,8 @@ public class MapManager : MonoBehaviour
             switch (type)
             {
                 case BuildingType.BASE:
-                    structure = new Base(9, 0, null);
-                    mirroredStructure = new Base(9, 0, null);
+                    structure = new Base(9, 0, null, false);
+                    mirroredStructure = new Base(9, 0, null, false);
                     break;
                 case BuildingType.MININGDRILL:
                     structure = new MiningDrill();
@@ -269,9 +269,9 @@ public class MapManager : MonoBehaviour
         return new IntVector2(MapWidth / 2, MapLength / 2);
     }
 
-    public void CreateBase(Player player, Coord coord)
+    public void CreateMainBase(Player player, Coord coord)
     {
-        Base playerBase = new Base(9, 0, player);
+        Base playerBase = new Base(9, 0, player, true);
         playerBase.MakePhysicalPiece(true);
         playerBase.PlaceAtLocation(coord);
     }
@@ -437,12 +437,6 @@ public class MapManager : MonoBehaviour
             piecesToFortify.Add(piece);
         }
 
-        for (int i = 0; i < piecesToFortify.Count; i++)
-        {
-            Debug.Log("fortifying piece at " + piecesToFortify[i].centerCoord.x + "," +
-                piecesToFortify[i].centerCoord.y);
-        }
-
         Player owner = piece.owner;
 
         foreach(Polyomino polyomino in piecesToFortify)
@@ -453,7 +447,6 @@ public class MapManager : MonoBehaviour
             foreach(Tile tile in tempTiles)
             {
                 Polyomino fortifiedMonomino = new Polyomino(1, 0, owner);
-                Debug.Log("placing monomino at " + tile.coord.x + "," + tile.coord.y);
                 fortifiedMonomino.isFortified = true;
                 fortifiedMonomino.MakePhysicalPiece(true);
                 fortifiedMonomino.PlaceAtLocation(tile.coord, true);

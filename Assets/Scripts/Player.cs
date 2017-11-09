@@ -130,7 +130,7 @@ public class Player : MonoBehaviour
                 Services.MapManager.MapWidth - 2, 
                 Services.MapManager.MapLength - 2);
         }
-        Services.MapManager.CreateBase(this, basePos);
+        Services.MapManager.CreateMainBase(this, basePos);
         //for now just allow placement always
         placementAvailable = true;
         resources = startingResources;

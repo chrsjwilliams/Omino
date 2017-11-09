@@ -81,76 +81,59 @@ public abstract class Structure : Polyomino
         }
     }
 
-    public virtual void ActivateStructureCheck()
+    public virtual void ToggleStructureActivation(Player player)
     {
-        List<Polyomino> adjacentPieces = new List<Polyomino>();
-        foreach (Tile tile in tiles)
+        if (owner == null) OnClaim(player);
+        else
         {
-            foreach (Coord direction in Coord.Directions())
-            {
-                Coord adjacentCoord = tile.coord.Add(direction);
-                if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
-                {
-                    Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
-                    if (adjTile.IsOccupied() && !adjacentPieces.Contains(adjTile.occupyingPiece) &&
-                        adjTile.occupyingPiece != this)
-                    {
-                        adjacentPieces.Add(adjTile.occupyingPiece);
-                    }
-                }
-            }
-        }
+            List<Polyomino> adjacentPieces = GetAdjacentPolyominos();
 
-        if(adjacentPieces.Count < 1)
-        {
-            SetToNeutralColor();
-            isActivated = false;
-            owner = null;
-            return;
-        }
-
-        bool connectedToBase = false;
-        
-        foreach (Polyomino piece in adjacentPieces)
-        {
-            connectedToBase = Services.MapManager.ConnectedToBase(piece, new List<Polyomino>(), 0);
-            if (connectedToBase && owner == null)
+            //  Not connected to a piece anymore
+            if (adjacentPieces.Count < 1)
             {
-                isActivated = true;
-                owner = piece.owner;
-                ToggleAltColor(true);
+                OnClaimLost();
                 return;
             }
-            else if(connectedToBase && owner != piece.owner)
+
+            bool connectedToBase = false;
+            foreach (Polyomino piece in adjacentPieces)
             {
-                List<Polyomino> recheck = new List<Polyomino>();
-                foreach(Polyomino newPiece in adjacentPieces)
+                connectedToBase = Services.MapManager.ConnectedToBase(piece, new List<Polyomino>(), 0);
+                //  Strcuture belongs to no one 2nd check? why?
+                if (connectedToBase && owner == null)
                 {
-                    if(newPiece != piece && !recheck.Contains(newPiece) &&
-                       newPiece.owner != piece.owner)
+                    OnClaim(piece.owner);
+                    return;
+                }
+                else if (connectedToBase && owner != piece.owner)
+                {
+                    //  Structure belongs to opponent
+                    List<Polyomino> recheck = new List<Polyomino>();
+                    foreach (Polyomino newPiece in adjacentPieces)
                     {
-                        recheck.Add(newPiece);
+                        if (newPiece != piece && !recheck.Contains(newPiece) &&
+                           newPiece.owner != piece.owner)
+                        {
+                            recheck.Add(newPiece);
+                        }
                     }
-                }
 
-                foreach (Polyomino opponentPieces in recheck)
-                {
-                    if (Services.MapManager.ConnectedToBase(opponentPieces, new List<Polyomino>(), 0))
-                        return;
-                }
+                    foreach (Polyomino opponentPieces in recheck)
+                    {
+                        //  Is the opponent piece connectd to their base
+                        if (Services.MapManager.ConnectedToBase(opponentPieces, new List<Polyomino>(), 0))
+                            return;
+                    }
 
-                isActivated = true;
-                owner = piece.owner;
-                ToggleAltColor(true);
-                return;
+                    OnClaim(piece.owner);
+                    return;
+                }
             }
-        }
 
-        if (!connectedToBase)
-        {
-            SetToNeutralColor();
-            isActivated = false;
-            owner = null;
+            if (!connectedToBase)
+            {
+                OnClaimLost();
+            }
         }
     }
 
@@ -170,10 +153,12 @@ public abstract class Structure : Polyomino
     protected virtual void OnClaim(Player player)
     {
         owner = player;
+        ToggleAltColor(true);
     }
 
     protected virtual void OnClaimLost()
     {
+        SetToNeutralColor();
         owner = null;
     }
 }
