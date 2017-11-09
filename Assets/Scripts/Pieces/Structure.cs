@@ -142,6 +142,16 @@ public abstract class Structure : Polyomino
         HideFromInput();
         holder.localScale = Vector3.one;
         neutralColor = tiles[0].GetComponent<SpriteRenderer>().color;
+        
+    }
+
+    public override void PlaceAtCurrentLocation(bool replace)
+    {
+        base.PlaceAtCurrentLocation(false);
+        foreach (Tile tile in tiles)
+        {
+            Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingStructure(this);
+        }
     }
 
     protected override void OnPlace()

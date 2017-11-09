@@ -20,7 +20,7 @@ public class Tile : MonoBehaviour
     public Material material { get; set; }
     public Polyomino occupyingPiece { get; private set; }
     public Polyomino pieceParent { get; private set; }
-    public Blueprint occupyingStructure { get; private set; }
+    public Structure occupyingStructure { get; private set; }
     public SuperDestructorResource occupyingResource { get; private set; }
 
     public void Init(Coord coord_)
@@ -94,6 +94,11 @@ public class Tile : MonoBehaviour
     public void SetOccupyingResource(SuperDestructorResource resource)
     {
         occupyingResource = resource;
+    }
+
+    public void SetOccupyingStructure(Structure structure)
+    {
+        occupyingStructure = structure;
     }
 
     public bool IsOccupied()
