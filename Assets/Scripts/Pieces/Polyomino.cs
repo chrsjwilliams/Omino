@@ -455,7 +455,7 @@ public class Polyomino
             {
                 foreach (Structure structure in adjacentStructures)
                 {
-                    structure.ActivateStructureCheck();
+                    structure.ToggleStructureActivation(owner);
                 }
             }
         }
@@ -483,6 +483,29 @@ public class Polyomino
         }
 
         return adjacentStructures;
+    }
+
+    public List<Polyomino> GetAdjacentPolyominos()
+    {
+        List<Polyomino> adjacentPieces = new List<Polyomino>();
+        foreach (Tile tile in tiles)
+        {
+            foreach (Coord direction in Coord.Directions())
+            {
+                Coord adjacentCoord = tile.coord.Add(direction);
+                if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
+                {
+                    Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                    if (adjTile.IsOccupied() && !adjacentPieces.Contains(adjTile.occupyingPiece) &&
+                        adjTile.occupyingPiece != this)
+                    {
+                        adjacentPieces.Add(adjTile.occupyingPiece);
+                    }
+                }
+            }
+        }
+
+        return adjacentPieces;
     }
 
     public virtual void CheckForFortification(bool isBeingDestroyed)

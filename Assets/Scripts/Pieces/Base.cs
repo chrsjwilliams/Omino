@@ -3,15 +3,20 @@ using System.Collections;
 
 public class Base : Structure
 {
-    public Base(int _units, int _index, Player _player) : base(_units, _index, _player)
+    protected bool mainBase;
+    public Base(int _units, int _index, Player _player, bool _mainBase) : base(_units, _index, _player)
     {
+        mainBase = _mainBase;
         owner = _player;
         baseDrawPeriod = 15f;
         baseResourceIncrementPeriod = 3f;
         baseResourcesPerIncrement = 10;
     }
 
-    public override void ActivateStructureCheck() { }
+    public override void ToggleStructureActivation(Player player)
+    {
+        if (!mainBase) base.ToggleStructureActivation(player);
+    }
 
     public override void Update()
     {
