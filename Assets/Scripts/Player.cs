@@ -93,6 +93,8 @@ public class Player : MonoBehaviour
             Services.UIManager.UpdateResourceCount(resources_, this);
         }
     }
+    public float resourceGainIncrementFactor { get; private set; }
+    public float drawRateFactor { get; private set; }
 
     // Use this for initialization
     public void Init(Color[] colorScheme, int posOffset)
@@ -129,6 +131,8 @@ public class Player : MonoBehaviour
         //for now just allow placement always
         placementAvailable = true;
         resources = startingResources;
+        resourceGainIncrementFactor = 1;
+        drawRateFactor = 1;
     }
 
     // Update is called once per frame
@@ -157,29 +161,29 @@ public class Player : MonoBehaviour
 
     }
 
-    void UpdateDrawMeter()
-    {
-        drawMeter += drawRate * Time.deltaTime;
-        Services.UIManager.UpdateDrawMeter(playerNum, drawMeter);
-        if (drawMeter >= 1)
-        {
-            DrawPieces(1);
-            drawMeter -= 1;
-        }
-    }
+    //void UpdateDrawMeter()
+    //{
+    //    drawMeter += drawRate * Time.deltaTime;
+    //    Services.UIManager.UpdateDrawMeter(playerNum, drawMeter);
+    //    if (drawMeter >= 1)
+    //    {
+    //        DrawPieces(1);
+    //        drawMeter -= 1;
+    //    }
+    //}
 
-    void UpdatePlayMeter()
-    {
-        playMeter += playRate * Time.deltaTime;
-        if (playMeter >= 1)
-        {
-            placementAvailable = true;
-            playMeter -= 1;
-            Services.AudioManager.CreateTempAudio(Services.Clips.PlayAvailable[playerNum -1], 
-                0.5f);
-        }
-        Services.UIManager.UpdatePlayMeter(playerNum, playMeter, placementAvailable);
-    }
+    //void UpdatePlayMeter()
+    //{
+    //    playMeter += playRate * Time.deltaTime;
+    //    if (playMeter >= 1)
+    //    {
+    //        placementAvailable = true;
+    //        playMeter -= 1;
+    //        Services.AudioManager.CreateTempAudio(Services.Clips.PlayAvailable[playerNum -1], 
+    //            0.5f);
+    //    }
+    //    Services.UIManager.UpdatePlayMeter(playerNum, playMeter, placementAvailable);
+    //}
 
     void SetHandStatus()
     {
@@ -396,15 +400,16 @@ public class Player : MonoBehaviour
         selectedPiece = null;
     }
 
-    public void ToggleMineCount(int newMineCount)
-    {
-        mineCount += newMineCount;
-    }
+    //public void ToggleMineCount(int newMineCount)
+    //{
+    //    mineCount += newMineCount;
+    //}
 
-    public void ToggleFactoryCount(int newFactoryCount)
-    {
-        factoryCount += newFactoryCount;
-    }
+    //public void ToggleFactoryCount(int newFactoryCount)
+    //{
+    //    factoryCount += newFactoryCount;
+    //}
+
     public void OnGameOver()
     {
         gameOver = true;
@@ -421,5 +426,15 @@ public class Player : MonoBehaviour
     public void GainResources(int numResources)
     {
         resources += numResources;
+    }
+
+    public void AugmentDrawRateFactor(float factorChangeIncrement)
+    {
+        drawRateFactor += factorChangeIncrement;
+    }
+
+    public void AugmentResourceGainIncrementFactor(float factorChangeIncrement)
+    {
+        resourceGainIncrementFactor += factorChangeIncrement;
     }
 }

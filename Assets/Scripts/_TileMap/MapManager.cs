@@ -65,7 +65,7 @@ public class MapManager : MonoBehaviour
             }
         }
         GenerateStructures();
-        GenerateResources();
+        //GenerateResources();
     }
 
     void GenerateResources()

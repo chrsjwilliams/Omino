@@ -33,6 +33,30 @@ public class Polyomino
     public bool isFortified;
     public List<Blueprint> occupyingStructures { get; protected set; }
     protected Image ringTimer;
+    protected float drawMeter_;
+    protected float drawMeter
+    {
+        get { return drawMeter_; }
+        set
+        {
+            drawMeter_ = value;
+            ringTimer.fillAmount = Mathf.Min(1, drawMeter_);
+        }
+    }
+    protected float baseDrawPeriod;
+    protected float drawRate { get { return (1 / baseDrawPeriod) * owner.drawRateFactor; } }
+    protected float baseResourceIncrementPeriod;
+    protected int baseResourcesPerIncrement;
+    protected float resourceGainMeter;
+    protected float resourceIncrementRate { get { return 1 / baseResourceIncrementPeriod; } }
+    protected int resourcesPerIncrement
+    {
+        get
+        {
+            return Mathf.RoundToInt(baseResourcesPerIncrement
+                * owner.resourceGainIncrementFactor);
+        }
+    }
 
     public int cost { get; protected set; }
     protected TextMesh costText;
@@ -934,4 +958,26 @@ public class Polyomino
     }
 
     public virtual void Update() { }
+
+    protected void UpdateDrawMeter()
+    {
+        drawMeter += drawRate * Time.deltaTime;
+        if (drawMeter >= 1)
+        {
+            owner.DrawPieces(1, holder.transform.position);
+            drawMeter -= 1;
+        }
+    }
+
+    protected void UpdateResourceMeter()
+    {
+        resourceGainMeter += resourceIncrementRate * Time.deltaTime;
+        if (resourceGainMeter >= 1)
+        {
+            owner.GainResources(resourcesPerIncrement);
+            resourceGainMeter -= 1;
+            Services.GeneralTaskManager.Do(new FloatText("+" + resourcesPerIncrement,
+                GetCenterpoint(), owner, 3, 0.75f));
+        }
+    }
 }

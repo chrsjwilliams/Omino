@@ -162,17 +162,17 @@ public class Blueprint : Polyomino
 
     public override void Remove()
     {
-        switch (buildingType)
-        {
-            case BuildingType.FACTORY:
-                owner.ToggleFactoryCount(-1);
-                break;
-            case BuildingType.MINE:
-                owner.ToggleMineCount(-1);
-                break;
-            default:
-                break;
-        }
+        //switch (buildingType)
+        //{
+        //    case BuildingType.FACTORY:
+        //        owner.ToggleFactoryCount(-1);
+        //        break;
+        //    case BuildingType.MINE:
+        //        owner.ToggleMineCount(-1);
+        //        break;
+        //    default:
+        //        break;
+        //}
         List<Polyomino> constituentPieces = new List<Polyomino>();
         foreach (Tile tile in tiles)
         {
@@ -191,19 +191,19 @@ public class Blueprint : Polyomino
 
     protected override void OnPlace()
     {
-        switch (buildingType)
-        {
-            case BuildingType.FACTORY:
-                owner.ToggleFactoryCount(1);
-                Services.AudioManager.CreateTempAudio(Services.Clips.FactoryPlaced, 1);
-                break;
-            case BuildingType.MINE:
-                owner.ToggleMineCount(1);
-                Services.AudioManager.CreateTempAudio(Services.Clips.FactoryPlaced, 1);
-                break;
-            default:
-                break;
-        }
+        //switch (buildingType)
+        //{
+        //    case BuildingType.FACTORY:
+        //        owner.ToggleFactoryCount(1);
+        //        Services.AudioManager.CreateTempAudio(Services.Clips.FactoryPlaced, 1);
+        //        break;
+        //    case BuildingType.MINE:
+        //        owner.ToggleMineCount(1);
+        //        Services.AudioManager.CreateTempAudio(Services.Clips.FactoryPlaced, 1);
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 
     public override void OnInputUp()
