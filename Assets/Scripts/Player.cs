@@ -50,32 +50,32 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int piecesPerHandColumn;
     public RectTransform handZone { get; private set; }
-    [SerializeField]
-    private float factoryPlayRateIncrement;
-    private int factoryCount;
-    [SerializeField]
-    private float baseDrawPeriod;
-    private float drawRate
-    {
-        get
-        {
-            return (1 / baseDrawPeriod) * (1 + mineCount * mineDrawRateIncrement);
-        }
-    }
-    private float drawMeter;
-    [SerializeField]
-    private float mineDrawRateIncrement;
-    private int mineCount;
-    [SerializeField]
-    private float basePlayPeriod;
-    private float playRate
-    {
-        get
-        {
-            return (1 / basePlayPeriod) * (1 + factoryCount * factoryPlayRateIncrement);
-        }
-    }
-    private float playMeter;
+    //[SerializeField]
+    //private float factoryPlayRateIncrement;
+    //private int factoryCount;
+    //[SerializeField]
+    //private float baseDrawPeriod;
+    //private float drawRate
+    //{
+    //    get
+    //    {
+    //        return (1 / baseDrawPeriod) * (1 + mineCount * mineDrawRateIncrement);
+    //    }
+    //}
+    //private float drawMeter;
+    //[SerializeField]
+    //private float mineDrawRateIncrement;
+    //private int mineCount;
+    //[SerializeField]
+    //private float basePlayPeriod;
+    //private float playRate
+    //{
+    //    get
+    //    {
+    //        return (1 / basePlayPeriod) * (1 + factoryCount * factoryPlayRateIncrement);
+    //    }
+    //}
+    //private float playMeter;
     public bool gameOver { get; private set; }
     private UITabs uiTabs;
     private List<Polyomino> boardPieces;
