@@ -6,6 +6,7 @@ public class AssemblyLine : Structure
 {
     public AssemblyLine() : base(7, 1)
     {
+        isFortified = true;
         buildingType = BuildingType.ASSEMBLYLINE;
     }
 

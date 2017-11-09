@@ -5,7 +5,6 @@ using UnityEngine;
 public abstract class Structure : Polyomino
 {
     protected bool isActivated;
-    private TaskManager tm = new TaskManager();
     private Color neutralColor;
     protected static int[,,] structure = new int[2, 5, 5]
     {   
@@ -38,7 +37,7 @@ public abstract class Structure : Polyomino
         index = _index;
         units = _units;
         isActivated = false;
-        isFortified = true;
+        
         placed = true;
 
         switch (_units)

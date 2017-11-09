@@ -5,6 +5,7 @@ public class MiningDrill : Structure
 {
     public MiningDrill() : base(7, 0)
     {
+        isFortified = true;
         buildingType = BuildingType.MININGDRILL;
     }
 

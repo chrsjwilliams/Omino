@@ -437,7 +437,7 @@ public class MapManager : MonoBehaviour
 
                     if (ValidateEyeProperty(tile, piece.owner) && !piece.isFortified 
                         && !piecesToFortify.Contains(adjacentTile.occupyingPiece) &&
-                        adjacentTile.occupyingPiece.buildingType != BuildingType.STRUCTURE)
+                        !(adjacentTile.occupyingPiece is Structure))
                     {
                         piecesToFortify.Add(adjacentTile.occupyingPiece);
                     }
@@ -454,7 +454,7 @@ public class MapManager : MonoBehaviour
             }
         }
 
-        if(piecesToFortify.Count > 0 && !piecesToFortify.Contains(piece))
+        if(piecesToFortify.Count > 0 && !piecesToFortify.Contains(piece) && !(piece is Structure))
         {
             piecesToFortify.Add(piece);
         }
