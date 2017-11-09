@@ -8,9 +8,17 @@ public class Base : Structure
     {
         mainBase = _mainBase;
         owner = _player;
-        baseDrawPeriod = 15f;
         baseResourceIncrementPeriod = 3f;
-        baseResourcesPerIncrement = 10;
+        if (owner != null)
+        {
+            baseDrawPeriod = 15f;
+            baseResourcesPerIncrement = 10;
+        }
+        else
+        {
+            baseDrawPeriod = 30f;
+            baseResourcesPerIncrement = 5;
+        }
     }
 
     public override void ToggleStructureActivation(Player player)

@@ -246,11 +246,33 @@ public class MapManager : MonoBehaviour
 
         for (int i = 0; i < startingStructCount / 2; i++)
         {
-            BuildingType type;
-            if (i == 0) type = BuildingType.BASE;
-            else type = structureTypes[(i - 1) % structureTypes.Count];
-            List<Structure> structures = GenerateStructureAndMirroredStructure(type);
-            if (structures == null) break;
+            List<Structure> structures = new List<Structure>();
+            if (i == 0)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    Base cornerBase = new Base(9, 0, null, false);
+                    structures.Add(cornerBase);
+                    cornerBase.MakePhysicalPiece(true);
+                    Coord location;
+                    if(j == 0)
+                    {
+                        location = new Coord(MapWidth - 2, 1);
+                    }
+                    else
+                    {
+                        location = new Coord(1, MapLength - 2);
+                    }
+                    cornerBase.PlaceAtLocation(location);
+                }
+            }
+            else
+            {
+                BuildingType type;
+                type = structureTypes[(i - 1) % structureTypes.Count];
+                structures = GenerateStructureAndMirroredStructure(type);
+                if (structures == null) break;
+            }
             foreach (Structure structure in structures)
             {
                 structuresOnMap.Add(structure);

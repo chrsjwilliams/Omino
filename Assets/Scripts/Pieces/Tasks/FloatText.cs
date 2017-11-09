@@ -31,6 +31,7 @@ public class FloatText : Task
         textMesh = GameObject.Instantiate(Services.Prefabs.FloatingText, startPos,
             rot, Services.GameScene.transform).GetComponent<TextMesh>();
         textMesh.GetComponent<MeshRenderer>().sortingOrder = 10;
+        textMesh.text = text;
         timeElapsed = 0;
         baseColor = textMesh.color;
         alphaOutColor = new Color(baseColor.r, baseColor.g, baseColor.b, 0);
