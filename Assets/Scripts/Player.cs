@@ -462,4 +462,14 @@ public class Player : MonoBehaviour
     {
         resourceGainIncrementFactor += factorChangeIncrement;
     }
+
+    public void GainOwnership(Structure structure)
+    {
+        boardPieces.Add(structure);
+    }
+
+    public void LoseOwnership(Structure structure)
+    {
+        boardPieces.Remove(structure);
+    }
 }

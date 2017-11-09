@@ -26,4 +26,16 @@ public class Base : Structure
     }
 
     public override void OnInputUp() { }
+
+    protected override void OnClaim(Player player)
+    {
+        base.OnClaim(player);
+        owner.GainOwnership(this);
+    }
+
+    protected override void OnClaimLost()
+    {
+        owner.LoseOwnership(this);
+        base.OnClaimLost();
+    }
 }
