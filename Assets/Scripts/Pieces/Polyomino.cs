@@ -473,7 +473,7 @@ public class Polyomino
                 if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
                 {
                     Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
-                    if (adjTile.IsOccupied() && adjTile.occupyingPiece.buildingType == BuildingType.STRUCTURE &&
+                    if (adjTile.IsOccupied() && adjTile.occupyingPiece is Structure &&
                         !adjacentStructures.Contains((Structure)adjTile.occupyingPiece))
                     {
                         adjacentStructures.Add((Structure)adjTile.occupyingPiece);
