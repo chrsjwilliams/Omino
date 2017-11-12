@@ -1048,9 +1048,9 @@ public class Polyomino
         resourceGainMeter += resourceIncrementRate * Time.deltaTime;
         if (resourceGainMeter >= 1)
         {
-            owner.GainResources(resourcesPerIncrement);
+            int resourcesGained = owner.GainResources(resourcesPerIncrement);
             resourceGainMeter -= 1;
-            Services.GeneralTaskManager.Do(new FloatText("+" + resourcesPerIncrement,
+            Services.GeneralTaskManager.Do(new FloatText("+" + resourcesGained,
                 GetCenterpoint(), owner, 3, 0.75f));
         }
     }

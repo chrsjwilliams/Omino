@@ -81,6 +81,9 @@ public class Player : MonoBehaviour
     private List<Polyomino> boardPieces;
     [SerializeField]
     private int startingResources;
+    [SerializeField]
+    private int baseMaxResources;
+    private int maxResources;
     private int resources_;
     public int resources {
         get
@@ -90,11 +93,12 @@ public class Player : MonoBehaviour
         private set
         {
             resources_ = value;
-            Services.UIManager.UpdateResourceCount(resources_, this);
+            Services.UIManager.UpdateResourceCount(resources_, maxResources, this);
         }
     }
     public float resourceGainIncrementFactor { get; private set; }
     public float drawRateFactor { get; private set; }
+
 
     // Use this for initialization
     public void Init(Color[] colorScheme, int posOffset)
@@ -133,6 +137,7 @@ public class Player : MonoBehaviour
         Services.MapManager.CreateMainBase(this, basePos);
         //for now just allow placement always
         placementAvailable = true;
+        maxResources = baseMaxResources;
         resources = startingResources;
         resourceGainIncrementFactor = 1;
         drawRateFactor = 1;
@@ -448,9 +453,11 @@ public class Player : MonoBehaviour
         AddPieceToHand(newPiece);
     }
 
-    public void GainResources(int numResources)
+    public int GainResources(int numResources)
     {
-        resources += numResources;
+        int prevResources = resources;
+        resources = Mathf.Min(maxResources, resources + numResources);
+        return resources - prevResources;
     }
 
     public void AugmentDrawRateFactor(float factorChangeIncrement)

@@ -114,8 +114,8 @@ public class UIManager : MonoBehaviour {
         greyOutBoxes[playerNum - 1].enabled = status;
     }
 
-    public void UpdateResourceCount(int resourceCount, Player player)
+    public void UpdateResourceCount(int resourceCount, int maxResources, Player player)
     {
-        resourceCounters[player.playerNum - 1].text = resourceCount.ToString();
+        resourceCounters[player.playerNum - 1].text = resourceCount + "/" + maxResources;
     }
 }
