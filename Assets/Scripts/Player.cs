@@ -218,12 +218,12 @@ public class Player : MonoBehaviour
         deckClumped = new List<List<Polyomino>>();
         List<Polyomino> destructors = new List<Polyomino>();
         List<Polyomino> nonDestructors = new List<Polyomino>();
-        for (int numBlocks = 3; numBlocks <= 5; numBlocks++)
+        for (int numBlocks = 2; numBlocks <= 4; numBlocks++)
         {
             int numTypes = Polyomino.pieceTypes[numBlocks];
             for (int index = 0; index < numTypes; index++)
             {
-                if (numBlocks < 5) destructors.Add(new Destructor(numBlocks, index, this, false));
+                if (numBlocks < 4) destructors.Add(new Destructor(numBlocks, index, this, false));
                 else nonDestructors.Add(new Polyomino(numBlocks, index, this));
             }
         }
@@ -310,7 +310,7 @@ public class Player : MonoBehaviour
         else
         {
             List<Polyomino> destructors = new List<Polyomino>();
-            for (int numBlocks = 3; numBlocks <= 4; numBlocks++)
+            for (int numBlocks = 2; numBlocks <= 3; numBlocks++)
             {
                 int numTypes = Polyomino.pieceTypes[numBlocks];
                 for (int index = 0; index < numTypes; index++)

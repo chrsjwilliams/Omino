@@ -179,11 +179,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4557438448763102, guid: d92c93376e4b8ed40b2136d517585ddc, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 14.5
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4557438448763102, guid: d92c93376e4b8ed40b2136d517585ddc, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 14
+      value: 11.5
       objectReference: {fileID: 0}
     - target: {fileID: 4557438448763102, guid: d92c93376e4b8ed40b2136d517585ddc, type: 2}
       propertyPath: m_LocalPosition.z
@@ -212,7 +212,7 @@ Prefab:
     - target: {fileID: 20490302304154860, guid: d92c93376e4b8ed40b2136d517585ddc,
         type: 2}
       propertyPath: orthographic size
-      value: 16
+      value: 13.5
       objectReference: {fileID: 0}
     - target: {fileID: 114118346105448396, guid: d92c93376e4b8ed40b2136d517585ddc,
         type: 2}
@@ -333,12 +333,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff2f35c7c8f8ac44782b58329980dae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapWidth: 30
-  _mapLength: 30
+  _mapWidth: 25
+  _mapLength: 25
   resourceDistMin: 10
   resourceRadiusMin: 14
-  structDistMin: 15
-  structRadiusMin: 15
+  structDistMin: 10
+  structRadiusMin: 10
   resourceBorderMin: 3
   resourceSizeMin: 1
   resourceSizeMax: 3

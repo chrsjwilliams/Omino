@@ -5,7 +5,7 @@ public class Mine : Blueprint
 {
     public Mine(Player player_) : base(BuildingType.MINE, player_)
     {
-        baseResourceIncrementPeriod = 3f;
+        baseResourceIncrementPeriod = 5f;
         baseResourcesPerIncrement = 5;
     }
 

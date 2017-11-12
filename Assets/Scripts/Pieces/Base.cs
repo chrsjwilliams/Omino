@@ -8,7 +8,7 @@ public class Base : Structure
     {
         mainBase = _mainBase;
         owner = _player;
-        baseResourceIncrementPeriod = 3f;
+        baseResourceIncrementPeriod = 5f;
         if (owner != null)
         {
             baseDrawPeriod = 15f;

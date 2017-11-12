@@ -90,7 +90,7 @@ public class Polyomino
             }
         };
 
-    protected static int[,,] triomino = new int[2, 5, 5]
+    protected static int[,,] triomino = new int[3, 5, 5]
         { 
             //  ###
             {
@@ -109,10 +109,20 @@ public class Polyomino
                 { 0,0,1,0,0 },
                 { 0,0,1,1,0 },
                 { 0,0,0,0,0 }
+            },
+            //  #
+            // ##
+            {
+
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 },
+                { 0,0,1,0,0 },
+                { 0,1,1,0,0 },
+                { 0,0,0,0,0 }
             }
         };
 
-    protected static int[,,] tetromino = new int[5, 5, 5]
+    protected static int[,,] tetromino = new int[7, 5, 5]
         { 
             //  ####
             {
@@ -133,6 +143,16 @@ public class Polyomino
                 { 0,0,0,0,0 }
             },
             //  #
+            //  #
+            // ##
+            {
+                { 0,0,0,0,0 },
+                { 0,0,1,0,0 },
+                { 0,0,1,0,0 },
+                { 0,1,1,0,0 },
+                { 0,0,0,0,0 }
+            },
+            //  #
             //  ##
             //  #
             {
@@ -148,6 +168,15 @@ public class Polyomino
                 { 0,0,0,0,0 },
                 { 0,1,1,0,0 },
                 { 0,0,1,1,0 },
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 }
+            },
+            //   ##
+            //  ##
+            {
+                { 0,0,0,0,0 },
+                { 0,0,1,1,0 },
+                { 0,1,1,0,0 },
                 { 0,0,0,0,0 },
                 { 0,0,0,0,0 }
             },
@@ -704,6 +733,12 @@ public class Polyomino
             Quaternion rot = owner.playerNum == 1 ?
                 Quaternion.Euler(0, 0, -90) : Quaternion.Euler(0, 0, 90);
             costText.transform.localRotation = rot;
+            Vector3 localPos = costText.transform.localPosition;
+            if (owner.playerNum != 1)
+            {
+                costText.transform.localPosition =
+                    new Vector3(-localPos.x, localPos.y, localPos.z);
+            }
         }
 
         if (piece == null) return;
