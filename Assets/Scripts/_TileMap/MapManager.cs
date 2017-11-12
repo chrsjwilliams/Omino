@@ -472,7 +472,7 @@ public class MapManager : MonoBehaviour
                 fortifiedMonomino.isFortified = true;
                 fortifiedMonomino.MakePhysicalPiece(true);
                 fortifiedMonomino.PlaceAtLocation(tile.coord, true);
-                fortifiedMonomino.ToggleAltColor(true);
+                //fortifiedMonomino.ToggleAltColor(true);
             }
         }
     }

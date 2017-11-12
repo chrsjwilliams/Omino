@@ -15,18 +15,28 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private Image[] greyOutBoxes;
     [SerializeField]
-    private Text gameWinText;
+    private RectTransform[] victoryBanners;
+    [SerializeField]
+    private RectTransform[] defeatBanners;
     public Transform canvas;
     public Sprite destructorIcon;
     public Sprite superDestructorIcon;
     public Sprite factoryIcon;
     public Sprite mineIcon;
     public Sprite baseIcon;
+    private bool scrollingInBanners;
+    private Player winner;
+    private float bannerScrollTimeElapsed;
+    [SerializeField]
+    private float bannerScrollDuration;
 
 	// Use this for initialization
 	void Start () {
-        gameWinText = GameObject.Find("GameWinText").GetComponent<Text>();
-        gameWinText.gameObject.SetActive(false);
+        for (int i = 0; i < victoryBanners.Length; i++)
+        {
+            victoryBanners[i].gameObject.SetActive(false);
+            defeatBanners[i].gameObject.SetActive(false);
+        }
         foreach(Image box in greyOutBoxes)
         {
             box.enabled = false;
@@ -35,7 +45,7 @@ public class UIManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        if (scrollingInBanners) ScrollBanners();
 	}
 
 	//public void UpdateTouchCount(Touch[] touches){
@@ -56,11 +66,47 @@ public class UIManager : MonoBehaviour {
         playMeters[playerNum - 1].fillAmount = fillProportion;
     }
 
-    public void SetGameWinText(Player winner)
+    public void StartBannerScroll(Player winner_)
     {
-        gameWinText.gameObject.SetActive(true);
-        gameWinText.text = "PLAYER " + winner.playerNum + " WINS";
-        gameWinText.color = winner.ActiveTilePrimaryColors[0];
+        scrollingInBanners = true;
+        winner = winner_;
+        for (int i = 0; i < victoryBanners.Length; i++)
+        {
+            if(i == winner.playerNum - 1)
+            {
+                victoryBanners[i].gameObject.SetActive(true);
+                victoryBanners[i].anchoredPosition = new Vector2(0, 1536);
+            }
+            else
+            {
+                defeatBanners[i].gameObject.SetActive(true);
+                defeatBanners[i].anchoredPosition = new Vector2(0, 1536);
+            }
+        }
+        bannerScrollTimeElapsed = 0;
+    }
+
+    void ScrollBanners()
+    {
+        bannerScrollTimeElapsed += Time.deltaTime;
+        for (int i = 0; i < victoryBanners.Length; i++)
+        {
+            if(i == winner.playerNum - 1)
+            {
+                victoryBanners[i].anchoredPosition =
+                    Vector2.Lerp(new Vector2(0, 1536), Vector2.zero,
+                    EasingEquations.Easing.QuadEaseOut(
+                        bannerScrollTimeElapsed / bannerScrollDuration));
+            }
+            else
+            {
+                defeatBanners[i].anchoredPosition =
+                    Vector2.Lerp(new Vector2(0, 1536), Vector2.zero,
+                    EasingEquations.Easing.QuadEaseOut(
+                        bannerScrollTimeElapsed / bannerScrollDuration));
+            }
+        }
+        if (bannerScrollTimeElapsed >= bannerScrollDuration) scrollingInBanners = false;
     }
 
     public void SetGreyOutBox(int playerNum, bool status)

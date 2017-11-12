@@ -39,7 +39,7 @@ public class GameSceneScript : Scene<TransitionData>
     public void GameWin(Player winner)
     {
         Debug.Log("player " + winner.playerNum + " has won");
-        Services.UIManager.SetGameWinText(winner);
+        Services.UIManager.StartBannerScroll(winner);
         foreach(Player player in Services.GameManager.Players)
         {
             player.OnGameOver();

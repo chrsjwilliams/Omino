@@ -157,6 +157,7 @@ public abstract class Structure : Polyomino
     protected override void OnPlace()
     {
         //CreateTimerUI();
+        ToggleCostUIStatus(false);
     }
 
     protected virtual void OnClaim(Player player)

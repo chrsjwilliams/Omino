@@ -614,6 +614,7 @@ public class Polyomino
         }
         Services.AudioManager.CreateTempAudio(Services.Clips.PiecePlaced, 1);
         ToggleCostUIStatus(false);
+        holder.localScale = Vector3.one;
     }
 
     //  Have a fortification method
@@ -624,7 +625,7 @@ public class Polyomino
         foreach (Tile tile in tiles)
         {
             Polyomino monomino = new Polyomino(1, 0, owner);
-            monomino.ToggleAltColor(true);
+            //monomino.ToggleAltColor(true);
             monomino.MakePhysicalPiece(true);
             monomino.PlaceAtLocation(tile.coord);
         }
