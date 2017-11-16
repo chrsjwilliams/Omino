@@ -9,24 +9,25 @@ public abstract class Structure : Polyomino
     protected static int[,,] structure = new int[2, 5, 5]
     {   
             //  These hashes represent what the piece will look like
-            //  ## 
-            //  ###
-            //   ##
+            //   ###  
+            //    # 
+            //    #  
+            //   
             {
                 { 0,0,0,0,0 },
-                { 0,1,1,0,0 },
                 { 0,1,1,1,0 },
-                { 0,0,1,1,0 },
+                { 0,0,1,0,0 },
+                { 0,0,1,0,0 },
                 { 0,0,0,0,0 }
             },
             //  These hashes represent what the piece will look like
-            //    #
-            //  #####
-            //    #
+            //   #
+            //  ###
+            //   # 
             {
                 { 0,0,0,0,0 },
                 { 0,0,1,0,0 },
-                { 1,1,1,1,1 },
+                { 0,1,1,1,0 },
                 { 0,0,1,0,0 },
                 { 0,0,0,0,0 }
             }

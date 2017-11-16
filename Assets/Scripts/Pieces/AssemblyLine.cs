@@ -21,4 +21,11 @@ public class AssemblyLine : Structure
         owner.AugmentDrawRateFactor(-0.2f);
         base.OnClaimLost();
     }
+
+    protected override void SetIconSprite()
+    {
+        base.SetIconSprite();
+        iconSr.enabled = true;
+        iconSr.sprite = Services.UIManager.gearIcon;
+    }
 }

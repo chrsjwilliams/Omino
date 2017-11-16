@@ -271,7 +271,11 @@ public class MapManager : MonoBehaviour
                 BuildingType type;
                 type = structureTypes[(i - 1) % structureTypes.Count];
                 structures = GenerateStructureAndMirroredStructure(type);
-                if (structures == null) break;
+                if (structures == null)
+                {
+                    Debug.Log("stopping short after " + structuresOnMap.Count + "structures");
+                    break;
+                }
             }
             foreach (Structure structure in structures)
             {
