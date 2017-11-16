@@ -416,10 +416,14 @@ public class MapManager : MonoBehaviour
                 {
                     Tile adjTile = Map[adjacentCoord.x, adjacentCoord.y];
                     if (adjTile.IsOccupied() &&
-                        adjTile.occupyingPiece.owner != null && 
+                        adjTile.occupyingPiece.owner != null &&
                         adjTile.occupyingPiece.owner != piece.owner &&
                         adjTile.occupyingPiece.buildingType == BuildingType.BASE)
-                        return true;
+                    {
+                        Base occupyingBase = adjTile.occupyingPiece as Base;
+                        if(occupyingBase.mainBase)
+                            return true;
+                    }
                 }
             }
         }

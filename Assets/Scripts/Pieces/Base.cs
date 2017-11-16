@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Base : Structure
 {
-    protected bool mainBase;
+    public bool mainBase { get; private set; }
     public Base(int _units, int _index, Player _player, bool _mainBase) : base(_units, _index, _player)
     {
         mainBase = _mainBase;
