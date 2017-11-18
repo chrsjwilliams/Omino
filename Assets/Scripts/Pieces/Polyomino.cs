@@ -26,8 +26,8 @@ public class Polyomino
     protected bool placed;
     private const float rotationInputRadius = 8f;
     private int touchID;
-    private readonly Vector3 dragOffset = 5f * Vector3.right;
-    private readonly Vector3 unselectedScale = 0.675f * Vector3.one;
+    private readonly Vector3 baseDragOffset = 5f * Vector3.right;
+    private readonly Vector3 unselectedScale = 0.5f * Vector3.one;
     public const float drawAnimDur = 0.5f;
 
     public bool isFortified;
@@ -917,9 +917,21 @@ public class Polyomino
     {
         if (!placed && !owner.gameOver)
         {
-            Vector3 offsetInputPos = inputPos;
-            if (owner.playerNum == 1) offsetInputPos += dragOffset;
-            else offsetInputPos -= dragOffset;
+            Vector3 screenInputPos = 
+                Services.GameManager.MainCamera.WorldToScreenPoint(inputPos);
+            Vector3 screenOffset;
+            if (owner.playerNum == 1)
+            {
+                screenOffset = baseDragOffset + ((1 - (2 * baseDragOffset.x / Screen.width))
+                    * screenInputPos.x * Vector3.right);
+            }
+            else
+            {
+                screenOffset = -baseDragOffset + ((1 - (2 * baseDragOffset.x / Screen.width)) 
+                    * (Screen.width - screenInputPos.x) * Vector3.left);
+            }
+            Vector3 offsetInputPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
+                screenInputPos + screenOffset);
             Coord roundedInputCoord = new Coord(
                 Mathf.RoundToInt(offsetInputPos.x),
                 Mathf.RoundToInt(offsetInputPos.y));

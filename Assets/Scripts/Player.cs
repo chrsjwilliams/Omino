@@ -200,7 +200,7 @@ public class Player : MonoBehaviour
         {
             hand[i].SetPieceState(placementAvailable);
         }
-        Services.UIManager.SetGreyOutBox(playerNum, !placementAvailable);
+        //Services.UIManager.SetGreyOutBox(playerNum, !placementAvailable);
     }
 
     public void InitializeUITabs(UITabs tabs)
@@ -365,8 +365,8 @@ public class Player : MonoBehaviour
     public void ToggleHandZoneView(bool viewPieces)
     {
         viewingHand = viewPieces;
-        if (!viewingHand) Services.UIManager.SetGreyOutBox(playerNum, false);
-        else Services.UIManager.SetGreyOutBox(playerNum, !placementAvailable);
+        //if (!viewingHand) Services.UIManager.SetGreyOutBox(playerNum, false);
+        //else Services.UIManager.SetGreyOutBox(playerNum, !placementAvailable);
         foreach(Polyomino piece in hand)
         {
             piece.SetVisible(viewingHand);

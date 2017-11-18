@@ -39,10 +39,10 @@ public class UIManager : MonoBehaviour {
             victoryBanners[i].gameObject.SetActive(false);
             defeatBanners[i].gameObject.SetActive(false);
         }
-        foreach(Image box in greyOutBoxes)
-        {
-            box.enabled = false;
-        }
+        //foreach(Image box in greyOutBoxes)
+        //{
+        //    box.enabled = false;
+        //}
 	}
 	
 	// Update is called once per frame
