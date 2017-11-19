@@ -477,14 +477,19 @@ public class MapManager : MonoBehaviour
         foreach(Polyomino polyomino in piecesToFortify)
         {
             List<Tile> tempTiles = polyomino.tiles;
+            List<Blueprint> prevOccupyingStructures = polyomino.occupyingStructures;
             polyomino.Remove(true);
 
-            foreach(Tile tile in tempTiles)
+            foreach (Tile tile in tempTiles)
             {
                 Polyomino fortifiedMonomino = new Polyomino(1, 0, owner);
                 fortifiedMonomino.isFortified = true;
                 fortifiedMonomino.MakePhysicalPiece(true);
                 fortifiedMonomino.PlaceAtLocation(tile.coord, true);
+                for (int i = 0; i < prevOccupyingStructures.Count; i++)
+                {
+                    fortifiedMonomino.AddOccupyingStructure(prevOccupyingStructures[i]);
+                }
                 //fortifiedMonomino.ToggleAltColor(true);
             }
         }

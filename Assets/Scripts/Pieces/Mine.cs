@@ -11,6 +11,7 @@ public class Mine : Blueprint
 
     public override void Update()
     {
+        base.Update();
         UpdateResourceMeter();
     }
 }

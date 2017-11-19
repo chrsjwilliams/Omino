@@ -77,7 +77,7 @@ public abstract class Structure : Polyomino
     {
         foreach(Tile tile in tiles)
         {
-            tile.GetComponent<SpriteRenderer>().color = neutralColor;
+            tile.ShiftColor(neutralColor);
         }
     }
 
@@ -164,7 +164,8 @@ public abstract class Structure : Polyomino
     protected virtual void OnClaim(Player player)
     {
         owner = player;
-        ToggleAltColor(true);
+        ShiftColor(owner.ActiveTilePrimaryColors[0]);
+        Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
     }
 
     protected virtual void OnClaimLost()

@@ -29,6 +29,8 @@ public class Polyomino
     private readonly Vector3 baseDragOffset = 5f * Vector3.right;
     private readonly Vector3 unselectedScale = 0.5f * Vector3.one;
     public const float drawAnimDur = 0.5f;
+    public const float deathAnimDur = 0.75f;
+    public const float deathAnimScaleUp = 1.5f;
 
     public bool isFortified;
     public List<Blueprint> occupyingStructures { get; protected set; }
@@ -629,6 +631,11 @@ public class Polyomino
         }
     }
 
+    public void ShiftColor(Color color)
+    {
+        foreach (Tile tile in tiles) tile.ShiftColor(color);
+    }
+
     protected virtual void OnPlace()
     {
         //do whatever special stuff this piece does when you place it 
@@ -675,6 +682,13 @@ public class Polyomino
             {
                 occupyingStructures[i].Remove();
             }
+            DeathAnimation die = new DeathAnimation(this);
+            die.Then(new ActionTask(DestroyThis));
+            Services.GeneralTaskManager.Do(die);
+        }
+        else
+        {
+            DestroyThis();
         }
         foreach (Tile tile in tiles)
         {
@@ -686,6 +700,10 @@ public class Polyomino
 
         if (ringTimer != null) RemoveTimerUI();
         owner.OnPieceRemoved(this);
+    }
+
+    void DestroyThis()
+    {
         GameObject.Destroy(holder.gameObject);
     }
 
@@ -1040,12 +1058,18 @@ public class Polyomino
 
     public virtual void Update() { }
 
+    public void ScaleHolder(Vector3 scale)
+    {
+        holder.transform.localScale = scale;
+    }
+
     protected void UpdateDrawMeter()
     {
         drawMeter += drawRate * Time.deltaTime;
         if (drawMeter >= 1)
         {
             OnDraw();
+            Services.AudioManager.CreateTempAudio(Services.Clips.PlayAvailable[0], 1);
             drawMeter -= 1;
         }
     }

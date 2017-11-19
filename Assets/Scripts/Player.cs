@@ -460,6 +460,7 @@ public class Player : MonoBehaviour
     {
         int prevResources = resources;
         resources = Mathf.Min(maxResources, resources + numResources);
+        Services.AudioManager.CreateTempAudio(Services.Clips.ResourceGained, 0.2f);
         return resources - prevResources;
     }
 

@@ -10,6 +10,7 @@ public class BombFactory : Blueprint
 
     public override void Update()
     {
+        base.Update();
         UpdateDrawMeter();
     }
 

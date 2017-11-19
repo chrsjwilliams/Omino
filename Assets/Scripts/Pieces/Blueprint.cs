@@ -224,6 +224,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         //    default:
         //        break;
         //}
+        Services.AudioManager.CreateTempAudio(Services.Clips.BlueprintPlaced, 1);
     }
 
     public override void OnInputUp()

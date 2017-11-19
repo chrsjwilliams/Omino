@@ -10,6 +10,7 @@ public class Factory : Blueprint
 
     public override void Update()
     {
+        base.Update();
         UpdateDrawMeter();
     }
 

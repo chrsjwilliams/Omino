@@ -22,6 +22,24 @@ public class Tile : MonoBehaviour
     public Polyomino pieceParent { get; private set; }
     public Structure occupyingStructure { get; private set; }
     public SuperDestructorResource occupyingResource { get; private set; }
+    private Color prevColor;
+    private Color targetColor_;
+    private Color targetColor
+    {
+        get { return targetColor_; }
+        set
+        {
+            prevColor = sr.color;
+            targetColor_ = value;
+            changingColor = true;
+            colorChangeTimeElapsed = 0;
+        }
+    }
+    private float colorChangeTimeElapsed;
+    [SerializeField]
+    private float colorChangeDuration;
+    private bool changingColor;
+    private SpriteRenderer maskSr;
 
     public void Init(Coord coord_)
     {
@@ -29,6 +47,7 @@ public class Tile : MonoBehaviour
         boxCol = GetComponent<BoxCollider2D>();
         sr = GetComponent<SpriteRenderer>();
         glow = GetComponent<SpriteGlow>();
+        maskSr = GetComponentInChildren<SpriteMask>().gameObject.GetComponent<SpriteRenderer>();
         glow.OutlineWidth = 0;
         transform.position = new Vector3(coord.x, coord.y, 0);
         if ((coord.x + coord.y) % 2 == 0)
@@ -49,7 +68,7 @@ public class Tile : MonoBehaviour
     }
 
 	public void OnRemove(){
-        Destroy(this);
+        //Destroy(this);
 	}
 
     public void SetCoord(Coord newCoord)
@@ -60,6 +79,11 @@ public class Tile : MonoBehaviour
     public void SetColor(Color color)
     {
         sr.color = color;
+    }
+
+    public void ShiftColor(Color color)
+    {
+        targetColor = color;
     }
 
     public void ToggleAltColor(bool useAlt)
@@ -76,6 +100,11 @@ public class Tile : MonoBehaviour
     public void SetGlowColor(Color color)
     {
         glow.GlowColor = color;
+    }
+
+    public void SetMaskSrAlpha(float alpha)
+    {
+        maskSr.color = new Color(maskSr.color.r, maskSr.color.g, maskSr.color.b, alpha);
     }
 
     public void ActivateTile(Player player, BuildingType buildingType)
@@ -130,7 +159,17 @@ public class Tile : MonoBehaviour
 
     private void Update()
     {
+        if (changingColor) LerpToTargetColor();
+    }
 
+    void LerpToTargetColor()
+    {
+        colorChangeTimeElapsed += Time.deltaTime;
+        sr.color = Color.Lerp(prevColor, targetColor, colorChangeTimeElapsed / colorChangeDuration);
+        if(colorChangeTimeElapsed >= colorChangeDuration)
+        {
+            changingColor = false;
+        }
     }
 
 
@@ -141,7 +180,7 @@ public class Tile : MonoBehaviour
 
     public void SetAlpha(float alpha)
     {
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);
+        targetColor = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);
     }
 
     public void IncrementSortingOrder(int inc)
