@@ -136,7 +136,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private void OnTouchDown(TouchDown e)
     {
         OnInputDown();
-        StartGame();
     }
 
     protected void OnTouchUp(TouchUp e)
@@ -187,13 +186,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     {
     }
 
-    private void OnButtonPressed(ButtonPressed e)
-    {
-        if ((e.button == "Start" || e.button == "A"))
-        {
-            StartGame();
-        }
-    }
 
     public void StartGame()
     {
