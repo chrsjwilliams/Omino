@@ -21,8 +21,9 @@ GameObject:
   - component: {fileID: 224282115627041556}
   - component: {fileID: 222954400718808290}
   - component: {fileID: 114152761805999986}
+  - component: {fileID: 95848565879326752}
   m_Layer: 0
-  m_Name: Rule 4
+  m_Name: Rule 5 Destructors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -211,8 +212,9 @@ GameObject:
   - component: {fileID: 224563254905666354}
   - component: {fileID: 222141660705654206}
   - component: {fileID: 114492901580000596}
+  - component: {fileID: 95617076292998634}
   m_Layer: 0
-  m_Name: Rule 2
+  m_Name: Rule 3 Rotate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -245,8 +247,9 @@ GameObject:
   - component: {fileID: 224995800412782230}
   - component: {fileID: 222021926958188038}
   - component: {fileID: 114941683269516088}
+  - component: {fileID: 95645056181822556}
   m_Layer: 0
-  m_Name: Rule 3
+  m_Name: Rule 4 Contiguity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -331,8 +334,9 @@ GameObject:
   - component: {fileID: 224967471337552762}
   - component: {fileID: 222327145635488184}
   - component: {fileID: 114039186104525624}
+  - component: {fileID: 95100108985506258}
   m_Layer: 0
-  m_Name: Rule 8
+  m_Name: Rule 1 Win
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -366,8 +370,9 @@ GameObject:
   - component: {fileID: 224891687699118312}
   - component: {fileID: 222216379287569996}
   - component: {fileID: 114299722814072874}
+  - component: {fileID: 95452883118601220}
   m_Layer: 0
-  m_Name: Rule 5
+  m_Name: Rule 6 Fortify
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -400,8 +405,9 @@ GameObject:
   - component: {fileID: 224542170623883272}
   - component: {fileID: 222640197151473458}
   - component: {fileID: 114848963767694032}
+  - component: {fileID: 95733373514619306}
   m_Layer: 0
-  m_Name: Rule 6
+  m_Name: Rule 7 Blueprints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -434,8 +440,9 @@ GameObject:
   - component: {fileID: 224889827151581426}
   - component: {fileID: 222849350764932228}
   - component: {fileID: 114859183596325652}
+  - component: {fileID: 95704805111623508}
   m_Layer: 0
-  m_Name: Rule 7
+  m_Name: Rule 8 Structures
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -451,8 +458,9 @@ GameObject:
   - component: {fileID: 224784248180352560}
   - component: {fileID: 222881021545272788}
   - component: {fileID: 114996546531280102}
+  - component: {fileID: 95065015531655958}
   m_Layer: 0
-  m_Name: Rule 1
+  m_Name: Rule 2 Movement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -467,7 +475,6 @@ GameObject:
   m_Component:
   - component: {fileID: 224311393303812052}
   - component: {fileID: 222014758087007538}
-  - component: {fileID: 114055766763763404}
   m_Layer: 0
   m_Name: CenterToCompare
   m_TagString: Untagged
@@ -539,7 +546,7 @@ GameObject:
   - component: {fileID: 222746992438265634}
   - component: {fileID: 114867496868537968}
   m_Layer: 0
-  m_Name: ReclaimStructure
+  m_Name: WinCondition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -559,6 +566,142 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &95065015531655958
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1872450700375934}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 75b6fa73616c8484db39a23347d57544, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!95 &95100108985506258
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1579981295272624}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4c9345d6aa53cf74badd64be8bf9f44b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!95 &95452883118601220
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1612824954028210}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 94b6262b290d53e42906ade849000d05, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!95 &95617076292998634
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1279158689801924}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d2a45d6f6e889ba4d8ae49f877cbbf9a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!95 &95645056181822556
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1298148508980260}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ab9d3e9f086326d4d90e5287c19c91d7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!95 &95704805111623508
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1833386978153750}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 14c498f19c5d5ba4ea93f16eabe0853f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!95 &95733373514619306
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1730322060563604}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6de44568f8c13ba4eafb8ce2dc525cec, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!95 &95848565879326752
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1029550863353022}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d3dc915ce34624d44b2631f14f3b3af8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114039186104525624
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -618,34 +761,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: You can only place pieces that are connected to a base
---- !u!114 &114055766763763404
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1897868838434026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c10a3b930185b4c4bb5a7310a4fb9982, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
+  m_Text: You can only place pieces that are connected to a base owned by you
 --- !u!114 &114092840320526386
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1438,7 +1554,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Pieces with the bomb icon destroy the pieces it overlaps
+  m_Text: 'Pieces with the bomb icon destroy the pieces it overlaps with that belong
+    to your opponent
 
 '
 --- !u!114 &114686536376262148
@@ -1674,7 +1791,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Nullify your opponents structures by cutting it off from their main base
+  m_Text: Connect to your opponent's main base to win
 --- !u!114 &114938464632275854
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2055,6 +2172,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 224967471337552762}
   - {fileID: 224784248180352560}
   - {fileID: 224563254905666354}
   - {fileID: 224995800412782230}
@@ -2062,7 +2180,6 @@ RectTransform:
   - {fileID: 224891687699118312}
   - {fileID: 224542170623883272}
   - {fileID: 224889827151581426}
-  - {fileID: 224967471337552762}
   m_Father: {fileID: 224067617613874792}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2101,11 +2218,11 @@ RectTransform:
   m_Children:
   - {fileID: 224731457658592358}
   m_Father: {fileID: 224255535164863686}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 605, y: 10}
+  m_AnchoredPosition: {x: 900, y: 10}
   m_SizeDelta: {x: 250, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224300952042369492
@@ -2249,11 +2366,11 @@ RectTransform:
   m_Children:
   - {fileID: 224969852226236506}
   m_Father: {fileID: 224255535164863686}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1195, y: 10}
+  m_AnchoredPosition: {x: 1490, y: 10}
   m_SizeDelta: {x: 250, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224563254905666354
@@ -2268,11 +2385,11 @@ RectTransform:
   m_Children:
   - {fileID: 224833449212783214}
   m_Father: {fileID: 224255535164863686}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 15, y: 10}
+  m_AnchoredPosition: {x: 310, y: 10}
   m_SizeDelta: {x: 250, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224575310666877048
@@ -2342,11 +2459,11 @@ RectTransform:
   m_Children:
   - {fileID: 224868025254193010}
   m_Father: {fileID: 224255535164863686}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -280, y: 10}
+  m_AnchoredPosition: {x: 15, y: 10}
   m_SizeDelta: {x: 250, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224833449212783214
@@ -2416,11 +2533,11 @@ RectTransform:
   m_Children:
   - {fileID: 224948593555628906}
   m_Father: {fileID: 224255535164863686}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1490, y: 10}
+  m_AnchoredPosition: {x: 1785, y: 10}
   m_SizeDelta: {x: 250, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224891687699118312
@@ -2435,11 +2552,11 @@ RectTransform:
   m_Children:
   - {fileID: 224032544015804414}
   m_Father: {fileID: 224255535164863686}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 900, y: 10}
+  m_AnchoredPosition: {x: 1195, y: 10}
   m_SizeDelta: {x: 250, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224937397697850906
@@ -2490,11 +2607,11 @@ RectTransform:
   m_Children:
   - {fileID: 224992643920816302}
   m_Father: {fileID: 224255535164863686}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1785, y: 10}
+  m_AnchoredPosition: {x: -280, y: 10}
   m_SizeDelta: {x: 250, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224969852226236506
@@ -2530,7 +2647,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000038147, y: -151}
+  m_AnchoredPosition: {x: -0.0000038147, y: -137}
   m_SizeDelta: {x: 250, y: 105}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224995800412782230
@@ -2545,10 +2662,10 @@ RectTransform:
   m_Children:
   - {fileID: 224575310666877048}
   m_Father: {fileID: 224255535164863686}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 310, y: 10}
+  m_AnchoredPosition: {x: 605, y: 10}
   m_SizeDelta: {x: 250, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}

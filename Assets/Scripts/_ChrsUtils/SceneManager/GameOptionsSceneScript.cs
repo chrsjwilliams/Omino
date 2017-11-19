@@ -140,11 +140,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     protected void OnTouchUp(TouchUp e)
     {
-        if (e.touch.fingerId == touchID)
-        {
-            touchID = -1;
-            OnInputUp();
-        }
+        OnInputUp();
     }
 
     protected void OnMouseDownEvent(MouseDown e)
