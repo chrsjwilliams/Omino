@@ -117,14 +117,17 @@ public class Player : MonoBehaviour
 
         InitializeDeck();
         DrawPieces(startingHandSize);
-        Factory factory = new Factory(this);
-        AddBluePrint(factory);
+        if (Services.GameManager.usingBlueprints)
+        {
+            Factory factory = new Factory(this);
+            AddBluePrint(factory);
 
-        Mine mine = new Mine(this);
-        AddBluePrint(mine);
+            Mine mine = new Mine(this);
+            AddBluePrint(mine);
 
-        BombFactory bombFactory = new BombFactory(this);
-        AddBluePrint(bombFactory);
+            BombFactory bombFactory = new BombFactory(this);
+            AddBluePrint(bombFactory);
+        }
 
         Coord basePos;
         if (playerNum == 1) basePos = new Coord(1, 1);

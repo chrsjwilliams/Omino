@@ -57,10 +57,27 @@ public class GameManager : MonoBehaviour
     private Color superDestructorResourceColor;
     public Color SuperDestructorResourceColor { get { return superDestructorResourceColor; } }
 
+    [SerializeField]
+    public bool turnBasedVersion { get; private set; }
+    [SerializeField]
+    public bool usingStructures { get; private set; }
+    [SerializeField]
+    public bool usingMiniBases { get; private set; }
+    [SerializeField]
+    public bool usingBlueprints { get; private set; }
+
     private void Awake()
     {
         Services.GameEventManager.Register<Reset>(Reset);
         Input.simulateMouseWithTouches = false;
+    }
+
+    public void SetUserPreferences(bool isTurnBased, bool useStructures, bool useMiniBases, bool useBlueprints)
+    {
+        turnBasedVersion = isTurnBased;
+        usingStructures = useStructures;
+        usingMiniBases = useMiniBases;
+        usingBlueprints = useBlueprints;
     }
 
     public void Init()

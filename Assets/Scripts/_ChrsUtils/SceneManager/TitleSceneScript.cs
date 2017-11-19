@@ -44,7 +44,7 @@ public class TitleSceneScript : Scene<TransitionData>
 
     private void ChangeScene()
     {
-        Services.Scenes.Swap<GameSceneScript>();
+        Services.Scenes.Swap<GameOptionsSceneScript>();
     }
 
     private void Update()

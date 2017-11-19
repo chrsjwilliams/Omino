@@ -70,6 +70,11 @@ public class MapManager : MonoBehaviour
                 tile.name = "Tile [X: " + i + ", Y: " + j + "]";
             }
         }
+
+        if (!Services.GameManager.usingStructures && !Services.GameManager.usingMiniBases)
+            startingStructCount = 0;
+        
+
         GenerateStructures();
         //GenerateResources();
     }
@@ -247,7 +252,7 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < startingStructCount / 2; i++)
         {
             List<Structure> structures = new List<Structure>();
-            if (i == 0)
+            if (Services.GameManager.usingMiniBases)
             {
                 for (int j = 0; j < 2; j++)
                 {
@@ -266,10 +271,10 @@ public class MapManager : MonoBehaviour
                     cornerBase.PlaceAtLocation(location);
                 }
             }
-            else
+            if(Services.GameManager.usingStructures)
             {
                 BuildingType type;
-                type = structureTypes[(i - 1) % structureTypes.Count];
+                type = structureTypes[Mathf.Abs((i - 1) % structureTypes.Count)];
                 structures = GenerateStructureAndMirroredStructure(type);
                 if (structures == null)
                 {
