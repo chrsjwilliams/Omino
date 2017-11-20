@@ -6,8 +6,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour {
 
     public RectTransform[] handZones;
-    [SerializeField]
-    private Text[] resourceCounters;
+    public Text[] resourceCounters;
     [SerializeField]
     private Image[] drawMeters;
     [SerializeField]

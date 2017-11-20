@@ -35,4 +35,7 @@ public class PrefabDB : ScriptableObject
     [SerializeField] private GameObject floatingText;
     public GameObject FloatingText { get { return floatingText; } }
 
+    [SerializeField] private GameObject resourceToken;
+    public GameObject ResourceToken { get { return resourceToken; } }
+
 }

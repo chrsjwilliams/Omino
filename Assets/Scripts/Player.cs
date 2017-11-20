@@ -354,13 +354,14 @@ public class Player : MonoBehaviour
         if (playerNum == 2)
         {
             spacingMultiplier = -1;
-            offset = new Vector3(-handOffset.x, handOffset.y, handOffset.z);
+            offset = new Vector3(-handOffset.x, -handOffset.y, handOffset.z);
         }
-        offset += Services.GameManager.MainCamera.ScreenToWorldPoint(handZone.transform.position);
+        //offset += Services.GameManager.MainCamera.ScreenToWorldPoint(handZone.transform.position);
+        offset += Services.GameManager.MainCamera.transform.position;
         offset = new Vector3(offset.x, offset.y, 0);
         Vector3 newPos = new Vector3(
                 handSpacing.x * (handIndex / piecesPerHandColumn) * spacingMultiplier,
-                handSpacing.y * (handIndex % piecesPerHandColumn), 0) + offset;
+                handSpacing.y * (handIndex % piecesPerHandColumn) * spacingMultiplier, 0) + offset;
         return newPos;
     }
     #endregion

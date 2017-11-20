@@ -31,6 +31,10 @@ public class Polyomino
     public const float drawAnimDur = 0.5f;
     public const float deathAnimDur = 0.75f;
     public const float deathAnimScaleUp = 1.5f;
+    public const float resourceGainAnimDur = 0.5f;
+    public const float resourceGainAnimStaggerTime = 0.06f;
+    public const float resourceGainAnimNoiseSpeed = 1;
+    public const float resourceGainAnimNoiseMag = 4;
 
     public bool isFortified;
     public List<Blueprint> occupyingStructures { get; protected set; }
@@ -1088,6 +1092,8 @@ public class Polyomino
             resourceGainMeter -= 1;
             Services.GeneralTaskManager.Do(new FloatText("+" + resourcesGained,
                 GetCenterpoint(), owner, 3, 0.75f));
+            Services.GeneralTaskManager.Do(new ResourceGainAnimation(resourcesGained, 
+                holder.transform.position, owner.playerNum));
         }
     }
 }

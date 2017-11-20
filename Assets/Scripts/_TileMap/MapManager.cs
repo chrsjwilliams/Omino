@@ -252,7 +252,7 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < startingStructCount / 2; i++)
         {
             List<Structure> structures = new List<Structure>();
-            if (Services.GameManager.usingMiniBases)
+            if (Services.GameManager.usingMiniBases && i == 0)
             {
                 for (int j = 0; j < 2; j++)
                 {
