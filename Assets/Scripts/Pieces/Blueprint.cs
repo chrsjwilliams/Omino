@@ -174,8 +174,11 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         foreach (Tile tile in tiles)
         {
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-            if (!mapTile.occupyingPiece.occupyingStructures.Contains(this))
+            if (mapTile.occupyingBlueprint == null)
+            {
                 mapTile.occupyingPiece.AddOccupyingStructure(this);
+                mapTile.SetOccupyingBlueprint(this);
+            }
         }
         owner.OnPiecePlaced(this);
     }
@@ -200,6 +203,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (!constituentPieces.Contains(mapTile.occupyingPiece))
                 constituentPieces.Add(mapTile.occupyingPiece);
+            mapTile.SetOccupyingBlueprint(null);
         }
         for (int i = 0; i < constituentPieces.Count; i++)
         {

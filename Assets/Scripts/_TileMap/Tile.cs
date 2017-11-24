@@ -20,6 +20,7 @@ public class Tile : MonoBehaviour
     public Material material { get; set; }
     public Polyomino occupyingPiece { get; private set; }
     public Polyomino pieceParent { get; private set; }
+    public Blueprint occupyingBlueprint { get; private set; }
     public Structure occupyingStructure { get; private set; }
     public SuperDestructorResource occupyingResource { get; private set; }
     private Color prevColor;
@@ -125,6 +126,11 @@ public class Tile : MonoBehaviour
         occupyingResource = resource;
     }
 
+    public void SetOccupyingBlueprint(Blueprint blueprint)
+    {
+        occupyingBlueprint = blueprint;
+    }
+
     public void SetOccupyingStructure(Structure structure)
     {
         occupyingStructure = structure;
@@ -137,7 +143,7 @@ public class Tile : MonoBehaviour
 
     public bool PartOfStructure()
     {
-        return occupyingStructure != null;
+        return occupyingBlueprint != null;
     }
 
     public bool HasResource()
