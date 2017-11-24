@@ -366,7 +366,7 @@ public class Polyomino
         occupyingStructures = new List<Blueprint>();
         isFortified = false;
         cost = units * 10;
-        if (owner != null) baseColor = owner.ActiveTilePrimaryColors[0];
+        if (owner != null) baseColor = owner.ColorScheme[0];
 
         buildingType = BuildingType.NONE;
 
@@ -575,7 +575,7 @@ public class Polyomino
         foreach (Tile tile in tiles)
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
-            if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>(), 0)) return false;
+            if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>())) return false;
             if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied()) return false;
         }
         return true;
@@ -618,6 +618,7 @@ public class Polyomino
             tile.SetGlowColor(color);
         }
     }
+
 
     public void SetTint(Color color, float tintProportion)
     {
@@ -697,6 +698,7 @@ public class Polyomino
         foreach (Tile tile in tiles)
         {
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(null);
+            Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingBlueprint(null);
             tile.OnRemove();
         }
 

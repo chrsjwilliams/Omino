@@ -7,16 +7,10 @@ public class Player : MonoBehaviour
 
     public Coord Coord { get; private set; }
 
-    [SerializeField] private Color[] _activeTilePrimaryColors = new Color[2];
-    public Color[] ActiveTilePrimaryColors
+    [SerializeField] private Color[] colorScheme = new Color[2];
+    public Color[] ColorScheme
     {
-        get { return _activeTilePrimaryColors; }
-    }
-
-    [SerializeField] private Color[] _activeTileSecondaryColors = new Color[2];
-    public Color[] ActiveTileSecondaryColors
-    {
-        get { return _activeTileSecondaryColors; }
+        get { return colorScheme; }
     }
 
     [SerializeField]
@@ -101,13 +95,13 @@ public class Player : MonoBehaviour
 
 
     // Use this for initialization
-    public void Init(Color[] colorScheme, int posOffset)
+    public void Init(Color[] playerColorScheme, int posOffset)
     {
         viewingHand = true;
         playerNum = posOffset + 1;
 
-        _activeTilePrimaryColors[0] = colorScheme[0];
-        _activeTilePrimaryColors[1] = colorScheme[1];
+        colorScheme[0] = playerColorScheme[0];
+        colorScheme[1] = playerColorScheme[1];
 
         handZone = Services.UIManager.handZones[playerNum - 1];
 
@@ -410,11 +404,23 @@ public class Player : MonoBehaviour
         selectedPiece = null;
         piece.SetGlowState(false);
         boardPieces.Add(piece);
+
+        foreach(Polyomino myPiece in boardPieces)
+        {
+            if (Services.MapManager.ConnectedToBase(myPiece, new List<Polyomino>()))
+                myPiece.ShiftColor(colorScheme[0]);
+        }
+
         if (Services.MapManager.CheckForWin(piece)) Services.GameScene.GameWin(this);
     }
 
     public void OnPieceRemoved(Polyomino piece)
     {
+        foreach (Polyomino myPiece in boardPieces)
+        {
+            if (!Services.MapManager.ConnectedToBase(myPiece, new List<Polyomino>()))
+                myPiece.ShiftColor(colorScheme[1]);
+        }
         boardPieces.Remove(piece);
     }
 

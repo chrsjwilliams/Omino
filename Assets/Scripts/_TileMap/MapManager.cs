@@ -303,6 +303,7 @@ public class MapManager : MonoBehaviour
     public void CreateMainBase(Player player, Coord coord)
     {
         Base playerBase = new Base(9, 0, player, true);
+        playerBase.ShiftColor(player.ColorScheme[0]);
         playerBase.MakePhysicalPiece(true);
         playerBase.PlaceAtLocation(coord);
     }
@@ -365,9 +366,9 @@ public class MapManager : MonoBehaviour
         return isValidEye;
     }
 
-	public bool ConnectedToBase(Polyomino piece, List<Polyomino> checkedPieces, int count)
+	public bool ConnectedToBase(Polyomino piece, List<Polyomino> checkedPieces)
     {
-        int calls = count;
+        if (piece.buildingType == BuildingType.BASE) return true;
 
         checkedPieces.Add(piece);
 
@@ -404,8 +405,7 @@ public class MapManager : MonoBehaviour
         }
         for (int i = 0; i < piecesToCheck.Count; i++)
         {
-            calls++;
-            if (ConnectedToBase(piecesToCheck[i], checkedPieces, calls)) return true;
+            if (ConnectedToBase(piecesToCheck[i], checkedPieces)) return true;
         }
         return false;
     }

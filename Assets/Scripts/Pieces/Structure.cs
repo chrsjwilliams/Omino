@@ -98,7 +98,7 @@ public abstract class Structure : Polyomino
             bool connectedToBase = false;
             foreach (Polyomino piece in adjacentPieces)
             {
-                connectedToBase = Services.MapManager.ConnectedToBase(piece, new List<Polyomino>(), 0);
+                connectedToBase = Services.MapManager.ConnectedToBase(piece, new List<Polyomino>());
                 //  Strcuture belongs to no one 2nd check? why?
                 if (connectedToBase && owner == null)
                 {
@@ -121,7 +121,7 @@ public abstract class Structure : Polyomino
                     foreach (Polyomino opponentPieces in recheck)
                     {
                         //  Is the opponent piece connectd to their base
-                        if (Services.MapManager.ConnectedToBase(opponentPieces, new List<Polyomino>(), 0))
+                        if (Services.MapManager.ConnectedToBase(opponentPieces, new List<Polyomino>()))
                             return;
                     }
 
@@ -164,7 +164,7 @@ public abstract class Structure : Polyomino
     protected virtual void OnClaim(Player player)
     {
         owner = player;
-        ShiftColor(owner.ActiveTilePrimaryColors[0]);
+        ShiftColor(owner.ColorScheme[0]);
         Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
     }
 

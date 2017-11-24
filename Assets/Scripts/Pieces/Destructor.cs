@@ -30,7 +30,7 @@ public class Destructor : Polyomino
         foreach (Tile tile in tiles)
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
-            if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>(), 0)) return false;
+            if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>())) return false;
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner) return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece is Structure) return false;

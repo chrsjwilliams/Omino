@@ -89,8 +89,8 @@ public class Tile : MonoBehaviour
 
     public void ToggleAltColor(bool useAlt)
     {
-        if (useAlt) sr.color = pieceParent.owner.ActiveTilePrimaryColors[1];
-        else sr.color = pieceParent.owner.ActiveTilePrimaryColors[0];
+        if (useAlt) sr.color = pieceParent.owner.ColorScheme[1];
+        else sr.color = pieceParent.owner.ColorScheme[0];
     }
 
     public void SetGlowOutLine(int i)
@@ -112,8 +112,8 @@ public class Tile : MonoBehaviour
     {
         _isActive = true;
         if (player == null) sr.color = Services.GameManager.SuperDestructorResourceColor;
-        else if(buildingType == BuildingType.NONE) sr.color = player.ActiveTilePrimaryColors[0];
-        else sr.color = player.ActiveTilePrimaryColors[1];
+        else if(buildingType == BuildingType.NONE) sr.color = player.ColorScheme[0];
+        else sr.color = player.ColorScheme[1];
     }
 
     public void SetOccupyingPiece(Polyomino piece)
