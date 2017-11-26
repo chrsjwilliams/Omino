@@ -679,6 +679,7 @@ public class Polyomino
         Services.AudioManager.CreateTempAudio(Services.Clips.PiecePlaced, 1);
         ToggleCostUIStatus(false);
         holder.localScale = Vector3.one;
+        
     }
 
     //  Have a fortification method
@@ -914,6 +915,7 @@ public class Polyomino
         if (!owner.gameOver && !placed)
         {
             holder.localScale = Vector3.one;
+            holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, -4);
             owner.OnPieceSelected(this);
             OnInputDrag(holder.position);
             ToggleCostUIStatus(false);
@@ -965,6 +967,7 @@ public class Polyomino
                 EnterUnselectedState();
                 ToggleCostUIStatus(true);
             }
+            holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
         }
     }
 
