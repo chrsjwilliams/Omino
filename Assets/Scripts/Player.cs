@@ -386,6 +386,25 @@ public class Player : MonoBehaviour
         OrganizeHand(hand);
     }
 
+    public void ToggleBranch(Polyomino root)
+    {
+        if (Services.MapManager.ConnectedToBase(root, new List<Polyomino>()))
+        {
+            root.ShiftColor(colorScheme[0]);
+        }
+        else
+        {
+            root.ShiftColor(colorScheme[1]);
+        }
+
+        List<Structure> adjStructures = root.GetAdjacentStructures();
+        foreach (Structure structure in adjStructures)
+        {
+            if(structure.owner == this || structure.owner == null)
+                structure.ToggleStructureActivation(this);
+        }    
+    }
+
 
     public void OnPiecePlaced(Polyomino piece)
     {
@@ -407,8 +426,7 @@ public class Player : MonoBehaviour
 
         foreach(Polyomino myPiece in boardPieces)
         {
-            if (Services.MapManager.ConnectedToBase(myPiece, new List<Polyomino>()))
-                myPiece.ShiftColor(colorScheme[0]);
+            ToggleBranch(myPiece);      
         }
 
         if (Services.MapManager.CheckForWin(piece)) Services.GameScene.GameWin(this);
@@ -416,12 +434,11 @@ public class Player : MonoBehaviour
 
     public void OnPieceRemoved(Polyomino piece)
     {
+        boardPieces.Remove(piece);
         foreach (Polyomino myPiece in boardPieces)
         {
-            if (!Services.MapManager.ConnectedToBase(myPiece, new List<Polyomino>()))
-                myPiece.ShiftColor(colorScheme[1]);
+            ToggleBranch(myPiece);
         }
-        boardPieces.Remove(piece);
     }
 
     public void CancelSelectedPiece()

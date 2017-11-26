@@ -520,6 +520,29 @@ public class Polyomino
         return adjacentStructures;
     }
 
+    public List<Polyomino> GetAdjacentPolyominos(Player player)
+    {
+        List<Polyomino> adjacentPieces = new List<Polyomino>();
+        foreach (Tile tile in tiles)
+        {
+            foreach (Coord direction in Coord.Directions())
+            {
+                Coord adjacentCoord = tile.coord.Add(direction);
+                if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
+                {
+                    Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                    if (adjTile.IsOccupied() && !adjacentPieces.Contains(adjTile.occupyingPiece) &&
+                        adjTile.occupyingPiece != this && adjTile.occupyingPiece.owner == player)
+                    {
+                        adjacentPieces.Add(adjTile.occupyingPiece);
+                    }
+                }
+            }
+        }
+
+        return adjacentPieces;
+    }
+
     public List<Polyomino> GetAdjacentPolyominos()
     {
         List<Polyomino> adjacentPieces = new List<Polyomino>();
@@ -687,6 +710,13 @@ public class Polyomino
             {
                 occupyingStructures[i].Remove();
             }
+
+            List<Structure> adjStructures = GetAdjacentStructures();
+            foreach(Structure structure in adjStructures)
+            {
+                structure.ToggleStructureActivation(owner);
+            }
+
             DeathAnimation die = new DeathAnimation(this);
             die.Then(new ActionTask(DestroyThis));
             Services.GeneralTaskManager.Do(die);
@@ -695,6 +725,7 @@ public class Polyomino
         {
             DestroyThis();
         }
+
         foreach (Tile tile in tiles)
         {
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(null);

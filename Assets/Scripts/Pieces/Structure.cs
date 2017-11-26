@@ -83,58 +83,29 @@ public abstract class Structure : Polyomino
 
     public virtual void ToggleStructureActivation(Player player)
     {
-        if (owner == null) OnClaim(player);
-        else
+        //  If I am connected to my owner's base, ownership
+        //  does not need to be transferred
+        List<Polyomino> adjacentPieces = GetAdjacentPolyominos(owner);
+        foreach (Polyomino piece in adjacentPieces)
         {
-            List<Polyomino> adjacentPieces = GetAdjacentPolyominos();
-
-            //  Not connected to a piece anymore
-            if (adjacentPieces.Count < 1)
+            if (Services.MapManager.ConnectedToBase(piece, new List<Polyomino>()) && owner != null) return;
+            else
             {
-                OnClaimLost();
-                return;
-            }
-
-            bool connectedToBase = false;
-            foreach (Polyomino piece in adjacentPieces)
-            {
-                connectedToBase = Services.MapManager.ConnectedToBase(piece, new List<Polyomino>());
-                //  Strcuture belongs to no one 2nd check? why?
-                if (connectedToBase && owner == null)
-                {
-                    OnClaim(piece.owner);
-                    return;
-                }
-                else if (connectedToBase && owner != piece.owner)
-                {
-                    //  Structure belongs to opponent
-                    List<Polyomino> recheck = new List<Polyomino>();
-                    foreach (Polyomino newPiece in adjacentPieces)
-                    {
-                        if (newPiece != piece && !recheck.Contains(newPiece) &&
-                           newPiece.owner != piece.owner)
-                        {
-                            recheck.Add(newPiece);
-                        }
-                    }
-
-                    foreach (Polyomino opponentPieces in recheck)
-                    {
-                        //  Is the opponent piece connectd to their base
-                        if (Services.MapManager.ConnectedToBase(opponentPieces, new List<Polyomino>()))
-                            return;
-                    }
-
-                    OnClaim(piece.owner);
-                    return;
-                }
-            }
-
-            if (!connectedToBase)
-            {
-                OnClaimLost();
+                if (owner != null)
+                    OnClaimLost();
+                break;
             }
         }
+
+        adjacentPieces = GetAdjacentPolyominos(player);
+        foreach (Polyomino piece in adjacentPieces)
+        {
+            if (Services.MapManager.ConnectedToBase(piece, new List<Polyomino>()))
+            {
+                OnClaim(player);
+                return;
+            }
+        }   
     }
 
     public override void MakePhysicalPiece(bool isViewable)
@@ -142,8 +113,7 @@ public abstract class Structure : Polyomino
         base.MakePhysicalPiece(isViewable);
         HideFromInput();
         holder.localScale = Vector3.one;
-        neutralColor = tiles[0].GetComponent<SpriteRenderer>().color;
-        
+        neutralColor = tiles[0].GetComponent<SpriteRenderer>().color;     
     }
 
     public override void PlaceAtCurrentLocation(bool replace)
@@ -164,13 +134,18 @@ public abstract class Structure : Polyomino
     protected virtual void OnClaim(Player player)
     {
         owner = player;
+        if(owner == null)
+        {
+            OnClaimLost();
+            return;
+        }
         ShiftColor(owner.ColorScheme[0]);
         Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
     }
 
     protected virtual void OnClaimLost()
     {
-        SetToNeutralColor();
+        SetToNeutralColor();        
         owner = null;
     }
 }
