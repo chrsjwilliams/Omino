@@ -3,7 +3,9 @@ using System.Collections;
 
 public class MiningDrill : Structure
 {
-    public MiningDrill() : base(7, 0)
+    private const float resourceGainIncrementMultiplier = 0.1f;
+
+    public MiningDrill() : base(0)
     {
         isFortified = true;
         buildingType = BuildingType.MININGDRILL;
@@ -12,12 +14,12 @@ public class MiningDrill : Structure
     protected override void OnClaim(Player player)
     {
         base.OnClaim(player);
-        owner.AugmentResourceGainIncrementFactor(0.2f);
+        owner.AugmentResourceGainIncrementFactor(resourceGainIncrementMultiplier);
     }
 
     protected override void OnClaimLost()
     {
-        owner.AugmentResourceGainIncrementFactor(-0.2f);
+        owner.AugmentResourceGainIncrementFactor(-resourceGainIncrementMultiplier);
         base.OnClaimLost();
     }
 

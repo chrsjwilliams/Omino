@@ -1,25 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AssemblyLine : Structure
+public class FortifiedSteel : Structure
 {
-    private const float drawRateMultiplier = 0.1f;
-
-    public AssemblyLine() : base(1)
+    public FortifiedSteel() : base(2)
     {
+        buildingType = BuildingType.FORTIFIEDSTEEL;
         isFortified = true;
-        buildingType = BuildingType.ASSEMBLYLINE;
     }
 
     protected override void OnClaim(Player player)
     {
         base.OnClaim(player);
-        owner.AugmentDrawRateFactor(drawRateMultiplier);
+        owner.ToggleAutoFortify(true);
     }
 
     protected override void OnClaimLost()
     {
-        owner.AugmentDrawRateFactor(-drawRateMultiplier);
+        owner.ToggleAutoFortify(false);
         base.OnClaimLost();
     }
 
@@ -27,6 +25,6 @@ public class AssemblyLine : Structure
     {
         base.SetIconSprite();
         iconSr.enabled = true;
-        iconSr.sprite = Services.UIManager.gearIcon;
+        iconSr.sprite = Services.UIManager.steelIcon;
     }
 }

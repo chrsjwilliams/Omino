@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum BuildingType
-{ BASE,FACTORY, MINE, STRUCTURE,NONE, BOMBFACTORY, MININGDRILL, ASSEMBLYLINE }
+{ BASE,FACTORY, MINE, STRUCTURE,NONE, BOMBFACTORY, MININGDRILL, ASSEMBLYLINE, FORTIFIEDSTEEL }
 
 
 public class Polyomino
@@ -483,8 +483,10 @@ public class Polyomino
 
         if (owner != null)
         {
+            bool autoFortify = owner.autoFortify;
             owner.OnPiecePlaced(this);
             if (!replace) CheckForFortification(false);
+            if (autoFortify && !isFortified) Services.MapManager.FortifyPiece(this);
             List<Structure> adjacentStructures = GetAdjacentStructures();
             if (adjacentStructures.Count > 0)
             {

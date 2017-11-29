@@ -6,29 +6,42 @@ public abstract class Structure : Polyomino
 {
     protected bool isActivated;
     private Color neutralColor;
-    protected static int[,,] structure = new int[2, 5, 5]
+    protected static int[,,] structure = new int[3, 5, 5]
     {   
             //  These hashes represent what the piece will look like
+            // MINING DRILL
             //   ###  
-            //    # 
             //    #  
             //   
             {
                 { 0,0,0,0,0 },
-                { 0,1,1,1,0 },
-                { 0,0,1,0,0 },
-                { 0,0,1,0,0 },
+                { 0,0,0,0,0 },
+                { 0,1,1,0,0 },
+                { 0,0,0,0,0 },
                 { 0,0,0,0,0 }
             },
             //  These hashes represent what the piece will look like
-            //   #
+            // ASSEMBLY LINE
+            //  #
             //  ###
-            //   # 
+            //    
             {
                 { 0,0,0,0,0 },
-                { 0,0,1,0,0 },
-                { 0,1,1,1,0 },
-                { 0,0,1,0,0 },
+                { 0,0,0,0,0 },
+                { 0,1,1,0,0 },
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 }
+            },
+            //  These hashes represent what the piece will look like
+            // FORTIFIED STEEL
+            //  ##
+            //  ##
+            //    
+            {
+                { 0,0,0,0,0 },
+                { 0,0,0,0,0 },
+                { 0,1,1,0,0 },
+                { 0,0,0,0,0 },
                 { 0,0,0,0,0 }
             }
     };
@@ -38,39 +51,20 @@ public abstract class Structure : Polyomino
         index = _index;
         units = _units;
         isActivated = false;
-        
         placed = true;
-
-        switch (_units)
-        {
-            case 1:
-                holderName = "StructureHolder";
-                piece = structure;
-                buildingType = BuildingType.STRUCTURE;
-                break;
-            default:
-                break;
-        }
+        holderName = "StructureHolder";
     }
 
-    public Structure(int _units, int _index) : base(_units, _index, null)
+    public Structure(int _index) : base(4, _index, null)
     {
         index = _index;
-        units = _units;
         isActivated = false;
         isFortified = true;
         placed = true;
 
-        switch (_units)
-        {
-            case 7:
-                holderName = "StructureHolder";
-                piece = structure;
-                buildingType = BuildingType.STRUCTURE;
-                break;
-            default:
-                break;
-        }
+        holderName = "StructureHolder";
+        piece = structure;
+
     }
 
     public void SetToNeutralColor()

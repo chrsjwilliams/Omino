@@ -25,6 +25,7 @@ public class UIManager : MonoBehaviour {
     public Sprite baseIcon;
     public Sprite drillIcon;
     public Sprite gearIcon;
+    public Sprite steelIcon;
     private bool scrollingInBanners;
     private Player winner;
     private float bannerScrollTimeElapsed;

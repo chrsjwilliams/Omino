@@ -92,6 +92,7 @@ public class Player : MonoBehaviour
     }
     public float resourceGainIncrementFactor { get; private set; }
     public float drawRateFactor { get; private set; }
+    public bool autoFortify { get; private set; }
 
 
     // Use this for initialization
@@ -457,16 +458,6 @@ public class Player : MonoBehaviour
         selectedPiece = null;
     }
 
-    //public void ToggleMineCount(int newMineCount)
-    //{
-    //    mineCount += newMineCount;
-    //}
-
-    //public void ToggleFactoryCount(int newFactoryCount)
-    //{
-    //    factoryCount += newFactoryCount;
-    //}
-
     public void OnGameOver()
     {
         gameOver = true;
@@ -496,6 +487,11 @@ public class Player : MonoBehaviour
     public void AugmentResourceGainIncrementFactor(float factorChangeIncrement)
     {
         resourceGainIncrementFactor += factorChangeIncrement;
+    }
+
+    public void ToggleAutoFortify(bool autoFortify_)
+    {
+        autoFortify = autoFortify_;
     }
 
     public void GainOwnership(Structure structure)

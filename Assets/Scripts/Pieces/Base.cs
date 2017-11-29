@@ -4,7 +4,7 @@ using System.Collections;
 public class Base : Structure
 {
     public bool mainBase { get; private set; }
-    public Base(int _units, int _index, Player _player, bool _mainBase) : base(_units, _index, _player)
+    public Base(Player _player, bool _mainBase) : base(9, 0, _player)
     {
         mainBase = _mainBase;
         owner = _player;

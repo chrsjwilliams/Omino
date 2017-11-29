@@ -129,9 +129,9 @@ public class MapManager : MonoBehaviour
         return null;
     }
 
-    List<Structure> GenerateStructureAndMirroredStructure(BuildingType type)
+    List<Structure> GenerateStructure(BuildingType type, bool mirrored)
     {
-        Coord structCoord = GenerateValidStructureCoord();
+        Coord structCoord = GenerateValidStructureCoord(mirrored);
         Coord mirroredCoord = MirroredCoord(structCoord);
         List<Structure> structures = new List<Structure>();
         if (structCoord != new Coord(-1, -1))
@@ -142,8 +142,8 @@ public class MapManager : MonoBehaviour
             switch (type)
             {
                 case BuildingType.BASE:
-                    structure = new Base(9, 0, null, false);
-                    mirroredStructure = new Base(9, 0, null, false);
+                    structure = new Base(null, false);
+                    mirroredStructure = new Base(null, false);
                     break;
                 case BuildingType.MININGDRILL:
                     structure = new MiningDrill();
@@ -153,25 +153,31 @@ public class MapManager : MonoBehaviour
                     structure = new AssemblyLine();
                     mirroredStructure = new AssemblyLine();
                     break;
+                case BuildingType.FORTIFIEDSTEEL:
+                    structure = new FortifiedSteel();
+                    mirroredStructure = new FortifiedSteel();
+                    break;
                 default:
                     return null;
             }
             structure.MakePhysicalPiece(true);
-            mirroredStructure.MakePhysicalPiece(true);
-
             for (int i = 0; i < numRotations; i++)
             {
                 structure.Rotate();
             }
-            for (int i = 0; i < numRotations + 2; i++)
+            structure.PlaceAtLocation(structCoord);
+            structures.Add(structure);
+            if (mirrored)
             {
-                mirroredStructure.Rotate();
+                mirroredStructure.MakePhysicalPiece(true);
+                for (int i = 0; i < numRotations + 2; i++)
+                {
+                    mirroredStructure.Rotate();
+                }
+                mirroredStructure.PlaceAtLocation(mirroredCoord);
+                structures.Add(mirroredStructure);
             }
 
-            structure.PlaceAtLocation(structCoord);
-            mirroredStructure.PlaceAtLocation(mirroredCoord);
-            structures.Add(structure);
-            structures.Add(mirroredStructure);
             return structures;
         }
         return null;
@@ -192,7 +198,7 @@ public class MapManager : MonoBehaviour
         return nullCoord;
     }
 
-    Coord GenerateValidStructureCoord()
+    Coord GenerateValidStructureCoord(bool mirrored)
     {
         Coord nullCoord = new Coord(-1, -1);
         for (int i = 0; i < procGenTriesMax; i++)
@@ -200,8 +206,8 @@ public class MapManager : MonoBehaviour
             Coord candidateCoord = GenerateRandomCoord();
             Coord mirroredCoord = MirroredCoord(candidateCoord);
             if (IsStructureCoordValid(candidateCoord) &&
-                IsStructureCoordValid(mirroredCoord) &&
-                candidateCoord.Distance(mirroredCoord) >= structDistMin)
+                (!mirrored || (IsStructureCoordValid(mirroredCoord) &&
+                candidateCoord.Distance(mirroredCoord) >= structDistMin)))
                 return candidateCoord;
         }
         return nullCoord;
@@ -246,36 +252,39 @@ public class MapManager : MonoBehaviour
         List<BuildingType> structureTypes = new List<BuildingType>()
         {
             BuildingType.MININGDRILL,
-            BuildingType.ASSEMBLYLINE
+            BuildingType.ASSEMBLYLINE,
+            BuildingType.FORTIFIEDSTEEL
         };
 
-        for (int i = 0; i < startingStructCount / 2; i++)
+        if (Services.GameManager.usingMiniBases)
+        {
+            for (int j = 0; j < 2; j++)
+            {
+                Base cornerBase = new Base(null, false);
+                cornerBase.MakePhysicalPiece(true);
+                Coord location;
+                if (j == 0)
+                {
+                    location = new Coord(MapWidth - 2, 1);
+                }
+                else
+                {
+                    location = new Coord(1, MapLength - 2);
+                }
+                cornerBase.PlaceAtLocation(location);
+                structuresOnMap.Add(cornerBase);
+            }
+        }
+
+        for (int i = 0; i < startingStructCount; i++)
         {
             List<Structure> structures = new List<Structure>();
-            if (Services.GameManager.usingMiniBases && i == 0)
-            {
-                for (int j = 0; j < 2; j++)
-                {
-                    Base cornerBase = new Base(9, 0, null, false);
-                    structures.Add(cornerBase);
-                    cornerBase.MakePhysicalPiece(true);
-                    Coord location;
-                    if(j == 0)
-                    {
-                        location = new Coord(MapWidth - 2, 1);
-                    }
-                    else
-                    {
-                        location = new Coord(1, MapLength - 2);
-                    }
-                    cornerBase.PlaceAtLocation(location);
-                }
-            }
+            
             if(Services.GameManager.usingStructures)
             {
                 BuildingType type;
-                type = structureTypes[Mathf.Abs((i - 1) % structureTypes.Count)];
-                structures = GenerateStructureAndMirroredStructure(type);
+                type = structureTypes[i % structureTypes.Count];
+                structures = GenerateStructure(type, false);
                 if (structures == null)
                 {
                     Debug.Log("stopping short after " + structuresOnMap.Count + "structures");
@@ -302,7 +311,7 @@ public class MapManager : MonoBehaviour
 
     public void CreateMainBase(Player player, Coord coord)
     {
-        Base playerBase = new Base(9, 0, player, true);
+        Base playerBase = new Base(player, true);
         playerBase.ShiftColor(player.ColorScheme[0]);
         playerBase.MakePhysicalPiece(true);
         playerBase.PlaceAtLocation(coord);
@@ -471,27 +480,37 @@ public class MapManager : MonoBehaviour
         {
             piecesToFortify.Add(piece);
         }
-
-        Player owner = piece.owner;
-
         foreach(Polyomino polyomino in piecesToFortify)
         {
-            List<Tile> tempTiles = polyomino.tiles;
-            List<Blueprint> prevOccupyingStructures = polyomino.occupyingStructures;
-            polyomino.Remove(true);
+            FortifyPiece(polyomino);
+        }
+    }
 
-            foreach (Tile tile in tempTiles)
+    public void FortifyPiece(Polyomino piece)
+    {
+        List<Tile> tempTiles = piece.tiles;
+        List<Blueprint> prevOccupyingStructures = piece.occupyingStructures;
+        piece.Remove(true);
+
+        foreach (Tile tile in tempTiles)
+        {
+            Polyomino fortifiedMonomino = new Polyomino(1, 0, piece.owner);
+            fortifiedMonomino.isFortified = true;
+            fortifiedMonomino.MakePhysicalPiece(true);
+            fortifiedMonomino.PlaceAtLocation(tile.coord, true);
+
+            for (int i = 0; i < prevOccupyingStructures.Count; i++)
             {
-                Polyomino fortifiedMonomino = new Polyomino(1, 0, owner);
-                fortifiedMonomino.isFortified = true;
-                fortifiedMonomino.MakePhysicalPiece(true);
-                fortifiedMonomino.PlaceAtLocation(tile.coord, true);
-                for (int i = 0; i < prevOccupyingStructures.Count; i++)
+                foreach(Tile structTile in prevOccupyingStructures[i].tiles)
                 {
-                    fortifiedMonomino.AddOccupyingStructure(prevOccupyingStructures[i]);
+                    if (structTile.coord == tile.coord)
+                    {
+                        fortifiedMonomino.AddOccupyingStructure(prevOccupyingStructures[i]);
+                        break;
+                    }
                 }
-                //fortifiedMonomino.ToggleAltColor(true);
             }
+            //fortifiedMonomino.ToggleAltColor(true);
         }
     }
 }
