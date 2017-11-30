@@ -112,8 +112,9 @@ public class Tile : MonoBehaviour
     {
         _isActive = true;
         if (player == null) sr.color = Services.GameManager.SuperDestructorResourceColor;
-        else if(buildingType == BuildingType.NONE) sr.color = player.ColorScheme[0];
-        else sr.color = player.ColorScheme[1];
+        //else if(buildingType == BuildingType.NONE)
+         else sr.color = player.ColorScheme[0];
+        //else sr.color = player.ColorScheme[1];
     }
 
     public void SetOccupyingPiece(Polyomino piece)

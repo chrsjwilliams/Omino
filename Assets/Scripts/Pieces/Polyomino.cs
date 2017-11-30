@@ -68,6 +68,7 @@ public class Polyomino
     protected TextMesh costText;
     private bool affordable;
     private bool isVisible;
+    public bool connected { get; private set; }
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -485,16 +486,16 @@ public class Polyomino
         {
             bool autoFortify = owner.autoFortify;
             owner.OnPiecePlaced(this);
-            if (!replace) CheckForFortification(false);
+            if (!replace && !autoFortify) CheckForFortification(false);
             if (autoFortify && !isFortified) Services.MapManager.FortifyPiece(this);
-            List<Structure> adjacentStructures = GetAdjacentStructures();
-            if (adjacentStructures.Count > 0)
-            {
-                foreach (Structure structure in adjacentStructures)
-                {
-                    structure.ToggleStructureActivation(owner);
-                }
-            }
+            //List<Structure> adjacentStructures = GetAdjacentStructures();
+            //if (adjacentStructures.Count > 0)
+            //{
+            //    foreach (Structure structure in adjacentStructures)
+            //    {
+            //        structure.ToggleStructureActivation(owner);
+            //    }
+            //}
         }
     }
 
@@ -597,10 +598,21 @@ public class Polyomino
         //CONDITIONS:
         //is contiguous with a structure connected to either the base or a fortification
         //doesn't overlap with any existing pieces or is a destructor\
+        List<Polyomino> adjacentPieces = GetAdjacentPolyominos(owner);
+        bool connectedToBase = false;
+        for (int i = 0; i < adjacentPieces.Count; i++)
+        {
+            if (adjacentPieces[i].connected || adjacentPieces[i] is Structure)
+            {
+                connectedToBase = true;
+                break;
+            }
+        }
+        if (!connectedToBase) return false;
         foreach (Tile tile in tiles)
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
-            if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>())) return false;
+            //if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>())) return false;
             if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied()) return false;
         }
         return true;
@@ -1133,5 +1145,18 @@ public class Polyomino
             Services.GeneralTaskManager.Do(new ResourceGainAnimation(resourcesGained, 
                 holder.transform.position, owner.playerNum));
         }
+    }
+
+    public void TogglePieceConnectedness(bool connected_)
+    {
+        if (connected_)
+        {
+            ShiftColor(owner.ColorScheme[0]);
+        }
+        else
+        {
+            ShiftColor(owner.ColorScheme[1]);
+        }
+        connected = connected_;
     }
 }

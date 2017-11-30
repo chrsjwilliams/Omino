@@ -44,6 +44,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int piecesPerHandColumn;
     public RectTransform handZone { get; private set; }
+    public Base mainBase;
     //[SerializeField]
     //private float factoryPlayRateIncrement;
     //private int factoryCount;
@@ -72,7 +73,7 @@ public class Player : MonoBehaviour
     //private float playMeter;
     public bool gameOver { get; private set; }
     private UITabs uiTabs;
-    private List<Polyomino> boardPieces;
+    public List<Polyomino> boardPieces { get; private set; }
     [SerializeField]
     private int startingResources;
     [SerializeField]
@@ -424,11 +425,11 @@ public class Player : MonoBehaviour
         selectedPiece = null;
         piece.SetGlowState(false);
         boardPieces.Add(piece);
-
-        for (int i = boardPieces.Count - 1; i >= 0; i--)
-        {
-            ToggleBranch(boardPieces[i]);
-        }
+        Services.MapManager.DetermineConnectedness(this);
+        //for (int i = boardPieces.Count - 1; i >= 0; i--)
+        //{
+        //    ToggleBranch(boardPieces[i]);
+        //}
 
         if (Services.MapManager.CheckForWin(piece)) Services.GameScene.GameWin(this);
     }
@@ -436,10 +437,11 @@ public class Player : MonoBehaviour
     public void OnPieceRemoved(Polyomino piece)
     {
         boardPieces.Remove(piece);
-        for (int i = boardPieces.Count - 1; i >= 0; i--)
-        {
-            ToggleBranch(boardPieces[i]);
-        }
+        Services.MapManager.DetermineConnectedness(this);
+        //for (int i = boardPieces.Count - 1; i >= 0; i--)
+        //{
+        //    ToggleBranch(boardPieces[i]);
+        //}
     }
 
     public void CancelSelectedPiece()

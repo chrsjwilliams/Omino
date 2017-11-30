@@ -312,6 +312,7 @@ public class MapManager : MonoBehaviour
     public void CreateMainBase(Player player, Coord coord)
     {
         Base playerBase = new Base(player, true);
+        player.mainBase = playerBase;
         playerBase.ShiftColor(player.ColorScheme[0]);
         playerBase.MakePhysicalPiece(true);
         playerBase.PlaceAtLocation(coord);
@@ -373,6 +374,68 @@ public class MapManager : MonoBehaviour
         }
 
         return isValidEye;
+    }
+
+    public void DetermineConnectedness(Player player)
+    {
+        Base mainBase = player.mainBase;
+        List<Polyomino> connectedPieces = new List<Polyomino>();
+        List<Polyomino> frontier = new List<Polyomino>();
+        connectedPieces.Add(mainBase);
+        frontier.AddRange(mainBase.GetAdjacentPolyominos());
+        while (frontier.Count > 0)
+        {
+            List<Polyomino> frontierQueue = new List<Polyomino>();
+            for (int i = frontier.Count - 1; i >= 0; i--)
+            {
+                Polyomino piece = frontier[i];
+                if (!connectedPieces.Contains(piece) && 
+                    ((piece is Structure && 
+                    (piece.owner == player || piece.owner == null)) || piece.owner == player))
+                {
+                    connectedPieces.Add(piece);
+                    frontierQueue.AddRange(piece.GetAdjacentPolyominos());
+                }
+                frontier.Remove(piece);
+            }
+            frontier.AddRange(frontierQueue);
+        }
+        Debug.Log(connectedPieces.Count + " connected pieces at time " + Time.time);
+
+        for (int i = player.boardPieces.Count - 1; i >= 0; i--)
+        {
+            Polyomino piece = player.boardPieces[i];
+            if (!connectedPieces.Contains(piece))
+            {
+                if(piece is Structure)
+                {
+                    Structure structure = piece as Structure;
+                    structure.OnClaimLost();
+                }
+                else
+                {
+                    piece.TogglePieceConnectedness(false);
+                }
+            }
+        }
+        for (int i = 0; i < connectedPieces.Count; i++)
+        {
+            Polyomino piece = connectedPieces[i];
+            if ((!piece.connected && !(piece is Structure)) || 
+                (piece is Structure && piece.owner == null))
+            {
+                if(piece is Structure)
+                {
+                    Structure structure = piece as Structure;
+                    structure.OnClaim(player);
+                    Debug.Log("claiming structure");
+                }
+                else
+                {
+                    piece.TogglePieceConnectedness(true);
+                }
+            }
+        }
     }
 
 	public bool ConnectedToBase(Polyomino piece, List<Polyomino> checkedPieces)

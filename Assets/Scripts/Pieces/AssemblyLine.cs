@@ -11,13 +11,13 @@ public class AssemblyLine : Structure
         buildingType = BuildingType.ASSEMBLYLINE;
     }
 
-    protected override void OnClaim(Player player)
+    public override void OnClaim(Player player)
     {
         base.OnClaim(player);
         owner.AugmentDrawRateFactor(drawRateMultiplier);
     }
 
-    protected override void OnClaimLost()
+    public override void OnClaimLost()
     {
         owner.AugmentDrawRateFactor(-drawRateMultiplier);
         base.OnClaimLost();

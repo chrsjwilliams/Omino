@@ -125,7 +125,7 @@ public abstract class Structure : Polyomino
         ToggleCostUIStatus(false);
     }
 
-    protected virtual void OnClaim(Player player)
+    public virtual void OnClaim(Player player)
     {
         owner = player;
         if(owner == null)
@@ -135,11 +135,13 @@ public abstract class Structure : Polyomino
         }
         ShiftColor(owner.ColorScheme[0]);
         Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
+        owner.GainOwnership(this);
     }
 
-    protected virtual void OnClaimLost()
+    public virtual void OnClaimLost()
     {
-        SetToNeutralColor();        
+        SetToNeutralColor();
+        owner.LoseOwnership(this);
         owner = null;
     }
 }

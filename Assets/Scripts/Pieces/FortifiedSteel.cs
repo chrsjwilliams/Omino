@@ -9,13 +9,13 @@ public class FortifiedSteel : Structure
         isFortified = true;
     }
 
-    protected override void OnClaim(Player player)
+    public override void OnClaim(Player player)
     {
         base.OnClaim(player);
         owner.ToggleAutoFortify(true);
     }
 
-    protected override void OnClaimLost()
+    public override void OnClaimLost()
     {
         owner.ToggleAutoFortify(false);
         base.OnClaimLost();
