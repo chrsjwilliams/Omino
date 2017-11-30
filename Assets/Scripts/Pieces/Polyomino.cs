@@ -486,8 +486,13 @@ public class Polyomino
         {
             bool autoFortify = owner.autoFortify;
             owner.OnPiecePlaced(this);
-            if (!replace && !autoFortify) CheckForFortification(false);
-            if (autoFortify && !isFortified) Services.MapManager.FortifyPiece(this);
+            bool fortifiedFromCheck = false;
+            if (!replace)
+            {
+                fortifiedFromCheck = CheckForFortification(false);
+            }
+            if (autoFortify && !isFortified && !fortifiedFromCheck)
+                Services.MapManager.FortifyPiece(this);
             //List<Structure> adjacentStructures = GetAdjacentStructures();
             //if (adjacentStructures.Count > 0)
             //{
@@ -569,7 +574,7 @@ public class Polyomino
         return adjacentPieces;
     }
 
-    public virtual void CheckForFortification(bool isBeingDestroyed)
+    public virtual bool CheckForFortification(bool isBeingDestroyed)
     {
         List<Tile> emptyAdjacentTiles = new List<Tile>();
 
@@ -589,7 +594,7 @@ public class Polyomino
             }
         }
 
-        Services.MapManager.CheckForFortification(this, emptyAdjacentTiles, isBeingDestroyed);
+        return Services.MapManager.CheckForFortification(this, emptyAdjacentTiles, isBeingDestroyed);
     }
 
     public virtual bool IsPlacementLegal()
@@ -930,6 +935,7 @@ public class Polyomino
             holder.localScale = Vector3.one;
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, -4);
             owner.OnPieceSelected(this);
+            IncrementSortingOrder(20);
             OnInputDrag(holder.position);
             ToggleCostUIStatus(false);
             Services.AudioManager.CreateTempAudio(Services.Clips.PiecePicked, 1);
@@ -972,7 +978,6 @@ public class Polyomino
             if (IsPlacementLegal() && affordable && !owner.gameOver)
             {
                 PlaceAtCurrentLocation();
-                
             }
             else
             {
@@ -980,6 +985,7 @@ public class Polyomino
                 EnterUnselectedState();
                 ToggleCostUIStatus(true);
             }
+            IncrementSortingOrder(-20);
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
         }
     }
@@ -1013,6 +1019,11 @@ public class Polyomino
                 holder.position.z));
         }
 
+        SetLegalityGlowStatus();
+    }
+
+    void SetLegalityGlowStatus()
+    {
         if (affordable || this is Blueprint)
         {
             bool isLegal = IsPlacementLegal();
@@ -1077,6 +1088,7 @@ public class Polyomino
             tile.transform.position = new Vector3(tile.coord.x, tile.coord.y);
         }
         SetIconSprite();
+        SetLegalityGlowStatus();
     }
 
     public virtual void PlaceAtLocation(Coord centerCoordLocation)
@@ -1161,5 +1173,11 @@ public class Polyomino
         {
             occupyingBlueprints[i].TogglePieceConnectedness(connected_);
         }
+    }
+
+    void IncrementSortingOrder(int increment)
+    {
+        foreach (Tile tile in tiles) tile.IncrementSortingOrder(increment);
+        iconSr.sortingOrder += increment;
     }
 }

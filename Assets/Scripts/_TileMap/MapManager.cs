@@ -506,7 +506,7 @@ public class MapManager : MonoBehaviour
         return false;
     }
 
-    public void CheckForFortification(Polyomino piece, List<Tile> emptyTiles, bool isBeingDestroyed)
+    public bool CheckForFortification(Polyomino piece, List<Tile> emptyTiles, bool isBeingDestroyed)
     {
         List<Polyomino> piecesToFortify = new List<Polyomino>();
 
@@ -546,6 +546,8 @@ public class MapManager : MonoBehaviour
         {
             FortifyPiece(polyomino);
         }
+
+        return piecesToFortify.Count > 0;
     }
 
     public void FortifyPiece(Polyomino piece)
