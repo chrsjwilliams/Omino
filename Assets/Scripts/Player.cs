@@ -425,9 +425,9 @@ public class Player : MonoBehaviour
         piece.SetGlowState(false);
         boardPieces.Add(piece);
 
-        foreach(Polyomino myPiece in boardPieces)
+        for (int i = boardPieces.Count - 1; i >= 0; i--)
         {
-            ToggleBranch(myPiece);      
+            ToggleBranch(boardPieces[i]);
         }
 
         if (Services.MapManager.CheckForWin(piece)) Services.GameScene.GameWin(this);
@@ -436,9 +436,9 @@ public class Player : MonoBehaviour
     public void OnPieceRemoved(Polyomino piece)
     {
         boardPieces.Remove(piece);
-        foreach (Polyomino myPiece in boardPieces)
+        for (int i = boardPieces.Count - 1; i >= 0; i--)
         {
-            ToggleBranch(myPiece);
+            ToggleBranch(boardPieces[i]);
         }
     }
 
