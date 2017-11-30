@@ -316,6 +316,7 @@ public class MapManager : MonoBehaviour
         playerBase.ShiftColor(player.ColorScheme[0]);
         playerBase.MakePhysicalPiece(true);
         playerBase.PlaceAtLocation(coord);
+        playerBase.TogglePieceConnectedness(true);
     }
 
     public Tile GetRandomTile()
@@ -400,12 +401,11 @@ public class MapManager : MonoBehaviour
             }
             frontier.AddRange(frontierQueue);
         }
-        Debug.Log(connectedPieces.Count + " connected pieces at time " + Time.time);
 
         for (int i = player.boardPieces.Count - 1; i >= 0; i--)
         {
             Polyomino piece = player.boardPieces[i];
-            if (!connectedPieces.Contains(piece))
+            if (!connectedPieces.Contains(piece) && !(piece is Blueprint))
             {
                 if(piece is Structure)
                 {
@@ -428,7 +428,6 @@ public class MapManager : MonoBehaviour
                 {
                     Structure structure = piece as Structure;
                     structure.OnClaim(player);
-                    Debug.Log("claiming structure");
                 }
                 else
                 {
@@ -552,7 +551,7 @@ public class MapManager : MonoBehaviour
     public void FortifyPiece(Polyomino piece)
     {
         List<Tile> tempTiles = piece.tiles;
-        List<Blueprint> prevOccupyingStructures = piece.occupyingStructures;
+        List<Blueprint> prevOccupyingStructures = piece.occupyingBlueprints;
         piece.Remove(true);
 
         foreach (Tile tile in tempTiles)
@@ -568,7 +567,7 @@ public class MapManager : MonoBehaviour
                 {
                     if (structTile.coord == tile.coord)
                     {
-                        fortifiedMonomino.AddOccupyingStructure(prevOccupyingStructures[i]);
+                        fortifiedMonomino.AddOccupyingBlueprint(prevOccupyingStructures[i]);
                         break;
                     }
                 }

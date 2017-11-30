@@ -142,7 +142,7 @@ public class Tile : MonoBehaviour
         return occupyingPiece != null;
     }
 
-    public bool PartOfStructure()
+    public bool PartOfExistingBlueprint()
     {
         return occupyingBlueprint != null;
     }

@@ -37,7 +37,7 @@ public class Polyomino
     public const float resourceGainAnimNoiseMag = 4;
 
     public bool isFortified;
-    public List<Blueprint> occupyingStructures { get; protected set; }
+    public List<Blueprint> occupyingBlueprints { get; protected set; }
     protected Image ringTimer;
     protected float drawMeter_;
     protected float drawMeter
@@ -364,7 +364,7 @@ public class Polyomino
         units = _units;
         owner = _player;
 
-        occupyingStructures = new List<Blueprint>();
+        occupyingBlueprints = new List<Blueprint>();
         isFortified = false;
         cost = units * 10;
         if (owner != null) baseColor = owner.ColorScheme[0];
@@ -640,7 +640,6 @@ public class Polyomino
     public void TurnOffGlow()
     {
         //if (placed && isFortified) return;
-
         foreach (Tile tile in tiles)
         {
             tile.SetGlowOutLine(0);
@@ -721,9 +720,9 @@ public class Polyomino
         Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
         if (!replace)
         {
-            for (int i = occupyingStructures.Count - 1; i >= 0; i--)
+            for (int i = occupyingBlueprints.Count - 1; i >= 0; i--)
             {
-                occupyingStructures[i].Remove();
+                occupyingBlueprints[i].Remove();
             }
 
             List<Structure> adjStructures = GetAdjacentStructures();
@@ -780,14 +779,14 @@ public class Polyomino
         }
     }
 
-    public void AddOccupyingStructure(Blueprint blueprint)
+    public void AddOccupyingBlueprint(Blueprint blueprint)
     {
-        occupyingStructures.Add(blueprint);
+        occupyingBlueprints.Add(blueprint);
     }
 
     public void RemoveOccupyingStructure(Blueprint blueprint)
     {
-        occupyingStructures.Remove(blueprint);
+        occupyingBlueprints.Remove(blueprint);
     }
 
     public virtual void MakePhysicalPiece(bool isViewable)
@@ -1014,7 +1013,7 @@ public class Polyomino
                 holder.position.z));
         }
 
-        if (affordable)
+        if (affordable || this is Blueprint)
         {
             bool isLegal = IsPlacementLegal();
             if (isLegal)
@@ -1158,5 +1157,9 @@ public class Polyomino
             ShiftColor(owner.ColorScheme[1]);
         }
         connected = connected_;
+        for (int i = 0; i < occupyingBlueprints.Count; i++)
+        {
+            occupyingBlueprints[i].TogglePieceConnectedness(connected_);
+        }
     }
 }

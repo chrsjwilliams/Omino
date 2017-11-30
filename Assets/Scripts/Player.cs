@@ -157,7 +157,7 @@ public class Player : MonoBehaviour
 
             for (int i = 0; i < boardPieces.Count; i++)
             {
-                boardPieces[i].Update();
+                if(boardPieces[i].connected) boardPieces[i].Update();
             }
 
             for (int i = 0; i < hand.Count; i++)

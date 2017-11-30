@@ -74,7 +74,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     protected bool PiecesShareOwner(Tile tile)
     {
         if (tile.occupyingPiece == null) return false;
-        if (tile.occupyingPiece.buildingType == BuildingType.BASE) return false;
+        if (tile.occupyingPiece is Structure) return false;
         return owner == tile.occupyingPiece.owner;
     }
 
@@ -91,7 +91,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
             if (!PiecesShareOwner(Services.MapManager.Map[tile.coord.x, tile.coord.y])) return false;
-            if (Services.MapManager.Map[tile.coord.x, tile.coord.y].PartOfStructure()) return false;
+            if (Services.MapManager.Map[tile.coord.x, tile.coord.y].PartOfExistingBlueprint()) return false;
             if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied())
             {
                 isLegal = true;
@@ -176,7 +176,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.occupyingBlueprint == null)
             {
-                mapTile.occupyingPiece.AddOccupyingStructure(this);
+                mapTile.occupyingPiece.AddOccupyingBlueprint(this);
                 mapTile.SetOccupyingBlueprint(this);
             }
         }
@@ -229,6 +229,14 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         //        break;
         //}
         Services.AudioManager.CreateTempAudio(Services.Clips.BlueprintPlaced, 1);
+        foreach(Tile tile in tiles)
+        {
+            if(Services.MapManager.Map[tile.coord.x, tile.coord.y].occupyingPiece.connected)
+            {
+                TogglePieceConnectedness(true);
+                break;
+            }
+        }
     }
 
     public override void OnInputUp()
