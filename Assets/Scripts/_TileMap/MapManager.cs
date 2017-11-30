@@ -395,7 +395,14 @@ public class MapManager : MonoBehaviour
                     (piece.owner == player || piece.owner == null)) || piece.owner == player))
                 {
                     connectedPieces.Add(piece);
-                    frontierQueue.AddRange(piece.GetAdjacentPolyominos());
+                    List<Polyomino> adjacentPieces = piece.GetAdjacentPolyominos();
+                    for (int j = 0; j < adjacentPieces.Count; j++)
+                    {
+                        Polyomino adjacentPiece = adjacentPieces[j];
+                        if (!frontier.Contains(adjacentPiece) && 
+                            !frontierQueue.Contains(adjacentPiece))
+                            frontierQueue.Add(adjacentPiece);
+                    }
                 }
                 frontier.Remove(piece);
             }

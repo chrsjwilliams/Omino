@@ -207,7 +207,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         }
         for (int i = 0; i < constituentPieces.Count; i++)
         {
-            constituentPieces[i].RemoveOccupyingStructure(this);
+            constituentPieces[i].RemoveOccupyingBlueprint(this);
         }
         owner.OnPieceRemoved(this);
         GameObject.Destroy(holder.gameObject);

@@ -730,11 +730,11 @@ public class Polyomino
                 occupyingBlueprints[i].Remove();
             }
 
-            List<Structure> adjStructures = GetAdjacentStructures();
-            foreach(Structure structure in adjStructures)
-            {
-                structure.ToggleStructureActivation(owner);
-            }
+            //List<Structure> adjStructures = GetAdjacentStructures();
+            //foreach(Structure structure in adjStructures)
+            //{
+            //    structure.ToggleStructureActivation(owner);
+            //}
 
             DeathAnimation die = new DeathAnimation(this);
             die.Then(new ActionTask(DestroyThis));
@@ -786,10 +786,13 @@ public class Polyomino
 
     public void AddOccupyingBlueprint(Blueprint blueprint)
     {
-        occupyingBlueprints.Add(blueprint);
+        if (!occupyingBlueprints.Contains(blueprint))
+        {
+            occupyingBlueprints.Add(blueprint);
+        }
     }
 
-    public void RemoveOccupyingStructure(Blueprint blueprint)
+    public void RemoveOccupyingBlueprint(Blueprint blueprint)
     {
         occupyingBlueprints.Remove(blueprint);
     }

@@ -39,4 +39,10 @@ public class Base : Structure
     }
 
     public override void OnInputUp() { }
+
+    public override void OnClaim(Player player)
+    {
+        base.OnClaim(player);
+        TogglePieceConnectedness(true);
+    }
 }
