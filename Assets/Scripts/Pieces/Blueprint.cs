@@ -133,7 +133,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                     newpiece.name = pieceName;
                     newpiece.ActivateTile(owner, buildingType);
                     newpiece.SetAlpha(0.75f);
-                    newpiece.IncrementSortingOrder(5);
+                    //newpiece.IncrementSortingOrder(5);
                     tiles.Add(newpiece);
                 }
             }

@@ -107,7 +107,9 @@ public abstract class Structure : Polyomino
         base.MakePhysicalPiece(isViewable);
         HideFromInput();
         holder.localScale = Vector3.one;
-        neutralColor = tiles[0].GetComponent<SpriteRenderer>().color;     
+        //neutralColor = tiles[0].GetComponent<SpriteRenderer>().color;  
+        neutralColor = tiles[0].material.color;
+        GrowSize(4);
     }
 
     public override void PlaceAtCurrentLocation(bool replace)

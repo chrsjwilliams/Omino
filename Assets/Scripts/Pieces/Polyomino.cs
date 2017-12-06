@@ -417,7 +417,7 @@ public class Polyomino
             costText.color = (Color.red + Color.black) / 2;
             HideFromInput();
         }
-        SetGlowState(affordable);
+        //SetGlowState(affordable);
     }
 
     protected void ToggleCostUIStatus(bool status)
@@ -669,14 +669,6 @@ public class Polyomino
         }
     }
 
-    public void ToggleAltColor(bool useAlt)
-    {
-        foreach (Tile tile in tiles)
-        {
-            tile.ToggleAltColor(useAlt);
-        }
-    }
-
     public void ShiftColor(Color color)
     {
         foreach (Tile tile in tiles) tile.ShiftColor(color);
@@ -850,6 +842,7 @@ public class Polyomino
     {
         iconSr = holder.gameObject.GetComponentsInChildren<SpriteRenderer>()[1];
         iconSr.transform.position = GetCenterpoint();
+        iconSr.transform.position += 1 * Vector3.back;
         if (buildingType == BuildingType.BASE) iconSr.sprite = Services.UIManager.baseIcon;
         else iconSr.enabled = false;
     }
@@ -869,7 +862,7 @@ public class Polyomino
     {
         if (playAvailable) EnterUnselectedState();
         else HideFromInput();
-        SetGlowState(playAvailable);
+        //SetGlowState(playAvailable);
     }
 
     protected void EnterUnselectedState()
@@ -936,9 +929,10 @@ public class Polyomino
         if (!owner.gameOver && !placed)
         {
             holder.localScale = Vector3.one;
-            holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, -4);
+            holder.transform.position = new Vector3(holder.transform.position.x, 
+                holder.transform.position.y, -Tile.thickness);
             owner.OnPieceSelected(this);
-            IncrementSortingOrder(20);
+            //IncrementSortingOrder(20);
             OnInputDrag(holder.position);
             ToggleCostUIStatus(false);
             Services.AudioManager.CreateTempAudio(Services.Clips.PiecePicked, 1);
@@ -988,8 +982,9 @@ public class Polyomino
                 EnterUnselectedState();
                 ToggleCostUIStatus(true);
             }
-            IncrementSortingOrder(-20);
-            holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
+            //IncrementSortingOrder(-20);
+            //holder.localPosition = new Vector3(holder.transform.position.x, 
+            //    holder.transform.position.y, 0);
         }
     }
 
@@ -1022,7 +1017,7 @@ public class Polyomino
                 holder.position.z));
         }
 
-        SetLegalityGlowStatus();
+        //SetLegalityGlowStatus();
     }
 
     void SetLegalityGlowStatus()
@@ -1088,10 +1083,11 @@ public class Polyomino
         SetTileSprites();
         foreach (Tile tile in tiles)
         {
-            tile.transform.position = new Vector3(tile.coord.x, tile.coord.y);
+            tile.transform.position = new Vector3(tile.coord.x, tile.coord.y, 
+                tile.transform.position.z);
         }
         SetIconSprite();
-        SetLegalityGlowStatus();
+        //SetLegalityGlowStatus();
     }
 
     public virtual void PlaceAtLocation(Coord centerCoordLocation)
@@ -1105,7 +1101,7 @@ public class Polyomino
         Reposition(new Vector3(
             centerCoordLocation.x,
             centerCoordLocation.y,
-            holder.position.z));
+            -Tile.thickness));
         PlaceAtCurrentLocation(replace);
     }
 
@@ -1182,5 +1178,11 @@ public class Polyomino
     {
         foreach (Tile tile in tiles) tile.IncrementSortingOrder(increment);
         iconSr.sortingOrder += increment;
+    }
+
+    protected void GrowSize(float scale)
+    {
+        holder.transform.localScale = new Vector3(holder.transform.localScale.x,
+            holder.transform.localScale.y, scale);
     }
 }

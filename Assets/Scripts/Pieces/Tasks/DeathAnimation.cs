@@ -18,8 +18,10 @@ public class DeathAnimation : Task
     {
         timeElapsed = 0;
         duration = Polyomino.deathAnimDur;
-        initialColor = piece.tiles[0].GetComponent<SpriteRenderer>().color;
-        targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 0);
+        //initialColor = piece.tiles[0].GetComponent<SpriteRenderer>().color;
+        initialColor = piece.tiles[0].material.color;
+        //targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 0);
+        targetColor = new Color(1, 1, 1, 0);
     }
 
     internal override void Update()
@@ -29,17 +31,17 @@ public class DeathAnimation : Task
         {
             tile.SetColor(Color.Lerp(initialColor, targetColor,
                 EasingEquations.Easing.QuadEaseOut(timeElapsed / duration)));
-            if (timeElapsed <= duration / 2)
-            {
-                tile.SetMaskSrAlpha(Mathf.Lerp(0, 1,
-                    EasingEquations.Easing.QuadEaseOut(timeElapsed / (duration / 2))));
-            }
-            else
-            {
-                tile.SetMaskSrAlpha(Mathf.Lerp(1, 0,
-                    EasingEquations.Easing.QuadEaseIn(
-                        (timeElapsed - (duration / 2)) / (duration / 2))));
-            }
+            //if (timeElapsed <= duration / 2)
+            //{
+            //    tile.SetMaskSrAlpha(Mathf.Lerp(0, 1,
+            //        EasingEquations.Easing.QuadEaseOut(timeElapsed / (duration / 2))));
+            //}
+            //else
+            //{
+            //    tile.SetMaskSrAlpha(Mathf.Lerp(1, 0,
+            //        EasingEquations.Easing.QuadEaseIn(
+            //            (timeElapsed - (duration / 2)) / (duration / 2))));
+            //}
         }
         if (timeElapsed <= duration / 2)
         {

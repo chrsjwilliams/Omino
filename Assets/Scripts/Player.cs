@@ -38,6 +38,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Vector3 handOffset;
     [SerializeField]
+    private Vector3 finalHandOffset;
+    [SerializeField]
     private int startingHandSize;
     [SerializeField]
     private int maxHandSize;
@@ -194,7 +196,7 @@ public class Player : MonoBehaviour
 
     void SetHandStatus()
     {
-        MakeAllPiecesGlow(placementAvailable);
+        //MakeAllPiecesGlow(placementAvailable);
         for (int i = 0; i < hand.Count; i++)
         {
             hand[i].SetPieceState(placementAvailable);
@@ -353,11 +355,14 @@ public class Player : MonoBehaviour
             offset = new Vector3(-handOffset.x, -handOffset.y, handOffset.z);
         }
         //offset += Services.GameManager.MainCamera.ScreenToWorldPoint(handZone.transform.position);
-        offset += Services.GameManager.MainCamera.transform.position;
+        //offset += Services.GameManager.MainCamera.transform.position;
+        offset += new Vector3(Screen.width / 2, Screen.height / 2);
         offset = new Vector3(offset.x, offset.y, 0);
         Vector3 newPos = new Vector3(
                 handSpacing.x * (handIndex / piecesPerHandColumn) * spacingMultiplier,
-                handSpacing.y * (handIndex % piecesPerHandColumn) * spacingMultiplier, 0) + offset;
+                handSpacing.y * (handIndex % piecesPerHandColumn) * spacingMultiplier, 
+                -1) + offset;
+        newPos = Services.GameManager.MainCamera.ScreenToWorldPoint(newPos) + finalHandOffset;
         return newPos;
     }
     #endregion
@@ -423,7 +428,7 @@ public class Player : MonoBehaviour
             uiTabs.ToggleHandZoneView(true);
         }
         selectedPiece = null;
-        piece.SetGlowState(false);
+        //piece.SetGlowState(false);
         boardPieces.Add(piece);
         Services.MapManager.DetermineConnectedness(this);
         //for (int i = boardPieces.Count - 1; i >= 0; i--)
@@ -455,7 +460,7 @@ public class Player : MonoBehaviour
     public void CancelSelectedBlueprint()
     {
         blueprints.Add((Blueprint)selectedPiece);
-        selectedPiece.SetGlowState(false);
+        //selectedPiece.SetGlowState(false);
         OrganizeHand(blueprints);
         selectedPiece = null;
     }
