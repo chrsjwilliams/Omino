@@ -68,8 +68,7 @@ public class Tile : MonoBehaviour
         //if ((coord.x + coord.y) % 2 == 0)
         //{
         //    sr.color = Services.GameManager.MapColorScheme[0];
-            material.color = Services.GameManager.MapColorScheme[0];
-        topMr.material.color = material.color;
+        SetColor(Services.GameManager.MapColorScheme[0]);
         //}
         //else
         //{
