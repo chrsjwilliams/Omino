@@ -52,14 +52,9 @@ public class Tile : MonoBehaviour
         maskSr = GetComponentInChildren<SpriteMask>().gameObject.GetComponent<SpriteRenderer>();
         
         transform.position = new Vector3(coord.x, coord.y, 0);
-        if ((coord.x + coord.y) % 2 == 0)
-        {
-            sr.color = Services.GameManager.MapColorScheme[0];
-        }
-        else
-        {
-            sr.color = Services.GameManager.MapColorScheme[1];
-        }
+
+        sr.color = Services.GameManager.MapColorScheme[0];
+
     }
 
     public void Init(Coord coord_, Polyomino pieceParent_)

@@ -655,8 +655,8 @@ public class Polyomino
     {
         foreach (Tile tile in tiles)
         {
-            tile.SetMaskSrAlpha(1.0f);
             tile.SetMaskColor(color);
+            tile.SetMaskSrAlpha(0.5f);
             //tile.SetGlowOutLine(10);
             //tile.SetGlowColor(color);
         }
