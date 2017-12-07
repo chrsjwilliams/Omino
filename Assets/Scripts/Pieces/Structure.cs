@@ -16,8 +16,8 @@ public abstract class Structure : Polyomino
             {
                 { 0,0,0,0,0 },
                 { 0,0,0,0,0 },
-                { 0,1,1,0,0 },
-                { 0,0,0,0,0 },
+                { 0,0,1,1,0 },
+                { 0,0,1,1,0 },
                 { 0,0,0,0,0 }
             },
             //  These hashes represent what the piece will look like
@@ -28,8 +28,8 @@ public abstract class Structure : Polyomino
             {
                 { 0,0,0,0,0 },
                 { 0,0,0,0,0 },
-                { 0,1,1,0,0 },
-                { 0,0,0,0,0 },
+                { 0,0,1,1,0 },
+                { 0,0,1,1,0 },
                 { 0,0,0,0,0 }
             },
             //  These hashes represent what the piece will look like
@@ -40,8 +40,8 @@ public abstract class Structure : Polyomino
             {
                 { 0,0,0,0,0 },
                 { 0,0,0,0,0 },
-                { 0,1,1,0,0 },
-                { 0,0,0,0,0 },
+                { 0,0,1,1,0 },
+                { 0,0,1,1,0 },
                 { 0,0,0,0,0 }
             }
     };

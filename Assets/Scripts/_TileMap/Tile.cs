@@ -61,7 +61,7 @@ public class Tile : MonoBehaviour
         //glow.OutlineWidth = 0;
         boxCol3D = GetComponent<BoxCollider>();
         mr = GetComponent<MeshRenderer>();
-        topMr = GetComponentsInChildren<MeshRenderer>()[1];
+        //topMr = GetComponentsInChildren<MeshRenderer>()[1];
         material = mr.material;
         transform.position = new Vector3(coord.x, coord.y, 0);
         transform.localScale = new Vector3(1, 1, thickness);
@@ -96,7 +96,7 @@ public class Tile : MonoBehaviour
     {
         //sr.color = color;
         material.color = color;
-        topMr.material.color = color;
+        //topMr.material.color = color;
     }
 
     public void ShiftColor(Color color)
@@ -125,15 +125,13 @@ public class Tile : MonoBehaviour
         if (player == null)
         {
             //sr.color = Services.GameManager.SuperDestructorResourceColor;
-            material.color = Services.GameManager.SuperDestructorResourceColor;
-            topMr.material.color = material.color;
+            SetColor(Services.GameManager.SuperDestructorResourceColor);
         }
         //else if(buildingType == BuildingType.NONE)
         else
         {
             //sr.color = player.ColorScheme[0];
-            material.color = player.ColorScheme[0];
-            topMr.material.color = material.color;
+            SetColor(player.ColorScheme[0]);
         }
         //else sr.color = player.ColorScheme[1];
     }
@@ -194,9 +192,8 @@ public class Tile : MonoBehaviour
     {
         colorChangeTimeElapsed += Time.deltaTime;
         //sr.color = Color.Lerp(prevColor, targetColor, colorChangeTimeElapsed / colorChangeDuration);
-        material.color = Color.Lerp(prevColor, targetColor, 
-            colorChangeTimeElapsed / colorChangeDuration);
-        topMr.material.color = material.color;
+        SetColor(Color.Lerp(prevColor, targetColor, 
+            colorChangeTimeElapsed / colorChangeDuration));
         if (colorChangeTimeElapsed >= colorChangeDuration)
         {
             changingColor = false;
@@ -210,8 +207,8 @@ public class Tile : MonoBehaviour
         //material.EnableKeyword("_MainTex");
         //material.SetTexture("_MainTex", textures[spriteIndex]);
         //material.mainTexture = textures[spriteIndex];
-        topMr.material = materials[spriteIndex];
-        topMr.material.color = material.color;
+        //topMr.material = materials[spriteIndex];
+        //topMr.material.color = material.color;
         Debug.Log("Setting sprite index to " + spriteIndex);
     }
 
