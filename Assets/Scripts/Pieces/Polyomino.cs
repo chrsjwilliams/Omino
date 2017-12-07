@@ -647,7 +647,7 @@ public class Polyomino
         //if (placed && isFortified) return;
         foreach (Tile tile in tiles)
         {
-            tile.SetGlowOutLine(0);
+            tile.SetMaskSrAlpha(0);
         }
     }
 
@@ -655,8 +655,10 @@ public class Polyomino
     {
         foreach (Tile tile in tiles)
         {
-            tile.SetGlowOutLine(10);
-            tile.SetGlowColor(color);
+            tile.SetMaskSrAlpha(1.0f);
+            tile.SetMaskColor(color);
+            //tile.SetGlowOutLine(10);
+            //tile.SetGlowColor(color);
         }
     }
 
@@ -1178,7 +1180,7 @@ public class Polyomino
         }
     }
 
-    void IncrementSortingOrder(int increment)
+    protected void IncrementSortingOrder(int increment)
     {
         foreach (Tile tile in tiles) tile.IncrementSortingOrder(increment);
         iconSr.sortingOrder += increment;

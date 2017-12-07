@@ -17,7 +17,7 @@ public abstract class Structure : Polyomino
                 { 0,0,0,0,0 },
                 { 0,0,0,0,0 },
                 { 0,1,1,0,0 },
-                { 0,0,0,0,0 },
+                { 0,1,1,0,0 },
                 { 0,0,0,0,0 }
             },
             //  These hashes represent what the piece will look like
@@ -29,7 +29,7 @@ public abstract class Structure : Polyomino
                 { 0,0,0,0,0 },
                 { 0,0,0,0,0 },
                 { 0,1,1,0,0 },
-                { 0,0,0,0,0 },
+                { 0,1,1,0,0 },
                 { 0,0,0,0,0 }
             },
             //  These hashes represent what the piece will look like
@@ -41,7 +41,7 @@ public abstract class Structure : Polyomino
                 { 0,0,0,0,0 },
                 { 0,0,0,0,0 },
                 { 0,1,1,0,0 },
-                { 0,0,0,0,0 },
+                { 0,1,1,0,0 },
                 { 0,0,0,0,0 }
             }
     };
@@ -64,7 +64,6 @@ public abstract class Structure : Polyomino
 
         holderName = "StructureHolder";
         piece = structure;
-
     }
 
     public void SetToNeutralColor()
@@ -107,7 +106,10 @@ public abstract class Structure : Polyomino
         base.MakePhysicalPiece(isViewable);
         HideFromInput();
         holder.localScale = Vector3.one;
-        neutralColor = tiles[0].GetComponent<SpriteRenderer>().color;     
+        neutralColor = tiles[0].GetComponent<SpriteRenderer>().color;
+        //TurnOffGlow();
+        SetGlow(Color.white);
+        IncrementSortingOrder(15);
     }
 
     public override void PlaceAtCurrentLocation(bool replace)

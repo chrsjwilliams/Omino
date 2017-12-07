@@ -68,6 +68,7 @@ public class MapManager : MonoBehaviour
                 tile.Init(new Coord(i, j));
                 _map[i, j] = tile;
                 tile.name = "Tile [X: " + i + ", Y: " + j + "]";
+                tile.SetMaskSrAlpha(0);
             }
         }
 

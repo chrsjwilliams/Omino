@@ -16,7 +16,7 @@ public class Tile : MonoBehaviour
     public Coord coord { get; private set; }
     public BoxCollider2D boxCol { get; private set; }
     private SpriteRenderer sr;
-    private SpriteGlow glow;
+    //private SpriteGlow glow;
     public Material material { get; set; }
     public Polyomino occupyingPiece { get; private set; }
     public Polyomino pieceParent { get; private set; }
@@ -40,16 +40,17 @@ public class Tile : MonoBehaviour
     [SerializeField]
     private float colorChangeDuration;
     private bool changingColor;
-    private SpriteRenderer maskSr;
+    public SpriteRenderer maskSr { get; private set; }
 
     public void Init(Coord coord_)
     {
         coord = coord_;
         boxCol = GetComponent<BoxCollider2D>();
         sr = GetComponent<SpriteRenderer>();
-        glow = GetComponent<SpriteGlow>();
+        //glow = GetComponent<SpriteGlow>();
+        //glow.OutlineWidth = 0;
         maskSr = GetComponentInChildren<SpriteMask>().gameObject.GetComponent<SpriteRenderer>();
-        glow.OutlineWidth = 0;
+        
         transform.position = new Vector3(coord.x, coord.y, 0);
         if ((coord.x + coord.y) % 2 == 0)
         {
@@ -95,17 +96,22 @@ public class Tile : MonoBehaviour
 
     public void SetGlowOutLine(int i)
     {
-        glow.OutlineWidth = i;
+        //glow.OutlineWidth = i;
     }
 
     public void SetGlowColor(Color color)
     {
-        glow.GlowColor = color;
+        //glow.GlowColor = color;
     }
 
     public void SetMaskSrAlpha(float alpha)
     {
         maskSr.color = new Color(maskSr.color.r, maskSr.color.g, maskSr.color.b, alpha);
+    }
+
+    public void SetMaskColor(Color color)
+    {
+        maskSr.color = color;
     }
 
     public void ActivateTile(Player player, BuildingType buildingType)
@@ -193,5 +199,6 @@ public class Tile : MonoBehaviour
     public void IncrementSortingOrder(int inc)
 	{
 		sr.sortingOrder += inc;
+        maskSr.sortingOrder += inc;
 	}
 }
