@@ -107,8 +107,8 @@ public abstract class Structure : Polyomino
         HideFromInput();
         holder.localScale = Vector3.one;
         neutralColor = tiles[0].GetComponent<SpriteRenderer>().color;
-        //TurnOffGlow();
-        SetGlow(Color.white);
+        TurnOffGlow();
+        //SetGlow(Color.white);
         IncrementSortingOrder(15);
     }
 

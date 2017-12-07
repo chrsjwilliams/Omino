@@ -20,6 +20,11 @@ public class DeathAnimation : Task
         duration = Polyomino.deathAnimDur;
         initialColor = piece.tiles[0].GetComponent<SpriteRenderer>().color;
         targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 0);
+        foreach(Tile tile in piece.tiles)
+        {
+            tile.maskSr.color = new Color(1,1,1,0);
+            tile.maskSr.sortingOrder += 2;
+        }
     }
 
     internal override void Update()
@@ -41,16 +46,16 @@ public class DeathAnimation : Task
                         (timeElapsed - (duration / 2)) / (duration / 2))));
             }
         }
-        if (timeElapsed <= duration / 2)
-        {
+        //if (timeElapsed <= duration / 2)
+        //{
             piece.ScaleHolder(Vector3.Lerp(Vector3.one, Polyomino.deathAnimScaleUp * Vector3.one,
-                EasingEquations.Easing.QuadEaseOut(timeElapsed / (duration / 2))));
-        }
-        else
-        {
-            piece.ScaleHolder(Vector3.Lerp(Vector3.one, Polyomino.deathAnimScaleUp * Vector3.one,
-                EasingEquations.Easing.QuadEaseIn((timeElapsed - (duration / 2)) / (duration / 2))));
-        }
+                EasingEquations.Easing.QuadEaseOut(timeElapsed / duration)));
+        //}
+        //else
+        //{
+        //    piece.ScaleHolder(Vector3.Lerp(Polyomino.deathAnimScaleUp * Vector3.one, Vector3.one,
+        //        EasingEquations.Easing.QuadEaseIn((timeElapsed - (duration / 2)) / (duration / 2))));
+        //}
 
         if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
     }
