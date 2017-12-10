@@ -7,6 +7,8 @@ public class Tooltip : MonoBehaviour {
 
     public Text nameText;
     public Text descriptionText;
+    [SerializeField]
+    private Vector2 tooltipOffset;
 
 	// Use this for initialization
 	void Start () {
@@ -23,7 +25,7 @@ public class Tooltip : MonoBehaviour {
         nameText.text = name;
         descriptionText.text = description;
         transform.localRotation = Quaternion.Euler(0, 0, rot);
-        Vector2 offset = Services.UIManager.tooltipOffset;
+        Vector2 offset = tooltipOffset * Screen.width/2048f;
         if (basePos.y > Screen.width / 2)
         {
             offset = new Vector2(offset.x, -offset.y);

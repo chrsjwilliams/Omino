@@ -939,7 +939,7 @@ public class Polyomino
         Vector3 touchWorldPos =
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position);
         if (IsPointContainedWithinHolderArea(touchWorldPos) && touchID == -1
-            && owner.selectedPiece == null)
+            && (owner == null || owner.selectedPiece == null))
         {
             touchID = e.touch.fingerId;
             OnInputDown();
@@ -1260,8 +1260,6 @@ public class Polyomino
             GameObject.Destroy(tooltips[i].gameObject);
             tooltips.Remove(tooltips[i]);
         }
-
-        touchID = -1;
         if (placed)
         {
             Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);

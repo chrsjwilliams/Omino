@@ -36,7 +36,6 @@ public class UIManager : MonoBehaviour {
     private float bannerScrollTimeElapsed;
     [SerializeField]
     private float bannerScrollDuration;
-    public Vector2 tooltipOffset;
     private List<int> touchIdsMakingTooltips;
 
 	// Use this for initialization
@@ -131,12 +130,12 @@ public class UIManager : MonoBehaviour {
 
     public void OnTooltipCreated(int touchId)
     {
-        touchIdsMakingTooltips.Add(touchId);
+        if(!IsTouchMakingTooltipAlready(touchId)) touchIdsMakingTooltips.Add(touchId);
     }
 
     public void OnTooltipDestroyed(int touchId)
     {
-        touchIdsMakingTooltips.Remove(touchId);
+        if (IsTouchMakingTooltipAlready(touchId)) touchIdsMakingTooltips.Remove(touchId);
     }
 
     public bool IsTouchMakingTooltipAlready(int touchId)
