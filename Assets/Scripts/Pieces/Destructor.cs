@@ -17,7 +17,7 @@ public class Destructor : Polyomino
         iconSr.enabled = true;
         if (isSuper)
         {
-            iconSr.sprite = Services.UIManager.superDestructorIcon;
+            iconSr.sprite = Services.UIManager.bombFactoryIcon;
         }
         else
         {

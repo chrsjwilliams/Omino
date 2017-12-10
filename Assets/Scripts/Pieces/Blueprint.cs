@@ -111,6 +111,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             Services.GameScene.transform).transform;
         holder.gameObject.name = holderName;
         holderSr = holder.gameObject.GetComponent<SpriteRenderer>();
+        spriteOverlay = holder.GetComponentsInChildren<SpriteRenderer>()[2];
         costText = holder.gameObject.GetComponentInChildren<TextMesh>();
         ToggleCostUIStatus(false);
 
@@ -140,8 +141,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         }
 
         SetVisible(!isViewable);
-        SetTileSprites();
-        SetIconSprite();
+        SetSprites();
     }
 
     protected override void SetIconSprite()
@@ -157,10 +157,32 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                 iconSr.sprite = Services.UIManager.mineIcon;
                 break;
             case BuildingType.BOMBFACTORY:
-                iconSr.sprite = Services.UIManager.superDestructorIcon;
+                iconSr.sprite = Services.UIManager.bombFactoryIcon;
                 break;
             case BuildingType.NONE:
                 iconSr.enabled = false;
+                break;
+            default:
+                break;
+        }
+    }
+
+    protected override void SetOverlaySprite()
+    {
+        base.SetOverlaySprite();
+        switch (buildingType)
+        {
+            case BuildingType.FACTORY:
+                spriteOverlay.sprite = Services.UIManager.factoryOverlay;
+                break;
+            case BuildingType.MINE:
+                spriteOverlay.sprite = Services.UIManager.mineOverlay;
+                break;
+            case BuildingType.BOMBFACTORY:
+                spriteOverlay.sprite = Services.UIManager.bombFactoryOverlay;
+                break;
+            case BuildingType.NONE:
+                spriteOverlay.enabled = false;
                 break;
             default:
                 break;

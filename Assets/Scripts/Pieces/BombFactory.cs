@@ -30,4 +30,10 @@ public class BombFactory : Blueprint
         base.OnPlace();
         CreateTimerUI();
     }
+
+    protected override void SetOverlaySprite()
+    {
+        base.SetOverlaySprite();
+        spriteOverlay.transform.position = GetCenterpoint(true);
+    }
 }

@@ -25,7 +25,7 @@ public class SuperDestructorResource : Polyomino
     {
         base.SetIconSprite();
         iconSr.enabled = true;
-        iconSr.sprite = Services.UIManager.superDestructorIcon;
+        iconSr.sprite = Services.UIManager.bombFactoryIcon;
     }
 
     public override void Remove()

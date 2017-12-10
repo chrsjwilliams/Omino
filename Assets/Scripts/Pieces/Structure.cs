@@ -6,6 +6,7 @@ public abstract class Structure : Polyomino
 {
     protected bool isActivated;
     private Color neutralColor;
+    private ParticleSystem ps;
     protected static int[,,] structure = new int[3, 5, 5]
     {   
             //  These hashes represent what the piece will look like
@@ -110,6 +111,17 @@ public abstract class Structure : Polyomino
         TurnOffGlow();
         //SetGlow(Color.white);
         IncrementSortingOrder(15);
+        GameObject psObj = GameObject.Instantiate(Services.Prefabs.StructureParticles, holder);
+        psObj.transform.position = GetCenterpoint();
+        ps = psObj.GetComponent<ParticleSystem>();
+        ParticleSystem.MainModule main = ps.main;
+        main.startSizeMultiplier *= Mathf.Sqrt(tiles.Count) / 2;
+        if(this is Base)
+        {
+            Base thisAsBase = this as Base;
+            if (thisAsBase.mainBase) SetParticleClaimMode(true);
+        }
+
     }
 
     public override void PlaceAtCurrentLocation(bool replace)
@@ -138,6 +150,7 @@ public abstract class Structure : Polyomino
         ShiftColor(owner.ColorScheme[0]);
         Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
         owner.GainOwnership(this);
+        SetParticleClaimMode(true);
     }
 
     public virtual void OnClaimLost()
@@ -145,5 +158,37 @@ public abstract class Structure : Polyomino
         SetToNeutralColor();
         owner.LoseOwnership(this);
         owner = null;
+        SetParticleClaimMode(false);
+    }
+
+    public override void Rotate()
+    {
+        base.Rotate();
+        ps.transform.position = GetCenterpoint();
+    }
+
+    void SetParticleClaimMode(bool claimed)
+    {
+        ParticleSystem.MainModule main = ps.main;
+        ParticleSystem.EmissionModule emission = ps.emission;
+        if (claimed)
+        {
+            main.gravityModifierMultiplier += -0.025f;
+            main.startColor = (owner.ColorScheme[0] * 0.4f) + (Color.white * 0.6f);
+            emission.rateOverTimeMultiplier *= 2f;
+            ps.Play();
+        }
+        else
+        {
+            main.gravityModifierMultiplier -= 0.025f;
+            main.startColor = Color.white;
+            emission.rateOverTimeMultiplier /= 2f;
+        }
+    }
+
+    protected override void SetOverlaySprite()
+    {
+        base.SetOverlaySprite();
+        spriteOverlay.sprite = Services.UIManager.structureOverlay;
     }
 }

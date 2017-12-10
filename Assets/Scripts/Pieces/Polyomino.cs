@@ -13,6 +13,7 @@ public class Polyomino
     protected Transform holder;
     protected SpriteRenderer holderSr;
     protected SpriteRenderer iconSr;
+    protected SpriteRenderer spriteOverlay;
     protected string holderName;
     public BuildingType buildingType { get; protected set; }
 
@@ -489,7 +490,7 @@ public class Polyomino
             bool fortifiedFromCheck = false;
             if (!replace)
             {
-                fortifiedFromCheck = CheckForFortification(false);
+                //fortifiedFromCheck = CheckForFortification(false);
             }
             if (autoFortify && !isFortified && !fortifiedFromCheck)
                 Services.MapManager.FortifyPiece(this);
@@ -805,6 +806,7 @@ public class Polyomino
             Services.GameScene.transform).transform;
         holder.gameObject.name = holderName;
         holderSr = holder.gameObject.GetComponent<SpriteRenderer>();
+        spriteOverlay = holder.GetComponentsInChildren<SpriteRenderer>()[2];
         costText = holder.gameObject.GetComponentInChildren<TextMesh>();
         costText.text = cost.ToString();
         if (owner != null)
@@ -843,8 +845,7 @@ public class Polyomino
                 }
             }
         }
-        SetTileSprites();
-        SetIconSprite();
+        SetSprites();
         if (buildingType != BuildingType.BASE) SetVisible(isViewable);
     }
 
@@ -856,7 +857,7 @@ public class Polyomino
         else iconSr.enabled = false;
     }
 
-    protected Vector3 GetCenterpoint()
+    protected Vector3 GetCenterpoint(bool centerTile)
     {
         Vector3 centerPos = Vector3.zero;
         foreach (Tile tile in tiles)
@@ -864,7 +865,28 @@ public class Polyomino
             centerPos += tile.transform.position;
         }
         centerPos /= tiles.Count;
+        if (centerTile)
+        {
+            Tile closestTile = null;
+            float closestDistance = Mathf.Infinity;
+            foreach (Tile tile in tiles)
+            {
+                float dist = Vector3.Distance(tile.transform.position, centerPos);
+                if(dist < closestDistance)
+                {
+                    closestTile = tile;
+                    closestDistance = dist;
+                }
+            }
+            return closestTile.transform.position;
+        }
+
         return centerPos;
+    }
+
+    protected Vector3 GetCenterpoint()
+    {
+        return GetCenterpoint(false);
     }
 
     public void SetPieceState(bool playAvailable)
@@ -1072,7 +1094,7 @@ public class Polyomino
         }
     }
 
-    public void Rotate()
+    public virtual void Rotate()
     {
         float rotAngle = 90 * Mathf.Deg2Rad;
         foreach (Tile tile in tiles)
@@ -1094,6 +1116,10 @@ public class Polyomino
         }
         SetIconSprite();
         SetLegalityGlowStatus();
+        Quaternion prevRotation = spriteOverlay.transform.localRotation;
+        spriteOverlay.transform.localRotation = Quaternion.Euler(prevRotation.eulerAngles.x,
+            prevRotation.eulerAngles.y, prevRotation.eulerAngles.z + 90);
+        SetOverlaySprite();
     }
 
     public virtual void PlaceAtLocation(Coord centerCoordLocation)
@@ -1184,5 +1210,19 @@ public class Polyomino
     {
         foreach (Tile tile in tiles) tile.IncrementSortingOrder(increment);
         iconSr.sortingOrder += increment;
+        spriteOverlay.sortingOrder += increment;
+    }
+
+    protected virtual void SetOverlaySprite()
+    {
+        spriteOverlay.color = new Color(0, 0, 0, 0.75f);
+        spriteOverlay.transform.position = GetCenterpoint();
+    }
+
+    protected void SetSprites()
+    {
+        SetIconSprite();
+        SetOverlaySprite();
+        SetTileSprites();
     }
 }

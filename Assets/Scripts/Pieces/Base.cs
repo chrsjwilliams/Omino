@@ -45,4 +45,10 @@ public class Base : Structure
         base.OnClaim(player);
         TogglePieceConnectedness(true);
     }
+
+    protected override void SetOverlaySprite()
+    {
+        base.SetOverlaySprite();
+        spriteOverlay.sprite = Services.UIManager.baseOverlay;
+    }
 }

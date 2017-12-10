@@ -38,4 +38,7 @@ public class PrefabDB : ScriptableObject
     [SerializeField] private GameObject resourceToken;
     public GameObject ResourceToken { get { return resourceToken; } }
 
+    [SerializeField] private GameObject structureParticles;
+    public GameObject StructureParticles { get { return structureParticles; } }
+
 }
