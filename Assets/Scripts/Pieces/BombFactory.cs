@@ -44,7 +44,8 @@ public class BombFactory : Blueprint
 
     protected override string GetDescription()
     {
-        return "Creates a new <color=red>Destructor</color> piece every " + "<color=green>" + 1 / drawRate 
+        return "Creates a new <color=red>Destructor</color> piece every " + "<color=green>" 
+            + Mathf.RoundToInt(1 / drawRate)
             + "</color>" + " s";
     }
 }

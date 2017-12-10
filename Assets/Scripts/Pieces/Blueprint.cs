@@ -306,9 +306,9 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
     public override void OnInputUp()
     {
+        DestroyTooltips();
         if (!placed)
         {
-            DestroyTooltips();
             Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
             Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
             Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);

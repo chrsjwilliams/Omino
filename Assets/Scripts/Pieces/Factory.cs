@@ -33,7 +33,8 @@ public class Factory : Blueprint
 
     protected override string GetDescription()
     {
-        return "Creates a new piece every " + "<color=green>" + 1 / drawRate + "</color>" +
+        return "Creates a new piece every " + "<color=green>" +
+            Mathf.RoundToInt(1 / drawRate) + "</color>" +
             " s";
     }
 }

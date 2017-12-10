@@ -57,10 +57,10 @@ public class Base : Structure
 
     protected override string GetDescription()
     {
-        return "Creates a new piece every " + "<color=green>" + 1 / drawRate + "</color>" +
-            " s" + "\n\n" +
+        return "Creates a new piece every " + "<color=green>" + Mathf.RoundToInt(1 / drawRate)
+            + "</color>" +" s" + "\n\n" +
             "Produces " + "<color=green>" + resourcesPerIncrement + "</color>" 
             + " resources every " + "<color=green>"
-            + 1 / resourceIncrementRate + "</color>" + " s";
+            + Mathf.RoundToInt(1 / resourceIncrementRate) + "</color>" + " s";
     }
 }

@@ -24,6 +24,6 @@ public class Mine : Blueprint
     {
         return "Produces " + "<color=green>" + resourcesPerIncrement + "</color>"
             + " resources every " + "<color=green>"
-            + 1 / resourceIncrementRate + "</color>" + " s";
+            + Mathf.RoundToInt(1 / resourceIncrementRate) + "</color>" + " s";
     }
 }
