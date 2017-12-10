@@ -928,8 +928,18 @@ public class Polyomino
     protected virtual bool IsPointContainedWithinHolderArea(Vector3 point)
     {
         Debug.Assert(holderSr != null);
-        Vector3 extents = holderSr.bounds.extents;
-        Vector3 centerPoint = holder.position;
+        Vector3 extents;
+        Vector3 centerPoint;
+        if (!placed)
+        {
+            extents = holderSr.bounds.extents;
+            centerPoint = holder.position;
+        }
+        else
+        {
+            extents = spriteOverlay.bounds.extents;
+            centerPoint = spriteOverlay.transform.position;
+        }
         return point.x >= centerPoint.x - extents.x && point.x <= centerPoint.x + extents.x &&
             point.y >= centerPoint.y - extents.y && point.y <= centerPoint.y + extents.y;
     }

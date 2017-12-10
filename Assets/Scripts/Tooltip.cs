@@ -27,7 +27,7 @@ public class Tooltip : MonoBehaviour {
         descriptionText.text = description;
         transform.localRotation = Quaternion.Euler(0, 0, rot);
         Vector2 offset = tooltipOffset * Screen.width / 2048f;
-        if (basePos.y > Screen.width / 2)
+        if (basePos.y > Screen.height / 2)
         {
             offset = new Vector2(offset.x, -offset.y);
         }
