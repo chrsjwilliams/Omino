@@ -38,8 +38,6 @@ public class Base : Structure
         ToggleCostUIStatus(false);
     }
 
-    public override void OnInputUp() { }
-
     public override void OnClaim(Player player)
     {
         base.OnClaim(player);
@@ -50,5 +48,19 @@ public class Base : Structure
     {
         base.SetOverlaySprite();
         spriteOverlay.sprite = Services.UIManager.baseOverlay;
+    }
+
+    protected override string GetName()
+    {
+        return "Base";
+    }
+
+    protected override string GetDescription()
+    {
+        return "Creates a new piece every " + "<color=green>" + 1 / drawRate + "</color>" +
+            " s" + "\n\n" +
+            "Produces " + "<color=green>" + resourcesPerIncrement + "</color>" 
+            + " resources every " + "<color=green>"
+            + 1 / resourceIncrementRate + "</color>" + " s";
     }
 }

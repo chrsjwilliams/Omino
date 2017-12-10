@@ -194,11 +194,11 @@ public class Player : MonoBehaviour
 
     void SetHandStatus()
     {
-        MakeAllPiecesGlow(placementAvailable);
-        for (int i = 0; i < hand.Count; i++)
-        {
-            hand[i].SetPieceState(placementAvailable);
-        }
+        //MakeAllPiecesGlow(placementAvailable);
+        //for (int i = 0; i < hand.Count; i++)
+        //{
+        //    hand[i].SetPieceState(placementAvailable);
+        //}
         //Services.UIManager.SetGreyOutBox(playerNum, !placementAvailable);
     }
 

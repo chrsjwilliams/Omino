@@ -69,7 +69,7 @@ public abstract class Structure : Polyomino
 
     public void SetToNeutralColor()
     {
-        foreach(Tile tile in tiles)
+        foreach (Tile tile in tiles)
         {
             tile.ShiftColor(neutralColor);
         }
@@ -99,7 +99,7 @@ public abstract class Structure : Polyomino
                 OnClaim(player);
                 return;
             }
-        }   
+        }
     }
 
     public override void MakePhysicalPiece(bool isViewable)
@@ -116,12 +116,12 @@ public abstract class Structure : Polyomino
         ps = psObj.GetComponent<ParticleSystem>();
         ParticleSystem.MainModule main = ps.main;
         main.startSizeMultiplier *= Mathf.Sqrt(tiles.Count) / 2;
-        if(this is Base)
+        if (this is Base)
         {
             Base thisAsBase = this as Base;
             if (thisAsBase.mainBase) SetParticleClaimMode(true);
         }
-
+        ListenForInput();
     }
 
     public override void PlaceAtCurrentLocation(bool replace)
@@ -142,7 +142,7 @@ public abstract class Structure : Polyomino
     public virtual void OnClaim(Player player)
     {
         owner = player;
-        if(owner == null)
+        if (owner == null)
         {
             OnClaimLost();
             return;
@@ -190,5 +190,36 @@ public abstract class Structure : Polyomino
     {
         base.SetOverlaySprite();
         spriteOverlay.sprite = Services.UIManager.structureOverlay;
+    }
+
+    public override void OnInputDown()
+    {
+        if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID))
+        {
+            Tooltip tooltipLeft = GameObject.Instantiate(Services.Prefabs.Tooltip,
+                Services.UIManager.canvas).GetComponent<Tooltip>();
+            tooltipLeft.Init(GetName(), GetDescription(), 90,
+                Services.GameManager.MainCamera.WorldToScreenPoint(
+                GetCenterpoint()));
+            Tooltip tooltipRight = GameObject.Instantiate(Services.Prefabs.Tooltip,
+                Services.UIManager.canvas).GetComponent<Tooltip>();
+            tooltipRight.Init(GetName(), GetDescription(), -90,
+                Services.GameManager.MainCamera.WorldToScreenPoint(
+                GetCenterpoint()));
+            tooltips.Add(tooltipLeft);
+            tooltips.Add(tooltipRight);
+            Services.GameEventManager.Register<TouchUp>(OnTouchUp);
+            Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
+
+            Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
+            Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
+
+            Services.UIManager.OnTooltipCreated(touchID);
+        }
+    }
+
+    public override void OnInputUp()
+    {
+        DestroyTooltips();
     }
 }

@@ -114,6 +114,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         spriteOverlay = holder.GetComponentsInChildren<SpriteRenderer>()[2];
         costText = holder.gameObject.GetComponentInChildren<TextMesh>();
         ToggleCostUIStatus(false);
+        tooltips = new List<Tooltip>();
 
         if (piece == null) return;
         tileRelativeCoords = new Dictionary<Tile, Coord>();
@@ -233,6 +234,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         }
         owner.OnPieceRemoved(this);
         GameObject.Destroy(holder.gameObject);
+        HideFromInput();
     }
 
     protected override void OnPlace()
@@ -259,6 +261,47 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                 break;
             }
         }
+        ListenForInput();
+    }
+
+    public override void OnInputDown()
+    {
+        base.OnInputDown();
+        if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID))
+        {
+            if (placed || owner.playerNum == 2)
+            {
+                Tooltip tooltipLeft = GameObject.Instantiate(Services.Prefabs.Tooltip,
+                    Services.UIManager.canvas).GetComponent<Tooltip>();
+                tooltipLeft.Init(GetName(), GetDescription(), 90,
+                    Services.GameManager.MainCamera.WorldToScreenPoint(
+                    GetCenterpoint()));
+                tooltips.Add(tooltipLeft);
+            }
+            if (placed || owner.playerNum == 1)
+            {
+                Tooltip tooltipRight = GameObject.Instantiate(Services.Prefabs.Tooltip,
+                Services.UIManager.canvas).GetComponent<Tooltip>();
+                tooltipRight.Init(GetName(), GetDescription(), -90,
+                    Services.GameManager.MainCamera.WorldToScreenPoint(
+                    GetCenterpoint()));
+                tooltips.Add(tooltipRight);
+            }
+
+            Services.GameEventManager.Register<TouchUp>(OnTouchUp);
+            Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
+
+            Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
+            Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
+
+            Services.UIManager.OnTooltipCreated(touchID);
+        }
+    }
+
+    public override void OnInputDrag(Vector3 inputPos)
+    {
+        base.OnInputDrag(inputPos);
+        DestroyTooltips();
     }
 
     public override void OnInputUp()
@@ -274,6 +317,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             if (IsPlacementLegal() && !owner.gameOver)
             {
                 PlaceAtCurrentLocation();
+                ListenForInput();
             }
             else
             {
@@ -281,5 +325,6 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                 EnterUnselectedState();
             }
         }
+        DestroyTooltips();
     }
 }

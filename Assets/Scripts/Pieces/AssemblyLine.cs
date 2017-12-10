@@ -29,4 +29,15 @@ public class AssemblyLine : Structure
         iconSr.enabled = true;
         iconSr.sprite = Services.UIManager.gearIcon;
     }
+
+    protected override string GetName()
+    {
+        return "Assembly Line";
+    }
+
+    protected override string GetDescription()
+    {
+        return "Increases piece creation rate by <color=green>"
+            + 100 * drawRateMultiplier + "</color>%";
+    }
 }

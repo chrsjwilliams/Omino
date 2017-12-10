@@ -26,7 +26,7 @@ public class Polyomino
     public Coord centerCoord;
     protected bool placed;
     private const float rotationInputRadius = 8f;
-    private int touchID;
+    protected int touchID;
     private readonly Vector3 baseDragOffset = 5f * Vector3.right;
     private readonly Vector3 unselectedScale = 0.5f * Vector3.one;
     public const float drawAnimDur = 0.5f;
@@ -51,7 +51,14 @@ public class Polyomino
         }
     }
     protected float baseDrawPeriod;
-    protected float drawRate { get { return (1 / baseDrawPeriod) * owner.drawRateFactor; } }
+    protected float drawRate
+    {
+        get
+        {
+            if (owner == null) return 1 / baseDrawPeriod;
+            else return (1 / baseDrawPeriod) * owner.drawRateFactor;
+        }
+    }
     protected float baseResourceIncrementPeriod;
     protected int baseResourcesPerIncrement;
     protected float resourceGainMeter;
@@ -60,7 +67,8 @@ public class Polyomino
     {
         get
         {
-            return Mathf.RoundToInt(baseResourcesPerIncrement
+            if (owner == null) return baseResourcesPerIncrement;
+            else return Mathf.RoundToInt(baseResourcesPerIncrement
                 * owner.resourceGainIncrementFactor);
         }
     }
@@ -70,6 +78,7 @@ public class Polyomino
     private bool affordable;
     private bool isVisible;
     public bool connected { get; private set; }
+    protected List<Tooltip> tooltips;
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -809,6 +818,7 @@ public class Polyomino
         spriteOverlay = holder.GetComponentsInChildren<SpriteRenderer>()[2];
         costText = holder.gameObject.GetComponentInChildren<TextMesh>();
         costText.text = cost.ToString();
+        tooltips = new List<Tooltip>();
         if (owner != null)
         {
             Quaternion rot = owner.playerNum == 1 ?
@@ -898,10 +908,15 @@ public class Polyomino
 
     protected void EnterUnselectedState()
     {
+        ListenForInput();
+        holder.localScale = unselectedScale;
+    }
+
+    protected void ListenForInput()
+    {
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
         touchID = -1;
-        holder.localScale = unselectedScale;
     }
 
     protected void HideFromInput()
@@ -910,7 +925,7 @@ public class Polyomino
         Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
     }
 
-    bool IsPointContainedWithinHolderArea(Vector3 point)
+    protected virtual bool IsPointContainedWithinHolderArea(Vector3 point)
     {
         Debug.Assert(holderSr != null);
         Vector3 extents = holderSr.bounds.extents;
@@ -935,7 +950,7 @@ public class Polyomino
     {
         Vector3 mouseWorldPos =
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos);
-        if (IsPointContainedWithinHolderArea(mouseWorldPos) && owner.selectedPiece == null)
+        if (IsPointContainedWithinHolderArea(mouseWorldPos) && (owner == null || owner.selectedPiece == null))
         {
             OnInputDown();
         }
@@ -979,6 +994,7 @@ public class Polyomino
         }
     }
 
+
     protected void OnMouseMoveEvent(MouseMove e)
     {
         OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos));
@@ -1017,7 +1033,7 @@ public class Polyomino
         }
     }
 
-    public void OnInputDrag(Vector3 inputPos)
+    public virtual void OnInputDrag(Vector3 inputPos)
     {
         if (!placed && !owner.gameOver)
         {
@@ -1224,5 +1240,35 @@ public class Polyomino
         SetIconSprite();
         SetOverlaySprite();
         SetTileSprites();
+    }
+
+    protected virtual string GetName()
+    {
+        return "";
+    }
+
+    protected virtual string GetDescription()
+    {
+        return "";
+    }
+
+    protected void DestroyTooltips()
+    {
+        if(tooltips.Count > 0) Services.UIManager.OnTooltipDestroyed(touchID);
+        for (int i = tooltips.Count - 1; i >= 0; i--)
+        {
+            GameObject.Destroy(tooltips[i].gameObject);
+            tooltips.Remove(tooltips[i]);
+        }
+
+        touchID = -1;
+        if (placed)
+        {
+            Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
+            Services.GameEventManager.Register<TouchDown>(OnTouchDown);
+
+            Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
+            Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
+        }
     }
 }

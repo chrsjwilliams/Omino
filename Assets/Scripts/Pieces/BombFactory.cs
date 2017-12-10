@@ -36,4 +36,15 @@ public class BombFactory : Blueprint
         base.SetOverlaySprite();
         spriteOverlay.transform.position = GetCenterpoint(true);
     }
+
+    protected override string GetName()
+    {
+        return "Bomb Factory";
+    }
+
+    protected override string GetDescription()
+    {
+        return "Creates a new <color=red>Destructor</color> piece every " + "<color=green>" + 1 / drawRate 
+            + "</color>" + " s";
+    }
 }

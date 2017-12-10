@@ -36,6 +36,8 @@ public class UIManager : MonoBehaviour {
     private float bannerScrollTimeElapsed;
     [SerializeField]
     private float bannerScrollDuration;
+    public Vector2 tooltipOffset;
+    private List<int> touchIdsMakingTooltips;
 
 	// Use this for initialization
 	void Start () {
@@ -44,6 +46,7 @@ public class UIManager : MonoBehaviour {
             victoryBanners[i].gameObject.SetActive(false);
             defeatBanners[i].gameObject.SetActive(false);
         }
+        touchIdsMakingTooltips = new List<int>();
         //foreach(Image box in greyOutBoxes)
         //{
         //    box.enabled = false;
@@ -125,4 +128,20 @@ public class UIManager : MonoBehaviour {
     {
         resourceCounters[player.playerNum - 1].text = resourceCount + "/" + maxResources;
     }
+
+    public void OnTooltipCreated(int touchId)
+    {
+        touchIdsMakingTooltips.Add(touchId);
+    }
+
+    public void OnTooltipDestroyed(int touchId)
+    {
+        touchIdsMakingTooltips.Remove(touchId);
+    }
+
+    public bool IsTouchMakingTooltipAlready(int touchId)
+    {
+        return touchIdsMakingTooltips.Contains(touchId);
+    }
+
 }

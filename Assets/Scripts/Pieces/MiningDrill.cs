@@ -30,5 +30,16 @@ public class MiningDrill : Structure
         iconSr.sprite = Services.UIManager.drillIcon;
     }
 
+    protected override string GetName()
+    {
+        return "Mining Drill";
+    }
+
+    protected override string GetDescription()
+    {
+        return "Increases resource production by <color=green>" 
+            + 100 * resourceGainIncrementMultiplier + "</color>%";
+    }
+
 }
 

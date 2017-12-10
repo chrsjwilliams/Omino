@@ -14,4 +14,16 @@ public class Mine : Blueprint
         base.Update();
         UpdateResourceMeter();
     }
+
+    protected override string GetName()
+    {
+        return "Mine";
+    }
+
+    protected override string GetDescription()
+    {
+        return "Produces " + "<color=green>" + resourcesPerIncrement + "</color>"
+            + " resources every " + "<color=green>"
+            + 1 / resourceIncrementRate + "</color>" + " s";
+    }
 }

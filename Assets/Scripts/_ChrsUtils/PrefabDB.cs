@@ -41,4 +41,7 @@ public class PrefabDB : ScriptableObject
     [SerializeField] private GameObject structureParticles;
     public GameObject StructureParticles { get { return structureParticles; } }
 
+    [SerializeField] private GameObject tooltip;
+    public GameObject Tooltip { get { return tooltip; } }
+
 }

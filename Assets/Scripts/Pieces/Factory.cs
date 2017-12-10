@@ -25,4 +25,15 @@ public class Factory : Blueprint
         base.OnPlace();
         CreateTimerUI();
     }
+
+    protected override string GetName()
+    {
+        return "Factory";
+    }
+
+    protected override string GetDescription()
+    {
+        return "Creates a new piece every " + "<color=green>" + 1 / drawRate + "</color>" +
+            " s";
+    }
 }

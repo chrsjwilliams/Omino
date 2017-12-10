@@ -27,4 +27,14 @@ public class FortifiedSteel : Structure
         iconSr.enabled = true;
         iconSr.sprite = Services.UIManager.steelIcon;
     }
+
+    protected override string GetName()
+    {
+        return "Fortified Steel";
+    }
+
+    protected override string GetDescription()
+    {
+        return "All newly placed pieces are automatically fortified";
+    }
 }
