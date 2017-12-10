@@ -37,7 +37,7 @@ public class Tooltip : MonoBehaviour {
         }
         if (blueprintInHand)
         {
-            offset = new Vector2(-offset.x, offset.y);
+            offset = new Vector2(-offset.x, 0);
         }
         transform.position = basePos + offset;
     }
