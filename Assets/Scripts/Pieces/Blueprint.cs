@@ -275,7 +275,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                     Services.UIManager.canvas).GetComponent<Tooltip>();
                 tooltipLeft.Init(GetName(), GetDescription(), 90,
                     Services.GameManager.MainCamera.WorldToScreenPoint(
-                    GetCenterpoint()));
+                    GetCenterpoint()), !placed);
                 tooltips.Add(tooltipLeft);
             }
             if (placed || owner.playerNum == 1)
@@ -284,7 +284,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                 Services.UIManager.canvas).GetComponent<Tooltip>();
                 tooltipRight.Init(GetName(), GetDescription(), -90,
                     Services.GameManager.MainCamera.WorldToScreenPoint(
-                    GetCenterpoint()));
+                    GetCenterpoint()), !placed);
                 tooltips.Add(tooltipRight);
             }
 

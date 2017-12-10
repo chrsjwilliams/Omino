@@ -960,8 +960,8 @@ public class Polyomino
     {
         if (e.touch.fingerId == touchID)
         {
-            touchID = -1;
             OnInputUp();
+            touchID = -1;
         }
     }
 
@@ -1254,7 +1254,7 @@ public class Polyomino
 
     protected void DestroyTooltips()
     {
-        if(tooltips.Count > 0) Services.UIManager.OnTooltipDestroyed(touchID);
+        Services.UIManager.OnTooltipDestroyed(touchID);
         for (int i = tooltips.Count - 1; i >= 0; i--)
         {
             GameObject.Destroy(tooltips[i].gameObject);
