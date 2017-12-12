@@ -1241,7 +1241,16 @@ public class Polyomino
 
     protected virtual void SetOverlaySprite()
     {
-        spriteOverlay.color = new Color(0, 0, 0, 0.75f);
+        Color overlayColor;
+        if(owner != null)
+        {
+            overlayColor = (owner.ColorScheme[0] + Color.black) / 2;
+        }
+        else
+        {
+            overlayColor = (Services.GameManager.NeutralColor + Color.black) / 2;
+        }
+        spriteOverlay.color = new Color(overlayColor.r, overlayColor.g, overlayColor.b, 0.75f);
         spriteOverlay.transform.position = GetCenterpoint();
     }
 

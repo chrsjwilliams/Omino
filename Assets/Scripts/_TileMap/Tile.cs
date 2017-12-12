@@ -112,7 +112,7 @@ public class Tile : MonoBehaviour
     public void ActivateTile(Player player, BuildingType buildingType)
     {
         _isActive = true;
-        if (player == null) sr.color = Services.GameManager.SuperDestructorResourceColor;
+        if (player == null) sr.color = Services.GameManager.NeutralColor;
         //else if(buildingType == BuildingType.NONE)
          else sr.color = player.ColorScheme[0];
         //else sr.color = player.ColorScheme[1];

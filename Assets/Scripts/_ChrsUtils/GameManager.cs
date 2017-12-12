@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private Color superDestructorResourceColor;
-    public Color SuperDestructorResourceColor { get { return superDestructorResourceColor; } }
+    public Color NeutralColor { get { return superDestructorResourceColor; } }
 
     [SerializeField]
     public bool turnBasedVersion { get; private set; }

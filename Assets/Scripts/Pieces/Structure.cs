@@ -148,6 +148,7 @@ public abstract class Structure : Polyomino
             return;
         }
         ShiftColor(owner.ColorScheme[0]);
+        SetOverlaySprite();
         Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
         owner.GainOwnership(this);
         SetParticleClaimMode(true);
@@ -158,6 +159,7 @@ public abstract class Structure : Polyomino
         SetToNeutralColor();
         owner.LoseOwnership(this);
         owner = null;
+        SetOverlaySprite();
         SetParticleClaimMode(false);
     }
 
@@ -183,6 +185,7 @@ public abstract class Structure : Polyomino
             main.gravityModifierMultiplier -= 0.025f;
             main.startColor = Color.white;
             emission.rateOverTimeMultiplier /= 2f;
+            ps.Stop();
         }
     }
 
