@@ -35,7 +35,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         useMiniBases = true;
         useBlueprints = true;
 
-        turnBasedButton = GameObject.Find("ToggleTurnBased").GetComponent<Text>();
+        //turnBasedButton = GameObject.Find("ToggleTurnBased").GetComponent<Text>();
         structureButton = GameObject.Find("ToggleStructures").GetComponent<Text>();
         miniBaseButton = GameObject.Find("ToggleMiniBases").GetComponent<Text>();
         blueprintButton = GameObject.Find("ToggleBlueprints").GetComponent<Text>();
