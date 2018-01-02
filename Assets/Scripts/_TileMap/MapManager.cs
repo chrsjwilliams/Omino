@@ -158,6 +158,14 @@ public class MapManager : MonoBehaviour
                     structure = new FortifiedSteel();
                     mirroredStructure = new FortifiedSteel();
                     break;
+                case BuildingType.BIGGERBRICKS:
+                    structure = new BiggerBricks();
+                    mirroredStructure = new BiggerBricks();
+                    break;
+                case BuildingType.BIGGERBOMBS:
+                    structure = new BiggerBombs();
+                    mirroredStructure = new BiggerBombs();
+                    break;
                 default:
                     return null;
             }
@@ -247,15 +255,22 @@ public class MapManager : MonoBehaviour
         return true;
     }
 
-    void GenerateStructures()
+    List<BuildingType> InitStructureTypeList()
     {
-        structuresOnMap = new List<Structure>();
-        List<BuildingType> structureTypes = new List<BuildingType>()
+        return new List<BuildingType>()
         {
             BuildingType.MININGDRILL,
             BuildingType.ASSEMBLYLINE,
-            BuildingType.FORTIFIEDSTEEL
+            BuildingType.FORTIFIEDSTEEL,
+            BuildingType.BIGGERBRICKS,
+            BuildingType.BIGGERBOMBS
         };
+    }
+
+    void GenerateStructures()
+    {
+        structuresOnMap = new List<Structure>();
+        List<BuildingType> structureTypes = InitStructureTypeList();
 
         if (Services.GameManager.usingMiniBases)
         {
@@ -284,7 +299,9 @@ public class MapManager : MonoBehaviour
             if(Services.GameManager.usingStructures)
             {
                 BuildingType type;
-                type = structureTypes[i % structureTypes.Count];
+                if (structureTypes.Count == 0) structureTypes = InitStructureTypeList();
+                type = structureTypes[Random.Range(0, structureTypes.Count)];
+                structureTypes.Remove(type);
                 structures = GenerateStructure(type, false);
                 if (structures == null)
                 {

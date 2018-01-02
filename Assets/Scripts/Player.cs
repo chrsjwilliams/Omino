@@ -94,6 +94,8 @@ public class Player : MonoBehaviour
     public float resourceGainIncrementFactor { get; private set; }
     public float drawRateFactor { get; private set; }
     public bool autoFortify { get; private set; }
+    private bool biggerBricks;
+    private bool biggerBombs;
 
 
     // Use this for initialization
@@ -224,11 +226,20 @@ public class Player : MonoBehaviour
         List<Polyomino> nonDestructors = new List<Polyomino>();
         for (int numBlocks = 2; numBlocks <= 4; numBlocks++)
         {
-            int numTypes = Polyomino.pieceTypes[numBlocks];
+            int pieceSize = numBlocks;
+            if (numBlocks == 4 && biggerBricks)
+            {
+                pieceSize += 1;
+            }
+            if(numBlocks <4 && biggerBombs)
+            {
+                pieceSize += 1;
+            }
+            int numTypes = Polyomino.pieceTypes[pieceSize];
             for (int index = 0; index < numTypes; index++)
             {
-                if (numBlocks < 4) destructors.Add(new Destructor(numBlocks, index, this, false));
-                else nonDestructors.Add(new Polyomino(numBlocks, index, this));
+                if (numBlocks < 4) destructors.Add(new Destructor(pieceSize, index, this, false));
+                else nonDestructors.Add(new Polyomino(pieceSize, index, this));
             }
         }
         for (int i = 0; i < deckClumpCount; i++)
@@ -314,7 +325,10 @@ public class Player : MonoBehaviour
         else
         {
             List<Polyomino> destructors = new List<Polyomino>();
-            for (int numBlocks = 2; numBlocks <= 3; numBlocks++)
+            int bigPieceIncrement = 0;
+            if (biggerBombs) bigPieceIncrement = 1;
+            for (int numBlocks = 2 + bigPieceIncrement; numBlocks <= 3 + bigPieceIncrement; 
+                numBlocks++)
             {
                 int numTypes = Polyomino.pieceTypes[numBlocks];
                 for (int index = 0; index < numTypes; index++)
@@ -504,5 +518,17 @@ public class Player : MonoBehaviour
     public void LoseOwnership(Structure structure)
     {
         boardPieces.Remove(structure);
+    }
+
+    public void ToggleBiggerBricks(bool status)
+    {
+        biggerBricks = status;
+        InitializeDeck();
+    }
+
+    public void ToggleBiggerBombs(bool status)
+    {
+        biggerBombs = status;
+        InitializeDeck();
     }
 }

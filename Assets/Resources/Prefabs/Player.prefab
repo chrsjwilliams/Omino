@@ -51,18 +51,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 680d4fbae593b8348ab048ecb1121d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _activeTilePrimaryColors:
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  _activeTileSecondaryColors:
+  colorScheme:
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 0, g: 0, b: 0, a: 0}
   viewingHand: 0
   deckClumpCount: 4
   handSpacing: {x: 5.5, y: -3.5, z: 0}
   handOffset: {x: -12.4, y: 5.5, z: 0}
-  startingHandSize: 3
+  startingHandSize: 4
   maxHandSize: 5
   piecesPerHandColumn: 5
-  startingResources: 50
+  startingResources: 90
   baseMaxResources: 100
