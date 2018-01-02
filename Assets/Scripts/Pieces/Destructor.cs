@@ -5,10 +5,12 @@ using System.Collections.Generic;
 public class Destructor : Polyomino
 {
     private bool isSuper;
+    private List<Polyomino> piecesInRange;
     public Destructor(int _units, int _index, Player _player, bool _isSuper) 
         : base(_units, _index, _player)
     {
         isSuper = _isSuper;
+        piecesInRange = new List<Polyomino>();
     }
 
     protected override void SetIconSprite()
@@ -94,6 +96,41 @@ public class Destructor : Polyomino
         for (int i = piecesToRemove.Count - 1; i >= 0; i--)
         {
             piecesToRemove[i].Remove();
+        }
+    }
+
+    void UnhighlightTargetedPieces()
+    {
+        for (int i = 0; i < piecesInRange.Count; i++)
+        {
+            if (!piecesInRange[i].dead)
+            {
+                piecesInRange[i].TurnOffGlow();
+            }
+        }
+    }
+
+    protected override void SetLegalityGlowStatus()
+    {
+        base.SetLegalityGlowStatus();
+        UnhighlightTargetedPieces();
+        if (IsPlacementLegal())
+        {
+            List<Polyomino> overlappingEnemyPieces = new List<Polyomino>();
+            foreach (Tile tile in tiles)
+            {
+                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                if(mapTile.occupyingPiece != null && mapTile.occupyingPiece.owner != owner &&
+                    !overlappingEnemyPieces.Contains(mapTile.occupyingPiece))
+                {
+                    overlappingEnemyPieces.Add(mapTile.occupyingPiece);
+                }
+            }
+            for (int i = 0; i < overlappingEnemyPieces.Count; i++)
+            {
+                overlappingEnemyPieces[i].SetGlow(Color.yellow);
+            }
+            piecesInRange = overlappingEnemyPieces;
         }
     }
 }

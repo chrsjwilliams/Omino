@@ -79,6 +79,7 @@ public class Polyomino
     private bool affordable;
     private bool isVisible;
     public bool connected { get; private set; }
+    public bool dead { get; private set; }
     protected List<Tooltip> tooltips;
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
@@ -769,6 +770,7 @@ public class Polyomino
 
         if (ringTimer != null) RemoveTimerUI();
         owner.OnPieceRemoved(this);
+        dead = true;
     }
 
     void DestroyThis()
@@ -1076,7 +1078,7 @@ public class Polyomino
         SetLegalityGlowStatus();
     }
 
-    void SetLegalityGlowStatus()
+    protected virtual void SetLegalityGlowStatus()
     {
         if (affordable || this is Blueprint)
         {
