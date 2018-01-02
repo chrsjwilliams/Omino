@@ -1040,6 +1040,7 @@ public class Polyomino
                 owner.CancelSelectedPiece();
                 EnterUnselectedState();
                 ToggleCostUIStatus(true);
+                CleanUpUI();
             }
             IncrementSortingOrder(-20);
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
@@ -1077,6 +1078,8 @@ public class Polyomino
 
         SetLegalityGlowStatus();
     }
+
+    protected virtual void CleanUpUI() { }
 
     protected virtual void SetLegalityGlowStatus()
     {
