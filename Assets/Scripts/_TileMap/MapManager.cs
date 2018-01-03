@@ -143,8 +143,8 @@ public class MapManager : MonoBehaviour
             switch (type)
             {
                 case BuildingType.BASE:
-                    structure = new Base(null, false);
-                    mirroredStructure = new Base(null, false);
+                    structure = new Base();
+                    mirroredStructure = new Base();
                     break;
                 case BuildingType.MININGDRILL:
                     structure = new MiningDrill();
@@ -165,6 +165,10 @@ public class MapManager : MonoBehaviour
                 case BuildingType.BIGGERBOMBS:
                     structure = new BiggerBombs();
                     mirroredStructure = new BiggerBombs();
+                    break;
+                case BuildingType.SPLASHDAMAGE:
+                    structure = new SplashDamage();
+                    mirroredStructure = new SplashDamage();
                     break;
                 default:
                     return null;
@@ -263,7 +267,8 @@ public class MapManager : MonoBehaviour
             BuildingType.ASSEMBLYLINE,
             BuildingType.FORTIFIEDSTEEL,
             BuildingType.BIGGERBRICKS,
-            BuildingType.BIGGERBOMBS
+            BuildingType.BIGGERBOMBS,
+            BuildingType.SPLASHDAMAGE
         };
     }
 
@@ -276,7 +281,7 @@ public class MapManager : MonoBehaviour
         {
             for (int j = 0; j < 2; j++)
             {
-                Base cornerBase = new Base(null, false);
+                Base cornerBase = new Base();
                 cornerBase.MakePhysicalPiece(true);
                 Coord location;
                 if (j == 0)
@@ -285,7 +290,7 @@ public class MapManager : MonoBehaviour
                 }
                 else
                 {
-                    location = new Coord(1, MapLength - 2);
+                    location = new Coord(0, MapLength - 1);
                 }
                 cornerBase.PlaceAtLocation(location);
                 structuresOnMap.Add(cornerBase);

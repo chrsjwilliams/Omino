@@ -28,6 +28,7 @@ public class UIManager : MonoBehaviour {
     public Sprite steelIcon;
     public Sprite bricksIcon;
     public Sprite bigBombIcon;
+    public Sprite splashIcon;
     public Sprite factoryOverlay;
     public Sprite mineOverlay;
     public Sprite baseOverlay;

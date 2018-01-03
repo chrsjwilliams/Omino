@@ -4,6 +4,16 @@ using System.Collections;
 public class Base : Structure
 {
     public bool mainBase { get; private set; }
+
+    public Base() : base(0)
+    {
+        baseDrawPeriod = 15f;
+        baseResourcesPerIncrement = 10;
+        baseResourceIncrementPeriod = 5f;
+        buildingType = BuildingType.BASE;
+        isFortified = true;
+    }
+
     public Base(Player _player, bool _mainBase) : base(9, 0, _player)
     {
         mainBase = _mainBase;
@@ -47,7 +57,11 @@ public class Base : Structure
     protected override void SetOverlaySprite()
     {
         base.SetOverlaySprite();
-        spriteOverlay.sprite = Services.UIManager.baseOverlay;
+        if (mainBase)
+        {
+            spriteOverlay.sprite = Services.UIManager.baseOverlay;
+        }
+        else { spriteOverlay.sprite = Services.UIManager.structureOverlay; }
     }
 
     protected override string GetName()

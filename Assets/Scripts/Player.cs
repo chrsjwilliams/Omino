@@ -96,6 +96,7 @@ public class Player : MonoBehaviour
     public bool autoFortify { get; private set; }
     private bool biggerBricks;
     private bool biggerBombs;
+    public bool splashDamage { get; private set; }
 
 
     // Use this for initialization
@@ -530,5 +531,10 @@ public class Player : MonoBehaviour
     {
         biggerBombs = status;
         InitializeDeck();
+    }
+
+    public void ToggleSplashDamage(bool status)
+    {
+        splashDamage = status;
     }
 }

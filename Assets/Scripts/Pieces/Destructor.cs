@@ -81,16 +81,7 @@ public class Destructor : Polyomino
     {
         base.OnPlace();
         iconSr.enabled = false;
-        List<Polyomino> piecesToRemove = new List<Polyomino>();
-        foreach (Tile tile in tiles)
-        {
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-            if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner != owner)
-            {
-                if (!piecesToRemove.Contains(mapTile.occupyingPiece))
-                    piecesToRemove.Add(mapTile.occupyingPiece);
-            }
-        }
+        List<Polyomino> piecesToRemove = GetPiecesInRange();
         if (piecesToRemove.Count > 0)
             Services.AudioManager.CreateTempAudio(Services.Clips.PieceDestroyed, 1);
         for (int i = piecesToRemove.Count - 1; i >= 0; i--)
@@ -122,21 +113,39 @@ public class Destructor : Polyomino
         UnhighlightTargetedPieces();
         if (IsPlacementLegal())
         {
-            List<Polyomino> overlappingEnemyPieces = new List<Polyomino>();
-            foreach (Tile tile in tiles)
+            piecesInRange = GetPiecesInRange();
+            for (int i = 0; i < piecesInRange.Count; i++)
             {
-                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-                if(mapTile.occupyingPiece != null && mapTile.occupyingPiece.owner != owner &&
-                    !overlappingEnemyPieces.Contains(mapTile.occupyingPiece))
+                piecesInRange[i].SetGlow(Color.yellow);
+            }
+        }
+    }
+
+    List<Polyomino> GetPiecesInRange()
+    {
+        List<Polyomino> enemyPiecesInRange = new List<Polyomino>();
+        foreach (Tile tile in tiles)
+        {
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            if (mapTile.occupyingPiece != null && mapTile.occupyingPiece.owner != owner &&
+                !enemyPiecesInRange.Contains(mapTile.occupyingPiece))
+            {
+                enemyPiecesInRange.Add(mapTile.occupyingPiece);
+            }
+        }
+        if (owner.splashDamage)
+        {
+            List<Polyomino> adjacentEnemyPieces =
+                GetAdjacentPolyominos(Services.GameManager.Players[owner.playerNum % 2]);
+            for (int i = 0; i < adjacentEnemyPieces.Count; i++)
+            {
+                Polyomino enemyPiece = adjacentEnemyPieces[i];
+                if (!enemyPiecesInRange.Contains(enemyPiece) && !(enemyPiece is Structure))
                 {
-                    overlappingEnemyPieces.Add(mapTile.occupyingPiece);
+                    enemyPiecesInRange.Add(enemyPiece);
                 }
             }
-            for (int i = 0; i < overlappingEnemyPieces.Count; i++)
-            {
-                overlappingEnemyPieces[i].SetGlow(Color.yellow);
-            }
-            piecesInRange = overlappingEnemyPieces;
         }
+        return enemyPiecesInRange;
     }
 }
