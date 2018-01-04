@@ -80,7 +80,7 @@ public class Main : MonoBehaviour
         Services.GameEventManager = new GameEventsManager();
 
         Services.GameManager = GetComponent<GameManager>();
-        Services.GameManager.Init(2);
+        Services.GameManager.Init();
 
         Services.MapManager = GetComponent<MapManager>();
         Services.MapManager.Init();

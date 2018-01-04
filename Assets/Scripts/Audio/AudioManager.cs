@@ -9,6 +9,7 @@ public class AudioManager {
     public void CreateTempAudio(AudioClip clip, float volume)
     {
         GameObject obj = new GameObject();
+        obj.name = "Audio Clip: " + clip.name;
         AudioSource audioSource = obj.AddComponent<AudioSource>();
         audioSource.clip = clip;
         audioSource.volume = volume;
@@ -21,6 +22,7 @@ public class AudioManager {
         if(mainTrack == null)
         {
             GameObject obj = new GameObject();
+            obj.name = "Main Track: " + clip.name;
             mainTrack = obj.AddComponent<AudioSource>();
         }
         mainTrack.clip = clip;

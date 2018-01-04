@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+
     public int playerNum { get; private set; }
 
     public Coord Coord { get; private set; }
@@ -14,14 +15,14 @@ public class Player : MonoBehaviour
     }
 
     [SerializeField]
-    private bool viewingHand;
+    protected bool viewingHand;
     private List<Polyomino> deck;
     [SerializeField]
-    private int deckClumpCount;
-    private List<List<Polyomino>> deckClumped;
-    private List<Polyomino> hand;
+    protected int deckClumpCount;
+    protected List<List<Polyomino>> deckClumped;
+    protected List<Polyomino> hand;
     public int handCount { get { return hand.Count; } }
-    private List<Blueprint> blueprints;
+    protected List<Blueprint> blueprints;
     public Polyomino selectedPiece { get; private set; }
     public bool placementAvailable
     {
@@ -32,17 +33,17 @@ public class Player : MonoBehaviour
             SetHandStatus();
         }
     }
-    private bool placementAvailable_;
+    protected bool placementAvailable_;
     [SerializeField]
-    private Vector3 handSpacing;
+    protected Vector3 handSpacing;
     [SerializeField]
-    private Vector3 handOffset;
+    protected Vector3 handOffset;
     [SerializeField]
-    private int startingHandSize;
+    protected int startingHandSize;
     [SerializeField]
-    private int maxHandSize;
+    protected int maxHandSize;
     [SerializeField]
-    private int piecesPerHandColumn;
+    protected int piecesPerHandColumn;
     public RectTransform handZone { get; private set; }
     public Base mainBase;
     //[SerializeField]
@@ -72,14 +73,14 @@ public class Player : MonoBehaviour
     //}
     //private float playMeter;
     public bool gameOver { get; private set; }
-    private UITabs uiTabs;
-    public List<Polyomino> boardPieces { get; private set; }
+    protected UITabs uiTabs;
+    public List<Polyomino> boardPieces { get; protected set; }
     [SerializeField]
-    private int startingResources;
+    protected int startingResources;
     [SerializeField]
-    private int baseMaxResources;
-    private int maxResources;
-    private int resources_;
+    protected int baseMaxResources;
+    protected int maxResources;
+    protected int resources_;
     public int resources {
         get
         {
@@ -91,16 +92,16 @@ public class Player : MonoBehaviour
             Services.UIManager.UpdateResourceCount(resources_, maxResources, this);
         }
     }
-    public float resourceGainIncrementFactor { get; private set; }
-    public float drawRateFactor { get; private set; }
-    public bool autoFortify { get; private set; }
-    private bool biggerBricks;
-    private bool biggerBombs;
-    public bool splashDamage { get; private set; }
+    public float resourceGainIncrementFactor { get; protected set; }
+    public float drawRateFactor { get; protected set; }
+    public bool autoFortify { get; protected set; }
+    protected bool biggerBricks;
+    protected bool biggerBombs;
+    public bool splashDamage { get; protected set; }
 
 
     // Use this for initialization
-    public void Init(Color[] playerColorScheme, int posOffset)
+    public virtual  void Init(Color[] playerColorScheme, int posOffset)
     {
         viewingHand = true;
         playerNum = posOffset + 1;
@@ -146,7 +147,7 @@ public class Player : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if (!gameOver)
         {

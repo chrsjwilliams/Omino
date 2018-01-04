@@ -6,6 +6,9 @@ public class GameManager : MonoBehaviour
 {
     public string PLAYER = "Player";
 
+    public readonly int MAX_PLAYERS = 2;
+    public readonly int MIN_PLAYERS = 0;
+
     [SerializeField] private int _numPlayers;
     public int NumPlayers
     {
@@ -82,34 +85,56 @@ public class GameManager : MonoBehaviour
 
     public void Init()
     {
-        NumPlayers = 1;
         _mainCamera = Camera.main;
-
-        _players = new Player[NumPlayers];
-        
     }
 
-	// Use this for initialization
-	public void Init (int players)
+    public void SetNumPlayers(int players)
     {
         _numPlayers = players;
-        _mainCamera = Camera.main;
-        _players = new Player[NumPlayers];
+        _players = new Player[MAX_PLAYERS];
     }
 
     public void InitPlayers()
     {
-        for (int i = 0; i < NumPlayers; i++)
+        int numAIPlayers = MAX_PLAYERS - NumPlayers;
+
+        for (int i = MAX_PLAYERS - 1; i > MIN_PLAYERS - 1; i--)
         {
 
-            _players[i] = Instantiate(  Services.Prefabs.Player, 
-                                        Services.MapManager.Map[0, 0].gameObject.transform.position, 
-                                        Quaternion.identity, 
-                                        Services.Main.transform).GetComponent<Player>();
+            if (numAIPlayers == 0)
+            {
+                _players[i] = Instantiate(Services.Prefabs.Player,
+                                            Services.MapManager.Map[0, 0].gameObject.transform.position,
+                                            Quaternion.identity,
+                                            Services.Main.transform).GetComponent<Player>();
+            }
+            else
+            {
+                numAIPlayers--;
+                Player _aiPlayer = Instantiate(Services.Prefabs.Player,
+                                           Services.MapManager.Map[0, 0].gameObject.transform.position,
+                                           Quaternion.identity,
+                                           Services.Main.transform);
+                GameObject aiPlayerGameObject = _aiPlayer.gameObject;
+                Destroy(aiPlayerGameObject.GetComponent<Player>());
+                aiPlayerGameObject.AddComponent<AIPlayer>();
+                AIPlayer aiPlayer = aiPlayerGameObject.GetComponent<AIPlayer>();
+                _players[i] = aiPlayer;
+            }     
 
             int playerNum = i + 1;
-            _players[i].name = PLAYER + " " + playerNum;
+            if (_players[i] is AIPlayer)
+            {
+                _players[i].name = "AI " + PLAYER + playerNum;
+            }
+            else
+            {
+                _players[i].name = PLAYER + " " + playerNum;
+            }
             _players[i].transform.parent = Services.Scenes.CurrentScene.transform;
+
+            
+
             switch (i)
             {
                 case 0:
@@ -121,6 +146,8 @@ public class GameManager : MonoBehaviour
                 default:
                     break;
             }
+            
+
         }
     }
 

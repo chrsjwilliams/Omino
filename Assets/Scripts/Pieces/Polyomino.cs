@@ -370,6 +370,8 @@ public class Polyomino
                                                     tetromino.GetLength(0),
                                                     pentomino.GetLength(0) };
 
+
+    public string ownerName;
     public Polyomino(int _units, int _index, Player _player)
     {
         index = _index;
@@ -917,9 +919,12 @@ public class Polyomino
 
     protected void ListenForInput()
     {
-        Services.GameEventManager.Register<TouchDown>(OnTouchDown);
-        Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
-        touchID = -1;
+        if (!(owner is AIPlayer))
+        {
+            Services.GameEventManager.Register<TouchDown>(OnTouchDown);
+            Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
+            touchID = -1;
+        }
     }
 
     protected void HideFromInput()
@@ -995,15 +1000,17 @@ public class Polyomino
             ToggleCostUIStatus(false);
             Services.AudioManager.CreateTempAudio(Services.Clips.PiecePicked, 1);
 
-            Services.GameEventManager.Register<TouchUp>(OnTouchUp);
-            Services.GameEventManager.Register<TouchMove>(OnTouchMove);
-            Services.GameEventManager.Register<TouchDown>(CheckTouchForRotateInput);
-            Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
+            if (!(owner is AIPlayer))
+            {
+                Services.GameEventManager.Register<TouchUp>(OnTouchUp);
+                Services.GameEventManager.Register<TouchMove>(OnTouchMove);
+                Services.GameEventManager.Register<TouchDown>(CheckTouchForRotateInput);
+                Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
 
-            Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
-            Services.GameEventManager.Register<MouseMove>(OnMouseMoveEvent);
-            Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
-
+                Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
+                Services.GameEventManager.Register<MouseMove>(OnMouseMoveEvent);
+                Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
+            }
         }
     }
 
@@ -1025,12 +1032,15 @@ public class Polyomino
     {
         if (!placed)
         {
-            Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
-            Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
-            Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
+            if (!(owner is AIPlayer))
+            {
+                Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
+                Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
+                Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
 
-            Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
-            Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
+                Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
+                Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
+            }
             if (IsPlacementLegal() && affordable && !owner.gameOver)
             {
                 PlaceAtCurrentLocation();

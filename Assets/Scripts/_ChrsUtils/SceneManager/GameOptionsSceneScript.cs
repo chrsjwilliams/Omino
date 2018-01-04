@@ -10,6 +10,10 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private const float SECONDS_TO_WAIT = 0.01f;
 
     [SerializeField]
+    private int numPlayers;
+    private const string PLAYERS = "Players: ";
+
+    [SerializeField]
     private bool turnBasedVersion;
     [SerializeField]
     private bool useStructures;
@@ -18,6 +22,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     [SerializeField]
     private bool useBlueprints;
 
+    private Text numPlayerText;
     private Text turnBasedButton;
     private Text structureButton;
     private Text miniBaseButton;
@@ -30,15 +35,18 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void Start()
     {
+        numPlayers = 2;
         turnBasedVersion = false;
         useStructures = true;
         useMiniBases = true;
         useBlueprints = true;
 
-        //turnBasedButton = GameObject.Find("ToggleTurnBased").GetComponent<Text>();
+        numPlayerText = GameObject.Find("PlayerNum").GetComponent<Text>();
         structureButton = GameObject.Find("ToggleStructures").GetComponent<Text>();
         miniBaseButton = GameObject.Find("ToggleMiniBases").GetComponent<Text>();
         blueprintButton = GameObject.Find("ToggleBlueprints").GetComponent<Text>();
+
+        numPlayerText.text = PLAYERS + numPlayers;
 
         ruleScroller = GetComponent<ScrollRectSnap>();
 
@@ -79,6 +87,24 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
         Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
         Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
+    }
+
+    public void IncrementPlayers()
+    {
+        if (numPlayers < Services.GameManager.MAX_PLAYERS)
+        {
+            numPlayers++;
+        }
+        numPlayerText.text = PLAYERS + numPlayers;
+    }
+
+    public void DecrementPlayers()
+    {
+        if(numPlayers > Services.GameManager.MIN_PLAYERS)
+        {
+            numPlayers--;
+        }
+        numPlayerText.text = PLAYERS + numPlayers;
     }
 
     public void ToggleTurnBased()
@@ -196,6 +222,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void ChangeScene()
     {
+        Services.GameManager.SetNumPlayers(numPlayers);
         Services.Scenes.Swap<GameSceneScript>();
     }
 
