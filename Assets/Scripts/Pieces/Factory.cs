@@ -5,25 +5,27 @@ public class Factory : Blueprint
 {
     public Factory(Player player_) : base(BuildingType.FACTORY, player_)
     {
-        baseDrawPeriod = 30f;
+        normalDrawRateBonus = 1f / 30f;
     }
 
     public override void Update()
     {
         base.Update();
-        UpdateDrawMeter();
+        //UpdateDrawMeter();
     }
 
     public override void Remove()
     {
+        owner.AugmentNormalDrawRate(-normalDrawRateBonus);
         base.Remove();
-        RemoveTimerUI();
+        //RemoveTimerUI();
     }
 
     protected override void OnPlace()
     {
         base.OnPlace();
-        CreateTimerUI();
+        owner.AugmentNormalDrawRate(normalDrawRateBonus);
+        //CreateTimerUI();
     }
 
     protected override string GetName()
@@ -33,8 +35,8 @@ public class Factory : Blueprint
 
     protected override string GetDescription()
     {
-        return "Creates a new piece every " + "<color=green>" +
-            Mathf.RoundToInt(1 / drawRate) + "</color>" +
-            " s";
+        return "+1 piece every" + "<color=green>"
+            + Mathf.RoundToInt(1 / normalDrawRateBonus)
+            + "</color>" + " s";
     }
 }

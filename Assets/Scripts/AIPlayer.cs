@@ -18,7 +18,7 @@ public class AIPlayer : Player
         startingResources = 90;
         baseMaxResources = 100;
         boardPieces = new List<Polyomino>();
-        resourceGainIncrementFactor = 1;
+        resourceGainFactor = 1;
         drawRateFactor = 1;
         base.Init(playerColorScheme, posOffset);
         playablePostions = FindAllPlayablePositions();
@@ -45,7 +45,7 @@ public class AIPlayer : Player
     protected void PlayPiece(List<Coord> _playablePositions)
     {
         
-        int possilbeRotations = 4;
+        int possibleRotations = 4;
         foreach(Polyomino piece in hand)
         {
             foreach (Coord coord in _playablePositions)

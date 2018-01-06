@@ -208,17 +208,6 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
     public override void Remove()
     {
-        //switch (buildingType)
-        //{
-        //    case BuildingType.FACTORY:
-        //        owner.ToggleFactoryCount(-1);
-        //        break;
-        //    case BuildingType.MINE:
-        //        owner.ToggleMineCount(-1);
-        //        break;
-        //    default:
-        //        break;
-        //}
         List<Polyomino> constituentPieces = new List<Polyomino>();
         foreach (Tile tile in tiles)
         {
@@ -239,19 +228,6 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
     protected override void OnPlace()
     {
-        //switch (buildingType)
-        //{
-        //    case BuildingType.FACTORY:
-        //        owner.ToggleFactoryCount(1);
-        //        Services.AudioManager.CreateTempAudio(Services.Clips.FactoryPlaced, 1);
-        //        break;
-        //    case BuildingType.MINE:
-        //        owner.ToggleMineCount(1);
-        //        Services.AudioManager.CreateTempAudio(Services.Clips.FactoryPlaced, 1);
-        //        break;
-        //    default:
-        //        break;
-        //}
         Services.AudioManager.CreateTempAudio(Services.Clips.BlueprintPlaced, 1);
         foreach(Tile tile in tiles)
         {

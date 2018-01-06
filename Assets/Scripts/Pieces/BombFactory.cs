@@ -5,30 +5,32 @@ public class BombFactory : Blueprint
 {
     public BombFactory(Player owner_) : base(BuildingType.BOMBFACTORY, owner_)
     {
-        baseDrawPeriod = 45f;
+        destructorDrawRateBonus = 1f / 45f;
     }
 
     public override void Update()
     {
         base.Update();
-        UpdateDrawMeter();
+        //UpdateDrawMeter();
     }
 
-    protected override void OnDraw()
-    {
-        owner.DrawPieces(1, holder.transform.position, true);
-    }
+    //protected override void OnDraw()
+    //{
+    //    owner.DrawPieces(1, holder.transform.position, true);
+    //}
 
     public override void Remove()
     {
+        owner.AugmentDestructorDrawRate(-destructorDrawRateBonus);
         base.Remove();
-        RemoveTimerUI();
+        //RemoveTimerUI();
     }
 
     protected override void OnPlace()
     {
         base.OnPlace();
-        CreateTimerUI();
+        owner.AugmentDestructorDrawRate(destructorDrawRateBonus);
+        //CreateTimerUI();
     }
 
     protected override void SetOverlaySprite()
@@ -44,8 +46,8 @@ public class BombFactory : Blueprint
 
     protected override string GetDescription()
     {
-        return "Creates a new <color=red>Destructor</color> piece every " + "<color=green>" 
-            + Mathf.RoundToInt(1 / drawRate)
+        return "+1" + "<color=red>DESTRUCTOR</color> piece every" + "<color=green>"
+            + Mathf.RoundToInt(1 / destructorDrawRateBonus)
             + "</color>" + " s";
     }
 }

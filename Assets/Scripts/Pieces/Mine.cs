@@ -5,14 +5,25 @@ public class Mine : Blueprint
 {
     public Mine(Player player_) : base(BuildingType.MINE, player_)
     {
-        baseResourceIncrementPeriod = 5f;
-        baseResourcesPerIncrement = 5;
+        resourceGainRateBonus = 1f / 10f;
     }
 
     public override void Update()
     {
         base.Update();
-        UpdateResourceMeter();
+        //UpdateResourceMeter();
+    }
+
+    protected override void OnPlace()
+    {
+        base.OnPlace();
+        owner.AugmentResourceGainRate(resourceGainRateBonus);
+    }
+
+    public override void Remove()
+    {
+        owner.AugmentResourceGainRate(-resourceGainRateBonus);
+        base.Remove();
     }
 
     protected override string GetName()
@@ -22,8 +33,7 @@ public class Mine : Blueprint
 
     protected override string GetDescription()
     {
-        return "Produces " + "<color=green>" + resourcesPerIncrement + "</color>"
-            + " resources every " + "<color=green>"
-            + Mathf.RoundToInt(1 / resourceIncrementRate) + "</color>" + " s";
+        return "+10 resources every " + "<color=green>"
+            + Mathf.RoundToInt(1 / resourceGainRateBonus) + "</color>" + " s";
     }
 }

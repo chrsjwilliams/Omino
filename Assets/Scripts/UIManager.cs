@@ -8,9 +8,9 @@ public class UIManager : MonoBehaviour {
     public RectTransform[] handZones;
     public Text[] resourceCounters;
     [SerializeField]
-    private Image[] drawMeters;
+    private Image[] normalDrawMeters;
     [SerializeField]
-    private Image[] playMeters;
+    private Image[] destructorDrawMeters;
     [SerializeField]
     private Image[] greyOutBoxes;
     [SerializeField]
@@ -68,14 +68,11 @@ public class UIManager : MonoBehaviour {
 	//	touchCount.text = newText;
 	//}
 
-    public void UpdateDrawMeter(int playerNum, float fillProportion)
+    public void UpdateDrawMeters(int playerNum, float normalFillProportion, 
+        float destructorFillProportion)
     {
-        drawMeters[playerNum - 1].fillAmount = fillProportion;
-    }
-
-    public void UpdatePlayMeter(int playerNum, float fillProportion, bool playAvailable)
-    {
-        playMeters[playerNum - 1].fillAmount = fillProportion;
+        normalDrawMeters[playerNum - 1].fillAmount = normalFillProportion;
+        destructorDrawMeters[playerNum - 1].fillAmount = destructorFillProportion;
     }
 
     public void StartBannerScroll(Player winner_)

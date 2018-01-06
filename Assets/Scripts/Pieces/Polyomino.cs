@@ -29,7 +29,7 @@ public class Polyomino
     private const float rotationInputRadius = 8f;
     protected int touchID;
     private readonly Vector3 baseDragOffset = 5f * Vector3.right;
-    private readonly Vector3 unselectedScale = 0.5f * Vector3.one;
+    private readonly Vector3 unselectedScale = 0.36f * Vector3.one;
     public const float drawAnimDur = 0.5f;
     public const float deathAnimDur = 0.5f;
     public const float deathAnimScaleUp = 1.5f;
@@ -40,40 +40,9 @@ public class Polyomino
 
     public bool isFortified;
     public List<Blueprint> occupyingBlueprints { get; protected set; }
-    protected Image ringTimer;
-    protected float drawMeter_;
-    protected float drawMeter
-    {
-        get { return drawMeter_; }
-        set
-        {
-            drawMeter_ = value;
-            ringTimer.fillAmount = Mathf.Min(1, drawMeter_);
-        }
-    }
-    protected float baseDrawPeriod;
-    protected float drawRate
-    {
-        get
-        {
-            if (owner == null) return 1 / baseDrawPeriod;
-            else return (1 / baseDrawPeriod) * owner.drawRateFactor;
-        }
-    }
-    protected float baseResourceIncrementPeriod;
-    protected int baseResourcesPerIncrement;
-    protected float resourceGainMeter;
-    protected float resourceIncrementRate { get { return 1 / baseResourceIncrementPeriod; } }
-    protected int resourcesPerIncrement
-    {
-        get
-        {
-            if (owner == null) return baseResourcesPerIncrement;
-            else return Mathf.RoundToInt(baseResourcesPerIncrement
-                * owner.resourceGainIncrementFactor);
-        }
-    }
-
+    protected float resourceGainRateBonus;
+    protected float normalDrawRateBonus;
+    protected float destructorDrawRateBonus;
     public int cost { get; protected set; }
     protected TextMesh costText;
     private bool affordable;
@@ -798,7 +767,7 @@ public class Polyomino
 
         //CheckForFortification(true);
 
-        if (ringTimer != null) RemoveTimerUI();
+        //if (ringTimer != null) RemoveTimerUI();
         owner.OnPieceRemoved(this);
         dead = true;
     }
@@ -1207,20 +1176,20 @@ public class Polyomino
         PlaceAtCurrentLocation(replace);
     }
 
-    protected void CreateTimerUI()
-    {
-        GameObject timerObj = GameObject.Instantiate(Services.Prefabs.RingTimer, 
-            Services.UIManager.canvas);
-        ringTimer = timerObj.GetComponentsInChildren<Image>()[1];
-        ringTimer.fillAmount = 0;
-        timerObj.transform.position =
-            Services.GameManager.MainCamera.WorldToScreenPoint(GetCenterpoint());
-    }
+    //protected void CreateTimerUI()
+    //{
+    //    GameObject timerObj = GameObject.Instantiate(Services.Prefabs.RingTimer, 
+    //        Services.UIManager.canvas);
+    //    ringTimer = timerObj.GetComponentsInChildren<Image>()[1];
+    //    ringTimer.fillAmount = 0;
+    //    timerObj.transform.position =
+    //        Services.GameManager.MainCamera.WorldToScreenPoint(GetCenterpoint());
+    //}
 
-    protected void RemoveTimerUI()
-    {
-        GameObject.Destroy(ringTimer.transform.parent.gameObject);
-    }
+    //protected void RemoveTimerUI()
+    //{
+    //    GameObject.Destroy(ringTimer.transform.parent.gameObject);
+    //}
 
     public virtual void Update() { }
 
@@ -1229,35 +1198,35 @@ public class Polyomino
         holder.transform.localScale = scale;
     }
 
-    protected void UpdateDrawMeter()
-    {
-        drawMeter += drawRate * Time.deltaTime;
-        if (drawMeter >= 1)
-        {
-            OnDraw();
-            Services.AudioManager.CreateTempAudio(Services.Clips.PlayAvailable[0], 1);
-            drawMeter -= 1;
-        }
-    }
+    //protected void UpdateDrawMeter()
+    //{
+    //    drawMeter += drawRate * Time.deltaTime;
+    //    if (drawMeter >= 1)
+    //    {
+    //        OnDraw();
+    //        Services.AudioManager.CreateTempAudio(Services.Clips.PlayAvailable[0], 1);
+    //        drawMeter -= 1;
+    //    }
+    //}
 
     protected virtual void OnDraw()
     {
         owner.DrawPieces(1, holder.transform.position);
     }
 
-    protected void UpdateResourceMeter()
-    {
-        resourceGainMeter += resourceIncrementRate * Time.deltaTime;
-        if (resourceGainMeter >= 1)
-        {
-            int resourcesGained = owner.GainResources(resourcesPerIncrement);
-            resourceGainMeter -= 1;
-            Services.GeneralTaskManager.Do(new FloatText("+" + resourcesGained,
-                GetCenterpoint(), owner, 3, 0.75f));
-            Services.GeneralTaskManager.Do(new ResourceGainAnimation(resourcesGained, 
-                holder.transform.position, owner.playerNum));
-        }
-    }
+    //protected void UpdateResourceMeter()
+    //{
+    //    resourceGainMeter += resourceIncrementRate * Time.deltaTime;
+    //    if (resourceGainMeter >= 1)
+    //    {
+    //        int resourcesGained = owner.GainResources(resourcesPerIncrement);
+    //        resourceGainMeter -= 1;
+    //        Services.GeneralTaskManager.Do(new FloatText("+" + resourcesGained,
+    //            GetCenterpoint(), owner, 3, 0.75f));
+    //        Services.GeneralTaskManager.Do(new ResourceGainAnimation(resourcesGained, 
+    //            holder.transform.position, owner.playerNum));
+    //    }
+    //}
 
     public void TogglePieceConnectedness(bool connected_)
     {

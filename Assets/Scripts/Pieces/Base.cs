@@ -7,9 +7,8 @@ public class Base : Structure
 
     public Base() : base(0)
     {
-        baseDrawPeriod = 15f;
-        baseResourcesPerIncrement = 10;
-        baseResourceIncrementPeriod = 5f;
+        normalDrawRateBonus = 1f / 30f;
+        resourceGainRateBonus = 1f / 10f;
         buildingType = BuildingType.BASE;
         isFortified = true;
     }
@@ -18,17 +17,8 @@ public class Base : Structure
     {
         mainBase = _mainBase;
         owner = _player;
-        baseResourceIncrementPeriod = 5f;
-        if (owner != null)
-        {
-            baseDrawPeriod = 15f;
-            baseResourcesPerIncrement = 10;
-        }
-        else
-        {
-            baseDrawPeriod = 30f;
-            baseResourcesPerIncrement = 5;
-        }
+        resourceGainRateBonus = 1f / 5f;
+        normalDrawRateBonus = 1f / 15f;
     }
 
     public override void ToggleStructureActivation(Player player)
@@ -38,20 +28,34 @@ public class Base : Structure
 
     public override void Update()
     {
-        UpdateDrawMeter();
-        UpdateResourceMeter();
+        //UpdateDrawMeter();
+        //UpdateResourceMeter();
     }
 
     protected override void OnPlace()
     {
-        CreateTimerUI();
+        //CreateTimerUI();
         ToggleCostUIStatus(false);
+        if (owner != null)
+        {
+            owner.AugmentNormalDrawRate(normalDrawRateBonus);
+            owner.AugmentResourceGainRate(resourceGainRateBonus);
+        }
     }
 
     public override void OnClaim(Player player)
     {
         base.OnClaim(player);
         TogglePieceConnectedness(true);
+        player.AugmentNormalDrawRate(normalDrawRateBonus);
+        player.AugmentResourceGainRate(resourceGainRateBonus);
+    }
+
+    public override void OnClaimLost()
+    {
+        owner.AugmentNormalDrawRate(-normalDrawRateBonus);
+        owner.AugmentResourceGainRate(-resourceGainRateBonus);
+        base.OnClaimLost();
     }
 
     protected override void SetOverlaySprite()
@@ -71,10 +75,10 @@ public class Base : Structure
 
     protected override string GetDescription()
     {
-        return "Creates a new piece every " + "<color=green>" + Mathf.RoundToInt(1 / drawRate)
+        return "+1 normal piece every " + "<color=green>" 
+            + Mathf.RoundToInt(1 / normalDrawRateBonus)
             + "</color>" +" s" + "\n\n" +
-            "Produces " + "<color=green>" + resourcesPerIncrement + "</color>" 
-            + " resources every " + "<color=green>"
-            + Mathf.RoundToInt(1 / resourceIncrementRate) + "</color>" + " s";
+            "+10 resources every " + "<color=green>" 
+            + Mathf.RoundToInt(1/resourceGainRateBonus) + "</color>" + " s";
     }
 }

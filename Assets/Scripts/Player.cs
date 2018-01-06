@@ -46,32 +46,6 @@ public class Player : MonoBehaviour
     protected int piecesPerHandColumn;
     public RectTransform handZone { get; private set; }
     public Base mainBase;
-    //[SerializeField]
-    //private float factoryPlayRateIncrement;
-    //private int factoryCount;
-    //[SerializeField]
-    //private float baseDrawPeriod;
-    //private float drawRate
-    //{
-    //    get
-    //    {
-    //        return (1 / baseDrawPeriod) * (1 + mineCount * mineDrawRateIncrement);
-    //    }
-    //}
-    //private float drawMeter;
-    //[SerializeField]
-    //private float mineDrawRateIncrement;
-    //private int mineCount;
-    //[SerializeField]
-    //private float basePlayPeriod;
-    //private float playRate
-    //{
-    //    get
-    //    {
-    //        return (1 / basePlayPeriod) * (1 + factoryCount * factoryPlayRateIncrement);
-    //    }
-    //}
-    //private float playMeter;
     public bool gameOver { get; private set; }
     protected UITabs uiTabs;
     public List<Polyomino> boardPieces { get; protected set; }
@@ -92,12 +66,20 @@ public class Player : MonoBehaviour
             Services.UIManager.UpdateResourceCount(resources_, maxResources, this);
         }
     }
-    public float resourceGainIncrementFactor { get; protected set; }
+    public float resourceGainFactor { get; protected set; }
     public float drawRateFactor { get; protected set; }
     public bool autoFortify { get; protected set; }
     protected bool biggerBricks;
     protected bool biggerBombs;
     public bool splashDamage { get; protected set; }
+    private float resourceGainRate;
+    private float normalDrawRate;
+    private float destructorDrawRate;
+    private float resourceMeterFillAmt;
+    private float normalDrawMeterFillAmt;
+    private float destructorDrawMeterFillAmt;
+    [SerializeField]
+    private int resourcesPerTick;
 
 
     // Use this for initialization
@@ -138,11 +120,9 @@ public class Player : MonoBehaviour
                 Services.MapManager.MapLength - 2);
         }
         Services.MapManager.CreateMainBase(this, basePos);
-        //for now just allow placement always
-        placementAvailable = true;
         maxResources = baseMaxResources;
         resources = startingResources;
-        resourceGainIncrementFactor = 1;
+        resourceGainFactor = 1;
         drawRateFactor = 1;
     }
 
@@ -151,8 +131,7 @@ public class Player : MonoBehaviour
     {
         if (!gameOver)
         {
-            //UpdateDrawMeter();
-            //UpdatePlayMeter();
+            UpdateMeters();
 
             if (Input.GetKeyDown(KeyCode.Space) && selectedPiece != null)
             {
@@ -172,29 +151,29 @@ public class Player : MonoBehaviour
 
     }
 
-    //void UpdateDrawMeter()
-    //{
-    //    drawMeter += drawRate * Time.deltaTime;
-    //    Services.UIManager.UpdateDrawMeter(playerNum, drawMeter);
-    //    if (drawMeter >= 1)
-    //    {
-    //        DrawPieces(1);
-    //        drawMeter -= 1;
-    //    }
-    //}
-
-    //void UpdatePlayMeter()
-    //{
-    //    playMeter += playRate * Time.deltaTime;
-    //    if (playMeter >= 1)
-    //    {
-    //        placementAvailable = true;
-    //        playMeter -= 1;
-    //        Services.AudioManager.CreateTempAudio(Services.Clips.PlayAvailable[playerNum -1], 
-    //            0.5f);
-    //    }
-    //    Services.UIManager.UpdatePlayMeter(playerNum, playMeter, placementAvailable);
-    //}
+    void UpdateMeters()
+    {
+        normalDrawMeterFillAmt += normalDrawRate * drawRateFactor * Time.deltaTime;
+        destructorDrawMeterFillAmt += destructorDrawRate * drawRateFactor * Time.deltaTime;
+        resourceMeterFillAmt += resourceGainRate * resourceGainFactor * Time.deltaTime;
+        Services.UIManager.UpdateDrawMeters(playerNum, normalDrawMeterFillAmt, 
+            destructorDrawMeterFillAmt);
+        if (normalDrawMeterFillAmt >= 1)
+        {
+            DrawPieces(1);
+            normalDrawMeterFillAmt -= 1;
+        }
+        if (destructorDrawMeterFillAmt >= 1)
+        {
+            DrawPieces(1, Vector3.zero, true);
+            destructorDrawMeterFillAmt -= 1;
+        }
+        if (resourceMeterFillAmt >= 1)
+        {
+            GainResources(resourcesPerTick);
+            resourceMeterFillAmt -= 1;
+        }
+    }
 
     void SetHandStatus()
     {
@@ -404,32 +383,12 @@ public class Player : MonoBehaviour
         OrganizeHand(hand);
     }
 
-    public void ToggleBranch(Polyomino root)
-    {
-        if (Services.MapManager.ConnectedToBase(root, new List<Polyomino>()))
-        {
-            root.ShiftColor(colorScheme[0]);
-        }
-        else
-        {
-            root.ShiftColor(colorScheme[1]);
-        }
-
-        List<Structure> adjStructures = root.GetAdjacentStructures();
-        foreach (Structure structure in adjStructures)
-        {
-            if(structure.owner == this || structure.owner == null)
-                structure.ToggleStructureActivation(this);
-        }    
-    }
-
 
     public void OnPiecePlaced(Polyomino piece)
     {
         BuildingType blueprintType = piece.buildingType;
         if (!(piece is Blueprint) && piece.cost != 10)
         {
-            //placementAvailable = false;
             resources -= piece.cost;
         }
         else if(piece is Blueprint)
@@ -442,11 +401,6 @@ public class Player : MonoBehaviour
         piece.SetGlowState(false);
         boardPieces.Add(piece);
         Services.MapManager.DetermineConnectedness(this);
-        //for (int i = boardPieces.Count - 1; i >= 0; i--)
-        //{
-        //    ToggleBranch(boardPieces[i]);
-        //}
-
         if (Services.MapManager.CheckForWin(piece)) Services.GameScene.GameWin(this);
     }
 
@@ -454,10 +408,6 @@ public class Player : MonoBehaviour
     {
         boardPieces.Remove(piece);
         Services.MapManager.DetermineConnectedness(this);
-        //for (int i = boardPieces.Count - 1; i >= 0; i--)
-        //{
-        //    ToggleBranch(boardPieces[i]);
-        //}
     }
 
     public void CancelSelectedPiece()
@@ -502,9 +452,24 @@ public class Player : MonoBehaviour
         drawRateFactor += factorChangeIncrement;
     }
 
+    public void AugmentResourceGainRate(float gainRateAmt)
+    {
+        resourceGainRate += gainRateAmt;
+    }
+
+    public void AugmentNormalDrawRate(float drawRateAmt)
+    {
+        normalDrawRate += drawRateAmt;
+    }
+
+    public void AugmentDestructorDrawRate(float drawRateAmt)
+    {
+        destructorDrawRate += drawRateAmt;
+    }
+
     public void AugmentResourceGainIncrementFactor(float factorChangeIncrement)
     {
-        resourceGainIncrementFactor += factorChangeIncrement;
+        resourceGainFactor += factorChangeIncrement;
     }
 
     public void ToggleAutoFortify(bool autoFortify_)
