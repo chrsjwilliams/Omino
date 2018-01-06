@@ -340,6 +340,7 @@ public class MapManager : MonoBehaviour
         playerBase.MakePhysicalPiece(true);
         playerBase.PlaceAtLocation(coord);
         playerBase.TogglePieceConnectedness(true);
+        player.boardPieces.Add(playerBase);
     }
 
     public Tile GetRandomTile()

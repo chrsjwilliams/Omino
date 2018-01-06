@@ -418,6 +418,11 @@ public class Polyomino
         }
     }
 
+    public void SetCentralCoord(Coord coord)
+    {
+        centerCoord = coord;
+    }
+
     public void SetAffordableStatus(Player player)
     {
         affordable = player.resources >= cost;
@@ -516,6 +521,29 @@ public class Polyomino
             //    }
             //}
         }
+    }
+
+    public List<Coord> GetAdjacentEmptyTiles()
+    {
+        List<Coord> adjacentEmptyTiles = new List<Coord>();
+
+        foreach (Tile tile in tiles)
+        {
+            foreach (Coord direction in Coord.Directions())
+            {
+                Coord adjacentCoord = tile.coord.Add(direction);
+                if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
+                {
+                    Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                    if (adjTile.occupyingPiece == null)
+                    {
+                        adjacentEmptyTiles.Add(adjTile.coord);
+                    }
+                }
+            }
+        }
+
+        return adjacentEmptyTiles;
     }
 
     public virtual List<Structure> GetAdjacentStructures()
