@@ -16,7 +16,8 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     protected bool viewingHand;
-    private List<Polyomino> deck;
+    private List<Polyomino> normalDeck;
+    private List<Destructor> destructorDeck;
     [SerializeField]
     protected int deckClumpCount;
     protected List<List<Polyomino>> deckClumped;
@@ -97,7 +98,8 @@ public class Player : MonoBehaviour
         blueprints = new List<Blueprint>();
         boardPieces = new List<Polyomino>();
 
-        InitializeDeck();
+        InitializeNormalDeck();
+        InitializeDestructorDeck();
         DrawPieces(startingHandSize);
         if (Services.GameManager.usingBlueprints)
         {
@@ -160,12 +162,16 @@ public class Player : MonoBehaviour
             destructorDrawMeterFillAmt);
         if (normalDrawMeterFillAmt >= 1)
         {
-            DrawPieces(1);
+            Vector3 rawDrawPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
+                Services.UIManager.factoryBlueprintLocations[playerNum - 1].position);
+            DrawPieces(1, new Vector3(rawDrawPos.x,rawDrawPos.y, 0));
             normalDrawMeterFillAmt -= 1;
         }
         if (destructorDrawMeterFillAmt >= 1)
         {
-            DrawPieces(1, Vector3.zero, true);
+            Vector3 rawDrawPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
+                Services.UIManager.bombFactoryBlueprintLocations[playerNum - 1].position);
+            DrawPieces(1, new Vector3(rawDrawPos.x, rawDrawPos.y, 0), true);
             destructorDrawMeterFillAmt -= 1;
         }
         if (resourceMeterFillAmt >= 1)
@@ -199,45 +205,77 @@ public class Player : MonoBehaviour
     }
 
     #region DECK FUNCTIONS
-    void InitializeDeck()
+    void InitializeNormalDeck()
     {
-        //deck = new List<Polyomino>();
-        deckClumped = new List<List<Polyomino>>();
-        List<Polyomino> destructors = new List<Polyomino>();
-        List<Polyomino> nonDestructors = new List<Polyomino>();
-        for (int numBlocks = 2; numBlocks <= 4; numBlocks++)
+        normalDeck = new List<Polyomino>();
+        for (int numBlocks = 4; numBlocks <= 4; numBlocks++)
         {
             int pieceSize = numBlocks;
-            if (numBlocks == 4 && biggerBricks)
-            {
-                pieceSize += 1;
-            }
-            if(numBlocks <4 && biggerBombs)
+            if (biggerBricks)
             {
                 pieceSize += 1;
             }
             int numTypes = Polyomino.pieceTypes[pieceSize];
             for (int index = 0; index < numTypes; index++)
             {
-                if (numBlocks < 4) destructors.Add(new Destructor(pieceSize, index, this, false));
-                else nonDestructors.Add(new Polyomino(pieceSize, index, this));
+                normalDeck.Add(new Polyomino(pieceSize, index, this));
             }
         }
-        for (int i = 0; i < deckClumpCount; i++)
+        //deck = new List<Polyomino>();
+        //deckClumped = new List<List<Polyomino>>();
+        //List<Polyomino> destructors = new List<Polyomino>();
+        //List<Polyomino> nonDestructors = new List<Polyomino>();
+        //for (int numBlocks = 2; numBlocks <= 4; numBlocks++)
+        //{
+        //    int pieceSize = numBlocks;
+        //    if (numBlocks == 4 && biggerBricks)
+        //    {
+        //        pieceSize += 1;
+        //    }
+        //    if(numBlocks <4 && biggerBombs)
+        //    {
+        //        pieceSize += 1;
+        //    }
+        //    int numTypes = Polyomino.pieceTypes[pieceSize];
+        //    for (int index = 0; index < numTypes; index++)
+        //    {
+        //        if (numBlocks < 4) destructors.Add(new Destructor(pieceSize, index, this, false));
+        //        else nonDestructors.Add(new Polyomino(pieceSize, index, this));
+        //    }
+        //}
+        //for (int i = 0; i < deckClumpCount; i++)
+        //{
+        //    deckClumped.Add(new List<Polyomino>());
+        //}
+        //for (int i = 0; i < destructors.Count; i++)
+        //{
+        //    Polyomino destructorToAdd = destructors[Random.Range(0, destructors.Count)];
+        //    deckClumped[i % deckClumpCount].Add(destructorToAdd);
+        //    destructors.Remove(destructorToAdd);
+        //}
+        //for (int i = 0; i < nonDestructors.Count; i++)
+        //{
+        //    Polyomino nonDestructorToAdd = nonDestructors[Random.Range(0, nonDestructors.Count)];
+        //    deckClumped[i % deckClumpCount].Add(nonDestructorToAdd);
+        //    nonDestructors.Remove(nonDestructorToAdd);
+        //}
+    }
+
+    void InitializeDestructorDeck()
+    {
+        destructorDeck = new List<Destructor>();
+        for (int numBlocks = 3; numBlocks <= 3; numBlocks++)
         {
-            deckClumped.Add(new List<Polyomino>());
-        }
-        for (int i = 0; i < destructors.Count; i++)
-        {
-            Polyomino destructorToAdd = destructors[Random.Range(0, destructors.Count)];
-            deckClumped[i % deckClumpCount].Add(destructorToAdd);
-            destructors.Remove(destructorToAdd);
-        }
-        for (int i = 0; i < nonDestructors.Count; i++)
-        {
-            Polyomino nonDestructorToAdd = nonDestructors[Random.Range(0, nonDestructors.Count)];
-            deckClumped[i % deckClumpCount].Add(nonDestructorToAdd);
-            nonDestructors.Remove(nonDestructorToAdd);
+            int pieceSize = numBlocks;
+            if (biggerBombs)
+            {
+                pieceSize += 1;
+            }
+            int numTypes = Polyomino.pieceTypes[pieceSize];
+            for (int index = 0; index < numTypes; index++)
+            {
+                destructorDeck.Add(new Destructor(pieceSize, index, this, false));
+            }
         }
     }
 
@@ -297,36 +335,66 @@ public class Player : MonoBehaviour
         Polyomino piece;
         if (!onlyDestructors)
         {
-            if (deckClumped.Count == 0) InitializeDeck();
-            int index = Random.Range(0, deckClumped[0].Count);
-            piece = deckClumped[0][index];
-            deckClumped[0].Remove(piece);
-            if (deckClumped[0].Count == 0) deckClumped.Remove(deckClumped[0]);
+            //if (deckClumped.Count == 0) InitializeNormalDeck();
+            //int index = Random.Range(0, deckClumped[0].Count);
+            //piece = deckClumped[0][index];
+            //deckClumped[0].Remove(piece);
+            //if (deckClumped[0].Count == 0) deckClumped.Remove(deckClumped[0]);
+            if (normalDeck.Count == 0) InitializeNormalDeck();
+            int index = Random.Range(0, normalDeck.Count);
+            piece = normalDeck[index];
+            normalDeck.Remove(piece);
         }
         else
         {
-            List<Polyomino> destructors = new List<Polyomino>();
-            int bigPieceIncrement = 0;
-            if (biggerBombs) bigPieceIncrement = 1;
-            for (int numBlocks = 2 + bigPieceIncrement; numBlocks <= 3 + bigPieceIncrement; 
-                numBlocks++)
-            {
-                int numTypes = Polyomino.pieceTypes[numBlocks];
-                for (int index = 0; index < numTypes; index++)
-                {
-                    destructors.Add(new Destructor(numBlocks, index, this, false));
-                }
-            }
-            piece = destructors[Random.Range(0,destructors.Count)];
+            //List<Polyomino> destructors = new List<Polyomino>();
+            //int bigPieceIncrement = 0;
+            //if (biggerBombs) bigPieceIncrement = 1;
+            //for (int numBlocks = 2 + bigPieceIncrement; numBlocks <= 3 + bigPieceIncrement; 
+            //    numBlocks++)
+            //{
+            //    int numTypes = Polyomino.pieceTypes[numBlocks];
+            //    for (int index = 0; index < numTypes; index++)
+            //    {
+            //        destructors.Add(new Destructor(numBlocks, index, this, false));
+            //    }
+            //}
+            //piece = destructors[Random.Range(0,destructors.Count)];
+            if (destructorDeck.Count == 0) InitializeDestructorDeck();
+            int index = Random.Range(0, destructorDeck.Count);
+            piece = destructorDeck[index];
+            destructorDeck.Remove(piece as Destructor);
         }
         return piece;
     }
 
+    Vector3 GetBlueprintPosition(Blueprint blueprint)
+    {
+        Vector3 screenPos = Vector3.zero;
+        switch (blueprint.buildingType)
+        {
+            case BuildingType.FACTORY:
+                screenPos = Services.UIManager.factoryBlueprintLocations[playerNum - 1].position;
+                break;
+            case BuildingType.MINE:
+                screenPos = Services.UIManager.mineBlueprintLocations[playerNum - 1].position;
+                break;
+            case BuildingType.BOMBFACTORY:
+                screenPos = Services.UIManager.bombFactoryBlueprintLocations[playerNum - 1].position;
+                break;
+            default:
+                break;
+        }
+        Vector3 rawWorldPos = Services.GameManager.MainCamera.ScreenToWorldPoint(screenPos);
+        return new Vector3(rawWorldPos.x, rawWorldPos.y, 0);
+    }
+
     public void AddBluePrint(Blueprint blueprint)
     {
-        blueprints.Add(blueprint);
-        blueprint.MakePhysicalPiece(viewingHand);
-        OrganizeHand(blueprints);
+        //blueprints.Add(blueprint);
+        blueprint.MakePhysicalPiece(false);
+        blueprint.Reposition(GetBlueprintPosition(blueprint));
+        //OrganizeHand(blueprints);
     }
 
     void OrganizeHand<T>(List<T> heldpieces) where T :Polyomino
@@ -420,9 +488,11 @@ public class Player : MonoBehaviour
 
     public void CancelSelectedBlueprint()
     {
-        blueprints.Add((Blueprint)selectedPiece);
+        //blueprints.Add((Blueprint)selectedPiece);
         selectedPiece.SetGlowState(false);
-        OrganizeHand(blueprints);
+        //OrganizeHand(blueprints);
+        Blueprint selectedBlueprint = selectedPiece as Blueprint;
+        selectedBlueprint.Reposition(GetBlueprintPosition(selectedBlueprint));
         selectedPiece = null;
     }
 
@@ -490,13 +560,13 @@ public class Player : MonoBehaviour
     public void ToggleBiggerBricks(bool status)
     {
         biggerBricks = status;
-        InitializeDeck();
+        InitializeNormalDeck();
     }
 
     public void ToggleBiggerBombs(bool status)
     {
         biggerBombs = status;
-        InitializeDeck();
+        InitializeNormalDeck();
     }
 
     public void ToggleSplashDamage(bool status)

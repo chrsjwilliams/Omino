@@ -17,6 +17,9 @@ public class UIManager : MonoBehaviour {
     private RectTransform[] victoryBanners;
     [SerializeField]
     private RectTransform[] defeatBanners;
+    public Transform[] mineBlueprintLocations;
+    public Transform[] factoryBlueprintLocations;
+    public Transform[] bombFactoryBlueprintLocations;
     public Transform canvas;
     public Sprite destructorIcon;
     public Sprite bombFactoryIcon;

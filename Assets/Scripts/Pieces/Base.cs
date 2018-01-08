@@ -7,7 +7,8 @@ public class Base : Structure
 
     public Base() : base(0)
     {
-        normalDrawRateBonus = 1f / 30f;
+        normalDrawRateBonus = 1f / 40f;
+        destructorDrawRateBonus = 1f / 120f;
         resourceGainRateBonus = 1f / 10f;
         buildingType = BuildingType.BASE;
         isFortified = true;
@@ -18,7 +19,8 @@ public class Base : Structure
         mainBase = _mainBase;
         owner = _player;
         resourceGainRateBonus = 1f / 5f;
-        normalDrawRateBonus = 1f / 15f;
+        normalDrawRateBonus = 1f / 20f;
+        destructorDrawRateBonus = 1f / 60f;
     }
 
     public override void ToggleStructureActivation(Player player)
@@ -39,6 +41,7 @@ public class Base : Structure
         if (owner != null)
         {
             owner.AugmentNormalDrawRate(normalDrawRateBonus);
+            owner.AugmentDestructorDrawRate(destructorDrawRateBonus);
             owner.AugmentResourceGainRate(resourceGainRateBonus);
         }
     }
@@ -48,12 +51,14 @@ public class Base : Structure
         base.OnClaim(player);
         TogglePieceConnectedness(true);
         player.AugmentNormalDrawRate(normalDrawRateBonus);
+        player.AugmentDestructorDrawRate(destructorDrawRateBonus);
         player.AugmentResourceGainRate(resourceGainRateBonus);
     }
 
     public override void OnClaimLost()
     {
         owner.AugmentNormalDrawRate(-normalDrawRateBonus);
+        owner.AugmentDestructorDrawRate(-destructorDrawRateBonus);
         owner.AugmentResourceGainRate(-resourceGainRateBonus);
         base.OnClaimLost();
     }
@@ -77,7 +82,10 @@ public class Base : Structure
     {
         return "+1 normal piece every " + "<color=green>" 
             + Mathf.RoundToInt(1 / normalDrawRateBonus)
-            + "</color>" +" s" + "\n\n" +
+            + "</color>" +" s" + "\n" +
+            "+1 <color=red>DESTRUCTOR</color> piece every " + "<color=green>"
+            + Mathf.RoundToInt(1 / destructorDrawRateBonus)
+            + "</color>" + " s" + "\n" +
             "+10 resources every " + "<color=green>" 
             + Mathf.RoundToInt(1/resourceGainRateBonus) + "</color>" + " s";
     }
