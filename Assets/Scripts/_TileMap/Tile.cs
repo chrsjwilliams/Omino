@@ -196,4 +196,9 @@ public class Tile : MonoBehaviour
 		sr.sortingOrder += inc;
         maskSr.sortingOrder += inc;
 	}
+
+    public void PrintCoord()
+    {
+        Debug.Log("X: " + coord.x + ", Y: " + coord.y);
+    }
 }

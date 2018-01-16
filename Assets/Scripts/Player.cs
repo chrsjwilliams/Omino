@@ -80,7 +80,7 @@ public class Player : MonoBehaviour
     private float normalDrawMeterFillAmt;
     private float destructorDrawMeterFillAmt;
     [SerializeField]
-    private int resourcesPerTick;
+    protected int resourcesPerTick;
 
 
     // Use this for initialization

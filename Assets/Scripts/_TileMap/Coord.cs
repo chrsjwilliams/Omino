@@ -112,4 +112,9 @@ public struct Coord
         }
         return 0;
     }
+
+    public override string ToString()
+    {
+        return "Tile Coord| X: " + x + ", Y: " + y;
+    }
 }

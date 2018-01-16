@@ -11,11 +11,11 @@ public class Polyomino
 {
     public List<Tile> tiles = new List<Tile>();
     protected Dictionary<Tile, Coord> tileRelativeCoords;
-    protected Transform holder;
     protected SpriteRenderer holderSr;
     protected SpriteRenderer iconSr;
     protected SpriteRenderer spriteOverlay;
     protected string holderName;
+    public Transform holder { get; protected set; }
     public BuildingType buildingType { get; protected set; }
 
     public int index { get; protected set; }
@@ -387,11 +387,6 @@ public class Polyomino
         }
     }
 
-    public void SetCentralCoord(Coord coord)
-    {
-        centerCoord = coord;
-    }
-
     public void SetAffordableStatus(Player player)
     {
         affordable = player.resources >= cost;
@@ -710,7 +705,6 @@ public class Polyomino
         Services.AudioManager.CreateTempAudio(Services.Clips.PiecePlaced, 1);
         ToggleCostUIStatus(false);
         holder.localScale = Vector3.one;
-        
     }
 
     //  Have a fortification method
@@ -1061,7 +1055,8 @@ public class Polyomino
             Vector3 screenInputPos = 
                 Services.GameManager.MainCamera.WorldToScreenPoint(inputPos);
             Vector3 screenOffset;
-            if (owner.playerNum == 1)
+            if (owner is AIPlayer) screenOffset = Vector3.zero;
+            else if (owner.playerNum == 1)
             {
                 screenOffset = baseDragOffset + ((1 - (2 * baseDragOffset.x / Screen.width))
                     * screenInputPos.x * Vector3.right);
