@@ -50,6 +50,9 @@ public class MapManager : MonoBehaviour
     private int startingStructCount;
     [SerializeField]
     private int procGenTriesMax;
+    [SerializeField]
+    private Level[] levels;
+
     public void Init()
     {
         _center = Services.MapManager.CenterIndexOfGrid();
@@ -75,8 +78,14 @@ public class MapManager : MonoBehaviour
         if (!Services.GameManager.usingStructures && !Services.GameManager.usingMiniBases)
             startingStructCount = 0;
         
-
-        GenerateStructures();
+        if(Services.GameManager.levelSelected == 0)
+        {
+            GenerateStructures(null);
+        }
+        else
+        {
+            GenerateStructures(levels[Services.GameManager.levelSelected - 1]);
+        }
         //GenerateResources();
     }
 
@@ -130,68 +139,73 @@ public class MapManager : MonoBehaviour
         return null;
     }
 
-    List<Structure> GenerateStructure(BuildingType type, bool mirrored)
+    Structure GenerateStructure(BuildingType type)
     {
-        Coord structCoord = GenerateValidStructureCoord(mirrored);
-        Coord mirroredCoord = MirroredCoord(structCoord);
-        List<Structure> structures = new List<Structure>();
+        return GenerateStructure(type, GenerateValidStructureCoord());
+    }
+
+    Structure GenerateStructure(BuildingType type, Coord structCoord)
+    {
+        //Coord mirroredCoord = MirroredCoord(structCoord);
+        //List<Structure> structures = new List<Structure>();
         if (structCoord != new Coord(-1, -1))
         {
-            int numRotations = Random.Range(0, 4);
+            //int numRotations = Random.Range(0, 4);
             Structure structure;
-            Structure mirroredStructure;
+            //Structure mirroredStructure;
             switch (type)
             {
                 case BuildingType.BASE:
                     structure = new Base();
-                    mirroredStructure = new Base();
+                    //mirroredStructure = new Base();
                     break;
                 case BuildingType.MININGDRILL:
                     structure = new MiningDrill();
-                    mirroredStructure = new MiningDrill();
+                    //mirroredStructure = new MiningDrill();
                     break;
                 case BuildingType.ASSEMBLYLINE:
                     structure = new AssemblyLine();
-                    mirroredStructure = new AssemblyLine();
+                    //mirroredStructure = new AssemblyLine();
                     break;
                 case BuildingType.FORTIFIEDSTEEL:
                     structure = new FortifiedSteel();
-                    mirroredStructure = new FortifiedSteel();
+                    // = new FortifiedSteel();
                     break;
                 case BuildingType.BIGGERBRICKS:
                     structure = new BiggerBricks();
-                    mirroredStructure = new BiggerBricks();
+                    //mirroredStructure = new BiggerBricks();
                     break;
                 case BuildingType.BIGGERBOMBS:
                     structure = new BiggerBombs();
-                    mirroredStructure = new BiggerBombs();
+                    //mirroredStructure = new BiggerBombs();
                     break;
                 case BuildingType.SPLASHDAMAGE:
                     structure = new SplashDamage();
-                    mirroredStructure = new SplashDamage();
+                    //mirroredStructure = new SplashDamage();
                     break;
                 default:
                     return null;
             }
             structure.MakePhysicalPiece(true);
-            for (int i = 0; i < numRotations; i++)
-            {
-                structure.Rotate();
-            }
+            //for (int i = 0; i < numRotations; i++)
+            //{
+            //    structure.Rotate();
+            //}
             structure.PlaceAtLocation(structCoord);
-            structures.Add(structure);
-            if (mirrored)
-            {
-                mirroredStructure.MakePhysicalPiece(true);
-                for (int i = 0; i < numRotations + 2; i++)
-                {
-                    mirroredStructure.Rotate();
-                }
-                mirroredStructure.PlaceAtLocation(mirroredCoord);
-                structures.Add(mirroredStructure);
-            }
+            //structures.Add(structure);
+            //if (mirrored)
+            //{
+            //    mirroredStructure.MakePhysicalPiece(true);
+            //    for (int i = 0; i < numRotations + 2; i++)
+            //    {
+            //        mirroredStructure.Rotate();
+            //    }
+            //    mirroredStructure.PlaceAtLocation(mirroredCoord);
+            //    structures.Add(mirroredStructure);
+            //}
 
-            return structures;
+            //return structures;
+            return structure;
         }
         return null;
     }
@@ -209,6 +223,11 @@ public class MapManager : MonoBehaviour
                 return candidateCoord;
         }
         return nullCoord;
+    }
+
+    Coord GenerateValidStructureCoord()
+    {
+        return GenerateValidStructureCoord(false);
     }
 
     Coord GenerateValidStructureCoord(bool mirrored)
@@ -272,7 +291,7 @@ public class MapManager : MonoBehaviour
         };
     }
 
-    void GenerateStructures()
+    void GenerateStructures(Level level)
     {
         structuresOnMap = new List<Structure>();
         List<BuildingType> structureTypes = InitStructureTypeList();
@@ -296,28 +315,45 @@ public class MapManager : MonoBehaviour
                 structuresOnMap.Add(cornerBase);
             }
         }
-
-        for (int i = 0; i < startingStructCount; i++)
+        if (Services.GameManager.usingStructures)
         {
-            List<Structure> structures = new List<Structure>();
-            
-            if(Services.GameManager.usingStructures)
+            if (level == null) // use procedural generation if no supplied level
             {
-                BuildingType type;
-                if (structureTypes.Count == 0) structureTypes = InitStructureTypeList();
-                type = structureTypes[Random.Range(0, structureTypes.Count)];
-                structureTypes.Remove(type);
-                structures = GenerateStructure(type, false);
-                if (structures == null)
+                for (int i = 0; i < startingStructCount; i++)
                 {
-                    Debug.Log("stopping short after " + structuresOnMap.Count + "structures");
-                    break;
+                    //List<Structure> structures = new List<Structure>();
+                    BuildingType type;
+                    if (structureTypes.Count == 0) structureTypes = InitStructureTypeList();
+                    type = structureTypes[Random.Range(0, structureTypes.Count)];
+                    structureTypes.Remove(type);
+                    Structure structure = GenerateStructure(type);
+                    if (structure == null)
+                    {
+                        Debug.Log("stopping short after " + structuresOnMap.Count + "structures");
+                        break;
+                    }
+                    //foreach (Structure structure in structures)
+                    //{
+                    structuresOnMap.Add(structure);
+                    //}
                 }
             }
-            foreach (Structure structure in structures)
-            {
-                structuresOnMap.Add(structure);
-            }
+            else GenerateLevel(level);
+        }
+    }
+
+    void GenerateLevel(Level level)
+    {
+        List<BuildingType> structureTypes = new List<BuildingType>(level.availableStructures);
+        for (int i = 0; i < level.structCoords.Length; i++)
+        {
+            BuildingType type;
+            if (structureTypes.Count == 0)
+                structureTypes = new List<BuildingType>(level.availableStructures);
+            type = structureTypes[Random.Range(0, structureTypes.Count)];
+            structureTypes.Remove(type);
+            Structure structure = GenerateStructure(type, level.structCoords[i]);
+            structuresOnMap.Add(structure);
         }
     }
 

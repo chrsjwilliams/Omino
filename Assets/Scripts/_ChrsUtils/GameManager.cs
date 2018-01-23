@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
     public bool usingMiniBases { get; private set; }
     [SerializeField]
     public bool usingBlueprints { get; private set; }
+    public int levelSelected { get; private set; }
 
     private void Awake()
     {
@@ -75,12 +76,14 @@ public class GameManager : MonoBehaviour
         Input.simulateMouseWithTouches = false;
     }
 
-    public void SetUserPreferences(bool isTurnBased, bool useStructures, bool useMiniBases, bool useBlueprints)
+    public void SetUserPreferences(bool isTurnBased, bool useStructures, 
+        bool useMiniBases, bool useBlueprints, int levelNum)
     {
         turnBasedVersion = isTurnBased;
         usingStructures = useStructures;
         usingMiniBases = useMiniBases;
         usingBlueprints = useBlueprints;
+        levelSelected = levelNum;
     }
 
     public void Init()

@@ -21,12 +21,18 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private bool useMiniBases;
     [SerializeField]
     private bool useBlueprints;
+    private int levelSelected;
 
     private Text numPlayerText;
     private Text turnBasedButton;
     private Text structureButton;
     private Text miniBaseButton;
     private Text blueprintButton;
+    [SerializeField]
+    private GameObject levelButtonParent;
+    private Button[] levelButtons;
+    [SerializeField]
+    private Image levelSelectionIndicator;
 
     private int touchID;
     private TaskManager _tm = new TaskManager();
@@ -48,9 +54,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
         numPlayerText.text = PLAYERS + numPlayers;
 
-        ruleScroller = GetComponent<ScrollRectSnap>();
+        //ruleScroller = GetComponent<ScrollRectSnap>();
 
-        ruleScroller.Init();
+        //ruleScroller.Init();
         Services.GameEventManager.Register<TouchUp>(OnTouchUp);
         Services.GameEventManager.Register<TouchMove>(OnTouchMove);
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
@@ -68,7 +74,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         useBlueprints = true;
         ruleScroller = GetComponent<ScrollRectSnap>();
 
-        ruleScroller.Init();
+        //ruleScroller.Init();
         Services.GameEventManager.Register<TouchUp>(OnTouchUp);
         Services.GameEventManager.Register<TouchMove>(OnTouchMove);
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
@@ -76,6 +82,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
         Services.GameEventManager.Register<MouseMove>(OnMouseMoveEvent);
+        levelButtons = levelButtonParent.GetComponentsInChildren<Button>();
+        SelectLevel(0);
     }
 
     internal override void OnExit()
@@ -211,7 +219,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     public void StartGame()
     {
-        Services.GameManager.SetUserPreferences(turnBasedVersion, useStructures, useMiniBases, useBlueprints);
+        Services.GameManager.SetUserPreferences(turnBasedVersion, useStructures, 
+            useMiniBases, useBlueprints, levelSelected);
         _tm.Do
         (
                     new Wait(SECONDS_TO_WAIT))
@@ -229,5 +238,17 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private void Update()
     {
         _tm.Update();
+    }
+
+    public void SelectLevel(int levelNum)
+    {
+        levelSelected = levelNum;
+        MoveLevelSelector(levelNum);
+    }
+
+    void MoveLevelSelector(int levelNum)
+    {
+        levelSelectionIndicator.transform.position = 
+            levelButtons[levelNum].transform.position;
     }
 }
