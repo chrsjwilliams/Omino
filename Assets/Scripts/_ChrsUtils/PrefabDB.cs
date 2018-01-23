@@ -44,4 +44,6 @@ public class PrefabDB : ScriptableObject
     [SerializeField] private GameObject tooltip;
     public GameObject Tooltip { get { return tooltip; } }
 
+    [SerializeField] private GameObject shield;
+    public GameObject Shield { get { return shield; } }
 }

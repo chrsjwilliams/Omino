@@ -70,6 +70,7 @@ public class Player : MonoBehaviour
     public float resourceGainFactor { get; protected set; }
     public float drawRateFactor { get; protected set; }
     public bool autoFortify { get; protected set; }
+    public bool shieldedPieces { get; protected set; }
     protected bool biggerBricks;
     protected bool biggerBombs;
     public bool splashDamage { get; protected set; }
@@ -142,7 +143,8 @@ public class Player : MonoBehaviour
 
             for (int i = 0; i < boardPieces.Count; i++)
             {
-                if(boardPieces[i].connected) boardPieces[i].Update();
+                //if(boardPieces[i].connected)
+                    boardPieces[i].Update();
             }
 
             for (int i = 0; i < hand.Count; i++)
@@ -300,6 +302,7 @@ public class Player : MonoBehaviour
     {
         int handSpace = maxHandSize - hand.Count;
         if (selectedPiece != null) handSpace -= 1;
+        if (DrawTask.pieceInTransit[playerNum - 1]) handSpace -= 1;
         int drawsAllowed = Mathf.Min(handSpace, numPiecesToDraw);
         for (int i = 0; i < drawsAllowed; i++)
         {
@@ -545,6 +548,11 @@ public class Player : MonoBehaviour
     public void ToggleAutoFortify(bool autoFortify_)
     {
         autoFortify = autoFortify_;
+    }
+
+    public void ToggleShieldedPieces(bool shieldedPieces_)
+    {
+        shieldedPieces = shieldedPieces_;
     }
 
     public void GainOwnership(Structure structure)

@@ -146,42 +146,35 @@ public class MapManager : MonoBehaviour
 
     Structure GenerateStructure(BuildingType type, Coord structCoord)
     {
-        //Coord mirroredCoord = MirroredCoord(structCoord);
-        //List<Structure> structures = new List<Structure>();
         if (structCoord != new Coord(-1, -1))
         {
             //int numRotations = Random.Range(0, 4);
             Structure structure;
-            //Structure mirroredStructure;
             switch (type)
             {
                 case BuildingType.BASE:
                     structure = new Base();
-                    //mirroredStructure = new Base();
                     break;
                 case BuildingType.MININGDRILL:
                     structure = new MiningDrill();
-                    //mirroredStructure = new MiningDrill();
                     break;
                 case BuildingType.ASSEMBLYLINE:
                     structure = new AssemblyLine();
-                    //mirroredStructure = new AssemblyLine();
                     break;
                 case BuildingType.FORTIFIEDSTEEL:
                     structure = new FortifiedSteel();
-                    // = new FortifiedSteel();
                     break;
                 case BuildingType.BIGGERBRICKS:
                     structure = new BiggerBricks();
-                    //mirroredStructure = new BiggerBricks();
                     break;
                 case BuildingType.BIGGERBOMBS:
                     structure = new BiggerBombs();
-                    //mirroredStructure = new BiggerBombs();
                     break;
                 case BuildingType.SPLASHDAMAGE:
                     structure = new SplashDamage();
-                    //mirroredStructure = new SplashDamage();
+                    break;
+                case BuildingType.SHIELDEDPIECES:
+                    structure = new ShieldedPieces();
                     break;
                 default:
                     return null;
@@ -192,19 +185,6 @@ public class MapManager : MonoBehaviour
             //    structure.Rotate();
             //}
             structure.PlaceAtLocation(structCoord);
-            //structures.Add(structure);
-            //if (mirrored)
-            //{
-            //    mirroredStructure.MakePhysicalPiece(true);
-            //    for (int i = 0; i < numRotations + 2; i++)
-            //    {
-            //        mirroredStructure.Rotate();
-            //    }
-            //    mirroredStructure.PlaceAtLocation(mirroredCoord);
-            //    structures.Add(mirroredStructure);
-            //}
-
-            //return structures;
             return structure;
         }
         return null;
@@ -287,7 +267,8 @@ public class MapManager : MonoBehaviour
             BuildingType.FORTIFIEDSTEEL,
             BuildingType.BIGGERBRICKS,
             BuildingType.BIGGERBOMBS,
-            BuildingType.SPLASHDAMAGE
+            BuildingType.SPLASHDAMAGE,
+            BuildingType.SHIELDEDPIECES
         };
     }
 

@@ -36,6 +36,7 @@ public class Destructor : Polyomino
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner) return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece is Structure) return false;
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece.shieldDurationRemaining > 0) return false;
 
             //if (CanDestroyPieceOn(mapTile)) return false;
         }

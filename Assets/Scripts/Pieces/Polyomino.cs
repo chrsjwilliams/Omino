@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public enum BuildingType
 { BASE,FACTORY, MINE, STRUCTURE,NONE, BOMBFACTORY, MININGDRILL, ASSEMBLYLINE, FORTIFIEDSTEEL,
-    BIGGERBRICKS, BIGGERBOMBS, SPLASHDAMAGE}
+    BIGGERBRICKS, BIGGERBOMBS, SPLASHDAMAGE, SHIELDEDPIECES}
 
 
 public class Polyomino
@@ -49,6 +49,8 @@ public class Polyomino
     private bool isVisible;
     public bool connected { get; private set; }
     public bool dead { get; private set; }
+    public float shieldDurationRemaining { get; private set; }
+    private GameObject shield;
     protected List<Tooltip> tooltips;
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
@@ -469,21 +471,8 @@ public class Polyomino
         {
             bool autoFortify = owner.autoFortify;
             owner.OnPiecePlaced(this);
-            bool fortifiedFromCheck = false;
-            if (!replace)
-            {
-                //fortifiedFromCheck = CheckForFortification(false);
-            }
-            if (autoFortify && !isFortified && !fortifiedFromCheck)
+            if (autoFortify && !isFortified)
                 Services.MapManager.FortifyPiece(this);
-            //List<Structure> adjacentStructures = GetAdjacentStructures();
-            //if (adjacentStructures.Count > 0)
-            //{
-            //    foreach (Structure structure in adjacentStructures)
-            //    {
-            //        structure.ToggleStructureActivation(owner);
-            //    }
-            //}
         }
     }
 
@@ -705,6 +694,7 @@ public class Polyomino
         Services.AudioManager.CreateTempAudio(Services.Clips.PiecePlaced, 1);
         ToggleCostUIStatus(false);
         holder.localScale = Vector3.one;
+        if (owner.shieldedPieces) CreateShield();
     }
 
     //  Have a fortification method
@@ -719,6 +709,23 @@ public class Polyomino
             monomino.MakePhysicalPiece(true);
             monomino.PlaceAtLocation(tile.coord);
         }
+    }
+
+    void CreateShield()
+    {
+        shieldDurationRemaining = ShieldedPieces.ShieldDuration;
+        shield = GameObject.Instantiate(Services.Prefabs.Shield, 
+            GetCenterpoint(), Quaternion.identity);
+    }
+
+    void DecayShield()
+    {
+        shieldDurationRemaining -= Time.deltaTime;
+        float shieldDecayed = ShieldedPieces.ShieldDuration - shieldDurationRemaining;
+        shield.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero,
+            Mathf.Pow(EasingEquations.Easing.ExpoEaseIn(
+                shieldDecayed / ShieldedPieces.ShieldDuration), 2));
+        if (shieldDurationRemaining <= 0) GameObject.Destroy(shield);
     }
 
     public virtual void Remove()
@@ -762,6 +769,7 @@ public class Polyomino
         //CheckForFortification(true);
 
         //if (ringTimer != null) RemoveTimerUI();
+        if (shield != null) GameObject.Destroy(shield);
         owner.OnPieceRemoved(this);
         dead = true;
     }
@@ -1186,7 +1194,10 @@ public class Polyomino
     //    GameObject.Destroy(ringTimer.transform.parent.gameObject);
     //}
 
-    public virtual void Update() { }
+    public virtual void Update()
+    {
+        if (shield != null) DecayShield();
+    }
 
     public void ScaleHolder(Vector3 scale)
     {

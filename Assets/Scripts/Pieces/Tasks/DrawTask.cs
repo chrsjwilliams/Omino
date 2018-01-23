@@ -9,11 +9,13 @@ public class DrawTask : Task
     private Vector3 targetPos;
     private float timeElapsed;
     private float duration;
+    public static bool[] pieceInTransit = new bool[2];
 
     public DrawTask(Polyomino piece_, Vector3 startPos_)
     {
         piece = piece_;
         startPos = startPos_;
+        pieceInTransit[piece.owner.playerNum - 1] = true;
     }
 
     protected override void Init()
@@ -38,5 +40,6 @@ public class DrawTask : Task
     protected override void OnSuccess()
     {
         piece.owner.AddPieceToHand(piece);
+        pieceInTransit[piece.owner.playerNum - 1] = false;
     }
 }
