@@ -29,7 +29,7 @@ public class Polyomino
     private const float rotationInputRadius = 8f;
     protected int touchID;
     private readonly Vector3 baseDragOffset = 5f * Vector3.right;
-    private readonly Vector3 unselectedScale = 0.36f * Vector3.one;
+    private readonly Vector3 unselectedScale = 0.5f * Vector3.one;
     public const float drawAnimDur = 0.5f;
     public const float deathAnimDur = 0.5f;
     public const float deathAnimScaleUp = 1.5f;

@@ -124,12 +124,12 @@ public class SetPos : GOTask
 
 
 // A task to lerp a gameobject's position
-public class Move : TimedGOTask
+public class LERP : TimedGOTask
 {
     public Vector3 Start { get; private set; }
     public Vector3 End { get; private set; }
 
-    public Move(GameObject gameObject, Vector3 start, Vector3 end, float duration) : base(gameObject, duration)
+    public LERP(GameObject gameObject, Vector3 start, Vector3 end, float duration) : base(gameObject, duration)
     {
         Start = start;
         End = end;

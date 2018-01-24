@@ -183,7 +183,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    protected void SetHandStatus()
+    public void SetHandStatus()
     {
         //MakeAllPiecesGlow(placementAvailable);
         //for (int i = 0; i < hand.Count; i++)
