@@ -141,7 +141,8 @@ public class Destructor : Polyomino
             for (int i = 0; i < adjacentEnemyPieces.Count; i++)
             {
                 Polyomino enemyPiece = adjacentEnemyPieces[i];
-                if (!enemyPiecesInRange.Contains(enemyPiece) && !(enemyPiece is Structure))
+                if (!enemyPiecesInRange.Contains(enemyPiece) && !(enemyPiece is Structure)
+                    && enemyPiece.shieldDurationRemaining <= 0)
                 {
                     enemyPiecesInRange.Add(enemyPiece);
                 }

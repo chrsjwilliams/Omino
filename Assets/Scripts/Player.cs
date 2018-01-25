@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     public int handCount { get { return hand.Count; } }
     protected List<Blueprint> blueprints;
     public Polyomino selectedPiece { get; private set; }
+    private int selectedPieceHandPos;
     public bool placementAvailable
     {
         get { return placementAvailable_; }
@@ -196,14 +197,6 @@ public class Player : MonoBehaviour
     public void InitializeUITabs(UITabs tabs)
     {
         uiTabs = tabs;
-    }
-
-    void MakeAllPiecesGlow(bool makeGlow)
-    {
-        foreach (Polyomino piece in hand)
-        {
-            piece.SetGlowState(makeGlow);
-        }
     }
 
     #region DECK FUNCTIONS
@@ -402,10 +395,24 @@ public class Player : MonoBehaviour
 
     void OrganizeHand<T>(List<T> heldpieces) where T :Polyomino
     {
-        for (int i = 0; i < heldpieces.Count; i++)
+        int provisionalHandCount = heldpieces.Count;
+        bool emptySpace = false;
+        if (selectedPiece != null) {
+            provisionalHandCount += 1;
+            emptySpace = true;
+        }
+        for (int i = 0; i < provisionalHandCount; i++)
         {
             Vector3 newPos = GetHandPosition(i);
-            heldpieces[i].Reposition(newPos);
+            int handPos = i;
+            if(emptySpace && i > selectedPieceHandPos)
+            {
+                handPos -= 1;
+            }
+            if (!emptySpace || (emptySpace && i != selectedPieceHandPos))
+            {
+                heldpieces[handPos].Reposition(newPos);
+            }
         }
     }
 
@@ -448,6 +455,14 @@ public class Player : MonoBehaviour
     {
         if (selectedPiece != null) CancelSelectedPiece();
         selectedPiece = piece;
+        for (int i = 0; i < hand.Count; i++)
+        {
+            if (hand[i] == selectedPiece)
+            {
+                selectedPieceHandPos = i;
+                break;
+            }
+        }
         if (piece.buildingType == BuildingType.NONE) hand.Remove(piece);
         else blueprints.Remove((Blueprint)piece);
 
@@ -469,6 +484,7 @@ public class Player : MonoBehaviour
             uiTabs.ToggleHandZoneView(true);
         }
         selectedPiece = null;
+        OrganizeHand(hand);
         piece.SetGlowState(false);
         boardPieces.Add(piece);
         Services.MapManager.DetermineConnectedness(this);
@@ -483,10 +499,10 @@ public class Player : MonoBehaviour
 
     public void CancelSelectedPiece()
     {
-        hand.Add(selectedPiece);
+        hand.Insert(selectedPieceHandPos, selectedPiece);
         SetHandStatus();
-        OrganizeHand(hand);
         selectedPiece = null;
+        OrganizeHand(hand);
     }
 
     public void CancelSelectedBlueprint()
