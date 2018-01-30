@@ -145,6 +145,7 @@ public class Player : MonoBehaviour
                 hand[i].SetAffordableStatus(this);
                 hand[i].ApproachHandPosition(handTargetPositions[i]);
             }
+            if (selectedPiece != null) selectedPiece.SetLegalityGlowStatus();
         }
 
     }
@@ -274,7 +275,7 @@ public class Player : MonoBehaviour
     public void AddPieceToHand(Polyomino piece)
     {
         hand.Add(piece);
-        piece.SetVisible(viewingHand);
+        //piece.SetVisible(viewingHand);
         OrganizeHand(hand);
     }
 

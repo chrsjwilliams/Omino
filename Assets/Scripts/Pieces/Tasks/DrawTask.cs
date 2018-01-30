@@ -25,6 +25,7 @@ public class DrawTask : Task
         piece.Reposition(startPos);
         duration = Polyomino.drawAnimDur;
         targetPos = piece.owner.GetHandPosition(piece.owner.handCount);
+        piece.SetAffordableStatus(piece.owner);
     }
 
     internal override void Update()

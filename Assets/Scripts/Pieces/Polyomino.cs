@@ -399,12 +399,14 @@ public class Polyomino
         if (affordable)
         {
             costText.color = (Color.green + Color.black) / 2;
-            if (isVisible) EnterUnselectedState();
+            SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 1), 1);
+            //if (isVisible) EnterUnselectedState();
         }
         else
         {
             costText.color = (Color.red + Color.black) / 2;
-            HideFromInput();
+            SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 0.7f), 1);
+            //HideFromInput();
         }
         SetGlowState(affordable);
     }
@@ -869,7 +871,11 @@ public class Polyomino
             }
         }
         SetSprites();
-        if (buildingType != BuildingType.BASE) SetVisible(isViewable);
+        if (buildingType != BuildingType.BASE)
+        {
+            //SetVisible(isViewable);
+            EnterUnselectedState();
+        }
     }
 
     protected virtual void SetIconSprite()
@@ -1100,12 +1106,13 @@ public class Polyomino
 
     protected virtual void CleanUpUI() { }
 
-    protected virtual void SetLegalityGlowStatus()
+    public virtual void SetLegalityGlowStatus()
     {
-        if (affordable || this is Blueprint)
-        {
-            bool isLegal = IsPlacementLegal();
-            if (isLegal)
+        //if (affordable || this is Blueprint)
+        //{
+        SetAffordableStatus(owner);
+        bool isLegal = IsPlacementLegal();
+            if (isLegal && affordable)
             {
                 SetGlow(new Color(0.2f, 1.5f, 0.2f));
             }
@@ -1113,7 +1120,7 @@ public class Polyomino
             {
                 SetGlow(new Color(1.5f, 0.2f, 0.2f));
             }
-        }
+        //}
     }
 
     protected void SetTileSprites()

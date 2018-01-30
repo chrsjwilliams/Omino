@@ -108,7 +108,7 @@ public class Destructor : Polyomino
         }
     }
 
-    protected override void SetLegalityGlowStatus()
+    public override void SetLegalityGlowStatus()
     {
         base.SetLegalityGlowStatus();
         UnhighlightTargetedPieces();
