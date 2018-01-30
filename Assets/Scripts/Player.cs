@@ -23,19 +23,10 @@ public class Player : MonoBehaviour
     protected List<List<Polyomino>> deckClumped;
     protected List<Polyomino> hand;
     public int handCount { get { return hand.Count; } }
+    private List<Vector3> handTargetPositions;
     protected List<Blueprint> blueprints;
     public Polyomino selectedPiece { get; private set; }
     private int selectedPieceHandPos;
-    public bool placementAvailable
-    {
-        get { return placementAvailable_; }
-        private set
-        {
-            placementAvailable_ = value;
-            SetHandStatus();
-        }
-    }
-    protected bool placementAvailable_;
     [SerializeField]
     protected Vector3 handSpacing;
     [SerializeField]
@@ -103,6 +94,7 @@ public class Player : MonoBehaviour
         InitializeNormalDeck();
         InitializeDestructorDeck();
         DrawPieces(startingHandSize);
+        OrganizeHand(hand, true);
         if (Services.GameManager.usingBlueprints)
         {
             Factory factory = new Factory(this);
@@ -151,6 +143,7 @@ public class Player : MonoBehaviour
             for (int i = 0; i < hand.Count; i++)
             {
                 hand[i].SetAffordableStatus(this);
+                hand[i].ApproachHandPosition(handTargetPositions[i]);
             }
         }
 
@@ -184,16 +177,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void SetHandStatus()
-    {
-        //MakeAllPiecesGlow(placementAvailable);
-        //for (int i = 0; i < hand.Count; i++)
-        //{
-        //    hand[i].SetPieceState(placementAvailable);
-        //}
-        //Services.UIManager.SetGreyOutBox(playerNum, !placementAvailable);
-    }
-
     public void InitializeUITabs(UITabs tabs)
     {
         uiTabs = tabs;
@@ -216,44 +199,6 @@ public class Player : MonoBehaviour
                 normalDeck.Add(new Polyomino(pieceSize, index, this));
             }
         }
-        //deck = new List<Polyomino>();
-        //deckClumped = new List<List<Polyomino>>();
-        //List<Polyomino> destructors = new List<Polyomino>();
-        //List<Polyomino> nonDestructors = new List<Polyomino>();
-        //for (int numBlocks = 2; numBlocks <= 4; numBlocks++)
-        //{
-        //    int pieceSize = numBlocks;
-        //    if (numBlocks == 4 && biggerBricks)
-        //    {
-        //        pieceSize += 1;
-        //    }
-        //    if(numBlocks <4 && biggerBombs)
-        //    {
-        //        pieceSize += 1;
-        //    }
-        //    int numTypes = Polyomino.pieceTypes[pieceSize];
-        //    for (int index = 0; index < numTypes; index++)
-        //    {
-        //        if (numBlocks < 4) destructors.Add(new Destructor(pieceSize, index, this, false));
-        //        else nonDestructors.Add(new Polyomino(pieceSize, index, this));
-        //    }
-        //}
-        //for (int i = 0; i < deckClumpCount; i++)
-        //{
-        //    deckClumped.Add(new List<Polyomino>());
-        //}
-        //for (int i = 0; i < destructors.Count; i++)
-        //{
-        //    Polyomino destructorToAdd = destructors[Random.Range(0, destructors.Count)];
-        //    deckClumped[i % deckClumpCount].Add(destructorToAdd);
-        //    destructors.Remove(destructorToAdd);
-        //}
-        //for (int i = 0; i < nonDestructors.Count; i++)
-        //{
-        //    Polyomino nonDestructorToAdd = nonDestructors[Random.Range(0, nonDestructors.Count)];
-        //    deckClumped[i % deckClumpCount].Add(nonDestructorToAdd);
-        //    nonDestructors.Remove(nonDestructorToAdd);
-        //}
     }
 
     void InitializeDestructorDeck()
@@ -278,12 +223,16 @@ public class Player : MonoBehaviour
     {
         int handSpace = maxHandSize - hand.Count;
         if (selectedPiece != null) handSpace -= 1;
-        int drawsAllowed = Mathf.Min(handSpace, numPiecesToDraw);
-        for (int i = 0; i < drawsAllowed; i++)
+        int numPiecesToBurn = Mathf.Max(numPiecesToDraw - handSpace, 0);
+        for (int i = numPiecesToBurn - 1; i >= 0; i--)
+        {
+            hand[i].BurnFromHand();
+            hand.RemoveAt(i);
+        }
+        for (int i = 0; i < numPiecesToDraw; i++)
         {
             DrawPiece();
         }
-        SetHandStatus();
     }
 
     public void DrawPieces(int numPiecesToDraw, Vector3 startPos)
@@ -296,12 +245,16 @@ public class Player : MonoBehaviour
         int handSpace = maxHandSize - hand.Count;
         if (selectedPiece != null) handSpace -= 1;
         if (DrawTask.pieceInTransit[playerNum - 1]) handSpace -= 1;
-        int drawsAllowed = Mathf.Min(handSpace, numPiecesToDraw);
-        for (int i = 0; i < drawsAllowed; i++)
+        int numPiecesToBurn = Mathf.Max(numPiecesToDraw - handSpace, 0);
+        for (int i = numPiecesToBurn - 1; i >= 0; i--)
+        {
+            hand[i].BurnFromHand();
+            hand.RemoveAt(i);
+        }
+        for (int i = 0; i < numPiecesToDraw; i++)
         {
             DrawPiece(startPos, onlyDestructors);
         }
-        SetHandStatus();
     }
 
     void DrawPiece()
@@ -315,7 +268,6 @@ public class Player : MonoBehaviour
     {
         Polyomino piece = GetRandomPieceFromDeck(onlyDestructors);
         Task drawTask = new DrawTask(piece, startPos);
-        drawTask.Then(new ActionTask(SetHandStatus));
         Services.GeneralTaskManager.Do(drawTask);
     }
 
@@ -393,7 +345,12 @@ public class Player : MonoBehaviour
         //OrganizeHand(blueprints);
     }
 
-    void OrganizeHand<T>(List<T> heldpieces) where T :Polyomino
+    void OrganizeHand<T>(List<T> heldpieces) where T : Polyomino
+    {
+        OrganizeHand<T>(heldpieces, false);
+    }
+
+    void OrganizeHand<T>(List<T> heldpieces, bool instant) where T :Polyomino
     {
         int provisionalHandCount = heldpieces.Count;
         bool emptySpace = false;
@@ -401,6 +358,7 @@ public class Player : MonoBehaviour
             provisionalHandCount += 1;
             emptySpace = true;
         }
+        handTargetPositions = new List<Vector3>();
         for (int i = 0; i < provisionalHandCount; i++)
         {
             Vector3 newPos = GetHandPosition(i);
@@ -411,7 +369,8 @@ public class Player : MonoBehaviour
             }
             if (!emptySpace || (emptySpace && i != selectedPieceHandPos))
             {
-                heldpieces[handPos].Reposition(newPos);
+                if (instant) heldpieces[handPos].Reposition(newPos);
+                handTargetPositions.Add(newPos);
             }
         }
     }
@@ -500,7 +459,6 @@ public class Player : MonoBehaviour
     public void CancelSelectedPiece()
     {
         hand.Insert(selectedPieceHandPos, selectedPiece);
-        SetHandStatus();
         selectedPiece = null;
         OrganizeHand(hand);
     }

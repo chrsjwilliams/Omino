@@ -31,7 +31,6 @@ public class Move
            // piece.Rotate();
 
         Task playTask = new PlayTask(piece, piece.holder.transform.position, targetCoord.ScreenPos());
-        playTask.Then(new ActionTask(piece.owner.SetHandStatus));
         Services.GeneralTaskManager.Do(playTask);
     }
 }

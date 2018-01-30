@@ -147,7 +147,6 @@ public class AIPlayer : Player
         Vector3 targetPos = PlayPositionToVector3(playPositions[Random.Range(0, playPositions.Length - 1)]);
         
         Task playTask = new PlayTask(hand[0], startPos, targetPos);
-        playTask.Then(new ActionTask(SetHandStatus));
         Services.GeneralTaskManager.Do(playTask);
     }
 

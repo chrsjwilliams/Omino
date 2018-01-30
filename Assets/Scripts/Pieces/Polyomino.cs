@@ -23,7 +23,7 @@ public class Polyomino
     protected int variations;
     protected int[,,] piece;
     public Player owner { get; protected set; }
-    private Color baseColor;
+    public Color baseColor { get; private set; }
     public Coord centerCoord;
     protected bool placed;
     private const float rotationInputRadius = 8f;
@@ -37,6 +37,10 @@ public class Polyomino
     public const float resourceGainAnimStaggerTime = 0.06f;
     public const float resourceGainAnimNoiseSpeed = 1;
     public const float resourceGainAnimNoiseMag = 4;
+    private const float handPosApproachFactor = 0.25f;
+    public const float burnPieceDuration = 0.5f;
+    public static Vector3 burnPieceOffset = new Vector3(3, 0, 0);
+
 
     public bool isFortified;
     public List<Blueprint> occupyingBlueprints { get; protected set; }
@@ -785,6 +789,11 @@ public class Polyomino
         //change localposition of the piece container in player UI to value
     }
 
+    public void ApproachHandPosition(Vector3 targetPos)
+    {
+        holder.position += (targetPos - holder.position) * handPosApproachFactor;
+    }
+
     public void SetBasePosition(IntVector2 pos)
     {
         centerCoord = new Coord(pos.x, pos.y);
@@ -1306,5 +1315,14 @@ public class Polyomino
             Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
             Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
         }
+    }
+
+    public void BurnFromHand()
+    {
+        HideFromInput();
+        IncrementSortingOrder(20);
+        BurnPiece burnTask = new BurnPiece(this);
+        burnTask.Then(new ActionTask(DestroyThis));
+        Services.GeneralTaskManager.Do(burnTask);
     }
 }
