@@ -10,7 +10,7 @@ public enum BuildingType
 public class Polyomino
 {
     public List<Tile> tiles = new List<Tile>();
-    protected Dictionary<Tile, Coord> tileRelativeCoords;
+    public Dictionary<Tile, Coord> tileRelativeCoords { get; protected set; }
     protected SpriteRenderer holderSr;
     protected SpriteRenderer iconSr;
     protected SpriteRenderer spriteOverlay;
@@ -1152,7 +1152,10 @@ public class Polyomino
         }
     }
 
-    public virtual void Rotate()
+
+    public virtual void Rotate() { Rotate(true); }
+
+    public virtual void Rotate(bool relocate)
     {
         float rotAngle = 90 * Mathf.Deg2Rad;
         foreach (Tile tile in tiles)
@@ -1168,9 +1171,13 @@ public class Polyomino
         }
         SetTileCoords(centerCoord);
         SetTileSprites();
-        foreach (Tile tile in tiles)
+
+        if (relocate)
         {
-            tile.transform.position = new Vector3(tile.coord.x, tile.coord.y);
+            foreach (Tile tile in tiles)
+            {
+                tile.transform.localPosition = new Vector3(tileRelativeCoords[tile].x, tileRelativeCoords[tile].y);
+            }
         }
         SetIconSprite();
         SetLegalityGlowStatus();

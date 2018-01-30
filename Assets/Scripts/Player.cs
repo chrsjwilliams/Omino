@@ -430,12 +430,12 @@ public class Player : MonoBehaviour
     }
 
 
-    public void OnPiecePlaced(Polyomino piece)
+    public virtual void OnPiecePlaced(Polyomino piece)
     {
         BuildingType blueprintType = piece.buildingType;
         if (!(piece is Blueprint) && piece.cost != 10)
         {
-            resources -= piece.cost;
+            //resources -= piece.cost;
         }
         else if(piece is Blueprint)
         {
