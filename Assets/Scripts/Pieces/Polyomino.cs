@@ -1110,9 +1110,9 @@ public class Polyomino
     {
         //if (affordable || this is Blueprint)
         //{
-        SetAffordableStatus(owner);
+        if(!(this is Blueprint)) SetAffordableStatus(owner);
         bool isLegal = IsPlacementLegal();
-            if (isLegal && affordable)
+            if (isLegal && (affordable || this is Blueprint))
             {
                 SetGlow(new Color(0.2f, 1.5f, 0.2f));
             }

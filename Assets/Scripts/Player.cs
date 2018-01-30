@@ -223,7 +223,7 @@ public class Player : MonoBehaviour
     public void DrawPieces(int numPiecesToDraw)
     {
         int handSpace = maxHandSize - hand.Count;
-        if (selectedPiece != null) handSpace -= 1;
+        if (selectedPiece != null && !(selectedPiece is Blueprint)) handSpace -= 1;
         int numPiecesToBurn = Mathf.Max(numPiecesToDraw - handSpace, 0);
         for (int i = numPiecesToBurn - 1; i >= 0; i--)
         {
@@ -244,7 +244,7 @@ public class Player : MonoBehaviour
     public void DrawPieces(int numPiecesToDraw, Vector3 startPos, bool onlyDestructors)
     {
         int handSpace = maxHandSize - hand.Count;
-        if (selectedPiece != null) handSpace -= 1;
+        if (selectedPiece != null && !(selectedPiece is Blueprint)) handSpace -= 1;
         if (DrawTask.pieceInTransit[playerNum - 1]) handSpace -= 1;
         int numPiecesToBurn = Mathf.Max(numPiecesToDraw - handSpace, 0);
         for (int i = numPiecesToBurn - 1; i >= 0; i--)
@@ -355,7 +355,7 @@ public class Player : MonoBehaviour
     {
         int provisionalHandCount = heldpieces.Count;
         bool emptySpace = false;
-        if (selectedPiece != null) {
+        if (selectedPiece != null && !(selectedPiece is Blueprint)) {
             provisionalHandCount += 1;
             emptySpace = true;
         }
