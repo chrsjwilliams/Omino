@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Blueprint : Polyomino
 {
+    private const float alphaPrePlacement = 0.25f;
+
     protected static int[,,] factory = new int[1, 5, 5]
     {   
             //  These hashes represent what the piece will look like
@@ -134,7 +136,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                     string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;
                     newpiece.ActivateTile(owner, buildingType);
-                    newpiece.SetAlpha(0.75f);
+                    newpiece.SetAlpha(alphaPrePlacement);
                     newpiece.IncrementSortingOrder(5);
                     tiles.Add(newpiece);
                 }
@@ -246,22 +248,39 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         base.OnInputDown();
         if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID))
         {
+            Vector3 tooltipLocation;
             if (placed || owner.playerNum == 2)
             {
                 Tooltip tooltipLeft = GameObject.Instantiate(Services.Prefabs.Tooltip,
                     Services.UIManager.canvas).GetComponent<Tooltip>();
-                tooltipLeft.Init(GetName(), GetDescription(), 90,
-                    Services.GameManager.MainCamera.WorldToScreenPoint(
-                    GetCenterpoint()), !placed);
+                if (placed)
+                {
+                    tooltipLocation = Services.GameManager.MainCamera.WorldToScreenPoint(
+                        GetCenterpoint());
+                }
+                else
+                {
+                    tooltipLocation = 
+                        Services.UIManager.blueprintUIZones[1].transform.position;
+                }
+                tooltipLeft.Init(GetName(), GetDescription(), 90, tooltipLocation, !placed);
                 tooltips.Add(tooltipLeft);
             }
             if (placed || owner.playerNum == 1)
             {
                 Tooltip tooltipRight = GameObject.Instantiate(Services.Prefabs.Tooltip,
                 Services.UIManager.canvas).GetComponent<Tooltip>();
-                tooltipRight.Init(GetName(), GetDescription(), -90,
-                    Services.GameManager.MainCamera.WorldToScreenPoint(
-                    GetCenterpoint()), !placed);
+                if (placed)
+                {
+                    tooltipLocation = Services.GameManager.MainCamera.WorldToScreenPoint(
+                        GetCenterpoint());
+                }
+                else
+                {
+                    tooltipLocation =
+                        Services.UIManager.blueprintUIZones[0].transform.position;
+                }
+                tooltipRight.Init(GetName(), GetDescription(), -90, tooltipLocation, !placed);
                 tooltips.Add(tooltipRight);
             }
 
@@ -275,10 +294,23 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         }
     }
 
+    void PositionTooltips()
+    {
+        if (tooltips.Count > 0)
+        {
+            float rot;
+            if (owner.playerNum == 2) rot = 90;
+            else rot = -90;
+            tooltips[0].Reposition(Services.GameManager.MainCamera.WorldToScreenPoint(
+                    GetCenterpoint()), rot, true);
+        }
+    }
+
     public override void OnInputDrag(Vector3 inputPos)
     {
         base.OnInputDrag(inputPos);
-        DestroyTooltips();
+        //DestroyTooltips();
+        //PositionTooltips();
     }
 
     public override void OnInputUp()

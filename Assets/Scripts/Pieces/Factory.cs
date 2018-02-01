@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Factory : Blueprint
 {
@@ -35,8 +36,7 @@ public class Factory : Blueprint
 
     protected override string GetDescription()
     {
-        return "+1 piece every" + "<color=green>"
-            + Mathf.RoundToInt(1 / normalDrawRateBonus)
-            + "</color>" + " s";
+        return "+<color=green>" + Math.Round((double)normalDrawRateBonus, 2) + 
+            "</color> normal pieces per second";
     }
 }

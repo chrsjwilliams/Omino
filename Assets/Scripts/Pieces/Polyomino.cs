@@ -40,6 +40,7 @@ public class Polyomino
     private const float handPosApproachFactor = 0.25f;
     public const float burnPieceDuration = 0.5f;
     public static Vector3 burnPieceOffset = new Vector3(3, 0, 0);
+    private const float alphaWhileUnaffordable = 0.5f;
 
 
     public bool isFortified;
@@ -405,7 +406,7 @@ public class Polyomino
         else
         {
             costText.color = (Color.red + Color.black) / 2;
-            SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 0.7f), 1);
+            SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, alphaWhileUnaffordable), 1);
             //HideFromInput();
         }
         SetGlowState(affordable);

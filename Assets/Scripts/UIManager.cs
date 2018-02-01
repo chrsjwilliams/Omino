@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour {
 
     public RectTransform[] handZones;
     public Text[] resourceCounters;
+    public RectTransform[] blueprintUIZones;
     [SerializeField]
     private Image[] normalDrawMeters;
     [SerializeField]

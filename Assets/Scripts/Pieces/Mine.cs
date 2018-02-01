@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Mine : Blueprint
 {
@@ -33,7 +34,7 @@ public class Mine : Blueprint
 
     protected override string GetDescription()
     {
-        return "+10 resources every " + "<color=green>"
-            + Mathf.RoundToInt(1 / resourceGainRateBonus) + "</color>" + " s";
+        return "+<color=green>" + Math.Round((double)resourceGainRateBonus, 2) + 
+            "</color> resources per second";
     }
 }
