@@ -272,7 +272,7 @@ public class Player : MonoBehaviour
         Services.GeneralTaskManager.Do(drawTask);
     }
 
-    public void AddPieceToHand(Polyomino piece)
+    public virtual void AddPieceToHand(Polyomino piece)
     {
         hand.Add(piece);
         //piece.SetVisible(viewingHand);
@@ -451,7 +451,7 @@ public class Player : MonoBehaviour
         if (Services.MapManager.CheckForWin(piece)) Services.GameScene.GameWin(this);
     }
 
-    public void OnPieceRemoved(Polyomino piece)
+    public virtual void OnPieceRemoved(Polyomino piece)
     {
         boardPieces.Remove(piece);
         Services.MapManager.DetermineConnectedness(this);
@@ -487,7 +487,7 @@ public class Player : MonoBehaviour
         AddPieceToHand(newPiece);
     }
 
-    public int GainResources(int numResources)
+    public virtual int GainResources(int numResources)
     {
         int prevResources = resources;
         resources = Mathf.Min(maxResources, resources + numResources);

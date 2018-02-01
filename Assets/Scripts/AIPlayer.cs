@@ -3,6 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *      AI TODO:
+ *                  Implement scoring for moves
+ *                  Implement Structure claiming behaviour
+ *                  Reduce number of calculations
+ * 
+ */ 
+
+
 public class AIPlayer : Player
 {
     struct ScoredMove
@@ -52,7 +61,7 @@ public class AIPlayer : Player
 
         playableCoords = FindAllPlayableCoords();
         GeneratePossibleMoves(playableCoords);
-        scoredMoves = SortPlayableMovesByDistance(new Coord(0, 0));
+        scoredMoves = CreateScoredMoveArray(new Coord(0, 0));
 
     }
 
@@ -77,7 +86,6 @@ public class AIPlayer : Player
     public void GeneratePossibleMoves(List<Coord> playCoords)
     {
         possibleMoves.Clear();
-
         foreach (Polyomino piece in hand)
         {
             //  Check the target coord and center coord
@@ -108,22 +116,11 @@ public class AIPlayer : Player
                                 Move newMove = new Move(piece, candidateCoord, (rotations + 1) % 4);
                                 if(!possibleMoves.Contains(newMove))
                                 {
-                                    if (piece.index == 0 && candidateCoord.x == 14 && candidateCoord.y == 17)
-                                    {
-                                        Debug.Log("Line Rotations: " + (rotations + 1) % 4);
-                                        Debug.Log("Candidate: " + candidateCoord.ToString());
-                                        foreach (Tile tile in piece.tiles)
-                                        {
-                                            Debug.Log(tile.coord.ToString());
-                                        }
-                                    }
                                     possibleMoves.Add(newMove);
                                 }
-
                             }
                         }
-                    }           
-                   
+                    }          
                 }
                 //  Then choose a new play position
             }
@@ -131,7 +128,7 @@ public class AIPlayer : Player
         }
     }
 
-    private ScoredMove[] SortPlayableMovesByDistance(Coord targetCoord)
+    private ScoredMove[] CreateScoredMoveArray(Coord targetCoord)
     {
         if (targetCoord == null)
         {
@@ -164,7 +161,7 @@ public class AIPlayer : Player
         }
 
         // sort playable positions beased on closeness to targetCoord
-        quick_sort(playPosition, 0, playPosition.Length - 1);
+        //quick_sort(playPosition, 0, playPosition.Length - 1);
 
         return playPosition;
     }
@@ -173,8 +170,17 @@ public class AIPlayer : Player
     {
         int moveIndex = UnityEngine.Random.Range(0, possibleMoves.Count - 1);
 
-        if (!scoredMoves[0].move.executed || scoredMoves[0].move != null)
-            scoredMoves[0].move.ExecuteMove();
+
+        ScoredMove nextPlay = scoredMoves[0];
+        nextPlay.distance = float.MaxValue;
+        for(int i = 0; i < scoredMoves.Length; i++)
+        {
+            if (nextPlay.distance > scoredMoves[i].distance)
+                nextPlay = scoredMoves[i];
+        }
+
+        if (scoredMoves.Length > 0)
+            nextPlay.move.ExecuteMove();
 
         playableCoords = null;
     }
@@ -194,14 +200,12 @@ public class AIPlayer : Player
                 Coord roundedPos = new Coord((int)piece.holder.transform.position.x, (int)piece.holder.transform.position.y);
                 piece.SetTileCoords(roundedPos);
                 piece.Rotate(false);
-            }
-            
+            }   
         }
 
-        if (Input.GetKeyDown(KeyCode.P) || (resources > 30 && selectedPiece == null && hand.Count > 0 && possibleMoves.Count > 0))
+        if (Input.GetKeyDown(KeyCode.P) || (resources >= 30 && selectedPiece == null && hand.Count > 0 && possibleMoves.Count > 0))
         {
             MakePlay();
-
         }
     }
 
@@ -209,13 +213,38 @@ public class AIPlayer : Player
     {
         playableCoords = FindAllPlayableCoords();
         GeneratePossibleMoves(playableCoords);
-        scoredMoves = SortPlayableMovesByDistance(primaryTarget);
+        scoredMoves = CreateScoredMoveArray(primaryTarget);
     }
 
     private void MakePlay()
     {
         AssesMoves();
         PlayPiece();
+    }
+
+    public override int GainResources(int numResources)
+    {
+        int _resources = base.GainResources(numResources);
+        if(resources >= 30) AssesMoves();
+        return _resources;
+    }
+
+    public override void OnPiecePlaced(Polyomino piece)
+    {
+        base.OnPiecePlaced(piece);
+        AssesMoves();
+    }
+
+    public override void OnPieceRemoved(Polyomino piece)
+    {
+        base.OnPieceRemoved(piece);
+        AssesMoves();
+    }
+
+    public override void AddPieceToHand(Polyomino piece)
+    {
+        base.AddPieceToHand(piece);
+        AssesMoves();
     }
 
     private Vector3 PlayPositionToVector3(ScoredMove playPosition)

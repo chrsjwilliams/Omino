@@ -32,7 +32,6 @@ public class Move
     public void ExecuteMove()
     {
         Task playTask = new PlayTask(piece, piece.holder.transform.position, targetCoord.ScreenPos(), rotations);
-        //playTask.Then(new ActionTask(piece.owner.SetHandStatus));
         Services.GeneralTaskManager.Do(playTask);
         executed = true;
     }
