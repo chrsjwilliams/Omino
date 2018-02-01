@@ -7,7 +7,6 @@ public class Move
     public bool executed { get; private set; }
     public const int MAX_ROTATIONS = 3;
 
-
     public Dictionary<Tile, Coord> relativeCoords { get; private set; }
     public Polyomino piece { get; private set; }
     public Coord targetCoord { get; private set; }
@@ -32,10 +31,8 @@ public class Move
 
     public void ExecuteMove()
     {
-        //for (int i = 0; i < rotations; i++)
-        // piece.Rotate();
-        Debug.Log("Target Coord: " + targetCoord);
         Task playTask = new PlayTask(piece, piece.holder.transform.position, targetCoord.ScreenPos(), rotations);
+        //playTask.Then(new ActionTask(piece.owner.SetHandStatus));
         Services.GeneralTaskManager.Do(playTask);
         executed = true;
     }
