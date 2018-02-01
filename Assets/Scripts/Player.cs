@@ -435,13 +435,13 @@ public class Player : MonoBehaviour
         BuildingType blueprintType = piece.buildingType;
         if (!(piece is Blueprint) && piece.cost != 10)
         {
-            //resources -= piece.cost;
+            resources -= piece.cost;
         }
         else if(piece is Blueprint)
         {
             AddBluePrint(System.Activator.CreateInstance(
                 piece.GetType(), new Object[] { this }) as Blueprint);
-            uiTabs.ToggleHandZoneView(true);
+            //uiTabs.ToggleHandZoneView(true);
         }
         selectedPiece = null;
         OrganizeHand(hand);
