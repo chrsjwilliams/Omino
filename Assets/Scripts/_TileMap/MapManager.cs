@@ -264,7 +264,7 @@ public class MapManager : MonoBehaviour
         {
             BuildingType.MININGDRILL,
             BuildingType.ASSEMBLYLINE,
-            BuildingType.FORTIFIEDSTEEL,
+            //BuildingType.FORTIFIEDSTEEL,
             BuildingType.BIGGERBRICKS,
             BuildingType.BIGGERBOMBS,
             BuildingType.SPLASHDAMAGE,
