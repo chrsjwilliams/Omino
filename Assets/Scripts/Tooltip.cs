@@ -9,6 +9,8 @@ public class Tooltip : MonoBehaviour {
     public Text descriptionText;
     [SerializeField]
     private Vector2 tooltipOffset;
+    [SerializeField]
+    private Vector2 inHandOffset;
 
 	// Use this for initialization
 	void Start () {
@@ -32,6 +34,10 @@ public class Tooltip : MonoBehaviour {
     public void Reposition(Vector2 basePos, float rot, bool blueprintInHand)
     {
         Vector2 offset = tooltipOffset * Screen.width / 2048f;
+        if (blueprintInHand)
+        {
+            offset = inHandOffset;
+        }
         if (basePos.y > Screen.height / 2)
         {
             offset = new Vector2(offset.x, -offset.y);
@@ -40,10 +46,7 @@ public class Tooltip : MonoBehaviour {
         {
             offset = new Vector2(-offset.x, offset.y);
         }
-        if (blueprintInHand)
-        {
-            offset = new Vector2(-offset.x, 0);
-        }
+
         transform.position = basePos + offset;
     }
 
