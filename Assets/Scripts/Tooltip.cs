@@ -26,6 +26,11 @@ public class Tooltip : MonoBehaviour {
         nameText.text = name;
         descriptionText.text = description;
         transform.localRotation = Quaternion.Euler(0, 0, rot);
+        Reposition(basePos, rot, blueprintInHand);
+    }
+
+    public void Reposition(Vector2 basePos, float rot, bool blueprintInHand)
+    {
         Vector2 offset = tooltipOffset * Screen.width / 2048f;
         if (basePos.y > Screen.height / 2)
         {

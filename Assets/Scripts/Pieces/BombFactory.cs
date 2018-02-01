@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class BombFactory : Blueprint
 {
@@ -46,8 +47,7 @@ public class BombFactory : Blueprint
 
     protected override string GetDescription()
     {
-        return "+1 " + "<color=red>DESTRUCTOR</color> piece every" + "<color=green>"
-            + Mathf.RoundToInt(1 / destructorDrawRateBonus)
-            + "</color>" + " s";
+        return "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 2) + 
+            "</color> <color=red>DESTRUCTIVE</color> pieces per second";
     }
 }

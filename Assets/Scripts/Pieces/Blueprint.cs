@@ -275,10 +275,23 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         }
     }
 
+    void PositionTooltips()
+    {
+        if (tooltips.Count > 0)
+        {
+            float rot;
+            if (owner.playerNum == 2) rot = 90;
+            else rot = -90;
+            tooltips[0].Reposition(Services.GameManager.MainCamera.WorldToScreenPoint(
+                    GetCenterpoint()), rot, true);
+        }
+    }
+
     public override void OnInputDrag(Vector3 inputPos)
     {
         base.OnInputDrag(inputPos);
-        DestroyTooltips();
+        //DestroyTooltips();
+        PositionTooltips();
     }
 
     public override void OnInputUp()
