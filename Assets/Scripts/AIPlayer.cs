@@ -13,12 +13,17 @@ public class AIPlayer : Player
 
     [SerializeField]
     private float playDelay;
+
+    public bool playWasMade { get; protected set; }
     public List<Coord> playableCoords { get; protected set; }
     private ScoredMove[] scoredMoves;
     public List<Move> possibleMoves { get; protected set; }
+    private Coord primaryTarget;
 
     public override void Init(Color[] playerColorScheme, int posOffset)
     {
+        
+
         playDelay = 1.5f;
         deckClumpCount = 4;
 
@@ -36,6 +41,15 @@ public class AIPlayer : Player
         drawRateFactor = 1;
         resourcesPerTick = 10;
         base.Init(playerColorScheme, posOffset);
+        if (playerNum == 1)
+        {
+            primaryTarget = new Coord(Services.MapManager.MapWidth - 1, Services.MapManager.MapLength - 1);
+        }
+        else
+        {
+            primaryTarget = new Coord(0, 0);
+        }
+
         playableCoords = FindAllPlayableCoords();
         GeneratePossibleMoves(playableCoords);
         scoredMoves = SortPlayableMovesByDistance(new Coord(0, 0));
@@ -129,41 +143,24 @@ public class AIPlayer : Player
         //  Create an array for each playable position and its distance to the target
         ScoredMove[] playPosition = new ScoredMove[possibleMoves.Count];
 
-        if (true)
+        for (int i = 0; i < possibleMoves.Count; i++)
         {
-            for (int i = 0; i < possibleMoves.Count; i++)
-            {
-                playPosition[i] = new ScoredMove();
-                playPosition[i].move = possibleMoves[i];
-                float pieceDistance = float.MaxValue;
-                //  Saves the distance of the closest tile
+            playPosition[i] = new ScoredMove();
+            playPosition[i].move = possibleMoves[i];
+            float pieceDistance = float.MaxValue;
+            //  Saves the distance of the closest tile
 
-                foreach (Tile tile in possibleMoves[i].piece.tiles)
+            foreach (Tile tile in possibleMoves[i].piece.tiles)
+            {
+                float tileDistance = targetCoord.Distance(
+                    possibleMoves[i].relativeCoords[tile].Add(possibleMoves[i].targetCoord));
+
+                if (tileDistance < pieceDistance)
                 {
-                    float tileDistance = targetCoord.Distance(
-                        possibleMoves[i].relativeCoords[tile].Add(possibleMoves[i].targetCoord));
-
-                    if (tileDistance < pieceDistance)
-                    {
-                        pieceDistance = tileDistance;
-                    }
+                    pieceDistance = tileDistance;
                 }
-                playPosition[i].distance = pieceDistance;
             }
-
-            
-        }
-        else
-        {
-            
-            for (int i = 0; i < possibleMoves.Count; i++)
-            {
-                playPosition[i] = new ScoredMove();
-                //  Playable move and possible positions are different!
-                playPosition[i].move = possibleMoves[i];
-                playPosition[i].distance = targetCoord.Distance(possibleMoves[i].targetCoord);       
-            }
-            
+            playPosition[i].distance = pieceDistance;
         }
 
         // sort playable positions beased on closeness to targetCoord
@@ -176,14 +173,9 @@ public class AIPlayer : Player
     {
         int moveIndex = UnityEngine.Random.Range(0, possibleMoves.Count - 1);
 
-        //possibleMoves[moveIndex].ExecuteMove();
-        //possibleMoves.Clear();
-        scoredMoves[0].move.ExecuteMove();
-        
+        if (!scoredMoves[0].move.executed || scoredMoves[0].move != null)
+            scoredMoves[0].move.ExecuteMove();
 
-        //possibleMoves[0].ExecuteMove();
-        //Debug.Log("Possible Moves: " + possibleMoves.Count);
-        //Debug.Log("Possible Moves After: " + possibleMoves.Count);
         playableCoords = null;
     }
 
@@ -206,17 +198,23 @@ public class AIPlayer : Player
             
         }
 
-        if (Input.GetKeyDown(KeyCode.P))// || (resources > 30 && selectedPiece == null && hand.Count > 0 && possibleMoves.Count > 0))
+        if (Input.GetKeyDown(KeyCode.P) || (resources > 30 && selectedPiece == null && hand.Count > 0 && possibleMoves.Count > 0))
         {
-            MakePlay();     
+            MakePlay();
+
         }
+    }
+
+    private void AssesMoves()
+    {
+        playableCoords = FindAllPlayableCoords();
+        GeneratePossibleMoves(playableCoords);
+        scoredMoves = SortPlayableMovesByDistance(primaryTarget);
     }
 
     private void MakePlay()
     {
-        playableCoords = FindAllPlayableCoords();
-        GeneratePossibleMoves(playableCoords);
-        scoredMoves = SortPlayableMovesByDistance(new Coord(0, 0));
+        AssesMoves();
         PlayPiece();
     }
 

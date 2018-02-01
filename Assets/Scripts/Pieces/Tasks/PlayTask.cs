@@ -25,7 +25,6 @@ public class PlayTask : Task
     {
         timeElapsed = 0;
         piece.OnInputDown();
-        Debug.Log(rotations);
 
         for (int rotationsCompleted = 0; rotationsCompleted < rotations; rotationsCompleted++)
         {
@@ -38,13 +37,6 @@ public class PlayTask : Task
     {
         timeElapsed += Time.deltaTime;
 
-        
-
-        foreach (Tile tile in piece.tiles)
-        {
-            //Debug.Log(tile.transform.localPosition);
-        }
-
         Vector3 lerpPos = Vector3.Lerp(startPos, targetPos,
             Easing.QuadEaseIn(timeElapsed / duration));
         piece.OnInputDrag(lerpPos);
@@ -54,17 +46,6 @@ public class PlayTask : Task
 
     protected override void OnSuccess()
     {
-        Debug.Log("Center Coord: " + piece.centerCoord);
-
-        foreach (Tile tile in piece.tiles)
-        {
-            //Debug.Log(tile.coord.ToString());
-        }
-
-        piece.OnInputUp();
-
-        //Debug.Log("Target Pos: " + targetPos);
-
-        
+        piece.OnInputUp();        
     }
 }

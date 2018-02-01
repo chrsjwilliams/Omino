@@ -555,5 +555,7 @@ public class Player : MonoBehaviour
     public void ToggleSplashDamage(bool status)
     {
         splashDamage = status;
+
+        Vector3 test = new Vector3(10, 10, 10);
     }
 }
