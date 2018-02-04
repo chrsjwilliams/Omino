@@ -12,6 +12,8 @@ public class GameSceneScript : Scene<TransitionData>
     [SerializeField]
     private Color _backgroundColor;
 
+    public bool gameStarted { get; private set; }
+
     internal override void OnEnter(TransitionData data)
     {
         tileMapHolder = GameObject.Find(TILE_MAP_HOLDER).transform;
@@ -49,5 +51,21 @@ public class GameSceneScript : Scene<TransitionData>
     public void Reset()
     {
         Services.GameManager.Reset(new Reset());
+    }
+
+    public void StartGame()
+    {
+        gameStarted = true;
+        for (int i = 0; i < Services.GameManager.Players.Length; i++)
+        {
+            Services.GameManager.Players[i].ToggleHandLock(false);
+        }
+    }
+
+    public void StartGameSequence()
+    {
+        Task scrollBanners = new ScrollOffReadyBanners(Services.UIManager.readyBanners);
+        scrollBanners.Then(new ActionTask(StartGame));
+        Services.GeneralTaskManager.Do(scrollBanners);
     }
 }

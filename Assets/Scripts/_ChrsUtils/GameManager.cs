@@ -152,6 +152,13 @@ public class GameManager : MonoBehaviour
             
 
         }
+        for (int i = 0; i < 2; i++)
+        {
+            if(Players[i] is AIPlayer)
+            {
+                Services.UIManager.ToggleReady(i + 1);
+            }
+        }
     }
 
     public void ChangeCameraTo(Camera camera)

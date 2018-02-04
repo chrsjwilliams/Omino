@@ -1359,4 +1359,14 @@ public class Polyomino
         burnTask.Then(new ActionTask(DestroyThis));
         Services.GeneralTaskManager.Do(burnTask);
     }
+
+    public void Lock()
+    {
+        HideFromInput();
+    }
+
+    public void Unlock()
+    {
+        ListenForInput();
+    }
 }

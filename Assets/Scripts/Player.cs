@@ -76,10 +76,12 @@ public class Player : MonoBehaviour
     protected int resourcesPerTick;
     private Polyomino queuedNormalPiece;
     private Polyomino queuedDestructor;
+    public bool ready { get; private set; }
+    private bool handLocked;
 
 
     // Use this for initialization
-    public virtual  void Init(Color[] playerColorScheme, int posOffset)
+    public virtual void Init(Color[] playerColorScheme, int posOffset)
     {
         viewingHand = true;
         playerNum = posOffset + 1;
@@ -124,12 +126,13 @@ public class Player : MonoBehaviour
         resources = startingResources;
         resourceGainFactor = 1;
         drawRateFactor = 1;
+        ToggleHandLock(true);
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (!gameOver)
+        if (!gameOver && Services.GameScene.gameStarted)
         {
             UpdateMeters();
 
@@ -610,5 +613,28 @@ public class Player : MonoBehaviour
         splashDamage = status;
 
         Vector3 test = new Vector3(10, 10, 10);
+    }
+
+    public void ToggleReady()
+    {
+        ready = !ready;
+    }
+
+    public void ToggleHandLock(bool lockHand)
+    {
+        bool wasLocked = handLocked;
+        handLocked = lockHand;
+
+        for (int i = 0; i < hand.Count; i++)
+        {
+            if (handLocked)
+            {
+                hand[i].Lock();
+            }
+            else if(wasLocked)
+            {
+                hand[i].Unlock();
+            }
+        }
     }
 }

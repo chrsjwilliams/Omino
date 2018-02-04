@@ -31,8 +31,6 @@ public class AIPlayer : Player
 
     public override void Init(Color[] playerColorScheme, int posOffset)
     {
-        
-
         playDelay = 1.5f;
         deckClumpCount = 4;
 
@@ -62,7 +60,6 @@ public class AIPlayer : Player
         playableCoords = FindAllPlayableCoords();
         GeneratePossibleMoves(playableCoords);
         scoredMoves = CreateScoredMoveArray(new Coord(0, 0));
-
     }
 
     public List<Coord> FindAllPlayableCoords()
@@ -190,22 +187,25 @@ public class AIPlayer : Player
     {
         base.Update();
 
-        if (Input.GetKeyDown(KeyCode.C))
-            Debug.Log(hand.Count);
-
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Services.GameScene.gameStarted)
         {
-            foreach(Polyomino piece in hand)
+            if (Input.GetKeyDown(KeyCode.C))
+                Debug.Log(hand.Count);
+
+            if (Input.GetKeyDown(KeyCode.T))
             {
-                Coord roundedPos = new Coord((int)piece.holder.transform.position.x, (int)piece.holder.transform.position.y);
-                piece.SetTileCoords(roundedPos);
-                piece.Rotate(false);
-            }   
-        }
+                foreach (Polyomino piece in hand)
+                {
+                    Coord roundedPos = new Coord((int)piece.holder.transform.position.x, (int)piece.holder.transform.position.y);
+                    piece.SetTileCoords(roundedPos);
+                    piece.Rotate(false);
+                }
+            }
 
-        if (Input.GetKeyDown(KeyCode.P) || (resources >= 30 && selectedPiece == null && hand.Count > 0 && possibleMoves.Count > 0))
-        {
-            MakePlay();
+            if (Input.GetKeyDown(KeyCode.P) || (resources >= 30 && selectedPiece == null && hand.Count > 0 && possibleMoves.Count > 0))
+            {
+                MakePlay();
+            }
         }
     }
 

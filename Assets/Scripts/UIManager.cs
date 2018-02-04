@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour {
     public Transform[] mineBlueprintLocations;
     public Transform[] factoryBlueprintLocations;
     public Transform[] bombFactoryBlueprintLocations;
+    public Button[] readyBanners;
     public Transform canvas;
     public Sprite destructorIcon;
     public Sprite bombFactoryIcon;
@@ -49,6 +50,11 @@ public class UIManager : MonoBehaviour {
     private List<int> touchIdsMakingTooltips;
     [SerializeField]
     private Vector3 queueMeterOffset;
+    [SerializeField]
+    private Color notReadyColor;
+    [SerializeField]
+    private Color readyColor;
+    public float readyBannerScrollOffTime;
 
 	// Use this for initialization
 	void Start () {
@@ -59,6 +65,10 @@ public class UIManager : MonoBehaviour {
         }
         touchIdsMakingTooltips = new List<int>();
         //InitializeQueueMeters();
+        for (int i = 0; i < 2; i++)
+        {
+            UpdateDrawMeters(i + 1, 0, 0);
+        }
 	}
 	
 	// Update is called once per frame
@@ -73,6 +83,8 @@ public class UIManager : MonoBehaviour {
 	//	}
 	//	touchCount.text = newText;
 	//}
+
+
 
     void InitializeQueueMeters()
     {
@@ -195,6 +207,37 @@ public class UIManager : MonoBehaviour {
         else
         {
             return normalDrawMeters[playerNum - 1].transform.position;
+        }
+    }
+
+    public void ToggleReady(int playerNum)
+    {
+        Player player = Services.GameManager.Players[playerNum - 1];
+        player.ToggleReady();
+        if (player.ready)
+        {
+            readyBanners[playerNum - 1].GetComponentInChildren<Text>().text =
+                "READY";
+            readyBanners[playerNum - 1].GetComponent<Image>().color = readyColor;
+        }
+        else
+        {
+            readyBanners[playerNum - 1].GetComponentInChildren<Text>().text =
+                "TAP WHEN READY";
+            readyBanners[playerNum - 1].GetComponent<Image>().color = notReadyColor;
+        }
+        bool allReady = true;
+        for (int i = 0; i < Services.GameManager.Players.Length; i++)
+        {
+            if (!Services.GameManager.Players[i].ready)
+            {
+                allReady = false;
+                break;
+            }
+        }
+        if (allReady)
+        {
+            Services.GameScene.StartGameSequence();
         }
     }
 
