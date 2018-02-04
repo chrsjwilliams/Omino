@@ -34,7 +34,7 @@ public class Mine : Blueprint
 
     protected override string GetDescription()
     {
-        return "+<color=green>" + Math.Round((double)resourceGainRateBonus, 2) + 
+        return "+<color=green>" + Math.Round((double)resourceGainRateBonus * 10, 3) + 
             "</color> resources per second";
     }
 }

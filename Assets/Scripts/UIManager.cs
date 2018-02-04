@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour {
 
     public RectTransform[] handZones;
     public Text[] resourceCounters;
+    private Image[] resourceSymbols;
     public RectTransform[] blueprintUIZones;
     [SerializeField]
     private Image[] normalDrawMeters;
@@ -55,6 +56,9 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private Color readyColor;
     public float readyBannerScrollOffTime;
+    public float resourceGainAnimationDist;
+    public float resourceGainAnimationDur;
+    public Vector3 resourceGainAnimationOffset;
 
 	// Use this for initialization
 	void Start () {
@@ -65,10 +69,14 @@ public class UIManager : MonoBehaviour {
         }
         touchIdsMakingTooltips = new List<int>();
         //InitializeQueueMeters();
+        resourceSymbols = new Image[2];
         for (int i = 0; i < 2; i++)
         {
             UpdateDrawMeters(i + 1, 0, 0);
+            resourceSymbols[i] = resourceCounters[i].GetComponentInChildren<Image>();
+            resourceSymbols[i].fillAmount = 0;
         }
+
 	}
 	
 	// Update is called once per frame
@@ -176,6 +184,11 @@ public class UIManager : MonoBehaviour {
     public void SetGreyOutBox(int playerNum, bool status)
     {
         greyOutBoxes[playerNum - 1].enabled = status;
+    }
+
+    public void UpdateResourceMeter(int playerNum, float fillProportion)
+    {
+        resourceSymbols[playerNum - 1].fillAmount = fillProportion;
     }
 
     public void UpdateResourceCount(int resourceCount, int maxResources, Player player)

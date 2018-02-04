@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Base : Structure
 {
@@ -80,13 +81,11 @@ public class Base : Structure
 
     protected override string GetDescription()
     {
-        return "+1 normal piece every " + "<color=green>" 
-            + Mathf.RoundToInt(1 / normalDrawRateBonus)
-            + "</color>" +" s" + "\n" +
-            "+1 <color=red>DESTRUCTOR</color> piece every " + "<color=green>"
-            + Mathf.RoundToInt(1 / destructorDrawRateBonus)
-            + "</color>" + " s" + "\n" +
-            "+10 resources every " + "<color=green>" 
-            + Mathf.RoundToInt(1/resourceGainRateBonus) + "</color>" + " s";
+        return "+<color=green>" + Math.Round((double)normalDrawRateBonus, 3) + 
+            "</color> normal pieces per second" + "\n" +
+            "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) +
+            "</color> <color=red>DESTRUCTIVE</color> pieces per second" + "\n" +
+            "+<color=green>" + Math.Round((double)resourceGainRateBonus * 10, 3) +
+            "</color> resources per second";
     }
 }

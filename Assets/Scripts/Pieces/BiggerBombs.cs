@@ -35,6 +35,6 @@ public class BiggerBombs : Structure
 
     protected override string GetDescription()
     {
-        return "Newly drawn <color=red>Destructor</color> pieces are 4 or 3 blocks rather than 3 or 2";
+        return "Newly drawn <color=red>Destructor</color> pieces are 4 blocks rather than 3";
     }
 }

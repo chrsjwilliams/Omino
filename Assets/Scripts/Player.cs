@@ -164,6 +164,7 @@ public class Player : MonoBehaviour
         resourceMeterFillAmt += resourceGainRate * resourceGainFactor * Time.deltaTime;
         Services.UIManager.UpdateDrawMeters(playerNum, normalDrawMeterFillAmt, 
             destructorDrawMeterFillAmt);
+        Services.UIManager.UpdateResourceMeter(playerNum, resourceMeterFillAmt);
         if (normalDrawMeterFillAmt >= 1)
         {
             Vector3 rawDrawPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
@@ -396,7 +397,7 @@ public class Player : MonoBehaviour
 
     public void AddBluePrint(Blueprint blueprint)
     {
-        //blueprints.Add(blueprint);
+        blueprints.Add(blueprint);
         blueprint.MakePhysicalPiece();
         blueprint.Reposition(GetBlueprintPosition(blueprint));
         //OrganizeHand(blueprints);
@@ -522,7 +523,7 @@ public class Player : MonoBehaviour
 
     public void CancelSelectedBlueprint()
     {
-        //blueprints.Add((Blueprint)selectedPiece);
+        blueprints.Add((Blueprint)selectedPiece);
         selectedPiece.SetGlowState(false);
         //OrganizeHand(blueprints);
         Blueprint selectedBlueprint = selectedPiece as Blueprint;
@@ -547,8 +548,20 @@ public class Player : MonoBehaviour
     {
         int prevResources = resources;
         resources = Mathf.Min(maxResources, resources + numResources);
+        int resourcesGained = resources - prevResources;
         Services.AudioManager.CreateTempAudio(Services.Clips.ResourceGained, 0.2f);
-        return resources - prevResources;
+        Vector3 resourceUILocation = Services.GameManager.MainCamera.ScreenToWorldPoint(
+            Services.UIManager.resourceCounters[playerNum - 1].transform.position);
+        resourceUILocation = new Vector3(resourceUILocation.x, resourceUILocation.y, 0);
+        Vector3 offset = Services.UIManager.resourceGainAnimationOffset;
+        if (playerNum == 2) offset = new Vector3(offset.x, -offset.y, offset.z);
+        resourceUILocation += offset;
+        FloatText floatText = new FloatText("+" + resourcesGained,
+           resourceUILocation, this,
+           Services.UIManager.resourceGainAnimationDist, 
+           Services.UIManager.resourceGainAnimationDur);
+        Services.GeneralTaskManager.Do(floatText);
+        return resourcesGained;
     }
 
     public void AugmentDrawRateFactor(float factorChangeIncrement)
@@ -636,5 +649,17 @@ public class Player : MonoBehaviour
                 hand[i].Unlock();
             }
         }
+        for (int i = 0; i < blueprints.Count; i++)
+        {
+            if (handLocked)
+            {
+                blueprints[i].Lock();
+            }
+            else if (wasLocked)
+            {
+                blueprints[i].Unlock();
+            }
+        }
+        
     }
 }

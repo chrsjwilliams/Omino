@@ -30,7 +30,7 @@ public class FloatText : Task
             player.playerNum == 1 ? Quaternion.Euler(0, 0, -90) : Quaternion.Euler(0, 0, 90);
         textMesh = GameObject.Instantiate(Services.Prefabs.FloatingText, startPos,
             rot, Services.GameScene.transform).GetComponent<TextMesh>();
-        textMesh.GetComponent<MeshRenderer>().sortingOrder = 10;
+        textMesh.GetComponent<MeshRenderer>().sortingOrder = 100;
         textMesh.text = text;
         timeElapsed = 0;
         baseColor = textMesh.color;
@@ -44,7 +44,7 @@ public class FloatText : Task
         textMesh.transform.position = Vector3.Lerp(startPos, targetPos, 
             EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
         textMesh.color = Color.Lerp(baseColor, alphaOutColor,
-            EasingEquations.Easing.ExpoEaseIn(timeElapsed / duration));
+            EasingEquations.Easing.QuartEaseIn(timeElapsed / duration));
 
         if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
     }

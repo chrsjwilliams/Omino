@@ -6,7 +6,7 @@ public class BombFactory : Blueprint
 {
     public BombFactory(Player owner_) : base(BuildingType.BOMBFACTORY, owner_)
     {
-        destructorDrawRateBonus = 1f / 45f;
+        destructorDrawRateBonus = 1f / 60f;
     }
 
     public override void Update()
@@ -47,7 +47,7 @@ public class BombFactory : Blueprint
 
     protected override string GetDescription()
     {
-        return "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 2) + 
+        return "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) + 
             "</color> <color=red>DESTRUCTIVE</color> pieces per second";
     }
 }
