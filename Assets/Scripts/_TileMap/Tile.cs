@@ -41,6 +41,7 @@ public class Tile : MonoBehaviour
     private float colorChangeDuration;
     private bool changingColor;
     public SpriteRenderer maskSr { get; private set; }
+    public SpriteMask mask { get; private set; }
 
     public void Init(Coord coord_)
     {
@@ -49,7 +50,10 @@ public class Tile : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         //glow = GetComponent<SpriteGlow>();
         //glow.OutlineWidth = 0;
-        maskSr = GetComponentInChildren<SpriteMask>().gameObject.GetComponent<SpriteRenderer>();
+        SpriteMask[] masks = GetComponentsInChildren<SpriteMask>();
+        maskSr = masks[0].gameObject.GetComponent<SpriteRenderer>();
+        mask = masks[1];
+        mask.enabled = false;
         
         transform.position = new Vector3(coord.x, coord.y, 0);
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Blueprint : Polyomino
 {
-    private const float alphaPrePlacement = 0.25f;
+    private const float alphaPrePlacement = 0.15f;
 
     protected static int[,,] factory = new int[1, 5, 5]
     {   
@@ -107,7 +107,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         return isLegal;
     }
 
-    public override void MakePhysicalPiece(bool isViewable)
+    public override void MakePhysicalPiece()
     {
         holder = GameObject.Instantiate(Services.Prefabs.PieceHolder,
             Services.GameScene.transform).transform;
@@ -143,7 +143,6 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             }
         }
 
-        //SetVisible(!isViewable);
         EnterUnselectedState();
         SetSprites();
     }

@@ -40,7 +40,7 @@ public class Polyomino
     private const float handPosApproachFactor = 0.25f;
     public const float burnPieceDuration = 0.5f;
     public static Vector3 burnPieceOffset = new Vector3(3, 0, 0);
-    private const float alphaWhileUnaffordable = 0.5f;
+    private const float alphaWhileUnaffordable = 0.3f;
 
 
     public bool isFortified;
@@ -417,6 +417,26 @@ public class Polyomino
         costText.gameObject.SetActive(status);
     }
 
+    public void QueueUp()
+    {
+        ToggleCostUIStatus(false);
+        HideFromInput();
+        foreach(Tile tile in tiles)
+        {
+            //tile.mask.enabled = true;
+            tile.SetMaskColor(new Color(0, 0, 0, 0));
+        }
+        SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 0.75f), 1);
+        Vector3 centerOffset = GetCenterpoint() - holder.transform.position;
+        Reposition(holder.transform.position - centerOffset);
+    }
+
+    public void OnDrawn()
+    {
+        ToggleCostUIStatus(true);
+        ListenForInput();
+    }
+
     public void SetVisible(bool isVisible_)
     {
         isVisible = isVisible_;
@@ -713,7 +733,7 @@ public class Polyomino
         {
             Polyomino monomino = new Polyomino(1, 0, owner);
             //monomino.ToggleAltColor(true);
-            monomino.MakePhysicalPiece(true);
+            monomino.MakePhysicalPiece();
             monomino.PlaceAtLocation(tile.coord);
         }
     }
@@ -781,7 +801,7 @@ public class Polyomino
         dead = true;
     }
 
-    void DestroyThis()
+    public void DestroyThis()
     {
         GameObject.Destroy(holder.gameObject);
     }
@@ -825,7 +845,7 @@ public class Polyomino
         occupyingBlueprints.Remove(blueprint);
     }
 
-    public virtual void MakePhysicalPiece(bool isViewable)
+    public virtual void MakePhysicalPiece()
     {
         holder = GameObject.Instantiate(Services.Prefabs.PieceHolder,
             Services.GameScene.transform).transform;
@@ -874,7 +894,6 @@ public class Polyomino
         SetSprites();
         if (buildingType != BuildingType.BASE)
         {
-            //SetVisible(isViewable);
             EnterUnselectedState();
         }
     }

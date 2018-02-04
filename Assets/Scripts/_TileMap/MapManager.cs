@@ -118,8 +118,8 @@ public class MapManager : MonoBehaviour
                 new SuperDestructorResource(tileCount, tileIndex);
             SuperDestructorResource mirroredResource =
                 new SuperDestructorResource(tileCount, tileIndex);
-            resource.MakePhysicalPiece(true);
-            mirroredResource.MakePhysicalPiece(true);
+            resource.MakePhysicalPiece();
+            mirroredResource.MakePhysicalPiece();
 
             for (int i = 0; i < numRotations; i++)
             {
@@ -179,7 +179,7 @@ public class MapManager : MonoBehaviour
                 default:
                     return null;
             }
-            structure.MakePhysicalPiece(true);
+            structure.MakePhysicalPiece();
             //for (int i = 0; i < numRotations; i++)
             //{
             //    structure.Rotate();
@@ -282,7 +282,7 @@ public class MapManager : MonoBehaviour
             for (int j = 0; j < 2; j++)
             {
                 Base cornerBase = new Base();
-                cornerBase.MakePhysicalPiece(true);
+                cornerBase.MakePhysicalPiece();
                 Coord location;
                 if (j == 0)
                 {
@@ -354,7 +354,7 @@ public class MapManager : MonoBehaviour
         Base playerBase = new Base(player, true);
         player.mainBase = playerBase;
         playerBase.ShiftColor(player.ColorScheme[0]);
-        playerBase.MakePhysicalPiece(true);
+        playerBase.MakePhysicalPiece();
         playerBase.PlaceAtLocation(coord);
         playerBase.TogglePieceConnectedness(true);
     }
@@ -607,7 +607,7 @@ public class MapManager : MonoBehaviour
         {
             Polyomino fortifiedMonomino = new Polyomino(1, 0, piece.owner);
             fortifiedMonomino.isFortified = true;
-            fortifiedMonomino.MakePhysicalPiece(true);
+            fortifiedMonomino.MakePhysicalPiece();
             fortifiedMonomino.PlaceAtLocation(tile.coord, true);
 
             for (int i = 0; i < prevOccupyingStructures.Count; i++)

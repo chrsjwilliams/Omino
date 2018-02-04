@@ -10,8 +10,10 @@ public class UIManager : MonoBehaviour {
     public RectTransform[] blueprintUIZones;
     [SerializeField]
     private Image[] normalDrawMeters;
+    private Transform[] normalQueueMeters;
     [SerializeField]
     private Image[] destructorDrawMeters;
+    private Transform[] destructorQueueMeters;
     [SerializeField]
     private Image[] greyOutBoxes;
     [SerializeField]
@@ -45,6 +47,8 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private float bannerScrollDuration;
     private List<int> touchIdsMakingTooltips;
+    [SerializeField]
+    private Vector3 queueMeterOffset;
 
 	// Use this for initialization
 	void Start () {
@@ -54,10 +58,7 @@ public class UIManager : MonoBehaviour {
             defeatBanners[i].gameObject.SetActive(false);
         }
         touchIdsMakingTooltips = new List<int>();
-        //foreach(Image box in greyOutBoxes)
-        //{
-        //    box.enabled = false;
-        //}
+        //InitializeQueueMeters();
 	}
 	
 	// Update is called once per frame
@@ -73,11 +74,48 @@ public class UIManager : MonoBehaviour {
 	//	touchCount.text = newText;
 	//}
 
+    void InitializeQueueMeters()
+    {
+        normalQueueMeters = new Transform[2];
+        destructorQueueMeters = new Transform[2];
+        for (int i = 0; i < 2; i++)
+        {
+            Quaternion rotation;
+            Vector3 offset = queueMeterOffset;
+            if(i == 0)
+            {
+                rotation = Quaternion.Euler(0, 0, -90);
+            }
+            else
+            {
+                rotation = Quaternion.Euler(0, 0, 90);
+                offset = new Vector3(offset.x, -offset.y, 0);
+            }
+            Vector3 normalPos = Services.GameManager.MainCamera
+                .ScreenToWorldPoint(normalDrawMeters[i].transform.position) + offset;
+            Transform normalQueueBar = Instantiate(Services.Prefabs.QueueBar,
+                new Vector3(normalPos.x, normalPos.y, 0),
+                rotation).transform;
+            normalQueueMeters[i] = normalQueueBar;
+            Vector3 destructorPos = Services.GameManager.MainCamera
+                 .ScreenToWorldPoint(destructorDrawMeters[i].transform.position) + offset;
+            Transform destructorQueueBar = Instantiate(Services.Prefabs.QueueBar,
+                 new Vector3(destructorPos.x, destructorPos.y, 0),
+                 rotation).transform;
+            destructorQueueMeters[i] = destructorQueueBar;
+        }
+    }
+
     public void UpdateDrawMeters(int playerNum, float normalFillProportion, 
         float destructorFillProportion)
     {
         normalDrawMeters[playerNum - 1].fillAmount = normalFillProportion;
         destructorDrawMeters[playerNum - 1].fillAmount = destructorFillProportion;
+
+        //normalQueueMeters[playerNum - 1].localScale = 
+        //    new Vector3(normalFillProportion, 1, 1);
+        //destructorQueueMeters[playerNum - 1].localScale =
+        //    new Vector3(destructorFillProportion, 1, 1);
     }
 
     public void StartBannerScroll(Player winner_)
@@ -146,6 +184,18 @@ public class UIManager : MonoBehaviour {
     public bool IsTouchMakingTooltipAlready(int touchId)
     {
         return touchIdsMakingTooltips.Contains(touchId);
+    }
+
+    public Vector3 GetBarPosition(int playerNum, bool destructor)
+    {
+        if (destructor)
+        {
+            return destructorDrawMeters[playerNum - 1].transform.position;
+        }
+        else
+        {
+            return normalDrawMeters[playerNum - 1].transform.position;
+        }
     }
 
 }

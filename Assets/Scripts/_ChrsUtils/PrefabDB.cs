@@ -46,4 +46,7 @@ public class PrefabDB : ScriptableObject
 
     [SerializeField] private GameObject shield;
     public GameObject Shield { get { return shield; } }
+
+    [SerializeField] private GameObject queueBar;
+    public GameObject QueueBar { get { return queueBar; } }
 }

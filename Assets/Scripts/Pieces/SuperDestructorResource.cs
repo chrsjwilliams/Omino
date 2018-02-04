@@ -14,9 +14,9 @@ public class SuperDestructorResource : Polyomino
 
     }
 
-    public override void MakePhysicalPiece(bool isViewable)
+    public override void MakePhysicalPiece()
     {
-        base.MakePhysicalPiece(isViewable);
+        base.MakePhysicalPiece();
         HideFromInput();
         holder.localScale = Vector3.one;
     }

@@ -102,9 +102,9 @@ public abstract class Structure : Polyomino
         }
     }
 
-    public override void MakePhysicalPiece(bool isViewable)
+    public override void MakePhysicalPiece()
     {
-        base.MakePhysicalPiece(isViewable);
+        base.MakePhysicalPiece();
         HideFromInput();
         holder.localScale = Vector3.one;
         neutralColor = tiles[0].GetComponent<SpriteRenderer>().color;

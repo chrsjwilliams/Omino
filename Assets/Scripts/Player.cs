@@ -74,6 +74,8 @@ public class Player : MonoBehaviour
     private float destructorDrawMeterFillAmt;
     [SerializeField]
     protected int resourcesPerTick;
+    private Polyomino queuedNormalPiece;
+    private Polyomino queuedDestructor;
 
 
     // Use this for initialization
@@ -95,6 +97,8 @@ public class Player : MonoBehaviour
         InitializeDestructorDeck();
         DrawPieces(startingHandSize);
         OrganizeHand(hand, true);
+        QueueUpNextPiece(true);
+        QueueUpNextPiece(false);
         if (Services.GameManager.usingBlueprints)
         {
             Factory factory = new Factory(this);
@@ -200,6 +204,14 @@ public class Player : MonoBehaviour
                 normalDeck.Add(new Polyomino(pieceSize, index, this));
             }
         }
+        if (queuedNormalPiece != null)
+        {
+            if ((queuedNormalPiece.tiles.Count == 4 && biggerBricks) ||
+                queuedNormalPiece.tiles.Count == 5 && !biggerBricks)
+            {
+                QueueUpNextPiece(false);
+            }
+        }
     }
 
     void InitializeDestructorDeck()
@@ -217,6 +229,13 @@ public class Player : MonoBehaviour
             {
                 destructorDeck.Add(new Destructor(pieceSize, index, this, false));
             }
+        }
+
+        if (queuedDestructor != null)
+        {
+            if((queuedDestructor.tiles.Count == 3 && biggerBombs) ||
+                (queuedDestructor.tiles.Count == 4 && !biggerBombs))
+            QueueUpNextPiece(true);
         }
     }
 
@@ -258,18 +277,52 @@ public class Player : MonoBehaviour
         }
     }
 
+    //draw instantly
     void DrawPiece()
     {
         Polyomino piece = GetRandomPieceFromDeck(false);
-        piece.MakePhysicalPiece(viewingHand);
+        piece.MakePhysicalPiece();
         AddPieceToHand(piece);
     }
 
+    //draw with task
     void DrawPiece(Vector3 startPos, bool onlyDestructors)
     {
-        Polyomino piece = GetRandomPieceFromDeck(onlyDestructors);
+        Polyomino piece;
+        if (onlyDestructors)
+        {
+            piece = queuedDestructor;
+            queuedDestructor = null;
+        }
+        else
+        {
+            piece = queuedNormalPiece;
+            queuedNormalPiece = null;
+        }
         Task drawTask = new DrawTask(piece, startPos);
         Services.GeneralTaskManager.Do(drawTask);
+        QueueUpNextPiece(onlyDestructors);
+    }
+
+    void QueueUpNextPiece(bool destructor)
+    {
+        Polyomino nextPiece = GetRandomPieceFromDeck(destructor);
+        nextPiece.MakePhysicalPiece();
+        Vector3 position;
+        position = Services.GameManager.MainCamera.ScreenToWorldPoint(
+            Services.UIManager.GetBarPosition(playerNum, destructor));
+        nextPiece.Reposition(new Vector3(position.x, position.y, 0));
+        nextPiece.QueueUp();
+        if (destructor)
+        {
+            if (queuedDestructor != null) queuedDestructor.DestroyThis();
+            queuedDestructor = nextPiece;
+        }
+        else
+        {
+            if (queuedNormalPiece != null) queuedNormalPiece.DestroyThis();
+            queuedNormalPiece = nextPiece;
+        }
     }
 
     public virtual void AddPieceToHand(Polyomino piece)
@@ -341,7 +394,7 @@ public class Player : MonoBehaviour
     public void AddBluePrint(Blueprint blueprint)
     {
         //blueprints.Add(blueprint);
-        blueprint.MakePhysicalPiece(false);
+        blueprint.MakePhysicalPiece();
         blueprint.Reposition(GetBlueprintPosition(blueprint));
         //OrganizeHand(blueprints);
     }
@@ -483,7 +536,7 @@ public class Player : MonoBehaviour
     {
         Destructor newPiece = new Destructor(resource.units, resource.index, this, true);
         resource.Remove();
-        newPiece.MakePhysicalPiece(viewingHand);
+        newPiece.MakePhysicalPiece();
         AddPieceToHand(newPiece);
     }
 
@@ -549,7 +602,7 @@ public class Player : MonoBehaviour
     public void ToggleBiggerBombs(bool status)
     {
         biggerBombs = status;
-        InitializeNormalDeck();
+        InitializeDestructorDeck();
     }
 
     public void ToggleSplashDamage(bool status)

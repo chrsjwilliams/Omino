@@ -21,8 +21,9 @@ public class DrawTask : Task
     protected override void Init()
     {
         timeElapsed = 0;
-        piece.MakePhysicalPiece(true);
-        piece.Reposition(startPos);
+        //piece.MakePhysicalPiece();
+        //piece.Reposition(startPos);
+        startPos = piece.holder.transform.position;
         duration = Polyomino.drawAnimDur;
         targetPos = piece.owner.GetHandPosition(piece.owner.handCount);
         piece.SetAffordableStatus(piece.owner);
@@ -41,6 +42,7 @@ public class DrawTask : Task
     protected override void OnSuccess()
     {
         piece.owner.AddPieceToHand(piece);
+        piece.OnDrawn();
         pieceInTransit[piece.owner.playerNum - 1] = false;
     }
 }
