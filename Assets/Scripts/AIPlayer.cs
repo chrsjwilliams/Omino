@@ -23,16 +23,26 @@ public class AIPlayer : Player
     [SerializeField]
     private float playDelay;
 
-    public bool playWasMade { get; protected set; }
+    public bool beganGame { get; protected set; }
+    public bool drawingPiece { get; protected set; }
+    public bool playingPiece { get; protected set; }
+    public bool isThinking { get; protected set; }
     public List<Coord> playableCoords { get; protected set; }
     private ScoredMove[] scoredMoves;
     public List<Move> possibleMoves { get; protected set; }
     private Coord primaryTarget;
+    private int frameBuffer;
 
     public override void Init(Color[] playerColorScheme, int posOffset)
     {
+        beganGame = false;
+        playingPiece = false;
+        isThinking = false;
+        drawingPiece = false;
         playDelay = 1.5f;
         deckClumpCount = 4;
+
+        frameBuffer = 1;
 
         handSpacing = new Vector3(5.5f, -2.35f, 0);
         handOffset = new Vector3(-12.6f, 9.125f, 0);
@@ -58,8 +68,11 @@ public class AIPlayer : Player
         }
 
         playableCoords = FindAllPlayableCoords();
-        GeneratePossibleMoves(playableCoords);
-        scoredMoves = CreateScoredMoveArray(new Coord(0, 0));
+        //GeneratePossibleMoves(playableCoords);
+
+        
+
+        //scoredMoves = CreateScoredMoveArray(new Coord(0, 0));
     }
 
     public List<Coord> FindAllPlayableCoords()
@@ -82,6 +95,7 @@ public class AIPlayer : Player
 
     public void GeneratePossibleMoves(List<Coord> playCoords)
     {
+
         possibleMoves.Clear();
         foreach (Polyomino piece in hand)
         {
@@ -103,13 +117,8 @@ public class AIPlayer : Player
                             Coord radiusOffset = new Coord(dx, dy);
                             Coord candidateCoord = playCoords[i].Add(radiusOffset);
                             piece.SetTileCoords(candidateCoord);
-
-                            
-
                             if (piece.IsPlacementLegal() && piece.cost <= resources)
                             {
-
-
                                 Move newMove = new Move(piece, candidateCoord, (rotations + 1) % 4);
                                 if(!possibleMoves.Contains(newMove))
                                 {
@@ -158,15 +167,13 @@ public class AIPlayer : Player
         }
 
         // sort playable positions beased on closeness to targetCoord
-        //quick_sort(playPosition, 0, playPosition.Length - 1);
-
         return playPosition;
     }
 
     protected void PlayPiece()
     {
+        playingPiece = true;
         int moveIndex = UnityEngine.Random.Range(0, possibleMoves.Count - 1);
-
 
         ScoredMove nextPlay = scoredMoves[0];
         nextPlay.distance = float.MaxValue;
@@ -176,6 +183,7 @@ public class AIPlayer : Player
                 nextPlay = scoredMoves[i];
         }
 
+        
         if (scoredMoves.Length > 0)
             nextPlay.move.ExecuteMove();
 
@@ -187,11 +195,10 @@ public class AIPlayer : Player
     {
         base.Update();
 
-        if (Services.GameScene.gameStarted)
+        if (Services.GameScene.gameStarted && !beganGame)
         {
-            if (Input.GetKeyDown(KeyCode.C))
-                Debug.Log(hand.Count);
-
+            beganGame = true;
+            StartCoroutine(GeneratePossibleMoves());
             if (Input.GetKeyDown(KeyCode.T))
             {
                 foreach (Polyomino piece in hand)
@@ -201,11 +208,70 @@ public class AIPlayer : Player
                     piece.Rotate(false);
                 }
             }
+        }
 
-            if (Input.GetKeyDown(KeyCode.P) || (resources >= 30 && selectedPiece == null && hand.Count > 0 && possibleMoves.Count > 0))
+        if (!isThinking && !playingPiece && !drawingPiece && Services.GameScene.gameStarted)
+        {
+            StartCoroutine(GeneratePossibleMoves());
+        }
+
+        if (Input.GetKeyDown(KeyCode.U)) Debug.Log("Board Pieces: " + boardPieces.Count);
+    }
+
+    protected IEnumerator GeneratePossibleMoves()
+    {
+        isThinking = true;
+        Debug.Log("Begin Thinking");
+
+        playableCoords = FindAllPlayableCoords();
+
+        foreach (Polyomino piece in hand)
+        {
+            //  Check the target coord and center coord
+            // rotate piece
+            Coord roundedPos = new Coord((int)piece.holder.transform.position.x, (int)piece.holder.transform.position.y);
+            piece.SetTileCoords(roundedPos);
+            for (int i = 0; i < playableCoords.Count; i++)
             {
-                MakePlay();
+                // each piece should know how many times it can be rotated
+                for (int rotations = 0; rotations <= Move.MAX_ROTATIONS; rotations++)
+                {
+                    piece.Rotate(false);
+                    //  For play positions +/- a pieces radius
+                    for (int dx = -2; dx <= 2; dx++)
+                    {
+                        for (int dy = -2; dy <= 2; dy++)
+                        {
+                            Coord radiusOffset = new Coord(dx, dy);
+                            Coord candidateCoord = playableCoords[i].Add(radiusOffset);
+                            piece.SetTileCoords(candidateCoord);
+                            if (piece.IsPlacementLegal() && piece.cost <= resources)
+                            {
+                                Move newMove = new Move(piece, candidateCoord, (rotations + 1) % 4);
+                                if (!possibleMoves.Contains(newMove))
+                                {
+                                    possibleMoves.Add(newMove);
+                                }
+                            }
+                        }
+                    }
+                }
+                //  Then choose a new play position
             }
+            //    Choose a new piece
+            //  Wait for a certain number of frames before evaluating next piece
+            for (int frames = 0; frames < frameBuffer; frames++)
+            {
+                yield return null;
+            }
+        }
+
+        scoredMoves = CreateScoredMoveArray(primaryTarget);
+        if (Input.GetKeyDown(KeyCode.P) || (resources >= 30 && selectedPiece == null && hand.Count > 0 && possibleMoves.Count > 0))
+        {
+            Debug.Log("Making Play");
+            MakePlay();
+            possibleMoves.Clear();
         }
     }
 
@@ -218,70 +284,50 @@ public class AIPlayer : Player
 
     private void MakePlay()
     {
-        AssesMoves();
+        //AssesMoves();
         PlayPiece();
     }
 
     public override int GainResources(int numResources)
     {
         int _resources = base.GainResources(numResources);
-        if(resources >= 30) AssesMoves();
+        if (resources >= 30) isThinking = false;
         return _resources;
     }
 
     public override void OnPiecePlaced(Polyomino piece)
     {
         base.OnPiecePlaced(piece);
-        AssesMoves();
+        playingPiece = false;
+        isThinking = false;
+        //if(Services.GameScene.gameStarted)
+            //StartCoroutine(GeneratePossibleMoves());
+    }
+
+    public override void DrawPiece(Vector3 startPos, bool onlyDestructors)
+    {
+        Debug.Log("Stop Thinking");
+        StopCoroutine(GeneratePossibleMoves());
+        drawingPiece = true;
+        isThinking = false;
+        base.DrawPiece(startPos, onlyDestructors);
     }
 
     public override void OnPieceRemoved(Polyomino piece)
     {
         base.OnPieceRemoved(piece);
-        AssesMoves();
+        //AssesMoves();
     }
 
     public override void AddPieceToHand(Polyomino piece)
     {
         base.AddPieceToHand(piece);
-        AssesMoves();
+        drawingPiece = false;
+        //AssesMoves();
     }
 
     private Vector3 PlayPositionToVector3(ScoredMove playPosition)
     {
         return Services.MapManager.Map[playPosition.move.targetCoord.x, playPosition.move.targetCoord.y].transform.position;
-    }
-
-    private void quick_sort(ScoredMove[] playPositions, int start, int end)
-    {
-        if (start < end)
-        {
-            int pIndex = partition(playPositions, start, end);
-            quick_sort(playPositions, start, pIndex - 1);
-            quick_sort(playPositions, pIndex + 1, end);
-        }
-    }
-
-    private int partition(ScoredMove[] playPositions, int start, int end)
-    {
-        ScoredMove pivot = playPositions[end];
-        int pIndex = start;
-        ScoredMove temp;
-
-        for (int i = start; i < end; i++)
-        {
-            if (playPositions[i].distance <= pivot.distance)
-            {
-                temp = playPositions[i];
-                playPositions[i] = playPositions[pIndex];
-                playPositions[pIndex] = temp;
-                pIndex++;
-            }
-        }
-
-        temp = playPositions[pIndex];
-        playPositions[pIndex] = playPositions[end];
-        playPositions[end] = temp;
-        return pIndex;
     }
 }

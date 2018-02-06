@@ -286,7 +286,7 @@ public class Player : MonoBehaviour
     }
 
     //draw instantly
-    void DrawPiece()
+    public virtual void DrawPiece()
     {
         Polyomino piece = GetRandomPieceFromDeck(false);
         piece.MakePhysicalPiece();
@@ -294,7 +294,7 @@ public class Player : MonoBehaviour
     }
 
     //draw with task
-    void DrawPiece(Vector3 startPos, bool onlyDestructors)
+    public virtual void DrawPiece(Vector3 startPos, bool onlyDestructors)
     {
         Polyomino piece;
         if (onlyDestructors)
