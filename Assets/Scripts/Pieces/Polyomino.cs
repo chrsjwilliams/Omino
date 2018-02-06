@@ -29,7 +29,8 @@ public class Polyomino
     private const float rotationInputRadius = 8f;
     protected int touchID;
     private readonly Vector3 baseDragOffset = 5f * Vector3.right;
-    private readonly Vector3 unselectedScale = 0.5f * Vector3.one;
+    public static Vector3 unselectedScale = 0.5f * Vector3.one;
+    public static Vector3 queueScale = 0.3f * Vector3.one;
     public const float drawAnimDur = 0.5f;
     public const float deathAnimDur = 0.5f;
     public const float deathAnimScaleUp = 1.5f;
@@ -429,6 +430,7 @@ public class Polyomino
         SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 0.75f), 1);
         Vector3 centerOffset = GetCenterpoint() - holder.transform.position;
         Reposition(holder.transform.position - centerOffset);
+        holder.transform.localScale = queueScale;
     }
 
     public void OnDrawn()

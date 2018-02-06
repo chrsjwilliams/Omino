@@ -7,6 +7,8 @@ public class DrawTask : Task
     private Polyomino piece;
     private Vector3 startPos;
     private Vector3 targetPos;
+    private Vector3 startScale;
+    private Vector3 targetScale;
     private float timeElapsed;
     private float duration;
     public static bool[] pieceInTransit = new bool[2];
@@ -27,6 +29,8 @@ public class DrawTask : Task
         duration = Polyomino.drawAnimDur;
         targetPos = piece.owner.GetHandPosition(piece.owner.handCount);
         piece.SetAffordableStatus(piece.owner);
+        startScale = piece.holder.transform.localScale;
+        targetScale = Polyomino.unselectedScale;
     }
 
     internal override void Update()
@@ -35,6 +39,8 @@ public class DrawTask : Task
 
         piece.Reposition(Vector3.Lerp(startPos, targetPos, 
             Easing.QuadEaseIn(timeElapsed / duration)));
+        piece.holder.transform.localScale = Vector3.Lerp(startScale, targetScale,
+            Easing.QuadEaseIn(timeElapsed/duration));
 
         if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
     }
