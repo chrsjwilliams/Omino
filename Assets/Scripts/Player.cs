@@ -162,8 +162,12 @@ public class Player : MonoBehaviour
         normalDrawMeterFillAmt += normalDrawRate * drawRateFactor * Time.deltaTime;
         destructorDrawMeterFillAmt += destructorDrawRate * drawRateFactor * Time.deltaTime;
         resourceMeterFillAmt += resourceGainRate * resourceGainFactor * Time.deltaTime;
+        float normalTimeLeft = ((1 - normalDrawMeterFillAmt) /
+            (normalDrawRate * drawRateFactor));
+        float destructorTimeLeft = ((1 - destructorDrawMeterFillAmt) /
+            (destructorDrawRate * drawRateFactor));
         Services.UIManager.UpdateDrawMeters(playerNum, normalDrawMeterFillAmt, 
-            destructorDrawMeterFillAmt);
+            destructorDrawMeterFillAmt, normalTimeLeft, destructorTimeLeft);
         Services.UIManager.UpdateResourceMeter(playerNum, resourceMeterFillAmt);
         if (normalDrawMeterFillAmt >= 1)
         {

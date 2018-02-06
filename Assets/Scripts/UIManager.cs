@@ -11,9 +11,13 @@ public class UIManager : MonoBehaviour {
     public RectTransform[] blueprintUIZones;
     [SerializeField]
     private Image[] normalDrawMeters;
+    [SerializeField]
+    private Text[] normalPieceTimers;
     private Transform[] normalQueueMeters;
     [SerializeField]
     private Image[] destructorDrawMeters;
+    [SerializeField]
+    private Text[] destructorPieceTimers;
     private Transform[] destructorQueueMeters;
     [SerializeField]
     private Image[] greyOutBoxes;
@@ -59,6 +63,10 @@ public class UIManager : MonoBehaviour {
     public float resourceGainAnimationDist;
     public float resourceGainAnimationDur;
     public Vector3 resourceGainAnimationOffset;
+    [SerializeField]
+    private float radialMeterFillMin;
+    [SerializeField]
+    private float radialMeterFillMax;
 
 	// Use this for initialization
 	void Start () {
@@ -72,7 +80,7 @@ public class UIManager : MonoBehaviour {
         resourceSymbols = new Image[2];
         for (int i = 0; i < 2; i++)
         {
-            UpdateDrawMeters(i + 1, 0, 0);
+            UpdateDrawMeters(i + 1, 0, 0, 0, 0);
             resourceSymbols[i] = resourceCounters[i].GetComponentInChildren<Image>();
             resourceSymbols[i].fillAmount = 0;
         }
@@ -127,10 +135,20 @@ public class UIManager : MonoBehaviour {
     }
 
     public void UpdateDrawMeters(int playerNum, float normalFillProportion, 
-        float destructorFillProportion)
+        float destructorFillProportion, float normalTimeLeft, float destructorTimeLeft)
     {
-        normalDrawMeters[playerNum - 1].fillAmount = normalFillProportion;
-        destructorDrawMeters[playerNum - 1].fillAmount = destructorFillProportion;
+        float meterBody = radialMeterFillMax - radialMeterFillMin;
+
+        float adjustedNormalProportion = radialMeterFillMin + 
+            (normalFillProportion * meterBody);
+        float adjustedDestructorProportion = radialMeterFillMin +
+            (destructorFillProportion * meterBody);
+
+        normalDrawMeters[playerNum - 1].fillAmount = adjustedNormalProportion;
+        destructorDrawMeters[playerNum - 1].fillAmount = adjustedDestructorProportion;
+
+        normalPieceTimers[playerNum - 1].text = Mathf.CeilToInt(normalTimeLeft).ToString();
+        destructorPieceTimers[playerNum - 1].text = Mathf.CeilToInt(destructorTimeLeft).ToString();
 
         //normalQueueMeters[playerNum - 1].localScale = 
         //    new Vector3(normalFillProportion, 1, 1);
