@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ShieldedPieces : Structure
 {
-    public const float ShieldDuration = 10f;
+    public const float ShieldDuration = 8f;
 
     public ShieldedPieces() : base(0)
     {
