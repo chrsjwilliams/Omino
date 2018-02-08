@@ -13,6 +13,8 @@ public class Tile : MonoBehaviour
     }
     [SerializeField]
     private Sprite[] sprites;
+    [SerializeField]
+    private Sprite[] destructorSprites;
     public Coord coord { get; private set; }
     public BoxCollider2D boxCol { get; private set; }
     public SpriteRenderer sr { get; private set; }
@@ -41,13 +43,28 @@ public class Tile : MonoBehaviour
     private float colorChangeDuration;
     private bool changingColor;
     public SpriteRenderer maskSr { get; private set; }
+    private SpriteRenderer bombOverlay;
+    private SpriteRenderer moltenLines;
+    private bool bombSettling;
+    private float bombSettleTimeElapsed;
+    private const float bombSettleDuration = 0.4f;
+    private float currentBombAlpha;
+    private float currentNormalAlpha;
     //public SpriteMask mask { get; private set; }
 
     public void Init(Coord coord_)
     {
         coord = coord_;
         boxCol = GetComponent<BoxCollider2D>();
-        sr = GetComponent<SpriteRenderer>();
+        SpriteRenderer[] srs = GetComponentsInChildren<SpriteRenderer>();
+        sr = srs[0];
+        bombOverlay = srs[2];
+        moltenLines = srs[3];
+        if (!(pieceParent != null && pieceParent is Destructor))
+        {
+            bombOverlay.enabled = false;
+            moltenLines.enabled = false;
+        }
         //glow = GetComponent<SpriteGlow>();
         //glow.OutlineWidth = 0;
         SpriteMask[] masks = GetComponentsInChildren<SpriteMask>();
@@ -65,7 +82,7 @@ public class Tile : MonoBehaviour
     {
         pieceParent = pieceParent_;
         Init(coord_);
-        sr.sortingOrder += 5;
+        IncrementSortingOrder(5);
     }
 
 	public void OnRemove(){
@@ -80,17 +97,12 @@ public class Tile : MonoBehaviour
     public void SetColor(Color color)
     {
         sr.color = color;
+        bombOverlay.color = color;
     }
 
     public void ShiftColor(Color color)
     {
         targetColor = color;
-    }
-
-    public void ToggleAltColor(bool useAlt)
-    {
-        if (useAlt) sr.color = pieceParent.owner.ColorScheme[1];
-        else sr.color = pieceParent.owner.ColorScheme[0];
     }
 
     public void SetGlowOutLine(int i)
@@ -172,21 +184,40 @@ public class Tile : MonoBehaviour
     private void Update()
     {
         if (changingColor) LerpToTargetColor();
+        if (bombSettling) SettleToNormalSprite();
     }
 
     void LerpToTargetColor()
     {
         colorChangeTimeElapsed += Time.deltaTime;
-        sr.color = Color.Lerp(prevColor, targetColor, colorChangeTimeElapsed / colorChangeDuration);
+        sr.color = Color.Lerp(prevColor, targetColor, 
+            colorChangeTimeElapsed / colorChangeDuration);
+        bombOverlay.color = new Color(sr.color.r, sr.color.g, sr.color.b, bombOverlay.color.a);
         if(colorChangeTimeElapsed >= colorChangeDuration)
         {
             changingColor = false;
         }
     }
 
+    void SettleToNormalSprite()
+    {
+        bombSettleTimeElapsed += Time.deltaTime;
+        sr.color = Color.Lerp(new Color(sr.color.r, sr.color.g, sr.color.b, 0),
+            new Color(sr.color.r, sr.color.g, sr.color.b, 1),
+            EasingEquations.Easing.QuadEaseOut(bombSettleTimeElapsed / bombSettleDuration));
+        bombOverlay.color = Color.Lerp(new Color(sr.color.r, sr.color.g, sr.color.b, 1),
+            new Color(sr.color.r, sr.color.g, sr.color.b, 0),
+            EasingEquations.Easing.QuadEaseIn(bombSettleTimeElapsed / bombSettleDuration));
+        moltenLines.color = Color.Lerp(new Color(sr.color.r, sr.color.g, sr.color.b, 1),
+            new Color(sr.color.r, sr.color.g, sr.color.b, 0),
+            EasingEquations.Easing.QuadEaseIn(bombSettleTimeElapsed / bombSettleDuration));
+        if (bombSettleTimeElapsed >= bombSettleDuration) bombSettling = false;
+    }
+
 
     public void SetSprite(int spriteIndex)
     {
+        bombOverlay.sprite = destructorSprites[spriteIndex];
         sr.sprite = sprites[spriteIndex];
     }
 
@@ -199,17 +230,29 @@ public class Tile : MonoBehaviour
 	{
 		sr.sortingOrder += inc;
         maskSr.sortingOrder += inc;
+        bombOverlay.sortingOrder += inc;
+        moltenLines.sortingOrder += inc;
 	}
 
     public void SetSortingOrder(int sortingOrder)
     {
-        int diff = sr.sortingOrder - maskSr.sortingOrder;
+        int maskDiff = sr.sortingOrder - maskSr.sortingOrder;
+        int bombDiff = sr.sortingOrder - bombOverlay.sortingOrder;
+        int moltenDiff = sr.sortingOrder - moltenLines.sortingOrder;
         sr.sortingOrder = sortingOrder;
-        maskSr.sortingOrder = sortingOrder - diff;
+        maskSr.sortingOrder = sortingOrder - maskDiff;
+        bombOverlay.sortingOrder = sortingOrder - bombDiff;
+        moltenLines.sortingOrder = sortingOrder - moltenDiff;
     }
 
     public void PrintCoord()
     {
         Debug.Log("X: " + coord.x + ", Y: " + coord.y);
+    }
+
+    public void StartSettlingToNormalPiece()
+    {
+        bombSettling = true;
+        bombSettleTimeElapsed = 0;
     }
 }

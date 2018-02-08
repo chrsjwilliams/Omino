@@ -89,6 +89,10 @@ public class Destructor : Polyomino
         {
             piecesToRemove[i].Remove();
         }
+        foreach(Tile tile in tiles)
+        {
+            tile.StartSettlingToNormalPiece();
+        }
     }
 
     protected override void CleanUpUI()

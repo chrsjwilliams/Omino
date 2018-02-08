@@ -697,14 +697,6 @@ public class Polyomino
         }
     }
 
-    public void ToggleAltColor(bool useAlt)
-    {
-        foreach (Tile tile in tiles)
-        {
-            tile.ToggleAltColor(useAlt);
-        }
-    }
-
     public void ShiftColor(Color color)
     {
         foreach (Tile tile in tiles) tile.ShiftColor(color);
