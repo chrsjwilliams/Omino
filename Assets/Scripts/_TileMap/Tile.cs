@@ -100,6 +100,8 @@ public class Tile : MonoBehaviour
         bombOverlay.color = color;
     }
 
+    public Color GetColor() { return sr.color; }
+
     public void ShiftColor(Color color)
     {
         targetColor = color;

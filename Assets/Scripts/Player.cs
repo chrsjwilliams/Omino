@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     public int handCount { get { return hand.Count; } }
     private List<Vector3> handTargetPositions;
     protected List<Blueprint> blueprints;
-    public Polyomino selectedPiece { get; private set; }
+    public Polyomino selectedPiece { get; protected set; }
     private int selectedPieceHandPos;
     [SerializeField]
     protected Vector3 handSpacing;
@@ -518,7 +518,7 @@ public class Player : MonoBehaviour
         Services.MapManager.DetermineConnectedness(this);
     }
 
-    public void CancelSelectedPiece()
+    public virtual void CancelSelectedPiece()
     {
         hand.Insert(selectedPieceHandPos, selectedPiece);
         selectedPiece = null;

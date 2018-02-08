@@ -177,13 +177,23 @@ public class AIPlayer : Player
 
         ScoredMove nextPlay = scoredMoves[0];
         nextPlay.distance = float.MaxValue;
-        for(int i = 0; i < scoredMoves.Length; i++)
+        
+        //  Scores move based on win condition
+
+        //  Lets say every move has a max power of 100
+        //  Lets day the distance to complete each tasks adds to the
+        //  denominator to determine the overall power of a move
+
+        for (int i = 0; i < scoredMoves.Length; i++)
         {
+            //  While I'm going through every move in the array
+            //  I will adjusts its score based on our parameters
+
             if (nextPlay.distance > scoredMoves[i].distance)
                 nextPlay = scoredMoves[i];
         }
 
-        
+
         if (scoredMoves.Length > 0)
             nextPlay.move.ExecuteMove();
 
@@ -199,30 +209,17 @@ public class AIPlayer : Player
         {
             beganGame = true;
             StartCoroutine(GeneratePossibleMoves());
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                foreach (Polyomino piece in hand)
-                {
-                    Coord roundedPos = new Coord((int)piece.holder.transform.position.x, (int)piece.holder.transform.position.y);
-                    piece.SetTileCoords(roundedPos);
-                    piece.Rotate(false);
-                }
-            }
         }
 
         if (!isThinking && !playingPiece && !drawingPiece && Services.GameScene.gameStarted)
         {
             StartCoroutine(GeneratePossibleMoves());
         }
-
-        if (Input.GetKeyDown(KeyCode.U)) Debug.Log("Board Pieces: " + boardPieces.Count);
     }
 
     protected IEnumerator GeneratePossibleMoves()
     {
         isThinking = true;
-        Debug.Log("Begin Thinking");
-
         playableCoords = FindAllPlayableCoords();
 
         foreach (Polyomino piece in hand)
@@ -245,6 +242,7 @@ public class AIPlayer : Player
                             Coord radiusOffset = new Coord(dx, dy);
                             Coord candidateCoord = playableCoords[i].Add(radiusOffset);
                             piece.SetTileCoords(candidateCoord);
+                            piece.TurnOffGlow();
                             if (piece.IsPlacementLegal() && piece.cost <= resources)
                             {
                                 Move newMove = new Move(piece, candidateCoord, (rotations + 1) % 4);
@@ -267,9 +265,8 @@ public class AIPlayer : Player
         }
 
         scoredMoves = CreateScoredMoveArray(primaryTarget);
-        if (Input.GetKeyDown(KeyCode.P) || (resources >= 30 && selectedPiece == null && hand.Count > 0 && possibleMoves.Count > 0))
+        if (Input.GetKeyDown(KeyCode.P) || (resources > 20 && selectedPiece == null && hand.Count > 0 && possibleMoves.Count > 0))
         {
-            Debug.Log("Making Play");
             MakePlay();
             possibleMoves.Clear();
         }
@@ -284,14 +281,17 @@ public class AIPlayer : Player
 
     private void MakePlay()
     {
-        //AssesMoves();
         PlayPiece();
     }
 
     public override int GainResources(int numResources)
     {
         int _resources = base.GainResources(numResources);
-        if (resources >= 30) isThinking = false;
+        if (resources > 20)
+        {
+            StartCoroutine(GeneratePossibleMoves());
+            isThinking = false;
+        }
         return _resources;
     }
 
@@ -300,30 +300,31 @@ public class AIPlayer : Player
         base.OnPiecePlaced(piece);
         playingPiece = false;
         isThinking = false;
-        //if(Services.GameScene.gameStarted)
-            //StartCoroutine(GeneratePossibleMoves());
     }
 
     public override void DrawPiece(Vector3 startPos, bool onlyDestructors)
     {
-        Debug.Log("Stop Thinking");
+        base.DrawPiece(startPos, onlyDestructors);
         StopCoroutine(GeneratePossibleMoves());
         drawingPiece = true;
         isThinking = false;
-        base.DrawPiece(startPos, onlyDestructors);
     }
 
     public override void OnPieceRemoved(Polyomino piece)
     {
         base.OnPieceRemoved(piece);
-        //AssesMoves();
     }
 
     public override void AddPieceToHand(Polyomino piece)
     {
         base.AddPieceToHand(piece);
         drawingPiece = false;
-        //AssesMoves();
+    }
+
+    public override void CancelSelectedPiece()
+    {
+        base.CancelSelectedPiece();
+        StartCoroutine(GeneratePossibleMoves());
     }
 
     private Vector3 PlayPositionToVector3(ScoredMove playPosition)

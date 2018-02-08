@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Move
 {
+
     public bool executed { get; private set; }
     public const int MAX_ROTATIONS = 3;
 
