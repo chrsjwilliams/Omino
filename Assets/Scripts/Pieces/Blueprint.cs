@@ -246,6 +246,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             }
         }
         ListenForInput();
+        MakeDustClouds();
     }
 
     public override void OnInputDown()

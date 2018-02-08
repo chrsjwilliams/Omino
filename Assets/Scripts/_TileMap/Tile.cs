@@ -75,6 +75,7 @@ public class Tile : MonoBehaviour
         transform.position = new Vector3(coord.x, coord.y, 0);
 
         sr.color = Services.GameManager.MapColorScheme[0];
+        if (pieceParent == null) IncrementSortingOrder(-5000);
 
     }
 
@@ -82,7 +83,6 @@ public class Tile : MonoBehaviour
     {
         pieceParent = pieceParent_;
         Init(coord_);
-        IncrementSortingOrder(5);
     }
 
 	public void OnRemove(){

@@ -718,10 +718,20 @@ public class Polyomino
         ToggleCostUIStatus(false);
         holder.localScale = Vector3.one;
         if (owner.shieldedPieces) CreateShield();
+        MakeDustClouds();
     }
 
     //  Have a fortification method
     //  When I am fortified, replace me with monominos at my tiles locations, then delete me
+
+    protected void MakeDustClouds()
+    {
+        foreach(Tile tile in tiles)
+        {
+            GameObject.Instantiate(Services.Prefabs.DustCloud, 
+                tile.transform.position, Quaternion.identity);
+        }
+    }
 
     public void FortifyPiece()
     {
@@ -799,6 +809,12 @@ public class Polyomino
 
     public void DestroyThis()
     {
+        Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
+        Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
+        Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
+        Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
+        Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
+        Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
         GameObject.Destroy(holder.gameObject);
     }
 

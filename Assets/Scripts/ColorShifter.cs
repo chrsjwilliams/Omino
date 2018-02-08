@@ -42,7 +42,6 @@ public class ColorShifter : MonoBehaviour {
         {
             changingColor = false;
         }
-        Debug.Log("color time change elapsed "  +colorChangeTimeElapsed);
     }
     public void ShiftColor(Color target)
     {

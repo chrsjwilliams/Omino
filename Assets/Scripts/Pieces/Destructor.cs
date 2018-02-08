@@ -93,6 +93,16 @@ public class Destructor : Polyomino
         {
             tile.StartSettlingToNormalPiece();
         }
+        MakeFireBurst();
+    }
+
+    void MakeFireBurst()
+    {
+        foreach(Tile tile in tiles)
+        {
+            GameObject.Instantiate(Services.Prefabs.FireBurst, 
+                tile.transform.position, Quaternion.identity);
+        }
     }
 
     protected override void CleanUpUI()

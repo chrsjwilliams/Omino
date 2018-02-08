@@ -49,4 +49,10 @@ public class PrefabDB : ScriptableObject
 
     [SerializeField] private GameObject queueBar;
     public GameObject QueueBar { get { return queueBar; } }
+
+    [SerializeField] private GameObject dustCloud;
+    public GameObject DustCloud { get { return dustCloud; } }
+
+    [SerializeField] private GameObject fireBurst;
+    public GameObject FireBurst { get { return fireBurst; } }
 }
