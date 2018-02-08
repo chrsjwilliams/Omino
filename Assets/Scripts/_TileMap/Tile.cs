@@ -15,7 +15,7 @@ public class Tile : MonoBehaviour
     private Sprite[] sprites;
     public Coord coord { get; private set; }
     public BoxCollider2D boxCol { get; private set; }
-    private SpriteRenderer sr;
+    public SpriteRenderer sr { get; private set; }
     //private SpriteGlow glow;
     public Material material { get; set; }
     public Polyomino occupyingPiece { get; private set; }
@@ -200,6 +200,13 @@ public class Tile : MonoBehaviour
 		sr.sortingOrder += inc;
         maskSr.sortingOrder += inc;
 	}
+
+    public void SetSortingOrder(int sortingOrder)
+    {
+        int diff = sr.sortingOrder - maskSr.sortingOrder;
+        sr.sortingOrder = sortingOrder;
+        maskSr.sortingOrder = sortingOrder - diff;
+    }
 
     public void PrintCoord()
     {

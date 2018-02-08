@@ -58,6 +58,8 @@ public class Polyomino
     public float shieldDurationRemaining { get; private set; }
     private GameObject shield;
     protected List<Tooltip> tooltips;
+    private int baseSortingOrder;
+    protected int numRotations;
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -495,7 +497,7 @@ public class Polyomino
             Coord tileCoord = tile.coord;
             Services.MapManager.Map[tileCoord.x, tileCoord.y].SetOccupyingPiece(this);
         }
-
+        SetTileSprites();
         if (owner != null)
         {
             bool autoFortify = owner.autoFortify;
@@ -1031,7 +1033,7 @@ public class Polyomino
             holder.localScale = Vector3.one;
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, -4);
             owner.OnPieceSelected(this);
-            IncrementSortingOrder(20);
+            IncrementSortingOrder(1000);
             OnInputDrag(holder.position);
             ToggleCostUIStatus(false);
             Services.AudioManager.CreateTempAudio(Services.Clips.PiecePicked, 1);
@@ -1088,7 +1090,7 @@ public class Polyomino
                 ToggleCostUIStatus(true);
                 CleanUpUI();
             }
-            IncrementSortingOrder(-20);
+            IncrementSortingOrder(-1000);
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
         }
     }
@@ -1160,7 +1162,13 @@ public class Polyomino
                 }
             }
             tile.SetSprite(spriteIndex);
+            SetRelativeSortingOrder(tile);
         }
+    }
+
+    private void SetRelativeSortingOrder(Tile tile)
+    {
+        tile.SetSortingOrder(baseSortingOrder - tile.coord.x - (100 * tile.coord.y));
     }
 
     protected void CheckTouchForRotateInput(TouchDown e)
@@ -1203,9 +1211,10 @@ public class Polyomino
         }
         SetIconSprite();
         SetLegalityGlowStatus();
-        Quaternion prevRotation = spriteOverlay.transform.localRotation;
-        spriteOverlay.transform.localRotation = Quaternion.Euler(prevRotation.eulerAngles.x,
-            prevRotation.eulerAngles.y, prevRotation.eulerAngles.z + 90);
+        //Quaternion prevRotation = spriteOverlay.transform.localRotation;
+        //spriteOverlay.transform.localRotation = Quaternion.Euler(prevRotation.eulerAngles.x,
+        //    prevRotation.eulerAngles.y, prevRotation.eulerAngles.z + 90);
+        numRotations = (numRotations + 1) % 4;
         SetOverlaySprite();
     }
 
@@ -1301,20 +1310,21 @@ public class Polyomino
         foreach (Tile tile in tiles) tile.IncrementSortingOrder(increment);
         iconSr.sortingOrder += increment;
         spriteOverlay.sortingOrder += increment;
+        baseSortingOrder += increment;
     }
 
     protected virtual void SetOverlaySprite()
     {
         Color overlayColor;
-        if(owner != null)
+        if (owner != null)
         {
-            overlayColor = (owner.ColorScheme[0] + Color.black) / 2;
+            overlayColor = owner.ColorScheme[0];
         }
         else
         {
-            overlayColor = (Services.GameManager.NeutralColor + Color.black) / 2;
+            overlayColor = Services.GameManager.NeutralColor;
         }
-        spriteOverlay.color = new Color(overlayColor.r, overlayColor.g, overlayColor.b, 0.75f);
+        spriteOverlay.color = overlayColor;
         spriteOverlay.transform.position = GetCenterpoint();
     }
 
@@ -1356,7 +1366,7 @@ public class Polyomino
     public void BurnFromHand()
     {
         HideFromInput();
-        IncrementSortingOrder(20);
+        IncrementSortingOrder(1000);
         BurnPiece burnTask = new BurnPiece(this);
         burnTask.Then(new ActionTask(DestroyThis));
         Services.GeneralTaskManager.Do(burnTask);

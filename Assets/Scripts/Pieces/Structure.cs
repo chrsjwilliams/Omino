@@ -69,10 +69,12 @@ public abstract class Structure : Polyomino
 
     public void SetToNeutralColor()
     {
-        foreach (Tile tile in tiles)
-        {
-            tile.ShiftColor(neutralColor);
-        }
+        //foreach (Tile tile in tiles)
+        //{
+        //    tile.ShiftColor(neutralColor);
+        //}
+        spriteOverlay.GetComponent<ColorShifter>().ShiftColor(neutralColor);
+
     }
 
     public virtual void ToggleStructureActivation(Player player)
@@ -108,9 +110,10 @@ public abstract class Structure : Polyomino
         HideFromInput();
         holder.localScale = Vector3.one;
         neutralColor = tiles[0].GetComponent<SpriteRenderer>().color;
+        spriteOverlay.color = neutralColor;
         TurnOffGlow();
         //SetGlow(Color.white);
-        IncrementSortingOrder(15);
+        IncrementSortingOrder(500);
         GameObject psObj = GameObject.Instantiate(Services.Prefabs.StructureParticles, holder);
         psObj.transform.position = GetCenterpoint();
         ps = psObj.GetComponent<ParticleSystem>();
@@ -122,6 +125,10 @@ public abstract class Structure : Polyomino
             if (thisAsBase.mainBase) SetParticleClaimMode(true);
         }
         ListenForInput();
+        foreach(Tile tile in tiles)
+        {
+            tile.sr.enabled = false;
+        }
     }
 
     public override void PlaceAtCurrentLocation(bool replace)
@@ -147,8 +154,9 @@ public abstract class Structure : Polyomino
             OnClaimLost();
             return;
         }
-        ShiftColor(owner.ColorScheme[0]);
+        //ShiftColor(owner.ColorScheme[0]);
         SetOverlaySprite();
+        spriteOverlay.GetComponent<ColorShifter>().ShiftColor(owner.ColorScheme[0]);
         Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
         owner.GainOwnership(this);
         SetParticleClaimMode(true);

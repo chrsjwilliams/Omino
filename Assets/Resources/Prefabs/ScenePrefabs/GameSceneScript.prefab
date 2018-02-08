@@ -1609,19 +1609,31 @@ MonoBehaviour:
   bombFactoryIcon: {fileID: 21300000, guid: cc0cac3f60b6cc742a6cdbbc61549f94, type: 3}
   factoryIcon: {fileID: 21300000, guid: e21ca96d3c1720045aa16e6a76007cc1, type: 3}
   mineIcon: {fileID: 21300000, guid: fc61107ed2bfd244a95654a5b224d12d, type: 3}
-  baseIcon: {fileID: 21300000, guid: c10a3b930185b4c4bb5a7310a4fb9982, type: 3}
-  drillIcon: {fileID: 21300000, guid: 8559d7f595d7c6e43bc92b572202d7c1, type: 3}
-  gearIcon: {fileID: 21300000, guid: 8c6a2f47992f53246a9bb619b2cbedf9, type: 3}
-  steelIcon: {fileID: 21300000, guid: 746c38d68113dd7409c6bbe132672b5f, type: 3}
-  bricksIcon: {fileID: 21300000, guid: a1f94b94b32db204295d7950a42d6876, type: 3}
-  bigBombIcon: {fileID: 21300000, guid: 76b93e0ed08ce864fa0555adf644f94a, type: 3}
-  splashIcon: {fileID: 21300000, guid: ac86b68c79b4c984baa9bd1fef17cf7c, type: 3}
-  shieldIcon: {fileID: 21300000, guid: df059cbe8e7b6d645a72682763a4b5a9, type: 3}
-  factoryOverlay: {fileID: 21300000, guid: 09335403d6b2b5b40a6201f3800a4e05, type: 3}
-  mineOverlay: {fileID: 21300000, guid: 1d9346ea424f96041a018a18eb0c9cdc, type: 3}
-  baseOverlay: {fileID: 21300000, guid: cce4d2712fe8051409d1b323efaba19c, type: 3}
-  bombFactoryOverlay: {fileID: 21300000, guid: 0acabccea60d23748985ba86afbf523f, type: 3}
-  structureOverlay: {fileID: 21300000, guid: 746afc5378d7d6b408bd313610a73371, type: 3}
+  baseIcon: {fileID: 0}
+  drillIcon: {fileID: 21300000, guid: 3c764cd3a1a119640a4b47e80c8af33b, type: 3}
+  gearIcon: {fileID: 21300000, guid: 0a9ba67ff2b91f7439ee960824a431ea, type: 3}
+  steelIcon: {fileID: 21300000, guid: 7f66f092a3327174b9b8043891b305dc, type: 3}
+  bricksIcon: {fileID: 21300000, guid: 9c7b134d91673cb429299934ff338bc6, type: 3}
+  bigBombIcon: {fileID: 21300000, guid: 70ff0cf6ead1a9d41b917a1b2797e606, type: 3}
+  splashIcon: {fileID: 21300000, guid: 0e25137a9787e464990629be42c064aa, type: 3}
+  shieldIcon: {fileID: 21300000, guid: 3114f59a25a126b418b85ed45548645d, type: 3}
+  factoryOverlays:
+  - {fileID: 21300000, guid: 2d3e7098f032723459310d3c25f0e2c9, type: 3}
+  - {fileID: 21300000, guid: 75358ca9376202e4eba24b20d02b3a10, type: 3}
+  - {fileID: 21300000, guid: fa3145a9c9cab284182609901e8f98a2, type: 3}
+  - {fileID: 21300000, guid: ba2bfd16b6d69394d99418c872fff69f, type: 3}
+  mineOverlays:
+  - {fileID: 21300000, guid: abea2caa5f18f6d4fbb429a0d7acdef8, type: 3}
+  - {fileID: 21300000, guid: a0a54d02fabbd884eabeb9f3fa9d90b5, type: 3}
+  - {fileID: 21300000, guid: d7bb17b97cd47f543b50a8ece2d102af, type: 3}
+  - {fileID: 21300000, guid: 3758776aa2abb684bb91822a5c4a8c19, type: 3}
+  baseOverlay: {fileID: 21300000, guid: 2a7ccfaecf6c5ac458e21c460c64a81e, type: 3}
+  bombFactoryOverlays:
+  - {fileID: 21300000, guid: d033c58d1f699e04fa587c7168c4aac8, type: 3}
+  - {fileID: 21300000, guid: a1729e6590ea0144dba8abadbbf617f2, type: 3}
+  - {fileID: 21300000, guid: 3ca3eb64431eb6e428829595d37c7dc1, type: 3}
+  - {fileID: 21300000, guid: fb1d201d0880b3447867f9aa26a59151, type: 3}
+  structureOverlay: {fileID: 21300000, guid: 42a2fa64ea2686b4c8f1ce6ed1b98089, type: 3}
   bannerScrollDuration: 0.5
   queueMeterOffset: {x: 0, y: 1, z: 0}
   notReadyColor: {r: 0.9607843, g: 1, b: 0.3019608, a: 0.5019608}

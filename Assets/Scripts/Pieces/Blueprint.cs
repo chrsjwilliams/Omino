@@ -143,6 +143,11 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             }
         }
 
+        foreach(Tile tile in tiles)
+        {
+            tile.sr.enabled = false;
+        }
+
         EnterUnselectedState();
         SetSprites();
     }
@@ -150,24 +155,25 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     protected override void SetIconSprite()
     {
         base.SetIconSprite();
-        iconSr.enabled = true;
-        switch (buildingType)
-        {
-            case BuildingType.FACTORY:
-                iconSr.sprite = Services.UIManager.factoryIcon;
-                break;
-            case BuildingType.MINE:
-                iconSr.sprite = Services.UIManager.mineIcon;
-                break;
-            case BuildingType.BOMBFACTORY:
-                iconSr.sprite = Services.UIManager.bombFactoryIcon;
-                break;
-            case BuildingType.NONE:
-                iconSr.enabled = false;
-                break;
-            default:
-                break;
-        }
+        iconSr.enabled = false;
+        //iconSr.enabled = true;
+        //switch (buildingType)
+        //{
+        //    case BuildingType.FACTORY:
+        //        iconSr.sprite = Services.UIManager.factoryIcon;
+        //        break;
+        //    case BuildingType.MINE:
+        //        iconSr.sprite = Services.UIManager.mineIcon;
+        //        break;
+        //    case BuildingType.BOMBFACTORY:
+        //        iconSr.sprite = Services.UIManager.bombFactoryIcon;
+        //        break;
+        //    case BuildingType.NONE:
+        //        iconSr.enabled = false;
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 
     protected override void SetOverlaySprite()
@@ -176,13 +182,13 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         switch (buildingType)
         {
             case BuildingType.FACTORY:
-                spriteOverlay.sprite = Services.UIManager.factoryOverlay;
+                spriteOverlay.sprite = Services.UIManager.factoryOverlays[numRotations];
                 break;
             case BuildingType.MINE:
-                spriteOverlay.sprite = Services.UIManager.mineOverlay;
+                spriteOverlay.sprite = Services.UIManager.mineOverlays[numRotations];
                 break;
             case BuildingType.BOMBFACTORY:
-                spriteOverlay.sprite = Services.UIManager.bombFactoryOverlay;
+                spriteOverlay.sprite = Services.UIManager.bombFactoryOverlays[numRotations];
                 break;
             case BuildingType.NONE:
                 spriteOverlay.enabled = false;

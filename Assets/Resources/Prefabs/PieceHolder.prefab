@@ -37,6 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4511271309377252}
   - component: {fileID: 212470445142580944}
+  - component: {fileID: 114613036539207060}
   m_Layer: 0
   m_Name: SpriteOverlay
   m_TagString: Untagged
@@ -184,6 +185,18 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
+--- !u!114 &114613036539207060
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1500671015287040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4300190ea132dd1469aead22eeb30f2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorChangeDuration: 0.3
 --- !u!212 &212470445142580944
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -257,9 +270,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 15
+  m_SortingOrder: 1000
   m_Sprite: {fileID: 21300000, guid: e21ca96d3c1720045aa16e6a76007cc1, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.647}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

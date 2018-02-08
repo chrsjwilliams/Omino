@@ -42,10 +42,10 @@ public class UIManager : MonoBehaviour {
     public Sprite bigBombIcon;
     public Sprite splashIcon;
     public Sprite shieldIcon;
-    public Sprite factoryOverlay;
-    public Sprite mineOverlay;
+    public Sprite[] factoryOverlays;
+    public Sprite[] mineOverlays;
     public Sprite baseOverlay;
-    public Sprite bombFactoryOverlay;
+    public Sprite[] bombFactoryOverlays;
     public Sprite structureOverlay;
     private bool scrollingInBanners;
     private Player winner;
