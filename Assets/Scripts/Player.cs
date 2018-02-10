@@ -132,7 +132,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (!gameOver && Services.GameScene.gameStarted)
+        if (!gameOver && Services.GameScene.gameInProgress)
         {
             UpdateMeters();
 
@@ -152,7 +152,10 @@ public class Player : MonoBehaviour
                 hand[i].SetAffordableStatus(this);
                 hand[i].ApproachHandPosition(handTargetPositions[i]);
             }
-            if (selectedPiece != null) selectedPiece.SetLegalityGlowStatus();
+            if (selectedPiece != null)
+            {
+                selectedPiece.SetLegalityGlowStatus();
+            }
         }
 
     }

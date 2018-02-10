@@ -25,7 +25,8 @@ public class InputManager
 				Services.GameEventManager.Fire (new TouchMove (touch));
 				break;
 			case TouchPhase.Stationary:
-				break;
+                Services.GameEventManager.Fire(new TouchMove(touch));
+                break;
 			case TouchPhase.Ended:
 				Touch touchLastFrame = GetLastFrameTouch (touch.fingerId);
 				if (touchLastFrame.phase != TouchPhase.Ended) {
@@ -43,7 +44,7 @@ public class InputManager
             lastMousePos = Input.mousePosition;
         }
 
-        if (Input.GetMouseButton(0) && Input.mousePosition != lastMousePos)
+        if (Input.GetMouseButton(0) /*&& Input.mousePosition != lastMousePos*/)
         {
             Services.GameEventManager.Fire(new MouseMove(Input.mousePosition));
             lastMousePos = Input.mousePosition;

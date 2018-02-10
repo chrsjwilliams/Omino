@@ -29,6 +29,8 @@ public class UIManager : MonoBehaviour {
     public Transform[] factoryBlueprintLocations;
     public Transform[] bombFactoryBlueprintLocations;
     public Button[] readyBanners;
+    [SerializeField]
+    private GameObject pauseMenu;
     public Transform canvas;
     public Sprite destructorIcon;
     public Sprite bombFactoryIcon;
@@ -84,7 +86,7 @@ public class UIManager : MonoBehaviour {
             resourceSymbols[i] = resourceCounters[i].GetComponentInChildren<Image>();
             resourceSymbols[i].fillAmount = 0;
         }
-
+        pauseMenu.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -269,6 +271,20 @@ public class UIManager : MonoBehaviour {
         if (allReady)
         {
             Services.GameScene.StartGameSequence();
+        }
+    }
+
+    public void TogglePauseMenu()
+    {
+        if (Services.GameScene.gamePaused)
+        {
+            pauseMenu.SetActive(false);
+            Services.GameScene.UnpauseGame();
+        }
+        else
+        {
+            pauseMenu.SetActive(true);
+            Services.GameScene.PauseGame();
         }
     }
 

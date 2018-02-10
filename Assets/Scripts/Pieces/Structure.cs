@@ -159,7 +159,7 @@ public abstract class Structure : Polyomino
         spriteOverlay.GetComponent<ColorShifter>().ShiftColor(owner.ColorScheme[0]);
         Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
         owner.GainOwnership(this);
-        SetParticleClaimMode(true);
+        //SetParticleClaimMode(true);
     }
 
     public virtual void OnClaimLost()
@@ -168,13 +168,13 @@ public abstract class Structure : Polyomino
         owner.LoseOwnership(this);
         owner = null;
         //SetOverlaySprite();
-        SetParticleClaimMode(false);
+        //SetParticleClaimMode(false);
     }
 
     public override void Rotate()
     {
         base.Rotate();
-        ps.transform.position = GetCenterpoint();
+        //ps.transform.position = GetCenterpoint();
     }
 
     void SetParticleClaimMode(bool claimed)

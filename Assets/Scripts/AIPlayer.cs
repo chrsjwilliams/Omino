@@ -205,13 +205,13 @@ public class AIPlayer : Player
     {
         base.Update();
 
-        if (Services.GameScene.gameStarted && !beganGame)
+        if (Services.GameScene.gameInProgress && !beganGame)
         {
             beganGame = true;
             StartCoroutine(GeneratePossibleMoves());
         }
 
-        if (!isThinking && !playingPiece && !drawingPiece && Services.GameScene.gameStarted)
+        if (!isThinking && !playingPiece && !drawingPiece && Services.GameScene.gameInProgress)
         {
             StartCoroutine(GeneratePossibleMoves());
         }

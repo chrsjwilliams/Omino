@@ -60,6 +60,8 @@ public class Polyomino
     protected List<Tooltip> tooltips;
     private int baseSortingOrder;
     protected int numRotations;
+    private Vector3[] pastLocations;
+    private const int inputLag = 5;
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -1042,6 +1044,7 @@ public class Polyomino
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, -4);
             owner.OnPieceSelected(this);
             IncrementSortingOrder(1000);
+            ResetLocations(holder.position);
             OnInputDrag(holder.position);
             ToggleCostUIStatus(false);
             Services.AudioManager.CreateTempAudio(Services.Clips.PiecePicked, 1);
@@ -1123,9 +1126,11 @@ public class Polyomino
             }
             Vector3 offsetInputPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
                 screenInputPos + screenOffset);
+            Vector3 laggedPos = pastLocations[inputLag - 1];
+            AddLocation(offsetInputPos);
             Coord roundedInputCoord = new Coord(
-                Mathf.RoundToInt(offsetInputPos.x),
-                Mathf.RoundToInt(offsetInputPos.y));
+                Mathf.RoundToInt(laggedPos.x),
+                Mathf.RoundToInt(laggedPos.y));
             SetTileCoords(roundedInputCoord);
             Reposition(new Vector3(
                 roundedInputCoord.x,
@@ -1388,5 +1393,25 @@ public class Polyomino
     public void Unlock()
     {
         ListenForInput();
+    }
+
+    void ResetLocations(Vector3 pos)
+    {
+        pastLocations = new Vector3[inputLag];
+        for (int i = 0; i < inputLag; i++)
+        {
+            pastLocations[i] = pos;
+        }
+    }
+
+    void AddLocation(Vector3 pos)
+    {
+        Vector3 nextPos = pos;
+        for (int i = 0; i < inputLag; i++)
+        {
+            Vector3 thisPos = nextPos;
+            nextPos = pastLocations[i];
+            pastLocations[i] = thisPos;
+        }
     }
 }

@@ -174,6 +174,7 @@ public class GameManager : MonoBehaviour
 
     public void Reset(Reset e)
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

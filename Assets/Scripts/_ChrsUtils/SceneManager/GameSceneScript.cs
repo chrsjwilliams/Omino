@@ -12,7 +12,12 @@ public class GameSceneScript : Scene<TransitionData>
     [SerializeField]
     private Color _backgroundColor;
 
-    public bool gameStarted { get; private set; }
+    private bool gameStarted;
+    public bool gamePaused { get; private set; }
+    public bool gameInProgress
+    {
+        get { return gameStarted && !gamePaused; }
+    }
 
     internal override void OnEnter(TransitionData data)
     {
@@ -24,11 +29,12 @@ public class GameSceneScript : Scene<TransitionData>
         Services.MapManager.GenerateMap();
         Services.GameManager.InitPlayers();
         Services.AudioManager.SetMainTrack(Services.Clips.MainTrackAudio, 0.3f);
+        Time.timeScale = 1;
     }
 
     internal override void OnExit()
     {
-
+        Time.timeScale = 1;
     }
 
 	// Update is called once per frame
@@ -56,9 +62,14 @@ public class GameSceneScript : Scene<TransitionData>
     public void StartGame()
     {
         gameStarted = true;
+        TogglePlayerHandLock(false);
+    }
+
+    void TogglePlayerHandLock(bool locked)
+    {
         for (int i = 0; i < Services.GameManager.Players.Length; i++)
         {
-            Services.GameManager.Players[i].ToggleHandLock(false);
+            Services.GameManager.Players[i].ToggleHandLock(locked);
         }
     }
 
@@ -67,5 +78,19 @@ public class GameSceneScript : Scene<TransitionData>
         Task scrollBanners = new ScrollOffReadyBanners(Services.UIManager.readyBanners);
         scrollBanners.Then(new ActionTask(StartGame));
         Services.GeneralTaskManager.Do(scrollBanners);
+    }
+
+    public void PauseGame()
+    {
+        gamePaused = true;
+        Time.timeScale = 0;
+        TogglePlayerHandLock(true);
+    }
+
+    public void UnpauseGame()
+    {
+        gamePaused = false;
+        Time.timeScale = 1;
+        TogglePlayerHandLock(false);
     }
 }
