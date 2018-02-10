@@ -62,6 +62,7 @@ public class Polyomino
     protected int numRotations;
     private Queue<Coord> lastPositions;
     private const int framesBeforeLockIn = 10;
+    private const int leniencyFrames = 5;
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -1083,20 +1084,34 @@ public class Polyomino
     {
         if (!placed)
         {
-            bool snapback = true;
-            Coord lastCoord = lastPositions.Peek();
-            foreach(Coord coord in lastPositions)
+            bool snapback = false;
+            int sameCoordInARow = 1;
+            Coord[] lastPositionsArray = lastPositions.ToArray();
+            Coord lastCoord = lastPositionsArray[0];
+            Coord coordToSnapbackTo = lastCoord;
+            for (int i = 1; i < lastPositionsArray.Length; i++)
             {
-                if(!coord.Equals(lastCoord))
+                if (lastPositionsArray[i].Equals(lastCoord))
                 {
-                    snapback = false;
-                    break;
+                    sameCoordInARow += 1;
+                    if (sameCoordInARow >= framesBeforeLockIn)
+                    {
+                        coordToSnapbackTo = lastCoord;
+                        snapback = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    lastCoord = lastPositionsArray[i];
+                    sameCoordInARow = 1;
                 }
             }
             if (snapback)
             {
-                SetTileCoords(lastCoord);
-                Reposition(new Vector3(lastCoord.x, lastCoord.y, holder.position.z));
+                SetTileCoords(coordToSnapbackTo);
+                Reposition(new Vector3(coordToSnapbackTo.x, coordToSnapbackTo.y, 
+                    holder.position.z));
             }
             if (!(owner is AIPlayer))
             {
@@ -1414,7 +1429,7 @@ public class Polyomino
 
     void QueuePosition(Coord pos)
     {
-        if(lastPositions.Count >= framesBeforeLockIn)
+        if(lastPositions.Count >= (framesBeforeLockIn + leniencyFrames))
         {
             lastPositions.Dequeue();
         }
