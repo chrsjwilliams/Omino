@@ -91,6 +91,9 @@ public class GameSceneScript : Scene<TransitionData>
     {
         gamePaused = false;
         Time.timeScale = 1;
-        TogglePlayerHandLock(false);
+        if (gameStarted)
+        {
+            TogglePlayerHandLock(false);
+        }
     }
 }

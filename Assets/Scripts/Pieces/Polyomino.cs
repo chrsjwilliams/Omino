@@ -61,7 +61,7 @@ public class Polyomino
     private int baseSortingOrder;
     protected int numRotations;
     private Vector3[] pastLocations;
-    private const int inputLag = 5;
+    private const int inputLag = 2;
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
