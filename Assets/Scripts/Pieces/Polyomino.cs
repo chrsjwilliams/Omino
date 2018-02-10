@@ -60,6 +60,8 @@ public class Polyomino
     protected List<Tooltip> tooltips;
     private int baseSortingOrder;
     protected int numRotations;
+    private Queue<Coord> lastPositions;
+    private const int framesBeforeLockIn = 10;
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -908,6 +910,8 @@ public class Polyomino
         {
             EnterUnselectedState();
         }
+
+        lastPositions = new Queue<Coord>();
     }
 
     protected virtual void SetIconSprite()
@@ -1038,6 +1042,7 @@ public class Polyomino
     {
         if (!owner.gameOver && !placed)
         {
+            lastPositions = new Queue<Coord>();
             holder.localScale = Vector3.one;
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, -4);
             owner.OnPieceSelected(this);
@@ -1078,6 +1083,21 @@ public class Polyomino
     {
         if (!placed)
         {
+            bool snapback = true;
+            Coord lastCoord = lastPositions.Peek();
+            foreach(Coord coord in lastPositions)
+            {
+                if(!coord.Equals(lastCoord))
+                {
+                    snapback = false;
+                    break;
+                }
+            }
+            if (snapback)
+            {
+                SetTileCoords(lastCoord);
+                Reposition(new Vector3(lastCoord.x, lastCoord.y, holder.position.z));
+            }
             if (!(owner is AIPlayer))
             {
                 Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
@@ -1131,6 +1151,8 @@ public class Polyomino
                 roundedInputCoord.x,
                 roundedInputCoord.y,
                 holder.position.z));
+            QueuePosition(roundedInputCoord);
+            Debug.Log(lastPositions.Count);
         }
 
         SetLegalityGlowStatus();
@@ -1388,5 +1410,14 @@ public class Polyomino
     public void Unlock()
     {
         ListenForInput();
+    }
+
+    void QueuePosition(Coord pos)
+    {
+        if(lastPositions.Count >= framesBeforeLockIn)
+        {
+            lastPositions.Dequeue();
+        }
+        lastPositions.Enqueue(pos);
     }
 }

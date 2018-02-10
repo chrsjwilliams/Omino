@@ -25,7 +25,7 @@ public struct Coord
 
     public bool Equals(Coord coord)
     {
-        return Equals(coord);
+        return Equals(coord as object);
     }
 
     public override int GetHashCode()
