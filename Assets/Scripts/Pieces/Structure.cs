@@ -109,7 +109,7 @@ public abstract class Structure : Polyomino
         base.MakePhysicalPiece();
         HideFromInput();
         holder.localScale = Vector3.one;
-        neutralColor = tiles[0].GetComponent<SpriteRenderer>().color;
+        neutralColor = tiles[0].sr.color;
         spriteOverlay.color = neutralColor;
         TurnOffGlow();
         //SetGlow(Color.white);

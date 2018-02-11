@@ -22,8 +22,8 @@ public class DeathAnimation : Task
         targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 0);
         foreach(Tile tile in piece.tiles)
         {
-            tile.maskSr.color = new Color(1,1,1,0);
-            tile.maskSr.sortingOrder += 2;
+            tile.highlightSr.color = new Color(1,1,1,0);
+            tile.highlightSr.sortingOrder += 2;
         }
     }
 
@@ -36,12 +36,12 @@ public class DeathAnimation : Task
                 EasingEquations.Easing.QuadEaseOut(timeElapsed / duration)));
             if (timeElapsed <= duration / 2)
             {
-                tile.SetMaskSrAlpha(Mathf.Lerp(0, 1,
+                tile.SetHighlightAlpha(Mathf.Lerp(0, 1,
                     EasingEquations.Easing.QuadEaseOut(timeElapsed / (duration / 2))));
             }
             else
             {
-                tile.SetMaskSrAlpha(Mathf.Lerp(1, 0,
+                tile.SetHighlightAlpha(Mathf.Lerp(1, 0,
                     EasingEquations.Easing.QuadEaseIn(
                         (timeElapsed - (duration / 2)) / (duration / 2))));
             }

@@ -42,6 +42,7 @@ public class Polyomino
     public const float burnPieceDuration = 0.5f;
     public static Vector3 burnPieceOffset = new Vector3(3, 0, 0);
     private const float alphaWhileUnaffordable = 0.3f;
+    private const float alphaWhileAffordable = 0.8f;
 
 
     public bool isFortified;
@@ -406,7 +407,7 @@ public class Polyomino
         if (affordable)
         {
             costText.color = (Color.green + Color.black) / 2;
-            SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 1), 1);
+            SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, alphaWhileAffordable), 1);
             //if (isVisible) EnterUnselectedState();
         }
         else
@@ -415,7 +416,7 @@ public class Polyomino
             SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, alphaWhileUnaffordable), 1);
             //HideFromInput();
         }
-        SetGlowState(affordable);
+        //SetGlowState(affordable);
     }
 
     protected void ToggleCostUIStatus(bool status)
@@ -430,7 +431,7 @@ public class Polyomino
         foreach(Tile tile in tiles)
         {
             //tile.mask.enabled = true;
-            tile.SetMaskColor(new Color(0, 0, 0, 0));
+            tile.SetHighlightColor(new Color(0, 0, 0, 0));
         }
         SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 0.75f), 1);
         Vector3 centerOffset = GetCenterpoint() - holder.transform.position;
@@ -495,6 +496,7 @@ public class Polyomino
         //place the piece on the board where it's being hovered now
         placed = true;
         OnPlace();
+        SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 1), 1);
         foreach (Tile tile in tiles)
         {
             Coord tileCoord = tile.coord;
@@ -676,7 +678,8 @@ public class Polyomino
         //if (placed && isFortified) return;
         foreach (Tile tile in tiles)
         {
-            tile.SetMaskSrAlpha(0);
+            //tile.SetMaskSrAlpha(0);
+            tile.SetHighlightStatus(false);
         }
     }
 
@@ -684,8 +687,9 @@ public class Polyomino
     {
         foreach (Tile tile in tiles)
         {
-            tile.SetMaskColor(color);
-            tile.SetMaskSrAlpha(0.5f);
+            tile.SetHighlightColor(color);
+            tile.SetHighlightAlpha(0.5f);
+            tile.SetHighlightStatus(true);
             //tile.SetGlowOutLine(10);
             //tile.SetGlowColor(color);
         }
@@ -750,18 +754,30 @@ public class Polyomino
     void CreateShield()
     {
         shieldDurationRemaining = ShieldedPieces.ShieldDuration;
-        shield = GameObject.Instantiate(Services.Prefabs.Shield, 
-            GetCenterpoint(), Quaternion.identity);
+        //shield = GameObject.Instantiate(Services.Prefabs.Shield, 
+        //    GetCenterpoint(), Quaternion.identity);
+        foreach (Tile tile in tiles)
+        {
+            tile.SetShieldStatus(true);
+            tile.SetShieldAlpha(0.5f);
+        }
     }
 
     void DecayShield()
     {
         shieldDurationRemaining -= Time.deltaTime;
         float shieldDecayed = ShieldedPieces.ShieldDuration - shieldDurationRemaining;
-        shield.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero,
-            Mathf.Pow(EasingEquations.Easing.ExpoEaseIn(
-                shieldDecayed / ShieldedPieces.ShieldDuration), 2));
-        if (shieldDurationRemaining <= 0) GameObject.Destroy(shield);
+        //shield.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero,
+        //    Mathf.Pow(EasingEquations.Easing.ExpoEaseIn(
+        //        shieldDecayed / ShieldedPieces.ShieldDuration), 2));
+        foreach (Tile tile in tiles)
+            tile.SetShieldAlpha(Mathf.Lerp(0.5f, 0, Mathf.Pow(EasingEquations.Easing
+                .ExpoEaseIn(shieldDecayed / ShieldedPieces.ShieldDuration),2)));
+        if (shieldDurationRemaining <= 0)
+        {
+            //GameObject.Destroy(shield);
+            foreach (Tile tile in tiles) tile.SetShieldStatus(false);
+        }
     }
 
     public virtual void Remove()
@@ -955,13 +971,6 @@ public class Polyomino
         return GetCenterpoint(false);
     }
 
-    public void SetPieceState(bool playAvailable)
-    {
-        if (playAvailable) EnterUnselectedState();
-        else HideFromInput();
-        SetGlowState(playAvailable);
-    }
-
     protected void EnterUnselectedState()
     {
         ListenForInput();
@@ -1047,7 +1056,7 @@ public class Polyomino
             holder.localScale = Vector3.one;
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, -4);
             owner.OnPieceSelected(this);
-            IncrementSortingOrder(1000);
+            IncrementSortingOrder(10000);
             OnInputDrag(holder.position);
             ToggleCostUIStatus(false);
             Services.AudioManager.CreateTempAudio(Services.Clips.PiecePicked, 1);
@@ -1133,7 +1142,7 @@ public class Polyomino
                 ToggleCostUIStatus(true);
                 CleanUpUI();
             }
-            IncrementSortingOrder(-1000);
+            IncrementSortingOrder(-10000);
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
         }
     }
@@ -1167,7 +1176,6 @@ public class Polyomino
                 roundedInputCoord.y,
                 holder.position.z));
             QueuePosition(roundedInputCoord);
-            Debug.Log(lastPositions.Count);
         }
 
         SetLegalityGlowStatus();
@@ -1295,7 +1303,7 @@ public class Polyomino
 
     public virtual void Update()
     {
-        if (shield != null) DecayShield();
+        if (shieldDurationRemaining >= 0) DecayShield();
     }
 
     public void ScaleHolder(Vector3 scale)
@@ -1411,7 +1419,7 @@ public class Polyomino
     public void BurnFromHand()
     {
         HideFromInput();
-        IncrementSortingOrder(1000);
+        IncrementSortingOrder(10000);
         BurnPiece burnTask = new BurnPiece(this);
         burnTask.Then(new ActionTask(DestroyThis));
         Services.GeneralTaskManager.Do(burnTask);

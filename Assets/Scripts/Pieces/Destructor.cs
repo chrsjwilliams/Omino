@@ -98,10 +98,29 @@ public class Destructor : Polyomino
 
     void MakeFireBurst()
     {
-        foreach(Tile tile in tiles)
+        List<Vector3> burstLocations = new List<Vector3>();
+        foreach (Tile tile in tiles)
         {
-            GameObject.Instantiate(Services.Prefabs.FireBurst, 
-                tile.transform.position, Quaternion.identity);
+            if (!burstLocations.Contains(tile.transform.position))
+            {
+                burstLocations.Add(tile.transform.position);
+            }
+            if (owner.splashDamage)
+            {
+                foreach (Coord dir in Coord.Directions())
+                {
+                    Coord adjCoord = tile.coord.Add(dir);
+                    Vector3 adjPos = new Vector3(adjCoord.x, adjCoord.y, 0);
+                    if (!burstLocations.Contains(adjPos))
+                    {
+                        burstLocations.Add(adjPos);
+                    }
+                }
+            }
+        }
+        foreach (Vector3 pos in burstLocations)
+        {
+            GameObject.Instantiate(Services.Prefabs.FireBurst, pos, Quaternion.identity);
         }
     }
 

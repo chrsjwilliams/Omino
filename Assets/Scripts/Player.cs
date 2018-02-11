@@ -524,6 +524,7 @@ public class Player : MonoBehaviour
     public virtual void CancelSelectedPiece()
     {
         hand.Insert(selectedPieceHandPos, selectedPiece);
+        selectedPiece.SetGlowState(false);
         selectedPiece = null;
         OrganizeHand(hand);
     }

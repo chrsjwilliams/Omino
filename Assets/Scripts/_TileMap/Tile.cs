@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 
 public class Tile : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class Tile : MonoBehaviour
     private Sprite[] sprites;
     [SerializeField]
     private Sprite[] destructorSprites;
+    [SerializeField]
+    private Sprite[] shieldSprites;
     public Coord coord { get; private set; }
     public BoxCollider2D boxCol { get; private set; }
     public SpriteRenderer sr { get; private set; }
@@ -42,35 +45,36 @@ public class Tile : MonoBehaviour
     [SerializeField]
     private float colorChangeDuration;
     private bool changingColor;
-    public SpriteRenderer maskSr { get; private set; }
+    public SpriteRenderer highlightSr { get; private set; }
     private SpriteRenderer bombOverlay;
     private SpriteRenderer moltenLines;
+    private SpriteRenderer shieldSr;
     private bool bombSettling;
     private float bombSettleTimeElapsed;
     private const float bombSettleDuration = 0.4f;
     private float currentBombAlpha;
     private float currentNormalAlpha;
+    private SortingGroup sortingGroup;
     //public SpriteMask mask { get; private set; }
 
     public void Init(Coord coord_)
     {
         coord = coord_;
         boxCol = GetComponent<BoxCollider2D>();
-        SpriteRenderer[] srs = GetComponentsInChildren<SpriteRenderer>();
+        sortingGroup = GetComponentInChildren<SortingGroup>();
+        highlightSr = GetComponentsInChildren<SpriteRenderer>()[0];
+        SpriteRenderer[] srs = sortingGroup.GetComponentsInChildren<SpriteRenderer>();
         sr = srs[0];
-        bombOverlay = srs[2];
-        moltenLines = srs[3];
+        bombOverlay = srs[1];
+        moltenLines = srs[2];
+        shieldSr = srs[3];
+        shieldSr.enabled = false;
+        highlightSr.enabled = false;
         if (!(pieceParent != null && pieceParent is Destructor))
         {
             bombOverlay.enabled = false;
             moltenLines.enabled = false;
         }
-        //glow = GetComponent<SpriteGlow>();
-        //glow.OutlineWidth = 0;
-        SpriteMask[] masks = GetComponentsInChildren<SpriteMask>();
-        maskSr = masks[0].gameObject.GetComponent<SpriteRenderer>();
-        //mask = masks[1];
-        //mask.enabled = false;
         
         transform.position = new Vector3(coord.x, coord.y, 0);
 
@@ -117,14 +121,19 @@ public class Tile : MonoBehaviour
         //glow.GlowColor = color;
     }
 
-    public void SetMaskSrAlpha(float alpha)
+    public void SetHighlightAlpha(float alpha)
     {
-        maskSr.color = new Color(maskSr.color.r, maskSr.color.g, maskSr.color.b, alpha);
+        highlightSr.color = new Color(highlightSr.color.r, highlightSr.color.g, highlightSr.color.b, alpha);
     }
 
-    public void SetMaskColor(Color color)
+    public void SetHighlightStatus(bool status)
     {
-        maskSr.color = color;
+        highlightSr.enabled = status;
+    }
+
+    public void SetHighlightColor(Color color)
+    {
+        highlightSr.color = color;
     }
 
     public void ActivateTile(Player player, BuildingType buildingType)
@@ -221,6 +230,7 @@ public class Tile : MonoBehaviour
     {
         bombOverlay.sprite = destructorSprites[spriteIndex];
         sr.sprite = sprites[spriteIndex];
+        shieldSr.sprite = shieldSprites[spriteIndex];
     }
 
     public void SetAlpha(float alpha)
@@ -230,21 +240,24 @@ public class Tile : MonoBehaviour
 
     public void IncrementSortingOrder(int inc)
 	{
-		sr.sortingOrder += inc;
-        maskSr.sortingOrder += inc;
-        bombOverlay.sortingOrder += inc;
-        moltenLines.sortingOrder += inc;
+		highlightSr.sortingOrder += inc;
+        sortingGroup.sortingOrder += inc;
+        //maskSr.sortingOrder += inc;
+        //bombOverlay.sortingOrder += inc;
+        //moltenLines.sortingOrder += inc;
 	}
 
     public void SetSortingOrder(int sortingOrder)
     {
-        int maskDiff = sr.sortingOrder - maskSr.sortingOrder;
-        int bombDiff = sr.sortingOrder - bombOverlay.sortingOrder;
-        int moltenDiff = sr.sortingOrder - moltenLines.sortingOrder;
-        sr.sortingOrder = sortingOrder;
-        maskSr.sortingOrder = sortingOrder - maskDiff;
-        bombOverlay.sortingOrder = sortingOrder - bombDiff;
-        moltenLines.sortingOrder = sortingOrder - moltenDiff;
+        int maskDiff = sortingGroup.sortingOrder - highlightSr.sortingOrder;
+        //int bombDiff = sr.sortingOrder - bombOverlay.sortingOrder;
+        //int moltenDiff = sr.sortingOrder - moltenLines.sortingOrder;
+        //sr.sortingOrder = sortingOrder;
+        highlightSr.sortingOrder = sortingOrder - maskDiff;
+        sortingGroup.sortingOrder = sortingOrder;
+        //maskSr.sortingOrder = sortingOrder - maskDiff;
+        //bombOverlay.sortingOrder = sortingOrder - bombDiff;
+        //moltenLines.sortingOrder = sortingOrder - moltenDiff;
     }
 
     public void PrintCoord()
@@ -256,5 +269,16 @@ public class Tile : MonoBehaviour
     {
         bombSettling = true;
         bombSettleTimeElapsed = 0;
+    }
+
+    public void SetShieldStatus(bool status)
+    {
+        shieldSr.enabled = status;
+    }
+
+    public void SetShieldAlpha(float alpha)
+    {
+        shieldSr.color = new Color(shieldSr.color.r, shieldSr.color.g, shieldSr.color.b,
+            alpha);
     }
 }
