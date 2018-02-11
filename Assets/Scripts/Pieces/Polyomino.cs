@@ -64,6 +64,7 @@ public class Polyomino
     private Queue<Coord> lastPositions;
     private const int framesBeforeLockIn = 10;
     private const int leniencyFrames = 5;
+    private RotationUI rotationUI;
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -1057,6 +1058,7 @@ public class Polyomino
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, -4);
             owner.OnPieceSelected(this);
             IncrementSortingOrder(10000);
+            CreateRotationUI();
             OnInputDrag(holder.position);
             ToggleCostUIStatus(false);
             Services.AudioManager.CreateTempAudio(Services.Clips.PiecePicked, 1);
@@ -1142,6 +1144,7 @@ public class Polyomino
                 ToggleCostUIStatus(true);
                 CleanUpUI();
             }
+            DestroyRotationUI();
             IncrementSortingOrder(-10000);
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
         }
@@ -1153,6 +1156,7 @@ public class Polyomino
         {
             Vector3 screenInputPos = 
                 Services.GameManager.MainCamera.WorldToScreenPoint(inputPos);
+            RepositionRotationUI(screenInputPos);
             Vector3 screenOffset;
             if (owner is AIPlayer) screenOffset = Vector3.zero;
             else if (owner.playerNum == 1)
@@ -1182,6 +1186,24 @@ public class Polyomino
     }
 
     protected virtual void CleanUpUI() { }
+
+    private void CreateRotationUI()
+    {
+        rotationUI = GameObject.Instantiate(Services.Prefabs.RotationUI, Services.UIManager.canvas)
+            .GetComponent<RotationUI>();
+        rotationUI.Init(this);
+    }
+
+    private void DestroyRotationUI()
+    {
+        GameObject.Destroy(rotationUI.gameObject);
+        rotationUI = null;
+    }
+
+    private void RepositionRotationUI(Vector3 inputPos)
+    {
+        rotationUI.transform.position = inputPos;
+    }
 
     public virtual void SetLegalityGlowStatus()
     {
@@ -1236,11 +1258,14 @@ public class Polyomino
     }
 
 
-    public virtual void Rotate() { Rotate(true); }
+    public virtual void Rotate() { Rotate(true, true); }
 
-    public virtual void Rotate(bool relocate)
+    public virtual void Rotate(bool relocate) { Rotate(relocate, true); }
+
+    public virtual void Rotate(bool relocate, bool clockwise)
     {
         float rotAngle = 90 * Mathf.Deg2Rad;
+        if (!clockwise) rotAngle *= -1;
         foreach (Tile tile in tiles)
         {
             Coord prevRelCoord = tileRelativeCoords[tile];

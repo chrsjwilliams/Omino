@@ -55,4 +55,7 @@ public class PrefabDB : ScriptableObject
 
     [SerializeField] private GameObject fireBurst;
     public GameObject FireBurst { get { return fireBurst; } }
+
+    [SerializeField] private GameObject rotationUI;
+    public GameObject RotationUI { get { return rotationUI; } }
 }

@@ -19,7 +19,7 @@ public class Base : Structure
     {
         mainBase = _mainBase;
         owner = _player;
-        resourceGainRateBonus = 1f / 5f;
+        resourceGainRateBonus = 1f / 4f;
         normalDrawRateBonus = 1f / 20f;
         destructorDrawRateBonus = 1f / 60f;
     }
