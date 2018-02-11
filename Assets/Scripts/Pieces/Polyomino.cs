@@ -1194,7 +1194,7 @@ public class Polyomino
         rotationUI.Init(this);
     }
 
-    private void DestroyRotationUI()
+    protected void DestroyRotationUI()
     {
         GameObject.Destroy(rotationUI.gameObject);
         rotationUI = null;
@@ -1253,7 +1253,7 @@ public class Polyomino
             Services.GameManager.MainCamera.ScreenToWorldPoint(Input.GetTouch(touchID).position))
             < rotationInputRadius)
         {
-            Rotate();
+            //Rotate();
         }
     }
 

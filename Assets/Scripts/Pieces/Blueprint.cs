@@ -330,6 +330,8 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
             Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
             Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
+            DestroyRotationUI();
+
             if (IsPlacementLegal() && !owner.gameOver)
             {
                 PlaceAtCurrentLocation();
