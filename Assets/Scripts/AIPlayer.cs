@@ -294,7 +294,7 @@ public class AIPlayer : Player
         }
 
         scoredMoves = CreateScoredMoveArray(primaryTarget);
-        if (Input.GetKeyDown(KeyCode.P) || (resources > 20 && selectedPiece == null && hand.Count > 0 && possibleMoves.Count > 0))
+        if (Input.GetKeyDown(KeyCode.P) || (resources > 2 && selectedPiece == null && hand.Count > 0 && possibleMoves.Count > 0))
         {
             MakePlay();
             possibleMoves.Clear();
@@ -316,7 +316,7 @@ public class AIPlayer : Player
     public override int GainResources(int numResources)
     {
         int _resources = base.GainResources(numResources);
-        if (resources > 20)
+        if (resources > 2)
         {
             StartCoroutine(GeneratePossibleMoves());
             isThinking = false;
