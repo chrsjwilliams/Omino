@@ -37,10 +37,12 @@ public class Tile : MonoBehaviour
         {
             prevColor = sr.color;
             targetColor_ = value;
+            baseColor = value;
             changingColor = true;
             colorChangeTimeElapsed = 0;
         }
     }
+    private Color baseColor;
     private float colorChangeTimeElapsed;
     [SerializeField]
     private float colorChangeDuration;
@@ -55,6 +57,10 @@ public class Tile : MonoBehaviour
     private float currentBombAlpha;
     private float currentNormalAlpha;
     private SortingGroup sortingGroup;
+    private float redPulseTimer;
+    private const float redPulsePeriod = 0.6f;
+    private static Color redPulseColor = new Color(0.5f, 0, 0);
+    private bool toRed;
     //public SpriteMask mask { get; private set; }
 
     public void Init(Coord coord_)
@@ -72,13 +78,16 @@ public class Tile : MonoBehaviour
         highlightSr.enabled = false;
         if (!(pieceParent != null && pieceParent is Destructor))
         {
-            bombOverlay.enabled = false;
+            //bombOverlay.enabled = false;
             moltenLines.enabled = false;
         }
+        bombOverlay.enabled = false;
         
         transform.position = new Vector3(coord.x, coord.y, 0);
 
         sr.color = Services.GameManager.MapColorScheme[0];
+        baseColor = sr.color;
+        toRed = true;
         if (pieceParent == null) IncrementSortingOrder(-5000);
 
     }
@@ -102,6 +111,7 @@ public class Tile : MonoBehaviour
     {
         sr.color = color;
         bombOverlay.color = color;
+        baseColor = color;
     }
 
     public Color GetColor() { return sr.color; }
@@ -196,6 +206,8 @@ public class Tile : MonoBehaviour
     {
         if (changingColor) LerpToTargetColor();
         if (bombSettling) SettleToNormalSprite();
+        if (pieceParent != null && pieceParent is Destructor && !pieceParent.placed)
+            PulseRed();
     }
 
     void LerpToTargetColor()
@@ -203,6 +215,7 @@ public class Tile : MonoBehaviour
         colorChangeTimeElapsed += Time.deltaTime;
         sr.color = Color.Lerp(prevColor, targetColor, 
             colorChangeTimeElapsed / colorChangeDuration);
+        baseColor = sr.color;
         bombOverlay.color = new Color(sr.color.r, sr.color.g, sr.color.b, bombOverlay.color.a);
         if(colorChangeTimeElapsed >= colorChangeDuration)
         {
@@ -213,9 +226,9 @@ public class Tile : MonoBehaviour
     void SettleToNormalSprite()
     {
         bombSettleTimeElapsed += Time.deltaTime;
-        sr.color = Color.Lerp(new Color(sr.color.r, sr.color.g, sr.color.b, 0),
-            new Color(sr.color.r, sr.color.g, sr.color.b, 1),
-            EasingEquations.Easing.QuadEaseOut(bombSettleTimeElapsed / bombSettleDuration));
+        //sr.color = Color.Lerp(new Color(sr.color.r, sr.color.g, sr.color.b, 0),
+        //    new Color(sr.color.r, sr.color.g, sr.color.b, 1),
+        //    EasingEquations.Easing.QuadEaseOut(bombSettleTimeElapsed / bombSettleDuration));
         bombOverlay.color = Color.Lerp(new Color(sr.color.r, sr.color.g, sr.color.b, 1),
             new Color(sr.color.r, sr.color.g, sr.color.b, 0),
             EasingEquations.Easing.QuadEaseIn(bombSettleTimeElapsed / bombSettleDuration));
@@ -280,5 +293,27 @@ public class Tile : MonoBehaviour
     {
         shieldSr.color = new Color(shieldSr.color.r, shieldSr.color.g, shieldSr.color.b,
             alpha);
+    }
+
+    void PulseRed()
+    {
+        redPulseTimer += Time.deltaTime;
+        Color redColor = new Color(redPulseColor.r, redPulseColor.g, redPulseColor.b, baseColor.a);
+        if (toRed)
+        {
+            sr.color = Color.Lerp(baseColor, redColor, EasingEquations.Easing.QuadEaseIn(
+                redPulseTimer / redPulsePeriod));
+        }
+        else
+        {
+            sr.color = Color.Lerp(redColor, baseColor, EasingEquations.Easing.QuadEaseOut(
+                redPulseTimer / redPulsePeriod));
+        }
+
+        if (redPulseTimer >= redPulsePeriod)
+        {
+            toRed = !toRed;
+            redPulseTimer = 0;
+        }
     }
 }

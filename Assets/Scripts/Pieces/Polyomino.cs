@@ -25,7 +25,7 @@ public class Polyomino
     public Player owner { get; protected set; }
     public Color baseColor { get; private set; }
     public Coord centerCoord;
-    protected bool placed;
+    public bool placed { get; protected set; }
     private const float rotationInputRadius = 8f;
     protected int touchID;
     private readonly Vector3 baseDragOffset = 5f * Vector3.right;
@@ -364,7 +364,7 @@ public class Polyomino
 
         occupyingBlueprints = new List<Blueprint>();
         isFortified = false;
-        cost = units * 10;
+        cost = units;
         if (owner != null) baseColor = owner.ColorScheme[0];
 
         buildingType = BuildingType.NONE;
@@ -442,7 +442,7 @@ public class Polyomino
 
     public void OnDrawn()
     {
-        ToggleCostUIStatus(true);
+        //ToggleCostUIStatus(true);
         ListenForInput();
     }
 
@@ -492,12 +492,16 @@ public class Polyomino
         PlaceAtCurrentLocation(false);
     }
 
+    protected void SetAlphaToOne()
+    {
+        SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 1), 1);
+    }
+
     public virtual void PlaceAtCurrentLocation(bool replace)
     {
         //place the piece on the board where it's being hovered now
         placed = true;
         OnPlace();
-        SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 1), 1);
         foreach (Tile tile in tiles)
         {
             Coord tileCoord = tile.coord;
@@ -722,11 +726,15 @@ public class Polyomino
                 owner.AddPieceToHand(mapTile.occupyingResource);
             }
         }
-        Services.AudioManager.CreateTempAudio(Services.Clips.PiecePlaced, 1);
+        //Services.AudioManager.CreateTempAudio(Services.Clips.PiecePlaced, 1);
         ToggleCostUIStatus(false);
         holder.localScale = Vector3.one;
         if (owner.shieldedPieces) CreateShield();
-        MakeDustClouds();
+        //MakeDustClouds();
+        ConstructionTask construct = new ConstructionTask(this);
+        if (!owner.autoFortify) construct.Then(new ActionTask(SetAlphaToOne));
+        else SetAlphaToOne();
+        if(tiles.Count != 1) Services.GeneralTaskManager.Do(construct);
     }
 
     //  Have a fortification method
@@ -886,6 +894,7 @@ public class Polyomino
         spriteOverlay = holder.GetComponentsInChildren<SpriteRenderer>()[2];
         costText = holder.gameObject.GetComponentInChildren<TextMesh>();
         costText.text = cost.ToString();
+        ToggleCostUIStatus(false);
         tooltips = new List<Tooltip>();
         if (owner != null)
         {
@@ -1141,7 +1150,7 @@ public class Polyomino
             {
                 owner.CancelSelectedPiece();
                 EnterUnselectedState();
-                ToggleCostUIStatus(true);
+                //ToggleCostUIStatus(true);
                 CleanUpUI();
             }
             DestroyRotationUI();

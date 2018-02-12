@@ -58,4 +58,7 @@ public class PrefabDB : ScriptableObject
 
     [SerializeField] private GameObject rotationUI;
     public GameObject RotationUI { get { return rotationUI; } }
+
+    [SerializeField] private GameObject block;
+    public GameObject Block { get { return block; } }
 }

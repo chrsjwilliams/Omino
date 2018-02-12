@@ -497,7 +497,7 @@ public class Player : MonoBehaviour
     public virtual void OnPiecePlaced(Polyomino piece)
     {
         BuildingType blueprintType = piece.buildingType;
-        if (!(piece is Blueprint) && piece.cost != 10)
+        if (!(piece is Blueprint) && piece.cost != 1)
         {
             resources -= piece.cost;
         }
@@ -557,18 +557,18 @@ public class Player : MonoBehaviour
         int prevResources = resources;
         resources = Mathf.Min(maxResources, resources + numResources);
         int resourcesGained = resources - prevResources;
-        Services.AudioManager.CreateTempAudio(Services.Clips.ResourceGained, 0.2f);
-        Vector3 resourceUILocation = Services.GameManager.MainCamera.ScreenToWorldPoint(
-            Services.UIManager.resourceCounters[playerNum - 1].transform.position);
-        resourceUILocation = new Vector3(resourceUILocation.x, resourceUILocation.y, 0);
-        Vector3 offset = Services.UIManager.resourceGainAnimationOffset;
-        if (playerNum == 2) offset = new Vector3(offset.x, -offset.y, offset.z);
-        resourceUILocation += offset;
-        FloatText floatText = new FloatText("+" + resourcesGained,
-           resourceUILocation, this,
-           Services.UIManager.resourceGainAnimationDist, 
-           Services.UIManager.resourceGainAnimationDur);
-        Services.GeneralTaskManager.Do(floatText);
+        Services.AudioManager.CreateTempAudio(Services.Clips.ResourceGained, 0.1f);
+        //Vector3 resourceUILocation = Services.GameManager.MainCamera.ScreenToWorldPoint(
+        //    Services.UIManager.resourceCounters[playerNum - 1].transform.position);
+        //resourceUILocation = new Vector3(resourceUILocation.x, resourceUILocation.y, 0);
+        //Vector3 offset = Services.UIManager.resourceGainAnimationOffset;
+        //if (playerNum == 2) offset = new Vector3(offset.x, -offset.y, offset.z);
+        //resourceUILocation += offset;
+        //FloatText floatText = new FloatText("+" + resourcesGained,
+        //   resourceUILocation, this,
+        //   Services.UIManager.resourceGainAnimationDist, 
+        //   Services.UIManager.resourceGainAnimationDur);
+        //Services.GeneralTaskManager.Do(floatText);
         return resourcesGained;
     }
 

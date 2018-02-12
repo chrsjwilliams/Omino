@@ -93,7 +93,7 @@ public class Destructor : Polyomino
         {
             tile.StartSettlingToNormalPiece();
         }
-        MakeFireBurst();
+        //MakeFireBurst();
     }
 
     void MakeFireBurst()

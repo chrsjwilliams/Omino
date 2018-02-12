@@ -29,4 +29,7 @@ public class ClipLibrary : ScriptableObject {
     [SerializeField] private AudioClip resourceGained;
     public AudioClip ResourceGained { get { return resourceGained; } }
 
+    [SerializeField] private AudioClip blockConstructed;
+    public AudioClip BlockConstructed { get { return blockConstructed; } }
+
 }

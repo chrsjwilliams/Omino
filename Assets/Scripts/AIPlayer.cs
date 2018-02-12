@@ -50,13 +50,13 @@ public class AIPlayer : Player
         startingHandSize = 4;
         maxHandSize = 5;
         piecesPerHandColumn = 5;
-        startingResources = 70;
-        baseMaxResources = 100;
+        startingResources = 7;
+        baseMaxResources = 9;
         boardPieces = new List<Polyomino>();
         possibleMoves = new List<Move>();
         resourceGainFactor = 1;
         drawRateFactor = 1;
-        resourcesPerTick = 10;
+        resourcesPerTick = 1;
         base.Init(playerColorScheme, posOffset);
         if (playerNum == 1)
         {

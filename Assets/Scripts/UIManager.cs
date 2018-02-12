@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour {
     public RectTransform[] handZones;
     public Text[] resourceCounters;
     private Image[] resourceSymbols;
+    public GameObject[] resourceSlotZones;
+    private Image[][] resourceSlots;
     public RectTransform[] blueprintUIZones;
     [SerializeField]
     private Image[] normalDrawMeters;
@@ -70,8 +72,30 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private float radialMeterFillMax;
 
-	// Use this for initialization
-	void Start () {
+
+    private void Awake()
+    {
+        Image[] slotsP1 = resourceSlotZones[0].GetComponentsInChildren<Image>();
+        Image[] slotsP2 = resourceSlotZones[1].GetComponentsInChildren<Image>();
+        Image[] slotTopsP1 = new Image[slotsP1.Length / 2];
+        Image[] slotTopsP2 = new Image[slotsP1.Length / 2];
+        for (int i = 0; i < slotsP1.Length; i++)
+        {
+            if (i % 2 == 1)
+            {
+                slotTopsP1[i / 2] = slotsP1[i];
+                slotTopsP2[i / 2] = slotsP2[i];
+                slotTopsP1[i / 2].color = Services.GameManager.Player1ColorScheme[0];
+                slotTopsP2[i / 2].color = Services.GameManager.Player2ColorScheme[0];
+            }
+        }
+
+        resourceSlots = new Image[][] { slotTopsP1, slotTopsP2 };
+
+    }
+
+    // Use this for initialization
+    void Start () {
         for (int i = 0; i < victoryBanners.Length; i++)
         {
             victoryBanners[i].gameObject.SetActive(false);
@@ -80,11 +104,12 @@ public class UIManager : MonoBehaviour {
         touchIdsMakingTooltips = new List<int>();
         //InitializeQueueMeters();
         resourceSymbols = new Image[2];
+
         for (int i = 0; i < 2; i++)
         {
             UpdateDrawMeters(i + 1, 0, 0, 0, 0);
-            resourceSymbols[i] = resourceCounters[i].GetComponentInChildren<Image>();
-            resourceSymbols[i].fillAmount = 0;
+            //resourceSymbols[i] = resourceCounters[i].GetComponentInChildren<Image>();
+            //resourceSymbols[i].fillAmount = 0;
         }
         pauseMenu.SetActive(false);
 	}
@@ -208,12 +233,36 @@ public class UIManager : MonoBehaviour {
 
     public void UpdateResourceMeter(int playerNum, float fillProportion)
     {
-        resourceSymbols[playerNum - 1].fillAmount = fillProportion;
+        for (int i = 0; i < resourceSlots[playerNum - 1].Length; i++)
+        {
+            Image slotImage = resourceSlots[playerNum - 1][i];
+            if (slotImage.fillAmount < 1)
+            {
+                slotImage.color = new Color(slotImage.color.r, slotImage.color.g,
+                    slotImage.color.b, fillProportion * (2f/3));
+                slotImage.fillAmount = fillProportion;
+                break;
+            }
+        }
     }
 
     public void UpdateResourceCount(int resourceCount, int maxResources, Player player)
     {
-        resourceCounters[player.playerNum - 1].text = resourceCount + "/" + maxResources;
+        //resourceCounters[player.playerNum - 1].text = resourceCount + "/" + maxResources;
+        for (int i = 0; i < resourceSlots[player.playerNum-1].Length; i++)
+        {
+            Image slotImage = resourceSlots[player.playerNum - 1][i];
+            if (i < resourceCount)
+            {
+                slotImage.fillAmount = 1;
+                slotImage.color = new Color(slotImage.color.r, 
+                    slotImage.color.g, slotImage.color.b, 1);
+            }
+            else
+            {
+                slotImage.fillAmount = 0;
+            }
+        }
     }
 
     public void OnTooltipCreated(int touchId)

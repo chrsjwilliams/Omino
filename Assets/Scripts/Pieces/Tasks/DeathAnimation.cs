@@ -18,7 +18,7 @@ public class DeathAnimation : Task
     {
         timeElapsed = 0;
         duration = Polyomino.deathAnimDur;
-        initialColor = piece.tiles[0].GetComponent<SpriteRenderer>().color;
+        initialColor = piece.tiles[0].sr.color;
         targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 0);
         foreach(Tile tile in piece.tiles)
         {
