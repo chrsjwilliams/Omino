@@ -136,7 +136,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                     string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;
                     newpiece.ActivateTile(owner, buildingType);
-                    newpiece.SetAlpha(alphaPrePlacement);
+                    newpiece.ShiftAlpha(alphaPrePlacement);
                     newpiece.IncrementSortingOrder(5);
                     tiles.Add(newpiece);
                 }
@@ -331,11 +331,12 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
             Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
             DestroyRotationUI();
-
+            SortOnSelection(false);
             if (IsPlacementLegal() && !owner.gameOver)
             {
                 PlaceAtCurrentLocation();
                 ListenForInput();
+                //IncrementSortingOrder(-20000);
             }
             else
             {

@@ -32,4 +32,6 @@ public class ClipLibrary : ScriptableObject {
     [SerializeField] private AudioClip blockConstructed;
     public AudioClip BlockConstructed { get { return blockConstructed; } }
 
+    [SerializeField] private AudioClip illegalPlay;
+    public AudioClip IllegalPlay { get { return illegalPlay; } }
 }

@@ -523,6 +523,10 @@ public class Player : MonoBehaviour
 
     public virtual void CancelSelectedPiece()
     {
+        if (selectedPiece.cost > resources)
+            Services.UIManager.FailedPlayFromLackOfResources(this, 
+                selectedPiece.cost - resources);
+        Services.AudioManager.CreateTempAudio(Services.Clips.IllegalPlay, 1);
         hand.Insert(selectedPieceHandPos, selectedPiece);
         selectedPiece.SetGlowState(false);
         selectedPiece = null;
@@ -557,7 +561,8 @@ public class Player : MonoBehaviour
         int prevResources = resources;
         resources = Mathf.Min(maxResources, resources + numResources);
         int resourcesGained = resources - prevResources;
-        Services.AudioManager.CreateTempAudio(Services.Clips.ResourceGained, 0.1f);
+        if(resourcesGained > 0)
+            Services.AudioManager.CreateTempAudio(Services.Clips.ResourceGained, 0.2f);
         //Vector3 resourceUILocation = Services.GameManager.MainCamera.ScreenToWorldPoint(
         //    Services.UIManager.resourceCounters[playerNum - 1].transform.position);
         //resourceUILocation = new Vector3(resourceUILocation.x, resourceUILocation.y, 0);

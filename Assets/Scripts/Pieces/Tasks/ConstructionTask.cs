@@ -12,6 +12,8 @@ public class ConstructionTask : Task
     private Vector3[] blockStartLocations;
     private Vector3[] blockTargets;
     private bool hadSplashDamage;
+    private Vector3 startScale = 0.47f * Vector3.one;
+    private Vector3 targetScale = Vector3.one;
 
     public ConstructionTask(Polyomino piece_)
     {
@@ -53,6 +55,7 @@ public class ConstructionTask : Task
                     blocks[i].GetComponent<SpriteRenderer>().color = piece.owner.ColorScheme[0];
                     blocksCreated[i] = true;
                     Services.AudioManager.CreateTempAudio(Services.Clips.BlockConstructed, 1);
+                    blocks[i].transform.localScale = startScale;
                 }
                 else
                 {
@@ -62,13 +65,17 @@ public class ConstructionTask : Task
                             blockStartLocations[i],
                             blockTargets[i],
                             EasingEquations.Easing.QuadEaseOut(
-                                timeElapsed - (i * staggerTime)) / duration);
+                                (timeElapsed - (i * staggerTime)) / duration));
+                        blocks[i].transform.localScale = Vector3.Lerp(
+                            startScale, targetScale, EasingEquations.Easing.QuadEaseOut(
+                                (timeElapsed - (i * staggerTime)) / duration));
                     }
                     else if (blocks[i] != null)
                     {
                         GameObject.Destroy(blocks[i]);
                         GameObject.Instantiate(Services.Prefabs.DustCloud, 
                             blockTargets[i], Quaternion.identity);
+                        if(piece.tiles[i] != null) piece.tiles[i].SetAlpha(1f);
                         if (piece is Destructor)
                         {
                             GameObject.Instantiate(Services.Prefabs.FireBurst, 

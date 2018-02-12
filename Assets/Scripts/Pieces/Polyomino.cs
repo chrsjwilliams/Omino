@@ -720,11 +720,12 @@ public class Polyomino
         //(e.g. destroy overlapping pieces for a destructor)
         foreach (Tile tile in tiles)
         {
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-            if (mapTile.HasResource())
-            {
-                owner.AddPieceToHand(mapTile.occupyingResource);
-            }
+            //Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            //if (mapTile.HasResource())
+            //{
+            //    owner.AddPieceToHand(mapTile.occupyingResource);
+            //}
+            tile.SetAlpha(0.1f);
         }
         //Services.AudioManager.CreateTempAudio(Services.Clips.PiecePlaced, 1);
         ToggleCostUIStatus(false);
@@ -732,8 +733,8 @@ public class Polyomino
         if (owner.shieldedPieces) CreateShield();
         //MakeDustClouds();
         ConstructionTask construct = new ConstructionTask(this);
-        if (!owner.autoFortify) construct.Then(new ActionTask(SetAlphaToOne));
-        else SetAlphaToOne();
+        //if (!owner.autoFortify) construct.Then(new ActionTask(SetAlphaToOne));
+        //else SetAlphaToOne();
         if(tiles.Count != 1) Services.GeneralTaskManager.Do(construct);
     }
 
@@ -1066,7 +1067,8 @@ public class Polyomino
             holder.localScale = Vector3.one;
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, -4);
             owner.OnPieceSelected(this);
-            IncrementSortingOrder(10000);
+            //IncrementSortingOrder(30000);
+            SortOnSelection(true);
             CreateRotationUI();
             OnInputDrag(holder.position);
             ToggleCostUIStatus(false);
@@ -1154,7 +1156,8 @@ public class Polyomino
                 CleanUpUI();
             }
             DestroyRotationUI();
-            IncrementSortingOrder(-10000);
+            //IncrementSortingOrder(-30000);
+            SortOnSelection(false);
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
         }
     }
@@ -1400,6 +1403,24 @@ public class Polyomino
         baseSortingOrder += increment;
     }
 
+    protected void SortOnSelection(bool selected)
+    {
+        foreach(Tile tile in tiles)
+        {
+            tile.SortOnSelection(selected);
+        }
+        if (selected)
+        {
+            iconSr.sortingLayerName = "SelectedPieceOverlay";
+            spriteOverlay.sortingLayerName = "SelectedPieceOverlay";
+        }
+        else
+        {
+            iconSr.sortingLayerName = "Overlay";
+            spriteOverlay.sortingLayerName = "Overlay";
+        }
+    }
+
     protected virtual void SetOverlaySprite()
     {
         Color overlayColor;
@@ -1453,7 +1474,8 @@ public class Polyomino
     public void BurnFromHand()
     {
         HideFromInput();
-        IncrementSortingOrder(10000);
+        //IncrementSortingOrder(10000);
+        SortOnSelection(true);
         BurnPiece burnTask = new BurnPiece(this);
         burnTask.Then(new ActionTask(DestroyThis));
         Services.GeneralTaskManager.Do(burnTask);

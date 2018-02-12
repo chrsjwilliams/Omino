@@ -68,12 +68,12 @@ public class Tile : MonoBehaviour
         coord = coord_;
         boxCol = GetComponent<BoxCollider2D>();
         sortingGroup = GetComponentInChildren<SortingGroup>();
-        highlightSr = GetComponentsInChildren<SpriteRenderer>()[0];
-        SpriteRenderer[] srs = sortingGroup.GetComponentsInChildren<SpriteRenderer>();
-        sr = srs[0];
-        bombOverlay = srs[1];
-        moltenLines = srs[2];
-        shieldSr = srs[3];
+        SpriteRenderer[] srs = GetComponentsInChildren<SpriteRenderer>();
+        highlightSr = srs[0];
+        sr = srs[1];
+        bombOverlay = srs[2];
+        moltenLines = srs[3];
+        shieldSr = srs[4];
         shieldSr.enabled = false;
         highlightSr.enabled = false;
         if (!(pieceParent != null && pieceParent is Destructor))
@@ -246,15 +246,21 @@ public class Tile : MonoBehaviour
         shieldSr.sprite = shieldSprites[spriteIndex];
     }
 
-    public void SetAlpha(float alpha)
+    public void ShiftAlpha(float alpha)
     {
         targetColor = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);
+    }
+
+    public void SetAlpha(float alpha)
+    {
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);
     }
 
     public void IncrementSortingOrder(int inc)
 	{
 		highlightSr.sortingOrder += inc;
         sortingGroup.sortingOrder += inc;
+        shieldSr.sortingOrder += inc;
         //maskSr.sortingOrder += inc;
         //bombOverlay.sortingOrder += inc;
         //moltenLines.sortingOrder += inc;
@@ -263,14 +269,22 @@ public class Tile : MonoBehaviour
     public void SetSortingOrder(int sortingOrder)
     {
         int maskDiff = sortingGroup.sortingOrder - highlightSr.sortingOrder;
+        int shieldDiff = sortingGroup.sortingOrder - shieldSr.sortingOrder;
         //int bombDiff = sr.sortingOrder - bombOverlay.sortingOrder;
         //int moltenDiff = sr.sortingOrder - moltenLines.sortingOrder;
         //sr.sortingOrder = sortingOrder;
-        highlightSr.sortingOrder = sortingOrder - maskDiff;
+        //highlightSr.sortingOrder = sortingOrder - maskDiff;
         sortingGroup.sortingOrder = sortingOrder;
+        //shieldSr.sortingOrder = sortingOrder - shieldDiff;
         //maskSr.sortingOrder = sortingOrder - maskDiff;
         //bombOverlay.sortingOrder = sortingOrder - bombDiff;
         //moltenLines.sortingOrder = sortingOrder - moltenDiff;
+    }
+
+    public void SortOnSelection(bool selected)
+    {
+        if (selected) sortingGroup.sortingLayerName = "SelectedPiece";
+        else sortingGroup.sortingLayerName = "Default";
     }
 
     public void PrintCoord()

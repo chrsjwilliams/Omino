@@ -1,85 +1,91 @@
 ﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Custom/ShieldStencilShader" {
- Properties
- {
-  [PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
-  _Color("Tint", Color) = (1,1,1,1)
-  [MaterialToggle] PixelSnap("Pixel snap", Float) = 0
- }
- SubShader
- {
-  Pass
-  {
-   Tags
-   {
-   "Queue" = "Transparent"
-   "IgnoreProjector" = "True"
-   "RenderType" = "Transparent"
-   "PreviewType" = "Plane"
-   "CanUseSpriteAtlas" = "True"
-   }
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-   Cull Off
-   Lighting Off
-   ZWrite Off
-   Fog{ Mode Off }
-   Blend One OneMinusSrcAlpha
+Shader "Custom/Sprites/Stencil"
+{
+	Properties
+	{
+		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
+		_Color("Tint", Color) = (1, 1, 1, 1)
+		[MaterialToggle] PixelSnap("Pixel snap", Float) = 0
+	}
 
-   Stencil
-   {
-    Ref 4
-    Comp notequal
-    Pass replace
-   }
+	SubShader
+	{
+		Tags
+		{
+			"Queue" = "Transparent"
+			"IgnoreProjector" = "True"
+			"RenderType" = "Transparent"
+			"PreviewType" = "Plane"
+			"CanUseSpriteAtlas" = "True"
+		}
 
-    CGPROGRAM
-    #pragma vertex vert
-    #pragma fragment frag
-    #pragma multi_compile DUMMY PIXELSNAP_ON
-    #include "UnityCG.cginc"
+		Cull Off
+		Lighting Off
+		ZWrite Off
+		Fog
+		{
+			Mode Off
+		}
+		
+		Blend One OneMinusSrcAlpha
 
-    struct appdata_t
-    {
-     float4 vertex   : POSITION;
-     float4 color    : COLOR;
-     float2 texcoord : TEXCOORD0;
-    };
+		Pass
+		{
+			Stencil
+			{
+				Ref 4
+				Comp notequal
+				Pass replace
+			}
 
-    struct v2f
-    {
-     float4 vertex   : SV_POSITION;
-     fixed4 color : COLOR;
-     half2 texcoord  : TEXCOORD0;
-    };
+			CGPROGRAM
+#pragma vertex vert
+#pragma fragment frag
+#pragma multi_compile DUMMY PIXELSNAP_ON
+#include "UnityCG.cginc"
 
-    fixed4 _Color;
+			struct appdata_t
+			{
+				float4 vertex   : POSITION;
+				float4 color    : COLOR;
+				float2 texcoord : TEXCOORD0;
+			};
 
-    v2f vert(appdata_t IN)
-    {
-     v2f OUT;
-     OUT.vertex = UnityObjectToClipPos(IN.vertex);
-     OUT.texcoord = IN.texcoord;
-     OUT.color = IN.color * _Color;
-     #ifdef PIXELSNAP_ON
-      OUT.vertex = UnityPixelSnap(OUT.vertex);
-     #endif
+			struct v2f
+			{
+				float4 vertex   : SV_POSITION;
+				fixed4 color : COLOR;
+				half2 texcoord  : TEXCOORD0;
+			};
 
-     return OUT;
-    }
+			fixed4 _Color;
 
-    sampler2D _MainTex;
+			v2f vert(appdata_t IN)
+			{
+				v2f OUT;
+				OUT.vertex = UnityObjectToClipPos(IN.vertex);
+				OUT.texcoord = IN.texcoord;
+				OUT.color = IN.color * _Color;
+#ifdef PIXELSNAP_ON
+				OUT.vertex = UnityPixelSnap(OUT.vertex);
+#endif
 
-     fixed4 frag(v2f IN) : SV_Target
-     {
-      fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
-      //if(c.a < 0.05)
-       //discard;
-      //else
-       c.rgb *= c.a;
-      return c;
-     }
-    ENDCG
-   } 
- }
+				return OUT;
+			}
+
+			sampler2D _MainTex;
+
+			fixed4 frag(v2f IN) : SV_Target
+			{
+				fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
+				c.rgb *= c.a;
+				return c;
+			}
+
+			ENDCG
+		}
+	}
 }

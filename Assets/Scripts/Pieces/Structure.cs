@@ -113,7 +113,7 @@ public abstract class Structure : Polyomino
         spriteOverlay.color = neutralColor;
         TurnOffGlow();
         //SetGlow(Color.white);
-        IncrementSortingOrder(500);
+        //IncrementSortingOrder(500);
         GameObject psObj = GameObject.Instantiate(Services.Prefabs.StructureParticles, holder);
         psObj.transform.position = GetCenterpoint();
         ps = psObj.GetComponent<ParticleSystem>();
