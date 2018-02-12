@@ -16,6 +16,8 @@ public class AIPlayer : Player
 {
     struct ScoredMove
     {
+        public const float MAX_SCORE = 100;
+        public float score;
         public float distance;
         public Move move;
     }
@@ -28,10 +30,14 @@ public class AIPlayer : Player
     public bool playingPiece { get; protected set; }
     public bool isThinking { get; protected set; }
     public List<Coord> playableCoords { get; protected set; }
+    protected List <Coord> structureCoords { get; private set; }
     private ScoredMove[] scoredMoves;
     public List<Move> possibleMoves { get; protected set; }
     private Coord primaryTarget;
     private int frameBuffer;
+
+    protected float winConditionMod;
+    protected float structConditionMod;
 
     public override void Init(Color[] playerColorScheme, int posOffset)
     {
@@ -43,6 +49,9 @@ public class AIPlayer : Player
         deckClumpCount = 4;
 
         frameBuffer = 1;
+
+        winConditionMod = 0.8f;
+        structConditionMod = 1.0f;
 
         handSpacing = new Vector3(5.5f, -2.35f, 0);
         handOffset = new Vector3(-12.6f, 9.125f, 0);
@@ -70,7 +79,17 @@ public class AIPlayer : Player
         playableCoords = FindAllPlayableCoords();
         //GeneratePossibleMoves(playableCoords);
 
-        
+        structureCoords = new List<Coord>();
+        foreach(Structure structure in Services.MapManager.structuresOnMap)
+        {
+            foreach(Tile tile in structure.tiles)
+            {
+                if(!structureCoords.Contains(tile.coord))
+                {
+                    structureCoords.Add(tile.coord);
+                }
+            }
+        }
 
         //scoredMoves = CreateScoredMoveArray(new Coord(0, 0));
     }
@@ -150,24 +169,43 @@ public class AIPlayer : Player
         {
             playPosition[i] = new ScoredMove();
             playPosition[i].move = possibleMoves[i];
+
             float pieceDistance = float.MaxValue;
-            //  Saves the distance of the closest tile
+            float structDist = float.MaxValue;
 
             foreach (Tile tile in possibleMoves[i].piece.tiles)
             {
-                float tileDistance = targetCoord.Distance(
+                float winDistance = targetCoord.Distance(
                     possibleMoves[i].relativeCoords[tile].Add(possibleMoves[i].targetCoord));
-
-                if (tileDistance < pieceDistance)
+                
+                foreach(Coord coord in structureCoords)
                 {
-                    pieceDistance = tileDistance;
+                    float testDistance = coord.Distance(
+                        possibleMoves[i].relativeCoords[tile].Add(possibleMoves[i].targetCoord));
+
+                    if (testDistance < structDist && 
+                        Services.MapManager.Map[coord.x, coord.y].occupyingStructure.owner == null)
+                    {
+                        structDist = testDistance;
+                    }
+                }
+
+                if (winDistance < pieceDistance)
+                {
+                    pieceDistance = winDistance;
                 }
             }
             playPosition[i].distance = pieceDistance;
+            playPosition[i].score = CalculateScore(playPosition[i].distance, structDist);
         }
 
-        // sort playable positions beased on closeness to targetCoord
         return playPosition;
+    }
+
+    public float CalculateScore(float win, float structure)
+    {
+        if (win == 0 && structure == 0) win = float.MaxValue;
+        return ScoredMove.MAX_SCORE / ((win * winConditionMod) + (structure * structConditionMod));
     }
 
     protected void PlayPiece()
@@ -175,24 +213,15 @@ public class AIPlayer : Player
         playingPiece = true;
         int moveIndex = UnityEngine.Random.Range(0, possibleMoves.Count - 1);
 
-        ScoredMove nextPlay = scoredMoves[0];
-        nextPlay.distance = float.MaxValue;
-        
-        //  Scores move based on win condition
-
-        //  Lets say every move has a max power of 100
-        //  Lets day the distance to complete each tasks adds to the
-        //  denominator to determine the overall power of a move
+        ScoredMove nextPlay = scoredMoves[0];        
 
         for (int i = 0; i < scoredMoves.Length; i++)
         {
             //  While I'm going through every move in the array
             //  I will adjusts its score based on our parameters
-
-            if (nextPlay.distance > scoredMoves[i].distance)
+            if (nextPlay.score < scoredMoves[i].score)
                 nextPlay = scoredMoves[i];
         }
-
 
         if (scoredMoves.Length > 0)
             nextPlay.move.ExecuteMove();
@@ -256,7 +285,7 @@ public class AIPlayer : Player
                 }
                 //  Then choose a new play position
             }
-            //    Choose a new piece
+            //  Choose a new piece
             //  Wait for a certain number of frames before evaluating next piece
             for (int frames = 0; frames < frameBuffer; frames++)
             {

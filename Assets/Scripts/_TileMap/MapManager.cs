@@ -29,7 +29,7 @@ public class MapManager : MonoBehaviour
     }
 
     private List<SuperDestructorResource> resourcesOnMap;
-    private List<Structure> structuresOnMap;
+    public List<Structure> structuresOnMap { get; private set; }
     [SerializeField]
     private int resourceDistMin;
     [SerializeField]
