@@ -37,21 +37,28 @@ public class Destructor : Polyomino
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner) return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece is Structure) return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.shieldDurationRemaining > 0) return false;
-
-            //if (CanDestroyPieceOn(mapTile)) return false;
         }
         
         return true;
     }
 
-    public bool CanDestroyPieceOn(Tile mapTile)
+    private bool LegalNotCountingShield()
     {
-        if (isSuper) return false;
-        else
+        foreach (Tile tile in tiles)
         {
-            if (mapTile.IsOccupied() && !mapTile.occupyingPiece.isFortified) return true;
-            return false;
+            if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
+            if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>())) return false;
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner) return false;
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece is Structure) return false;
         }
+
+        return true;
+    }
+
+    public bool StoppedByShield()
+    {
+        return !IsPlacementLegal() && LegalNotCountingShield();
     }
 
     //public override void CheckForFortification()

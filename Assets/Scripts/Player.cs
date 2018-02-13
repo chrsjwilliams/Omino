@@ -526,7 +526,14 @@ public class Player : MonoBehaviour
         if (selectedPiece.cost > resources)
             Services.UIManager.FailedPlayFromLackOfResources(this, 
                 selectedPiece.cost - resources);
-        Services.AudioManager.CreateTempAudio(Services.Clips.IllegalPlay, 1);
+        if (selectedPiece is Destructor && (selectedPiece as Destructor).StoppedByShield())
+        {
+            Services.AudioManager.CreateTempAudio(Services.Clips.ShieldHit, 1);
+        }
+        else
+        {
+            Services.AudioManager.CreateTempAudio(Services.Clips.IllegalPlay, 1);
+        }
         hand.Insert(selectedPieceHandPos, selectedPiece);
         selectedPiece.SetGlowState(false);
         selectedPiece = null;
@@ -537,6 +544,7 @@ public class Player : MonoBehaviour
     {
         blueprints.Add((Blueprint)selectedPiece);
         selectedPiece.SetGlowState(false);
+        Services.AudioManager.CreateTempAudio(Services.Clips.IllegalPlay, 1);
         //OrganizeHand(blueprints);
         Blueprint selectedBlueprint = selectedPiece as Blueprint;
         selectedBlueprint.Reposition(GetBlueprintPosition(selectedBlueprint));

@@ -10,8 +10,8 @@ public class DeathAnimation : Task
     private Color targetColor;
     private Vector3[] startPositions;
     private Vector3[] targetPositions;
-    private const float explosionDistanceMin = 2f;
-    private const float explosionDistanceMax = 6f;
+    private const float explosionDistanceMin = 1.5f;
+    private const float explosionDistanceMax = 5f;
 
     public DeathAnimation(Polyomino piece_)
     {
@@ -28,14 +28,20 @@ public class DeathAnimation : Task
         startPositions = new Vector3[piece.tiles.Count];
         for (int i = 0; i < piece.tiles.Count; i++)
         {
-            piece.tiles[i].highlightSr.color = new Color(1,1,1,0);
-            //tile.highlightSr.sortingOrder += 2;
+            piece.tiles[i].highlightSr.color = new Color(1, 1, 1, 0);
+            piece.tiles[i].SortOnSelection(true);
             Vector3 tilePos = piece.tiles[i].transform.position;
             float explosionDist = Random.Range(explosionDistanceMin, explosionDistanceMax);
-            float explosionAngle = Random.Range(0f, 360f);
-            Vector3 randomOffset = explosionDist * new Vector3(Mathf.Sin(explosionAngle),
-                Mathf.Cos(explosionAngle), 0);
-            targetPositions[i] = tilePos + randomOffset;
+            float angleOffset = Random.Range(5f, 10f);
+            angleOffset *= Random.Range(0, 2) == 0 ? 1 : -1;
+            Vector3 tileOffset = (tilePos - piece.GetCenterpoint()).normalized;
+            float explosionAngle = (Mathf.Atan2(tileOffset.y, tileOffset.x) * Mathf.Rad2Deg)
+                + angleOffset;
+            //Vector3 offset = explosionDist * new Vector3(Mathf.Sin(explosionAngle),
+            //    Mathf.Cos(explosionAngle), 0);
+            Vector3 offset = explosionDist 
+                * new Vector3(Mathf.Sin(explosionAngle), Mathf.Cos(explosionAngle), 0);
+            targetPositions[i] = tilePos + offset;
             startPositions[i] = tilePos;
         }
     }

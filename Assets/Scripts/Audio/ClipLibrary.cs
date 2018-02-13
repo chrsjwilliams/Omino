@@ -34,4 +34,7 @@ public class ClipLibrary : ScriptableObject {
 
     [SerializeField] private AudioClip illegalPlay;
     public AudioClip IllegalPlay { get { return illegalPlay; } }
+
+    [SerializeField] private AudioClip shieldHit;
+    public AudioClip ShieldHit { get { return shieldHit; } }
 }

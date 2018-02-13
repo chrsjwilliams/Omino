@@ -950,7 +950,7 @@ public class Polyomino
         else iconSr.enabled = false;
     }
 
-    protected Vector3 GetCenterpoint(bool centerTile)
+    public Vector3 GetCenterpoint(bool centerTile)
     {
         Vector3 centerPos = Vector3.zero;
         foreach (Tile tile in tiles)
@@ -977,7 +977,7 @@ public class Polyomino
         return centerPos;
     }
 
-    protected Vector3 GetCenterpoint()
+    public Vector3 GetCenterpoint()
     {
         return GetCenterpoint(false);
     }
