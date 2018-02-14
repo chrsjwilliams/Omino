@@ -27,12 +27,22 @@ public class Destructor : Polyomino
         }
     }
 
-    public override bool IsPlacementLegal()
+    public override bool IsPlacementLegal(List<Polyomino> adjacentPieces)
     {
+        bool connectedToBase = false;
+        for (int i = 0; i < adjacentPieces.Count; i++)
+        {
+            if (adjacentPieces[i].connected || adjacentPieces[i] is Structure)
+            {
+                connectedToBase = true;
+                break;
+            }
+        }
+        if (!connectedToBase) return false;
+
         foreach (Tile tile in tiles)
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
-            if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>())) return false;
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner) return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece is Structure) return false;

@@ -17,6 +17,16 @@ public class Polyomino
     protected string holderName;
     public Transform holder { get; protected set; }
     public BuildingType buildingType { get; protected set; }
+    public static int[][] rotationDictionary = new int[][]
+    {
+        new int []{ },
+        new int [1] {1},
+        new int [1] {2},
+        new int [2] {2, 4},
+        new int [7] {2, 4, 4, 4, 2, 2, 1},
+        new int [12] {4, 2, 4, 4, 4, 4, 4, 4, 4, 1, 4, 2}
+
+    };
 
     public int index { get; protected set; }
     public int units { get; protected set; }
@@ -93,7 +103,7 @@ public class Polyomino
             }
         };
 
-    protected static int[,,] triomino = new int[3, 5, 5]
+    protected static int[,,] triomino = new int[2, 5, 5]
         { 
             //  ###
             {
@@ -111,16 +121,6 @@ public class Polyomino
                 { 0,0,0,0,0 },
                 { 0,0,1,0,0 },
                 { 0,0,1,1,0 },
-                { 0,0,0,0,0 }
-            },
-            //  #
-            // ##
-            {
-
-                { 0,0,0,0,0 },
-                { 0,0,0,0,0 },
-                { 0,0,1,0,0 },
-                { 0,1,1,0,0 },
                 { 0,0,0,0,0 }
             }
         };
@@ -567,18 +567,23 @@ public class Polyomino
     public List<Polyomino> GetAdjacentPolyominos(Player player)
     {
         List<Polyomino> adjacentPieces = new List<Polyomino>();
+        List<Coord> coordsChecked = new List<Coord>();
         foreach (Tile tile in tiles)
         {
             foreach (Coord direction in Coord.Directions())
             {
                 Coord adjacentCoord = tile.coord.Add(direction);
-                if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
+                if (!coordsChecked.Contains(adjacentCoord))
                 {
-                    Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
-                    if (adjTile.IsOccupied() && !adjacentPieces.Contains(adjTile.occupyingPiece) &&
-                        adjTile.occupyingPiece != this && adjTile.occupyingPiece.owner == player)
+                    coordsChecked.Add(adjacentCoord);
+                    if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
                     {
-                        adjacentPieces.Add(adjTile.occupyingPiece);
+                        Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                        if (adjTile.IsOccupied() && !adjacentPieces.Contains(adjTile.occupyingPiece) &&
+                            adjTile.occupyingPiece != this && adjTile.occupyingPiece.owner == player)
+                        {
+                            adjacentPieces.Add(adjTile.occupyingPiece);
+                        }
                     }
                 }
             }
@@ -587,24 +592,52 @@ public class Polyomino
         return adjacentPieces;
     }
 
+    public static List<Polyomino> GetAdjacentPolyominosToCoord(Coord coord, Player player)
+    {
+        List<Polyomino> adjacentPieces = new List<Polyomino>();
+
+        foreach (Coord direction in Coord.Directions())
+        {
+            Coord adjacentCoord = coord.Add(direction);
+            if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
+            {
+                Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                if (adjTile.IsOccupied() && !adjacentPieces.Contains(adjTile.occupyingPiece) 
+                    && adjTile.occupyingPiece.owner == player)
+                {
+                    adjacentPieces.Add(adjTile.occupyingPiece);
+                }
+            }
+        }
+        return adjacentPieces;
+    }
+
+    public List<Polyomino> GetAdjacentPolyominosToCoord(Coord coord)
+    {
+        List<Polyomino> adjacentPieces = new List<Polyomino>();
+
+        foreach (Coord direction in Coord.Directions())
+        {
+            Coord adjacentCoord = coord.Add(direction);
+            if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
+            {
+                Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                if (adjTile.IsOccupied() && !adjacentPieces.Contains(adjTile.occupyingPiece) &&
+                    adjTile.occupyingPiece != this)
+                {
+                    adjacentPieces.Add(adjTile.occupyingPiece);
+                }
+            }
+        }
+        return adjacentPieces;
+    }
+
     public List<Polyomino> GetAdjacentPolyominos()
     {
         List<Polyomino> adjacentPieces = new List<Polyomino>();
         foreach (Tile tile in tiles)
         {
-            foreach (Coord direction in Coord.Directions())
-            {
-                Coord adjacentCoord = tile.coord.Add(direction);
-                if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
-                {
-                    Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
-                    if (adjTile.IsOccupied() && !adjacentPieces.Contains(adjTile.occupyingPiece) &&
-                        adjTile.occupyingPiece != this)
-                    {
-                        adjacentPieces.Add(adjTile.occupyingPiece);
-                    }
-                }
-            }
+            adjacentPieces.AddRange(GetAdjacentPolyominosToCoord(tile.coord)); 
         }
 
         return adjacentPieces;
@@ -635,11 +668,15 @@ public class Polyomino
 
     public virtual bool IsPlacementLegal()
     {
+        return IsPlacementLegal(GetAdjacentPolyominos(owner));
+    }
+
+    public virtual bool IsPlacementLegal(List<Polyomino> adjacentPieces)
+    {
         //determine if the pieces current location is a legal placement
         //CONDITIONS:
         //is contiguous with a structure connected to either the base or a fortification
         //doesn't overlap with any existing pieces or is a destructor\
-        List<Polyomino> adjacentPieces = GetAdjacentPolyominos(owner);
         bool connectedToBase = false;
         for (int i = 0; i < adjacentPieces.Count; i++)
         {
@@ -866,11 +903,16 @@ public class Polyomino
 
     public void SetTileCoords(Coord centerPos)
     {
+        //Coord oldCenter = centerCoord;
         centerCoord = centerPos;
         foreach (KeyValuePair<Tile, Coord> tileCoord in tileRelativeCoords)
         {
             tileCoord.Key.SetCoord(tileCoord.Value.Add(centerPos));
         }
+        //foreach(Tile tile in tiles)
+        //{
+        //    tile.SetCoord(centerCoord.Add(tile.coord.Subtract(oldCenter)));
+        //}
     }
 
     public void AddOccupyingBlueprint(Blueprint blueprint)
@@ -1144,6 +1186,7 @@ public class Polyomino
                 Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
                 Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
             }
+          
             if (IsPlacementLegal() && affordable && !owner.gameOver)
             {
                 PlaceAtCurrentLocation();
@@ -1170,8 +1213,7 @@ public class Polyomino
                 Services.GameManager.MainCamera.WorldToScreenPoint(inputPos);
             RepositionRotationUI(screenInputPos);
             Vector3 screenOffset;
-            if (owner is AIPlayer) screenOffset = Vector3.zero;
-            else if (owner.playerNum == 1)
+            if (owner.playerNum == 1)
             {
                 screenOffset = baseDragOffset + ((1 - (2 * baseDragOffset.x / Screen.width))
                     * screenInputPos.x * Vector3.right);
@@ -1183,6 +1225,7 @@ public class Polyomino
             }
             Vector3 offsetInputPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
                 screenInputPos + screenOffset);
+            if (owner is AIPlayer) offsetInputPos = inputPos;
             Coord roundedInputCoord = new Coord(
                 Mathf.RoundToInt(offsetInputPos.x),
                 Mathf.RoundToInt(offsetInputPos.y));
@@ -1270,11 +1313,11 @@ public class Polyomino
     }
 
 
-    public virtual void Rotate() { Rotate(true, true); }
+    public virtual void Rotate() { Rotate(true, true, false); }
 
-    public virtual void Rotate(bool relocate) { Rotate(relocate, true); }
+    public virtual void Rotate(bool relocate) { Rotate(relocate, true, false); }
 
-    public virtual void Rotate(bool relocate, bool clockwise)
+    public virtual void Rotate(bool relocate, bool clockwise, bool dataOnly)
     {
         float rotAngle = 90 * Mathf.Deg2Rad;
         if (!clockwise) rotAngle *= -1;
@@ -1290,22 +1333,27 @@ public class Polyomino
             tileRelativeCoords[tile] = new Coord(newXCoord, newYCoord);
         }
         SetTileCoords(centerCoord);
-        SetTileSprites();
 
-        if (relocate)
+        if (!dataOnly)
         {
-            foreach (Tile tile in tiles)
+            SetTileSprites();
+
+            if (relocate)
             {
-                tile.transform.localPosition = new Vector3(tileRelativeCoords[tile].x, tileRelativeCoords[tile].y);
+                foreach (Tile tile in tiles)
+                {
+                    tile.transform.localPosition = new Vector3(tileRelativeCoords[tile].x, tileRelativeCoords[tile].y);
+                }
             }
+
+            SetIconSprite();
+            SetLegalityGlowStatus();
+            //Quaternion prevRotation = spriteOverlay.transform.localRotation;
+            //spriteOverlay.transform.localRotation = Quaternion.Euler(prevRotation.eulerAngles.x,
+            //    prevRotation.eulerAngles.y, prevRotation.eulerAngles.z + 90);
+            numRotations = (numRotations + 1) % 4;
+            SetOverlaySprite();
         }
-        SetIconSprite();
-        SetLegalityGlowStatus();
-        //Quaternion prevRotation = spriteOverlay.transform.localRotation;
-        //spriteOverlay.transform.localRotation = Quaternion.Euler(prevRotation.eulerAngles.x,
-        //    prevRotation.eulerAngles.y, prevRotation.eulerAngles.z + 90);
-        numRotations = (numRotations + 1) % 4;
-        SetOverlaySprite();
     }
 
     public virtual void PlaceAtLocation(Coord centerCoordLocation)

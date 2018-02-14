@@ -34,6 +34,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     [SerializeField]
     private Image levelSelectionIndicator;
 
+    private Slider winWeightSlider;
+    private Slider structureWeightSlider;
+
     private int touchID;
     private TaskManager _tm = new TaskManager();
 
@@ -51,7 +54,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         structureButton = GameObject.Find("ToggleStructures").GetComponent<Text>();
         miniBaseButton = GameObject.Find("ToggleMiniBases").GetComponent<Text>();
         blueprintButton = GameObject.Find("ToggleBlueprints").GetComponent<Text>();
-
+        winWeightSlider = GameObject.Find("WinWeightSlider").GetComponent<Slider>();
+        structureWeightSlider = GameObject.Find("StructWeightSlider").GetComponent<Slider>();
         numPlayerText.text = PLAYERS + numPlayers;
 
         //ruleScroller = GetComponent<ScrollRectSnap>();
@@ -165,6 +169,16 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             blueprintButton.text = "BLUEPRINTS\nOFF";
         }
+    }
+
+    public void SetWinWeight()
+    {
+        Services.GameManager.SetWinWeight(winWeightSlider.value);
+    }
+
+    public void SetStructureWeight()
+    {
+        Services.GameManager.SetStructureWeight(structureWeightSlider.value);
     }
 
     private void OnTouchDown(TouchDown e)

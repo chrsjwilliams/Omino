@@ -46,6 +46,6 @@ public class PlayTask : Task
 
     protected override void OnSuccess()
     {
-        piece.OnInputUp();        
+        piece.OnInputUp();
     }
 }

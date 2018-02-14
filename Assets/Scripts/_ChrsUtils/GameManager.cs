@@ -69,6 +69,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public bool usingBlueprints { get; private set; }
     public int levelSelected { get; private set; }
+    public float winWeight { get; private set; }
+    public float structureWeight { get; private set; }
 
     private void Awake()
     {
@@ -95,6 +97,16 @@ public class GameManager : MonoBehaviour
     {
         _numPlayers = players;
         _players = new Player[MAX_PLAYERS];
+    }
+
+    public void SetWinWeight(float weight)
+    {
+        winWeight = weight;
+    }
+
+    public void SetStructureWeight(float weight)
+    {
+        structureWeight = weight;
     }
 
     public void InitPlayers()
@@ -141,10 +153,10 @@ public class GameManager : MonoBehaviour
             switch (i)
             {
                 case 0:
-                    _players[0].Init(_player1ColorScheme, 0);
+                    _players[0].Init(_player1ColorScheme, 0, winWeight, structureWeight);
                     break;
                 case 1:
-                    _players[1].Init(_player2ColorScheme, 1);
+                    _players[1].Init(_player2ColorScheme, 1, winWeight, structureWeight);
                     break;
                 default:
                     break;
@@ -160,6 +172,8 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    
 
     public void ChangeCameraTo(Camera camera)
     {
