@@ -85,7 +85,7 @@ public struct Coord
         return a.Subtract(b);
     }
 
-    public Vector3 ScreenPos()
+    public Vector3 WorldPos()
     {
         return new Vector3(x, y, 0);
     }

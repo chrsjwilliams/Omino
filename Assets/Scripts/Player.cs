@@ -81,7 +81,7 @@ public class Player : MonoBehaviour
 
 
     // Use this for initialization
-    public virtual void Init(Color[] playerColorScheme, int posOffset)
+    public virtual void Init(Color[] playerColorScheme, int posOffset, float _winWeight, float _structureWeight)
     {
         viewingHand = true;
         playerNum = posOffset + 1;

@@ -30,6 +30,7 @@ public class MapManager : MonoBehaviour
 
     private List<SuperDestructorResource> resourcesOnMap;
     public List<Structure> structuresOnMap { get; private set; }
+    public List<Coord> structureCoords { get; private set; }
     [SerializeField]
     private int resourceDistMin;
     [SerializeField]
@@ -60,7 +61,7 @@ public class MapManager : MonoBehaviour
 
     public void GenerateMap()
     {
-        _map = new Tile[MapWidth, MapWidth];
+        _map = new Tile[MapWidth, MapLength];
         for (int i = 0; i < MapWidth; i++)
         {
             for (int j = 0; j < MapLength; j++)
@@ -189,6 +190,21 @@ public class MapManager : MonoBehaviour
             return structure;
         }
         return null;
+    }
+
+    void GetStructureCoords()
+    {
+        structureCoords = new List<Coord>();
+        foreach (Structure structure in Services.MapManager.structuresOnMap)
+        {
+            foreach (Tile tile in structure.tiles)
+            {
+                if (!structureCoords.Contains(tile.coord))
+                {
+                    structureCoords.Add(tile.coord);
+                }
+            }
+        }
     }
 
     Coord GenerateValidResourceCoord()
@@ -322,6 +338,8 @@ public class MapManager : MonoBehaviour
             }
             else GenerateLevel(level);
         }
+
+        GetStructureCoords();
     }
 
     void GenerateLevel(Level level)
