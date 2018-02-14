@@ -136,7 +136,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                     string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;
                     newpiece.ActivateTile(owner, buildingType);
-                    newpiece.ShiftAlpha(alphaPrePlacement);
+                    newpiece.SetAlpha(alphaPrePlacement);
                     newpiece.IncrementSortingOrder(5);
                     tiles.Add(newpiece);
                 }
@@ -147,9 +147,9 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         {
             tile.sr.enabled = false;
         }
-
         EnterUnselectedState();
         SetSprites();
+
     }
 
     protected override void SetIconSprite()
@@ -196,11 +196,18 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             default:
                 break;
         }
+        if (!placed)
+        {
+            spriteOverlay.color = new Color(spriteOverlay.color.r, spriteOverlay.color.g,
+                spriteOverlay.color.b, alphaPrePlacement);
+        }
     }
 
     public override void PlaceAtCurrentLocation()
     {
         placed = true;
+        spriteOverlay.color = spriteOverlay.color = new Color(spriteOverlay.color.r, spriteOverlay.color.g,
+                spriteOverlay.color.b, 1);
         OnPlace();
         foreach (Tile tile in tiles)
         {
