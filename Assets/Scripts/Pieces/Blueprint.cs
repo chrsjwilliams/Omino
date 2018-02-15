@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Blueprint : Polyomino
 {
-    private const float alphaPrePlacement = 0.15f;
+    private const float alphaPrePlacement = 0.5f;
 
     protected static int[,,] factory = new int[1, 5, 5]
     {   
@@ -337,7 +337,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
             Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
             Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
-            DestroyRotationUI();
+            //DestroyRotationUI();
             SortOnSelection(false);
             if (IsPlacementLegal() && !owner.gameOver)
             {

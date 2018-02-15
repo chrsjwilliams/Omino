@@ -6,7 +6,7 @@ public class Mine : Blueprint
 {
     public Mine(Player player_) : base(BuildingType.MINE, player_)
     {
-        resourceGainRateBonus = 1f / 10f;
+        resourceGainRateBonus = 1f / 8f;
     }
 
     public override void Update()
@@ -34,7 +34,8 @@ public class Mine : Blueprint
 
     protected override string GetDescription()
     {
-        return "+<color=green>" + Math.Round((double)resourceGainRateBonus * 10, 3) + 
-            "</color> resources per second";
+        //return "+<color=green>" + Math.Round((double)resourceGainRateBonus * 10, 3) + 
+        //    "</color> resources per second";
+        return "Brick Production Level +1";
     }
 }

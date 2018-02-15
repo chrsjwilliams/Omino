@@ -47,7 +47,8 @@ public class BombFactory : Blueprint
 
     protected override string GetDescription()
     {
-        return "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) + 
-            "</color> <color=red>DESTRUCTIVE</color> pieces per second";
+        //return "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) + 
+        //    "</color> <color=red>DESTRUCTIVE</color> pieces per second";
+        return "<color=red>DESTRUCTIVE</color> Piece Production Level +1";
     }
 }

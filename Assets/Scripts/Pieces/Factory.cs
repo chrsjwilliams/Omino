@@ -36,7 +36,8 @@ public class Factory : Blueprint
 
     protected override string GetDescription()
     {
-        return "+<color=green>" + Math.Round((double)normalDrawRateBonus, 3) + 
-            "</color> normal pieces per second";
+        //return "+<color=green>" + Math.Round((double)normalDrawRateBonus, 3) + 
+        //    "</color> normal pieces per second";
+        return "Normal Piece Production Level +1";
     }
 }

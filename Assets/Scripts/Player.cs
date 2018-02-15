@@ -532,7 +532,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            Services.AudioManager.CreateTempAudio(Services.Clips.IllegalPlay, 1);
+            Services.AudioManager.CreateTempAudio(Services.Clips.IllegalPlay, 0.01f);
         }
         hand.Insert(selectedPieceHandPos, selectedPiece);
         selectedPiece.SetGlowState(false);
@@ -544,7 +544,7 @@ public class Player : MonoBehaviour
     {
         blueprints.Add((Blueprint)selectedPiece);
         selectedPiece.SetGlowState(false);
-        Services.AudioManager.CreateTempAudio(Services.Clips.IllegalPlay, 1);
+        Services.AudioManager.CreateTempAudio(Services.Clips.IllegalPlay, 0.01f);
         //OrganizeHand(blueprints);
         Blueprint selectedBlueprint = selectedPiece as Blueprint;
         selectedBlueprint.Reposition(GetBlueprintPosition(selectedBlueprint));

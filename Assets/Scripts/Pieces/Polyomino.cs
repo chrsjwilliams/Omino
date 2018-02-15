@@ -1111,7 +1111,7 @@ public class Polyomino
             owner.OnPieceSelected(this);
             //IncrementSortingOrder(30000);
             SortOnSelection(true);
-            CreateRotationUI();
+            //CreateRotationUI();
             OnInputDrag(holder.position);
             ToggleCostUIStatus(false);
             Services.AudioManager.CreateTempAudio(Services.Clips.PiecePicked, 1);
@@ -1198,7 +1198,7 @@ public class Polyomino
                 //ToggleCostUIStatus(true);
                 CleanUpUI();
             }
-            DestroyRotationUI();
+            //DestroyRotationUI();
             //IncrementSortingOrder(-30000);
             SortOnSelection(false);
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
@@ -1211,7 +1211,7 @@ public class Polyomino
         {
             Vector3 screenInputPos = 
                 Services.GameManager.MainCamera.WorldToScreenPoint(inputPos);
-            RepositionRotationUI(screenInputPos);
+            //RepositionRotationUI(screenInputPos);
             Vector3 screenOffset;
             if (owner.playerNum == 1)
             {
@@ -1308,7 +1308,7 @@ public class Polyomino
             Services.GameManager.MainCamera.ScreenToWorldPoint(Input.GetTouch(touchID).position))
             < rotationInputRadius)
         {
-            //Rotate();
+            Rotate();
         }
     }
 

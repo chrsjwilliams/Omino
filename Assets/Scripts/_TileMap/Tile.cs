@@ -112,6 +112,7 @@ public class Tile : MonoBehaviour
         sr.color = color;
         bombOverlay.color = color;
         baseColor = color;
+        targetColor = color;
     }
 
     public Color GetColor() { return sr.color; }
@@ -254,6 +255,7 @@ public class Tile : MonoBehaviour
     public void SetAlpha(float alpha)
     {
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);
+        targetColor = sr.color;
     }
 
     public void IncrementSortingOrder(int inc)

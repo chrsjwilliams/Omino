@@ -9,8 +9,8 @@ public class Base : Structure
     public Base() : base(0)
     {
         normalDrawRateBonus = 1f / 40f;
-        destructorDrawRateBonus = 1f / 120f;
-        resourceGainRateBonus = 1f / 10f;
+        destructorDrawRateBonus = 1f / 80f;
+        resourceGainRateBonus = 1f / 8f;
         buildingType = BuildingType.BASE;
         isFortified = true;
     }
@@ -81,11 +81,21 @@ public class Base : Structure
 
     protected override string GetDescription()
     {
-        return "+<color=green>" + Math.Round((double)normalDrawRateBonus, 3) + 
-            "</color> normal pieces per second" + "\n" +
-            "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) +
-            "</color> <color=red>DESTRUCTIVE</color> pieces per second" + "\n" +
-            "+<color=green>" + Math.Round((double)resourceGainRateBonus * 10, 3) +
-            "</color> resources per second";
+        //return "+<color=green>" + Math.Round((double)normalDrawRateBonus, 3) + 
+        //    "</color> normal pieces per second" + "\n" +
+        //    "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) +
+        //    "</color> <color=red>DESTRUCTIVE</color> pieces per second" + "\n" +
+        //    "+<color=green>" + Math.Round((double)resourceGainRateBonus * 10, 3) +
+        //    "</color> resources per second";
+        if (mainBase)
+        {
+            return "Home base. Connect to your opponent's home base to win.";
+        }
+        else
+        {
+            return "Normal Piece Production Level +1 \n" +
+                "<color=red>DESTRUCTIVE</color> Piece Production Level +1 \n" +
+                "Brick Production Level +1";
+        }
     }
 }

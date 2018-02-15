@@ -30,7 +30,7 @@ public class BiggerBricks : Structure
 
     protected override string GetName()
     {
-        return "Bigger Bricks";
+        return "Bigger Pieces";
     }
 
     protected override string GetDescription()

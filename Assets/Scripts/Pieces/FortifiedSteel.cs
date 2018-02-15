@@ -35,6 +35,6 @@ public class FortifiedSteel : Structure
 
     protected override string GetDescription()
     {
-        return "All newly placed pieces are automatically fortified";
+        return "Newly placed pieces are split up into individual bricks";
     }
 }
