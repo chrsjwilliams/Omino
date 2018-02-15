@@ -72,7 +72,7 @@ public class AIPlayer : Player
         //scoredMoves = CreateScoredMoveArray(new Coord(0, 0));
     }
 
-    public List<Coord> FindAllPlayableCoords(int range)
+    public List<Coord> FindAllPlayableCoords(int range, bool tossOccupied)
     {
         List<Coord> _playablePositions = new List<Coord>();
 
@@ -89,7 +89,12 @@ public class AIPlayer : Player
                         if (!_playablePositions.Contains(candidateCoord) 
                             && Services.MapManager.IsCoordContainedInMap(candidateCoord))
                         {
-                            _playablePositions.Add(candidateCoord);
+                            if (!tossOccupied ||
+                              (Services.MapManager.Map[coord.x, coord.y].occupyingPiece == null ||
+                               Services.MapManager.Map[coord.x, coord.y].occupyingPiece.owner != this))
+                            {
+                                _playablePositions.Add(candidateCoord);
+                            }
                         }
                     }
                  }
@@ -125,21 +130,111 @@ public class AIPlayer : Player
 
     protected IEnumerator GeneratePossibleMoves()
     {
+        List<Polyomino> currentHand = hand;
+
         isThinking = true;
-        List<Coord> playableCoords = FindAllPlayableCoords(2);
-        List<Coord> touchableCoords = FindAllPlayableCoords(4);
+
+        #region playableCoords
+        //List<Coord> playableCoords = FindAllPlayableCoords(2, true);
+        List<Coord> playableCoords = new List<Coord>();
+        //  Finding possibile center coords for pieces
+        int countedPlayableCoords = 0;
+        int framesTaken = 0;
+        foreach (Polyomino piece in boardPieces)
+        {
+            foreach (Coord coord in piece.GetAdjacentEmptyTiles())
+            {
+                for (int dx = -2; dx <= 2; dx++)
+                {
+                    for (int dy = -2; dy <= 2; dy++)
+                    {
+                        countedPlayableCoords++;
+
+                        Coord radiusOffset = new Coord(dx, dy);
+                        Coord candidateCoord = coord.Add(radiusOffset);
+
+                        if (countedPlayableCoords % 200 == 0)
+                        {
+                            framesTaken++;
+                            yield return null;
+                        }
+
+                        if (!playableCoords.Contains(candidateCoord)
+                            && Services.MapManager.IsCoordContainedInMap(candidateCoord))
+                        {
+
+                            playableCoords.Add(candidateCoord);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+        Debug.Log("frames taken for playable coords " + framesTaken);
+        framesTaken = 0;
+        
+        //  Finding tiles that could possibly adjacent pieces AI cares about
+        #region touchableCoord
+        //List<Coord> touchableCoords = FindAllPlayableCoords(4, false);
+        List<Coord> touchableCoords = new List<Coord>();
+
+        int countedTouchedCoords = 0;
+        foreach (Polyomino piece in boardPieces)
+        {
+            foreach (Coord coord in piece.GetAdjacentEmptyTiles())
+            {
+                for (int dx = -4; dx <= 4; dx++)
+                {
+                    for (int dy = -4; dy <= 4; dy++)
+                    {
+                        countedTouchedCoords++;
+                        Coord radiusOffset = new Coord(dx, dy);
+                        Coord candidateCoord = coord.Add(radiusOffset);
+
+                        if (countedTouchedCoords % 200 == 0)
+                        {
+                            framesTaken++;
+                            yield return null;
+                        }
+
+                        if (!touchableCoords.Contains(candidateCoord)
+                            && Services.MapManager.IsCoordContainedInMap(candidateCoord))
+                        {
+                            if (Services.MapManager.Map[coord.x, coord.y].occupyingPiece == null ||
+                               Services.MapManager.Map[coord.x, coord.y].occupyingPiece.owner != this)
+                                    touchableCoords.Add(candidateCoord);
+
+                            
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+        Debug.Log("frames taken for touchable coords " + framesTaken);
+        framesTaken = 0;
+
         List<Polyomino>[,] adjPiecesByCoord = new List<Polyomino>[
             Services.MapManager.MapWidth,
             Services.MapManager.MapLength];
         Move nextPlay = null;
+
+        int coordsConsidered = 0;
         foreach(Coord coord in touchableCoords)
         {
             adjPiecesByCoord[coord.x, coord.y] = Polyomino.GetAdjacentPolyominosToCoord(coord, this);
+            coordsConsidered++;
+            if (coordsConsidered % (touchableCoords.Count / 5) == 0)
+            {
+                framesTaken++;
+                yield return null;
+            }
         }
+        Debug.Log("frames taken for adjacent pieces " + framesTaken);
 
         int movesTried = 0;
         // if 
-        foreach (Polyomino piece in hand)
+        foreach (Polyomino piece in currentHand)
         {
             if(piece.cost <= resources) { 
             //  Check the target coord and center coord
@@ -256,6 +351,7 @@ public class AIPlayer : Player
     public override void CancelSelectedPiece()
     {
         base.CancelSelectedPiece();
+        playingPiece = false;
         StopThinking();
     }
 
