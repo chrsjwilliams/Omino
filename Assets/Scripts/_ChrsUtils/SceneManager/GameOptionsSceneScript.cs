@@ -8,167 +8,59 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     public KeyCode startGame = KeyCode.Space;
 
     private const float SECONDS_TO_WAIT = 0.01f;
+    private bool[] humanPlayers;
 
-    [SerializeField]
-    private int numPlayers;
-    private const string PLAYERS = "Players: ";
-
-    [SerializeField]
-    private bool turnBasedVersion;
-    [SerializeField]
-    private bool useStructures;
-    [SerializeField]
-    private bool useMiniBases;
-    [SerializeField]
-    private bool useBlueprints;
     private int levelSelected;
-
-    private Text numPlayerText;
-    private Text turnBasedButton;
-    private Text structureButton;
-    private Text miniBaseButton;
-    private Text blueprintButton;
     [SerializeField]
     private GameObject levelButtonParent;
     private Button[] levelButtons;
     [SerializeField]
     private Image levelSelectionIndicator;
-
+    [SerializeField]
     private Slider winWeightSlider;
+    [SerializeField]
     private Slider structureWeightSlider;
+    [SerializeField]
+    private Button[] joinButtons;
+    private Text[] joinButtonTexts;
+    private Color[] baseColors;
 
-    private int touchID;
     private TaskManager _tm = new TaskManager();
 
-    private ScrollRectSnap ruleScroller;
-
-    private void Start()
-    {
-        numPlayers = 2;
-        turnBasedVersion = false;
-        useStructures = true;
-        useMiniBases = true;
-        useBlueprints = true;
-
-        numPlayerText = GameObject.Find("PlayerNum").GetComponent<Text>();
-        structureButton = GameObject.Find("ToggleStructures").GetComponent<Text>();
-        miniBaseButton = GameObject.Find("ToggleMiniBases").GetComponent<Text>();
-        blueprintButton = GameObject.Find("ToggleBlueprints").GetComponent<Text>();
-        winWeightSlider = GameObject.Find("WinWeightSlider").GetComponent<Slider>();
-        structureWeightSlider = GameObject.Find("StructWeightSlider").GetComponent<Slider>();
-        numPlayerText.text = PLAYERS + numPlayers;
-
-        //ruleScroller = GetComponent<ScrollRectSnap>();
-
-        //ruleScroller.Init();
-        Services.GameEventManager.Register<TouchUp>(OnTouchUp);
-        Services.GameEventManager.Register<TouchMove>(OnTouchMove);
-        Services.GameEventManager.Register<TouchDown>(OnTouchDown);
-
-        Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
-        Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
-        Services.GameEventManager.Register<MouseMove>(OnMouseMoveEvent);
-    }
+    private bool aiOptionsActive;
+    [SerializeField]
+    private GameObject aiOptionsMenu;
 
     internal override void OnEnter(TransitionData data)
     {
-        turnBasedVersion = false;
-        useStructures = true;
-        useMiniBases = true;
-        useBlueprints = true;
-        ruleScroller = GetComponent<ScrollRectSnap>();
-
-        //ruleScroller.Init();
-        Services.GameEventManager.Register<TouchUp>(OnTouchUp);
-        Services.GameEventManager.Register<TouchMove>(OnTouchMove);
-        Services.GameEventManager.Register<TouchDown>(OnTouchDown);
-
-        Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
-        Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
-        Services.GameEventManager.Register<MouseMove>(OnMouseMoveEvent);
+        if (PlayerPrefs.HasKey("winWeight"))
+        {
+            winWeightSlider.value = PlayerPrefs.GetFloat("winWeight");
+        }
+        if (PlayerPrefs.HasKey("structWeight"))
+        {
+            structureWeightSlider.value = PlayerPrefs.GetFloat("structWeight");
+        }
         levelButtons = levelButtonParent.GetComponentsInChildren<Button>();
         SelectLevel(0);
+        aiOptionsMenu.SetActive(false);
+        humanPlayers = new bool[2] { false, false };
+        joinButtonTexts = new Text[2] {
+            joinButtons[0].GetComponentInChildren<Text>(),
+            joinButtons[1].GetComponentInChildren<Text>()
+        };
+        baseColors = new Color[2] { Services.GameManager.Player1ColorScheme[0],
+                        Services.GameManager.Player2ColorScheme[0] };
+
+        for (int i = 0; i < 2; i++)
+        {
+            joinButtons[i].GetComponent<Image>().color = (baseColors[i] + Color.white) / 2;
+        }
     }
 
     internal override void OnExit()
     {
-        Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
-        Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
-        Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
-
-        Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
-        Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
-        Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
-    }
-
-    public void IncrementPlayers()
-    {
-        if (numPlayers < Services.GameManager.MAX_PLAYERS)
-        {
-            numPlayers++;
-        }
-        numPlayerText.text = PLAYERS + numPlayers;
-    }
-
-    public void DecrementPlayers()
-    {
-        if(numPlayers > Services.GameManager.MIN_PLAYERS)
-        {
-            numPlayers--;
-        }
-        numPlayerText.text = PLAYERS + numPlayers;
-    }
-
-    public void ToggleTurnBased()
-    {
-        turnBasedVersion = !turnBasedVersion;
-        if(turnBasedVersion)
-        {
-            turnBasedButton.text = "TURN BASED VERSION\nON";
-        }
-        else
-        {
-            turnBasedButton.text = "TURN BASED VERSION\nOFF";
-        }
-    }
-
-    public void ToggleUsingStructures()
-    {
-        useStructures = !useStructures;
-        if (useStructures)
-        {
-            structureButton.text = "STRUCTURES\nON";
-        }
-        else
-        {
-            structureButton.text = "STRUCTURES\nOFF";
-        }
-    }
-
-    public void ToggleUsingMiniBases()
-    {
-        useMiniBases = !useMiniBases;
-        if (useMiniBases)
-        {
-            miniBaseButton.text = "MINI-BASES\nON";
-        }
-        else
-        {
-            miniBaseButton.text = "MINI-BASES\nOFF";
-        }
-    }
-
-    public void ToggleUsingBlueprints()
-    {
-        useBlueprints = !useBlueprints;
-        if (useBlueprints)
-        {
-            blueprintButton.text = "BLUEPRINTS\nON";
-        }
-        else
-        {
-            blueprintButton.text = "BLUEPRINTS\nOFF";
-        }
+        PlayerPrefs.Save();
     }
 
     public void SetWinWeight()
@@ -181,60 +73,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GameManager.SetStructureWeight(structureWeightSlider.value);
     }
 
-    private void OnTouchDown(TouchDown e)
-    {
-        OnInputDown();
-    }
-
-    protected void OnTouchUp(TouchUp e)
-    {
-        OnInputUp();
-    }
-
-    protected void OnMouseDownEvent(MouseDown e)
-    {
-        Vector3 mouseWorldPos = Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos);
-        OnInputDown();
-    }
-
-    protected void OnMouseUpEvent(MouseUp e)
-    {
-        Vector3 mouseWorldPos = Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos);
-        OnInputUp();
-    }
-
-    public void OnInputDown()
-    {
-        ruleScroller.dragging = true;
-    }
-
-    public void OnInputUp()
-    {
-        ruleScroller.dragging = false;
-    }
-
-    protected void OnMouseMoveEvent(MouseMove e)
-    {
-        OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos));
-    }
-
-    protected void OnTouchMove(TouchMove e)
-    {
-        if (e.touch.fingerId == touchID)
-        {
-            OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position));
-        }
-    }
-
-    public void OnInputDrag(Vector3 inputPos)
-    {
-    }
-
-
     public void StartGame()
     {
-        Services.GameManager.SetUserPreferences(turnBasedVersion, useStructures, 
-            useMiniBases, useBlueprints, levelSelected);
+        Services.GameManager.SetUserPreferences(levelSelected);
         _tm.Do
         (
                     new Wait(SECONDS_TO_WAIT))
@@ -245,7 +86,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void ChangeScene()
     {
-        Services.GameManager.SetNumPlayers(numPlayers);
+        Services.GameManager.SetNumPlayers(humanPlayers);
         Services.Scenes.Swap<GameSceneScript>();
     }
 
@@ -264,5 +105,28 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     {
         levelSelectionIndicator.transform.position = 
             levelButtons[levelNum].transform.position;
+    }
+
+    public void ToggleAIOptionsMenu()
+    {
+        aiOptionsActive = !aiOptionsActive;
+        aiOptionsMenu.SetActive(aiOptionsActive);
+    }
+
+    public void ToggleHumanPlayer(int playerNum)
+    {
+        int index = playerNum - 1;
+        humanPlayers[index] = !humanPlayers[index];
+        string colorName = playerNum == 1 ? "Blue" : "Pink";
+        if (humanPlayers[index])
+        {
+            joinButtonTexts[index].text = colorName + " Player \n Human \n Tap to Withdraw";
+            joinButtons[index].GetComponent<Image>().color = baseColors[index];
+        }
+        else
+        {
+            joinButtonTexts[index].text = colorName + " Player \n CPU \n Tap to Join";
+            joinButtons[index].GetComponent<Image>().color = (baseColors[index] + Color.white) / 2;
+        }
     }
 }

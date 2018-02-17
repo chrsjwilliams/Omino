@@ -9,22 +9,7 @@ public class GameManager : MonoBehaviour
     public readonly int MAX_PLAYERS = 2;
     public readonly int MIN_PLAYERS = 0;
 
-    [SerializeField] private int _numPlayers;
-    public int NumPlayers
-    {
-        get { return _numPlayers; }
-        private set
-        {
-            if (_numPlayers <= 0)
-            {
-                _numPlayers = 1;
-            }
-            else
-            {
-                _numPlayers = value;
-            }
-        }
-    }
+    private bool[] humanPlayers;
 
     [SerializeField] private Camera _mainCamera;
     public Camera MainCamera
@@ -60,14 +45,6 @@ public class GameManager : MonoBehaviour
     private Color superDestructorResourceColor;
     public Color NeutralColor { get { return superDestructorResourceColor; } }
 
-    [SerializeField]
-    public bool turnBasedVersion { get; private set; }
-    [SerializeField]
-    public bool usingStructures { get; private set; }
-    [SerializeField]
-    public bool usingMiniBases { get; private set; }
-    [SerializeField]
-    public bool usingBlueprints { get; private set; }
     public int levelSelected { get; private set; }
     public float winWeight { get; private set; }
     public float structureWeight { get; private set; }
@@ -78,13 +55,8 @@ public class GameManager : MonoBehaviour
         Input.simulateMouseWithTouches = false;
     }
 
-    public void SetUserPreferences(bool isTurnBased, bool useStructures, 
-        bool useMiniBases, bool useBlueprints, int levelNum)
+    public void SetUserPreferences(int levelNum)
     {
-        turnBasedVersion = isTurnBased;
-        usingStructures = useStructures;
-        usingMiniBases = useMiniBases;
-        usingBlueprints = useBlueprints;
         levelSelected = levelNum;
     }
 
@@ -93,30 +65,29 @@ public class GameManager : MonoBehaviour
         _mainCamera = Camera.main;
     }
 
-    public void SetNumPlayers(int players)
+    public void SetNumPlayers(bool[] players)
     {
-        _numPlayers = players;
+        humanPlayers = players;
         _players = new Player[MAX_PLAYERS];
     }
 
     public void SetWinWeight(float weight)
     {
         winWeight = weight;
+        PlayerPrefs.SetFloat("winWeight", winWeight);
     }
 
     public void SetStructureWeight(float weight)
     {
         structureWeight = weight;
+        PlayerPrefs.SetFloat("structWeight", structureWeight);
     }
 
     public void InitPlayers()
     {
-        int numAIPlayers = MAX_PLAYERS - NumPlayers;
-
-        for (int i = MAX_PLAYERS - 1; i > MIN_PLAYERS - 1; i--)
+        for (int i = 0; i < 2; i++)
         {
-
-            if (numAIPlayers == 0)
+            if (humanPlayers[i])
             {
                 _players[i] = Instantiate(Services.Prefabs.Player,
                                             Services.MapManager.Map[0, 0].gameObject.transform.position,
@@ -125,7 +96,6 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                numAIPlayers--;
                 Player _aiPlayer = Instantiate(Services.Prefabs.Player,
                                            Services.MapManager.Map[0, 0].gameObject.transform.position,
                                            Quaternion.identity,
@@ -135,8 +105,7 @@ public class GameManager : MonoBehaviour
                 aiPlayerGameObject.AddComponent<AIPlayer>();
                 AIPlayer aiPlayer = aiPlayerGameObject.GetComponent<AIPlayer>();
                 _players[i] = aiPlayer;
-            }     
-
+            }
             int playerNum = i + 1;
             if (_players[i] is AIPlayer)
             {
@@ -147,9 +116,6 @@ public class GameManager : MonoBehaviour
                 _players[i].name = PLAYER + " " + playerNum;
             }
             _players[i].transform.parent = Services.Scenes.CurrentScene.transform;
-
-            
-
             switch (i)
             {
                 case 0:
@@ -161,12 +127,11 @@ public class GameManager : MonoBehaviour
                 default:
                     break;
             }
-            
 
         }
         for (int i = 0; i < 2; i++)
         {
-            if(Players[i] is AIPlayer)
+            if (Players[i] is AIPlayer)
             {
                 Services.UIManager.ToggleReady(i + 1);
             }

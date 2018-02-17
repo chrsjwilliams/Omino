@@ -67,7 +67,6 @@ public class Polyomino
     public bool connected { get; private set; }
     public bool dead { get; private set; }
     public float shieldDurationRemaining { get; private set; }
-    private GameObject shield;
     protected List<Tooltip> tooltips;
     private int baseSortingOrder;
     protected int numRotations;
@@ -868,7 +867,6 @@ public class Polyomino
         //CheckForFortification(true);
 
         //if (ringTimer != null) RemoveTimerUI();
-        if (shield != null) GameObject.Destroy(shield);
         owner.OnPieceRemoved(this);
         dead = true;
     }

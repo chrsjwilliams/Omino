@@ -101,24 +101,23 @@ public class Player : MonoBehaviour
         OrganizeHand(hand, true);
         QueueUpNextPiece(true);
         QueueUpNextPiece(false);
-        if (Services.GameManager.usingBlueprints)
-        {
-            Factory factory = new Factory(this);
-            AddBluePrint(factory);
 
-            Mine mine = new Mine(this);
-            AddBluePrint(mine);
+        Factory factory = new Factory(this);
+        AddBluePrint(factory);
 
-            BombFactory bombFactory = new BombFactory(this);
-            AddBluePrint(bombFactory);
-        }
+        Mine mine = new Mine(this);
+        AddBluePrint(mine);
+
+        BombFactory bombFactory = new BombFactory(this);
+        AddBluePrint(bombFactory);
+
 
         Coord basePos;
         if (playerNum == 1) basePos = new Coord(1, 1);
         else
         {
             basePos = new Coord(
-                Services.MapManager.MapWidth - 2, 
+                Services.MapManager.MapWidth - 2,
                 Services.MapManager.MapLength - 2);
         }
         Services.MapManager.CreateMainBase(this, basePos);
@@ -645,8 +644,6 @@ public class Player : MonoBehaviour
     public void ToggleSplashDamage(bool status)
     {
         splashDamage = status;
-
-        Vector3 test = new Vector3(10, 10, 10);
     }
 
     public void ToggleReady()

@@ -270,8 +270,8 @@ public class Tile : MonoBehaviour
 
     public void SetSortingOrder(int sortingOrder)
     {
-        int maskDiff = sortingGroup.sortingOrder - highlightSr.sortingOrder;
-        int shieldDiff = sortingGroup.sortingOrder - shieldSr.sortingOrder;
+        //int maskDiff = sortingGroup.sortingOrder - highlightSr.sortingOrder;
+        //int shieldDiff = sortingGroup.sortingOrder - shieldSr.sortingOrder;
         //int bombDiff = sr.sortingOrder - bombOverlay.sortingOrder;
         //int moltenDiff = sr.sortingOrder - moltenLines.sortingOrder;
         //sr.sortingOrder = sortingOrder;

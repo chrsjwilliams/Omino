@@ -34,28 +34,28 @@ public class ScrollRectSnap : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        //for (int i = 0; i < rules.Length; i++)
-        //{
-        //    distance[i] = Mathf.Abs(center.transform.position.x - rules[i].transform.position.x);
-        //}
+        for (int i = 0; i < rules.Length; i++)
+        {
+            distance[i] = Mathf.Abs(center.transform.position.x - rules[i].transform.position.x);
+        }
 
-        //float minDistance = Mathf.Min(distance);
+        float minDistance = Mathf.Min(distance);
 
-        //for (int i = 0; i < rules.Length; i++)
-        //{
-        //    if(minDistance == distance[i])
-        //    {
-        //        minRuleNumber = i;
-        //        if (minRuleNumber > 5)
-        //            minRuleNumber = 5;
-        //    }
-        //}
+        for (int i = 0; i < rules.Length; i++)
+        {
+            if (minDistance == distance[i])
+            {
+                minRuleNumber = i;
+                if (minRuleNumber > 5)
+                    minRuleNumber = 5;
+            }
+        }
 
-        //if (!dragging)
-        //{
-        //    LerpToRule(minRuleNumber * -ruleDistance);
-        //}
-	}
+        if (!dragging)
+        {
+            LerpToRule(minRuleNumber * -ruleDistance);
+        }
+    }
 
     void LerpToRule(int position)
     {

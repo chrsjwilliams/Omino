@@ -7,7 +7,6 @@ public class UIManager : MonoBehaviour {
 
     public RectTransform[] handZones;
     public Text[] resourceCounters;
-    private Image[] resourceSymbols;
     public GameObject[] resourceSlotZones;
     private Image[][] resourceSlots;
     private Image[][] resourceMissingIndicators;
@@ -142,8 +141,6 @@ public class UIManager : MonoBehaviour {
         }
         touchIdsMakingTooltips = new List<int>();
         //InitializeQueueMeters();
-        resourceSymbols = new Image[2];
-
         for (int i = 0; i < 2; i++)
         {
             UpdateDrawMeters(i + 1, 0, 0, 0, 0);

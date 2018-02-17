@@ -76,9 +76,6 @@ public class MapManager : MonoBehaviour
                 tile.SetHighlightStatus(false);
             }
         }
-
-        if (!Services.GameManager.usingStructures && !Services.GameManager.usingMiniBases)
-            startingStructCount = 0;
         
         if(Services.GameManager.levelSelected == 0)
         {
@@ -88,7 +85,6 @@ public class MapManager : MonoBehaviour
         {
             GenerateStructures(levels[Services.GameManager.levelSelected - 1]);
         }
-        //GenerateResources();
     }
 
     void GenerateResources()
@@ -294,50 +290,45 @@ public class MapManager : MonoBehaviour
         structuresOnMap = new List<Structure>();
         List<BuildingType> structureTypes = InitStructureTypeList();
 
-        if (Services.GameManager.usingMiniBases)
+        for (int j = 0; j < 2; j++)
         {
-            for (int j = 0; j < 2; j++)
+            Base cornerBase = new Base();
+            cornerBase.MakePhysicalPiece();
+            Coord location;
+            if (j == 0)
             {
-                Base cornerBase = new Base();
-                cornerBase.MakePhysicalPiece();
-                Coord location;
-                if (j == 0)
+                location = new Coord(MapWidth - 2, 1);
+            }
+            else
+            {
+                location = new Coord(0, MapLength - 1);
+            }
+            cornerBase.PlaceAtLocation(location);
+            structuresOnMap.Add(cornerBase);
+        }
+
+        if (level == null) // use procedural generation if no supplied level
+        {
+            for (int i = 0; i < startingStructCount; i++)
+            {
+                //List<Structure> structures = new List<Structure>();
+                BuildingType type;
+                if (structureTypes.Count == 0) structureTypes = InitStructureTypeList();
+                type = structureTypes[Random.Range(0, structureTypes.Count)];
+                structureTypes.Remove(type);
+                Structure structure = GenerateStructure(type);
+                if (structure == null)
                 {
-                    location = new Coord(MapWidth - 2, 1);
+                    Debug.Log("stopping short after " + structuresOnMap.Count + "structures");
+                    break;
                 }
-                else
-                {
-                    location = new Coord(0, MapLength - 1);
-                }
-                cornerBase.PlaceAtLocation(location);
-                structuresOnMap.Add(cornerBase);
+                //foreach (Structure structure in structures)
+                //{
+                structuresOnMap.Add(structure);
+                //}
             }
         }
-        if (Services.GameManager.usingStructures)
-        {
-            if (level == null) // use procedural generation if no supplied level
-            {
-                for (int i = 0; i < startingStructCount; i++)
-                {
-                    //List<Structure> structures = new List<Structure>();
-                    BuildingType type;
-                    if (structureTypes.Count == 0) structureTypes = InitStructureTypeList();
-                    type = structureTypes[Random.Range(0, structureTypes.Count)];
-                    structureTypes.Remove(type);
-                    Structure structure = GenerateStructure(type);
-                    if (structure == null)
-                    {
-                        Debug.Log("stopping short after " + structuresOnMap.Count + "structures");
-                        break;
-                    }
-                    //foreach (Structure structure in structures)
-                    //{
-                    structuresOnMap.Add(structure);
-                    //}
-                }
-            }
-            else GenerateLevel(level);
-        }
+        else GenerateLevel(level);
 
         GetStructureCoords();
     }
