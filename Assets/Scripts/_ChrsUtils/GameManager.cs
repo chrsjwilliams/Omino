@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     public readonly int MAX_PLAYERS = 2;
     public readonly int MIN_PLAYERS = 0;
-
+    
     private bool[] humanPlayers;
 
     [SerializeField] private Camera _mainCamera;

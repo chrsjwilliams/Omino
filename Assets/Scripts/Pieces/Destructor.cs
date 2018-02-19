@@ -167,7 +167,7 @@ public class Destructor : Polyomino
             piecesInRange = GetPiecesInRange();
             for (int i = 0; i < piecesInRange.Count; i++)
             {
-                piecesInRange[i].SetGlow(Color.yellow);
+                piecesInRange[i].SetGlow(Color.magenta);
             }
         }
     }

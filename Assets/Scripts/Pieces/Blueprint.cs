@@ -92,9 +92,10 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         foreach (Tile tile in tiles)
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
-            if (!PiecesShareOwner(Services.MapManager.Map[tile.coord.x, tile.coord.y])) return false;
-            if (Services.MapManager.Map[tile.coord.x, tile.coord.y].PartOfExistingBlueprint()) return false;
-            if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied())
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            if (!PiecesShareOwner(mapTile)) return false;
+            if (mapTile.PartOfExistingBlueprint()) return false;
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece.connected)
             {
                 isLegal = true;
             }

@@ -10,6 +10,9 @@ public class GameSceneScript : Scene<TransitionData>
     private float _colorChangeTime;
 
     [SerializeField]
+    private bool demoMode;
+
+    [SerializeField]
     private Color _backgroundColor;
 
     private bool gameStarted;
@@ -52,6 +55,17 @@ public class GameSceneScript : Scene<TransitionData>
         {
             player.OnGameOver();
         }
+        if (demoMode)
+        {
+            Task restartTask = new Wait(5f);
+            restartTask.Then(new ActionTask(Reload));
+            Services.GeneralTaskManager.Do(restartTask);
+        }
+    }
+
+    void Reload()
+    {
+        Services.Scenes.Swap<GameSceneScript>();
     }
 
     public void Reset()

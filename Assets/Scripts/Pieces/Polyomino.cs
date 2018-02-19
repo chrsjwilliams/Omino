@@ -1262,16 +1262,20 @@ public class Polyomino
     {
         //if (affordable || this is Blueprint)
         //{
-        if(!(this is Blueprint)) SetAffordableStatus(owner);
+        if (!(this is Blueprint)) SetAffordableStatus(owner);
         bool isLegal = IsPlacementLegal();
-            if (isLegal && (affordable || this is Blueprint))
-            {
-                SetGlow(new Color(0.2f, 1.5f, 0.2f));
-            }
-            else
-            {
-                SetGlow(new Color(1.5f, 0.2f, 0.2f));
-            }
+        if (isLegal && (affordable || this is Blueprint))
+        {
+            SetGlow(new Color(0.2f, 1, 0.2f));
+        }
+        else if (isLegal && !affordable && !(this is Blueprint))
+        {
+            SetGlow(Color.yellow);
+        }
+        else
+        {
+            SetGlow(new Color(1, 0.2f, 0.2f));
+        }
         //}
     }
 
