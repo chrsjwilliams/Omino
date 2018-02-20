@@ -149,16 +149,19 @@ public abstract class Structure : Polyomino
     public virtual void OnClaim(Player player)
     {
         owner = player;
-        if (owner == null)
-        {
-            OnClaimLost();
-            return;
-        }
+        //if (owner == null)
+        //{
+        //    OnClaimLost();
+        //    return;
+        //}
         //ShiftColor(owner.ColorScheme[0]);
         //SetOverlaySprite();
         spriteOverlay.GetComponent<ColorShifter>().ShiftColor(owner.ColorScheme[0]);
         Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
         owner.GainOwnership(this);
+        StructClaimEffect effect = GameObject.Instantiate(Services.Prefabs.StructClaimEffect, 
+            GetCenterpoint(), Quaternion.identity).GetComponent<StructClaimEffect>();
+        effect.Init(owner);
         //SetParticleClaimMode(true);
     }
 

@@ -61,4 +61,7 @@ public class PrefabDB : ScriptableObject
 
     [SerializeField] private GameObject block;
     public GameObject Block { get { return block; } }
+
+    [SerializeField] private GameObject structClaimEffect;
+    public GameObject StructClaimEffect { get { return structClaimEffect; } }
 }
