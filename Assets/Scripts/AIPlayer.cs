@@ -27,6 +27,7 @@ public class AIPlayer : Player
 
     protected float winWeight;
     protected float structWeight;
+    private IEnumerator thinkingCoroutine;
 
     public override void Init(Color[] playerColorScheme, int posOffset, float _winWeight, float _structureWeight)
     {
@@ -124,13 +125,15 @@ public class AIPlayer : Player
         }
         if (canAffordAPiece && !isThinking && !playingPiece && !drawingPiece && Services.GameScene.gameInProgress)
         {
-            StartCoroutine(GeneratePossibleMoves());
+            thinkingCoroutine = GeneratePossibleMoves();
+            StartCoroutine(thinkingCoroutine);
         }
     }
 
     protected IEnumerator GeneratePossibleMoves()
     {
-        List<Polyomino> currentHand = hand;
+        List<Polyomino> currentHand = new List<Polyomino>(hand);
+        List<Polyomino> currentBoardPieces = new List<Polyomino> (boardPieces);
 
         isThinking = true;
 
@@ -140,7 +143,7 @@ public class AIPlayer : Player
         //  Finding possibile center coords for pieces
         int countedPlayableCoords = 0;
         int framesTaken = 0;
-        foreach (Polyomino piece in boardPieces)
+        foreach (Polyomino piece in currentBoardPieces)
         {
             foreach (Coord coord in piece.GetAdjacentEmptyTiles())
             {
@@ -179,7 +182,7 @@ public class AIPlayer : Player
         List<Coord> touchableCoords = new List<Coord>();
 
         int countedTouchedCoords = 0;
-        foreach (Polyomino piece in boardPieces)
+        foreach (Polyomino piece in currentBoardPieces)
         {
             foreach (Coord coord in piece.GetAdjacentEmptyTiles())
             {
@@ -344,8 +347,11 @@ public class AIPlayer : Player
 
     void StopThinking()
     {
-        StopCoroutine(GeneratePossibleMoves());
-        isThinking = false;
+        if (isThinking)
+        {
+            StopCoroutine(thinkingCoroutine);
+            isThinking = false;
+        }
     }
 
     public override void CancelSelectedPiece()
