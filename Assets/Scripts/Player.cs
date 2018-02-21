@@ -533,7 +533,8 @@ public class Player : MonoBehaviour
         {
             Services.AudioManager.CreateTempAudio(Services.Clips.IllegalPlay, 0.01f);
         }
-        hand.Insert(selectedPieceHandPos, selectedPiece);
+        int handPosToPlace = Mathf.Min(selectedPieceHandPos, hand.Count);
+        hand.Insert(handPosToPlace, selectedPiece);
         selectedPiece.SetGlowState(false);
         selectedPiece = null;
         OrganizeHand(hand);
