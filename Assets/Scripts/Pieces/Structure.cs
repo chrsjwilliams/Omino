@@ -159,8 +159,8 @@ public abstract class Structure : Polyomino
         spriteOverlay.GetComponent<ColorShifter>().ShiftColor(owner.ColorScheme[0]);
         Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
         owner.GainOwnership(this);
-        StructClaimEffect effect = GameObject.Instantiate(Services.Prefabs.StructClaimEffect, 
-            GetCenterpoint(), Quaternion.identity).GetComponent<StructClaimEffect>();
+        StructClaimAura effect = GameObject.Instantiate(Services.Prefabs.StructClaimEffect, 
+            GetCenterpoint(), Quaternion.identity).GetComponent<StructClaimAura>();
         effect.Init(owner);
         //SetParticleClaimMode(true);
     }

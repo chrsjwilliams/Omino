@@ -126,6 +126,8 @@ public class Player : MonoBehaviour
         resourceGainFactor = 1;
         drawRateFactor = 1;
         ToggleHandLock(true);
+        //testing
+        ToggleAutoFortify(true);
     }
 
     // Update is called once per frame

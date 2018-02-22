@@ -689,7 +689,6 @@ public class Polyomino
         foreach (Tile tile in tiles)
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
-            //if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>())) return false;
             if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied()) return false;
         }
         return true;
