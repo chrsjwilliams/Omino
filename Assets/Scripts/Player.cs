@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
     protected List<Polyomino> hand;
     public int handCount { get { return hand.Count; } }
     private List<Vector3> handTargetPositions;
-    protected List<Blueprint> blueprints;
+    public List<Blueprint> blueprints { get; protected set; }
     public Polyomino selectedPiece { get; protected set; }
     private int selectedPieceHandPos;
     [SerializeField]

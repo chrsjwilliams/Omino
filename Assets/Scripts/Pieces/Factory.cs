@@ -4,6 +4,7 @@ using System;
 
 public class Factory : Blueprint
 {
+    
     public Factory(Player player_) : base(BuildingType.FACTORY, player_)
     {
         normalDrawRateBonus = 1f / 30f;

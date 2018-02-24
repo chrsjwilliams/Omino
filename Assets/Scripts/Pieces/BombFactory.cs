@@ -6,6 +6,7 @@ public class BombFactory : Blueprint
 {
     public BombFactory(Player owner_) : base(BuildingType.BOMBFACTORY, owner_)
     {
+        maxRotations = 4;
         destructorDrawRateBonus = 1f / 60f;
     }
 

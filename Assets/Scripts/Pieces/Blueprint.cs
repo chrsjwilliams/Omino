@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Blueprint : Polyomino
 {
-    private const float alphaPrePlacement = 0.5f;
+    private const float alphaPrePlacement = 0.15f;
+    public int maxRotations { get; protected set; }
 
     protected static int[,,] factory = new int[1, 5, 5]
     {   
@@ -58,14 +59,17 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             case BuildingType.FACTORY:
                 holderName = "FactoryHolder";
                 piece = factory;
+                maxRotations = 2;
                 break;
             case BuildingType.MINE:
                 holderName = "MineHolder";
                 piece = mine;
+                maxRotations = 2;
                 break;
             case BuildingType.BOMBFACTORY:
                 holderName = "BombFactoryHolder";
                 piece = bombFactory;
+                maxRotations = 4;
                 break;
             default:
                 break;
@@ -82,12 +86,6 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
     public override bool IsPlacementLegal()
     {
-        //determine if the pieces current location is a legal placement
-        //  CONDITIONS:
-        //      Blueprint tiles are contained in the map
-        //      All tiles in blueprint are placed on tiles that belong to a single player
-        //      All pieces a blueprint will cover do not belong to another blueprint
-        //      There is a piece on the tile the blueprint will be placed on
         bool isLegal = false;
         foreach (Tile tile in tiles)
         {

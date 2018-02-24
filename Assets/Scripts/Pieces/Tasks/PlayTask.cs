@@ -21,6 +21,14 @@ public class PlayTask : Task
         rotations = rotations_;
     }
 
+    public PlayTask(Move move)
+    {
+        piece = move.piece;
+        startPos = move.piece.holder.transform.position;
+        targetPos = move.targetCoord.WorldPos();
+        rotations = move.rotations;
+    }
+
     protected override void Init()
     {
         timeElapsed = 0;

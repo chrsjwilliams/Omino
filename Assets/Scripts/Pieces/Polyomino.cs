@@ -10,6 +10,7 @@ public enum BuildingType
 public class Polyomino
 {
     public List<Tile> tiles = new List<Tile>();
+    public List<Coord> pieceCoords = new List<Coord>();
     public Dictionary<Tile, Coord> tileRelativeCoords { get; protected set; }
     protected SpriteRenderer holderSr;
     protected SpriteRenderer iconSr;
@@ -17,7 +18,7 @@ public class Polyomino
     protected string holderName;
     public Transform holder { get; protected set; }
     public BuildingType buildingType { get; protected set; }
-    public static int[][] rotationDictionary = new int[][]
+    public static int[][] peiceRotationDictionary = new int[][]
     {
         new int []{ },
         new int [1] {1},
@@ -631,6 +632,17 @@ public class Polyomino
         return adjacentPieces;
     }
 
+    public List<Coord> GetAdjacentCoords(Player player)
+    {
+        List<Coord> adjacentCoords = new List<Coord>();
+        List<Polyomino> adjacentPieces = GetAdjacentPolyominos(owner);
+        foreach (Polyomino piece in adjacentPieces)
+        {
+           // if(!adjacentCoords.Contains(piece))
+        }
+        return adjacentCoords;
+    }
+
     public List<Polyomino> GetAdjacentPolyominos()
     {
         List<Polyomino> adjacentPieces = new List<Polyomino>();
@@ -902,6 +914,7 @@ public class Polyomino
     {
         //Coord oldCenter = centerCoord;
         centerCoord = centerPos;
+
         foreach (KeyValuePair<Tile, Coord> tileCoord in tileRelativeCoords)
         {
             tileCoord.Key.SetCoord(tileCoord.Value.Add(centerPos));
