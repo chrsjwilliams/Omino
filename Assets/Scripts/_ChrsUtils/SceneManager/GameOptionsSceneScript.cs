@@ -128,15 +128,14 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     {
         int index = playerNum - 1;
         humanPlayers[index] = !humanPlayers[index];
-        string colorName = playerNum == 1 ? "Blue" : "Pink";
         if (humanPlayers[index])
         {
-            joinButtonTexts[index].text = colorName + " Player \n Human \n Tap to Withdraw";
+            joinButtonTexts[index].text = "Human \n Tap to Withdraw";
             joinButtons[index].GetComponent<Image>().color = baseColors[index];
         }
         else
         {
-            joinButtonTexts[index].text = colorName + " Player \n CPU \n Tap to Join";
+            joinButtonTexts[index].text = "CPU \n Tap to Join";
             joinButtons[index].GetComponent<Image>().color = (baseColors[index] + Color.white) / 2;
         }
     }
