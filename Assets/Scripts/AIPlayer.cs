@@ -42,6 +42,7 @@ public class AIPlayer : Player
 
     protected float winWeight;
     protected float structWeight;
+    protected float blueprintWeight;
     private IEnumerator thinkingCoroutine;
 
     public struct MoveData
@@ -60,7 +61,8 @@ public class AIPlayer : Player
         }
     }
 
-    public override void Init(Color[] playerColorScheme, int posOffset, float _winWeight, float _structureWeight)
+    public override void Init(Color[] playerColorScheme, int posOffset, float _winWeight, float _structureWeight, 
+        float _blueprintWeight)
     {
         playingPiece = false;
         isThinking = false;
@@ -76,6 +78,7 @@ public class AIPlayer : Player
 
         winWeight = _winWeight;
         structWeight = _structureWeight;
+        blueprintWeight = _blueprintWeight;
 
         handSpacing = new Vector3(5.5f, -2.35f, 0);
         handOffset = new Vector3(-12.6f, 9.125f, 0);
@@ -89,7 +92,7 @@ public class AIPlayer : Player
         resourceGainFactor = 1;
         drawRateFactor = 1;
         resourcesPerTick = 1;
-        base.Init(playerColorScheme, posOffset, winWeight, structWeight);
+        base.Init(playerColorScheme, posOffset, winWeight, structWeight, blueprintWeight);
         
         if (playerNum == 1)
         {
@@ -146,7 +149,7 @@ public class AIPlayer : Player
                 break;
             }
         }
-        if (canAffordAPiece && !isThinking && !playingPiece && !drawingPiece && Services.GameScene.gameInProgress)
+        if (canAffordAPiece && !isThinking && !playingPiece && !drawingPiece && Services.GameScene.gameInProgress && !gameOver)
         {
             thinkingCoroutine = GeneratePossibleMoves();
             StartCoroutine(thinkingCoroutine);
@@ -161,71 +164,87 @@ public class AIPlayer : Player
         List<Polyomino> currentHand = new List<Polyomino>(hand);
         List<Polyomino> currentBoardPieces = new List<Polyomino> (boardPieces);
 
+
+        #region Calculate economy stuff
+
+        float mineWeight = 0;
+        float factoryWeight = 0;
+        float bombFactoryWeight = 0;
+
+        int normalPieceCost = biggerBricks ? 5 : 4;
+        int destructorCost = biggerBombs ? 4 : 3;
+
+        float expenditurePerSecond = (normalDrawRate * normalPieceCost) + (destructorDrawRate * destructorCost);
+
+        float productionRatio = expenditurePerSecond / resourceGainRate;
+
+        if(productionRatio > 1)
+        {
+            mineWeight = blueprintWeight;
+        }
+        else
+        {
+            factoryWeight = blueprintWeight;
+            bombFactoryWeight = blueprintWeight;
+        }
+
+        #endregion
+
         isThinking = true;
         //  Finding tiles that my center coord could be placed
         #region Gets Playable Coords
         //List<Coord> playableCoords = FindAllPlayableCoords(2, true);
         List<Coord> playableCoords = new List<Coord>();
-        List<BlueprintMap> possibleBlueprintCoords = new List<BlueprintMap>();
-        HashSet<Coord> boardPieceHashSet = new HashSet<Coord>();
+        HashSet<Coord> possibleBlueprintCoords = new HashSet<Coord>();
+        List<Coord> touchableCoords = new List<Coord>();
+        List<BlueprintMap> possibleBlueprintMoves = new List<BlueprintMap>();
 
         //  Finding possibile center coords for pieces
         int countedPlayableCoords = 0;
-        int countedBlueprintCoords = 0;
-        int framesTaken = 0;
         foreach (Polyomino piece in currentBoardPieces)
         {
-            foreach (Coord coord in piece.GetAdjacentEmptyTiles())
+            foreach(Tile tile in piece.tiles)
             {
-                for (int dx = -2; dx <= 2; dx++)
+                for (int dx = -5; dx <= 5; dx++)
                 {
-                    for (int dy = -2; dy <= 2; dy++)
+                    for (int dy = -5; dy <= 5; dy++)
                     {
                         countedPlayableCoords++;
 
                         Coord radiusOffset = new Coord(dx, dy);
-                        Coord candidateCoord = coord.Add(radiusOffset);
+                        Coord candidateCoord = tile.coord.Add(radiusOffset);
 
                         if (countedPlayableCoords % coordCountBuffer == 0)
                         {
                             yield return null;
                         }
-
-                        if (!playableCoords.Contains(candidateCoord)
-                            && Services.MapManager.IsCoordContainedInMap(candidateCoord))
+                        bool containedInMap = Services.MapManager.IsCoordContainedInMap(candidateCoord);
+                        Tile mapTile = null;
+                        if(containedInMap) mapTile = Services.MapManager.Map[candidateCoord.x, candidateCoord.y];
+                        if (Mathf.Abs(dx) <= 3 && Mathf.Abs(dy) <= 3)
                         {
+                            if (!playableCoords.Contains(candidateCoord) &&
+                                containedInMap &&
+                                mapTile.occupyingPiece == null &&
+                                mapTile.occupyingStructure == null)
+                            {
+                                playableCoords.Add(candidateCoord);
+                            }
 
-                            playableCoords.Add(candidateCoord);
+                            if (!possibleBlueprintCoords.Contains(candidateCoord) &&
+                                containedInMap &&
+                                mapTile.occupyingStructure == null &&
+                                mapTile.occupyingBlueprint == null)
+                            {
+                                possibleBlueprintCoords.Add(candidateCoord);
+                            }
                         }
-                    }
-                }
-            }
 
-            if (!(piece is Base) && !(piece is Structure))
-            {
-                foreach (Tile tile in piece.tiles)
-                {
-                    for (int dx = -2; dx <= 2; dx++)
-                    {
-                        for (int dy = -2; dy <= 2; dy++)
-                        {
-                            countedBlueprintCoords++;
-
-                            Coord radiusOffset = new Coord(0, 0);
-                            Coord candidateCoord = tile.coord.Add(radiusOffset);
-
-                            if (countedPlayableCoords % coordCountBuffer == 0)
-                            {
-                                yield return null;
-                            }
-
-                            if (!boardPieceHashSet.Contains(candidateCoord) &&
-                                Services.MapManager.IsCoordContainedInMap(candidateCoord) &&
-                                tile.occupyingBlueprint == null)
-                            {
-
-                                boardPieceHashSet.Add(candidateCoord);
-                            }
+                        if (!touchableCoords.Contains(candidateCoord) && 
+                            containedInMap &&
+                            (mapTile.occupyingPiece == null || mapTile.occupyingPiece.owner != this))
+                        { 
+                                touchableCoords.Add(candidateCoord);
                         }
                     }
                 }
@@ -236,43 +255,6 @@ public class AIPlayer : Player
         #endregion
 
         //  Finding tiles that could possibly adjacent pieces AI cares about
-        #region Gets Touchable Coords 
-        //List<Coord> touchableCoords = FindAllPlayableCoords(4, false);
-        List<Coord> touchableCoords = new List<Coord>();
-
-        int countedTouchedCoords = 0;
-        foreach (Polyomino piece in currentBoardPieces)
-        {
-            foreach (Coord coord in piece.GetAdjacentEmptyTiles())
-            {
-                for (int dx = -4; dx <= 4; dx++)
-                {
-                    for (int dy = -4; dy <= 4; dy++)
-                    {
-                        countedTouchedCoords++;
-                        Coord radiusOffset = new Coord(dx, dy);
-                        Coord candidateCoord = coord.Add(radiusOffset);
-
-                        if (countedTouchedCoords % coordCountBuffer == 0)
-                        {
-                            yield return null;
-                        }
-
-                        if (!touchableCoords.Contains(candidateCoord)
-                            && Services.MapManager.IsCoordContainedInMap(candidateCoord))
-                        {
-                            if (Services.MapManager.Map[coord.x, coord.y].occupyingPiece == null ||
-                               Services.MapManager.Map[coord.x, coord.y].occupyingPiece.owner != this)
-                                    touchableCoords.Add(candidateCoord);
-
-                            
-                        }
-                    }
-                }
-            }
-        }
-        #endregion
-
         List<Polyomino>[,] adjPiecesByCoord = new List<Polyomino>[
             Services.MapManager.MapWidth,
             Services.MapManager.MapLength];
@@ -288,7 +270,7 @@ public class AIPlayer : Player
                 yield return null;
             }
         }
-
+        Debug.Log("touchable coords: " + touchableCoords.Count());
         #region Blueprint Placement Logic
         int blueprintsTried = 0;
         foreach (Blueprint blueprint in blueprints)
@@ -298,7 +280,7 @@ public class AIPlayer : Player
 
             blueprint.SetTileCoords(roundedPos);
             int numRotations = blueprint.maxRotations;
-            foreach (Coord coord in boardPieceHashSet)
+            foreach (Coord coord in possibleBlueprintCoords)
             {
                 for (int rotations = 0; rotations < 4; rotations++)
                 {
@@ -307,36 +289,39 @@ public class AIPlayer : Player
                     //  For play positions +/- a pieces radius
                     blueprint.SetTileCoords(coord);
                     blueprint.TurnOffGlow();
-
-                    foreach (Tile tile in blueprint.tiles)
+                    if (rotations < numRotations)
                     {
-                        if (!blueprintHashset.Contains(tile.coord) && 
-                            Services.MapManager.IsCoordContainedInMap(tile.coord) &&
-                            !(Services.MapManager.Map[tile.coord.x, tile.coord.y].occupyingPiece is Base) &&
-                            !(Services.MapManager.Map[tile.coord.x, tile.coord.y].occupyingPiece is Structure) &&
-                            Services.MapManager.Map[tile.coord.x, tile.coord.y].occupyingBlueprint == null)
+                        bool illegalPlacement = false;
+                        HashSet<Coord> missingCoordHashSet = new HashSet<Coord>();
+                        foreach (Tile tile in blueprint.tiles)
                         {
-                            blueprintHashset.Add(tile.coord);
+                            bool containedInMap = Services.MapManager.IsCoordContainedInMap(tile.coord);
+                            Tile mapTile = null;
+                            if (containedInMap) mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                            if (!containedInMap ||
+                                (mapTile.occupyingPiece != null &&
+                                    (mapTile.occupyingPiece is Structure || mapTile.occupyingPiece.owner != this)) ||
+                                mapTile.occupyingBlueprint != null)
+                            {
+                                illegalPlacement = true;
+                                break;
+                            }
+                            if (mapTile.occupyingPiece == null)
+                            {
+                                missingCoordHashSet.Add(tile.coord);
+                            }
                         }
-                    }
-           
-                    if(blueprintHashset.Count == blueprint.tiles.Count)
-                    { 
-                        HashSet<Coord> missingCordHashSet = new HashSet<Coord>(blueprintHashset.Except(boardPieceHashSet));
-
-                        if (rotations < numRotations)
+                        if (illegalPlacement) continue;
+                        blueprintsTried++;
+                        if (blueprintsTried % movesTriedBuffer == 0)
                         {
-                            blueprintsTried++;
-                            if (blueprintsTried % movesTriedBuffer == 0)
-                            {
-                                yield return null;
-                            }
+                            yield return null;
+                        }
 
-                            if (missingCordHashSet.Count() <= tilesUntilBlueprint)
-                            {
-                                BlueprintMap blueprintMap = new BlueprintMap(blueprint, missingCordHashSet, coord, (rotations + 1) % 4);
-                                possibleBlueprintCoords.Add(blueprintMap);
-                            }
+                        if (missingCoordHashSet.Count() <= tilesUntilBlueprint)
+                        {
+                            BlueprintMap blueprintMap = new BlueprintMap(blueprint, missingCoordHashSet, coord, (rotations + 1) % 4);
+                            possibleBlueprintMoves.Add(blueprintMap);
                         }
                     }
                 }
@@ -359,7 +344,7 @@ public class AIPlayer : Player
 
                 piece.SetTileCoords(roundedPos);
 
-                int numRotations = Polyomino.peiceRotationDictionary[piece.tiles.Count][piece.index];
+                int numRotations = Polyomino.pieceRotationDictionary[piece.tiles.Count][piece.index];
 
                 for (int i = 0; i < playableCoords.Count; i++)
                 {
@@ -383,7 +368,10 @@ public class AIPlayer : Player
                             {
                                 if (Services.MapManager.IsCoordContainedInMap(tile.coord))
                                 {
-                                    adjacentPolyominos.AddRange(adjPiecesByCoord[tile.coord.x, tile.coord.y]);
+                                    if(adjPiecesByCoord[tile.coord.x, tile.coord.y] != null)
+                                    {
+                                        adjacentPolyominos.AddRange(adjPiecesByCoord[tile.coord.x, tile.coord.y]);
+                                    }
                                 }
                             }
 
@@ -397,38 +385,8 @@ public class AIPlayer : Player
                                         pieceCoords.Add(tile.coord);
                                     }
                                 }
-
-                                foreach (BlueprintMap blueprintMap in possibleBlueprintCoords)
-                                {
-                                    if (pieceCoords.IsSupersetOf(blueprintMap.missingCoords) || blueprintMap.missingCoords.Count == 0)
-                                    {
-                                        selectedBluePrintMap = blueprintMap;
-                                        break;
-                                    }
-
-                                    blueprintMapsTried++;
-                                    if (blueprintMapsTried % blueprintMapsTriedBuffer == 0)
-                                    {
-                                        yield return null;
-                                    }
-
-                                    #region Smart Blueprint Placement Test
-                                    /*
-                                    //  find which missing peice I'm a superset of
-                                    moveBlueprintMap = blueprintMap;
-                                    int numFilledCoords = moveBlueprintMap.coords.Intersect(pieceCoords).Count();
-                                    if(numFilledCoords > moveBlueprintMap.numCoordsFilled)
-                                    {
-                                        moveBlueprintMap = blueprintMap;
-                                        //   we can do other things here that distinguish between blueprints
-                                        if (numFilledCoords == piece.tiles.Count) break;
-                                    }
-                                    */
-                                    #endregion
-                                }
-
-                                MoveData moveData = new MoveData(piece, playableCoords[i], (rotations + 1) % 4, selectedBluePrintMap);
-                                Move newMove = new Move(moveData, winWeight, structWeight);
+                                Move newMove = new Move(piece, playableCoords[i], (rotations + 1) % 4, possibleBlueprintMoves,
+                                    winWeight, structWeight, mineWeight, factoryWeight, bombFactoryWeight);
                                 
                                 if (nextPlay == null) nextPlay = newMove;
                                 else if (newMove.score > nextPlay.score)
@@ -454,11 +412,10 @@ public class AIPlayer : Player
         isThinking = false;
     }
 
-
     private void MakePlay(Move nextPlay)
     {
         playingPiece = true;
-        nextPlay.ExecuteMove();
+        if (nextPlay.piece != null) nextPlay.ExecuteMove();
     }
 
     public override int GainResources(int numResources)
@@ -478,6 +435,12 @@ public class AIPlayer : Player
     {
         base.DrawPiece(startPos, onlyDestructors);
         drawingPiece = true;
+    }
+
+    protected override void BurnFromHand(Polyomino piece)
+    {
+        base.BurnFromHand(piece);
+        StopThinking();
     }
 
     public override void OnPieceRemoved(Polyomino piece)

@@ -9,68 +9,107 @@ public class Move
     public const int MAX_SCORE = 100;
     public const int MAX_ROTATIONS = 3;
 
-    public Dictionary<BuildingType, bool> blueprintsAvailable = new Dictionary<BuildingType, bool>();
-
-    public Move blueprintPlay { get; private set; }
-    public bool canMakeBlueprint;
+    public Move blueprintMove { get; private set; }
 
     public Dictionary<Tile, Coord> relativeCoords { get; private set; }
     public Polyomino piece { get; private set; }
     public Coord targetCoord { get; private set; }
     public int rotations { get; private set; }
 
-    private bool canMakeMine = false;
-    private bool canMakeBombFactory = false;
-    private bool canMakeFactory = false;
+    private List<BlueprintMap> possibleBlueprintMoves;
 
-    private int coordCountBuffer = 200;
-    private int movesTriedBuffer = 50;
-
-    public Move(Polyomino _piece, Coord _targetCoord, int _rotations)
+    public Move(Polyomino _piece, Coord _targetCoord, int _rotations, List<BlueprintMap> _possibleBlueprintMoves, float winWeight, 
+        float structureWeight, float mineWeight, float factoryWeight, float bombFactoryWeight)
     {
-        canMakeBlueprint = false;
         piece = _piece;
         relativeCoords = piece.tileRelativeCoords;
         targetCoord = _targetCoord;
         rotations = _rotations;
-        blueprintPlay = null;
+        possibleBlueprintMoves = _possibleBlueprintMoves;
+        blueprintMove = null;
+        score = CalculateScore(winWeight, structureWeight, mineWeight, factoryWeight, bombFactoryWeight);
     }
 
-    public Move (AIPlayer.MoveData moveData, float winWeight, float structureWeight)
+    public Move(Blueprint blueprint, Coord _targetCoord, int _rotations)
     {
-        canMakeBlueprint = false;
-        piece = moveData.piece;
-        relativeCoords = moveData.piece.tileRelativeCoords;
-        targetCoord = moveData.targetCoord;
-        rotations = moveData.rotations;
+        piece = blueprint;
+        targetCoord = _targetCoord;
+        rotations = _rotations;
+    }
+
+    public float CalculateScore(float winWeight, float structWeight, float mineWeight, float factoryWeight, float bombFactoryWeight)
+    {
+        HashSet<Coord> pieceCoords = new HashSet<Coord>();
+        foreach(Tile tile in piece.tiles)
+        {
+            pieceCoords.Add(relativeCoords[tile].Add(targetCoord));
+        }
+
+        Move mineMove = null;
+        Move factoryMove = null;
+        Move bombFactoryMove = null;
+
+        foreach (BlueprintMap blueprintMap in possibleBlueprintMoves)
+        {
+            if (pieceCoords.IsSupersetOf(blueprintMap.missingCoords))
+            {
+                if (blueprintMap.blueprint is Mine)
+                {
+                    mineMove = new Move(blueprintMap.blueprint, blueprintMap.targetCoord, blueprintMap.rotations);
+                }
+                else if(blueprintMap.blueprint is Factory)
+                {
+                    factoryMove = new Move(blueprintMap.blueprint, blueprintMap.targetCoord, blueprintMap.rotations);
+                }
+                else if (blueprintMap.blueprint is BombFactory)
+                {
+                    bombFactoryMove = new Move(blueprintMap.blueprint, blueprintMap.targetCoord, blueprintMap.rotations);
+                }
+                if (mineMove != null && factoryMove != null && bombFactoryMove != null) break;
+            }
+
+            #region Smart Blueprint Placement Test
+            /*
+            //  find which missing peice I'm a superset of
+            moveBlueprintMap = blueprintMap;
+            int numFilledCoords = moveBlueprintMap.coords.Intersect(pieceCoords).Count();
+            if(numFilledCoords > moveBlueprintMap.numCoordsFilled)
+            {
+                moveBlueprintMap = blueprintMap;
+                //   we can do other things here that distinguish between blueprints
+                if (numFilledCoords == piece.tiles.Count) break;
+            }
+            */
+            #endregion
+
+        }
         
 
-        if (moveData.blueprintMap.blueprint != null)
+        return WinAndStructScore(winWeight, structWeight) + BlueprintScore(mineMove, factoryMove, bombFactoryMove, mineWeight,
+            factoryWeight, bombFactoryWeight);
+    }
+
+    private float BlueprintScore(Move mineMove, Move factoryMove, Move bombFactoryMove, float mineWeight, float factoryWeight,
+        float bombFactoryWeight)
+    {
+        float blueprintScore = 0;
+        if (mineMove != null)
         {
-            canMakeBlueprint = true;
-            blueprintPlay = new Move(   moveData.blueprintMap.blueprint, 
-                                        moveData.blueprintMap.targetCoord, 
-                                        moveData.blueprintMap.rotations);
+            blueprintScore = mineWeight;
+            blueprintMove = mineMove;
         }
-        score = CalculateScore(winWeight, structureWeight, canMakeBlueprint);
-    }
+        if (factoryMove != null && factoryWeight > blueprintScore)
+        {
+            blueprintScore = factoryWeight;
+            blueprintMove = factoryMove;
+        }
+        if (bombFactoryMove != null && bombFactoryWeight > blueprintScore)
+        {
+            blueprintScore = bombFactoryWeight;
+            blueprintMove = bombFactoryMove;
+        }
+        return blueprintScore;
 
-
-    public void PopulateDictionary()
-    {
-        blueprintsAvailable.Add(BuildingType.MINE, false);
-        blueprintsAvailable.Add(BuildingType.FACTORY, false);
-        blueprintsAvailable.Add(BuildingType.BOMBFACTORY, false);
-    }
-
-    public float CalculateScore(float winWeight, float structWeight, bool canMakeBluePrint)
-    {
-        //  Temporary
-        float blueprintWeight = 0;
-        if (canMakeBlueprint)
-            blueprintWeight = 10000;
-
-        return WinAndStructScore(winWeight, structWeight) + blueprintWeight;
     }
     
     private float WinAndStructScore(float winWeight, float structWeight)
@@ -125,17 +164,15 @@ public class Move
 
     public void ExecuteMove()
     {
-
-        
         Task playTask;
-        if (blueprintPlay == null)
+        if (blueprintMove == null)
         {
             playTask = new PlayTask(this);
         }
         else
         {
             playTask = new PlayTask(this);
-            playTask.Then(new ActionTask(blueprintPlay.ExecuteMove));
+            playTask.Then(new ActionTask(blueprintMove.ExecuteMove));
         }
         Services.GeneralTaskManager.Do(playTask);
     }

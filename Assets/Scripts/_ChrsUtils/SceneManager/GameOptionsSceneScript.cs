@@ -21,6 +21,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     [SerializeField]
     private Slider structureWeightSlider;
     [SerializeField]
+    private Slider blueprintWeightSlider;
+    [SerializeField]
     private Button[] joinButtons;
     private Text[] joinButtonTexts;
     private Color[] baseColors;
@@ -40,6 +42,10 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         if (PlayerPrefs.HasKey("structWeight"))
         {
             structureWeightSlider.value = PlayerPrefs.GetFloat("structWeight");
+        }
+        if (PlayerPrefs.HasKey("blueprintWeight"))
+        {
+            blueprintWeightSlider.value = PlayerPrefs.GetFloat("blueprintWeight");
         }
         levelButtons = levelButtonParent.GetComponentsInChildren<Button>();
         SelectLevel(0);
@@ -71,6 +77,11 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     public void SetStructureWeight()
     {
         Services.GameManager.SetStructureWeight(structureWeightSlider.value);
+    }
+
+    public void SetBlueprintWeight()
+    {
+        Services.GameManager.SetBlueprintWeight(blueprintWeightSlider.value);
     }
 
     public void StartGame()

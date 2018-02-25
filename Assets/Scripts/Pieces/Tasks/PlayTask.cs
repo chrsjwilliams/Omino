@@ -43,6 +43,11 @@ public class PlayTask : Task
 
     internal override void Update()
     {
+        if (piece.owner.gameOver)
+        {
+            SetStatus(TaskStatus.Aborted);
+            return;
+        }
         timeElapsed += Time.deltaTime;
 
         Vector3 lerpPos = Vector3.Lerp(startPos, targetPos,

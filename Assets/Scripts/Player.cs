@@ -66,9 +66,9 @@ public class Player : MonoBehaviour
     protected bool biggerBricks;
     protected bool biggerBombs;
     public bool splashDamage { get; protected set; }
-    private float resourceGainRate;
-    private float normalDrawRate;
-    private float destructorDrawRate;
+    protected float resourceGainRate;
+    protected float normalDrawRate;
+    protected float destructorDrawRate;
     private float resourceMeterFillAmt;
     private float normalDrawMeterFillAmt;
     private float destructorDrawMeterFillAmt;
@@ -81,7 +81,7 @@ public class Player : MonoBehaviour
 
 
     // Use this for initialization
-    public virtual void Init(Color[] playerColorScheme, int posOffset, float _winWeight, float _structureWeight)
+    public virtual void Init(Color[] playerColorScheme, int posOffset, float winWeight, float structWeight, float blueprintWeight)
     {
         viewingHand = true;
         playerNum = posOffset + 1;
@@ -251,6 +251,12 @@ public class Player : MonoBehaviour
         }
     }
 
+    protected virtual void BurnFromHand(Polyomino piece)
+    {
+        piece.BurnFromHand();
+        hand.Remove(piece);
+    }
+
     public void DrawPieces(int numPiecesToDraw)
     {
         int handSpace = maxHandSize - hand.Count;
@@ -258,8 +264,7 @@ public class Player : MonoBehaviour
         int numPiecesToBurn = Mathf.Max(numPiecesToDraw - handSpace, 0);
         for (int i = numPiecesToBurn - 1; i >= 0; i--)
         {
-            hand[i].BurnFromHand();
-            hand.RemoveAt(i);
+            BurnFromHand(hand[i]);
         }
         for (int i = 0; i < numPiecesToDraw; i++)
         {
@@ -556,14 +561,6 @@ public class Player : MonoBehaviour
     public void OnGameOver()
     {
         gameOver = true;
-    }
-
-    public void AddPieceToHand(SuperDestructorResource resource)
-    {
-        Destructor newPiece = new Destructor(resource.units, resource.index, this, true);
-        resource.Remove();
-        newPiece.MakePhysicalPiece();
-        AddPieceToHand(newPiece);
     }
 
     public virtual int GainResources(int numResources)

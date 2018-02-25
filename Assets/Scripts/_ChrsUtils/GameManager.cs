@@ -46,8 +46,10 @@ public class GameManager : MonoBehaviour
     public Color NeutralColor { get { return superDestructorResourceColor; } }
 
     public int levelSelected { get; private set; }
-    public float winWeight { get; private set; }
-    public float structureWeight { get; private set; }
+    private float winWeight;
+    private float structureWeight;
+    private float blueprintWeight;
+
 
     private void Awake()
     {
@@ -81,6 +83,12 @@ public class GameManager : MonoBehaviour
     {
         structureWeight = weight;
         PlayerPrefs.SetFloat("structWeight", structureWeight);
+    }
+
+    public void SetBlueprintWeight(float weight)
+    {
+        blueprintWeight = weight;
+        PlayerPrefs.SetFloat("blueprintWeight", blueprintWeight);
     }
 
     public void InitPlayers()
@@ -119,10 +127,10 @@ public class GameManager : MonoBehaviour
             switch (i)
             {
                 case 0:
-                    _players[0].Init(_player1ColorScheme, 0, winWeight, structureWeight);
+                    _players[0].Init(_player1ColorScheme, 0, winWeight, structureWeight, blueprintWeight);
                     break;
                 case 1:
-                    _players[1].Init(_player2ColorScheme, 1, winWeight, structureWeight);
+                    _players[1].Init(_player2ColorScheme, 1, winWeight, structureWeight, blueprintWeight);
                     break;
                 default:
                     break;

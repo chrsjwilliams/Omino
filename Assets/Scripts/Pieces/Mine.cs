@@ -7,7 +7,6 @@ public class Mine : Blueprint
     public Mine(Player player_) : base(BuildingType.MINE, player_)
     {
         resourceGainRateBonus = 1f / 8f;
-        resourceGainRateBonus = 1f / 10f;
     }
 
     public override void Update()

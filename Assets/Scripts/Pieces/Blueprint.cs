@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Blueprint : Polyomino
 {
-    private const float alphaPrePlacement = 0.15f;
+    private const float alphaPrePlacement = 0.5f;
     public int maxRotations { get; protected set; }
 
     protected static int[,,] factory = new int[1, 5, 5]

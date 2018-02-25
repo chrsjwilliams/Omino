@@ -18,7 +18,7 @@ public class Polyomino
     protected string holderName;
     public Transform holder { get; protected set; }
     public BuildingType buildingType { get; protected set; }
-    public static int[][] peiceRotationDictionary = new int[][]
+    public static int[][] pieceRotationDictionary = new int[][]
     {
         new int []{ },
         new int [1] {1},
@@ -1158,34 +1158,37 @@ public class Polyomino
     {
         if (!placed)
         {
-            bool snapback = false;
-            int sameCoordInARow = 1;
-            Coord[] lastPositionsArray = lastPositions.ToArray();
-            Coord lastCoord = lastPositionsArray[0];
-            Coord coordToSnapbackTo = lastCoord;
-            for (int i = 1; i < lastPositionsArray.Length; i++)
+            if (lastPositions.Count > 0)
             {
-                if (lastPositionsArray[i].Equals(lastCoord))
+                bool snapback = false;
+                int sameCoordInARow = 1;
+                Coord[] lastPositionsArray = lastPositions.ToArray();
+                Coord lastCoord = lastPositionsArray[0];
+                Coord coordToSnapbackTo = lastCoord;
+                for (int i = 1; i < lastPositionsArray.Length; i++)
                 {
-                    sameCoordInARow += 1;
-                    if (sameCoordInARow >= framesBeforeLockIn)
+                    if (lastPositionsArray[i].Equals(lastCoord))
                     {
-                        coordToSnapbackTo = lastCoord;
-                        snapback = true;
-                        break;
+                        sameCoordInARow += 1;
+                        if (sameCoordInARow >= framesBeforeLockIn)
+                        {
+                            coordToSnapbackTo = lastCoord;
+                            snapback = true;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        lastCoord = lastPositionsArray[i];
+                        sameCoordInARow = 1;
                     }
                 }
-                else
+                if (snapback)
                 {
-                    lastCoord = lastPositionsArray[i];
-                    sameCoordInARow = 1;
+                    SetTileCoords(coordToSnapbackTo);
+                    Reposition(new Vector3(coordToSnapbackTo.x, coordToSnapbackTo.y,
+                        holder.position.z));
                 }
-            }
-            if (snapback)
-            {
-                SetTileCoords(coordToSnapbackTo);
-                Reposition(new Vector3(coordToSnapbackTo.x, coordToSnapbackTo.y, 
-                    holder.position.z));
             }
             if (!(owner is AIPlayer))
             {
