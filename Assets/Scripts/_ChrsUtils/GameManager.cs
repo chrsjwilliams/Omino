@@ -50,6 +50,8 @@ public class GameManager : MonoBehaviour
     private float structureWeight;
     private float blueprintWeight;
 
+    private AIStrategy[] currentStrategies;
+
 
     private void Awake()
     {
@@ -146,7 +148,88 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
+    public void InitPlayersEvoMode()
+    {
+        SetStrategies();
+        for (int i = 0; i < 2; i++)
+        {
+            Player _aiPlayer = Instantiate(Services.Prefabs.Player,
+                                       Services.MapManager.Map[0, 0].gameObject.transform.position,
+                                       Quaternion.identity,
+                                       Services.Main.transform);
+            GameObject aiPlayerGameObject = _aiPlayer.gameObject;
+            Destroy(aiPlayerGameObject.GetComponent<Player>());
+            aiPlayerGameObject.AddComponent<AIPlayer>();
+            AIPlayer aiPlayer = aiPlayerGameObject.GetComponent<AIPlayer>();
+            _players[i] = aiPlayer;
+
+            int playerNum = i + 1;
+
+            _players[i].name = "AI " + PLAYER + playerNum;
+            _players[i].transform.parent = Services.Scenes.CurrentScene.transform;
+            Color[] colorScheme = i == 0 ? _player1ColorScheme : _player2ColorScheme;
+            AIStrategy strategy = currentStrategies[i];
+            _players[i].Init(colorScheme, i, 
+                strategy.winWeight, 
+                strategy.structWeight, 
+                strategy.blueprintWeight);
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            Services.UIManager.ToggleReady(i + 1);
+        }
+    }
+
+    public void SetStrategies()
+    {
+        if (currentStrategies == null) currentStrategies = new AIStrategy[2];
+        for (int i = 0; i < 2; i++)
+        {
+            if (PlayerPrefs.HasKey("strategy" + i))
+            {
+                string strategyString = PlayerPrefs.GetString("strategy" + i);
+                string[] weightArrays = strategyString.Split(',');
+                currentStrategies[i] = new AIStrategy(
+                    float.Parse(weightArrays[0]),
+                    float.Parse(weightArrays[1]),
+                    float.Parse(weightArrays[2]));
+            }
+            else
+            {
+                float winWeight = 1;
+                float structWeight = 0.15f;
+                float blueprintWeight = 0.15f;
+                currentStrategies[i] = new AIStrategy(winWeight, structWeight, blueprintWeight);
+            }
+        }
+
+    }
+
+    public void MutateAndSaveStrats(Player winner)
+    {
+        float mutationRange = 0.05f;
+        AIStrategy winningStrat = currentStrategies[winner.playerNum - 1];
+        float mutatedWinWeight = winningStrat.winWeight + Random.Range(-mutationRange, mutationRange);
+        float mutatedStructWeight = winningStrat.structWeight + Random.Range(-mutationRange, mutationRange);
+        float mutatedBlueprintWeight = winningStrat.blueprintWeight + Random.Range(-mutationRange, mutationRange);
+        AIStrategy mutatedStrat = new AIStrategy(
+            mutatedWinWeight, 
+            mutatedStructWeight, 
+            mutatedBlueprintWeight);
+        currentStrategies[winner.playerNum % 2] = mutatedStrat;
+        for (int i = 0; i < 2; i++)
+        {
+            AIStrategy strat = currentStrategies[i];
+            string strategyString = 
+                strat.winWeight + "," + 
+                strat.structWeight + "," + 
+                strat.blueprintWeight;
+            PlayerPrefs.SetString("strategy" + i, strategyString);
+        }
+        PlayerPrefs.Save();
+        Debug.Log("current best strat: " + winningStrat.winWeight + "," +
+            winningStrat.structWeight + "," + winningStrat.blueprintWeight);
+    }
 
     public void ChangeCameraTo(Camera camera)
     {

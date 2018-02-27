@@ -8,8 +8,8 @@ public class Base : Structure
 
     public Base() : base(0)
     {
-        normalDrawRateBonus = 1f / 40f;
-        destructorDrawRateBonus = 1f / 80f;
+        normalDrawRateBonus = 1f / 30f;
+        destructorDrawRateBonus = 1f / 60f;
         resourceGainRateBonus = 1f / 8f;
         buildingType = BuildingType.BASE;
         isFortified = true;
@@ -21,7 +21,7 @@ public class Base : Structure
         owner = _player;
         resourceGainRateBonus = 1f / 4f;
         normalDrawRateBonus = 1f / 20f;
-        destructorDrawRateBonus = 1f / 60f;
+        destructorDrawRateBonus = 1f / 40f;
     }
 
     public override void ToggleStructureActivation(Player player)

@@ -319,7 +319,6 @@ public class MapManager : MonoBehaviour
                 Structure structure = GenerateStructure(type);
                 if (structure == null)
                 {
-                    Debug.Log("stopping short after " + structuresOnMap.Count + "structures");
                     break;
                 }
                 //foreach (Structure structure in structures)

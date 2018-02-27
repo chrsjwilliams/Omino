@@ -19,6 +19,7 @@ public class PlayTask : Task
         startPos = startPos_;
         targetPos = targetPos_;
         rotations = rotations_;
+        player = piece.owner as AIPlayer;
     }
 
     public PlayTask(Move move)
@@ -27,23 +28,30 @@ public class PlayTask : Task
         startPos = move.piece.holder.transform.position;
         targetPos = move.targetCoord.WorldPos();
         rotations = move.rotations;
+        player = piece.owner as AIPlayer;
     }
 
     protected override void Init()
     {
+        if (piece.burningFromHand)
+        {
+            SetStatus(TaskStatus.Aborted);
+            return;
+        }
         timeElapsed = 0;
-        piece.OnInputDown();
 
         for (int rotationsCompleted = 0; rotationsCompleted < rotations; rotationsCompleted++)
         {
             piece.Rotate();
         }
+        piece.OnInputDown();
+
         duration = Polyomino.drawAnimDur;
     }
 
     internal override void Update()
     {
-        if (piece.owner.gameOver)
+        if (piece.owner.gameOver || piece.burningFromHand)
         {
             SetStatus(TaskStatus.Aborted);
             return;
@@ -60,5 +68,17 @@ public class PlayTask : Task
     protected override void OnSuccess()
     {
         piece.OnInputUp();
+    }
+
+    protected override void OnAbort()
+    {
+        base.OnAbort();
+        player.PlayTaskAborted(piece);
+    }
+
+    protected override void CleanUp()
+    {
+        base.CleanUp();
+        player.PlayTaskComplete();
     }
 }

@@ -285,8 +285,7 @@ public class Player : MonoBehaviour
         int numPiecesToBurn = Mathf.Max(numPiecesToDraw - handSpace, 0);
         for (int i = numPiecesToBurn - 1; i >= 0; i--)
         {
-            hand[i].BurnFromHand();
-            hand.RemoveAt(i);
+            BurnFromHand(hand[i]);
         }
         for (int i = 0; i < numPiecesToDraw; i++)
         {
@@ -518,7 +517,15 @@ public class Player : MonoBehaviour
         piece.SetGlowState(false);
         boardPieces.Add(piece);
         Services.MapManager.DetermineConnectedness(this);
-        if (Services.MapManager.CheckForWin(piece)) Services.GameScene.GameWin(this);
+        if (piece.cost != 1 && Services.MapManager.CheckForWin(piece))
+            Services.GameScene.GameWin(this);
+        if (Services.GameManager.Players[playerNum % 2] != null)
+            Services.GameManager.Players[playerNum % 2].OnOpposingPiecePlaced();
+    }
+
+    public virtual void OnOpposingPiecePlaced()
+    {
+
     }
 
     public virtual void OnPieceRemoved(Polyomino piece)

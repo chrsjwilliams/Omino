@@ -86,15 +86,15 @@ using Object = UnityEngine.Object;
 
          }
 
-         var nextScene = GetScene<T>();
+        if (previousScene != null)
+        {
+            previousScene._OnExit();
+            Object.Destroy(previousScene.Root);
+        }
+        var nextScene = GetScene<T>();
          _sceneStack.Push(nextScene);
          nextScene._OnEnter(data);
 
-         if (previousScene != null)
-         {
-             previousScene._OnExit();
-             Object.Destroy(previousScene.Root);
-         }
      }
 
      private T GetScene<T>() where T : Scene<TTransitionData>

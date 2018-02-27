@@ -31,35 +31,16 @@ public class AIPlayer : Player
     public bool drawingPiece { get; protected set; }
     public bool playingPiece { get; protected set; }
     public bool isThinking { get; protected set; }
-    public Coord primaryTarget { get; protected set; }
+    public List<Coord> primaryTargets { get; protected set; }
 
-    private int frameBuffer;
-    private int moveCountBuffer;
     private int coordCountBuffer;
     private int movesTriedBuffer;
-    private int blueprintMapsTriedBuffer;
     private int tilesUntilBlueprint;
 
     protected float winWeight;
     protected float structWeight;
     protected float blueprintWeight;
     private IEnumerator thinkingCoroutine;
-
-    public struct MoveData
-    {
-        public Polyomino piece;
-        public Coord targetCoord;
-        public int rotations;
-        public BlueprintMap blueprintMap;
-        
-        public MoveData(Polyomino _piece, Coord _coord, int _rotations, BlueprintMap _blueprintMap)
-        {
-            piece = _piece;
-            targetCoord = _coord;
-            rotations = _rotations;
-            blueprintMap = _blueprintMap;
-        }
-    }
 
     public override void Init(Color[] playerColorScheme, int posOffset, float _winWeight, float _structureWeight, 
         float _blueprintWeight)
@@ -69,11 +50,8 @@ public class AIPlayer : Player
         drawingPiece = false;
         deckClumpCount = 4;
 
-        frameBuffer = 1;
         movesTriedBuffer = 50;
-        moveCountBuffer = 300;
         coordCountBuffer = 200;
-        blueprintMapsTriedBuffer = 500;
         tilesUntilBlueprint = 5;
 
         winWeight = _winWeight;
@@ -86,7 +64,7 @@ public class AIPlayer : Player
         startingHandSize = 4;
         maxHandSize = 5;
         piecesPerHandColumn = 5;
-        startingResources = 7;
+        startingResources = 6;
         baseMaxResources = 9;
         boardPieces = new List<Polyomino>();
         resourceGainFactor = 1;
@@ -96,11 +74,25 @@ public class AIPlayer : Player
         
         if (playerNum == 1)
         {
-            primaryTarget = new Coord(Services.MapManager.MapWidth - 1, Services.MapManager.MapLength - 1);
-        }
+            primaryTargets = new List<Coord>()
+            {
+                new Coord(Services.MapManager.MapWidth - 3, Services.MapManager.MapLength - 3),
+                new Coord(Services.MapManager.MapWidth - 2, Services.MapManager.MapLength - 3),
+                new Coord(Services.MapManager.MapWidth - 1, Services.MapManager.MapLength - 3),
+                new Coord(Services.MapManager.MapWidth-3, Services.MapManager.MapLength -2),
+                new Coord(Services.MapManager.MapWidth -3, Services.MapManager.MapLength -1)
+            };
+    }
         else
         {
-            primaryTarget = new Coord(0, 0);
+            primaryTargets = new List<Coord>()
+            {
+                new Coord(0,2),
+                new Coord(1,2),
+                new Coord(2,2),
+                new Coord(2,1),
+                new Coord(2,0)
+            };
         }
     }
 
@@ -270,7 +262,7 @@ public class AIPlayer : Player
                 yield return null;
             }
         }
-        Debug.Log("touchable coords: " + touchableCoords.Count());
+        //Debug.Log("touchable coords: " + touchableCoords.Count());
         #region Blueprint Placement Logic
         int blueprintsTried = 0;
         foreach (Blueprint blueprint in blueprints)
@@ -284,7 +276,6 @@ public class AIPlayer : Player
             {
                 for (int rotations = 0; rotations < 4; rotations++)
                 {
-                    HashSet<Coord> blueprintHashset = new HashSet<Coord>();
                     blueprint.Rotate(false, true, true);
                     //  For play positions +/- a pieces radius
                     blueprint.SetTileCoords(coord);
@@ -327,13 +318,11 @@ public class AIPlayer : Player
                 }
             }
         }
-        Debug.Log("Blueprints Tried: " + blueprintsTried);
+        //Debug.Log("Blueprints Tried: " + blueprintsTried);
         #endregion
 
         #region Polyomino Placement Logic
         int movesTried = 0;
-        int blueprintMapsTried = 0;
-        BlueprintMap selectedBluePrintMap = new BlueprintMap();
         foreach (Polyomino piece in currentHand)
         {
             if (piece.cost <= resources)
@@ -403,7 +392,7 @@ public class AIPlayer : Player
         }
         #endregion
 
-        Debug.Log("BlueprintMaps Tried: " + blueprintMapsTried);
+        //Debug.Log("BlueprintMaps Tried: " + blueprintMapsTried);
 
         if (nextPlay != null)
         {
@@ -427,8 +416,22 @@ public class AIPlayer : Player
     public override void OnPiecePlaced(Polyomino piece)
     {
         base.OnPiecePlaced(piece);
+    }
+
+    public override void OnOpposingPiecePlaced()
+    {
+        base.OnOpposingPiecePlaced();
         StopThinking();
+    }
+
+    public void PlayTaskComplete()
+    {
         playingPiece = false;
+    }
+
+    public void PlayTaskAborted(Polyomino piece)
+    {
+        if (selectedPiece == piece) selectedPiece = null;
     }
 
     public override void DrawPiece(Vector3 startPos, bool onlyDestructors)
@@ -471,5 +474,18 @@ public class AIPlayer : Player
         playingPiece = false;
         StopThinking();
     }
+}
 
+public struct AIStrategy
+{
+    public float winWeight;
+    public float structWeight;
+    public float blueprintWeight;
+
+    public AIStrategy(float winWeight_, float structWeight_, float blueprintWeight_)
+    {
+        winWeight = winWeight_;
+        structWeight = structWeight_;
+        blueprintWeight = blueprintWeight_;
+    }
 }

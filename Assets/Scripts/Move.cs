@@ -8,6 +8,9 @@ public class Move
     public float score;
     public const int MAX_SCORE = 100;
     public const int MAX_ROTATIONS = 3;
+    private float finalWinScore;
+    private float finalStructScore;
+    private float finalBlueprintScore;
 
     public Move blueprintMove { get; private set; }
 
@@ -108,6 +111,7 @@ public class Move
             blueprintScore = bombFactoryWeight;
             blueprintMove = bombFactoryMove;
         }
+        finalBlueprintScore = blueprintScore;
         return blueprintScore;
 
     }
@@ -119,8 +123,15 @@ public class Move
         foreach (Tile tile in piece.tiles)
         {
             Coord tileRelCoord = relativeCoords[tile];
-            float tileDistFromTarget = ((AIPlayer)piece.owner).primaryTarget.Distance(
-                                                    tileRelCoord.Add(targetCoord));
+            foreach (Coord coord in ((AIPlayer)piece.owner).primaryTargets)
+            {
+                float tileDistFromTarget = coord.Distance(tileRelCoord.Add(targetCoord));
+
+                if (tileDistFromTarget < pieceDistFromTarget)
+                {
+                    pieceDistFromTarget = tileDistFromTarget;
+                }
+            }
 
             foreach (Coord coord in Services.MapManager.structureCoords)
             {
@@ -134,31 +145,28 @@ public class Move
                 }
             }
 
-            if (tileDistFromTarget < pieceDistFromTarget)
-            {
-                pieceDistFromTarget = tileDistFromTarget;
-            }
         }
 
         float winScore;
         float structScore;
         if (pieceDistFromTarget == 0)
         {
-            winScore = winWeight * MAX_SCORE;
+            winScore = winWeight;
         }
         else
         {
-            winScore = winWeight / pieceDistFromTarget;
+            winScore = winWeight / Mathf.Pow(pieceDistFromTarget, 2);
         }
         if(structDist == 0)
         {
-            structScore = structWeight * MAX_SCORE;
+            structScore = structWeight;
         }
         else
         {
-            structScore = structWeight / structDist;
+            structScore = structWeight / Mathf.Pow(structDist, 2);
         }
-
+        finalWinScore = winScore;
+        finalStructScore = structScore;
         return winScore + structScore;
     }
 
@@ -175,5 +183,11 @@ public class Move
             playTask.Then(new ActionTask(blueprintMove.ExecuteMove));
         }
         Services.GeneralTaskManager.Do(playTask);
+        if(!(piece is Blueprint))
+        {
+            Debug.Log("player " + piece.owner.playerNum + " playing move with score:" + score +
+                ", winScore: " + finalWinScore + ", structScore: " + finalStructScore +
+                ", blueprintScore: " + finalBlueprintScore);
+        }
     }
 }

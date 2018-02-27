@@ -11,6 +11,8 @@ public class GameSceneScript : Scene<TransitionData>
 
     [SerializeField]
     private bool demoMode;
+    [SerializeField]
+    private bool evolutionMode;
 
     [SerializeField]
     private Color _backgroundColor;
@@ -25,14 +27,21 @@ public class GameSceneScript : Scene<TransitionData>
     internal override void OnEnter(TransitionData data)
     {
         tileMapHolder = GameObject.Find(TILE_MAP_HOLDER).transform;
+        Time.timeScale = 1;
         Services.GameScene = this;
         Services.UIManager = GetComponentInChildren<UIManager>();
 
         _colorChangeTime = 0f;
         Services.MapManager.GenerateMap();
-        Services.GameManager.InitPlayers();
+        if (evolutionMode)
+        {
+            Services.GameManager.InitPlayersEvoMode();
+        }
+        else
+        {
+            Services.GameManager.InitPlayers();
+        }
         Services.AudioManager.SetMainTrack(Services.Clips.MainTrackAudio, 0.3f);
-        Time.timeScale = 1;
     }
 
     internal override void OnExit()
@@ -49,7 +58,6 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void GameWin(Player winner)
     {
-        Debug.Log("player " + winner.playerNum + " has won");
         Services.UIManager.StartBannerScroll(winner);
         foreach(Player player in Services.GameManager.Players)
         {
@@ -58,6 +66,13 @@ public class GameSceneScript : Scene<TransitionData>
         if (demoMode)
         {
             Task restartTask = new Wait(5f);
+            restartTask.Then(new ActionTask(Reload));
+            Services.GeneralTaskManager.Do(restartTask);
+        }
+        else if (evolutionMode)
+        {
+            Services.GameManager.MutateAndSaveStrats(winner);
+            Task restartTask = new Wait(1f);
             restartTask.Then(new ActionTask(Reload));
             Services.GeneralTaskManager.Do(restartTask);
         }

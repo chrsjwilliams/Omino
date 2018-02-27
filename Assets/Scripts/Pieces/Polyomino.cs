@@ -75,6 +75,7 @@ public class Polyomino
     private const int framesBeforeLockIn = 10;
     private const int leniencyFrames = 5;
     private RotationUI rotationUI;
+    public bool burningFromHand { get; private set; }
 
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
@@ -1350,7 +1351,8 @@ public class Polyomino
             tileRelativeCoords[tile] = new Coord(newXCoord, newYCoord);
         }
         SetTileCoords(centerCoord);
-
+        numRotations = (numRotations + 1) % 4;
+        if (this == owner.selectedPiece || placed) Debug.Log("rotating while selected or placed");
         if (!dataOnly)
         {
             SetTileSprites();
@@ -1368,7 +1370,6 @@ public class Polyomino
             //Quaternion prevRotation = spriteOverlay.transform.localRotation;
             //spriteOverlay.transform.localRotation = Quaternion.Euler(prevRotation.eulerAngles.x,
             //    prevRotation.eulerAngles.y, prevRotation.eulerAngles.z + 90);
-            numRotations = (numRotations + 1) % 4;
             SetOverlaySprite();
         }
     }
@@ -1544,6 +1545,7 @@ public class Polyomino
         BurnPiece burnTask = new BurnPiece(this);
         burnTask.Then(new ActionTask(DestroyThis));
         Services.GeneralTaskManager.Do(burnTask);
+        burningFromHand = true;
     }
 
     public void Lock()
