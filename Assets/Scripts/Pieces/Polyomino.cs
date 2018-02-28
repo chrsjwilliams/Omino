@@ -1382,7 +1382,7 @@ public class Polyomino
         if ((this == owner.selectedPiece || placed) && owner is AIPlayer)
         {
             Debug.Log("rotating while selected or placed");
-            Debug.Break();
+            //Debug.Break();
         }        
         if (!dataOnly)
         {
