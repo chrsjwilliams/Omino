@@ -11,10 +11,10 @@ public class Polyomino
 {
     public List<Tile> tiles = new List<Tile>();
     public List<Coord> pieceCoords = new List<Coord>();
-    public Dictionary<Tile, Coord> tileRelativeCoords { get; protected set; }
+    //public Dictionary<Tile, Coord> tileRelativeCoords { get; protected set; }
     protected SpriteRenderer holderSr;
     protected SpriteRenderer iconSr;
-    protected SpriteRenderer spriteOverlay;
+    public SpriteRenderer spriteOverlay { get; protected set; }
     protected string holderName;
     public Transform holder { get; protected set; }
     public BuildingType buildingType { get; protected set; }
@@ -933,10 +933,15 @@ public class Polyomino
         //Coord oldCenter = centerCoord;
         centerCoord = centerPos;
 
-        foreach (KeyValuePair<Tile, Coord> tileCoord in tileRelativeCoords)
+        foreach(Tile tile in tiles)
         {
-            tileCoord.Key.SetCoord(tileCoord.Value.Add(centerPos));
+            tile.SetCoord(tile.relativeCoord.Add(centerPos));
         }
+
+        //foreach (KeyValuePair<Tile, Coord> tileCoord in tileRelativeCoords)
+        //{
+        //    tileCoord.Key.SetCoord(tileCoord.Value.Add(centerPos));
+        //}
         //foreach(Tile tile in tiles)
         //{
         //    tile.SetCoord(centerCoord.Add(tile.coord.Subtract(oldCenter)));
@@ -981,7 +986,7 @@ public class Polyomino
         }
 
         if (piece == null) return;
-        tileRelativeCoords = new Dictionary<Tile, Coord>();
+        //tileRelativeCoords = new Dictionary<Tile, Coord>();
 
         for (int x = 0; x < 5; x++)
         {
@@ -989,17 +994,17 @@ public class Polyomino
             {
                 if (piece[index, x, y] == 1)
                 {
-                    Tile newpiece = MonoBehaviour.Instantiate(Services.Prefabs.Tile, holder);
+                    Tile newTile = MonoBehaviour.Instantiate(Services.Prefabs.Tile, holder);
 
                     Coord myCoord = new Coord(-2 + x, -2 + y);
-                    newpiece.Init(myCoord, this);
-                    tileRelativeCoords[newpiece] = myCoord;
+                    newTile.Init(myCoord, this);
+                    //tileRelativeCoords[newTile] = myCoord;
 
-                    string pieceName = newpiece.name.Replace("(Clone)", "");
-                    newpiece.name = pieceName;
-                    newpiece.SetBaseTileColor(owner, buildingType);
+                    string pieceName = newTile.name.Replace("(Clone)", "");
+                    newTile.name = pieceName;
+                    newTile.SetBaseTileColor(owner, buildingType);
 
-                    tiles.Add(newpiece);
+                    tiles.Add(newTile);
                 }
             }
         }
@@ -1314,14 +1319,17 @@ public class Polyomino
 
     protected virtual void SetTileSprites()
     {
+        List<Coord> tileRelativeCoords = new List<Coord>();
+        foreach (Tile tile in tiles) tileRelativeCoords.Add(tile.relativeCoord);
+
         foreach (Tile tile in tiles)
         {
             int spriteIndex = 15;
             Coord[] directions = Coord.Directions();
             for (int i = 0; i < directions.Length; i++)
             {
-                Coord adjCoord = tileRelativeCoords[tile].Add(directions[i]);
-                if (tileRelativeCoords.ContainsValue(adjCoord))
+                Coord adjCoord = tile.relativeCoord.Add(directions[i]);
+                if (tileRelativeCoords.Contains(adjCoord))
                 {
                     spriteIndex -= Mathf.RoundToInt(Mathf.Pow(2, i));
                 }
@@ -1358,14 +1366,16 @@ public class Polyomino
         if (!clockwise) rotAngle *= -1;
         foreach (Tile tile in tiles)
         {
-            Coord prevRelCoord = tileRelativeCoords[tile];
+            //Coord prevRelCoord = tileRelativeCoords[tile];
+            Coord prevRelCoord = tile.relativeCoord;
             int newXCoord = Mathf.RoundToInt(
                 prevRelCoord.x * Mathf.Cos(rotAngle)
                 - (prevRelCoord.y * Mathf.Sin(rotAngle)));
             int newYCoord = Mathf.RoundToInt(
                 prevRelCoord.x * Mathf.Sin(rotAngle)
                 + (prevRelCoord.y * Mathf.Cos(rotAngle)));
-            tileRelativeCoords[tile] = new Coord(newXCoord, newYCoord);
+            //tileRelativeCoords[tile] = new Coord(newXCoord, newYCoord);
+            tile.relativeCoord = new Coord(newXCoord, newYCoord);
         }
         SetTileCoords(centerCoord);
         numRotations = (numRotations + 1) % 4;
@@ -1382,7 +1392,10 @@ public class Polyomino
             {
                 foreach (Tile tile in tiles)
                 {
-                    tile.transform.localPosition = new Vector3(tileRelativeCoords[tile].x, tileRelativeCoords[tile].y);
+                    //tile.transform.localPosition = 
+                    //new Vector3(tileRelativeCoords[tile].x, tileRelativeCoords[tile].y);
+                    tile.transform.localPosition = 
+                        new Vector3(tile.relativeCoord.x, tile.relativeCoord.y);
                 }
             }
 

@@ -14,7 +14,7 @@ public class Move
 
     public Move blueprintMove { get; private set; }
 
-    public Dictionary<Tile, Coord> relativeCoords { get; private set; }
+    //public Dictionary<Tile, Coord> relativeCoords { get; private set; }
     public Polyomino piece { get; private set; }
     public Coord targetCoord { get; private set; }
     public int rotations { get; private set; }
@@ -25,7 +25,7 @@ public class Move
         float structureWeight, float mineWeight, float factoryWeight, float bombFactoryWeight)
     {
         piece = _piece;
-        relativeCoords = piece.tileRelativeCoords;
+        //relativeCoords = piece.tileRelativeCoords;
         targetCoord = _targetCoord;
         rotations = _rotations;
         possibleBlueprintMoves = _possibleBlueprintMoves;
@@ -45,7 +45,7 @@ public class Move
         HashSet<Coord> pieceCoords = new HashSet<Coord>();
         foreach(Tile tile in piece.tiles)
         {
-            pieceCoords.Add(relativeCoords[tile].Add(targetCoord));
+            pieceCoords.Add(tile.relativeCoord.Add(targetCoord));
         }
 
         Move mineMove = null;
@@ -122,7 +122,7 @@ public class Move
         float pieceDistFromTarget = float.MaxValue;
         foreach (Tile tile in piece.tiles)
         {
-            Coord tileRelCoord = relativeCoords[tile];
+            Coord tileRelCoord = tile.relativeCoord;
             foreach (Coord coord in ((AIPlayer)piece.owner).primaryTargets)
             {
                 float tileDistFromTarget = coord.Distance(tileRelCoord.Add(targetCoord));

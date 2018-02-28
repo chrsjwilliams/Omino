@@ -118,7 +118,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         tooltips = new List<Tooltip>();
 
         if (piece == null) return;
-        tileRelativeCoords = new Dictionary<Tile, Coord>();
+        //tileRelativeCoords = new Dictionary<Tile, Coord>();
 
         for (int x = 0; x < 5; x++)
         {
@@ -130,7 +130,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
                     Coord myCoord = new Coord(-2 + x, -2 + y);
                     newpiece.Init(myCoord, this);
-                    tileRelativeCoords[newpiece] = myCoord;
+                    //tileRelativeCoords[newpiece] = myCoord;
 
                     string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;
@@ -215,9 +215,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     public override void PlaceAtCurrentLocation()
     {
         placed = true;
-        spriteOverlay.color = spriteOverlay.color = new Color(spriteOverlay.color.r, spriteOverlay.color.g,
-                spriteOverlay.color.b, 1);
-        spriteOverlay.enabled = true;
+
         OnPlace();
         foreach (Tile tile in tiles)
         {
@@ -264,7 +262,11 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             }
         }
         ListenForInput();
-        MakeDustClouds();
+        Services.GeneralTaskManager.Do(new BlueprintPlacementTask(this));
+        //MakeDustClouds();
+        //spriteOverlay.color = spriteOverlay.color = new Color(spriteOverlay.color.r, spriteOverlay.color.g,
+        //spriteOverlay.color.b, 1);
+        //spriteOverlay.enabled = true;
     }
 
     public override void OnInputDown()

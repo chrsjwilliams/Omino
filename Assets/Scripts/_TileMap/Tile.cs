@@ -14,6 +14,7 @@ public class Tile : MonoBehaviour
     [SerializeField]
     private Sprite[] shieldSprites;
     public Coord coord { get; private set; }
+    public Coord relativeCoord;
     public BoxCollider2D boxCol { get; private set; }
     public SpriteRenderer sr { get; private set; }
     //private SpriteGlow glow;
@@ -97,6 +98,7 @@ public class Tile : MonoBehaviour
         uiTile = Instantiate(Services.Prefabs.UITile, uiPos, Quaternion.identity,
             Services.UIManager.canvas).GetComponent<Image>();
         uiTile.gameObject.SetActive(false);
+        relativeCoord = coord_;
     }
 
 	public void OnRemove(){
