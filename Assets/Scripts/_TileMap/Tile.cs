@@ -96,7 +96,7 @@ public class Tile : MonoBehaviour
         Vector3 uiPos = Camera.main.WorldToScreenPoint(transform.position);
         uiPos = new Vector3(uiPos.x, uiPos.y, 0);
         uiTile = Instantiate(Services.Prefabs.UITile, uiPos, Quaternion.identity,
-            Services.UIManager.canvas).GetComponent<Image>();
+            Services.UIManager.uiTileHolder).GetComponent<Image>();
         uiTile.gameObject.SetActive(false);
         relativeCoord = coord_;
     }

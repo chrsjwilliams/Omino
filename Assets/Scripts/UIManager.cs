@@ -33,6 +33,7 @@ public class UIManager : MonoBehaviour {
     public Button[] readyBanners;
     [SerializeField]
     private GameObject pauseMenu;
+    public Transform uiTileHolder;
     public Transform canvas;
     public Sprite blueprintTile;
     public Sprite destructorIcon;
@@ -262,7 +263,12 @@ public class UIManager : MonoBehaviour {
                         bannerScrollTimeElapsed / bannerScrollDuration));
             }
         }
-        if (bannerScrollTimeElapsed >= bannerScrollDuration) scrollingInBanners = false;
+        if (bannerScrollTimeElapsed >= bannerScrollDuration)
+        {
+            scrollingInBanners = false;
+            //if (!Services.GameScene.gamePaused && Services.GameScene.normalPlayMode)
+            //    TogglePauseMenu();
+        }
     }
 
     public void SetGreyOutBox(int playerNum, bool status)

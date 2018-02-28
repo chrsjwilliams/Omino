@@ -12,18 +12,11 @@ public class PlayTask : Task
     private float duration;
     //private int rotationsCompleted;
     private int rotations;
+    private Move move;
 
-    public PlayTask(Polyomino piece_, Vector3 startPos_, Vector3 targetPos_, int rotations_)
+    public PlayTask(Move move_)
     {
-        piece = piece_;
-        startPos = startPos_;
-        targetPos = targetPos_;
-        rotations = rotations_;
-        player = piece.owner as AIPlayer;
-    }
-
-    public PlayTask(Move move)
-    {
+        move = move_;
         piece = move.piece;
         startPos = move.piece.holder.transform.position;
         targetPos = move.targetCoord.WorldPos();
@@ -79,6 +72,6 @@ public class PlayTask : Task
     protected override void CleanUp()
     {
         base.CleanUp();
-        player.PlayTaskComplete();
+        player.PlayTaskComplete(move);
     }
 }

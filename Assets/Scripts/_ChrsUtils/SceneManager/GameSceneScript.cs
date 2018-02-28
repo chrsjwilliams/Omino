@@ -13,6 +13,7 @@ public class GameSceneScript : Scene<TransitionData>
     private bool demoMode;
     [SerializeField]
     private bool evolutionMode;
+    public bool normalPlayMode { get { return !demoMode && !evolutionMode; } }
 
     [SerializeField]
     private Color _backgroundColor;

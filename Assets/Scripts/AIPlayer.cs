@@ -405,8 +405,11 @@ public class AIPlayer : Player
 
     private void MakePlay(Move nextPlay)
     {
-        playingPiece = true;
-        if (nextPlay.piece != null) nextPlay.ExecuteMove();
+        if (nextPlay.piece != null)
+        {
+            playingPiece = true;
+            nextPlay.ExecuteMove();
+        }
     }
 
     public override int GainResources(int numResources)
@@ -426,9 +429,9 @@ public class AIPlayer : Player
         StopThinking();
     }
 
-    public void PlayTaskComplete()
+    public void PlayTaskComplete(Move playedMove)
     {
-        playingPiece = false;
+        if(playedMove.blueprintMove == null) playingPiece = false;
     }
 
     public void PlayTaskAborted(Polyomino piece)
