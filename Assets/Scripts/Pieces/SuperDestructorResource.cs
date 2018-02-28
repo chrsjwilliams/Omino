@@ -18,7 +18,7 @@ public class SuperDestructorResource : Polyomino
     {
         base.MakePhysicalPiece();
         HideFromInput();
-        holder.localScale = Vector3.one;
+        ScaleHolder(Vector3.one);
     }
 
     protected override void SetIconSprite()

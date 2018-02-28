@@ -408,17 +408,33 @@ public class Polyomino
         affordable = player.resources >= cost;
         if (affordable)
         {
-            costText.color = (Color.green + Color.black) / 2;
             SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, alphaWhileAffordable), 1);
-            //if (isVisible) EnterUnselectedState();
+            foreach(Tile tile in tiles)
+            {
+                tile.SetFilledUIStatus(false);
+            }
         }
         else
         {
-            costText.color = (Color.red + Color.black) / 2;
             SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, alphaWhileUnaffordable), 1);
-            //HideFromInput();
+            for (int i = 0; i < tiles.Count; i++)
+            {
+                Tile tile = tiles[i];
+                if (i <= player.resources)
+                {
+                    tile.SetFilledUIStatus(true);
+                    if (i == player.resources)
+                    {
+                        tile.SetFilledUIFillAmount(player.resourceMeterFillAmt);
+                    }
+                    else
+                    {
+                        tile.SetFilledUIFillAmount(1);
+                    }
+                }
+                else tile.SetFilledUIStatus(false);
+            }
         }
-        //SetGlowState(affordable);
     }
 
     protected void ToggleCostUIStatus(bool status)
@@ -438,7 +454,7 @@ public class Polyomino
         SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 0.75f), 1);
         Vector3 centerOffset = GetCenterpoint() - holder.transform.position;
         Reposition(holder.transform.position - centerOffset);
-        holder.transform.localScale = queueScale;
+        ScaleHolder(queueScale);
     }
 
     public void OnDrawn()
@@ -507,6 +523,7 @@ public class Polyomino
         {
             Coord tileCoord = tile.coord;
             Services.MapManager.Map[tileCoord.x, tileCoord.y].SetOccupyingPiece(this);
+            tile.OnPlace();
         }
         SetTileSprites();
         if (owner != null)
@@ -777,7 +794,7 @@ public class Polyomino
         }
         //Services.AudioManager.CreateTempAudio(Services.Clips.PiecePlaced, 1);
         ToggleCostUIStatus(false);
-        holder.localScale = Vector3.one;
+        ScaleHolder(Vector3.one);
         if (owner.shieldedPieces) CreateShield();
         //MakeDustClouds();
         ConstructionTask construct = new ConstructionTask(this);
@@ -980,7 +997,7 @@ public class Polyomino
 
                     string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;
-                    newpiece.ActivateTile(owner, buildingType);
+                    newpiece.SetBaseTileColor(owner, buildingType);
 
                     tiles.Add(newpiece);
                 }
@@ -1038,7 +1055,7 @@ public class Polyomino
     protected void EnterUnselectedState()
     {
         ListenForInput();
-        holder.localScale = unselectedScale;
+        ScaleHolder(unselectedScale);
     }
 
     protected void ListenForInput()
@@ -1117,7 +1134,7 @@ public class Polyomino
         if (!owner.gameOver && !placed)
         {
             lastPositions = new Queue<Coord>();
-            holder.localScale = Vector3.one;
+            ScaleHolder(Vector3.one);
             holder.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, -4);
             owner.OnPieceSelected(this);
             //IncrementSortingOrder(30000);
@@ -1295,7 +1312,7 @@ public class Polyomino
         //}
     }
 
-    protected void SetTileSprites()
+    protected virtual void SetTileSprites()
     {
         foreach (Tile tile in tiles)
         {
@@ -1352,7 +1369,11 @@ public class Polyomino
         }
         SetTileCoords(centerCoord);
         numRotations = (numRotations + 1) % 4;
-        if (this == owner.selectedPiece || placed) Debug.Log("rotating while selected or placed");
+        if ((this == owner.selectedPiece || placed) && owner is AIPlayer)
+        {
+            Debug.Log("rotating while selected or placed");
+            Debug.Break();
+        }        
         if (!dataOnly)
         {
             SetTileSprites();
@@ -1412,6 +1433,10 @@ public class Polyomino
     public void ScaleHolder(Vector3 scale)
     {
         holder.transform.localScale = scale;
+        foreach(Tile tile in tiles)
+        {
+            tile.SetUIScale(scale);
+        }
     }
 
     //protected void UpdateDrawMeter()

@@ -7,11 +7,6 @@ using UnityEngine.Rendering;
 
 public class Tile : MonoBehaviour
 {
-    [SerializeField] private bool _isActive;
-    public bool isActive
-    {
-        get { return _isActive; }
-    }
     [SerializeField]
     private Sprite[] sprites;
     [SerializeField]
@@ -61,6 +56,7 @@ public class Tile : MonoBehaviour
     private const float redPulsePeriod = 0.6f;
     private static Color redPulseColor = new Color(0.5f, 0, 0);
     private bool toRed;
+    private Image uiTile;
     //public SpriteMask mask { get; private set; }
 
     public void Init(Coord coord_)
@@ -96,11 +92,22 @@ public class Tile : MonoBehaviour
     {
         pieceParent = pieceParent_;
         Init(coord_);
+        Vector3 uiPos = Camera.main.WorldToScreenPoint(transform.position);
+        uiPos = new Vector3(uiPos.x, uiPos.y, 0);
+        uiTile = Instantiate(Services.Prefabs.UITile, uiPos, Quaternion.identity,
+            Services.UIManager.canvas).GetComponent<Image>();
+        uiTile.gameObject.SetActive(false);
     }
 
 	public void OnRemove(){
         //Destroy(this);
-	}
+        if (uiTile != null) Destroy(uiTile.gameObject);
+    }
+
+    public void OnPlace()
+    {
+        if(uiTile != null) Destroy(uiTile.gameObject);
+    }
 
     public void SetCoord(Coord newCoord)
     {
@@ -109,10 +116,16 @@ public class Tile : MonoBehaviour
 
     public void SetColor(Color color)
     {
-        sr.color = color;
+        SetSrAndUIColor(color);
         bombOverlay.color = color;
         baseColor = color;
         targetColor = color;
+    }
+    
+    private void SetSrAndUIColor(Color color)
+    {
+        sr.color = color;
+        if (uiTile != null) uiTile.color = new Color(color.r, color.g, color.b, 0.7f);
     }
 
     public Color GetColor() { return sr.color; }
@@ -147,13 +160,10 @@ public class Tile : MonoBehaviour
         highlightSr.color = color;
     }
 
-    public void ActivateTile(Player player, BuildingType buildingType)
+    public void SetBaseTileColor(Player player, BuildingType buildingType)
     {
-        _isActive = true;
-        if (player == null) sr.color = Services.GameManager.NeutralColor;
-        //else if(buildingType == BuildingType.NONE)
-         else sr.color = player.ColorScheme[0];
-        //else sr.color = player.ColorScheme[1];
+        if (player == null) SetSrAndUIColor(Services.GameManager.NeutralColor);
+        else SetSrAndUIColor(player.ColorScheme[0]);
     }
 
     public void SetOccupyingPiece(Polyomino piece)
@@ -209,13 +219,19 @@ public class Tile : MonoBehaviour
         if (bombSettling) SettleToNormalSprite();
         if (pieceParent != null && pieceParent is Destructor && !pieceParent.placed)
             PulseRed();
+        if (uiTile != null && uiTile.IsActive())
+        {
+            Vector3 uiPos = Camera.main.WorldToScreenPoint(transform.position);
+            uiPos = new Vector3(uiPos.x, uiPos.y, 0);
+            uiTile.transform.position = uiPos;
+        }
     }
 
     void LerpToTargetColor()
     {
         colorChangeTimeElapsed += Time.deltaTime;
-        sr.color = Color.Lerp(prevColor, targetColor, 
-            colorChangeTimeElapsed / colorChangeDuration);
+        SetSrAndUIColor(Color.Lerp(prevColor, targetColor,
+            colorChangeTimeElapsed / colorChangeDuration));
         baseColor = sr.color;
         bombOverlay.color = new Color(sr.color.r, sr.color.g, sr.color.b, bombOverlay.color.a);
         if(colorChangeTimeElapsed >= colorChangeDuration)
@@ -245,6 +261,7 @@ public class Tile : MonoBehaviour
         bombOverlay.sprite = destructorSprites[spriteIndex];
         sr.sprite = sprites[spriteIndex];
         shieldSr.sprite = shieldSprites[spriteIndex];
+        if (uiTile != null) uiTile.sprite = sr.sprite;
     }
 
     public void ShiftAlpha(float alpha)
@@ -263,24 +280,11 @@ public class Tile : MonoBehaviour
 		highlightSr.sortingOrder += inc;
         sortingGroup.sortingOrder += inc;
         shieldSr.sortingOrder += inc;
-        //maskSr.sortingOrder += inc;
-        //bombOverlay.sortingOrder += inc;
-        //moltenLines.sortingOrder += inc;
 	}
 
     public void SetSortingOrder(int sortingOrder)
     {
-        //int maskDiff = sortingGroup.sortingOrder - highlightSr.sortingOrder;
-        //int shieldDiff = sortingGroup.sortingOrder - shieldSr.sortingOrder;
-        //int bombDiff = sr.sortingOrder - bombOverlay.sortingOrder;
-        //int moltenDiff = sr.sortingOrder - moltenLines.sortingOrder;
-        //sr.sortingOrder = sortingOrder;
-        //highlightSr.sortingOrder = sortingOrder - maskDiff;
         sortingGroup.sortingOrder = sortingOrder;
-        //shieldSr.sortingOrder = sortingOrder - shieldDiff;
-        //maskSr.sortingOrder = sortingOrder - maskDiff;
-        //bombOverlay.sortingOrder = sortingOrder - bombDiff;
-        //moltenLines.sortingOrder = sortingOrder - moltenDiff;
     }
 
     public void SortOnSelection(bool selected)
@@ -317,13 +321,13 @@ public class Tile : MonoBehaviour
         Color redColor = new Color(redPulseColor.r, redPulseColor.g, redPulseColor.b, baseColor.a);
         if (toRed)
         {
-            sr.color = Color.Lerp(baseColor, redColor, EasingEquations.Easing.QuadEaseIn(
-                redPulseTimer / redPulsePeriod));
+            SetSrAndUIColor(Color.Lerp(baseColor, redColor, EasingEquations.Easing.QuadEaseIn(
+                redPulseTimer / redPulsePeriod)));
         }
         else
         {
-            sr.color = Color.Lerp(redColor, baseColor, EasingEquations.Easing.QuadEaseOut(
-                redPulseTimer / redPulsePeriod));
+            SetSrAndUIColor(Color.Lerp(redColor, baseColor, EasingEquations.Easing.QuadEaseOut(
+                 redPulseTimer / redPulsePeriod)));
         }
 
         if (redPulseTimer >= redPulsePeriod)
@@ -331,5 +335,20 @@ public class Tile : MonoBehaviour
             toRed = !toRed;
             redPulseTimer = 0;
         }
+    }
+
+    public void SetFilledUIStatus(bool status)
+    {
+        uiTile.gameObject.SetActive(status);
+    }
+
+    public void SetFilledUIFillAmount(float fillProportion)
+    {
+        uiTile.fillAmount = fillProportion;
+    }
+
+    public void SetUIScale(Vector3 scale)
+    {
+        uiTile.transform.localScale = scale;
     }
 }

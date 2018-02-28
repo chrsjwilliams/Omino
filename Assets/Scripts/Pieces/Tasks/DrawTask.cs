@@ -39,8 +39,8 @@ public class DrawTask : Task
 
         piece.Reposition(Vector3.Lerp(startPos, targetPos, 
             Easing.QuadEaseIn(timeElapsed / duration)));
-        piece.holder.transform.localScale = Vector3.Lerp(startScale, targetScale,
-            Easing.QuadEaseIn(timeElapsed/duration));
+        piece.ScaleHolder( Vector3.Lerp(startScale, targetScale,
+            Easing.QuadEaseIn(timeElapsed/duration)));
 
         if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
     }

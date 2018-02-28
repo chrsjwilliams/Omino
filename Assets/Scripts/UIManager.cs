@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private GameObject pauseMenu;
     public Transform canvas;
+    public Sprite blueprintTile;
     public Sprite destructorIcon;
     public Sprite bombFactoryIcon;
     public Sprite factoryIcon;

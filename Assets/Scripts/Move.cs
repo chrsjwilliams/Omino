@@ -183,11 +183,11 @@ public class Move
             playTask.Then(new ActionTask(blueprintMove.ExecuteMove));
         }
         Services.GeneralTaskManager.Do(playTask);
-        if(!(piece is Blueprint))
-        {
-            Debug.Log("player " + piece.owner.playerNum + " playing move with score:" + score +
-                ", winScore: " + finalWinScore + ", structScore: " + finalStructScore +
-                ", blueprintScore: " + finalBlueprintScore);
-        }
+        //if(!(piece is Blueprint))
+        //{
+        //    Debug.Log("player " + piece.owner.playerNum + " playing move with score:" + score +
+        //        ", winScore: " + finalWinScore + ", structScore: " + finalStructScore +
+        //        ", blueprintScore: " + finalBlueprintScore);
+        //}
     }
 }

@@ -71,7 +71,9 @@ public class AIPlayer : Player
         drawRateFactor = 1;
         resourcesPerTick = 1;
         base.Init(playerColorScheme, posOffset, winWeight, structWeight, blueprintWeight);
-        
+        Debug.Log("player " + playerNum + "using " + "\nwin weight: " + winWeight);
+        Debug.Log("struct weight: " + structWeight + "\nblueprint weight: " + blueprintWeight);
+
         if (playerNum == 1)
         {
             primaryTargets = new List<Coord>()

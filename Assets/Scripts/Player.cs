@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
     protected float resourceGainRate;
     protected float normalDrawRate;
     protected float destructorDrawRate;
-    private float resourceMeterFillAmt;
+    public float resourceMeterFillAmt { get; private set; }
     private float normalDrawMeterFillAmt;
     private float destructorDrawMeterFillAmt;
     [SerializeField]

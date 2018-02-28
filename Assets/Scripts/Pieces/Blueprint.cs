@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Blueprint : Polyomino
 {
-    private const float alphaPrePlacement = 0.5f;
+    private const float alphaPrePlacement = 0.8f;
     public int maxRotations { get; protected set; }
 
     protected static int[,,] factory = new int[1, 5, 5]
@@ -134,7 +134,8 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
                     string pieceName = newpiece.name.Replace("(Clone)", "");
                     newpiece.name = pieceName;
-                    newpiece.ActivateTile(owner, buildingType);
+                    //newpiece.SetBaseTileColor(owner, buildingType);
+                    newpiece.SetColor(Color.white);
                     newpiece.SetAlpha(alphaPrePlacement);
                     newpiece.IncrementSortingOrder(5);
                     tiles.Add(newpiece);
@@ -142,13 +143,21 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             }
         }
 
-        foreach(Tile tile in tiles)
-        {
-            tile.sr.enabled = false;
-        }
+        //foreach(Tile tile in tiles)
+        //{
+        //    tile.sr.enabled = false;
+        //}
         EnterUnselectedState();
         SetSprites();
 
+    }
+
+    protected override void SetTileSprites()
+    {
+        foreach(Tile tile in tiles)
+        {
+            tile.sr.sprite = Services.UIManager.blueprintTile;
+        }
     }
 
     protected override void SetIconSprite()
@@ -199,6 +208,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         {
             spriteOverlay.color = new Color(spriteOverlay.color.r, spriteOverlay.color.g,
                 spriteOverlay.color.b, alphaPrePlacement);
+            spriteOverlay.enabled = false;
         }
     }
 
@@ -207,9 +217,11 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         placed = true;
         spriteOverlay.color = spriteOverlay.color = new Color(spriteOverlay.color.r, spriteOverlay.color.g,
                 spriteOverlay.color.b, 1);
+        spriteOverlay.enabled = true;
         OnPlace();
         foreach (Tile tile in tiles)
         {
+            tile.sr.enabled = false;
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.occupyingBlueprint == null)
             {

@@ -108,22 +108,22 @@ public abstract class Structure : Polyomino
     {
         base.MakePhysicalPiece();
         HideFromInput();
-        holder.localScale = Vector3.one;
+        ScaleHolder(Vector3.one);
         neutralColor = tiles[0].sr.color;
         spriteOverlay.color = neutralColor;
         TurnOffGlow();
         //SetGlow(Color.white);
         //IncrementSortingOrder(500);
-        GameObject psObj = GameObject.Instantiate(Services.Prefabs.StructureParticles, holder);
-        psObj.transform.position = GetCenterpoint();
-        ps = psObj.GetComponent<ParticleSystem>();
-        ParticleSystem.MainModule main = ps.main;
-        main.startSizeMultiplier *= Mathf.Sqrt(tiles.Count) / 2;
-        if (this is Base)
-        {
-            Base thisAsBase = this as Base;
-            if (thisAsBase.mainBase) SetParticleClaimMode(true);
-        }
+        //GameObject psObj = GameObject.Instantiate(Services.Prefabs.StructureParticles, holder);
+        //psObj.transform.position = GetCenterpoint();
+        //ps = psObj.GetComponent<ParticleSystem>();
+        //ParticleSystem.MainModule main = ps.main;
+        //main.startSizeMultiplier *= Mathf.Sqrt(tiles.Count) / 2;
+        //if (this is Base)
+        //{
+        //    Base thisAsBase = this as Base;
+        //    if (thisAsBase.mainBase) SetParticleClaimMode(true);
+        //}
         ListenForInput();
         foreach(Tile tile in tiles)
         {
