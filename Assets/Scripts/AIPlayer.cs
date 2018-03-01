@@ -4,28 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- *      AI TODO:
- *                  AI tries to build blueprints
- *                  Needs to know geometry of pieces on board
- * 
- */ 
-
-
-/*
- *      Things AI needs to know:
- *              I need to know if this move would result in a successful blueprint
- * 
- * 
- */ 
-
-
-/*
- *      I need a hashset of coords a blueprint could go
- * 
- * 
- */ 
-
 public class AIPlayer : Player
 {
     public bool drawingPiece { get; protected set; }
@@ -40,10 +18,11 @@ public class AIPlayer : Player
     protected float winWeight;
     protected float structWeight;
     protected float blueprintWeight;
+    protected float destructionWeight;
     private IEnumerator thinkingCoroutine;
 
     public override void Init(Color[] playerColorScheme, int posOffset, float _winWeight, float _structureWeight, 
-        float _blueprintWeight)
+        float _blueprintWeight, float _destructionWeight)
     {
         playingPiece = false;
         isThinking = false;
@@ -57,6 +36,7 @@ public class AIPlayer : Player
         winWeight = _winWeight;
         structWeight = _structureWeight;
         blueprintWeight = _blueprintWeight;
+        destructionWeight = _destructionWeight;
 
         handSpacing = new Vector3(5.5f, -2.35f, 0);
         handOffset = new Vector3(-12.6f, 9.125f, 0);
@@ -70,7 +50,7 @@ public class AIPlayer : Player
         resourceGainFactor = 1;
         drawRateFactor = 1;
         resourcesPerTick = 1;
-        base.Init(playerColorScheme, posOffset, winWeight, structWeight, blueprintWeight);
+        base.Init(playerColorScheme, posOffset, winWeight, structWeight, blueprintWeight, destructionWeight);
         Debug.Log("player " + playerNum + "using " + "\nwin weight: " + winWeight);
         Debug.Log("struct weight: " + structWeight + "\nblueprint weight: " + blueprintWeight);
 
@@ -84,7 +64,7 @@ public class AIPlayer : Player
                 new Coord(Services.MapManager.MapWidth-3, Services.MapManager.MapHeight -2),
                 new Coord(Services.MapManager.MapWidth -3, Services.MapManager.MapHeight -1)
             };
-    }
+        }
         else
         {
             primaryTargets = new List<Coord>()
@@ -96,6 +76,7 @@ public class AIPlayer : Player
                 new Coord(2,0)
             };
         }
+        destructionWeight = 1.0f;
     }
 
     public List<Coord> FindAllPlayableCoords(int range, bool tossOccupied)
@@ -376,8 +357,9 @@ public class AIPlayer : Player
                                         pieceCoords.Add(tile.coord);
                                     }
                                 }
+
                                 Move newMove = new Move(piece, playableCoords[i], (rotations + 1) % 4, possibleBlueprintMoves,
-                                    winWeight, structWeight, mineWeight, factoryWeight, bombFactoryWeight);
+                                    winWeight, structWeight, destructionWeight, mineWeight, factoryWeight, bombFactoryWeight);
                                 
                                 if (nextPlay == null) nextPlay = newMove;
                                 else if (newMove.score > nextPlay.score)
@@ -398,6 +380,7 @@ public class AIPlayer : Player
 
         if (nextPlay != null)
         {
+           
             MakePlay(nextPlay);
         }
         isThinking = false;
@@ -486,11 +469,13 @@ public struct AIStrategy
     public float winWeight;
     public float structWeight;
     public float blueprintWeight;
+    public float destructionWeight;
 
-    public AIStrategy(float winWeight_, float structWeight_, float blueprintWeight_)
+    public AIStrategy(float winWeight_, float structWeight_, float blueprintWeight_, float destructionWeight_)
     {
         winWeight = winWeight_;
         structWeight = structWeight_;
         blueprintWeight = blueprintWeight_;
+        destructionWeight = destructionWeight_;
     }
 }

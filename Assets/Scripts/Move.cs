@@ -22,7 +22,7 @@ public class Move
     private List<BlueprintMap> possibleBlueprintMoves;
 
     public Move(Polyomino _piece, Coord _targetCoord, int _rotations, List<BlueprintMap> _possibleBlueprintMoves, float winWeight, 
-        float structureWeight, float mineWeight, float factoryWeight, float bombFactoryWeight)
+        float structureWeight, float destructionWeight, float mineWeight, float factoryWeight, float bombFactoryWeight)
     {
         piece = _piece;
         //relativeCoords = piece.tileRelativeCoords;
@@ -30,7 +30,7 @@ public class Move
         rotations = _rotations;
         possibleBlueprintMoves = _possibleBlueprintMoves;
         blueprintMove = null;
-        score = CalculateScore(winWeight, structureWeight, mineWeight, factoryWeight, bombFactoryWeight);
+        score = CalculateScore(winWeight, structureWeight, destructionWeight, mineWeight, factoryWeight, bombFactoryWeight);
     }
 
     public Move(Blueprint blueprint, Coord _targetCoord, int _rotations)
@@ -40,7 +40,7 @@ public class Move
         rotations = _rotations;
     }
 
-    public float CalculateScore(float winWeight, float structWeight, float mineWeight, float factoryWeight, float bombFactoryWeight)
+    public float CalculateScore(float winWeight, float structWeight, float destructionWeight, float mineWeight, float factoryWeight, float bombFactoryWeight)
     {
         HashSet<Coord> pieceCoords = new HashSet<Coord>();
         foreach(Tile tile in piece.tiles)
@@ -70,50 +70,66 @@ public class Move
                 }
                 if (mineMove != null && factoryMove != null && bombFactoryMove != null) break;
             }
-
-            #region Smart Blueprint Placement Test
-            /*
-            //  find which missing peice I'm a superset of
-            moveBlueprintMap = blueprintMap;
-            int numFilledCoords = moveBlueprintMap.coords.Intersect(pieceCoords).Count();
-            if(numFilledCoords > moveBlueprintMap.numCoordsFilled)
-            {
-                moveBlueprintMap = blueprintMap;
-                //   we can do other things here that distinguish between blueprints
-                if (numFilledCoords == piece.tiles.Count) break;
-            }
-            */
-            #endregion
-
         }
         
 
-        return WinAndStructScore(winWeight, structWeight) + BlueprintScore(mineMove, factoryMove, bombFactoryMove, mineWeight,
-            factoryWeight, bombFactoryWeight);
+        return  WinAndStructScore(winWeight, structWeight) + 
+                BlueprintScore(mineMove, factoryMove, bombFactoryMove, mineWeight,
+                                factoryWeight, bombFactoryWeight) +
+                DestructionScore(destructionWeight, pieceCoords);
     }
 
     private float BlueprintScore(Move mineMove, Move factoryMove, Move bombFactoryMove, float mineWeight, float factoryWeight,
         float bombFactoryWeight)
     {
+        float destructorModifier = 1;
+        if(piece is Destructor)
+        {
+            destructorModifier = 0.5f;
+        }
+
         float blueprintScore = 0;
         if (mineMove != null)
         {
-            blueprintScore = mineWeight;
+            blueprintScore = mineWeight * destructorModifier;
             blueprintMove = mineMove;
         }
         if (factoryMove != null && factoryWeight > blueprintScore)
         {
-            blueprintScore = factoryWeight;
+            blueprintScore = factoryWeight * destructorModifier;
             blueprintMove = factoryMove;
         }
         if (bombFactoryMove != null && bombFactoryWeight > blueprintScore)
         {
-            blueprintScore = bombFactoryWeight;
+            blueprintScore = bombFactoryWeight * destructorModifier;
             blueprintMove = bombFactoryMove;
         }
         finalBlueprintScore = blueprintScore;
         return blueprintScore;
 
+    }
+
+    private float DestructionScore(float destructionWeight, HashSet<Coord> pieceCoords)
+    {
+        if (!(piece is Destructor)) return 0;
+        else
+        {
+            List<Coord> tileCoordsIDestroy = new List<Coord>();
+            foreach (Coord coord in pieceCoords)
+            {
+                Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
+
+                if (mapTile.occupyingPiece != null &&
+                    mapTile.occupyingStructure == null &&
+                    mapTile.occupyingPiece.owner != piece.owner)
+                {
+                    // check if my tile coords contain a polyomino that belongs to my opponent
+                    //  count up the coords evaliate them somehow
+                    tileCoordsIDestroy.Add(coord);
+                }
+            }
+            return destructionWeight * tileCoordsIDestroy.Count;
+        }
     }
     
     private float WinAndStructScore(float winWeight, float structWeight)
@@ -179,6 +195,7 @@ public class Move
         }
         else
         {
+            
             playTask = new PlayTask(this);
             playTask.Then(new ActionTask(blueprintMove.ExecuteMove));
         }
