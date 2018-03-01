@@ -278,7 +278,7 @@ public class AIPlayer : Player
             {
                 for (int rotations = 0; rotations < 4; rotations++)
                 {
-                    blueprint.Rotate(false, true, true);
+                    blueprint.Rotate(false, true);
                     //  For play positions +/- a pieces radius
                     blueprint.SetTileCoords(coord);
                     blueprint.TurnOffGlow();
@@ -342,7 +342,7 @@ public class AIPlayer : Player
                     // each piece should know how many times it can be rotated
                     for (int rotations = 0; rotations < 4; rotations++)
                     {
-                        piece.Rotate(false, true, true);
+                        piece.Rotate(false, true);
                         piece.SetTileCoords(playableCoords[i]);
                         piece.TurnOffGlow();
                         if (rotations < numRotations)

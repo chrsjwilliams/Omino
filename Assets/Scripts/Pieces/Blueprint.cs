@@ -147,7 +147,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         //{
         //    tile.sr.enabled = false;
         //}
-        EnterUnselectedState();
+        EnterUnselectedState(false);
         SetSprites();
 
     }
@@ -260,7 +260,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                 break;
             }
         }
-        ListenForInput();
+        ListenForInput(true);
         Services.GeneralTaskManager.Do(new BlueprintPlacementTask(this));
         //MakeDustClouds();
         //spriteOverlay.color = spriteOverlay.color = new Color(spriteOverlay.color.r, spriteOverlay.color.g,
@@ -268,9 +268,9 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         //spriteOverlay.enabled = true;
     }
 
-    public override void OnInputDown()
+    public override void OnInputDown(bool fromPlayTask)
     {
-        base.OnInputDown();
+        base.OnInputDown(fromPlayTask);
         if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID))
         {
             Vector3 tooltipLocation;
@@ -309,11 +309,14 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                 tooltips.Add(tooltipRight);
             }
 
-            Services.GameEventManager.Register<TouchUp>(OnTouchUp);
-            Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
+            if (!fromPlayTask)
+            {
+                Services.GameEventManager.Register<TouchUp>(OnTouchUp);
+                Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
 
-            Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
-            Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
+                Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
+                Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
+            }
 
             Services.UIManager.OnTooltipCreated(touchID);
         }
@@ -354,13 +357,13 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             if (IsPlacementLegal() && !owner.gameOver)
             {
                 PlaceAtCurrentLocation();
-                ListenForInput();
+                //ListenForInput();
                 //IncrementSortingOrder(-20000);
             }
             else
             {
                 owner.CancelSelectedBlueprint();
-                EnterUnselectedState();
+                EnterUnselectedState(false);
             }
         }
     }

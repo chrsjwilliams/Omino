@@ -124,7 +124,7 @@ public abstract class Structure : Polyomino
         //    Base thisAsBase = this as Base;
         //    if (thisAsBase.mainBase) SetParticleClaimMode(true);
         //}
-        ListenForInput();
+        ListenForInput(false);
         foreach(Tile tile in tiles)
         {
             tile.sr.enabled = false;
@@ -206,7 +206,7 @@ public abstract class Structure : Polyomino
         spriteOverlay.sprite = Services.UIManager.structureOverlay;
     }
 
-    public override void OnInputDown()
+    public override void OnInputDown(bool fromPlayTask)
     {
         if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID))
         {

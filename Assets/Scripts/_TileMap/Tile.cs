@@ -55,7 +55,7 @@ public class Tile : MonoBehaviour
     private SortingGroup sortingGroup;
     private float redPulseTimer;
     private const float redPulsePeriod = 0.6f;
-    private static Color redPulseColor = new Color(0.5f, 0, 0);
+    private static Color redPulseColor = new Color(0.5f, 0, 0.5f);
     private bool toRed;
     private Image uiTile;
     //public SpriteMask mask { get; private set; }

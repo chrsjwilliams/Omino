@@ -27,6 +27,6 @@ public class RotationUI : MonoBehaviour {
 
     public void Rotate(bool clockwise)
     {
-        piece.Rotate(true, clockwise, false);
+        //piece.Rotate(true, clockwise, false);
     }
 }

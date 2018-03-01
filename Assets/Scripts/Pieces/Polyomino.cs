@@ -460,7 +460,7 @@ public class Polyomino
     public void OnDrawn()
     {
         //ToggleCostUIStatus(true);
-        ListenForInput();
+        ListenForInput(false);
     }
 
     public void SetVisible(bool isVisible_)
@@ -475,11 +475,11 @@ public class Polyomino
             }
             if (isVisible && owner != null && (affordable || this is Blueprint))
             {
-                EnterUnselectedState();
+                EnterUnselectedState(false);
             }
             else
             {
-                EnterUnselectedState();
+                EnterUnselectedState(false);
                 HideFromInput();
             }
         }
@@ -1012,7 +1012,7 @@ public class Polyomino
         SetSprites();
         if (buildingType != BuildingType.BASE)
         {
-            EnterUnselectedState();
+            EnterUnselectedState(false);
         }
 
         lastPositions = new Queue<Coord>();
@@ -1058,15 +1058,15 @@ public class Polyomino
         return GetCenterpoint(false);
     }
 
-    protected void EnterUnselectedState()
+    protected void EnterUnselectedState(bool allowAIPlayers)
     {
-        ListenForInput();
+        ListenForInput(allowAIPlayers);
         ScaleHolder(unselectedScale);
     }
 
-    protected void ListenForInput()
+    protected void ListenForInput(bool allowAIPlayers)
     {
-        if (!(owner is AIPlayer))
+        if (!(owner is AIPlayer) || allowAIPlayers)
         {
             Services.GameEventManager.Register<TouchDown>(OnTouchDown);
             Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
@@ -1107,7 +1107,7 @@ public class Polyomino
             && (owner == null || owner.selectedPiece == null))
         {
             touchID = e.touch.fingerId;
-            OnInputDown();
+            OnInputDown(false);
         }
     }
 
@@ -1117,7 +1117,7 @@ public class Polyomino
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos);
         if (IsPointContainedWithinHolderArea(mouseWorldPos) && (owner == null || owner.selectedPiece == null))
         {
-            OnInputDown();
+            OnInputDown(false);
         }
     }
 
@@ -1135,7 +1135,7 @@ public class Polyomino
         OnInputUp();
     }
 
-    public virtual void OnInputDown()
+    public virtual void OnInputDown(bool fromPlayTask)
     {
         if (!owner.gameOver && !placed)
         {
@@ -1231,7 +1231,7 @@ public class Polyomino
             else
             {
                 owner.CancelSelectedPiece();
-                EnterUnselectedState();
+                EnterUnselectedState(false);
                 //ToggleCostUIStatus(true);
                 CleanUpUI();
             }
@@ -1357,14 +1357,11 @@ public class Polyomino
     }
 
 
-    public virtual void Rotate() { Rotate(true, true, false); }
+    public virtual void Rotate() { Rotate(true, false); }
 
-    public virtual void Rotate(bool relocate) { Rotate(relocate, true, false); }
-
-    public virtual void Rotate(bool relocate, bool clockwise, bool dataOnly)
+    public virtual void Rotate(bool relocate, bool dataOnly)
     {
         float rotAngle = 90 * Mathf.Deg2Rad;
-        if (!clockwise) rotAngle *= -1;
         foreach (Tile tile in tiles)
         {
             //Coord prevRelCoord = tileRelativeCoords[tile];
@@ -1569,9 +1566,9 @@ public class Polyomino
         if (placed)
         {
             Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
-            Services.GameEventManager.Register<TouchDown>(OnTouchDown);
-
             Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
+
+            Services.GameEventManager.Register<TouchDown>(OnTouchDown);
             Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
         }
     }
@@ -1594,7 +1591,7 @@ public class Polyomino
 
     public void Unlock()
     {
-        ListenForInput();
+        ListenForInput(false);
     }
 
     void QueuePosition(Coord pos)

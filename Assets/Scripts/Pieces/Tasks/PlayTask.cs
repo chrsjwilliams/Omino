@@ -37,7 +37,7 @@ public class PlayTask : Task
         {
             piece.Rotate();
         }
-        piece.OnInputDown();
+        piece.OnInputDown(true);
 
         duration = Polyomino.drawAnimDur;
     }
