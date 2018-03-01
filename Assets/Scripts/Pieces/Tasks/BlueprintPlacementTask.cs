@@ -69,7 +69,10 @@ public class BlueprintPlacementTask : Task
 
     protected override void OnSuccess()
     {
-
+        foreach(Tile tile in blueprint.tiles)
+        {
+            tile.sr.enabled = false;
+        }
     }
 
 

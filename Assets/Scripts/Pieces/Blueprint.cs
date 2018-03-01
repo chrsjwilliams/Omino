@@ -219,7 +219,6 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         OnPlace();
         foreach (Tile tile in tiles)
         {
-            tile.sr.enabled = false;
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.occupyingBlueprint == null)
             {

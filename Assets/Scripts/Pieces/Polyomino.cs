@@ -491,7 +491,7 @@ public class Polyomino
         foreach (Tile tile in tiles)
         {
             if (0 <= tile.coord.x && tile.coord.x < Services.MapManager.MapWidth &&
-               0 <= tile.coord.y && tile.coord.y < Services.MapManager.MapLength)
+               0 <= tile.coord.y && tile.coord.y < Services.MapManager.MapHeight)
             {
                 withinBounds = true;
             }
@@ -777,6 +777,7 @@ public class Polyomino
     public void ShiftColor(Color color)
     {
         foreach (Tile tile in tiles) tile.ShiftColor(color);
+        spriteOverlay.color = color;
     }
 
     protected virtual void OnPlace()

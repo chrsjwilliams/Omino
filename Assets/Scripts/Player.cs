@@ -118,7 +118,7 @@ public class Player : MonoBehaviour
         {
             basePos = new Coord(
                 Services.MapManager.MapWidth - 2,
-                Services.MapManager.MapLength - 2);
+                Services.MapManager.MapHeight - 2);
         }
         Services.MapManager.CreateMainBase(this, basePos);
         maxResources = baseMaxResources;
@@ -567,6 +567,11 @@ public class Player : MonoBehaviour
 
     public void OnGameOver()
     {
+        if (selectedPiece != null)
+        {
+            if (selectedPiece is Blueprint) CancelSelectedBlueprint();
+            else CancelSelectedPiece();
+        }
         gameOver = true;
     }
 

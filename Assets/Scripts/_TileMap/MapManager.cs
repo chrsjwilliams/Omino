@@ -10,10 +10,10 @@ public class MapManager : MonoBehaviour
         get { return _mapWidth; }
     }
 
-  	[SerializeField] private int _mapLength;
-    public int MapLength
+  	[SerializeField] private int _mapHeight;
+    public int MapHeight
     {
-        get { return _mapLength; }
+        get { return _mapHeight; }
     }
 
 	[SerializeField] private Tile[,] _map;
@@ -61,10 +61,22 @@ public class MapManager : MonoBehaviour
 
     public void GenerateMap()
     {
-        _map = new Tile[MapWidth, MapLength];
+        if(Services.GameManager.levelSelected != 0)
+        {
+            Level level = levels[Services.GameManager.levelSelected - 1];
+            _mapWidth = level.width;
+            _mapHeight = level.height;
+        }
+
+        Camera.main.transform.position = 
+            new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, -10);
+
+        //Debug.Log("width " + MapWidth + ", height " + MapHeight);
+
+        _map = new Tile[MapWidth, MapHeight];
         for (int i = 0; i < MapWidth; i++)
         {
-            for (int j = 0; j < MapLength; j++)
+            for (int j = 0; j < MapHeight; j++)
             {
                 Tile tile = Instantiate(Services.Prefabs.Tile, GameSceneScript.tileMapHolder)
                     .GetComponent<Tile>();
@@ -240,13 +252,13 @@ public class MapManager : MonoBehaviour
 
     Coord MirroredCoord(Coord coord)
     {
-        return new Coord((MapWidth - 1) - coord.x, (MapLength - 1) - coord.y);
+        return new Coord((MapWidth - 1) - coord.x, (MapHeight - 1) - coord.y);
     }
 
     bool IsStructureCoordValid(Coord candidateCoord)
     {
         if (candidateCoord.Distance(new Coord(0, 0)) < structRadiusMin ||
-            candidateCoord.Distance(new Coord(MapWidth - 1, MapLength - 1))
+            candidateCoord.Distance(new Coord(MapWidth - 1, MapHeight - 1))
             < structRadiusMin)
             return false;
         for (int i = 0; i < structuresOnMap.Count; i++)
@@ -260,7 +272,7 @@ public class MapManager : MonoBehaviour
     bool IsResourceCoordValid(Coord candidateCoord)
     {
         if (candidateCoord.Distance(new Coord(0, 0)) < resourceRadiusMin ||
-            candidateCoord.Distance(new Coord(MapWidth - 1, MapLength - 1))
+            candidateCoord.Distance(new Coord(MapWidth - 1, MapHeight - 1))
             < resourceRadiusMin)
             return false;
         for (int i = 0; i < resourcesOnMap.Count; i++)
@@ -290,21 +302,24 @@ public class MapManager : MonoBehaviour
         structuresOnMap = new List<Structure>();
         List<BuildingType> structureTypes = InitStructureTypeList();
 
-        for (int j = 0; j < 2; j++)
+        if (level == null || level.cornerBases)
         {
-            Base cornerBase = new Base();
-            cornerBase.MakePhysicalPiece();
-            Coord location;
-            if (j == 0)
+            for (int j = 0; j < 2; j++)
             {
-                location = new Coord(MapWidth - 2, 1);
+                Base cornerBase = new Base();
+                cornerBase.MakePhysicalPiece();
+                Coord location;
+                if (j == 0)
+                {
+                    location = new Coord(MapWidth - 2, 1);
+                }
+                else
+                {
+                    location = new Coord(0, MapHeight - 1);
+                }
+                cornerBase.PlaceAtLocation(location);
+                structuresOnMap.Add(cornerBase);
             }
-            else
-            {
-                location = new Coord(0, MapLength - 1);
-            }
-            cornerBase.PlaceAtLocation(location);
-            structuresOnMap.Add(cornerBase);
         }
 
         if (level == null) // use procedural generation if no supplied level
@@ -350,27 +365,27 @@ public class MapManager : MonoBehaviour
     Coord GenerateRandomCoord()
     {
         return new Coord(Random.Range(resourceBorderMin, MapWidth - resourceBorderMin),
-            Random.Range(resourceBorderMin, MapLength - resourceBorderMin));
+            Random.Range(resourceBorderMin, MapHeight - resourceBorderMin));
     }
 
     public IntVector2 CenterIndexOfGrid()
     {
-        return new IntVector2(MapWidth / 2, MapLength / 2);
+        return new IntVector2(MapWidth / 2, MapHeight / 2);
     }
 
     public void CreateMainBase(Player player, Coord coord)
     {
         Base playerBase = new Base(player, true);
         player.mainBase = playerBase;
-        playerBase.ShiftColor(player.ColorScheme[0]);
         playerBase.MakePhysicalPiece();
+        playerBase.ShiftColor(player.ColorScheme[0]);
         playerBase.PlaceAtLocation(coord);
         playerBase.TogglePieceConnectedness(true);
     }
 
     public Tile GetRandomTile()
     {
-        return _map[Random.Range(0, MapWidth), Random.Range(0, MapLength)];
+        return _map[Random.Range(0, MapWidth), Random.Range(0, MapHeight)];
     }
 
     public Tile GetRandomEmptyTile()
@@ -383,7 +398,7 @@ public class MapManager : MonoBehaviour
     public bool IsCoordContainedInMap(Coord coord)
     {
         return coord.x >= 0 && coord.x < MapWidth &&
-                coord.y >= 0 && coord.y < MapLength;
+                coord.y >= 0 && coord.y < MapHeight;
     }
 
     public bool ValidateTile(Tile tile, Player owner)

@@ -78,11 +78,11 @@ public class AIPlayer : Player
         {
             primaryTargets = new List<Coord>()
             {
-                new Coord(Services.MapManager.MapWidth - 3, Services.MapManager.MapLength - 3),
-                new Coord(Services.MapManager.MapWidth - 2, Services.MapManager.MapLength - 3),
-                new Coord(Services.MapManager.MapWidth - 1, Services.MapManager.MapLength - 3),
-                new Coord(Services.MapManager.MapWidth-3, Services.MapManager.MapLength -2),
-                new Coord(Services.MapManager.MapWidth -3, Services.MapManager.MapLength -1)
+                new Coord(Services.MapManager.MapWidth - 3, Services.MapManager.MapHeight - 3),
+                new Coord(Services.MapManager.MapWidth - 2, Services.MapManager.MapHeight - 3),
+                new Coord(Services.MapManager.MapWidth - 1, Services.MapManager.MapHeight - 3),
+                new Coord(Services.MapManager.MapWidth-3, Services.MapManager.MapHeight -2),
+                new Coord(Services.MapManager.MapWidth -3, Services.MapManager.MapHeight -1)
             };
     }
         else
@@ -251,7 +251,7 @@ public class AIPlayer : Player
         //  Finding tiles that could possibly adjacent pieces AI cares about
         List<Polyomino>[,] adjPiecesByCoord = new List<Polyomino>[
             Services.MapManager.MapWidth,
-            Services.MapManager.MapLength];
+            Services.MapManager.MapHeight];
 
         Move nextPlay = null;
         int coordsConsidered = 0;
