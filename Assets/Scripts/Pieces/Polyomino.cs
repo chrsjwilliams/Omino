@@ -1582,6 +1582,7 @@ public class Polyomino
         burnTask.Then(new ActionTask(DestroyThis));
         Services.GeneralTaskManager.Do(burnTask);
         burningFromHand = true;
+        foreach (Tile tile in tiles) tile.OnRemove();
     }
 
     public void Lock()

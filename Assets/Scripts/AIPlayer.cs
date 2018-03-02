@@ -178,48 +178,51 @@ public class AIPlayer : Player
         int countedPlayableCoords = 0;
         foreach (Polyomino piece in currentBoardPieces)
         {
-            foreach(Tile tile in piece.tiles)
+            if (piece.connected || piece is Structure)
             {
-                for (int dx = -5; dx <= 5; dx++)
+                foreach (Tile tile in piece.tiles)
                 {
-                    for (int dy = -5; dy <= 5; dy++)
+                    for (int dx = -5; dx <= 5; dx++)
                     {
-                        countedPlayableCoords++;
-
-                        Coord radiusOffset = new Coord(dx, dy);
-                        Coord candidateCoord = tile.coord.Add(radiusOffset);
-
-                        if (countedPlayableCoords % coordCountBuffer == 0)
+                        for (int dy = -5; dy <= 5; dy++)
                         {
-                            yield return null;
-                        }
-                        bool containedInMap = Services.MapManager.IsCoordContainedInMap(candidateCoord);
-                        Tile mapTile = null;
-                        if(containedInMap) mapTile = Services.MapManager.Map[candidateCoord.x, candidateCoord.y];
-                        if (Mathf.Abs(dx) <= 3 && Mathf.Abs(dy) <= 3)
-                        {
-                            if (!playableCoords.Contains(candidateCoord) &&
-                                containedInMap &&
-                                mapTile.occupyingPiece == null &&
-                                mapTile.occupyingStructure == null)
+                            countedPlayableCoords++;
+
+                            Coord radiusOffset = new Coord(dx, dy);
+                            Coord candidateCoord = tile.coord.Add(radiusOffset);
+
+                            if (countedPlayableCoords % coordCountBuffer == 0)
                             {
-                                playableCoords.Add(candidateCoord);
+                                yield return null;
+                            }
+                            bool containedInMap = Services.MapManager.IsCoordContainedInMap(candidateCoord);
+                            Tile mapTile = null;
+                            if (containedInMap) mapTile = Services.MapManager.Map[candidateCoord.x, candidateCoord.y];
+                            if (Mathf.Abs(dx) <= 3 && Mathf.Abs(dy) <= 3)
+                            {
+                                if (!playableCoords.Contains(candidateCoord) &&
+                                    containedInMap &&
+                                    mapTile.occupyingPiece == null &&
+                                    mapTile.occupyingStructure == null)
+                                {
+                                    playableCoords.Add(candidateCoord);
+                                }
+
+                                if (!possibleBlueprintCoords.Contains(candidateCoord) &&
+                                    containedInMap &&
+                                    mapTile.occupyingStructure == null &&
+                                    mapTile.occupyingBlueprint == null)
+                                {
+                                    possibleBlueprintCoords.Add(candidateCoord);
+                                }
                             }
 
-                            if (!possibleBlueprintCoords.Contains(candidateCoord) &&
+                            if (!touchableCoords.Contains(candidateCoord) &&
                                 containedInMap &&
-                                mapTile.occupyingStructure == null &&
-                                mapTile.occupyingBlueprint == null)
+                                (mapTile.occupyingPiece == null || mapTile.occupyingPiece.owner != this))
                             {
-                                possibleBlueprintCoords.Add(candidateCoord);
-                            }
-                        }
-
-                        if (!touchableCoords.Contains(candidateCoord) && 
-                            containedInMap &&
-                            (mapTile.occupyingPiece == null || mapTile.occupyingPiece.owner != this))
-                        { 
                                 touchableCoords.Add(candidateCoord);
+                            }
                         }
                     }
                 }
@@ -274,7 +277,8 @@ public class AIPlayer : Player
                             if (containedInMap) mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                             if (!containedInMap ||
                                 (mapTile.occupyingPiece != null &&
-                                    (mapTile.occupyingPiece is Structure || mapTile.occupyingPiece.owner != this)) ||
+                                    (mapTile.occupyingPiece is Structure || mapTile.occupyingPiece.owner != this ||
+                                    !mapTile.occupyingPiece.connected)) ||
                                 mapTile.occupyingBlueprint != null)
                             {
                                 illegalPlacement = true;
