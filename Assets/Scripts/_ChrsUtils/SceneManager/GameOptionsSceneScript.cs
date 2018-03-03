@@ -102,6 +102,13 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             joinButtons[i].GetComponent<Image>().color = (baseColors[i] + Color.white) / 2;
         }
+
+        if (Services.GameManager.tutorialMode)
+        {
+            levelButtonParent.SetActive(false);
+            levelSelectionIndicator.gameObject.SetActive(false);
+            levelSelected = 4;
+        }
     }
 
     internal override void OnExit()

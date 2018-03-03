@@ -1279,6 +1279,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1572357589406666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4394426634200346}
+  - component: {fileID: 114800975611488008}
+  m_Layer: 0
+  m_Name: TutorialManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1575263695875206
 GameObject:
   m_ObjectHideFlags: 1
@@ -2159,6 +2175,19 @@ Transform:
   m_Father: {fileID: 4552964003137588}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4394426634200346
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1572357589406666}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 366.5, y: 314.57202, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4552964003137588}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4552964003137588
 Transform:
   m_ObjectHideFlags: 1
@@ -2172,6 +2201,7 @@ Transform:
   - {fileID: 4153143093252728}
   - {fileID: 224712141627911468}
   - {fileID: 4387843705577276}
+  - {fileID: 4394426634200346}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5298,7 +5328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   demoMode: 0
-  evolutionMode: 1
+  evolutionMode: 0
   _backgroundColor: {r: 0.9019608, g: 0.9098039, b: 0.9019608, a: 1}
 --- !u!114 &114757423564641448
 MonoBehaviour:
@@ -5485,6 +5515,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 0
   m_FillOrigin: 2
+--- !u!114 &114800975611488008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1572357589406666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e060219fb252f55478bb2fc95db1d3c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tutorialTooltipPrefab: {fileID: 1061029122255962, guid: a6d91cf4939bd8846b0fa42ddebd2b36,
+    type: 2}
 --- !u!114 &114820756606580354
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -22,7 +22,7 @@ public class TitleSceneScript : Scene<TransitionData>
 
     private void OnTouchDown(TouchDown e)
     {
-        StartGame();
+        //StartGame();
     }
 
     private void OnButtonPressed(ButtonPressed e)
@@ -42,6 +42,12 @@ public class TitleSceneScript : Scene<TransitionData>
         );
     }
 
+    public void Play(bool tutorialModeChosen)
+    {
+        Services.GameManager.tutorialMode = tutorialModeChosen;
+        StartGame();
+    }
+
     private void ChangeScene()
     {
         Services.Scenes.Swap<GameOptionsSceneScript>();
@@ -50,6 +56,6 @@ public class TitleSceneScript : Scene<TransitionData>
     private void Update()
     {
         _tm.Update();
-        if (Input.GetMouseButtonDown(0)) StartGame();
+        //if (Input.GetMouseButtonDown(0)) StartGame();
     }
 }

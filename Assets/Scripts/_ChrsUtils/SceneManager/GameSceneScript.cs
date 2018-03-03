@@ -13,7 +13,8 @@ public class GameSceneScript : Scene<TransitionData>
     private bool demoMode;
     [SerializeField]
     private bool evolutionMode;
-    public bool normalPlayMode { get { return !demoMode && !evolutionMode; } }
+    private bool tutorialMode;
+    public bool normalPlayMode { get { return !demoMode && !evolutionMode && !tutorialMode; } }
 
     [SerializeField]
     private Color _backgroundColor;
@@ -31,12 +32,16 @@ public class GameSceneScript : Scene<TransitionData>
         Time.timeScale = 1;
         Services.GameScene = this;
         Services.UIManager = GetComponentInChildren<UIManager>();
-
+        tutorialMode = Services.GameManager.tutorialMode;
         _colorChangeTime = 0f;
         Services.MapManager.GenerateMap();
         if (evolutionMode)
         {
             Services.GameManager.InitPlayersEvoMode();
+        }
+        else if (tutorialMode)
+        {
+            Services.GameManager.InitPlayersTutorialMode();
         }
         else
         {

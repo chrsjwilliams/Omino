@@ -53,6 +53,8 @@ public class GameManager : MonoBehaviour
 
     private AIStrategy[] currentStrategies;
 
+    public bool tutorialMode;
+
 
     private void Awake()
     {
@@ -98,6 +100,15 @@ public class GameManager : MonoBehaviour
     {
         destructionWeight = weight;
         PlayerPrefs.SetFloat("attackWeight", destructionWeight);
+    }
+
+    public void InitPlayersTutorialMode()
+    {
+        winWeight = 1;
+        structureWeight = 0;
+        blueprintWeight = 0;
+        destructionWeight = 0;
+        InitPlayers();
     }
 
     public void InitPlayers()
