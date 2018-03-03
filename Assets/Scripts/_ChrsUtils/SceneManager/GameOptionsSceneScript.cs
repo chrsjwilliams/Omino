@@ -23,10 +23,20 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     [SerializeField]
     private Slider blueprintWeightSlider;
     [SerializeField]
+    private Slider attackWeightSlider;
+    [SerializeField]
     private Button[] joinButtons;
     private Text[] joinButtonJoinTexts;
     private Text[] joinButtonPlayerTypeTexts;
     private Color[] baseColors;
+    [SerializeField]
+    private float defaultWinWeight;
+    [SerializeField]
+    private float defaultStructWeight;
+    [SerializeField]
+    private float defaultBlueprintWeight;
+    [SerializeField]
+    private float defaultAttackWeight;
 
     private float timeElapsed;
     private const float textPulsePeriod = 0.35f;
@@ -45,13 +55,33 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             winWeightSlider.value = PlayerPrefs.GetFloat("winWeight");
         }
+        else
+        {
+            winWeightSlider.value = defaultWinWeight;
+        }
         if (PlayerPrefs.HasKey("structWeight"))
         {
             structureWeightSlider.value = PlayerPrefs.GetFloat("structWeight");
         }
+        else
+        {
+            structureWeightSlider.value = defaultStructWeight;
+        }
         if (PlayerPrefs.HasKey("blueprintWeight"))
         {
             blueprintWeightSlider.value = PlayerPrefs.GetFloat("blueprintWeight");
+        }
+        else
+        {
+            blueprintWeightSlider.value = defaultBlueprintWeight;
+        }
+        if (PlayerPrefs.HasKey("attackWeight"))
+        {
+            attackWeightSlider.value = PlayerPrefs.GetFloat("attackWeight");
+        }
+        else
+        {
+            attackWeightSlider.value = defaultAttackWeight;
         }
         levelButtons = levelButtonParent.GetComponentsInChildren<Button>();
         SelectLevel(0);
@@ -92,6 +122,11 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     public void SetBlueprintWeight()
     {
         Services.GameManager.SetBlueprintWeight(blueprintWeightSlider.value);
+    }
+
+    public void SetAttackWeight()
+    {
+        Services.GameManager.SetAttackWeight(attackWeightSlider.value);
     }
 
     public void StartGame()

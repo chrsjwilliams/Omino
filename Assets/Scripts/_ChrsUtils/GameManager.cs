@@ -94,6 +94,12 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetFloat("blueprintWeight", blueprintWeight);
     }
 
+    public void SetAttackWeight(float weight)
+    {
+        destructionWeight = weight;
+        PlayerPrefs.SetFloat("attackWeight", destructionWeight);
+    }
+
     public void InitPlayers()
     {
         for (int i = 0; i < 2; i++)
@@ -191,18 +197,32 @@ public class GameManager : MonoBehaviour
             {
                 string strategyString = PlayerPrefs.GetString("strategy" + i);
                 string[] weightArrays = strategyString.Split(',');
-                currentStrategies[i] = new AIStrategy(
-                    float.Parse(weightArrays[0]),
-                    float.Parse(weightArrays[1]),
-                    float.Parse(weightArrays[2]),
-                    float.Parse(weightArrays[3]));
+                if (weightArrays.Length == 4)
+                {
+                    currentStrategies[i] = new AIStrategy(
+                        float.Parse(weightArrays[0]),
+                        float.Parse(weightArrays[1]),
+                        float.Parse(weightArrays[2]),
+                        float.Parse(weightArrays[3]));
+                }
+                else
+                {
+                    float winWeight = 1;
+                    float structWeight = 0.11f;
+                    float blueprintWeight = 0.23f;
+                    float destructionWeight = 0.15f;
+                    currentStrategies[i] = new AIStrategy(winWeight, structWeight, 
+                        blueprintWeight, destructionWeight);
+                }
             }
             else
             {
                 float winWeight = 1;
-                float structWeight = 0.15f;
-                float blueprintWeight = 0.15f;
-                currentStrategies[i] = new AIStrategy(winWeight, structWeight, blueprintWeight, destructionWeight);
+                float structWeight = 0.11f;
+                float blueprintWeight = 0.23f;
+                float destructionWeight = 0.15f;
+                currentStrategies[i] = new AIStrategy(winWeight, structWeight, 
+                    blueprintWeight, destructionWeight);
             }
         }
 
@@ -210,12 +230,19 @@ public class GameManager : MonoBehaviour
 
     public void MutateAndSaveStrats(Player winner)
     {
-        float mutationRange = 0.05f;
+        float mutationRange = 0.02f;
         AIStrategy winningStrat = currentStrategies[winner.playerNum - 1];
         float mutatedWinWeight = winningStrat.winWeight + Random.Range(-mutationRange, mutationRange);
         float mutatedStructWeight = winningStrat.structWeight + Random.Range(-mutationRange, mutationRange);
         float mutatedBlueprintWeight = winningStrat.blueprintWeight + Random.Range(-mutationRange, mutationRange);
         float mutatedDestructionWeight = winningStrat.destructionWeight + Random.Range(-mutationRange, mutationRange);
+        float highestWeight = Mathf.Max(mutatedWinWeight, mutatedStructWeight,
+            mutatedBlueprintWeight,
+            mutatedDestructionWeight);
+        mutatedWinWeight /= highestWeight;
+        mutatedStructWeight /= highestWeight;
+        mutatedBlueprintWeight /= highestWeight;
+        mutatedDestructionWeight /= highestWeight;
         AIStrategy mutatedStrat = new AIStrategy(
             mutatedWinWeight, 
             mutatedStructWeight, 
@@ -228,12 +255,14 @@ public class GameManager : MonoBehaviour
             string strategyString = 
                 strat.winWeight + "," + 
                 strat.structWeight + "," + 
-                strat.blueprintWeight;
+                strat.blueprintWeight + "," + 
+                strat.destructionWeight;
             PlayerPrefs.SetString("strategy" + i, strategyString);
         }
         PlayerPrefs.Save();
         Debug.Log("current best strat: " + winningStrat.winWeight + "," +
-            winningStrat.structWeight + "," + winningStrat.blueprintWeight);
+            winningStrat.structWeight + "," + winningStrat.blueprintWeight + ","
+            + winningStrat.destructionWeight);
     }
 
     public void ChangeCameraTo(Camera camera)

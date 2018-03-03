@@ -76,7 +76,6 @@ public class AIPlayer : Player
                 new Coord(2,0)
             };
         }
-        destructionWeight = 1.0f;
     }
 
     public List<Coord> FindAllPlayableCoords(int range, bool tossOccupied)
