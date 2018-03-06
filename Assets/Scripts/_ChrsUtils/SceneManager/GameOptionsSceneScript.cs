@@ -108,6 +108,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             levelButtonParent.SetActive(false);
             levelSelectionIndicator.gameObject.SetActive(false);
             levelSelected = 4;
+            joinButtons[1].gameObject.SetActive(false);
         }
     }
 

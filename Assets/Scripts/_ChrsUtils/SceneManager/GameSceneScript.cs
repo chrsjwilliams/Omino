@@ -32,6 +32,7 @@ public class GameSceneScript : Scene<TransitionData>
         Time.timeScale = 1;
         Services.GameScene = this;
         Services.UIManager = GetComponentInChildren<UIManager>();
+        Services.TutorialManager = GetComponentInChildren<TutorialManager>();
         tutorialMode = Services.GameManager.tutorialMode;
         _colorChangeTime = 0f;
         Services.MapManager.GenerateMap();
@@ -98,6 +99,7 @@ public class GameSceneScript : Scene<TransitionData>
     {
         gameStarted = true;
         TogglePlayerHandLock(false);
+        if (tutorialMode) Services.TutorialManager.Init();
     }
 
     void TogglePlayerHandLock(bool locked)

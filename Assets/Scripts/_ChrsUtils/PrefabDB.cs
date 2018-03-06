@@ -67,4 +67,7 @@ public class PrefabDB : ScriptableObject
 
     [SerializeField] private GameObject uiTile;
     public GameObject UITile { get { return uiTile; } }
+
+    [SerializeField] private GameObject tutorialTooltip;
+    public GameObject TutorialTooltip { get { return tutorialTooltip; } }
 }

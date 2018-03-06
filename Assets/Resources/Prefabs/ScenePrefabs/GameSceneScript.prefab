@@ -5528,6 +5528,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorialTooltipPrefab: {fileID: 1061029122255962, guid: a6d91cf4939bd8846b0fa42ddebd2b36,
     type: 2}
+  tooltipLocations:
+  - {x: 1800, y: 1300}
+  - {x: 300, y: 900}
+  tooltipTexts:
+  - This is your opponent's base. To win, you must connect from your base to your
+    opponent's.
+  - This is your hand. You can play pieces from here.
+  tooltipsDismissable: 0101
 --- !u!114 &114820756606580354
 MonoBehaviour:
   m_ObjectHideFlags: 1
