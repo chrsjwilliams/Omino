@@ -12,15 +12,25 @@ public class TutorialManager : MonoBehaviour {
     [TextArea]
     public string[] tooltipTexts;
     public bool[] tooltipsDismissable;
+    public Vector2[] arrowLocations;
+    public float[] arrowRotations;
+    public GameObject backDim;
+    private TaskManager tm;
+    public float delayDur;
 
-	// Use this for initialization
-	void Start () {
+    private void Awake()
+    {
+        tm = new TaskManager();
+    }
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+        tm.Update();
 	}
 
     public void Init()
@@ -32,13 +42,17 @@ public class TutorialManager : MonoBehaviour {
 
     public void OnDismiss()
     {
+        backDim.SetActive(false);
         if (currentIndex < tooltipTexts.Length - 1) MoveToNextStep();
+        Services.GameScene.UnpauseGame();
     }
 
     private void MoveToNextStep()
     {
         currentIndex += 1;
-        CreateTooltip();
+        Wait wait = new Wait(delayDur);
+        wait.Then(new ActionTask(CreateTooltip));
+        tm.Do(wait);
     }
 
     private void CreateTooltip()
@@ -48,6 +62,10 @@ public class TutorialManager : MonoBehaviour {
         currentTooltip.Init(
             tooltipLocations[currentIndex],
             tooltipTexts[currentIndex],
-            tooltipsDismissable[currentIndex]);
+            tooltipsDismissable[currentIndex],
+            arrowLocations[currentIndex],
+            arrowRotations[currentIndex]);
+        backDim.SetActive(true);
+        Services.GameScene.PauseGame();
     }
 }
