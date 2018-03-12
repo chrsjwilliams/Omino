@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 
-public class Tile : MonoBehaviour
+public class Tile : MonoBehaviour, IVertex
 {
     [SerializeField]
     private Sprite[] sprites;

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Destructor : Polyomino
 {
     private bool isSuper;
-    private List<Polyomino> piecesInRange;
+    public List<Polyomino> piecesInRange { get; private set; }
     public Destructor(int _units, int _index, Player _player, bool _isSuper) 
         : base(_units, _index, _player)
     {
@@ -172,7 +172,7 @@ public class Destructor : Polyomino
         }
     }
 
-    List<Polyomino> GetPiecesInRange()
+    public List<Polyomino> GetPiecesInRange()
     {
         List<Polyomino> enemyPiecesInRange = new List<Polyomino>();
         foreach (Tile tile in tiles)

@@ -7,7 +7,7 @@ public enum BuildingType
     BIGGERBRICKS, BIGGERBOMBS, SPLASHDAMAGE, SHIELDEDPIECES}
 
 
-public class Polyomino
+public class Polyomino : IVertex
 {
     public List<Tile> tiles = new List<Tile>();
     public List<Coord> pieceCoords = new List<Coord>();

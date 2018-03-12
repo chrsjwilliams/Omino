@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.ObjectModel;
 
 public class Move 
 {
@@ -11,6 +12,8 @@ public class Move
     private float finalWinScore;
     private float finalStructScore;
     private float finalBlueprintScore;
+
+    //private AdjacencyListGraph<Tile,Edge<bool>> opponentPieces;
 
     public Move blueprintMove { get; private set; }
 
@@ -115,20 +118,25 @@ public class Move
         else
         {
             List<Coord> tileCoordsIDestroy = new List<Coord>();
-            foreach (Coord coord in pieceCoords)
+            List<Blueprint> blueprintsDestroyed = new List<Blueprint>();
+            foreach (Polyomino polyomino in ((Destructor)piece).GetPiecesInRange())
             {
-                Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
-
-                if (mapTile.occupyingPiece != null &&
-                    mapTile.occupyingStructure == null &&
-                    mapTile.occupyingPiece.owner != piece.owner)
+                if(polyomino.occupyingBlueprints != null)
                 {
-                    // check if my tile coords contain a polyomino that belongs to my opponent
-                    //  count up the coords evaliate them somehow
-                    tileCoordsIDestroy.Add(coord);
+                    Blueprint blueprint = Services.MapManager.Map[polyomino.centerCoord.x, polyomino.centerCoord.y].occupyingBlueprint;
+                    if (blueprint != null &&
+                        blueprintsDestroyed.Contains(blueprint))
+                    {
+                        blueprintsDestroyed.Add(blueprint);
+                    }
                 }
             }
-            return destructionWeight * tileCoordsIDestroy.Count;
+
+            float tileDestructionWeight = ((Destructor)piece).GetPiecesInRange().Count * 0.05f;
+            float blueprintDestructionWeight = blueprintsDestroyed.Count * 0.2f;
+            float disconnectionWeight = 0;
+
+            return destructionWeight + tileDestructionWeight + blueprintDestructionWeight;
         }
     }
     
@@ -188,6 +196,7 @@ public class Move
 
     public void ExecuteMove()
     {
+
         Task playTask;
         if (blueprintMove == null)
         {

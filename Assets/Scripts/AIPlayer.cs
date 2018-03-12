@@ -14,6 +14,8 @@ public class AIPlayer : Player
     private int coordCountBuffer;
     private int movesTriedBuffer;
     private int tilesUntilBlueprint;
+    private int totalRandomizations;
+    private int kragerAlgorithmBuffer;
 
     protected float winWeight;
     protected float structWeight;
@@ -32,6 +34,8 @@ public class AIPlayer : Player
         movesTriedBuffer = 50;
         coordCountBuffer = 200;
         tilesUntilBlueprint = 5;
+        totalRandomizations = 500;
+        kragerAlgorithmBuffer = 100;
 
         winWeight = _winWeight;
         structWeight = _structureWeight;
@@ -133,11 +137,49 @@ public class AIPlayer : Player
     // I need to run the blueprint check for every move
 
 
+
+    public Graph<Polyomino> MakeOpponentPieceGraph(List<Polyomino> currentAllBoardPieces)
+    {
+        Graph<Polyomino> graph = new Graph<Polyomino>();
+        foreach (Polyomino piece in currentAllBoardPieces)
+        {
+            if (piece.owner != null &&
+                piece.owner != this)
+            {
+                //  the first parameter is the vertex
+                //  the second parameter are its adajcent verticies
+                graph.Vertices.Add(piece, piece.GetAdjacentPolyominos(piece.owner));
+            }
+        }
+
+        return graph;
+    }
+
     protected IEnumerator GeneratePossibleMoves()
     {
         List<Polyomino> currentHand = new List<Polyomino>(hand);
         List<Polyomino> currentBoardPieces = new List<Polyomino> (boardPieces);
+        
+        #region Failed Attempt Krager's Algorithm
+        //  Collect the board pieces so I can make a graph of the opponent pieces
+        List<Polyomino> allBoardPieces = Services.GameScene.allBoardPieces;
 
+        //  These are the polyominos I can cut
+        Dictionary<Polyomino, List<Polyomino>> cuts = new Dictionary<Polyomino, List<Polyomino>>();
+        for(int i = 0; i < totalRandomizations; i++)
+        {
+            Graph<Polyomino> opponentGraph = MakeOpponentPieceGraph(allBoardPieces);
+            opponentGraph.ApplyKrager();
+            foreach(var vertex in opponentGraph.Vertices)
+            {
+                //  use the key and value of the cut to find the edge(s) which would
+                //  make a bipartite graph
+                cuts.Add(vertex.Key, vertex.Value);
+            }
+        }
+
+        //  We can then use the list of cuts and extract coords to pass along to our move
+        #endregion
 
         #region Calculate economy stuff
 
