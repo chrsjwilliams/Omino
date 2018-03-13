@@ -117,26 +117,73 @@ public class Move
         if (!(piece is Destructor)) return 0;
         else
         {
+
             List<Coord> tileCoordsIDestroy = new List<Coord>();
+            int tilesIDestroy = 0;
             List<Blueprint> blueprintsDestroyed = new List<Blueprint>();
-            foreach (Polyomino polyomino in ((Destructor)piece).GetPiecesInRange())
+            int destructionRange = piece.owner.splashDamage ? 1 : 0;
+            bool bisectsOpponentsPieces = false;
+            
+            foreach (Tile tile in piece.tiles)
             {
-                if(polyomino.occupyingBlueprints != null)
+                for (int x = -destructionRange; x < destructionRange; x++)
                 {
-                    Blueprint blueprint = Services.MapManager.Map[polyomino.centerCoord.x, polyomino.centerCoord.y].occupyingBlueprint;
-                    if (blueprint != null &&
-                        blueprintsDestroyed.Contains(blueprint))
+                    for (int y = -destructionRange; y < destructionRange; y++)
                     {
-                        blueprintsDestroyed.Add(blueprint);
+                        Coord destructionRadius = new Coord(x, y);
+                        Coord coordToBeDestroyed = tile.coord.Add(destructionRadius);
+
+                        if (Services.MapManager.IsCoordContainedInMap(coordToBeDestroyed))
+                        {
+                            Tile mapTile = Services.MapManager.Map[coordToBeDestroyed.x, coordToBeDestroyed.y];
+                            if( mapTile.occupyingPiece!= null &&
+                                mapTile.occupyingPiece.owner != null &&
+                                mapTile.occupyingPiece.owner != piece.owner &&
+                                !(mapTile.occupyingPiece is Structure))
+                            {
+                                tilesIDestroy++;
+                                Blueprint blueprint = mapTile.occupyingBlueprint;
+                                if( blueprint != null &&
+                                    !blueprintsDestroyed.Contains(blueprint))
+                                {
+                                    blueprintsDestroyed.Add(blueprint);
+                                }
+                            }
+                        }
                     }
                 }
+
+                if (tilesIDestroy > 1 && !bisectsOpponentsPieces)
+                {
+                    int numberOfOpponentNeighbors = 0;
+                    foreach (Coord dir in Coord.Directions())
+                    {
+                        Coord newCoord = tile.coord.Add(dir);
+                        if (Services.MapManager.IsCoordContainedInMap(newCoord))
+                        {
+                            Tile mapTile = Services.MapManager.Map[newCoord.x, newCoord.y];
+         
+                            if (mapTile.occupyingPiece != null &&
+                                mapTile.occupyingPiece.owner != null &&
+                                mapTile.occupyingPiece.owner != piece.owner)
+                            {
+                                numberOfOpponentNeighbors++;
+                            }
+                        }
+                    }
+
+                    if (numberOfOpponentNeighbors == 2)
+                    {
+                        bisectsOpponentsPieces = true;
+                    }
+                }   
             }
-
-            float tileDestructionWeight = ((Destructor)piece).GetPiecesInRange().Count * 0.05f;
+            
+            float tileDestructionWeight = tilesIDestroy * 0.05f;
             float blueprintDestructionWeight = blueprintsDestroyed.Count * 0.2f;
-            float disconnectionWeight = 0;
+            float disconnectionWeight = bisectsOpponentsPieces ? 0.3f : 0;
 
-            return destructionWeight + tileDestructionWeight + blueprintDestructionWeight;
+            return destructionWeight + tileDestructionWeight + blueprintDestructionWeight + disconnectionWeight;
         }
     }
     
@@ -196,15 +243,13 @@ public class Move
 
     public void ExecuteMove()
     {
-
         Task playTask;
         if (blueprintMove == null)
         {
             playTask = new PlayTask(this);
         }
         else
-        {
-            
+        {      
             playTask = new PlayTask(this);
             playTask.Then(new ActionTask(blueprintMove.ExecuteMove));
         }
