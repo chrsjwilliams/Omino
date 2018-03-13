@@ -161,6 +161,7 @@ public class AIPlayer : Player
         List<Polyomino> currentBoardPieces = new List<Polyomino> (boardPieces);
         
         #region Failed Attempt Krager's Algorithm
+        /*
         //  Collect the board pieces so I can make a graph of the opponent pieces
         List<Polyomino> allBoardPieces = Services.GameScene.allBoardPieces;
 
@@ -179,6 +180,7 @@ public class AIPlayer : Player
         }
 
         //  We can then use the list of cuts and extract coords to pass along to our move
+        */
         #endregion
 
         #region Calculate economy stuff
