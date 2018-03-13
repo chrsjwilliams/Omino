@@ -34,7 +34,7 @@ public class AIPlayer : Player
         movesTriedBuffer = 50;
         coordCountBuffer = 200;
         tilesUntilBlueprint = 5;
-        totalRandomizations = 500;
+        totalRandomizations = 1;
         kragerAlgorithmBuffer = 100;
 
         winWeight = _winWeight;
@@ -132,6 +132,8 @@ public class AIPlayer : Player
             thinkingCoroutine = GeneratePossibleMoves();
             StartCoroutine(thinkingCoroutine);
         }
+
+        if (Input.GetKeyDown(KeyCode.K)) RunKragersAlg();
     }
 
     // I need to run the blueprint check for every move
@@ -148,11 +150,65 @@ public class AIPlayer : Player
             {
                 //  the first parameter is the vertex
                 //  the second parameter are its adajcent verticies
-                graph.Vertices.Add(piece, piece.GetAdjacentPolyominos(piece.owner));
+                List<Polyomino> adjPieces = piece.GetAdjacentPolyominos(piece.owner);
+                List<Edge<Polyomino>> pieceEdges = new List<Edge<Polyomino>>();
+                foreach(Polyomino adjPiece in adjPieces)
+                {
+                    Edge<Polyomino> edge = null;
+                    if (!graph.EdgeDict.ContainsKey(adjPiece))
+                    {
+                        edge = new Edge<Polyomino>(piece, adjPiece);
+                        graph.Edges.Add(edge);
+                    }
+                    else
+                    {
+                        foreach(Edge<Polyomino> adjPieceEdge in graph.EdgeDict[adjPiece])
+                        {
+                            if(adjPieceEdge.curFirstVertex.Equals(piece) ||
+                                adjPieceEdge.curSecondVertex.Equals(piece))
+                            {
+                                edge = adjPieceEdge;
+                                break;
+                            }
+                        }
+                    }
+                    pieceEdges.Add(edge);
+                }
+                graph.EdgeDict.Add(piece, pieceEdges);
+                graph.Vertices.Add(piece);
+
             }
         }
 
         return graph;
+    }
+
+    private void RunKragersAlg()
+    {
+        Debug.Log("running alg at time " + Time.time);
+        //  Collect the board pieces so I can make a graph of the opponent pieces
+        List<Polyomino> allBoardPieces = Services.GameScene.allBoardPieces;
+
+        //  These are the polyominos I can cut
+        List<List<Edge<Polyomino>>> cuts = new List<List<Edge<Polyomino>>>();
+        for(int i = 0; i < totalRandomizations; i++)
+        {
+            Graph<Polyomino> opponentGraph = MakeOpponentPieceGraph(allBoardPieces);
+            opponentGraph.ApplyKarger();
+            Debug.Log("cut includes: ");
+            foreach(Edge<Polyomino> edge in opponentGraph.Edges)
+            {
+                Coord firstEdgeNodeCoord = edge.originalFirstVertex.centerCoord;
+                Coord secondEdgeNodeCoord = edge.originalSecondVertex.centerCoord;
+                Debug.Log("edge from " + firstEdgeNodeCoord.x + "," + 
+                    firstEdgeNodeCoord.y + " to " +
+                    secondEdgeNodeCoord.x + "," + secondEdgeNodeCoord.y);
+            }
+            cuts.Add(opponentGraph.Edges);
+        }
+
+        //  We can then use the list of cuts and extract coords to pass along to our move
+        
     }
 
     protected IEnumerator GeneratePossibleMoves()
