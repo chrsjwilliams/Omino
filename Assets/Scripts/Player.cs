@@ -522,7 +522,6 @@ public class Player : MonoBehaviour
         if (Services.GameManager.Players[playerNum % 2] != null)
             Services.GameManager.Players[playerNum % 2].OnOpposingPiecePlaced();
 
-        Services.GameScene.allBoardPieces.Add(piece);
     }
 
     public virtual void OnOpposingPiecePlaced()
@@ -533,7 +532,6 @@ public class Player : MonoBehaviour
     public virtual void OnPieceRemoved(Polyomino piece)
     {
         boardPieces.Remove(piece);
-        Services.GameScene.allBoardPieces.Remove(piece);
         Services.MapManager.DetermineConnectedness(this);
     }
 

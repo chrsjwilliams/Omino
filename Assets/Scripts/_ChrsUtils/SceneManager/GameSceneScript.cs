@@ -26,8 +26,6 @@ public class GameSceneScript : Scene<TransitionData>
         get { return gameStarted && !gamePaused; }
     }
 
-    public List<Polyomino> allBoardPieces = new List<Polyomino>();
-
     internal override void OnEnter(TransitionData data)
     {
         tileMapHolder = GameObject.Find(TILE_MAP_HOLDER).transform;

@@ -15,7 +15,7 @@ public class AIPlayer : Player
     private int movesTriedBuffer;
     private int tilesUntilBlueprint;
     private int totalRandomizations;
-    private int kragerAlgorithmBuffer;
+    private int kargerAlgorithmBuffer;
 
     protected float winWeight;
     protected float structWeight;
@@ -34,8 +34,8 @@ public class AIPlayer : Player
         movesTriedBuffer = 50;
         coordCountBuffer = 200;
         tilesUntilBlueprint = 5;
-        totalRandomizations = 1;
-        kragerAlgorithmBuffer = 100;
+        totalRandomizations = 50;
+        kargerAlgorithmBuffer = 10;
 
         winWeight = _winWeight;
         structWeight = _structureWeight;
@@ -133,12 +133,7 @@ public class AIPlayer : Player
             StartCoroutine(thinkingCoroutine);
         }
 
-        if (Input.GetKeyDown(KeyCode.K)) RunKragersAlg();
     }
-
-    // I need to run the blueprint check for every move
-
-
 
     public Graph<Polyomino> MakeOpponentPieceGraph(List<Polyomino> currentAllBoardPieces)
     {
@@ -146,7 +141,9 @@ public class AIPlayer : Player
         foreach (Polyomino piece in currentAllBoardPieces)
         {
             if (piece.owner != null &&
-                piece.owner != this)
+                piece.owner != this &&
+                !(piece is Blueprint) &&
+                (piece.connected || piece is Structure))
             {
                 //  the first parameter is the vertex
                 //  the second parameter are its adajcent verticies
@@ -180,34 +177,128 @@ public class AIPlayer : Player
             }
         }
 
+        List<Polyomino> verticiesToRemove = new List<Polyomino>();
+        foreach(Polyomino vertex in graph.Vertices)
+        {
+            if(graph.EdgeDict[vertex].Count < 2)
+            {
+                verticiesToRemove.Add(vertex);
+            }
+        }
+
+        foreach(Polyomino vertex in verticiesToRemove)
+        {
+            if (graph.EdgeDict[vertex].Count > 0)
+            {
+
+                Edge<Polyomino> edge = graph.EdgeDict[vertex][0];
+
+                Polyomino otherVertex;
+                if (edge.curFirstVertex.Equals(vertex))
+                {
+                    otherVertex = edge.curSecondVertex;
+                }
+                else
+                {
+                    otherVertex = edge.curFirstVertex;
+                }
+
+                graph.EdgeDict[otherVertex].Remove(edge);
+                graph.EdgeDict.Remove(vertex);
+                graph.Edges.Remove(edge);
+                graph.Vertices.Remove(vertex);
+            }
+        }
+
         return graph;
     }
 
-    private void RunKragersAlg()
-    {
-        Debug.Log("running alg at time " + Time.time);
-        //  Collect the board pieces so I can make a graph of the opponent pieces
-        List<Polyomino> allBoardPieces = Services.GameScene.allBoardPieces;
 
-        //  These are the polyominos I can cut
-        List<List<Edge<Polyomino>>> cuts = new List<List<Edge<Polyomino>>>();
-        for(int i = 0; i < totalRandomizations; i++)
+    public List<HashSet<Coord>> MakeLegalCuts(List<HashSet<Edge<Polyomino>>> cuts)
+    {
+        List<HashSet<Coord>> legalCuts = new List<HashSet<Coord>>();
+
+        foreach(HashSet<Edge<Polyomino>> cut in cuts)
         {
-            Graph<Polyomino> opponentGraph = MakeOpponentPieceGraph(allBoardPieces);
-            opponentGraph.ApplyKarger();
-            Debug.Log("cut includes: ");
-            foreach(Edge<Polyomino> edge in opponentGraph.Edges)
-            {
-                Coord firstEdgeNodeCoord = edge.originalFirstVertex.centerCoord;
-                Coord secondEdgeNodeCoord = edge.originalSecondVertex.centerCoord;
-                Debug.Log("edge from " + firstEdgeNodeCoord.x + "," + 
-                    firstEdgeNodeCoord.y + " to " +
-                    secondEdgeNodeCoord.x + "," + secondEdgeNodeCoord.y);
-            }
-            cuts.Add(opponentGraph.Edges);
+            HashSet<Coord> candidateCut = new HashSet<Coord>();
+            legalCuts.AddRange(GenerateCombinations(new List<HashSet<Coord>>(), cut));
         }
 
-        //  We can then use the list of cuts and extract coords to pass along to our move
+        return legalCuts;
+    }
+    
+
+    protected List<HashSet<Coord>> GenerateCombinations(List<HashSet<Coord>> sets, HashSet<Edge<Polyomino>> edges)
+    {
+        if (sets.Count == 0) sets.Add(new HashSet<Coord>());
+
+        List<HashSet<Coord>> newSets = new List<HashSet<Coord>>();
+        
+        if (edges.Count == 0) return sets;
+        else 
+        {
+            Edge<Polyomino> edgeToBeRemoved = edges.ElementAt(0);
+
+            Coord firstCoord = edgeToBeRemoved.originalFirstVertex.centerCoord;
+            Coord secondCoord = edgeToBeRemoved.originalSecondVertex.centerCoord;
+
+            bool includeFirstCoord = !(edgeToBeRemoved.originalFirstVertex is Structure);
+            bool includeSecondCoord = !(edgeToBeRemoved.originalSecondVertex is Structure);
+
+            foreach (HashSet<Coord> set in sets)
+            {
+                
+                if (includeFirstCoord)
+                {
+                    if (!set.Contains(firstCoord))
+                    {
+                        HashSet<Coord> newSet = new HashSet<Coord>(set);
+                        newSet.Add(firstCoord);
+
+                        newSets.Add(newSet);
+                    }
+                    else
+                    {
+                        newSets.Add(set);
+                    }
+                }
+                if (includeSecondCoord)
+                {
+                    if (!set.Contains(secondCoord))
+                    {
+                        HashSet<Coord> newSet = new HashSet<Coord>(set);
+                        newSet.Add(secondCoord);
+
+                        newSets.Add(newSet);
+                    }
+                    else
+                    {
+                        newSets.Add(set);
+                    }
+                }
+            }
+
+            List<HashSet<Coord>> setsToRemove = new List<HashSet<Coord>>();
+            foreach(HashSet<Coord> set in newSets)
+            {
+                foreach(HashSet<Coord> otherSet in newSets)
+                {
+                    if (set.IsSupersetOf(otherSet) && set != otherSet)
+                    {
+                        setsToRemove.Add(set);
+                        break;
+                    }
+                }
+            }
+
+            foreach(HashSet<Coord> set in setsToRemove)
+            {
+                newSets.Remove(set);
+            }
+
+            edges.Remove(edgeToBeRemoved);
+            return GenerateCombinations(newSets, edges);
+        }
         
     }
 
@@ -215,28 +306,68 @@ public class AIPlayer : Player
     {
         List<Polyomino> currentHand = new List<Polyomino>(hand);
         List<Polyomino> currentBoardPieces = new List<Polyomino> (boardPieces);
-        
-        #region Failed Attempt Krager's Algorithm
-        /*
+
+        #region Successful Krager's Algorithm
+
         //  Collect the board pieces so I can make a graph of the opponent pieces
-        List<Polyomino> allBoardPieces = Services.GameScene.allBoardPieces;
+        int opposingIndex;
+        if (playerNum == 1) opposingIndex = 1;
+        else opposingIndex = 0;
+
+        List<Polyomino> opposingBoardPieces = 
+                    new List<Polyomino>(Services.GameManager.Players[opposingIndex].boardPieces);
 
         //  These are the polyominos I can cut
-        Dictionary<Polyomino, List<Polyomino>> cuts = new Dictionary<Polyomino, List<Polyomino>>();
-        for(int i = 0; i < totalRandomizations; i++)
+        List<HashSet<Edge<Polyomino>>> cuts = new List<HashSet<Edge<Polyomino>>>();
+        for (int i = 0; i < totalRandomizations; i++)
         {
-            Graph<Polyomino> opponentGraph = MakeOpponentPieceGraph(allBoardPieces);
-            opponentGraph.ApplyKrager();
-            foreach(var vertex in opponentGraph.Vertices)
+            if (i % kargerAlgorithmBuffer == 0)
             {
-                //  use the key and value of the cut to find the edge(s) which would
-                //  make a bipartite graph
-                cuts.Add(vertex.Key, vertex.Value);
+                yield return null;
+            }
+
+            Graph<Polyomino> opponentGraph = MakeOpponentPieceGraph(opposingBoardPieces);
+            opponentGraph.ApplyKarger();
+            //Debug.Log("cut includes: ");
+            foreach (Edge<Polyomino> edge in opponentGraph.Edges)
+            {
+                Coord firstEdgeNodeCoord = edge.originalFirstVertex.centerCoord;
+                Coord secondEdgeNodeCoord = edge.originalSecondVertex.centerCoord;
+                //Debug.Log("edge from " + firstEdgeNodeCoord.x + "," +
+                //    firstEdgeNodeCoord.y + " to " +
+                //    secondEdgeNodeCoord.x + "," + secondEdgeNodeCoord.y);
+            }
+
+            if (opponentGraph.Edges.Count <= 3)
+            {
+                bool redundantCut = false;
+                HashSet<Edge<Polyomino>> newCut = new HashSet<Edge<Polyomino>>(opponentGraph.Edges);
+                foreach (HashSet<Edge<Polyomino>> cut in cuts)
+                {
+                    if (newCut.IsSupersetOf(cut) && newCut.IsSubsetOf(cut))
+                    {
+                        redundantCut = true;
+                        break;
+                    }
+                }
+
+                if (!redundantCut && newCut.Count > 0)
+                    cuts.Add(newCut);
+
             }
         }
+        List<HashSet<Coord>> possibleCutMoves = MakeLegalCuts(cuts);
 
-        //  We can then use the list of cuts and extract coords to pass along to our move
-        */
+        //foreach (HashSet<Coord> set in possibleCutMoves)
+        //{
+        //    Debug.Log("---");
+        //    foreach (Coord coord in set)
+        //    {
+        //        Debug.Log(coord);
+        //    }
+        //}
+        //  We can then use the list of cuts and extract coords to pass along to our move 
+        
         #endregion
 
         #region Calculate economy stuff

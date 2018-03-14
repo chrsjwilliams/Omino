@@ -49,6 +49,7 @@ public class Graph<TVertex> where TVertex : IVertex
     public void ApplyKarger()
     {
         var random = new System.Random();
+        if (Edges.Count == 0) return;
         while (Vertices.Count > 2)
         {
             //  choose a random edge and extract its two verticies
@@ -59,8 +60,6 @@ public class Graph<TVertex> where TVertex : IVertex
             //Merge
             Polyomino firstNode = firstVertex as Polyomino;
             Polyomino secondNode = secondVertex as Polyomino;
-            Debug.Log("collapsing " + secondNode.centerCoord.x + "," + secondNode.centerCoord.y + " into " +
-                firstNode.centerCoord.x + "," + firstNode.centerCoord.y);
             foreach (Edge<TVertex> edge in EdgeDict[secondVertex])
             {
 
@@ -85,40 +84,23 @@ public class Graph<TVertex> where TVertex : IVertex
                 //  For each edge connected to the second vertex,
                 //  connect the other end of the edge to the first vertex
                 {
-                    bool addNewEdge = true;
-                    foreach (Edge<TVertex> firstVertEdge in EdgeDict[firstVertex])
-                    {
-                        if (firstVertEdge.curFirstVertex.Equals(otherVertex) ||
-                            firstVertEdge.curSecondVertex.Equals(otherVertex))
-                        {
-                            addNewEdge = false;
-                            break;
-                        }
-                    }
-                    if (addNewEdge) EdgeDict[firstVertex].Add(edge);
+                    //bool addNewEdge = true;
+                    //foreach (Edge<TVertex> firstVertEdge in EdgeDict[firstVertex])
+                    //{
+                    //    if (firstVertEdge.curFirstVertex.Equals(otherVertex) ||
+                    //        firstVertEdge.curSecondVertex.Equals(otherVertex))
+                    //    {
+                    //        addNewEdge = false;
+                    //        break;
+                    //    }
+                    //}
+                    //if (addNewEdge)
+                        EdgeDict[firstVertex].Add(edge);
                 }
             }
 
             Vertices.Remove(secondVertex);
             EdgeDict.Remove(secondVertex);
-            Debug.Log(Vertices.Count + " vertices remaining:");
-            foreach (TVertex vertex in EdgeDict.Keys)
-            {
-                Polyomino piece = vertex as Polyomino;
-                Debug.Log("vertex at " + piece.centerCoord.x + "," + piece.centerCoord.y + " has edges:");
-                foreach (Edge<TVertex> edge in EdgeDict[vertex])
-                {
-                    Polyomino origFirstEdgePiece = edge.originalFirstVertex as Polyomino;
-                    Polyomino origSecondEdgePiece = edge.originalSecondVertex as Polyomino;
-                    Polyomino firstEdgePiece = edge.curFirstVertex as Polyomino;
-                    Polyomino secondEdgePiece = edge.curSecondVertex as Polyomino;
-                    Debug.Log(firstEdgePiece.centerCoord.x + "," + firstEdgePiece.centerCoord.y + " to " +
-                        secondEdgePiece.centerCoord.x + "," + secondEdgePiece.centerCoord.y);
-                    Debug.Log("originally: " + origFirstEdgePiece.centerCoord.x + "," + origFirstEdgePiece.centerCoord.y + " to " +
-                        origSecondEdgePiece.centerCoord.x + "," + origSecondEdgePiece.centerCoord.y);
-                }
-            }
-
         }
     }
 }
