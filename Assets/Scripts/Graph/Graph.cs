@@ -58,22 +58,16 @@ public class Graph<TVertex> where TVertex : IVertex
             TVertex firstVertex = randomEdge.curFirstVertex;
             TVertex secondVertex = randomEdge.curSecondVertex;
             //Merge
-            Polyomino firstNode = firstVertex as Polyomino;
-            Polyomino secondNode = secondVertex as Polyomino;
             foreach (Edge<TVertex> edge in EdgeDict[secondVertex])
             {
-
                 //change all the occurences of the secondVertex to the first
-                TVertex otherVertex = default(TVertex);
                 if (edge.curFirstVertex.Equals(secondVertex))
                 {
                     edge.AssignVertex(firstVertex, 1);
-                    otherVertex = edge.curSecondVertex;
                 }
                 else if (edge.curSecondVertex.Equals(secondVertex))
                 {
                     edge.AssignVertex(firstVertex, 2);
-                    otherVertex = edge.curFirstVertex;
                 }
                 if (edge.curFirstVertex.Equals(edge.curSecondVertex)) //check for self loop
                 {
@@ -84,18 +78,7 @@ public class Graph<TVertex> where TVertex : IVertex
                 //  For each edge connected to the second vertex,
                 //  connect the other end of the edge to the first vertex
                 {
-                    //bool addNewEdge = true;
-                    //foreach (Edge<TVertex> firstVertEdge in EdgeDict[firstVertex])
-                    //{
-                    //    if (firstVertEdge.curFirstVertex.Equals(otherVertex) ||
-                    //        firstVertEdge.curSecondVertex.Equals(otherVertex))
-                    //    {
-                    //        addNewEdge = false;
-                    //        break;
-                    //    }
-                    //}
-                    //if (addNewEdge)
-                        EdgeDict[firstVertex].Add(edge);
+                    EdgeDict[firstVertex].Add(edge);
                 }
             }
 

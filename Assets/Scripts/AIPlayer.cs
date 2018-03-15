@@ -23,8 +23,8 @@ public class AIPlayer : Player
     protected float destructionWeight;
     private IEnumerator thinkingCoroutine;
 
-    public override void Init(Color[] playerColorScheme, int posOffset, float _winWeight, float _structureWeight, 
-        float _blueprintWeight, float _destructionWeight)
+    public override void Init(Color[] playerColorScheme, int posOffset, 
+        AIStrategy strategy)
     {
         playingPiece = false;
         isThinking = false;
@@ -37,10 +37,10 @@ public class AIPlayer : Player
         totalRandomizations = 50;
         kargerAlgorithmBuffer = 10;
 
-        winWeight = _winWeight;
-        structWeight = _structureWeight;
-        blueprintWeight = _blueprintWeight;
-        destructionWeight = _destructionWeight;
+        winWeight = strategy.winWeight;
+        structWeight = strategy.structWeight;
+        blueprintWeight = strategy.blueprintWeight;
+        destructionWeight = strategy.destructionWeight;
 
         handSpacing = new Vector3(5.5f, -2.35f, 0);
         handOffset = new Vector3(-12.6f, 9.125f, 0);
@@ -54,7 +54,7 @@ public class AIPlayer : Player
         resourceGainFactor = 1;
         drawRateFactor = 1;
         resourcesPerTick = 1;
-        base.Init(playerColorScheme, posOffset, winWeight, structWeight, blueprintWeight, destructionWeight);
+        base.Init(playerColorScheme, posOffset, strategy);
         Debug.Log("player " + playerNum + "using " + "\nwin weight: " + winWeight);
         Debug.Log("struct weight: " + structWeight + "\nblueprint weight: " + blueprintWeight);
 
@@ -220,7 +220,6 @@ public class AIPlayer : Player
 
         foreach(HashSet<Edge<Polyomino>> cut in cuts)
         {
-            HashSet<Coord> candidateCut = new HashSet<Coord>();
             legalCuts.AddRange(GenerateCombinations(new List<HashSet<Coord>>(), cut));
         }
 
@@ -330,14 +329,14 @@ public class AIPlayer : Player
             Graph<Polyomino> opponentGraph = MakeOpponentPieceGraph(opposingBoardPieces);
             opponentGraph.ApplyKarger();
             //Debug.Log("cut includes: ");
-            foreach (Edge<Polyomino> edge in opponentGraph.Edges)
-            {
-                Coord firstEdgeNodeCoord = edge.originalFirstVertex.centerCoord;
-                Coord secondEdgeNodeCoord = edge.originalSecondVertex.centerCoord;
-                //Debug.Log("edge from " + firstEdgeNodeCoord.x + "," +
-                //    firstEdgeNodeCoord.y + " to " +
-                //    secondEdgeNodeCoord.x + "," + secondEdgeNodeCoord.y);
-            }
+            //foreach (Edge<Polyomino> edge in opponentGraph.Edges)
+            //{
+            //    Coord firstEdgeNodeCoord = edge.originalFirstVertex.centerCoord;
+            //    Coord secondEdgeNodeCoord = edge.originalSecondVertex.centerCoord;
+            //    Debug.Log("edge from " + firstEdgeNodeCoord.x + "," +
+            //        firstEdgeNodeCoord.y + " to " +
+            //        secondEdgeNodeCoord.x + "," + secondEdgeNodeCoord.y);
+            //}
 
             if (opponentGraph.Edges.Count <= 3)
             {

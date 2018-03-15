@@ -8,6 +8,8 @@ public class TutorialTooltip : MonoBehaviour {
     [SerializeField]
     private Text textComponent;
     [SerializeField]
+    private Text dismissText;
+    [SerializeField]
     private Image arrow;
     [SerializeField]
     private float scaleDuration;
@@ -48,6 +50,7 @@ public class TutorialTooltip : MonoBehaviour {
         GetComponent<RectTransform>().anchoredPosition = location;
         textComponent.text = text;
         GetComponent<Button>().enabled = dismissable;
+        dismissText.enabled = dismissable;
         if (arrowLocation == Vector2.zero) arrow.enabled = false;
         else
         {

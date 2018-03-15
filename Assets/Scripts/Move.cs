@@ -9,9 +9,6 @@ public class Move
     public float score;
     public const int MAX_SCORE = 100;
     public const int MAX_ROTATIONS = 3;
-    private float finalWinScore;
-    private float finalStructScore;
-    private float finalBlueprintScore;
 
     //private AdjacencyListGraph<Tile,Edge<bool>> opponentPieces;
 
@@ -107,7 +104,6 @@ public class Move
             blueprintScore = bombFactoryWeight * destructorModifier;
             blueprintMove = bombFactoryMove;
         }
-        finalBlueprintScore = blueprintScore;
         return blueprintScore;
 
     }
@@ -236,8 +232,6 @@ public class Move
         {
             structScore = structWeight / Mathf.Pow(structDist, 2);
         }
-        finalWinScore = winScore;
-        finalStructScore = structScore;
         return winScore + structScore;
     }
 

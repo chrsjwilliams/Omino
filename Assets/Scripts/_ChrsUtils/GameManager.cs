@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
         get { return _player2ColorScheme; }
     }
 
+    private Color[][] colorSchemes;
+
     [SerializeField] private Color[] _mapColorScheme;
     public Color[] MapColorScheme
     {
@@ -60,6 +62,11 @@ public class GameManager : MonoBehaviour
     {
         Services.GameEventManager.Register<Reset>(Reset);
         Input.simulateMouseWithTouches = false;
+        colorSchemes = new Color[][]
+        {
+            _player1ColorScheme,
+            _player2ColorScheme
+        };
     }
 
     public void SetUserPreferences(int levelNum)
@@ -144,18 +151,9 @@ public class GameManager : MonoBehaviour
                 _players[i].name = PLAYER + " " + playerNum;
             }
             _players[i].transform.parent = Services.Scenes.CurrentScene.transform;
-            switch (i)
-            {
-                case 0:
-                    _players[0].Init(_player1ColorScheme, 0, winWeight, structureWeight, blueprintWeight, destructionWeight);
-                    break;
-                case 1:
-                    _players[1].Init(_player2ColorScheme, 1, winWeight, structureWeight, blueprintWeight, destructionWeight);
-                    break;
-                default:
-                    break;
-            }
-
+            AIStrategy strategy = new AIStrategy(
+                winWeight, structureWeight, blueprintWeight, destructionWeight);
+            _players[i].Init(colorSchemes[i], i, strategy);
         }
         for (int i = 0; i < 2; i++)
         {
@@ -187,11 +185,7 @@ public class GameManager : MonoBehaviour
             _players[i].transform.parent = Services.Scenes.CurrentScene.transform;
             Color[] colorScheme = i == 0 ? _player1ColorScheme : _player2ColorScheme;
             AIStrategy strategy = currentStrategies[i];
-            _players[i].Init(colorScheme, i, 
-                strategy.winWeight, 
-                strategy.structWeight, 
-                strategy.blueprintWeight,
-                strategy.destructionWeight);
+            _players[i].Init(colorScheme, i, strategy);
         }
         for (int i = 0; i < 2; i++)
         {

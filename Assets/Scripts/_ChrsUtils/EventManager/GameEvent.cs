@@ -11,10 +11,20 @@ public abstract class GameEvent
    
 }
 
+public class PiecePlaced : GameEvent
+{
+    public Polyomino piece;
+    public PiecePlaced(Polyomino piece_)
+    {
+        piece = piece_;
+    }
+}
 
-public class MouseDown : GameEvent{
+public class MouseDown : GameEvent
+{
 	public Vector3 mousePos;
-	public MouseDown(Vector3 mousePos_){
+	public MouseDown(Vector3 mousePos_)
+    {
 		mousePos = mousePos_;
 	}
 }

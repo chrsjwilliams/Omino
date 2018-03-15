@@ -42,17 +42,32 @@ public class TutorialManager : MonoBehaviour {
 
     public void OnDismiss()
     {
-        backDim.SetActive(false);
+        if (tooltipsDismissable[currentIndex])
+        {
+            Services.GameScene.UnpauseGame();
+            backDim.SetActive(false);
+        }
         if (currentIndex < tooltipTexts.Length - 1) MoveToNextStep();
-        Services.GameScene.UnpauseGame();
     }
 
     private void MoveToNextStep()
     {
         currentIndex += 1;
-        Wait wait = new Wait(delayDur);
-        wait.Then(new ActionTask(CreateTooltip));
-        tm.Do(wait);
+        //Wait wait = new Wait(delayDur);
+        //wait.Then(new ActionTask(CreateTooltip));
+        //tm.Do(wait);
+        CreateTooltip();
+        if (!tooltipsDismissable[currentIndex])
+            Services.GameEventManager.Register<PiecePlaced>(OnPiecePlaced);
+    }
+
+    private void OnPiecePlaced(PiecePlaced e)
+    {
+        if (e.piece.owner.playerNum == 1)
+        {
+            Services.GameEventManager.Unregister<PiecePlaced>(OnPiecePlaced);
+            currentTooltip.Dismiss();
+        }
     }
 
     private void CreateTooltip()
@@ -65,7 +80,10 @@ public class TutorialManager : MonoBehaviour {
             tooltipsDismissable[currentIndex],
             arrowLocations[currentIndex],
             arrowRotations[currentIndex]);
-        backDim.SetActive(true);
-        Services.GameScene.PauseGame();
+        if (tooltipsDismissable[currentIndex])
+        {
+            Services.GameScene.PauseGame();
+            backDim.SetActive(true);
+        }
     }
 }

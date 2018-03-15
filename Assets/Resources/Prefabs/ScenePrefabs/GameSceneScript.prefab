@@ -5576,25 +5576,29 @@ MonoBehaviour:
   - {x: 1500, y: 600}
   - {x: 550, y: 1100}
   - {x: 600, y: 1000}
+  - {x: 550, y: 1100}
   - {x: 700, y: 400}
   - {x: 700, y: 500}
   tooltipTexts:
   - This is your opponent's base. Connect from your base to your opponent's to win.
   - This is your hand. You can play pieces from here by tapping and dragging.
   - Pieces must be played connected to your base.
+  - Try placing a piece now.
   - Pieces cost resources to play, 1 per block. Resources replenish over time.
   - You also draw new pieces into your hand over time.
-  tooltipsDismissable: 0101010101
+  tooltipsDismissable: 010101000101
   arrowLocations:
   - {x: -450, y: 0}
   - {x: 0, y: -250}
   - {x: 450, y: 0}
+  - {x: 0, y: 0}
   - {x: 280, y: -250}
   - {x: 0, y: -250}
   arrowRotations:
   - 90
   - 180
   - -90
+  - 0
   - 180
   - 180
   backDim: {fileID: 1449769892746540}

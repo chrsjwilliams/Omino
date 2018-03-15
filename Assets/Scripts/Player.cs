@@ -81,7 +81,8 @@ public class Player : MonoBehaviour
 
 
     // Use this for initialization
-    public virtual void Init(Color[] playerColorScheme, int posOffset, float winWeight, float structWeight, float blueprintWeight, float destructionWeight)
+    public virtual void Init(Color[] playerColorScheme, int posOffset, 
+        AIStrategy strategy)
     {
         viewingHand = true;
         playerNum = posOffset + 1;
@@ -293,12 +294,17 @@ public class Player : MonoBehaviour
         }
     }
 
+    public virtual void DrawPiece(Polyomino piece)
+    {
+        piece.MakePhysicalPiece();
+        AddPieceToHand(piece);
+    }
+
     //draw instantly
     public virtual void DrawPiece()
     {
         Polyomino piece = GetRandomPieceFromDeck(false);
-        piece.MakePhysicalPiece();
-        AddPieceToHand(piece);
+        DrawPiece(piece);
     }
 
     //draw with task
@@ -501,6 +507,7 @@ public class Player : MonoBehaviour
 
     public virtual void OnPiecePlaced(Polyomino piece)
     {
+        Services.GameEventManager.Fire(new PiecePlaced(piece));
         BuildingType blueprintType = piece.buildingType;
         if (!(piece is Blueprint) && piece.cost != 1)
         {
