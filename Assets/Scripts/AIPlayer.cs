@@ -23,8 +23,7 @@ public class AIPlayer : Player
     protected float destructionWeight;
     private IEnumerator thinkingCoroutine;
 
-    public override void Init(Color[] playerColorScheme, int posOffset, 
-        AIStrategy strategy)
+    public override void Init(int playerNum_, AIStrategy strategy)
     {
         playingPiece = false;
         isThinking = false;
@@ -54,7 +53,7 @@ public class AIPlayer : Player
         resourceGainFactor = 1;
         drawRateFactor = 1;
         resourcesPerTick = 1;
-        base.Init(playerColorScheme, posOffset, strategy);
+        base.Init(playerNum_, strategy);
         Debug.Log("player " + playerNum + "using " + "\nwin weight: " + winWeight);
         Debug.Log("struct weight: " + structWeight + "\nblueprint weight: " + blueprintWeight);
 

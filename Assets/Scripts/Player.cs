@@ -14,8 +14,6 @@ public class Player : MonoBehaviour
         get { return colorScheme; }
     }
 
-    [SerializeField]
-    protected bool viewingHand;
     private List<Polyomino> normalDeck;
     private List<Destructor> destructorDeck;
     [SerializeField]
@@ -40,7 +38,6 @@ public class Player : MonoBehaviour
     public RectTransform handZone { get; private set; }
     public Base mainBase;
     public bool gameOver { get; private set; }
-    protected UITabs uiTabs;
     public List<Polyomino> boardPieces { get; protected set; }
     [SerializeField]
     protected int startingResources;
@@ -81,14 +78,11 @@ public class Player : MonoBehaviour
 
 
     // Use this for initialization
-    public virtual void Init(Color[] playerColorScheme, int posOffset, 
-        AIStrategy strategy)
+    public virtual void Init(int playerNum_, AIStrategy strategy)
     {
-        viewingHand = true;
-        playerNum = posOffset + 1;
+        playerNum = playerNum_;
 
-        colorScheme[0] = playerColorScheme[0];
-        colorScheme[1] = playerColorScheme[1];
+        colorScheme = Services.GameManager.colorSchemes[playerNum - 1];
 
         handZone = Services.UIManager.handZones[playerNum - 1];
 
@@ -193,11 +187,6 @@ public class Player : MonoBehaviour
             GainResources(resourcesPerTick);
             resourceMeterFillAmt -= 1;
         }
-    }
-
-    public void InitializeUITabs(UITabs tabs)
-    {
-        uiTabs = tabs;
     }
 
     #region DECK FUNCTIONS
@@ -469,22 +458,6 @@ public class Player : MonoBehaviour
         return newPos;
     }
     #endregion
-
-    public void ToggleHandZoneView(bool viewPieces)
-    {
-        viewingHand = viewPieces;
-        //if (!viewingHand) Services.UIManager.SetGreyOutBox(playerNum, false);
-        //else Services.UIManager.SetGreyOutBox(playerNum, !placementAvailable);
-        foreach(Polyomino piece in hand)
-        {
-            piece.SetVisible(viewingHand);
-        }
-
-        foreach(Blueprint blueprint in blueprints)
-        {
-            blueprint.SetVisible(!viewingHand);
-        }
-    }
 
     public void OnPieceSelected(Polyomino piece)
     {

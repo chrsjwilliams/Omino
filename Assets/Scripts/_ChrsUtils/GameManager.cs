@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
         get { return _player2ColorScheme; }
     }
 
-    private Color[][] colorSchemes;
+    public Color[][] colorSchemes { get; private set; }
 
     [SerializeField] private Color[] _mapColorScheme;
     public Color[] MapColorScheme
@@ -153,7 +153,7 @@ public class GameManager : MonoBehaviour
             _players[i].transform.parent = Services.Scenes.CurrentScene.transform;
             AIStrategy strategy = new AIStrategy(
                 winWeight, structureWeight, blueprintWeight, destructionWeight);
-            _players[i].Init(colorSchemes[i], i, strategy);
+            _players[i].Init(i+1, strategy);
         }
         for (int i = 0; i < 2; i++)
         {
@@ -185,7 +185,7 @@ public class GameManager : MonoBehaviour
             _players[i].transform.parent = Services.Scenes.CurrentScene.transform;
             Color[] colorScheme = i == 0 ? _player1ColorScheme : _player2ColorScheme;
             AIStrategy strategy = currentStrategies[i];
-            _players[i].Init(colorScheme, i, strategy);
+            _players[i].Init(i+1, strategy);
         }
         for (int i = 0; i < 2; i++)
         {
