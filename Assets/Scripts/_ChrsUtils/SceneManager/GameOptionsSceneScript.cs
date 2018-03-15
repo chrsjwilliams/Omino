@@ -25,6 +25,13 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     [SerializeField]
     private Slider attackWeightSlider;
     [SerializeField]
+    private Slider blueprintDestructionWeightSlider;
+    [SerializeField]
+    private Slider disconnectionWeightSlider;
+    [SerializeField]
+    private Slider destructorForBlueprintWeightSlider;
+
+    [SerializeField]
     private Button[] joinButtons;
     private Text[] joinButtonJoinTexts;
     private Text[] joinButtonPlayerTypeTexts;
@@ -37,6 +44,12 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private float defaultBlueprintWeight;
     [SerializeField]
     private float defaultAttackWeight;
+    [SerializeField]
+    private float defaultBlueprintDestructionWeight;
+    [SerializeField]
+    private float defaultDisconnectionWeight;
+    [SerializeField]
+    private float defaultDestructorForBlueprintWeight;
 
     private float timeElapsed;
     private const float textPulsePeriod = 0.35f;
@@ -83,6 +96,32 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             attackWeightSlider.value = defaultAttackWeight;
         }
+        if (PlayerPrefs.HasKey("blueprintDestructionWeight"))
+        {
+            blueprintDestructionWeightSlider.value = PlayerPrefs.GetFloat("blueprintDestructionWeight");
+        }
+        else
+        {
+            blueprintDestructionWeightSlider.value = defaultBlueprintDestructionWeight;
+        }
+        if (PlayerPrefs.HasKey("disconnectionWeight"))
+        {
+            disconnectionWeightSlider.value = PlayerPrefs.GetFloat("disconnectionWeight");
+        }
+        else
+        {
+            disconnectionWeightSlider.value = defaultDisconnectionWeight;
+        }
+        if (PlayerPrefs.HasKey("destructorForBlueprintWeight"))
+        {
+            destructorForBlueprintWeightSlider.value = PlayerPrefs.GetFloat("destructorForBlueprintWeight");
+        }
+        else
+        {
+            destructorForBlueprintWeightSlider.value = defaultDestructorForBlueprintWeight;
+        }
+
+
         levelButtons = levelButtonParent.GetComponentsInChildren<Button>();
         SelectLevel(0);
         aiOptionsMenu.SetActive(false);
@@ -135,6 +174,21 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     public void SetAttackWeight()
     {
         Services.GameManager.SetAttackWeight(attackWeightSlider.value);
+    }
+
+    public void SetBlueprintDestructionWeight()
+    {
+        Services.GameManager.SetBlueprintDestructionWeight(blueprintDestructionWeightSlider.value);
+    }
+
+    public void SetDisconnectionWeight()
+    {
+        Services.GameManager.SetDisconnectionWeight(disconnectionWeightSlider.value);
+    }
+
+    public void SetDestructorForBlueprintWeight()
+    {
+        Services.GameManager.SetDestructorForBlueprintWeight(destructorForBlueprintWeightSlider.value);
     }
 
     public void StartGame()

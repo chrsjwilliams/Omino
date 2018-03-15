@@ -20,8 +20,15 @@ public class Move
     public int rotations { get; private set; }
 
     private List<BlueprintMap> possibleBlueprintMoves;
+    private List<HashSet<Coord>> possibleCutMoves;
 
-    public Move(Polyomino _piece, Coord _targetCoord, int _rotations, List<BlueprintMap> _possibleBlueprintMoves, float winWeight, 
+    float blueprintDestructionWeight = 0.2f;
+    float disconnectionWeight = 0.4f;
+
+    float normalPieceForBlueprintWeight = 1;
+    float destructorForBlueprintWeight = 0.5f;
+
+    public Move(Polyomino _piece, Coord _targetCoord, int _rotations, List<BlueprintMap> _possibleBlueprintMoves, List<HashSet<Coord>> _possibleCutMoves, float winWeight, 
         float structureWeight, float destructionWeight, float mineWeight, float factoryWeight, float bombFactoryWeight)
     {
         piece = _piece;
@@ -29,6 +36,7 @@ public class Move
         targetCoord = _targetCoord;
         rotations = _rotations;
         possibleBlueprintMoves = _possibleBlueprintMoves;
+        possibleCutMoves = _possibleCutMoves;
         blueprintMove = null;
         score = CalculateScore(winWeight, structureWeight, destructionWeight, mineWeight, factoryWeight, bombFactoryWeight);
     }
@@ -82,11 +90,8 @@ public class Move
     private float BlueprintScore(Move mineMove, Move factoryMove, Move bombFactoryMove, float mineWeight, float factoryWeight,
         float bombFactoryWeight)
     {
-        float destructorModifier = 1;
-        if(piece is Destructor)
-        {
-            destructorModifier = 0.5f;
-        }
+        float destructorModifier = piece is Destructor ? destructorForBlueprintWeight : 1;
+
 
         float blueprintScore = 0;
         if (mineMove != null)
@@ -113,12 +118,17 @@ public class Move
         if (!(piece is Destructor)) return 0;
         else
         {
-
-            List<Coord> tileCoordsIDestroy = new List<Coord>();
-            int tilesIDestroy = 0;
             List<Blueprint> blueprintsDestroyed = new List<Blueprint>();
             int destructionRange = piece.owner.splashDamage ? 1 : 0;
-            bool bisectsOpponentsPieces = false;
+            bool cutsOffOpponent = false;
+            foreach(HashSet<Coord> cutSet in possibleCutMoves)
+            {
+                if(pieceCoords.IsSupersetOf(cutSet))
+                {
+                    cutsOffOpponent = true;
+                    break;
+                }
+            }
             
             foreach (Tile tile in piece.tiles)
             {
@@ -137,7 +147,6 @@ public class Move
                                 mapTile.occupyingPiece.owner != piece.owner &&
                                 !(mapTile.occupyingPiece is Structure))
                             {
-                                tilesIDestroy++;
                                 Blueprint blueprint = mapTile.occupyingBlueprint;
                                 if( blueprint != null &&
                                     !blueprintsDestroyed.Contains(blueprint))
@@ -148,8 +157,9 @@ public class Move
                         }
                     }
                 }
-
-                if (tilesIDestroy > 1 && !bisectsOpponentsPieces)
+                #region Dumb Cut Hueristic
+                /*
+                if (tilesIDestroy > 1 && !cutsOffOpponent)
                 {
                     int numberOfOpponentNeighbors = 0;
                     foreach (Coord dir in Coord.Directions())
@@ -170,16 +180,17 @@ public class Move
 
                     if (numberOfOpponentNeighbors == 2)
                     {
-                        bisectsOpponentsPieces = true;
+                        cutsOffOpponent = true;
                     }
-                }   
+                }
+                */
+                #endregion
             }
             
-            float tileDestructionWeight = tilesIDestroy * 0.05f;
-            float blueprintDestructionWeight = blueprintsDestroyed.Count * 0.2f;
-            float disconnectionWeight = bisectsOpponentsPieces ? 0.3f : 0;
+            float blueprintDestructionScore = blueprintsDestroyed.Count * blueprintDestructionWeight;
+            float disconnectionScore = (cutsOffOpponent ? 1 : 0) * disconnectionWeight;
 
-            return destructionWeight + tileDestructionWeight + blueprintDestructionWeight + disconnectionWeight;
+            return destructionWeight + blueprintDestructionScore + disconnectionScore;
         }
     }
     

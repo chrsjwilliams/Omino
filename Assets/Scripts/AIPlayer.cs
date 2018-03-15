@@ -590,8 +590,10 @@ public class AIPlayer : Player
                                     }
                                 }
 
-                                Move newMove = new Move(piece, playableCoords[i], (rotations + 1) % 4, possibleBlueprintMoves,
-                                    winWeight, structWeight, destructionWeight, mineWeight, factoryWeight, bombFactoryWeight);
+                                Move newMove = new Move(piece, playableCoords[i], (rotations + 1) % 4, 
+                                                        possibleBlueprintMoves, possibleCutMoves,
+                                                        winWeight, structWeight, destructionWeight, 
+                                                        mineWeight, factoryWeight, bombFactoryWeight);
                                 
                                 if (nextPlay == null) nextPlay = newMove;
                                 else if (newMove.score > nextPlay.score)
@@ -702,12 +704,19 @@ public struct AIStrategy
     public float structWeight;
     public float blueprintWeight;
     public float destructionWeight;
+    public float blueprintDestructionWeight;
+    public float disconnectionWeight;
+    public float destructorForBlueprintWeight;
 
-    public AIStrategy(float winWeight_, float structWeight_, float blueprintWeight_, float destructionWeight_)
+    public AIStrategy(  float winWeight_, float structWeight_, float blueprintWeight_, float destructionWeight_,
+                        float blueprintDestructionWeight_, float disconnectionWeight_, float destructorForBlueprintWeight_)
     {
         winWeight = winWeight_;
         structWeight = structWeight_;
         blueprintWeight = blueprintWeight_;
         destructionWeight = destructionWeight_;
+        blueprintDestructionWeight = blueprintDestructionWeight_;
+        disconnectionWeight = disconnectionWeight_;
+        destructorForBlueprintWeight = destructorForBlueprintWeight_;
     }
 }
