@@ -304,17 +304,18 @@ public class AIPlayer : Player
 
     protected IEnumerator GeneratePossibleMoves()
     {
+        isThinking = true;
         List<Polyomino> currentHand = new List<Polyomino>(hand);
         List<Polyomino> currentBoardPieces = new List<Polyomino> (boardPieces);
 
-        #region Successful Krager's Algorithm
+        #region Successful Karger's Algorithm
 
         //  Collect the board pieces so I can make a graph of the opponent pieces
         int opposingIndex;
         if (playerNum == 1) opposingIndex = 1;
         else opposingIndex = 0;
 
-        List<Polyomino> opposingBoardPieces = 
+        List<Polyomino> opposingBoardPieces =
                     new List<Polyomino>(Services.GameManager.Players[opposingIndex].boardPieces);
 
         //  These are the polyominos I can cut
@@ -367,7 +368,7 @@ public class AIPlayer : Player
         //    }
         //}
         //  We can then use the list of cuts and extract coords to pass along to our move 
-        
+
         #endregion
 
         #region Calculate economy stuff
@@ -395,7 +396,6 @@ public class AIPlayer : Player
 
         #endregion
 
-        isThinking = true;
         //  Finding tiles that my center coord could be placed
         #region Gets Playable Coords
         //List<Coord> playableCoords = FindAllPlayableCoords(2, true);
