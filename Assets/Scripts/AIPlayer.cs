@@ -21,6 +21,9 @@ public class AIPlayer : Player
     protected float structWeight;
     protected float blueprintWeight;
     protected float destructionWeight;
+    protected float blueprintdestructionWeight;
+    protected float disconnectionWeight;
+    protected float destructorForBlueprintWeight;
     private IEnumerator thinkingCoroutine;
 
     public override void Init(int playerNum_, AIStrategy strategy)
@@ -40,6 +43,9 @@ public class AIPlayer : Player
         structWeight = strategy.structWeight;
         blueprintWeight = strategy.blueprintWeight;
         destructionWeight = strategy.destructionWeight;
+        blueprintdestructionWeight = strategy.blueprintDestructionWeight;
+        disconnectionWeight = strategy.disconnectionWeight;
+        destructorForBlueprintWeight = strategy.destructorForBlueprintWeight;
 
         handSpacing = new Vector3(5.5f, -2.35f, 0);
         handOffset = new Vector3(-12.6f, 9.125f, 0);
@@ -56,6 +62,10 @@ public class AIPlayer : Player
         base.Init(playerNum_, strategy);
         Debug.Log("player " + playerNum + "using " + "\nwin weight: " + winWeight);
         Debug.Log("struct weight: " + structWeight + "\nblueprint weight: " + blueprintWeight);
+        Debug.Log("destruction weight: " + destructionWeight +
+                    "\nblueprint destruction weight: " + blueprintdestructionWeight); 
+         Debug.Log("disconnection weight: " + disconnectionWeight + 
+                    "\ndestructor4Blueprint weight: " + destructorForBlueprintWeight);
 
         if (playerNum == 1)
         {

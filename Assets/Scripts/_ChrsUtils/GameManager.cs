@@ -207,6 +207,7 @@ public class GameManager : MonoBehaviour
             _players[i].transform.parent = Services.Scenes.CurrentScene.transform;
             Color[] colorScheme = i == 0 ? _player1ColorScheme : _player2ColorScheme;
             AIStrategy strategy = currentStrategies[i];
+
             _players[i].Init(i+1, strategy);
         }
         for (int i = 0; i < 2; i++)
@@ -224,7 +225,7 @@ public class GameManager : MonoBehaviour
             {
                 string strategyString = PlayerPrefs.GetString("strategy" + i);
                 string[] weightArrays = strategyString.Split(',');
-                if (weightArrays.Length == 4)
+                if (weightArrays.Length == 7)
                 {
                     currentStrategies[i] = new AIStrategy(
                         float.Parse(weightArrays[0]),
@@ -241,6 +242,9 @@ public class GameManager : MonoBehaviour
                     float structWeight = 0.11f;
                     float blueprintWeight = 0.23f;
                     float destructionWeight = 0.15f;
+                    float blueprintDestructionWeight = 0.2f;
+                    float disconnectionWeight = 0.4f;
+                    float destructorForBlueprintWeight = 0.5f;
                     currentStrategies[i] = new AIStrategy(
                         winWeight, structWeight, blueprintWeight, destructionWeight,
                         blueprintDestructionWeight, disconnectionWeight, destructorForBlueprintWeight);
@@ -252,6 +256,9 @@ public class GameManager : MonoBehaviour
                 float structWeight = 0.11f;
                 float blueprintWeight = 0.23f;
                 float destructionWeight = 0.15f;
+                float blueprintDestructionWeight = 0.2f;
+                float disconnectionWeight = 0.4f;
+                float destructorForBlueprintWeight = 0.5f;
                 currentStrategies[i] = new AIStrategy(
                     winWeight, structWeight, blueprintWeight, destructionWeight,
                     blueprintDestructionWeight, disconnectionWeight, destructorForBlueprintWeight);
@@ -264,6 +271,7 @@ public class GameManager : MonoBehaviour
     {
         float mutationRange = 0.02f;
         AIStrategy winningStrat = currentStrategies[winner.playerNum - 1];
+
         float mutatedWinWeight = winningStrat.winWeight + Random.Range(-mutationRange, mutationRange);
         float mutatedStructWeight = winningStrat.structWeight + Random.Range(-mutationRange, mutationRange);
         float mutatedBlueprintWeight = winningStrat.blueprintWeight + Random.Range(-mutationRange, mutationRange);
@@ -271,13 +279,22 @@ public class GameManager : MonoBehaviour
         float mutatedBlueprintDestructionWeight = winningStrat.blueprintDestructionWeight + Random.Range(-mutationRange, mutationRange);
         float mutatedDisconnectionWeight = winningStrat.disconnectionWeight + Random.Range(-mutationRange, mutationRange);
         float mutatedDestructorForBlueprintWeight = winningStrat.destructorForBlueprintWeight + Random.Range(-mutationRange, mutationRange);
+
         float highestWeight = Mathf.Max(mutatedWinWeight, mutatedStructWeight,
             mutatedBlueprintWeight,
-            mutatedDestructionWeight);
+            mutatedDestructionWeight,
+            mutatedBlueprintDestructionWeight,
+            mutatedDisconnectionWeight,
+            mutatedDestructorForBlueprintWeight);
+
         mutatedWinWeight /= highestWeight;
         mutatedStructWeight /= highestWeight;
         mutatedBlueprintWeight /= highestWeight;
         mutatedDestructionWeight /= highestWeight;
+        mutatedBlueprintDestructionWeight /= highestWeight;
+        mutatedDisconnectionWeight /= highestWeight;
+        mutatedDestructorForBlueprintWeight /= highestWeight;
+
         AIStrategy mutatedStrat = new AIStrategy(
             mutatedWinWeight, 
             mutatedStructWeight, 
@@ -286,7 +303,9 @@ public class GameManager : MonoBehaviour
             mutatedBlueprintDestructionWeight,
             mutatedDisconnectionWeight,
             mutatedDestructorForBlueprintWeight);
+
         currentStrategies[winner.playerNum % 2] = mutatedStrat;
+
         for (int i = 0; i < 2; i++)
         {
             AIStrategy strat = currentStrategies[i];
@@ -294,13 +313,18 @@ public class GameManager : MonoBehaviour
                 strat.winWeight + "," + 
                 strat.structWeight + "," + 
                 strat.blueprintWeight + "," + 
-                strat.destructionWeight;
+                strat.destructionWeight + "," +
+                strat.blueprintDestructionWeight + "," +
+                strat.disconnectionWeight + "," +
+                strat.destructorForBlueprintWeight;
+
             PlayerPrefs.SetString("strategy" + i, strategyString);
         }
         PlayerPrefs.Save();
-        Debug.Log("current best strat: " + winningStrat.winWeight + "," +
-            winningStrat.structWeight + "," + winningStrat.blueprintWeight + ","
-            + winningStrat.destructionWeight);
+        Debug.Log("current best strat: WW: " + winningStrat.winWeight + ", Struct: " +
+            winningStrat.structWeight + ", BP: " + winningStrat.blueprintWeight + ", ATK: "
+            + winningStrat.destructionWeight + ", BPATTK: " + winningStrat.blueprintDestructionWeight +
+            "DISCON: , " + winningStrat.disconnectionWeight + ", DES4BP: " + winningStrat.destructorForBlueprintWeight);
     }
 
     public void ChangeCameraTo(Camera camera)
