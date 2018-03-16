@@ -77,33 +77,6 @@ public abstract class Structure : Polyomino
 
     }
 
-    public virtual void ToggleStructureActivation(Player player)
-    {
-        //  If I am connected to my owner's base, ownership
-        //  does not need to be transferred
-        List<Polyomino> adjacentPieces = GetAdjacentPolyominos(owner);
-        foreach (Polyomino piece in adjacentPieces)
-        {
-            if (Services.MapManager.ConnectedToBase(piece, new List<Polyomino>()) && owner != null) return;
-            else
-            {
-                if (owner != null)
-                    OnClaimLost();
-                break;
-            }
-        }
-
-        adjacentPieces = GetAdjacentPolyominos(player);
-        foreach (Polyomino piece in adjacentPieces)
-        {
-            if (Services.MapManager.ConnectedToBase(piece, new List<Polyomino>()))
-            {
-                OnClaim(player);
-                return;
-            }
-        }
-    }
-
     public override void MakePhysicalPiece()
     {
         base.MakePhysicalPiece();
@@ -138,6 +111,7 @@ public abstract class Structure : Polyomino
         {
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingStructure(this);
         }
+        adjacentPieces = new List<Polyomino>();
     }
 
     protected override void OnPlace()
@@ -149,20 +123,17 @@ public abstract class Structure : Polyomino
     public virtual void OnClaim(Player player)
     {
         owner = player;
-        //if (owner == null)
-        //{
-        //    OnClaimLost();
-        //    return;
-        //}
-        //ShiftColor(owner.ColorScheme[0]);
-        //SetOverlaySprite();
         spriteOverlay.GetComponent<ColorShifter>().ShiftColor(owner.ColorScheme[0]);
         Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
         owner.GainOwnership(this);
         StructClaimAura effect = GameObject.Instantiate(Services.Prefabs.StructClaimEffect, 
             GetCenterpoint(), Quaternion.identity).GetComponent<StructClaimAura>();
         effect.Init(owner);
-        //SetParticleClaimMode(true);
+        adjacentPieces = GetAdjacentPolyominos(owner);
+        foreach(Polyomino piece in adjacentPieces)
+        {
+            if (!piece.adjacentPieces.Contains(this)) piece.adjacentPieces.Add(this);
+        }
     }
 
     public virtual void OnClaimLost()
@@ -170,6 +141,11 @@ public abstract class Structure : Polyomino
         SetToNeutralColor();
         owner.LoseOwnership(this);
         owner = null;
+        foreach(Polyomino piece in adjacentPieces)
+        {
+            piece.adjacentPieces.Remove(this);
+        }
+        adjacentPieces.Clear();
         //SetOverlaySprite();
         //SetParticleClaimMode(false);
     }

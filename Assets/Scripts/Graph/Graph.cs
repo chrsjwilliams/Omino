@@ -35,7 +35,7 @@ public class Edge<TVertex> where TVertex : IVertex
 public class Graph<TVertex> where TVertex : IVertex
 {
     //  Using a Dictionary as an adjacency list.
-    //  Each vertex contains a list of verticies its adjacent to
+    //  Each vertex contains a list of vertices it's adjacent to
     public List<Edge<TVertex>> Edges { get; set; }
     public List<TVertex> Vertices;
     public Dictionary<TVertex, List<Edge<TVertex>>> EdgeDict;
@@ -44,6 +44,13 @@ public class Graph<TVertex> where TVertex : IVertex
         Edges = new List<Edge<TVertex>>();
         Vertices = new List<TVertex>();
         EdgeDict = new Dictionary<TVertex, List<Edge<TVertex>>>();
+    }
+
+    public Graph(Graph<TVertex> graphToCopy)
+    {
+        Edges = new List<Edge<TVertex>>(graphToCopy.Edges);
+        Vertices = new List<TVertex>(graphToCopy.Vertices);
+        EdgeDict = new Dictionary<TVertex, List<Edge<TVertex>>>(graphToCopy.EdgeDict);
     }
 
     public void ApplyKarger()

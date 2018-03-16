@@ -92,7 +92,11 @@ public class Player : MonoBehaviour
 
         InitializeNormalDeck();
         InitializeDestructorDeck();
-        DrawPieces(startingHandSize);
+        if (Services.GameManager.tutorialMode && !(this is AIPlayer))
+        {
+            DrawPiece(new Polyomino(4, 1, this));
+        }
+        else DrawPieces(startingHandSize);
         OrganizeHand(hand, true);
         QueueUpNextPiece(true);
         QueueUpNextPiece(false);

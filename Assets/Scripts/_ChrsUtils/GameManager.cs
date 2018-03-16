@@ -60,7 +60,6 @@ public class GameManager : MonoBehaviour
 
     public bool tutorialMode;
 
-
     private void Awake()
     {
         Services.GameEventManager.Register<Reset>(Reset);

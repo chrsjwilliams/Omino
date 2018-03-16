@@ -24,11 +24,6 @@ public class Base : Structure
         destructorDrawRateBonus = 1f / 40f;
     }
 
-    public override void ToggleStructureActivation(Player player)
-    {
-        if (!mainBase) base.ToggleStructureActivation(player);
-    }
-
     public override void Update()
     {
         //UpdateDrawMeter();

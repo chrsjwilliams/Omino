@@ -77,6 +77,8 @@ public class Polyomino : IVertex
     private RotationUI rotationUI;
     public bool burningFromHand { get; private set; }
 
+    public List<Polyomino> adjacentPieces;
+
     protected readonly IntVector2 Center = new IntVector2(2, 2);
 
     protected static int[,,] monomino = new int[1, 5, 5]
@@ -530,6 +532,7 @@ public class Polyomino : IVertex
         {
             bool autoFortify = owner.autoFortify;
             owner.OnPiecePlaced(this);
+            //adjacentPieces = GetAdjacentPolyominos(owner);
             if (autoFortify && !isFortified)
                 Services.MapManager.FortifyPiece(this);
         }
@@ -893,10 +896,11 @@ public class Polyomino : IVertex
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingBlueprint(null);
             tile.OnRemove();
         }
+        foreach(Polyomino piece in adjacentPieces)
+        {
+            piece.adjacentPieces.Remove(this);
+        }
 
-        //CheckForFortification(true);
-
-        //if (ringTimer != null) RemoveTimerUI();
         owner.OnPieceRemoved(this);
         dead = true;
     }
@@ -973,6 +977,7 @@ public class Polyomino : IVertex
         costText.text = cost.ToString();
         ToggleCostUIStatus(false);
         tooltips = new List<Tooltip>();
+        adjacentPieces = new List<Polyomino>();
         if (owner != null)
         {
             Quaternion rot = owner.playerNum == 1 ?

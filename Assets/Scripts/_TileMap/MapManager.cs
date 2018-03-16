@@ -626,13 +626,14 @@ public class MapManager : MonoBehaviour
         List<Tile> tempTiles = piece.tiles;
         List<Blueprint> prevOccupyingStructures = piece.occupyingBlueprints;
         piece.Remove(true);
-
+        List<Polyomino> monominos = new List<Polyomino>();
         foreach (Tile tile in tempTiles)
         {
             Polyomino fortifiedMonomino = new Polyomino(1, 0, piece.owner);
             fortifiedMonomino.isFortified = true;
             fortifiedMonomino.MakePhysicalPiece();
             fortifiedMonomino.PlaceAtLocation(tile.coord, true);
+            monominos.Add(fortifiedMonomino);
 
             for (int i = 0; i < prevOccupyingStructures.Count; i++)
             {
@@ -646,6 +647,16 @@ public class MapManager : MonoBehaviour
                 }
             }
             //fortifiedMonomino.ToggleAltColor(true);
+        }
+        foreach(Polyomino monomino in monominos)
+        {
+            monomino.adjacentPieces = 
+                monomino.GetAdjacentPolyominos(monomino.owner);
+            foreach(Polyomino adjPiece in monomino.adjacentPieces)
+            {
+                if(!adjPiece.adjacentPieces.Contains(monomino))
+                    adjPiece.adjacentPieces.Add(monomino);
+            }
         }
     }
 }

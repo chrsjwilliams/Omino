@@ -156,7 +156,8 @@ public class AIPlayer : Player
             {
                 //  the first parameter is the vertex
                 //  the second parameter are its adajcent verticies
-                List<Polyomino> adjPieces = piece.GetAdjacentPolyominos(piece.owner);
+                //List<Polyomino> adjPieces = piece.GetAdjacentPolyominos(piece.owner);
+                List<Polyomino> adjPieces = piece.adjacentPieces;
                 List<Edge<Polyomino>> pieceEdges = new List<Edge<Polyomino>>();
                 foreach(Polyomino adjPiece in adjPieces)
                 {
@@ -186,16 +187,16 @@ public class AIPlayer : Player
             }
         }
 
-        List<Polyomino> verticiesToRemove = new List<Polyomino>();
+        List<Polyomino> verticesToRemove = new List<Polyomino>();
         foreach(Polyomino vertex in graph.Vertices)
         {
             if(graph.EdgeDict[vertex].Count < 2)
             {
-                verticiesToRemove.Add(vertex);
+                verticesToRemove.Add(vertex);
             }
         }
 
-        foreach(Polyomino vertex in verticiesToRemove)
+        foreach(Polyomino vertex in verticesToRemove)
         {
             if (graph.EdgeDict[vertex].Count > 0)
             {
@@ -328,15 +329,16 @@ public class AIPlayer : Player
 
         //  These are the polyominos I can cut
         List<HashSet<Edge<Polyomino>>> cuts = new List<HashSet<Edge<Polyomino>>>();
+        Graph<Polyomino> opponentGraph = MakeOpponentPieceGraph(opposingBoardPieces);
         for (int i = 0; i < totalRandomizations; i++)
         {
             if (i % kargerAlgorithmBuffer == 0)
             {
                 yield return null;
             }
-
-            Graph<Polyomino> opponentGraph = MakeOpponentPieceGraph(opposingBoardPieces);
-            opponentGraph.ApplyKarger();
+            //Graph<Polyomino> tempGraph = new Graph<Polyomino>(opponentGraph);
+            Graph<Polyomino> tempGraph = opponentGraph;
+            tempGraph.ApplyKarger();
             //Debug.Log("cut includes: ");
             //foreach (Edge<Polyomino> edge in opponentGraph.Edges)
             //{
@@ -347,10 +349,10 @@ public class AIPlayer : Player
             //        secondEdgeNodeCoord.x + "," + secondEdgeNodeCoord.y);
             //}
 
-            if (opponentGraph.Edges.Count <= 3)
+            if (tempGraph.Edges.Count <= 3)
             {
                 bool redundantCut = false;
-                HashSet<Edge<Polyomino>> newCut = new HashSet<Edge<Polyomino>>(opponentGraph.Edges);
+                HashSet<Edge<Polyomino>> newCut = new HashSet<Edge<Polyomino>>(tempGraph.Edges);
                 foreach (HashSet<Edge<Polyomino>> cut in cuts)
                 {
                     if (newCut.IsSupersetOf(cut) && newCut.IsSubsetOf(cut))
@@ -438,7 +440,8 @@ public class AIPlayer : Player
                             if (containedInMap) mapTile = Services.MapManager.Map[candidateCoord.x, candidateCoord.y];
                             if (Mathf.Abs(dx) <= 3 && Mathf.Abs(dy) <= 3)
                             {
-                                if (!playableCoords.Contains(candidateCoord) &&
+                                if (
+                                    //!playableCoords.Contains(candidateCoord) &&
                                     containedInMap &&
                                     mapTile.occupyingPiece == null &&
                                     mapTile.occupyingStructure == null)
@@ -446,7 +449,8 @@ public class AIPlayer : Player
                                     playableCoords.Add(candidateCoord);
                                 }
 
-                                if (!possibleBlueprintCoords.Contains(candidateCoord) &&
+                                if (
+                                    //!possibleBlueprintCoords.Contains(candidateCoord) &&
                                     containedInMap &&
                                     mapTile.occupyingStructure == null &&
                                     mapTile.occupyingBlueprint == null)
@@ -455,7 +459,8 @@ public class AIPlayer : Player
                                 }
                             }
 
-                            if (!touchableCoords.Contains(candidateCoord) &&
+                            if (
+                                //!touchableCoords.Contains(candidateCoord) &&
                                 containedInMap &&
                                 (mapTile.occupyingPiece == null || mapTile.occupyingPiece.owner != this))
                             {
@@ -466,7 +471,10 @@ public class AIPlayer : Player
                 }
             }
         }
-
+        playableCoords = playableCoords.Distinct().ToList();
+        possibleBlueprintCoords = new HashSet<Coord>(
+            possibleBlueprintCoords.Distinct());
+        touchableCoords = touchableCoords.Distinct().ToList();
         //Debug.Log("Counted Blueprint Coords: " + countedBlueprintCoords);
         #endregion
 
@@ -591,14 +599,14 @@ public class AIPlayer : Player
 
                             if (piece.IsPlacementLegal(adjacentPolyominos))
                             {
-                                HashSet<Coord> pieceCoords = new HashSet<Coord>();
-                                foreach (Tile tile in piece.tiles)
-                                {
-                                    if (!pieceCoords.Contains(tile.coord))
-                                    {
-                                        pieceCoords.Add(tile.coord);
-                                    }
-                                }
+                                //HashSet<Coord> pieceCoords = new HashSet<Coord>();
+                                //foreach (Tile tile in piece.tiles)
+                                //{
+                                //    if (!pieceCoords.Contains(tile.coord))
+                                //    {
+                                //        pieceCoords.Add(tile.coord);
+                                //    }
+                                //}
 
                                 Move newMove = new Move(piece, playableCoords[i], (rotations + 1) % 4, 
                                                         possibleBlueprintMoves, possibleCutMoves,
@@ -687,7 +695,7 @@ public class AIPlayer : Player
     public override void AddPieceToHand(Polyomino piece)
     {
         base.AddPieceToHand(piece);
-        StopThinking();
+        //StopThinking();
         drawingPiece = false;
     }
 
