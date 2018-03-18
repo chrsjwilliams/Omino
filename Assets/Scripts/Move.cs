@@ -20,16 +20,20 @@ public class Move
     public int rotations { get; private set; }
 
     private List<BlueprintMap> possibleBlueprintMoves;
-    private List<HashSet<Coord>> possibleCutMoves;
+    private List<CutCoordSet> possibleCutMoves;
 
     float blueprintDestructionWeight = 0.2f;
     float disconnectionWeight = 0.4f;
 
     float normalPieceForBlueprintWeight = 1;
     float destructorForBlueprintWeight = 0.5f;
+    public int finalCutSize;
 
-    public Move(Polyomino _piece, Coord _targetCoord, int _rotations, List<BlueprintMap> _possibleBlueprintMoves, List<HashSet<Coord>> _possibleCutMoves, float winWeight, 
-        float structureWeight, float destructionWeight, float mineWeight, float factoryWeight, float bombFactoryWeight)
+    public Move(Polyomino _piece, Coord _targetCoord, int _rotations, 
+        List<BlueprintMap> _possibleBlueprintMoves, 
+        List<CutCoordSet> _possibleCutMoves, float winWeight, 
+        float structureWeight, float destructionWeight, float mineWeight, 
+        float factoryWeight, float bombFactoryWeight)
     {
         piece = _piece;
         //relativeCoords = piece.tileRelativeCoords;
@@ -120,25 +124,18 @@ public class Move
         {
             List<Blueprint> blueprintsDestroyed = new List<Blueprint>();
             int destructionRange = piece.owner.splashDamage ? 1 : 0;
-            bool cutsOffOpponent = false;
-            foreach(HashSet<Coord> cutSet in possibleCutMoves)
-            {
-                if(pieceCoords.IsSupersetOf(cutSet))
-                {
-                    cutsOffOpponent = true;
-                    break;
-                }
-            }
+            int cutSize = 0;
+            HashSet<Coord> coordsToBeDestroyed = new HashSet<Coord>();
             
             foreach (Tile tile in piece.tiles)
             {
-                for (int x = -destructionRange; x < destructionRange; x++)
+                for (int x = -destructionRange; x <= destructionRange; x++)
                 {
-                    for (int y = -destructionRange; y < destructionRange; y++)
+                    for (int y = -destructionRange; y <= destructionRange; y++)
                     {
                         Coord destructionRadius = new Coord(x, y);
                         Coord coordToBeDestroyed = tile.coord.Add(destructionRadius);
-
+                        coordsToBeDestroyed.Add(coordToBeDestroyed);
                         if (Services.MapManager.IsCoordContainedInMap(coordToBeDestroyed))
                         {
                             Tile mapTile = Services.MapManager.Map[coordToBeDestroyed.x, coordToBeDestroyed.y];
@@ -186,9 +183,21 @@ public class Move
                 */
                 #endregion
             }
-            
+
+            foreach (CutCoordSet cutSet in possibleCutMoves)
+            {
+                if (coordsToBeDestroyed.IsSupersetOf(cutSet.coords))
+                {
+                    if (cutSet.size > cutSize)
+                    {
+                        cutSize = cutSet.size;
+                        Debug.Log("move has cutsize score of " + cutSize);
+                    }
+                }
+            }
+            finalCutSize = cutSize;
             float blueprintDestructionScore = blueprintsDestroyed.Count * blueprintDestructionWeight;
-            float disconnectionScore = (cutsOffOpponent ? 1 : 0) * disconnectionWeight;
+            float disconnectionScore = cutSize * disconnectionWeight;
 
             return destructionWeight + blueprintDestructionScore + disconnectionScore;
         }
@@ -259,6 +268,8 @@ public class Move
             playTask.Then(new ActionTask(blueprintMove.ExecuteMove));
         }
         Services.GeneralTaskManager.Do(playTask);
+        //Debug.Log("player " + piece.owner.playerNum + " making move of score: " + score + " at time " + Time.time);
+        //if (finalCutSize > 0) Debug.Log("making cut of size" + finalCutSize);
         //if(!(piece is Blueprint))
         //{
         //    Debug.Log("player " + piece.owner.playerNum + " playing move with score:" + score +

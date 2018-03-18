@@ -36,7 +36,7 @@ public class AIPlayer : Player
         movesTriedBuffer = 50;
         coordCountBuffer = 200;
         tilesUntilBlueprint = 5;
-        totalRandomizations = 50;
+        totalRandomizations = 100;
         kargerAlgorithmBuffer = 10;
 
         winWeight = strategy.winWeight;
@@ -144,9 +144,9 @@ public class AIPlayer : Player
 
     }
 
-    public Graph<Polyomino> MakeOpponentPieceGraph(List<Polyomino> currentAllBoardPieces)
+    public Graph MakeOpponentPieceGraph(List<Polyomino> currentAllBoardPieces)
     {
-        Graph<Polyomino> graph = new Graph<Polyomino>();
+        Graph graph = new Graph();
         foreach (Polyomino piece in currentAllBoardPieces)
         {
             if (piece.owner != null &&
@@ -183,70 +183,74 @@ public class AIPlayer : Player
                 }
                 graph.EdgeDict.Add(piece, pieceEdges);
                 graph.Vertices.Add(piece);
-
             }
         }
 
-        List<Polyomino> verticesToRemove = new List<Polyomino>();
-        foreach(Polyomino vertex in graph.Vertices)
-        {
-            if(graph.EdgeDict[vertex].Count < 2)
-            {
-                verticesToRemove.Add(vertex);
-            }
-        }
+        //List<Polyomino> verticesToRemove = new List<Polyomino>();
+        //foreach(Polyomino vertex in graph.Vertices)
+        //{
+        //    if(graph.EdgeDict[vertex].Count < 2)
+        //    {
+        //        verticesToRemove.Add(vertex);
+        //    }
+        //}
 
-        foreach(Polyomino vertex in verticesToRemove)
-        {
-            if (graph.EdgeDict[vertex].Count > 0)
-            {
+        //foreach(Polyomino vertex in verticesToRemove)
+        //{
+        //    if (graph.EdgeDict[vertex].Count > 0)
+        //    {
+        //        Edge<Polyomino> edge = graph.EdgeDict[vertex][0];
 
-                Edge<Polyomino> edge = graph.EdgeDict[vertex][0];
+        //        Polyomino otherVertex;
+        //        if (edge.curFirstVertex.Equals(vertex))
+        //        {
+        //            otherVertex = edge.curSecondVertex;
+        //        }
+        //        else
+        //        {
+        //            otherVertex = edge.curFirstVertex;
+        //        }
 
-                Polyomino otherVertex;
-                if (edge.curFirstVertex.Equals(vertex))
-                {
-                    otherVertex = edge.curSecondVertex;
-                }
-                else
-                {
-                    otherVertex = edge.curFirstVertex;
-                }
-
-                graph.EdgeDict[otherVertex].Remove(edge);
-                graph.EdgeDict.Remove(vertex);
-                graph.Edges.Remove(edge);
-                graph.Vertices.Remove(vertex);
-            }
-        }
+        //        graph.EdgeDict[otherVertex].Remove(edge);
+        //        graph.EdgeDict.Remove(vertex);
+        //        graph.Edges.Remove(edge);
+        //        graph.Vertices.Remove(vertex);
+        //    }
+        //}
 
         return graph;
     }
 
 
-    public List<HashSet<Coord>> MakeLegalCuts(List<HashSet<Edge<Polyomino>>> cuts)
+    public List<CutCoordSet> MakeLegalCuts(List<Cut> cuts)
     {
-        List<HashSet<Coord>> legalCuts = new List<HashSet<Coord>>();
-
-        foreach(HashSet<Edge<Polyomino>> cut in cuts)
+        List<CutCoordSet> legalCuts = new List<CutCoordSet>();
+        //Debug.Log("logging cuts for player " + playerNum + " at time " + Time.time);
+        foreach(Cut cut in cuts)
         {
-            legalCuts.AddRange(GenerateCombinations(new List<HashSet<Coord>>(), cut));
+            //Debug.Log("found cut of size: " + cut.size);
+            //foreach (Edge<Polyomino> edge in cut.edges)
+            //{
+            //    Debug.Log("edge " + edge.originalFirstVertex.centerCoord +
+            //        " to " + edge.originalSecondVertex.centerCoord);
+            //}
+            legalCuts.AddRange(GenerateCombinations(new List<CutCoordSet>(), cut));
         }
 
         return legalCuts;
     }
     
 
-    protected List<HashSet<Coord>> GenerateCombinations(List<HashSet<Coord>> sets, HashSet<Edge<Polyomino>> edges)
+    protected List<CutCoordSet> GenerateCombinations(List<CutCoordSet> sets, Cut cutEdges)
     {
-        if (sets.Count == 0) sets.Add(new HashSet<Coord>());
+        if (sets.Count == 0) sets.Add(new CutCoordSet());
 
-        List<HashSet<Coord>> newSets = new List<HashSet<Coord>>();
+        List<CutCoordSet> newSets = new List<CutCoordSet>();
         
-        if (edges.Count == 0) return sets;
+        if (cutEdges.edges.Count == 0) return sets;
         else 
         {
-            Edge<Polyomino> edgeToBeRemoved = edges.ElementAt(0);
+            Edge<Polyomino> edgeToBeRemoved = cutEdges.edges.ElementAt(0);
 
             Coord firstCoord = edgeToBeRemoved.originalFirstVertex.centerCoord;
             Coord secondCoord = edgeToBeRemoved.originalSecondVertex.centerCoord;
@@ -254,16 +258,14 @@ public class AIPlayer : Player
             bool includeFirstCoord = !(edgeToBeRemoved.originalFirstVertex is Structure);
             bool includeSecondCoord = !(edgeToBeRemoved.originalSecondVertex is Structure);
 
-            foreach (HashSet<Coord> set in sets)
+            foreach (CutCoordSet set in sets)
             {
-                
                 if (includeFirstCoord)
                 {
-                    if (!set.Contains(firstCoord))
+                    if (!set.coords.Contains(firstCoord))
                     {
-                        HashSet<Coord> newSet = new HashSet<Coord>(set);
-                        newSet.Add(firstCoord);
-
+                        CutCoordSet newSet = new CutCoordSet(set.coords, cutEdges.size);
+                        newSet.coords.Add(firstCoord);
                         newSets.Add(newSet);
                     }
                     else
@@ -273,11 +275,10 @@ public class AIPlayer : Player
                 }
                 if (includeSecondCoord)
                 {
-                    if (!set.Contains(secondCoord))
+                    if (!set.coords.Contains(secondCoord))
                     {
-                        HashSet<Coord> newSet = new HashSet<Coord>(set);
-                        newSet.Add(secondCoord);
-
+                        CutCoordSet newSet = new CutCoordSet(set.coords, cutEdges.size);
+                        newSet.coords.Add(secondCoord);
                         newSets.Add(newSet);
                     }
                     else
@@ -287,12 +288,12 @@ public class AIPlayer : Player
                 }
             }
 
-            List<HashSet<Coord>> setsToRemove = new List<HashSet<Coord>>();
-            foreach(HashSet<Coord> set in newSets)
+            List<CutCoordSet> setsToRemove = new List<CutCoordSet>();
+            foreach(CutCoordSet set in newSets)
             {
-                foreach(HashSet<Coord> otherSet in newSets)
+                foreach(CutCoordSet otherSet in newSets)
                 {
-                    if (set.IsSupersetOf(otherSet) && set != otherSet)
+                    if (set.coords.IsSupersetOf(otherSet.coords) && set != otherSet)
                     {
                         setsToRemove.Add(set);
                         break;
@@ -300,13 +301,13 @@ public class AIPlayer : Player
                 }
             }
 
-            foreach(HashSet<Coord> set in setsToRemove)
+            foreach(CutCoordSet set in setsToRemove)
             {
                 newSets.Remove(set);
             }
 
-            edges.Remove(edgeToBeRemoved);
-            return GenerateCombinations(newSets, edges);
+            cutEdges.edges.Remove(edgeToBeRemoved);
+            return GenerateCombinations(newSets, cutEdges);
         }
         
     }
@@ -328,17 +329,17 @@ public class AIPlayer : Player
                     new List<Polyomino>(Services.GameManager.Players[opposingIndex].boardPieces);
 
         //  These are the polyominos I can cut
-        List<HashSet<Edge<Polyomino>>> cuts = new List<HashSet<Edge<Polyomino>>>();
-        Graph<Polyomino> opponentGraph = MakeOpponentPieceGraph(opposingBoardPieces);
+        List<Cut> cuts = new List<Cut>();
+        //Graph opponentGraph = MakeOpponentPieceGraph(opposingBoardPieces);
         for (int i = 0; i < totalRandomizations; i++)
         {
             if (i % kargerAlgorithmBuffer == 0)
             {
                 yield return null;
             }
-            //Graph<Polyomino> tempGraph = new Graph<Polyomino>(opponentGraph);
-            Graph<Polyomino> tempGraph = opponentGraph;
-            tempGraph.ApplyKarger();
+            //Graph tempGraph = new Graph(opponentGraph);
+            Graph tempGraph = MakeOpponentPieceGraph(opposingBoardPieces);
+            int cutSize = tempGraph.ApplyKarger();
             //Debug.Log("cut includes: ");
             //foreach (Edge<Polyomino> edge in opponentGraph.Edges)
             //{
@@ -352,22 +353,26 @@ public class AIPlayer : Player
             if (tempGraph.Edges.Count <= 3)
             {
                 bool redundantCut = false;
-                HashSet<Edge<Polyomino>> newCut = new HashSet<Edge<Polyomino>>(tempGraph.Edges);
-                foreach (HashSet<Edge<Polyomino>> cut in cuts)
+                Cut newCut = new Cut(
+                    new HashSet<Edge<Polyomino>>(tempGraph.Edges), 
+                    cutSize);
+                foreach (Cut cut in cuts)
                 {
-                    if (newCut.IsSupersetOf(cut) && newCut.IsSubsetOf(cut))
+                    if (newCut.IsEquivalentTo(cut))
                     {
                         redundantCut = true;
                         break;
                     }
                 }
 
-                if (!redundantCut && newCut.Count > 0)
+                if (!redundantCut && newCut.edges.Count > 0)
+                {
                     cuts.Add(newCut);
+                }
 
             }
         }
-        List<HashSet<Coord>> possibleCutMoves = MakeLegalCuts(cuts);
+        List<CutCoordSet> possibleCutMoves = MakeLegalCuts(cuts);
 
         //foreach (HashSet<Coord> set in possibleCutMoves)
         //{
