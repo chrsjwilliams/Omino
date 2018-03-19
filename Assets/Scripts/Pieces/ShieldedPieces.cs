@@ -37,7 +37,7 @@ public class ShieldedPieces : Structure
 
     protected override string GetDescription()
     {
-        return "Newly placed pieces gain a temporary shield. They can't be destroyed within " +
+        return "Newly placed roads gain a temporary shield. They can't be destroyed until " +
             ShieldDuration + " seconds after placement.";
     }
 }

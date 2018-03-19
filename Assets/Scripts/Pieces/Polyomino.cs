@@ -15,6 +15,7 @@ public class Polyomino : IVertex
     protected SpriteRenderer holderSr;
     protected SpriteRenderer iconSr;
     public SpriteRenderer spriteOverlay { get; protected set; }
+    protected SpriteRenderer secondOverlay;
     protected string holderName;
     public Transform holder { get; protected set; }
     public BuildingType buildingType { get; protected set; }
@@ -973,6 +974,7 @@ public class Polyomino : IVertex
         holder.gameObject.name = holderName;
         holderSr = holder.gameObject.GetComponent<SpriteRenderer>();
         spriteOverlay = holder.GetComponentsInChildren<SpriteRenderer>()[2];
+        secondOverlay = holder.GetComponentsInChildren<SpriteRenderer>()[3];
         costText = holder.gameObject.GetComponentInChildren<TextMesh>();
         costText.text = cost.ToString();
         ToggleCostUIStatus(false);
@@ -1487,27 +1489,23 @@ public class Polyomino : IVertex
 
     public void TogglePieceConnectedness(bool connected_)
     {
-        if (connected_)
+        if (!(this is Structure))
         {
-            ShiftColor(owner.ColorScheme[0]);
-        }
-        else
-        {
-            ShiftColor(owner.ColorScheme[1]);
+            if (connected_)
+            {
+                ShiftColor(owner.ColorScheme[0]);
+            }
+            else
+            {
+                ShiftColor(owner.ColorScheme[1]);
+            }
+            foreach (Tile tile in tiles) tile.ToggleConnectedness(connected_);
         }
         connected = connected_;
         for (int i = 0; i < occupyingBlueprints.Count; i++)
         {
             occupyingBlueprints[i].TogglePieceConnectedness(connected_);
         }
-    }
-
-    protected void IncrementSortingOrder(int increment)
-    {
-        foreach (Tile tile in tiles) tile.IncrementSortingOrder(increment);
-        iconSr.sortingOrder += increment;
-        spriteOverlay.sortingOrder += increment;
-        baseSortingOrder += increment;
     }
 
     protected void SortOnSelection(bool selected)

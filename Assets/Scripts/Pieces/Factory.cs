@@ -3,8 +3,7 @@ using System.Collections;
 using System;
 
 public class Factory : Blueprint
-{
-    
+{ 
     public Factory(Player player_) : base(BuildingType.FACTORY, player_)
     {
         normalDrawRateBonus = 1f / 30f;
@@ -32,13 +31,13 @@ public class Factory : Blueprint
 
     protected override string GetName()
     {
-        return "Factory";
+        return "Brickworks";
     }
 
     protected override string GetDescription()
     {
         //return "+<color=green>" + Math.Round((double)normalDrawRateBonus, 3) + 
         //    "</color> normal pieces per second";
-        return "Normal Piece Production Level +1";
+        return "Normal Road Production Level +1";
     }
 }

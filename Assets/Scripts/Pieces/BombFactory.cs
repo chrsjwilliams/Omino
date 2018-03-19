@@ -43,13 +43,13 @@ public class BombFactory : Blueprint
 
     protected override string GetName()
     {
-        return "Bomb Factory";
+        return "Barracks";
     }
 
     protected override string GetDescription()
     {
         //return "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) + 
         //    "</color> <color=red>DESTRUCTIVE</color> pieces per second";
-        return "<color=red>DESTRUCTIVE</color> Piece Production Level +1";
+        return "<color=red>Attack</color> Road Production Level +1";
     }
 }

@@ -62,11 +62,17 @@ public class Base : Structure
     protected override void SetOverlaySprite()
     {
         base.SetOverlaySprite();
+        secondOverlay.enabled = false;
         if (mainBase)
+            spriteOverlay.sprite =
+                Services.UIManager.baseOverlays[owner.playerNum - 1];
+        else if( owner!=null)
+            spriteOverlay.sprite =
+                Services.UIManager.sideBaseOverlays[owner.playerNum - 1];
+        else
         {
-            spriteOverlay.sprite = Services.UIManager.baseOverlay;
+            spriteOverlay.sprite = Services.UIManager.sideBaseOverlays[2];
         }
-        else { spriteOverlay.sprite = Services.UIManager.structureOverlay; }
     }
 
     protected override string GetName()
@@ -88,9 +94,9 @@ public class Base : Structure
         }
         else
         {
-            return "Normal Piece Production Level +1 \n" +
-                "<color=red>DESTRUCTIVE</color> Piece Production Level +1 \n" +
-                "Brick Production Level +1";
+            return "Normal Road Production Level +1 \n" +
+                "<color=red>Attack</color> Road Production Level +1 \n" +
+                "Hammer Production Level +1";
         }
     }
 }

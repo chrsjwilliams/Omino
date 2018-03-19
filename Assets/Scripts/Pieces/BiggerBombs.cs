@@ -30,11 +30,11 @@ public class BiggerBombs : Structure
 
     protected override string GetName()
     {
-        return "Bigger Bombs";
+        return "Bigger Militia";
     }
 
     protected override string GetDescription()
     {
-        return "Newly drawn <color=red>Destructor</color> pieces are 4 blocks rather than 3";
+        return "Newly drawn <color=red>Attack</color> pieces are 4 blocks rather than 3";
     }
 }

@@ -70,6 +70,9 @@ public class MapManager : MonoBehaviour
 
         Camera.main.transform.position = 
             new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, -10);
+        Services.GameScene.backgroundImage.transform.position = 
+            new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, 0);
+
 
         //Debug.Log("width " + MapWidth + ", height " + MapHeight);
 
@@ -378,7 +381,7 @@ public class MapManager : MonoBehaviour
         Base playerBase = new Base(player, true);
         player.mainBase = playerBase;
         playerBase.MakePhysicalPiece();
-        playerBase.ShiftColor(player.ColorScheme[0]);
+        //playerBase.ShiftColor(player.ColorScheme[0]);
         playerBase.PlaceAtLocation(coord);
         playerBase.TogglePieceConnectedness(true);
     }

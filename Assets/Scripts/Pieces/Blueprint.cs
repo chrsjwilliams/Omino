@@ -187,16 +187,23 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     protected override void SetOverlaySprite()
     {
         base.SetOverlaySprite();
+        int spriteIndex = 0; 
         switch (buildingType)
         {
             case BuildingType.FACTORY:
-                spriteOverlay.sprite = Services.UIManager.factoryOverlays[numRotations];
+                spriteIndex = ((owner.playerNum - 1) * 2) + numRotations % 2;
+                spriteOverlay.sprite = 
+                    Services.UIManager.factoryOverlays[spriteIndex];
                 break;
             case BuildingType.MINE:
-                spriteOverlay.sprite = Services.UIManager.mineOverlays[numRotations];
+                spriteIndex = ((owner.playerNum - 1) * 2) + numRotations % 2;
+                spriteOverlay.sprite = 
+                    Services.UIManager.mineOverlays[spriteIndex];
                 break;
             case BuildingType.BOMBFACTORY:
-                spriteOverlay.sprite = Services.UIManager.bombFactoryOverlays[numRotations];
+                spriteIndex = ((owner.playerNum - 1) * 4) + numRotations % 4;
+                spriteOverlay.sprite = 
+                    Services.UIManager.bombFactoryOverlays[spriteIndex];
                 break;
             case BuildingType.NONE:
                 spriteOverlay.enabled = false;

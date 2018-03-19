@@ -29,13 +29,13 @@ public class Mine : Blueprint
 
     protected override string GetName()
     {
-        return "Mine";
+        return "Smith";
     }
 
     protected override string GetDescription()
     {
         //return "+<color=green>" + Math.Round((double)resourceGainRateBonus * 10, 3) + 
         //    "</color> resources per second";
-        return "Brick Production Level +1";
+        return "Hammer Production Level +1";
     }
 }

@@ -30,11 +30,11 @@ public class BiggerBricks : Structure
 
     protected override string GetName()
     {
-        return "Bigger Pieces";
+        return "Bigger Roads";
     }
 
     protected override string GetDescription()
     {
-        return "Newly drawn normal pieces are 5 blocks rather than 4";
+        return "Newly drawn normal roads are 5 blocks rather than 4";
     }
 }

@@ -8,6 +8,7 @@ public class GameSceneScript : Scene<TransitionData>
     public static Transform tileMapHolder;
 
     private float _colorChangeTime;
+    public Transform backgroundImage;
 
     [SerializeField]
     private bool demoMode;

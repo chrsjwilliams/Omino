@@ -13,6 +13,8 @@ public class Tile : MonoBehaviour, IVertex
     private Sprite[] destructorSprites;
     [SerializeField]
     private Sprite[] shieldSprites;
+    [SerializeField]
+    private Sprite disconnectedSprite;
     public Coord coord { get; private set; }
     public Coord relativeCoord;
     public BoxCollider2D boxCol { get; private set; }
@@ -352,5 +354,11 @@ public class Tile : MonoBehaviour, IVertex
     public void SetUIScale(Vector3 scale)
     {
         uiTile.transform.localScale = scale;
+    }
+
+    public void ToggleConnectedness(bool connected)
+    {
+        if (connected) sr.sprite = sprites[0];
+        else sr.sprite = disconnectedSprite;
     }
 }

@@ -35,6 +35,6 @@ public class SplashDamage : Structure
 
     protected override string GetDescription()
     {
-        return "<color=red>Destructor</color> pieces also destroy adjacent enemy pieces.";
+        return "<color=red>Attack</color> roads also destroy adjacent enemy roads.";
     }
 }

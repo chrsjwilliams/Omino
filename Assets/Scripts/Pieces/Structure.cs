@@ -73,8 +73,8 @@ public abstract class Structure : Polyomino
         //{
         //    tile.ShiftColor(neutralColor);
         //}
-        spriteOverlay.GetComponent<ColorShifter>().ShiftColor(neutralColor);
-
+        //spriteOverlay.GetComponent<ColorShifter>().ShiftColor(neutralColor);
+        SetOverlaySprite();
     }
 
     public override void MakePhysicalPiece()
@@ -83,7 +83,8 @@ public abstract class Structure : Polyomino
         HideFromInput();
         ScaleHolder(Vector3.one);
         neutralColor = tiles[0].sr.color;
-        spriteOverlay.color = neutralColor;
+        //spriteOverlay.color = neutralColor;
+        spriteOverlay.color = Color.white;
         TurnOffGlow();
         //SetGlow(Color.white);
         //IncrementSortingOrder(500);
@@ -123,7 +124,8 @@ public abstract class Structure : Polyomino
     public virtual void OnClaim(Player player)
     {
         owner = player;
-        spriteOverlay.GetComponent<ColorShifter>().ShiftColor(owner.ColorScheme[0]);
+        SetOverlaySprite();
+        //spriteOverlay.GetComponent<ColorShifter>().ShiftColor(owner.ColorScheme[0]);
         Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
         owner.GainOwnership(this);
         StructClaimAura effect = GameObject.Instantiate(Services.Prefabs.StructClaimEffect, 
@@ -180,6 +182,18 @@ public abstract class Structure : Polyomino
     {
         base.SetOverlaySprite();
         spriteOverlay.sprite = Services.UIManager.structureOverlay;
+        if (owner != null)
+        {
+            secondOverlay.sprite = 
+                Services.UIManager.structureOverlayToppers[owner.playerNum - 1];
+            secondOverlay.enabled = true;
+        }
+        else
+        {
+            secondOverlay.enabled = false;
+        }
+        spriteOverlay.color = Color.white;
+        secondOverlay.transform.position = GetCenterpoint();
     }
 
     public override void OnInputDown(bool fromPlayTask)

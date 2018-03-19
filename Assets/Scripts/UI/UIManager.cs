@@ -50,9 +50,11 @@ public class UIManager : MonoBehaviour {
     public Sprite shieldIcon;
     public Sprite[] factoryOverlays;
     public Sprite[] mineOverlays;
-    public Sprite baseOverlay;
+    public Sprite[] baseOverlays;
+    public Sprite[] sideBaseOverlays;
     public Sprite[] bombFactoryOverlays;
     public Sprite structureOverlay;
+    public Sprite[] structureOverlayToppers;
     private bool scrollingInBanners;
     private Player winner;
     private float bannerScrollTimeElapsed;
