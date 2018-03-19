@@ -234,6 +234,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             }
         }
         owner.OnPiecePlaced(this);
+        SortOverlay();
     }
 
     public override void Remove()

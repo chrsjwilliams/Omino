@@ -113,6 +113,7 @@ public abstract class Structure : Polyomino
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingStructure(this);
         }
         adjacentPieces = new List<Polyomino>();
+        SortOverlay();
     }
 
     protected override void OnPlace()

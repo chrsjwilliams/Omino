@@ -1606,4 +1606,11 @@ public class Polyomino : IVertex
         }
         lastPositions.Enqueue(pos);
     }
+
+    protected void SortOverlay()
+    {
+        spriteOverlay.sortingOrder = (-centerCoord.x * 10) - (centerCoord.y * 1000);
+        if(secondOverlay != null) secondOverlay.sortingOrder = spriteOverlay.sortingOrder + 1;
+        iconSr.sortingOrder = spriteOverlay.sortingOrder + 2;
+    }
 }
