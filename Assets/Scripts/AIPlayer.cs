@@ -10,6 +10,10 @@ public class AIPlayer : Player
     public bool playingPiece { get; protected set; }
     public bool isThinking { get; protected set; }
     public List<Coord> primaryTargets { get; protected set; }
+    private const int rollsPerLevel = 2;
+    private int level;
+    private const int bestMovesCount = 20;
+
 
     private int coordCountBuffer;
     private int movesTriedBuffer;
@@ -26,7 +30,7 @@ public class AIPlayer : Player
     protected float destructorForBlueprintWeight;
     private IEnumerator thinkingCoroutine;
 
-    public override void Init(int playerNum_, AIStrategy strategy)
+    public override void Init(int playerNum_, AIStrategy strategy, int level_)
     {
         playingPiece = false;
         isThinking = false;
@@ -38,6 +42,8 @@ public class AIPlayer : Player
         tilesUntilBlueprint = 5;
         totalRandomizations = 100;
         kargerAlgorithmBuffer = 10;
+
+        level = level_;
 
         winWeight = strategy.winWeight;
         structWeight = strategy.structWeight;
@@ -59,7 +65,7 @@ public class AIPlayer : Player
         resourceGainFactor = 1;
         drawRateFactor = 1;
         resourcesPerTick = 1;
-        base.Init(playerNum_, strategy);
+        base.Init(playerNum_);
         Debug.Log("player " + playerNum + "using " + "\nwin weight: " + winWeight);
         Debug.Log("struct weight: " + structWeight + "\nblueprint weight: " + blueprintWeight);
         Debug.Log("destruction weight: " + destructionWeight +
@@ -89,38 +95,6 @@ public class AIPlayer : Player
                 new Coord(2,0)
             };
         }
-    }
-
-    public List<Coord> FindAllPlayableCoords(int range, bool tossOccupied)
-    {
-        List<Coord> _playablePositions = new List<Coord>();
-
-        foreach (Polyomino piece in boardPieces)
-        {
-            foreach (Coord coord in piece.GetAdjacentEmptyTiles())
-            {
-                for (int dx = -range; dx <= range; dx++)
-                {
-                    for (int dy = -range; dy <= range; dy++)
-                    {
-                        Coord radiusOffset = new Coord(dx, dy);
-                        Coord candidateCoord = coord.Add(radiusOffset);
-                        if (!_playablePositions.Contains(candidateCoord) 
-                            && Services.MapManager.IsCoordContainedInMap(candidateCoord))
-                        {
-                            if (!tossOccupied ||
-                              (Services.MapManager.Map[coord.x, coord.y].occupyingPiece == null ||
-                               Services.MapManager.Map[coord.x, coord.y].occupyingPiece.owner != this))
-                            {
-                                _playablePositions.Add(candidateCoord);
-                            }
-                        }
-                    }
-                 }
-            }
-        }
-
-        return _playablePositions;
     }
 
     // Update is called once per frame
@@ -240,7 +214,6 @@ public class AIPlayer : Player
         return legalCuts;
     }
     
-
     protected List<CutCoordSet> GenerateCombinations(List<CutCoordSet> sets, Cut cutEdges)
     {
         if (sets.Count == 0) sets.Add(new CutCoordSet());
@@ -488,6 +461,7 @@ public class AIPlayer : Player
             Services.MapManager.MapWidth,
             Services.MapManager.MapHeight];
 
+        List<Move> movesToConsider = new List<Move>();
         Move nextPlay = null;
         int coordsConsidered = 0;
         foreach(Coord coord in touchableCoords)
@@ -618,10 +592,20 @@ public class AIPlayer : Player
                                                         winWeight, structWeight, destructionWeight, 
                                                         mineWeight, factoryWeight, bombFactoryWeight);
                                 
-                                if (nextPlay == null) nextPlay = newMove;
-                                else if (newMove.score > nextPlay.score)
+                                //if (nextPlay == null) nextPlay = newMove;
+                                //else if (newMove.score > nextPlay.score)
+                                //{
+                                //    nextPlay = newMove;
+                                //}
+                                if(movesToConsider.Count < bestMovesCount ||
+                                    newMove.score > movesToConsider[0].score)
                                 {
-                                    nextPlay = newMove;
+                                    movesToConsider = InsertMoveIntoSortedList(
+                                        newMove, movesToConsider);
+                                    if(movesToConsider.Count > bestMovesCount)
+                                    {
+                                        movesToConsider.RemoveAt(0);
+                                    }
                                 }
                             }
                         }
@@ -634,13 +618,52 @@ public class AIPlayer : Player
         #endregion
 
         //Debug.Log("BlueprintMaps Tried: " + blueprintMapsTried);
+        // Choose a play by rolling
+        if (movesToConsider.Count > 0) {
+            //Debug.Log("player " + playerNum + " considering moves of score:");
+            //foreach(Move move in movesToConsider)
+            //{
+            //    Debug.Log(move.score);
+            //}
+            for (int i = 0; i < level * rollsPerLevel; i++)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, movesToConsider.Count);
+                Move potentialMove = movesToConsider[randomIndex];
+                if(nextPlay == null || potentialMove.score > nextPlay.score)
+                {
+                    nextPlay = potentialMove;
+                }
+            }
+            Debug.Log("picking move of score " + nextPlay.score);
+        }
 
         if (nextPlay != null)
         {
-           
             MakePlay(nextPlay);
         }
         isThinking = false;
+    }
+
+    private List<Move> InsertMoveIntoSortedList(Move move, List<Move> sortedMoveList)
+    {
+        int startIndex = 0;
+        int endIndex = sortedMoveList.Count;
+        while (endIndex > startIndex)
+        {
+            int windowSize = endIndex - startIndex;
+            int middleIndex = startIndex + windowSize / 2;
+            float middleScore = sortedMoveList[middleIndex].score;
+            if(move.score < middleScore)
+            {
+                endIndex = middleIndex;
+            }
+            else
+            {
+                startIndex = middleIndex + 1;
+            }
+        }
+        sortedMoveList.Insert(startIndex, move);
+        return sortedMoveList;
     }
 
     private void MakePlay(Move nextPlay)

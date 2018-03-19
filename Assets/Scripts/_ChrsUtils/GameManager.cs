@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public readonly int MIN_PLAYERS = 0;
     
     private bool[] humanPlayers;
+    public int[] aiLevels = new int[2] { 1, 1 };
 
     [SerializeField] private Camera _mainCamera;
     public Camera MainCamera
@@ -140,14 +141,20 @@ public class GameManager : MonoBehaviour
 
     public void InitPlayers()
     {
+        AIStrategy strategy = new AIStrategy(winWeight, structureWeight,
+            blueprintWeight, destructionWeight, blueprintDestructionWeight,
+            disconnectionWeight, destructorForBlueprintWeight);
         for (int i = 0; i < 2; i++)
         {
+            int playerNum = i + 1;
             if (humanPlayers[i])
             {
                 _players[i] = Instantiate(Services.Prefabs.Player,
                                             Services.MapManager.Map[0, 0].gameObject.transform.position,
                                             Quaternion.identity,
                                             Services.Main.transform).GetComponent<Player>();
+                _players[i].Init(playerNum);
+                _players[i].name = PLAYER + " " + playerNum;
             }
             else
             {
@@ -160,21 +167,11 @@ public class GameManager : MonoBehaviour
                 aiPlayerGameObject.AddComponent<AIPlayer>();
                 AIPlayer aiPlayer = aiPlayerGameObject.GetComponent<AIPlayer>();
                 _players[i] = aiPlayer;
-            }
-            int playerNum = i + 1;
-            if (_players[i] is AIPlayer)
-            {
+                _players[i].Init(playerNum, strategy, aiLevels[i]);
                 _players[i].name = "AI " + PLAYER + playerNum;
-            }
-            else
-            {
-                _players[i].name = PLAYER + " " + playerNum;
+
             }
             _players[i].transform.parent = Services.Scenes.CurrentScene.transform;
-            AIStrategy strategy = new AIStrategy(
-                winWeight, structureWeight, blueprintWeight, destructionWeight, 
-                blueprintDestructionWeight, disconnectionWeight, destructorForBlueprintWeight);
-            _players[i].Init(i+1, strategy);
         }
         for (int i = 0; i < 2; i++)
         {
@@ -190,6 +187,7 @@ public class GameManager : MonoBehaviour
         SetStrategies();
         for (int i = 0; i < 2; i++)
         {
+            int playerNum = i + 1;
             Player _aiPlayer = Instantiate(Services.Prefabs.Player,
                                        Services.MapManager.Map[0, 0].gameObject.transform.position,
                                        Quaternion.identity,
@@ -200,14 +198,12 @@ public class GameManager : MonoBehaviour
             AIPlayer aiPlayer = aiPlayerGameObject.GetComponent<AIPlayer>();
             _players[i] = aiPlayer;
 
-            int playerNum = i + 1;
-
             _players[i].name = "AI " + PLAYER + playerNum;
             _players[i].transform.parent = Services.Scenes.CurrentScene.transform;
             Color[] colorScheme = i == 0 ? _player1ColorScheme : _player2ColorScheme;
             AIStrategy strategy = currentStrategies[i];
 
-            _players[i].Init(i+1, strategy);
+            _players[i].Init(playerNum, strategy, 10);
         }
         for (int i = 0; i < 2; i++)
         {

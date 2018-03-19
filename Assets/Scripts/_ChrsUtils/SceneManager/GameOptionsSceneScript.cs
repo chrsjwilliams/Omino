@@ -35,6 +35,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private Button[] joinButtons;
     private Text[] joinButtonJoinTexts;
     private Text[] joinButtonPlayerTypeTexts;
+    [SerializeField]
+    private Slider[] aiLevelSliders;
+    private Text[] aiLevelTexts;
     private Color[] baseColors;
     [SerializeField]
     private float defaultWinWeight;
@@ -136,10 +139,11 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         };
         baseColors = new Color[2] { Services.GameManager.Player1ColorScheme[0],
                         Services.GameManager.Player2ColorScheme[0] };
-
+        aiLevelTexts = new Text[2];
         for (int i = 0; i < 2; i++)
         {
             joinButtons[i].GetComponent<Image>().color = (baseColors[i] + Color.white) / 2;
+            aiLevelTexts[i] = aiLevelSliders[i].GetComponentInChildren<Text>();
         }
 
         if (Services.GameManager.tutorialMode)
@@ -274,6 +278,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             joinButtons[index].GetComponent<Image>().color = baseColors[index];
             joinButtonJoinTexts[index].color = Color.white;
             joinButtonPlayerTypeTexts[index].color = Color.white;
+            aiLevelSliders[index].gameObject.SetActive(false);
         }
         else
         {
@@ -282,6 +287,14 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             joinButtons[index].GetComponent<Image>().color = (baseColors[index] + Color.white) / 2;
             joinButtonJoinTexts[index].color = Color.black;
             joinButtonPlayerTypeTexts[index].color = Color.black;
+            aiLevelSliders[index].gameObject.SetActive(true);
         }
+    }
+
+    public void SetAILevel(int playerNum)
+    {
+        int level = Mathf.RoundToInt(aiLevelSliders[playerNum - 1].value);
+        Services.GameManager.aiLevels[playerNum - 1] = level;
+        aiLevelTexts[playerNum - 1].text = "AI Level: " + level;
     }
 }

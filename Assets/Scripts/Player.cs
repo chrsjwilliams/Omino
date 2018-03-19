@@ -77,8 +77,13 @@ public class Player : MonoBehaviour
     private bool handLocked;
 
 
+    public virtual void Init(int playerNum_, AIStrategy strategy, int level_)
+    {
+        Init(playerNum_);
+    }
+
     // Use this for initialization
-    public virtual void Init(int playerNum_, AIStrategy strategy)
+    public virtual void Init(int playerNum_)
     {
         playerNum = playerNum_;
 
