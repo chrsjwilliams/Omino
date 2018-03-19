@@ -81,8 +81,8 @@ public class MapManager : MonoBehaviour
         {
             for (int j = 0; j < MapHeight; j++)
             {
-                Tile tile = Instantiate(Services.Prefabs.Tile, GameSceneScript.tileMapHolder)
-                    .GetComponent<Tile>();
+                Tile tile = Instantiate(Services.Prefabs.Tile, 
+                    GameSceneScript.tileMapHolder).GetComponent<Tile>();
                 
                 tile.Init(new Coord(i, j));
                 _map[i, j] = tile;
@@ -91,7 +91,6 @@ public class MapManager : MonoBehaviour
                 tile.SetHighlightStatus(false);
             }
         }
-        
         if(Services.GameManager.levelSelected == 0)
         {
             GenerateStructures(null);

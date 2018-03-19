@@ -325,13 +325,21 @@ public class Tile : MonoBehaviour, IVertex
         Color redColor = new Color(redPulseColor.r, redPulseColor.g, redPulseColor.b, baseColor.a);
         if (toRed)
         {
-            SetSrAndUIColor(Color.Lerp(baseColor, redColor, EasingEquations.Easing.QuadEaseIn(
-                redPulseTimer / redPulsePeriod)));
+            //SetSrAndUIColor(
+            moltenLines.color =
+                Color.Lerp(baseColor, redColor, EasingEquations.Easing.QuadEaseIn(
+                redPulseTimer / redPulsePeriod))
+                ;
+                //);
         }
         else
         {
-            SetSrAndUIColor(Color.Lerp(redColor, baseColor, EasingEquations.Easing.QuadEaseOut(
-                 redPulseTimer / redPulsePeriod)));
+            //SetSrAndUIColor(
+            moltenLines.color =
+                Color.Lerp(redColor, baseColor, EasingEquations.Easing.QuadEaseOut(
+                 redPulseTimer / redPulsePeriod))
+                 ;
+                 //);
         }
 
         if (redPulseTimer >= redPulsePeriod)

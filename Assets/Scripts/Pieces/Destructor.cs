@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Destructor : Polyomino
 {
     private bool isSuper;
+    private SwordIcon swordIcon;
     public List<Polyomino> piecesInRange { get; private set; }
     public Destructor(int _units, int _index, Player _player, bool _isSuper) 
         : base(_units, _index, _player)
@@ -111,6 +112,7 @@ public class Destructor : Polyomino
             tile.StartSettlingToNormalPiece();
         }
         //MakeFireBurst();
+        swordIcon.Remove();
     }
 
     void MakeFireBurst()
@@ -199,5 +201,19 @@ public class Destructor : Polyomino
             }
         }
         return enemyPiecesInRange;
+    }
+
+    public override void MakePhysicalPiece()
+    {
+        base.MakePhysicalPiece();
+        swordIcon = GameObject.Instantiate(Services.Prefabs.SwordIcon, Services.UIManager.canvas)
+            .GetComponent<SwordIcon>();
+        swordIcon.Init(this);
+    }
+
+    public override void DestroyThis()
+    {
+        base.DestroyThis();
+        if (swordIcon != null) swordIcon.Remove();
     }
 }

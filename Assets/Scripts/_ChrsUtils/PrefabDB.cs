@@ -70,4 +70,7 @@ public class PrefabDB : ScriptableObject
 
     [SerializeField] private GameObject tutorialTooltip;
     public GameObject TutorialTooltip { get { return tutorialTooltip; } }
+
+    [SerializeField] private GameObject swordIcon;
+    public GameObject SwordIcon { get { return swordIcon; } } 
 }

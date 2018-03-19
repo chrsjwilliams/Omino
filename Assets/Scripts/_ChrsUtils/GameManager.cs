@@ -152,7 +152,7 @@ public class GameManager : MonoBehaviour
                 _players[i] = Instantiate(Services.Prefabs.Player,
                                             Services.MapManager.Map[0, 0].gameObject.transform.position,
                                             Quaternion.identity,
-                                            Services.Main.transform).GetComponent<Player>();
+                                            Services.Scenes.CurrentScene.transform).GetComponent<Player>();
                 _players[i].Init(playerNum);
                 _players[i].name = PLAYER + " " + playerNum;
             }
@@ -161,7 +161,7 @@ public class GameManager : MonoBehaviour
                 Player _aiPlayer = Instantiate(Services.Prefabs.Player,
                                            Services.MapManager.Map[0, 0].gameObject.transform.position,
                                            Quaternion.identity,
-                                           Services.Main.transform);
+                                           Services.Scenes.CurrentScene.transform);
                 GameObject aiPlayerGameObject = _aiPlayer.gameObject;
                 Destroy(aiPlayerGameObject.GetComponent<Player>());
                 aiPlayerGameObject.AddComponent<AIPlayer>();
@@ -171,7 +171,6 @@ public class GameManager : MonoBehaviour
                 _players[i].name = "AI " + PLAYER + playerNum;
 
             }
-            _players[i].transform.parent = Services.Scenes.CurrentScene.transform;
         }
         for (int i = 0; i < 2; i++)
         {
@@ -191,7 +190,7 @@ public class GameManager : MonoBehaviour
             Player _aiPlayer = Instantiate(Services.Prefabs.Player,
                                        Services.MapManager.Map[0, 0].gameObject.transform.position,
                                        Quaternion.identity,
-                                       Services.Main.transform);
+                                       Services.Scenes.CurrentScene.transform);
             GameObject aiPlayerGameObject = _aiPlayer.gameObject;
             Destroy(aiPlayerGameObject.GetComponent<Player>());
             aiPlayerGameObject.AddComponent<AIPlayer>();

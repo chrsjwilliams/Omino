@@ -906,7 +906,7 @@ public class Polyomino : IVertex
         dead = true;
     }
 
-    public void DestroyThis()
+    public virtual void DestroyThis()
     {
         Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
         Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
