@@ -851,7 +851,7 @@ public class Polyomino : IVertex
         //    Mathf.Pow(EasingEquations.Easing.ExpoEaseIn(
         //        shieldDecayed / ShieldedPieces.ShieldDuration), 2));
         foreach (Tile tile in tiles)
-            tile.SetShieldAlpha(Mathf.Lerp(0.5f, 0, Mathf.Pow(EasingEquations.Easing
+            tile.SetShieldAlpha(Mathf.Lerp(0.8f, 0, Mathf.Pow(EasingEquations.Easing
                 .ExpoEaseIn(shieldDecayed / ShieldedPieces.ShieldDuration),2)));
         if (shieldDurationRemaining <= 0)
         {
