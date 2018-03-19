@@ -140,10 +140,10 @@ public abstract class Structure : Polyomino
 
     public virtual void OnClaimLost()
     {
-        SetToNeutralColor();
         owner.LoseOwnership(this);
         owner = null;
-        foreach(Polyomino piece in adjacentPieces)
+        SetToNeutralColor();
+        foreach (Polyomino piece in adjacentPieces)
         {
             piece.adjacentPieces.Remove(this);
         }
