@@ -36,7 +36,8 @@ public class BlueprintPlacementTask : Task
         targetPos = overlayTransform.position;
         startPos = targetPos + (dropHeight * Vector3.up);
         timeElapsed = 0;
-        blueprint.spriteOverlay.enabled = true;
+        //blueprint.spriteOverlay.enabled = true;
+        blueprint.spriteOverlay.sortingLayerName = "Overlay";
         Color color = blueprint.spriteOverlay.color;
         blueprint.spriteOverlay.color = new Color(color.r, color.g, color.b, 1);
         overlayTransform.position = startPos;

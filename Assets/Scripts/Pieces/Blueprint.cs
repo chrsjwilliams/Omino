@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Blueprint : Polyomino
 {
-    private const float alphaPrePlacement = 0.8f;
+    private const float overlayAlphaPrePlacement = 0.6f;
+    private const float tileAlphaPrePlacement = 0.8f;
     public int maxRotations { get; protected set; }
 
     protected static int[,,] factory = new int[1, 5, 5]
@@ -136,7 +137,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                     newpiece.name = pieceName;
                     //newpiece.SetBaseTileColor(owner, buildingType);
                     newpiece.SetColor(Color.white);
-                    newpiece.SetAlpha(alphaPrePlacement);
+                    newpiece.SetAlpha(tileAlphaPrePlacement);
                     newpiece.IncrementSortingOrder(5);
                     tiles.Add(newpiece);
                 }
@@ -187,6 +188,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     protected override void SetOverlaySprite()
     {
         base.SetOverlaySprite();
+        spriteOverlay.color = Color.white;
         int spriteIndex = 0; 
         switch (buildingType)
         {
@@ -214,8 +216,8 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         if (!placed)
         {
             spriteOverlay.color = new Color(spriteOverlay.color.r, spriteOverlay.color.g,
-                spriteOverlay.color.b, alphaPrePlacement);
-            spriteOverlay.enabled = false;
+                spriteOverlay.color.b, overlayAlphaPrePlacement);
+            //spriteOverlay.enabled = false;
         }
     }
 
@@ -374,5 +376,18 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                 EnterUnselectedState(false);
             }
         }
+    }
+
+    protected override void SortOnSelection(bool selected)
+    {
+        base.SortOnSelection(selected);
+        if (selected)
+        {
+            spriteOverlay.sortingLayerName = "SelectedPieceUnderlay";
+        }
+        //else
+        //{
+        //    spriteOverlay.sortingLayerName = "Underlay";
+        //}
     }
 }

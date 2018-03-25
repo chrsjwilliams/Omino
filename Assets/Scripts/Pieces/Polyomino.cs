@@ -1489,7 +1489,7 @@ public class Polyomino : IVertex
 
     public void TogglePieceConnectedness(bool connected_)
     {
-        if (!(this is Structure))
+        if (!(this is Structure) && !(this is Blueprint))
         {
             if (connected_)
             {
@@ -1504,11 +1504,11 @@ public class Polyomino : IVertex
         connected = connected_;
         for (int i = 0; i < occupyingBlueprints.Count; i++)
         {
-            occupyingBlueprints[i].TogglePieceConnectedness(connected_);
+            //occupyingBlueprints[i].TogglePieceConnectedness(connected_);
         }
     }
 
-    protected void SortOnSelection(bool selected)
+    protected virtual void SortOnSelection(bool selected)
     {
         foreach(Tile tile in tiles)
         {
