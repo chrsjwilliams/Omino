@@ -16,6 +16,7 @@ public class Polyomino : IVertex
     protected SpriteRenderer iconSr;
     public SpriteRenderer spriteOverlay { get; protected set; }
     protected SpriteRenderer secondOverlay;
+    protected OverlayIcon legalityOverlay;
     protected string holderName;
     public Transform holder { get; protected set; }
     public BuildingType buildingType { get; protected set; }
@@ -699,6 +700,35 @@ public class Polyomino : IVertex
         return Services.MapManager.CheckForFortification(this, emptyAdjacentTiles, isBeingDestroyed);
     }
 
+    protected bool IsConnected()
+    {
+        List<Polyomino> adjPieces = GetAdjacentPolyominos(owner);
+        bool connectedToBase = false;
+        for (int i = 0; i < adjPieces.Count; i++)
+        {
+            if (adjPieces[i].connected || adjPieces[i] is Structure)
+            {
+                connectedToBase = true;
+                break;
+            }
+        }
+        return connectedToBase;
+    }
+
+    protected virtual List<Tile> GetIllegalTiles()
+    {
+        List<Tile> illegalTiles = new List<Tile>();
+        foreach (Tile tile in tiles)
+        {
+            if (!Services.MapManager.IsCoordContainedInMap(tile.coord) ||
+                Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied())
+            {
+                illegalTiles.Add(tile);
+            }
+        }
+        return illegalTiles;
+    }
+
     public virtual bool IsPlacementLegal()
     {
         return IsPlacementLegal(GetAdjacentPolyominos(owner));
@@ -754,7 +784,9 @@ public class Polyomino : IVertex
         {
             //tile.SetMaskSrAlpha(0);
             tile.SetHighlightStatus(false);
+            tile.ToggleIllegalLocationIcon(false);
         }
+        legalityOverlay.SetStatus(false);
     }
 
     public void SetGlow(Color color)
@@ -767,6 +799,7 @@ public class Polyomino : IVertex
             //tile.SetGlowOutLine(10);
             //tile.SetGlowColor(color);
         }
+        if(!placed) legalityOverlay.SetStatus(true);
     }
 
 
@@ -914,6 +947,8 @@ public class Polyomino : IVertex
         Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
         Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
         Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
+        legalityOverlay.Remove();
+        foreach (Tile tile in tiles) tile.OnRemove();
         GameObject.Destroy(holder.gameObject);
     }
 
@@ -973,8 +1008,14 @@ public class Polyomino : IVertex
             Services.GameScene.transform).transform;
         holder.gameObject.name = holderName;
         holderSr = holder.gameObject.GetComponent<SpriteRenderer>();
-        spriteOverlay = holder.GetComponentsInChildren<SpriteRenderer>()[2];
-        secondOverlay = holder.GetComponentsInChildren<SpriteRenderer>()[3];
+        SpriteRenderer[] childSrs = holder.GetComponentsInChildren<SpriteRenderer>();
+        spriteOverlay = childSrs[2];
+        secondOverlay = childSrs[3];
+        legalityOverlay = GameObject.Instantiate(Services.Prefabs.LegalityOverlay, 
+            Services.UIManager.overlayIconHolder).
+            GetComponent<OverlayIcon>();
+        legalityOverlay.Init(this);
+        legalityOverlay.SetStatus(false);
         costText = holder.gameObject.GetComponentInChildren<TextMesh>();
         costText.text = cost.ToString();
         ToggleCostUIStatus(false);
@@ -1310,17 +1351,39 @@ public class Polyomino : IVertex
         //{
         if (!(this is Blueprint)) SetAffordableStatus(owner);
         bool isLegal = IsPlacementLegal();
+        foreach (Tile tile in tiles)
+        {
+            tile.ToggleIllegalLocationIcon(false);
+        }
         if (isLegal && (affordable || this is Blueprint))
         {
             SetGlow(new Color(0.2f, 1, 0.2f));
+            legalityOverlay.SetStatus(false);
         }
         else if (isLegal && !affordable && !(this is Blueprint))
         {
             SetGlow(Color.yellow);
+            legalityOverlay.SetStatus(true);
+            legalityOverlay.SetSprite(Services.UIManager.notEnoughResourcesIcon);
         }
         else
         {
             SetGlow(new Color(1, 0.2f, 0.2f));
+            bool connected = IsConnected();
+            if(!(this is Blueprint) && !connected)
+            {
+                legalityOverlay.SetStatus(true);
+                legalityOverlay.SetSprite(Services.UIManager.notConnectedIcon);
+            }
+            else
+            {
+                legalityOverlay.SetStatus(false);
+                List<Tile> illegalTiles = GetIllegalTiles();
+                foreach(Tile tile in tiles)
+                {
+                    tile.ToggleIllegalLocationIcon(illegalTiles.Contains(tile));
+                }
+            }
         }
         //}
     }

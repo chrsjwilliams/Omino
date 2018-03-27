@@ -60,6 +60,7 @@ public class Tile : MonoBehaviour, IVertex
     private static Color redPulseColor = new Color(0.5f, 0, 0.5f);
     private bool toRed;
     private Image uiTile;
+    private OverlayIcon illegalLocationIcon;
     //public SpriteMask mask { get; private set; }
 
     public void Init(Coord coord_)
@@ -88,7 +89,6 @@ public class Tile : MonoBehaviour, IVertex
         baseColor = sr.color;
         toRed = true;
         if (pieceParent == null) IncrementSortingOrder(-5000);
-
     }
 
     public void Init(Coord coord_, Polyomino pieceParent_)
@@ -100,17 +100,38 @@ public class Tile : MonoBehaviour, IVertex
         uiTile = Instantiate(Services.Prefabs.UITile, uiPos, Quaternion.identity,
             Services.UIManager.uiTileHolder).GetComponent<Image>();
         uiTile.gameObject.SetActive(false);
+        illegalLocationIcon = Instantiate(Services.Prefabs.LegalityOverlay,
+            Services.UIManager.uiTileHolder).GetComponent<OverlayIcon>();
+        illegalLocationIcon.Init(this);
+        illegalLocationIcon.SetStatus(false);
+        illegalLocationIcon.SetSize(70);
+        illegalLocationIcon.SetSprite(Services.UIManager.notConnectedIcon);
         relativeCoord = coord_;
+    }
+
+    public void ToggleIllegalLocationIcon(bool status)
+    {
+        if(illegalLocationIcon != null) illegalLocationIcon.SetStatus(status);
     }
 
 	public void OnRemove(){
         //Destroy(this);
         if (uiTile != null) Destroy(uiTile.gameObject);
+        if (illegalLocationIcon != null)
+        {
+            illegalLocationIcon.Remove();
+            illegalLocationIcon = null;
+        }
     }
 
     public void OnPlace()
     {
         if(uiTile != null) Destroy(uiTile.gameObject);
+        if (illegalLocationIcon != null)
+        {
+            illegalLocationIcon.Remove();
+            illegalLocationIcon = null;
+        }
     }
 
     public void SetCoord(Coord newCoord)

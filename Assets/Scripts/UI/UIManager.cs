@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private GameObject pauseMenu;
     public Transform uiTileHolder;
+    public Transform overlayIconHolder;
     public Transform canvas;
     public Sprite blueprintTile;
     public Sprite destructorIcon;
@@ -55,6 +56,8 @@ public class UIManager : MonoBehaviour {
     public Sprite[] bombFactoryOverlays;
     public Sprite structureOverlay;
     public Sprite[] structureOverlayToppers;
+    public Sprite notEnoughResourcesIcon;
+    public Sprite notConnectedIcon;
     private bool scrollingInBanners;
     private Player winner;
     private float bannerScrollTimeElapsed;

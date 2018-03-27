@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Destructor : Polyomino
 {
     private bool isSuper;
-    private SwordIcon swordIcon;
+    private OverlayIcon swordIcon;
     public List<Polyomino> piecesInRange { get; private set; }
     public Destructor(int _units, int _index, Player _player, bool _isSuper) 
         : base(_units, _index, _player)
@@ -51,6 +51,30 @@ public class Destructor : Polyomino
         }
         
         return true;
+    }
+
+    protected override List<Tile> GetIllegalTiles()
+    {
+        List<Tile> illegalTiles = new List<Tile>();
+        foreach (Tile tile in tiles)
+        {
+            if (!Services.MapManager.IsCoordContainedInMap(tile.coord))
+            {
+                illegalTiles.Add(tile);
+            }
+            else
+            {
+                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                bool occupied = mapTile.IsOccupied();
+                if ((occupied && mapTile.occupyingPiece.owner == owner) ||
+                    (occupied && mapTile.occupyingPiece is Structure) ||
+                    (occupied && mapTile.occupyingPiece.shieldDurationRemaining > 0))
+                {
+                    illegalTiles.Add(tile);
+                }
+            }
+        }
+        return illegalTiles;
     }
 
     private bool LegalNotCountingShield()
@@ -206,8 +230,8 @@ public class Destructor : Polyomino
     public override void MakePhysicalPiece()
     {
         base.MakePhysicalPiece();
-        swordIcon = GameObject.Instantiate(Services.Prefabs.SwordIcon, Services.UIManager.canvas)
-            .GetComponent<SwordIcon>();
+        swordIcon = GameObject.Instantiate(Services.Prefabs.SwordIcon, 
+            Services.UIManager.overlayIconHolder).GetComponent<OverlayIcon>();
         swordIcon.Init(this);
     }
 

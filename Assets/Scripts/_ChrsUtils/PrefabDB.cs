@@ -72,5 +72,8 @@ public class PrefabDB : ScriptableObject
     public GameObject TutorialTooltip { get { return tutorialTooltip; } }
 
     [SerializeField] private GameObject swordIcon;
-    public GameObject SwordIcon { get { return swordIcon; } } 
+    public GameObject SwordIcon { get { return swordIcon; } }
+
+    [SerializeField] private GameObject legalityOverlay;
+    public GameObject LegalityOverlay { get { return legalityOverlay; } }
 }

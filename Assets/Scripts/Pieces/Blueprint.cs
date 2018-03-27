@@ -107,13 +107,43 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         return isLegal;
     }
 
+    protected override List<Tile> GetIllegalTiles()
+    {
+        List<Tile> illegalTiles = new List<Tile>();
+        foreach (Tile tile in tiles)
+        {
+            if (!Services.MapManager.IsCoordContainedInMap(tile.coord))
+            {
+                illegalTiles.Add(tile);
+            }
+            else
+            {
+                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                if ((!PiecesShareOwner(mapTile)) ||
+                (mapTile.PartOfExistingBlueprint()))
+                {
+                    illegalTiles.Add(tile);
+                }
+            }
+            
+        }
+        return illegalTiles;
+    }
+
     public override void MakePhysicalPiece()
     {
         holder = GameObject.Instantiate(Services.Prefabs.PieceHolder,
             Services.GameScene.transform).transform;
         holder.gameObject.name = holderName;
         holderSr = holder.gameObject.GetComponent<SpriteRenderer>();
-        spriteOverlay = holder.GetComponentsInChildren<SpriteRenderer>()[2];
+        SpriteRenderer[] childSrs = holder.GetComponentsInChildren<SpriteRenderer>();
+        spriteOverlay = childSrs[2];
+        secondOverlay = childSrs[3];
+        legalityOverlay = GameObject.Instantiate(Services.Prefabs.LegalityOverlay,
+            Services.UIManager.overlayIconHolder).
+            GetComponent<OverlayIcon>();
+        legalityOverlay.Init(this);
+        legalityOverlay.SetStatus(false);
         costText = holder.gameObject.GetComponentInChildren<TextMesh>();
         ToggleCostUIStatus(false);
         tooltips = new List<Tooltip>();
