@@ -16,6 +16,11 @@ public class OverlayIcon : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if(piece == null && tile == null || (piece != null && piece.tiles.Count ==0))
+        {
+            Destroy(gameObject);
+            return;
+        }
         if (piece != null) UpdatePositionAndScale();
         else UpdatePositionForTile();
 	}

@@ -25,8 +25,20 @@ public class Factory : Blueprint
     protected override void OnPlace()
     {
         base.OnPlace();
-        owner.AugmentNormalDrawRate(normalDrawRateBonus);
+        //owner.AugmentNormalDrawRate(normalDrawRateBonus);
         //CreateTimerUI();
+    }
+
+    public override void OnConnect()
+    {
+        base.OnConnect();
+        owner.AugmentNormalDrawRate(normalDrawRateBonus);
+    }
+
+    public override void OnDisconnect()
+    {
+        base.OnDisconnect();
+        owner.AugmentNormalDrawRate(-normalDrawRateBonus);
     }
 
     protected override string GetName()

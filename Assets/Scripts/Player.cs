@@ -66,6 +66,36 @@ public class Player : MonoBehaviour
     protected float resourceGainRate;
     protected float normalDrawRate;
     protected float destructorDrawRate;
+    private int resourceProdLevel
+    {
+        get { return resourceProdLevel_; }
+        set
+        {
+            resourceProdLevel_ = value;
+            Services.UIManager.UpdateResourceLevel(resourceProdLevel_, playerNum);
+        }
+    }
+    private int resourceProdLevel_;
+    private int normProdLevel
+    {
+        get { return normProdLevel_; }
+        set
+        {
+            normProdLevel_ = value;
+            Services.UIManager.UpdateNormLevel(normProdLevel_, playerNum);
+        }
+    }
+    private int normProdLevel_;
+    private int destProdLevel
+    {
+        get { return destProdLevel_; }
+        set
+        {
+            destProdLevel_ = value;
+            Services.UIManager.UpdateDestLevel(destProdLevel_, playerNum);
+        }
+    }
+    private int destProdLevel_;
     public float resourceMeterFillAmt { get; private set; }
     private float normalDrawMeterFillAmt;
     private float destructorDrawMeterFillAmt;
@@ -594,16 +624,19 @@ public class Player : MonoBehaviour
     public void AugmentResourceGainRate(float gainRateAmt)
     {
         resourceGainRate += gainRateAmt;
+        resourceProdLevel += gainRateAmt > 0 ? 1 : -1;
     }
 
     public void AugmentNormalDrawRate(float drawRateAmt)
     {
         normalDrawRate += drawRateAmt;
+        normProdLevel += drawRateAmt > 0 ? 1 : -1;
     }
 
     public void AugmentDestructorDrawRate(float drawRateAmt)
     {
         destructorDrawRate += drawRateAmt;
+        destProdLevel += drawRateAmt > 0 ? 1 : -1;
     }
 
     public void AugmentResourceGainIncrementFactor(float factorChangeIncrement)

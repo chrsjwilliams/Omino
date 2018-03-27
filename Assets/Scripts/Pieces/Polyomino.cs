@@ -67,7 +67,7 @@ public class Polyomino : IVertex
     protected TextMesh costText;
     private bool affordable;
     private bool isVisible;
-    public bool connected { get; private set; }
+    public bool connected { get; protected set; }
     public bool dead { get; private set; }
     public float shieldDurationRemaining { get; private set; }
     protected List<Tooltip> tooltips;
@@ -774,7 +774,8 @@ public class Polyomino : IVertex
     public void SetGlowState(bool playAvailable)
     {
         if (playAvailable) SetGlow(new Color(1.3f, 1.3f, 0.9f));
-        else TurnOffGlow();
+        else
+            TurnOffGlow();
     }
 
     public void TurnOffGlow()
@@ -1363,17 +1364,21 @@ public class Polyomino : IVertex
         else if (isLegal && !affordable && !(this is Blueprint))
         {
             SetGlow(Color.yellow);
-            legalityOverlay.SetStatus(true);
-            legalityOverlay.SetSprite(Services.UIManager.notEnoughResourcesIcon);
+            //TurnOffGlow();
+            //legalityOverlay.SetStatus(true);
+            //legalityOverlay.SetSprite(Services.UIManager.notEnoughResourcesIcon);
+            legalityOverlay.SetStatus(false);
         }
         else
         {
             SetGlow(new Color(1, 0.2f, 0.2f));
+            //TurnOffGlow();
             bool connected = IsConnected();
             if(!(this is Blueprint) && !connected)
             {
-                legalityOverlay.SetStatus(true);
-                legalityOverlay.SetSprite(Services.UIManager.notConnectedIcon);
+                //legalityOverlay.SetStatus(true);
+                legalityOverlay.SetStatus(false);
+                //legalityOverlay.SetSprite(Services.UIManager.notConnectedIcon);
             }
             else
             {
@@ -1550,7 +1555,7 @@ public class Polyomino : IVertex
     //    }
     //}
 
-    public void TogglePieceConnectedness(bool connected_)
+    public virtual void TogglePieceConnectedness(bool connected_)
     {
         if (!(this is Structure) && !(this is Blueprint))
         {
@@ -1567,7 +1572,7 @@ public class Polyomino : IVertex
         connected = connected_;
         for (int i = 0; i < occupyingBlueprints.Count; i++)
         {
-            //occupyingBlueprints[i].TogglePieceConnectedness(connected_);
+            occupyingBlueprints[i].TogglePieceConnectedness(connected_);
         }
     }
 

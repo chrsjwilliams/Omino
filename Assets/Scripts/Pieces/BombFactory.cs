@@ -31,7 +31,7 @@ public class BombFactory : Blueprint
     protected override void OnPlace()
     {
         base.OnPlace();
-        owner.AugmentDestructorDrawRate(destructorDrawRateBonus);
+        //owner.AugmentDestructorDrawRate(destructorDrawRateBonus);
         //CreateTimerUI();
     }
 
@@ -51,5 +51,17 @@ public class BombFactory : Blueprint
         //return "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) + 
         //    "</color> <color=red>DESTRUCTIVE</color> pieces per second";
         return "<color=red>Attack</color> Road Production Level +1";
+    }
+
+    public override void OnDisconnect()
+    {
+        base.OnDisconnect();
+        owner.AugmentDestructorDrawRate(-destructorDrawRateBonus);
+    }
+
+    public override void OnConnect()
+    {
+        base.OnConnect();
+        owner.AugmentDestructorDrawRate(destructorDrawRateBonus);
     }
 }

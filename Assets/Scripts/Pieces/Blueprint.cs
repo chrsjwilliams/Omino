@@ -420,4 +420,23 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         //    spriteOverlay.sortingLayerName = "Underlay";
         //}
     }
+
+    public override void TogglePieceConnectedness(bool connected_)
+    {
+        if(connected != connected_)
+        {
+            connected = connected_;
+            if (connected) OnConnect();
+            else OnDisconnect();
+        }
+    }
+
+    public virtual void OnDisconnect()
+    {
+    }
+
+    public virtual void OnConnect()
+    {
+
+    }
 }

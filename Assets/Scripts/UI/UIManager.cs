@@ -22,6 +22,12 @@ public class UIManager : MonoBehaviour {
     private Text[] destructorPieceTimers;
     private Transform[] destructorQueueMeters;
     [SerializeField]
+    private Text[] resourceLevelTexts;
+    [SerializeField]
+    private Text[] normLevelTexts;
+    [SerializeField]
+    private Text[] destLevelTexts;
+    [SerializeField]
     private Image[] greyOutBoxes;
     [SerializeField]
     private RectTransform[] victoryBanners;
@@ -518,6 +524,21 @@ public class UIManager : MonoBehaviour {
     {
         numResourcesMissing[player.playerNum - 1] = resourceDeficit;
         resourceMissingAnimActive[player.playerNum - 1] = true;
+    }
+
+    public void UpdateResourceLevel(int level, int playerNum)
+    {
+        resourceLevelTexts[playerNum - 1].text = "LV " + level;
+    }
+
+    public void UpdateNormLevel(int level, int playerNum)
+    {
+        normLevelTexts[playerNum - 1].text = "LV " + level;
+    }
+
+    public void UpdateDestLevel(int level, int playerNum)
+    {
+        destLevelTexts[playerNum - 1].text = "LV " + level;
     }
 
 }

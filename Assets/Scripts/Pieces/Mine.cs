@@ -18,13 +18,25 @@ public class Mine : Blueprint
     protected override void OnPlace()
     {
         base.OnPlace();
-        owner.AugmentResourceGainRate(resourceGainRateBonus);
+        //owner.AugmentResourceGainRate(resourceGainRateBonus);
     }
 
     public override void Remove()
     {
         owner.AugmentResourceGainRate(-resourceGainRateBonus);
         base.Remove();
+    }
+
+    public override void OnDisconnect()
+    {
+        base.OnDisconnect();
+        owner.AugmentResourceGainRate(-resourceGainRateBonus);
+    }
+
+    public override void OnConnect()
+    {
+        base.OnConnect();
+        owner.AugmentResourceGainRate(resourceGainRateBonus);
     }
 
     protected override string GetName()
