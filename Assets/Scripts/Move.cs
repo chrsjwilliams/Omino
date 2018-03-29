@@ -83,12 +83,20 @@ public class Move
                 if (mineMove != null && factoryMove != null && bombFactoryMove != null) break;
             }
         }
-        
-
-        return  WinAndStructScore(winWeight, structWeight) + 
+        float score = 0;
+        if (piece is Destructor && piece.owner.splashDamage)
+        {
+            score = DestructionScore(destructionWeight, pieceCoords);
+        }
+        else
+        {
+            score = WinAndStructScore(winWeight, structWeight) +
                 BlueprintScore(mineMove, factoryMove, bombFactoryMove, mineWeight,
                                 factoryWeight, bombFactoryWeight) +
                 DestructionScore(destructionWeight, pieceCoords);
+        }
+
+        return score;
     }
 
     private float BlueprintScore(Move mineMove, Move factoryMove, Move bombFactoryMove, float mineWeight, float factoryWeight,
@@ -199,7 +207,7 @@ public class Move
             float blueprintDestructionScore = blueprintsDestroyed.Count * blueprintDestructionWeight;
             float disconnectionScore = cutSize * disconnectionWeight;
 
-            return destructionWeight + blueprintDestructionScore + disconnectionScore;
+            return destructionWeight*(blueprintDestructionScore + disconnectionScore);
         }
     }
     

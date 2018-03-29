@@ -953,7 +953,10 @@ public class Polyomino : IVertex
         Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
         Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
         Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
-        legalityOverlay.Remove();
+        if (legalityOverlay != null)
+        {
+            legalityOverlay.Remove();
+        }
         foreach (Tile tile in tiles) tile.OnRemove();
         GameObject.Destroy(holder.gameObject);
     }

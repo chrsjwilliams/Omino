@@ -637,7 +637,7 @@ public class AIPlayer : Player
             Debug.Log("picking move of score " + nextPlay.score);
         }
 
-        if (nextPlay != null)
+        if (nextPlay != null && nextPlay.score > 0)
         {
             MakePlay(nextPlay);
         }

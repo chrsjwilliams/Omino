@@ -136,7 +136,10 @@ public class Destructor : Polyomino
             tile.StartSettlingToNormalPiece();
         }
         //MakeFireBurst();
-        swordIcon.Remove();
+        if (swordIcon != null)
+        {
+            swordIcon.Remove();
+        }
     }
 
     void MakeFireBurst()
