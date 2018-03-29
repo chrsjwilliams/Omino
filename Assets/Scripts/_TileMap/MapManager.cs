@@ -28,7 +28,6 @@ public class MapManager : MonoBehaviour
         get { return _center; }
     }
 
-    private List<SuperDestructorResource> resourcesOnMap;
     public List<Structure> structuresOnMap { get; private set; }
     public List<Coord> structureCoords { get; private set; }
     [SerializeField]
@@ -101,56 +100,6 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    void GenerateResources()
-    {
-        resourcesOnMap = new List<SuperDestructorResource>();
-        for (int i = 0; i < startingResourceCount / 2; i++)
-        {
-            List<SuperDestructorResource> resources = GenerateResourceAndMirroredResource();
-            if (resources == null) break;
-            foreach (SuperDestructorResource resource in resources)
-            {
-                resourcesOnMap.Add(resource);
-            }
-        }
-    }
-
-    List<SuperDestructorResource> GenerateResourceAndMirroredResource()
-    {
-        Coord resourceCoord = GenerateValidResourceCoord();
-        Coord mirroredCoord = MirroredCoord(resourceCoord);
-        List<SuperDestructorResource> resources = new List<SuperDestructorResource>();
-        if (resourceCoord != new Coord(-1, -1))
-        {
-            int tileCount = Random.Range(resourceSizeMin, resourceSizeMax + 1);
-            int shapeTypeCount = Polyomino.pieceTypes[tileCount];
-            int tileIndex = Random.Range(0, shapeTypeCount);
-            int numRotations = Random.Range(0, 4);
-            SuperDestructorResource resource = 
-                new SuperDestructorResource(tileCount, tileIndex);
-            SuperDestructorResource mirroredResource =
-                new SuperDestructorResource(tileCount, tileIndex);
-            resource.MakePhysicalPiece();
-            mirroredResource.MakePhysicalPiece();
-
-            for (int i = 0; i < numRotations; i++)
-            {
-                resource.Rotate();
-            }
-            for (int i = 0; i < numRotations + 2; i++)
-            {
-                mirroredResource.Rotate();
-            }
-
-            resource.PlaceAtLocation(resourceCoord);
-            mirroredResource.PlaceAtLocation(mirroredCoord);
-            resources.Add(resource);
-            resources.Add(mirroredResource);
-            return resources;
-        }
-        return null;
-    }
-
     Structure GenerateStructure(BuildingType type)
     {
         return GenerateStructure(type, GenerateValidStructureCoord());
@@ -217,21 +166,6 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    Coord GenerateValidResourceCoord()
-    {
-        Coord nullCoord = new Coord(-1, -1);
-        for (int i = 0; i < procGenTriesMax; i++)
-        {
-            Coord candidateCoord = GenerateRandomCoord();
-            Coord mirroredCoord = MirroredCoord(candidateCoord);
-            if (IsResourceCoordValid(candidateCoord) &&
-                IsResourceCoordValid(mirroredCoord) &&
-                candidateCoord.Distance(mirroredCoord) >= resourceDistMin)
-                return candidateCoord;
-        }
-        return nullCoord;
-    }
-
     Coord GenerateValidStructureCoord()
     {
         return GenerateValidStructureCoord(false);
@@ -266,20 +200,6 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < structuresOnMap.Count; i++)
         {
             if (candidateCoord.Distance(structuresOnMap[i].centerCoord) < structDistMin)
-                return false;
-        }
-        return true;
-    }
-
-    bool IsResourceCoordValid(Coord candidateCoord)
-    {
-        if (candidateCoord.Distance(new Coord(0, 0)) < resourceRadiusMin ||
-            candidateCoord.Distance(new Coord(MapWidth - 1, MapHeight - 1))
-            < resourceRadiusMin)
-            return false;
-        for (int i = 0; i < resourcesOnMap.Count; i++)
-        {
-            if (candidateCoord.Distance(resourcesOnMap[i].centerCoord) < resourceDistMin)
                 return false;
         }
         return true;

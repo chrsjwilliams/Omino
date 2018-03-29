@@ -8,6 +8,7 @@ public class BombFactory : Blueprint
     {
         maxRotations = 4;
         destructorDrawRateBonus = 1f / 60f;
+        onGainText = "+1 Attack Piece Production";
     }
 
     public override void Update()

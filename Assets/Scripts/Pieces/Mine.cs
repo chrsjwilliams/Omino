@@ -7,6 +7,7 @@ public class Mine : Blueprint
     public Mine(Player player_) : base(BuildingType.MINE, player_)
     {
         resourceGainRateBonus = 1f / 8f;
+        onGainText = "+1 Hammer Production";
     }
 
     public override void Update()

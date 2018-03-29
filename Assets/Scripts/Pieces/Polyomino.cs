@@ -535,6 +535,11 @@ public class Polyomino : IVertex
             bool autoFortify = owner.autoFortify;
             owner.OnPiecePlaced(this);
             //adjacentPieces = GetAdjacentPolyominos(owner);
+            if (this is Destructor && owner.splashDamage)
+            {
+                Remove();
+                return;
+            }
             if (autoFortify && !isFortified)
                 Services.MapManager.FortifyPiece(this);
         }

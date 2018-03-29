@@ -7,6 +7,7 @@ public class Blueprint : Polyomino
     private const float overlayAlphaPrePlacement = 0.6f;
     private const float tileAlphaPrePlacement = 0.8f;
     public int maxRotations { get; protected set; }
+    protected string onGainText;
 
     protected static int[,,] factory = new int[1, 5, 5]
     {   
@@ -437,6 +438,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
     public virtual void OnConnect()
     {
-
+        Services.GeneralTaskManager.Do(new FloatText(onGainText, GetCenterpoint(),
+            owner, 2, 1));
     }
 }

@@ -25,7 +25,6 @@ public class Tile : MonoBehaviour, IVertex
     public Polyomino pieceParent { get; private set; }
     public Blueprint occupyingBlueprint { get; private set; }
     public Structure occupyingStructure { get; private set; }
-    public SuperDestructorResource occupyingResource { get; private set; }
     private Color prevColor;
     private Color targetColor_;
     private Color targetColor
@@ -196,11 +195,6 @@ public class Tile : MonoBehaviour, IVertex
         occupyingPiece = piece;
     }
 
-    public void SetOccupyingResource(SuperDestructorResource resource)
-    {
-        occupyingResource = resource;
-    }
-
     public void SetOccupyingBlueprint(Blueprint blueprint)
     {
         occupyingBlueprint = blueprint;
@@ -219,11 +213,6 @@ public class Tile : MonoBehaviour, IVertex
     public bool PartOfExistingBlueprint()
     {
         return occupyingBlueprint != null;
-    }
-
-    public bool HasResource()
-    {
-        return occupyingResource != null;
     }
 
     public Polyomino OccupiedBy()

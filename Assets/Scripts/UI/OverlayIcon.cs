@@ -8,6 +8,8 @@ public class OverlayIcon : MonoBehaviour {
     private Polyomino piece;
     private Tile tile;
     private Image image;
+    private bool splashDamage;
+    private Sprite swordIcon;
 
 	// Use this for initialization
 	void Start () {
@@ -21,7 +23,23 @@ public class OverlayIcon : MonoBehaviour {
             Destroy(gameObject);
             return;
         }
-        if (piece != null) UpdatePositionAndScale();
+        if (piece != null)
+        {
+            if (piece.owner != null)
+            {
+                if (piece.owner.splashDamage && !splashDamage)
+                {
+                    splashDamage = true;
+                    image.sprite = Services.UIManager.splashIcon;
+                }
+                else if (!piece.owner.splashDamage & splashDamage)
+                {
+                    splashDamage = false;
+                    image.sprite = swordIcon;
+                }
+            }
+            UpdatePositionAndScale();
+        }
         else UpdatePositionForTile();
 	}
 
@@ -49,6 +67,7 @@ public class OverlayIcon : MonoBehaviour {
                     Quaternion.Euler(0, 0, -90) : Quaternion.Euler(0, 0, 90);
             transform.localRotation = rot;
         }
+        swordIcon = image.sprite;
     }
 
     private void UpdatePositionForTile()
