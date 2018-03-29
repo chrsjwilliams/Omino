@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class TutorialTooltip : MonoBehaviour {
 
     [SerializeField]
-    private Text textComponent;
+    private TextMeshProUGUI textComponent;
     [SerializeField]
-    private Text dismissText;
+    private TextMeshProUGUI dismissText;
     [SerializeField]
     private Image arrow;
     [SerializeField]

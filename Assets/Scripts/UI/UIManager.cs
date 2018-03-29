@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour {
 
@@ -14,19 +15,19 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private Image[] normalDrawMeters;
     [SerializeField]
-    private Text[] normalPieceTimers;
+    private TextMeshProUGUI[] normalPieceTimers;
     private Transform[] normalQueueMeters;
     [SerializeField]
     private Image[] destructorDrawMeters;
     [SerializeField]
-    private Text[] destructorPieceTimers;
+    private TextMeshProUGUI[] destructorPieceTimers;
     private Transform[] destructorQueueMeters;
     [SerializeField]
-    private Text[] resourceLevelTexts;
+    private TextMeshProUGUI[] resourceLevelTexts;
     [SerializeField]
-    private Text[] normLevelTexts;
+    private TextMeshProUGUI[] normLevelTexts;
     [SerializeField]
-    private Text[] destLevelTexts;
+    private TextMeshProUGUI[] destLevelTexts;
     [SerializeField]
     private Image[] greyOutBoxes;
     [SerializeField]
@@ -481,13 +482,13 @@ public class UIManager : MonoBehaviour {
         player.ToggleReady();
         if (player.ready)
         {
-            readyBanners[playerNum - 1].GetComponentInChildren<Text>().text =
+            readyBanners[playerNum - 1].GetComponentInChildren<TextMeshProUGUI>().text =
                 "READY";
             readyBanners[playerNum - 1].GetComponent<Image>().color = readyColor;
         }
         else
         {
-            readyBanners[playerNum - 1].GetComponentInChildren<Text>().text =
+            readyBanners[playerNum - 1].GetComponentInChildren<TextMeshProUGUI>().text =
                 "TAP WHEN READY";
             readyBanners[playerNum - 1].GetComponent<Image>().color = notReadyColor;
         }

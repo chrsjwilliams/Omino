@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Tooltip : MonoBehaviour {
 
-    public Text nameText;
-    public Text descriptionText;
+    public TextMeshProUGUI nameText;
+    public TextMeshProUGUI descriptionText;
     [SerializeField]
     private Vector2 tooltipOffset;
     [SerializeField]

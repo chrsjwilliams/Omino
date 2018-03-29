@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameOptionsSceneScript : Scene<TransitionData>
 {
@@ -33,11 +34,11 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     [SerializeField]
     private Button[] joinButtons;
-    private Text[] joinButtonJoinTexts;
-    private Text[] joinButtonPlayerTypeTexts;
+    private TextMeshProUGUI[] joinButtonJoinTexts;
+    private TextMeshProUGUI[] joinButtonPlayerTypeTexts;
     [SerializeField]
     private Slider[] aiLevelSliders;
-    private Text[] aiLevelTexts;
+    private TextMeshProUGUI[] aiLevelTexts;
     private Color[] baseColors;
     [SerializeField]
     private float defaultWinWeight;
@@ -129,21 +130,21 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         SelectLevel(0);
         aiOptionsMenu.SetActive(false);
         humanPlayers = new bool[2] { false, false };
-        joinButtonPlayerTypeTexts = new Text[2] {
-            joinButtons[0].GetComponentInChildren<Text>(),
-            joinButtons[1].GetComponentInChildren<Text>()
+        joinButtonPlayerTypeTexts = new TextMeshProUGUI[2] {
+            joinButtons[0].GetComponentInChildren<TextMeshProUGUI>(),
+            joinButtons[1].GetComponentInChildren<TextMeshProUGUI>()
         };
-        joinButtonJoinTexts = new Text[2] {
-            joinButtons[0].GetComponentsInChildren<Text>()[1],
-            joinButtons[1].GetComponentsInChildren<Text>()[1]
+        joinButtonJoinTexts = new TextMeshProUGUI[2] {
+            joinButtons[0].GetComponentsInChildren<TextMeshProUGUI>()[1],
+            joinButtons[1].GetComponentsInChildren<TextMeshProUGUI>()[1]
         };
         baseColors = new Color[2] { Services.GameManager.Player1ColorScheme[0],
                         Services.GameManager.Player2ColorScheme[0] };
-        aiLevelTexts = new Text[2];
+        aiLevelTexts = new TextMeshProUGUI[2];
         for (int i = 0; i < 2; i++)
         {
             joinButtons[i].GetComponent<Image>().color = (baseColors[i] + Color.white) / 2;
-            aiLevelTexts[i] = aiLevelSliders[i].GetComponentInChildren<Text>();
+            aiLevelTexts[i] = aiLevelSliders[i].GetComponentInChildren<TextMeshProUGUI>();
         }
 
         if (Services.GameManager.tutorialMode)
@@ -152,6 +153,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             levelSelectionIndicator.gameObject.SetActive(false);
             levelSelected = 4;
             joinButtons[1].gameObject.SetActive(false);
+            aiLevelSliders[1].gameObject.SetActive(false);
         }
     }
 
@@ -273,7 +275,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         humanPlayers[index] = !humanPlayers[index];
         if (humanPlayers[index])
         {
-            joinButtonPlayerTypeTexts[index].text = "Human \n";
+            joinButtonPlayerTypeTexts[index].text = "Human\n ";
             joinButtonJoinTexts[index].text = "\nTap to Withdraw";
             joinButtons[index].GetComponent<Image>().color = baseColors[index];
             joinButtonJoinTexts[index].color = Color.white;
@@ -282,7 +284,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         }
         else
         {
-            joinButtonPlayerTypeTexts[index].text = "CPU \n";
+            joinButtonPlayerTypeTexts[index].text = "CPU\n ";
             joinButtonJoinTexts[index].text = "\nTap to Join";
             joinButtons[index].GetComponent<Image>().color = (baseColors[index] + Color.white) / 2;
             joinButtonJoinTexts[index].color = Color.black;
