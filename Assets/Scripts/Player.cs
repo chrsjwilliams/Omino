@@ -679,6 +679,7 @@ public class Player : MonoBehaviour
     public void ToggleSplashDamage(bool status)
     {
         splashDamage = status;
+        Services.GameEventManager.Fire(new SplashDamageStatusChange(this));
     }
 
     public void ToggleReady()

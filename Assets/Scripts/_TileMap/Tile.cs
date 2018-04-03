@@ -18,7 +18,9 @@ public class Tile : MonoBehaviour, IVertex
     public Coord coord { get; private set; }
     public Coord relativeCoord;
     public BoxCollider2D boxCol { get; private set; }
-    public SpriteRenderer sr { get; private set; }
+    public SpriteRenderer mainSr;
+    [SerializeField]
+    private SpriteRenderer fillOverlay;
     //private SpriteGlow glow;
     public Material material { get; set; }
     public Polyomino occupyingPiece { get; private set; }
@@ -32,7 +34,7 @@ public class Tile : MonoBehaviour, IVertex
         get { return targetColor_; }
         set
         {
-            prevColor = sr.color;
+            prevColor = mainSr.color;
             targetColor_ = value;
             baseColor = value;
             changingColor = true;
@@ -44,10 +46,13 @@ public class Tile : MonoBehaviour, IVertex
     [SerializeField]
     private float colorChangeDuration;
     private bool changingColor;
-    public SpriteRenderer highlightSr { get; private set; }
-    private SpriteRenderer bombOverlay;
-    private SpriteRenderer moltenLines;
+    public SpriteRenderer highlightSr;
+    //private SpriteRenderer bombOverlay;
+    //private SpriteRenderer moltenLines;
+    [SerializeField]
     private SpriteRenderer shieldSr;
+    [SerializeField]
+    private SpriteRenderer legalitySr;
     private bool bombSettling;
     private float bombSettleTimeElapsed;
     private const float bombSettleDuration = 0.4f;
@@ -58,8 +63,8 @@ public class Tile : MonoBehaviour, IVertex
     private const float redPulsePeriod = 0.6f;
     private static Color redPulseColor = new Color(0.5f, 0, 0.5f);
     private bool toRed;
-    private Image uiTile;
-    private OverlayIcon illegalLocationIcon;
+    //private Image uiTile;
+    //private OverlayIcon illegalLocationIcon;
     //public SpriteMask mask { get; private set; }
 
     public void Init(Coord coord_)
@@ -67,25 +72,13 @@ public class Tile : MonoBehaviour, IVertex
         coord = coord_;
         boxCol = GetComponent<BoxCollider2D>();
         sortingGroup = GetComponentInChildren<SortingGroup>();
-        SpriteRenderer[] srs = GetComponentsInChildren<SpriteRenderer>();
-        highlightSr = srs[0];
-        sr = srs[1];
-        bombOverlay = srs[2];
-        moltenLines = srs[3];
-        shieldSr = srs[4];
         shieldSr.enabled = false;
         highlightSr.enabled = false;
-        if (!(pieceParent != null && pieceParent is Destructor))
-        {
-            //bombOverlay.enabled = false;
-            moltenLines.enabled = false;
-        }
-        bombOverlay.enabled = false;
-        
+        legalitySr.enabled = false;
         transform.position = new Vector3(coord.x, coord.y, 0);
 
-        sr.color = Services.GameManager.MapColorScheme[0];
-        baseColor = sr.color;
+        mainSr.color = Services.GameManager.MapColorScheme[0];
+        baseColor = mainSr.color;
         toRed = true;
         if (pieceParent == null) IncrementSortingOrder(-5000);
     }
@@ -94,43 +87,21 @@ public class Tile : MonoBehaviour, IVertex
     {
         pieceParent = pieceParent_;
         Init(coord_);
-        Vector3 uiPos = Camera.main.WorldToScreenPoint(transform.position);
-        uiPos = new Vector3(uiPos.x, uiPos.y, 0);
-        uiTile = Instantiate(Services.Prefabs.UITile, uiPos, Quaternion.identity,
-            Services.UIManager.uiTileHolder).GetComponent<Image>();
-        uiTile.gameObject.SetActive(false);
-        illegalLocationIcon = Instantiate(Services.Prefabs.LegalityOverlay,
-            Services.UIManager.uiTileHolder).GetComponent<OverlayIcon>();
-        illegalLocationIcon.Init(this);
-        illegalLocationIcon.SetStatus(false);
-        illegalLocationIcon.SetSize(70);
-        illegalLocationIcon.SetSprite(Services.UIManager.notConnectedIcon);
         relativeCoord = coord_;
     }
 
     public void ToggleIllegalLocationIcon(bool status)
     {
-        if(illegalLocationIcon != null) illegalLocationIcon.SetStatus(status);
+        legalitySr.enabled = status;
     }
 
-	public void OnRemove(){
-        //Destroy(this);
-        if (uiTile != null) Destroy(uiTile.gameObject);
-        if (illegalLocationIcon != null)
-        {
-            illegalLocationIcon.Remove();
-            illegalLocationIcon = null;
-        }
+    public void OnRemove(){
+
     }
 
     public void OnPlace()
     {
-        if(uiTile != null) Destroy(uiTile.gameObject);
-        if (illegalLocationIcon != null)
-        {
-            illegalLocationIcon.Remove();
-            illegalLocationIcon = null;
-        }
+        ToggleIllegalLocationIcon(false);
     }
 
     public void SetCoord(Coord newCoord)
@@ -141,18 +112,17 @@ public class Tile : MonoBehaviour, IVertex
     public void SetColor(Color color)
     {
         SetSrAndUIColor(color);
-        bombOverlay.color = color;
         baseColor = color;
         targetColor = color;
     }
     
     private void SetSrAndUIColor(Color color)
     {
-        sr.color = color;
-        if (uiTile != null) uiTile.color = new Color(color.r, color.g, color.b, 0.7f);
+        mainSr.color = color;
+        fillOverlay.color = new Color(color.r, color.g, color.b, 1);
     }
 
-    public Color GetColor() { return sr.color; }
+    public Color GetColor() { return mainSr.color; }
 
     public void ShiftColor(Color color)
     {
@@ -230,15 +200,6 @@ public class Tile : MonoBehaviour, IVertex
     private void Update()
     {
         if (changingColor) LerpToTargetColor();
-        if (bombSettling) SettleToNormalSprite();
-        if (pieceParent != null && pieceParent is Destructor && !pieceParent.placed)
-            PulseRed();
-        if (uiTile != null && uiTile.IsActive())
-        {
-            Vector3 uiPos = Camera.main.WorldToScreenPoint(transform.position);
-            uiPos = new Vector3(uiPos.x, uiPos.y, 0);
-            uiTile.transform.position = uiPos;
-        }
     }
 
     void LerpToTargetColor()
@@ -246,47 +207,29 @@ public class Tile : MonoBehaviour, IVertex
         colorChangeTimeElapsed += Time.deltaTime;
         SetSrAndUIColor(Color.Lerp(prevColor, targetColor,
             colorChangeTimeElapsed / colorChangeDuration));
-        baseColor = sr.color;
-        bombOverlay.color = new Color(sr.color.r, sr.color.g, sr.color.b, bombOverlay.color.a);
+        baseColor = mainSr.color;
         if(colorChangeTimeElapsed >= colorChangeDuration)
         {
             changingColor = false;
         }
     }
 
-    void SettleToNormalSprite()
-    {
-        bombSettleTimeElapsed += Time.deltaTime;
-        //sr.color = Color.Lerp(new Color(sr.color.r, sr.color.g, sr.color.b, 0),
-        //    new Color(sr.color.r, sr.color.g, sr.color.b, 1),
-        //    EasingEquations.Easing.QuadEaseOut(bombSettleTimeElapsed / bombSettleDuration));
-        bombOverlay.color = Color.Lerp(new Color(sr.color.r, sr.color.g, sr.color.b, 1),
-            new Color(sr.color.r, sr.color.g, sr.color.b, 0),
-            EasingEquations.Easing.QuadEaseIn(bombSettleTimeElapsed / bombSettleDuration));
-        moltenLines.color = Color.Lerp(new Color(sr.color.r, sr.color.g, sr.color.b, 1),
-            new Color(sr.color.r, sr.color.g, sr.color.b, 0),
-            EasingEquations.Easing.QuadEaseIn(bombSettleTimeElapsed / bombSettleDuration));
-        if (bombSettleTimeElapsed >= bombSettleDuration) bombSettling = false;
-    }
-
-
     public void SetSprite(int spriteIndex)
     {
-        bombOverlay.sprite = destructorSprites[spriteIndex];
-        sr.sprite = sprites[spriteIndex];
+        mainSr.sprite = sprites[spriteIndex];
         shieldSr.sprite = shieldSprites[spriteIndex];
-        if (uiTile != null) uiTile.sprite = sr.sprite;
+        fillOverlay.sprite = mainSr.sprite;
     }
 
     public void ShiftAlpha(float alpha)
     {
-        targetColor = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);
+        targetColor = new Color(mainSr.color.r, mainSr.color.g, mainSr.color.b, alpha);
     }
 
     public void SetAlpha(float alpha)
     {
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);
-        targetColor = sr.color;
+        mainSr.color = new Color(mainSr.color.r, mainSr.color.g, mainSr.color.b, alpha);
+        targetColor = mainSr.color;
     }
 
     public void IncrementSortingOrder(int inc)
@@ -294,6 +237,7 @@ public class Tile : MonoBehaviour, IVertex
 		highlightSr.sortingOrder += inc;
         sortingGroup.sortingOrder += inc;
         shieldSr.sortingOrder += inc;
+        legalitySr.sortingOrder += inc;
 	}
 
     public void SetSortingOrder(int sortingOrder)
@@ -329,54 +273,14 @@ public class Tile : MonoBehaviour, IVertex
             alpha);
     }
 
-    void PulseRed()
-    {
-        redPulseTimer += Time.deltaTime;
-        Color redColor = new Color(redPulseColor.r, redPulseColor.g, redPulseColor.b, baseColor.a);
-        if (toRed)
-        {
-            //SetSrAndUIColor(
-            moltenLines.color =
-                Color.Lerp(baseColor, redColor, EasingEquations.Easing.QuadEaseIn(
-                redPulseTimer / redPulsePeriod))
-                ;
-                //);
-        }
-        else
-        {
-            //SetSrAndUIColor(
-            moltenLines.color =
-                Color.Lerp(redColor, baseColor, EasingEquations.Easing.QuadEaseOut(
-                 redPulseTimer / redPulsePeriod))
-                 ;
-                 //);
-        }
-
-        if (redPulseTimer >= redPulsePeriod)
-        {
-            toRed = !toRed;
-            redPulseTimer = 0;
-        }
-    }
-
-    public void SetFilledUIStatus(bool status)
-    {
-        uiTile.gameObject.SetActive(status);
-    }
-
     public void SetFilledUIFillAmount(float fillProportion)
     {
-        uiTile.fillAmount = fillProportion;
-    }
-
-    public void SetUIScale(Vector3 scale)
-    {
-        uiTile.transform.localScale = scale;
+        fillOverlay.material.SetFloat("_Cutoff", 1 - fillProportion);
     }
 
     public void ToggleConnectedness(bool connected)
     {
-        if (connected) sr.sprite = sprites[0];
-        else sr.sprite = disconnectedSprite;
+        if (connected) mainSr.sprite = sprites[0];
+        else mainSr.sprite = disconnectedSprite;
     }
 }

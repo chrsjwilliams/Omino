@@ -22,7 +22,7 @@ public class DeathAnimation : Task
     {
         timeElapsed = 0;
         duration = Polyomino.deathAnimDur;
-        initialColor = piece.tiles[0].sr.color;
+        initialColor = piece.tiles[0].mainSr.color;
         targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 0);
         targetPositions = new Vector3[piece.tiles.Count];
         startPositions = new Vector3[piece.tiles.Count];

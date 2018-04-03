@@ -11,6 +11,16 @@ public abstract class GameEvent
    
 }
 
+public class SplashDamageStatusChange : GameEvent
+{
+    public Player player;
+    public SplashDamageStatusChange(Player player_)
+    {
+        player = player_;
+    }
+}
+
+
 public class PiecePlaced : GameEvent
 {
     public Polyomino piece;

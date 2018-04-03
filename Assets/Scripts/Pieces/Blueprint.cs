@@ -140,11 +140,8 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         SpriteRenderer[] childSrs = holder.GetComponentsInChildren<SpriteRenderer>();
         spriteOverlay = childSrs[2];
         secondOverlay = childSrs[3];
-        legalityOverlay = GameObject.Instantiate(Services.Prefabs.LegalityOverlay,
-            Services.UIManager.overlayIconHolder).
-            GetComponent<OverlayIcon>();
-        legalityOverlay.Init(this);
-        legalityOverlay.SetStatus(false);
+        legalityOverlay = childSrs[4];
+        legalityOverlay.enabled = false;
         costText = holder.gameObject.GetComponentInChildren<TextMesh>();
         ToggleCostUIStatus(false);
         tooltips = new List<Tooltip>();
@@ -188,7 +185,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     {
         foreach(Tile tile in tiles)
         {
-            tile.sr.sprite = Services.UIManager.blueprintTile;
+            tile.mainSr.sprite = Services.UIManager.blueprintTile;
         }
     }
 

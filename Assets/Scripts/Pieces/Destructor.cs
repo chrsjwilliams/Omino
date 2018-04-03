@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class Destructor : Polyomino
 {
     private bool isSuper;
-    private OverlayIcon swordIcon;
     public List<Polyomino> piecesInRange { get; private set; }
     public Destructor(int _units, int _index, Player _player, bool _isSuper) 
         : base(_units, _index, _player)
@@ -18,14 +17,8 @@ public class Destructor : Polyomino
     {
         base.SetIconSprite();
         iconSr.enabled = true;
-        if (isSuper)
-        {
-            iconSr.sprite = Services.UIManager.bombFactoryIcon;
-        }
-        else
-        {
-            iconSr.sprite = Services.UIManager.destructorIcon;
-        }
+        iconSr.sprite = owner.splashDamage ?
+                Services.UIManager.splashIcon : Services.UIManager.destructorIcon;
     }
 
     public override bool IsPlacementLegal(List<Polyomino> adjacentPieces)
@@ -96,30 +89,6 @@ public class Destructor : Polyomino
         return !IsPlacementLegal() && LegalNotCountingShield();
     }
 
-    //public override void CheckForFortification()
-    //{
-    //    List<Tile> emptyAdjacentTiles = new List<Tile>();
-
-    //    foreach (Tile tile in tiles)
-    //    {
-    //        foreach (Coord direction in Coord.Directions())
-    //        {
-    //            Coord adjacentCoord = tile.coord.Add(direction);
-    //            if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
-    //            {
-    //                Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
-    //                if (!adjTile.IsOccupied() && !emptyAdjacentTiles.Contains(adjTile))
-    //                {
-    //                    emptyAdjacentTiles.Add(adjTile);
-    //                }
-    //            }
-    //        }
-    //    }
-
-    //    Services.MapManager.CheckForFortification(this, emptyAdjacentTiles, isSuper);
-    //}
-
-
     protected override void OnPlace()
     {
         base.OnPlace();
@@ -136,10 +105,6 @@ public class Destructor : Polyomino
             tile.StartSettlingToNormalPiece();
         }
         //MakeFireBurst();
-        if (swordIcon != null)
-        {
-            swordIcon.Remove();
-        }
     }
 
     void MakeFireBurst()
@@ -233,14 +198,21 @@ public class Destructor : Polyomino
     public override void MakePhysicalPiece()
     {
         base.MakePhysicalPiece();
-        swordIcon = GameObject.Instantiate(Services.Prefabs.SwordIcon, 
-            Services.UIManager.overlayIconHolder).GetComponent<OverlayIcon>();
-        swordIcon.Init(this);
+        Services.GameEventManager.Register<SplashDamageStatusChange>(OnSplashDamageStatusChange);
     }
 
     public override void DestroyThis()
     {
+        Services.GameEventManager.Unregister<SplashDamageStatusChange>(OnSplashDamageStatusChange);
         base.DestroyThis();
-        if (swordIcon != null) swordIcon.Remove();
+    }
+
+    private void OnSplashDamageStatusChange(SplashDamageStatusChange e)
+    {
+        if (e.player == owner)
+        {
+            iconSr.sprite = owner.splashDamage ?
+                Services.UIManager.splashIcon : Services.UIManager.destructorIcon;
+        }
     }
 }

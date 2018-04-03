@@ -82,7 +82,7 @@ public abstract class Structure : Polyomino
         base.MakePhysicalPiece();
         HideFromInput();
         ScaleHolder(Vector3.one);
-        neutralColor = tiles[0].sr.color;
+        neutralColor = tiles[0].mainSr.color;
         //spriteOverlay.color = neutralColor;
         spriteOverlay.color = Color.white;
         TurnOffGlow();
@@ -101,7 +101,8 @@ public abstract class Structure : Polyomino
         ListenForInput(false);
         foreach(Tile tile in tiles)
         {
-            tile.sr.enabled = false;
+            tile.mainSr.enabled = false;
+            tile.SetFilledUIFillAmount(0);
         }
     }
 
@@ -227,5 +228,10 @@ public abstract class Structure : Polyomino
     {
         DestroyTooltips();
         touchID = -1;
+    }
+
+    public override void SetLegalityGlowStatus()
+    {
+        
     }
 }

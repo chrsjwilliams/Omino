@@ -72,7 +72,7 @@ public class BlueprintPlacementTask : Task
     {
         foreach(Tile tile in blueprint.tiles)
         {
-            tile.sr.enabled = false;
+            tile.mainSr.enabled = false;
         }
     }
 

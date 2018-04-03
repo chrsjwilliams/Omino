@@ -16,7 +16,7 @@ public class Polyomino : IVertex
     protected SpriteRenderer iconSr;
     public SpriteRenderer spriteOverlay { get; protected set; }
     protected SpriteRenderer secondOverlay;
-    protected OverlayIcon legalityOverlay;
+    protected SpriteRenderer legalityOverlay;
     protected string holderName;
     public Transform holder { get; protected set; }
     public BuildingType buildingType { get; protected set; }
@@ -413,9 +413,9 @@ public class Polyomino : IVertex
         if (affordable)
         {
             SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, alphaWhileAffordable), 1);
-            foreach(Tile tile in tiles)
+            foreach (Tile tile in tiles)
             {
-                tile.SetFilledUIStatus(false);
+                tile.SetFilledUIFillAmount(1);
             }
         }
         else
@@ -426,7 +426,7 @@ public class Polyomino : IVertex
                 Tile tile = tiles[i];
                 if (i <= player.resources)
                 {
-                    tile.SetFilledUIStatus(true);
+                    //tile.SetFilledUIStatus(true);
                     if (i == player.resources)
                     {
                         tile.SetFilledUIFillAmount(player.resourceMeterFillAmt);
@@ -436,7 +436,7 @@ public class Polyomino : IVertex
                         tile.SetFilledUIFillAmount(1);
                     }
                 }
-                else tile.SetFilledUIStatus(false);
+                else tile.SetFilledUIFillAmount(0);
             }
         }
     }
@@ -792,7 +792,7 @@ public class Polyomino : IVertex
             tile.SetHighlightStatus(false);
             tile.ToggleIllegalLocationIcon(false);
         }
-        legalityOverlay.SetStatus(false);
+        legalityOverlay.enabled = false;
     }
 
     public void SetGlow(Color color)
@@ -805,7 +805,7 @@ public class Polyomino : IVertex
             //tile.SetGlowOutLine(10);
             //tile.SetGlowColor(color);
         }
-        if(!placed) legalityOverlay.SetStatus(true);
+        if (!placed) legalityOverlay.enabled = true;
     }
 
 
@@ -953,10 +953,6 @@ public class Polyomino : IVertex
         Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
         Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
         Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
-        if (legalityOverlay != null)
-        {
-            legalityOverlay.Remove();
-        }
         foreach (Tile tile in tiles) tile.OnRemove();
         GameObject.Destroy(holder.gameObject);
     }
@@ -1020,11 +1016,8 @@ public class Polyomino : IVertex
         SpriteRenderer[] childSrs = holder.GetComponentsInChildren<SpriteRenderer>();
         spriteOverlay = childSrs[2];
         secondOverlay = childSrs[3];
-        legalityOverlay = GameObject.Instantiate(Services.Prefabs.LegalityOverlay, 
-            Services.UIManager.overlayIconHolder).
-            GetComponent<OverlayIcon>();
-        legalityOverlay.Init(this);
-        legalityOverlay.SetStatus(false);
+        legalityOverlay = childSrs[4];
+        legalityOverlay.enabled = false;
         costText = holder.gameObject.GetComponentInChildren<TextMesh>();
         costText.text = cost.ToString();
         ToggleCostUIStatus(false);
@@ -1367,7 +1360,7 @@ public class Polyomino : IVertex
         if (isLegal && (affordable || this is Blueprint))
         {
             SetGlow(new Color(0.2f, 1, 0.2f));
-            legalityOverlay.SetStatus(false);
+            legalityOverlay.enabled = false;
         }
         else if (isLegal && !affordable && !(this is Blueprint))
         {
@@ -1375,7 +1368,7 @@ public class Polyomino : IVertex
             //TurnOffGlow();
             //legalityOverlay.SetStatus(true);
             //legalityOverlay.SetSprite(Services.UIManager.notEnoughResourcesIcon);
-            legalityOverlay.SetStatus(false);
+            legalityOverlay.enabled = false;
         }
         else
         {
@@ -1385,12 +1378,12 @@ public class Polyomino : IVertex
             if(!(this is Blueprint) && !connected)
             {
                 //legalityOverlay.SetStatus(true);
-                legalityOverlay.SetStatus(false);
+                legalityOverlay.enabled = false;
                 //legalityOverlay.SetSprite(Services.UIManager.notConnectedIcon);
             }
             else
             {
-                legalityOverlay.SetStatus(false);
+                legalityOverlay.enabled = false;
                 List<Tile> illegalTiles = GetIllegalTiles();
                 foreach(Tile tile in tiles)
                 {
@@ -1527,10 +1520,6 @@ public class Polyomino : IVertex
     public void ScaleHolder(Vector3 scale)
     {
         holder.transform.localScale = scale;
-        foreach(Tile tile in tiles)
-        {
-            tile.SetUIScale(scale);
-        }
     }
 
     //protected void UpdateDrawMeter()
