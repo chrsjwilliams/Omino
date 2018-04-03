@@ -12,6 +12,7 @@ public class Tooltip : MonoBehaviour {
     private Vector2 tooltipOffset;
     [SerializeField]
     private Vector2 inHandOffset;
+    private RectTransform rect;
 
 	// Use this for initialization
 	void Start () {
@@ -29,26 +30,24 @@ public class Tooltip : MonoBehaviour {
         nameText.text = name;
         descriptionText.text = description;
         transform.localRotation = Quaternion.Euler(0, 0, rot);
+        rect = GetComponent<RectTransform>();
         Reposition(basePos, rot, blueprintInHand);
     }
 
     public void Reposition(Vector2 basePos, float rot, bool blueprintInHand)
     {
-        Vector2 offset = tooltipOffset;
-        if (blueprintInHand)
-        {
-            offset = inHandOffset;
-        }
+        Vector2 offset = blueprintInHand ? inHandOffset : tooltipOffset;
         offset *= Screen.width / 2048f;
+
         if (basePos.y > Screen.height / 2)
         {
             offset = new Vector2(offset.x, -offset.y);
         }
+
         if (rot < 0)
         {
             offset = new Vector2(-offset.x, offset.y);
         }
-
         transform.position = basePos + offset;
     }
 

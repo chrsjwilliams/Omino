@@ -169,6 +169,7 @@ public class UIManager : MonoBehaviour {
         if (scrollingInBanners) ScrollBanners();
         HighlightResourceGained();
         HighlightResourcesMissing();
+        if (Input.GetKeyDown(KeyCode.P)) Debug.Break();
 	}
 
 	//public void UpdateTouchCount(Touch[] touches){
@@ -489,7 +490,7 @@ public class UIManager : MonoBehaviour {
         else
         {
             readyBanners[playerNum - 1].GetComponentInChildren<TextMeshProUGUI>().text =
-                "TAP WHEN READY";
+                "READY?";
             readyBanners[playerNum - 1].GetComponent<Image>().color = notReadyColor;
         }
         bool allReady = true;
