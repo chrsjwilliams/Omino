@@ -56,6 +56,7 @@ public class Polyomino : IVertex
     public static Vector3 burnPieceOffset = new Vector3(3, 0, 0);
     private const float alphaWhileUnaffordable = 0.3f;
     private const float alphaWhileAffordable = 0.8f;
+    private List<Structure> highlightedStructures;
 
 
     public bool isFortified;
@@ -1283,8 +1284,8 @@ public class Polyomino : IVertex
                 owner.CancelSelectedPiece();
                 EnterUnselectedState(false);
                 //ToggleCostUIStatus(true);
-                CleanUpUI();
             }
+            CleanUpUI();
             //DestroyRotationUI();
             //IncrementSortingOrder(-30000);
             SortOnSelection(false);
@@ -1327,7 +1328,10 @@ public class Polyomino : IVertex
         SetLegalityGlowStatus();
     }
 
-    protected virtual void CleanUpUI() { }
+    protected virtual void CleanUpUI()
+    {
+        UnhighlightPotentialStructureClaims();
+    }
 
     private void CreateRotationUI()
     {
@@ -1391,7 +1395,32 @@ public class Polyomino : IVertex
                 }
             }
         }
+        UnhighlightPotentialStructureClaims();
+        highlightedStructures = new List<Structure>();
+        List<Structure> adjStructures = GetAdjacentStructures();
+        if (isLegal)
+        {
+            foreach (Structure structure in adjStructures)
+            {
+                if (structure.owner == null)
+                {
+                    structure.SetGlow(owner.ColorScheme[0]);
+                    highlightedStructures.Add(structure);
+                }
+            }
+        }
         //}
+    }
+
+    protected void UnhighlightPotentialStructureClaims()
+    {
+        if (highlightedStructures != null)
+        {
+            foreach (Structure structure in highlightedStructures)
+            {
+                structure.TurnOffGlow();
+            }
+        }
     }
 
     protected virtual void SetTileSprites()

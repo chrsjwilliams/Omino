@@ -103,6 +103,7 @@ public abstract class Structure : Polyomino
         {
             tile.mainSr.enabled = false;
             tile.SetFilledUIFillAmount(0);
+            tile.highlightSr.sortingLayerName = "Underlay";
         }
     }
 
@@ -228,10 +229,5 @@ public abstract class Structure : Polyomino
     {
         DestroyTooltips();
         touchID = -1;
-    }
-
-    public override void SetLegalityGlowStatus()
-    {
-        
     }
 }

@@ -686,9 +686,9 @@ public class AIPlayer : Player
         base.OnPiecePlaced(piece);
     }
 
-    public override void OnOpposingPiecePlaced()
+    public override void OnOpposingPiecePlaced(Polyomino piece)
     {
-        base.OnOpposingPiecePlaced();
+        base.OnOpposingPiecePlaced(piece);
         StopThinking();
     }
 

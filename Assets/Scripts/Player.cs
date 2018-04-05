@@ -105,6 +105,9 @@ public class Player : MonoBehaviour
     private Polyomino queuedDestructor;
     public bool ready { get; private set; }
     private bool handLocked;
+    private Coord homeBasePos;
+    [SerializeField]
+    private int dangerDistance;
 
 
     public virtual void Init(int playerNum_, AIStrategy strategy, int level_)
@@ -146,15 +149,14 @@ public class Player : MonoBehaviour
         AddBluePrint(bombFactory);
 
 
-        Coord basePos;
-        if (playerNum == 1) basePos = new Coord(1, 1);
+        if (playerNum == 1) homeBasePos = new Coord(1, 1);
         else
         {
-            basePos = new Coord(
+            homeBasePos = new Coord(
                 Services.MapManager.MapWidth - 2,
                 Services.MapManager.MapHeight - 2);
         }
-        Services.MapManager.CreateMainBase(this, basePos);
+        Services.MapManager.CreateMainBase(this, homeBasePos);
         maxResources = baseMaxResources;
         resources = startingResources;
         resourceGainFactor = 1;
@@ -538,14 +540,36 @@ public class Player : MonoBehaviour
         Services.MapManager.DetermineConnectedness(this);
         if (piece.cost != 1 && Services.MapManager.CheckForWin(piece))
             Services.GameScene.GameWin(this);
-        if (Services.GameManager.Players[playerNum % 2] != null)
-            Services.GameManager.Players[playerNum % 2].OnOpposingPiecePlaced();
+        if (Services.GameManager.Players[playerNum % 2] != null && piece.tiles.Count != 1)
+            Services.GameManager.Players[playerNum % 2].OnOpposingPiecePlaced(piece);
 
     }
 
-    public virtual void OnOpposingPiecePlaced()
+    public virtual void OnOpposingPiecePlaced(Polyomino piece)
     {
-
+        float minDist = Mathf.Infinity;
+        Vector3 pos = Vector3.zero;
+        bool closeEnough = false;
+        foreach (Tile tile in piece.tiles)
+        {
+            float dist = tile.coord.Distance(homeBasePos);
+            if (dist < dangerDistance)
+            {
+                if(dist < minDist)
+                {
+                    minDist = dist;
+                    pos = tile.transform.position;
+                    closeEnough = true;
+                }
+            }
+        }
+        if (closeEnough)
+        {
+            GameObject dangerEffect = GameObject.Instantiate(Services.Prefabs.DangerEffect);
+            dangerEffect.transform.position = pos;
+            float rot = playerNum == 1 ? -90 : 90;
+            dangerEffect.transform.rotation = Quaternion.Euler(0, 0, rot);
+        }
     }
 
     public virtual void OnPieceRemoved(Polyomino piece)
@@ -714,6 +738,5 @@ public class Player : MonoBehaviour
                 blueprints[i].Unlock();
             }
         }
-        
     }
 }

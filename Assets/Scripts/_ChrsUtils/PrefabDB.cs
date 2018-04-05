@@ -76,4 +76,7 @@ public class PrefabDB : ScriptableObject
 
     [SerializeField] private GameObject legalityOverlay;
     public GameObject LegalityOverlay { get { return legalityOverlay; } }
+
+    [SerializeField] private GameObject dangerEffect;
+    public GameObject DangerEffect { get { return dangerEffect; } }
 }

@@ -37,4 +37,7 @@ public class ClipLibrary : ScriptableObject {
 
     [SerializeField] private AudioClip shieldHit;
     public AudioClip ShieldHit { get { return shieldHit; } }
+
+    [SerializeField] private AudioClip warning;
+    public AudioClip Warning { get { return warning; } }
 }
