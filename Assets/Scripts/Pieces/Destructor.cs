@@ -4,12 +4,10 @@ using System.Collections.Generic;
 
 public class Destructor : Polyomino
 {
-    private bool isSuper;
     public List<Polyomino> piecesInRange { get; private set; }
-    public Destructor(int _units, int _index, Player _player, bool _isSuper) 
+    public Destructor(int _units, int _index, Player _player) 
         : base(_units, _index, _player)
     {
-        isSuper = _isSuper;
         piecesInRange = new List<Polyomino>();
     }
 
@@ -214,5 +212,20 @@ public class Destructor : Polyomino
             iconSr.sprite = owner.splashDamage ?
                 Services.UIManager.splashIcon : Services.UIManager.destructorIcon;
         }
+    }
+
+    protected override void AssignLocation(Coord coord)
+    {
+        base.AssignLocation(coord);
+        if (owner.splashDamage) Remove();
+        iconSr.enabled = false;
+
+    }
+
+    protected override Polyomino CreateSubPiece()
+    {
+        Destructor destructorMonomino = new Destructor(1, 0, owner);
+        destructorMonomino.MakePhysicalPiece();
+        return destructorMonomino;
     }
 }

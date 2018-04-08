@@ -59,8 +59,8 @@ public class AIPlayer : Player
         startingHandSize = 4;
         maxHandSize = 5;
         piecesPerHandColumn = 5;
-        startingResources = 6;
-        baseMaxResources = 9;
+        startingResources = 2;
+        baseMaxResources = 3;
         boardPieces = new List<Polyomino>();
         resourceGainFactor = 1;
         drawRateFactor = 1;
@@ -287,6 +287,7 @@ public class AIPlayer : Player
 
     protected IEnumerator GeneratePossibleMoves()
     {
+        Debug.Log("starting to think at time " + Time.time);
         isThinking = true;
         List<Polyomino> currentHand = new List<Polyomino>(hand);
         List<Polyomino> currentBoardPieces = new List<Polyomino> (boardPieces);
@@ -532,7 +533,6 @@ public class AIPlayer : Player
         }
         //Debug.Log("Blueprints Tried: " + blueprintsTried);
         #endregion
-
         #region Polyomino Placement Logic
         int movesTried = 0;
         foreach (Polyomino piece in currentHand)
@@ -636,7 +636,6 @@ public class AIPlayer : Player
             }
             Debug.Log("picking move of score " + nextPlay.score);
         }
-
         if (nextPlay != null && nextPlay.score > 0)
         {
             MakePlay(nextPlay);
@@ -679,11 +678,6 @@ public class AIPlayer : Player
     {
         int _resources = base.GainResources(numResources);
         return _resources;
-    }
-
-    public override void OnPiecePlaced(Polyomino piece)
-    {
-        base.OnPiecePlaced(piece);
     }
 
     public override void OnOpposingPiecePlaced(Polyomino piece)

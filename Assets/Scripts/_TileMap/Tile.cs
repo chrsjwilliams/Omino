@@ -102,6 +102,7 @@ public class Tile : MonoBehaviour, IVertex
     public void OnPlace()
     {
         ToggleIllegalLocationIcon(false);
+        SetAlpha(0.1f);
     }
 
     public void SetCoord(Coord newCoord)

@@ -298,11 +298,11 @@ public class MapManager : MonoBehaviour
     public void CreateMainBase(Player player, Coord coord)
     {
         Base playerBase = new Base(player, true);
-        player.mainBase = playerBase;
         playerBase.MakePhysicalPiece();
         //playerBase.ShiftColor(player.ColorScheme[0]);
         playerBase.PlaceAtLocation(coord);
         playerBase.TogglePieceConnectedness(true);
+        player.AddBase(playerBase);
     }
 
     public Tile GetRandomTile()

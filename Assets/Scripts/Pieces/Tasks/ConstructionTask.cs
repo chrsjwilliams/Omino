@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ConstructionTask : Task
 {
@@ -8,6 +9,7 @@ public class ConstructionTask : Task
     private const float staggerTime = 0.2f;
     private const float settleDuration = 0.15f;
     private Polyomino piece;
+    private List<Polyomino> subpieces;
     private GameObject[] blocks;
     private bool[] blocksCreated;
     private Vector3[] blockStartLocations;
@@ -19,10 +21,11 @@ public class ConstructionTask : Task
     private Vector3 settleTargetOffset = new Vector3(0.35f, 0.35f);
     private bool[] soundPlayed;
 
-    public ConstructionTask(Polyomino piece_)
+    public ConstructionTask(Polyomino piece_, List<Polyomino> subpieces_)
     {
         piece = piece_;
         hadSplashDamage = piece.owner.splashDamage;
+        subpieces = subpieces_;
     }
 
     protected override void Init()
@@ -122,7 +125,8 @@ public class ConstructionTask : Task
                         GameObject.Destroy(blocks[i]);
                         Services.AudioManager.CreateTempAudio(
                             Services.Clips.BlockConstructed, 1);
-                        if (piece.tiles[i] != null) piece.tiles[i].SetAlpha(1f);
+                        if (!subpieces[i].dead)
+                            subpieces[i].tiles[0].SetAlpha(1f);
                         
                     }
                 }

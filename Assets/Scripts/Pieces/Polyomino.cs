@@ -370,7 +370,8 @@ public class Polyomino : IVertex
 
         occupyingBlueprints = new List<Blueprint>();
         isFortified = false;
-        cost = units;
+        //cost = units;
+        cost = 1;
         if (owner != null) baseColor = owner.ColorScheme[0];
 
         buildingType = BuildingType.NONE;
@@ -422,15 +423,19 @@ public class Polyomino : IVertex
         else
         {
             SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, alphaWhileUnaffordable), 1);
+            int tileCompletionProportion = 
+                Mathf.FloorToInt(player.resourceMeterFillAmt * tiles.Count);
             for (int i = 0; i < tiles.Count; i++)
             {
                 Tile tile = tiles[i];
-                if (i <= player.resources)
+                if (i <= tileCompletionProportion)
                 {
                     //tile.SetFilledUIStatus(true);
-                    if (i == player.resources)
+                    if (i == tileCompletionProportion)
                     {
-                        tile.SetFilledUIFillAmount(player.resourceMeterFillAmt);
+                        tile.SetFilledUIFillAmount(
+                            (player.resourceMeterFillAmt - ((float)tileCompletionProportion / tiles.Count))
+                            * tiles.Count);
                     }
                     else
                     {
@@ -519,31 +524,54 @@ public class Polyomino : IVertex
         SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 1), 1);
     }
 
+    protected virtual void AssignLocation(Coord coord)
+    {
+        placed = true;
+        SetTileCoords(coord);
+        Reposition(new Vector3(coord.x, coord.y, holder.position.z));
+        Services.MapManager.Map[coord.x, coord.y].SetOccupyingPiece(this);
+        tiles[0].OnPlace();
+        SetTileSprites();
+        ToggleCostUIStatus(false);
+        ScaleHolder(Vector3.one);
+        if (owner.shieldedPieces) CreateShield();
+    }
+
+    protected virtual Polyomino CreateSubPiece()
+    {
+        Polyomino monomino = new Polyomino(1, 0, owner);
+        monomino.MakePhysicalPiece();
+        return monomino;
+    }
+
     public virtual void PlaceAtCurrentLocation(bool replace)
     {
         //place the piece on the board where it's being hovered now
-        placed = true;
         OnPlace();
+        DestroyThis();
+        List<Polyomino> monominos = new List<Polyomino>();
         foreach (Tile tile in tiles)
         {
-            Coord tileCoord = tile.coord;
-            Services.MapManager.Map[tileCoord.x, tileCoord.y].SetOccupyingPiece(this);
-            tile.OnPlace();
+            Polyomino monomino = CreateSubPiece();
+            monominos.Add(monomino);
         }
-        SetTileSprites();
-        if (owner != null)
+        ConstructionTask construct = new ConstructionTask(this, monominos);
+        Services.GeneralTaskManager.Do(construct);
+        for (int i = 0; i < monominos.Count; i++)
         {
-            bool autoFortify = owner.autoFortify;
-            owner.OnPiecePlaced(this);
-            //adjacentPieces = GetAdjacentPolyominos(owner);
-            if (this is Destructor && owner.splashDamage)
-            {
-                Remove();
-                return;
-            }
-            if (autoFortify && !isFortified)
-                Services.MapManager.FortifyPiece(this);
+            monominos[i].AssignLocation(tiles[i].coord);
         }
+        foreach (Polyomino monomino in monominos)
+        {
+            monomino.adjacentPieces =
+                monomino.GetAdjacentPolyominos(monomino.owner);
+            foreach (Polyomino adjPiece in monomino.adjacentPieces)
+            {
+                if (!adjPiece.adjacentPieces.Contains(monomino))
+                    adjPiece.adjacentPieces.Add(monomino);
+            }
+        }
+        owner.OnPiecePlaced(this, monominos);
     }
 
     public List<Coord> GetAdjacentEmptyTiles()
@@ -826,30 +854,7 @@ public class Polyomino : IVertex
 
     protected virtual void OnPlace()
     {
-        //do whatever special stuff this piece does when you place it 
-        //(e.g. destroy overlapping pieces for a destructor)
-        foreach (Tile tile in tiles)
-        {
-            //Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-            //if (mapTile.HasResource())
-            //{
-            //    owner.AddPieceToHand(mapTile.occupyingResource);
-            //}
-            tile.SetAlpha(0.1f);
-        }
-        //Services.AudioManager.CreateTempAudio(Services.Clips.PiecePlaced, 1);
-        ToggleCostUIStatus(false);
-        ScaleHolder(Vector3.one);
-        if (owner.shieldedPieces) CreateShield();
-        //MakeDustClouds();
-        ConstructionTask construct = new ConstructionTask(this);
-        //if (!owner.autoFortify) construct.Then(new ActionTask(SetAlphaToOne));
-        //else SetAlphaToOne();
-        if(tiles.Count != 1) Services.GeneralTaskManager.Do(construct);
     }
-
-    //  Have a fortification method
-    //  When I am fortified, replace me with monominos at my tiles locations, then delete me
 
     protected void MakeDustClouds()
     {
@@ -954,6 +959,7 @@ public class Polyomino : IVertex
         Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
         Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
         Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
+        Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
         foreach (Tile tile in tiles) tile.OnRemove();
         GameObject.Destroy(holder.gameObject);
     }

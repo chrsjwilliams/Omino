@@ -10,7 +10,7 @@ public class Base : Structure
     {
         normalDrawRateBonus = 1f / 30f;
         destructorDrawRateBonus = 1f / 60f;
-        resourceGainRateBonus = 1f / 8f;
+        resourceGainRateBonus = 1f / 32f;
         buildingType = BuildingType.BASE;
         isFortified = true;
     }
@@ -19,7 +19,7 @@ public class Base : Structure
     {
         mainBase = _mainBase;
         owner = _player;
-        resourceGainRateBonus = 1f / 4f;
+        resourceGainRateBonus = 1f / 16f;
         normalDrawRateBonus = 1f / 20f;
         destructorDrawRateBonus = 1f / 40f;
     }

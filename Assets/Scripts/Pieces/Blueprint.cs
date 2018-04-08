@@ -263,7 +263,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                 mapTile.SetOccupyingBlueprint(this);
             }
         }
-        owner.OnPiecePlaced(this);
+        owner.OnPiecePlaced(this, new List<Polyomino>() { this });
         SortOverlay();
     }
 

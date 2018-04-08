@@ -109,10 +109,15 @@ public abstract class Structure : Polyomino
 
     public override void PlaceAtCurrentLocation(bool replace)
     {
-        base.PlaceAtCurrentLocation(false);
+        placed = true;
+        OnPlace();
+
         foreach (Tile tile in tiles)
         {
-            Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingStructure(this);
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            mapTile.SetOccupyingStructure(this);
+            mapTile.SetOccupyingPiece(this);
+            tile.OnPlace();
         }
         adjacentPieces = new List<Polyomino>();
         SortOverlay();

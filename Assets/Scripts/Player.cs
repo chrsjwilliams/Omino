@@ -270,7 +270,7 @@ public class Player : MonoBehaviour
             int numTypes = Polyomino.pieceTypes[pieceSize];
             for (int index = 0; index < numTypes; index++)
             {
-                destructorDeck.Add(new Destructor(pieceSize, index, this, false));
+                destructorDeck.Add(new Destructor(pieceSize, index, this));
             }
         }
 
@@ -519,11 +519,11 @@ public class Player : MonoBehaviour
     }
 
 
-    public virtual void OnPiecePlaced(Polyomino piece)
+    public virtual void OnPiecePlaced(Polyomino piece, List<Polyomino> subpieces)
     {
         Services.GameEventManager.Fire(new PiecePlaced(piece));
         BuildingType blueprintType = piece.buildingType;
-        if (!(piece is Blueprint) && piece.cost != 1)
+        if (!(piece is Blueprint))
         {
             resources -= piece.cost;
         }
@@ -536,17 +536,27 @@ public class Player : MonoBehaviour
         selectedPiece = null;
         OrganizeHand(hand);
         piece.SetGlowState(false);
-        boardPieces.Add(piece);
+        foreach(Polyomino subpiece in subpieces)
+        {
+            if (!subpiece.dead) boardPieces.Add(subpiece);
+        }
         Services.MapManager.DetermineConnectedness(this);
-        if (piece.cost != 1 && Services.MapManager.CheckForWin(piece))
+        if (Services.MapManager.CheckForWin(piece))
             Services.GameScene.GameWin(this);
-        if (Services.GameManager.Players[playerNum % 2] != null && piece.tiles.Count != 1)
+        if (Services.GameManager.Players[playerNum % 2] != null)
             Services.GameManager.Players[playerNum % 2].OnOpposingPiecePlaced(piece);
 
     }
 
+    public void AddBase(Base mainBase_)
+    {
+        boardPieces.Add(mainBase_);
+        mainBase = mainBase_;
+    }
+
     public virtual void OnOpposingPiecePlaced(Polyomino piece)
     {
+        if (piece is Blueprint) return;
         float minDist = Mathf.Infinity;
         Vector3 pos = Vector3.zero;
         bool closeEnough = false;
