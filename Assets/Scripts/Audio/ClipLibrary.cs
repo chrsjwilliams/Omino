@@ -20,6 +20,9 @@ public class ClipLibrary : ScriptableObject {
     [SerializeField] private AudioClip blueprintPlaced;
     public AudioClip BlueprintPlaced { get { return blueprintPlaced; } }
 
+    [SerializeField] private AudioClip prodLevelUp;
+    public AudioClip ProdLevelUp { get { return prodLevelUp; } }
+
     [SerializeField] private AudioClip[] playAvailable;
     public AudioClip[] PlayAvailable { get { return playAvailable; } }
 

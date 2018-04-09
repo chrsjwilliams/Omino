@@ -103,6 +103,7 @@ public class Tile : MonoBehaviour, IVertex
     {
         ToggleIllegalLocationIcon(false);
         SetAlpha(0.1f);
+        SetFilledUIFillAmount(0);
     }
 
     public void SetCoord(Coord newCoord)

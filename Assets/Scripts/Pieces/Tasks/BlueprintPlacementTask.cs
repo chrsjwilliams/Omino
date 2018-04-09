@@ -13,6 +13,11 @@ public class BlueprintPlacementTask : Task
     private Blueprint blueprint;
     private Transform overlayTransform;
     private Vector3[] dustLocations;
+    private const float shakeDur = 0.3f;
+    private const float shakeMag = 0.2f;
+    private const float shakeSpeed = 40f;
+    private const float shakeStartTime = 0.2f;
+    private bool shakeStarted;
 
 
     public BlueprintPlacementTask(Blueprint blueprint_)
@@ -65,6 +70,12 @@ public class BlueprintPlacementTask : Task
             }
             dustDropped = true;
         }
+        if(timeElapsed >= shakeStartTime && !shakeStarted)
+        {
+            Services.CameraController.StartShake(shakeDur, shakeSpeed, shakeMag);
+            shakeStarted = true;
+            Services.AudioManager.CreateTempAudio(Services.Clips.BlueprintPlaced, 1);
+        }
         if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
     }
 
@@ -74,6 +85,7 @@ public class BlueprintPlacementTask : Task
         {
             tile.mainSr.enabled = false;
         }
+        Services.AudioManager.CreateTempAudio(Services.Clips.ProdLevelUp, 1);
     }
 
 

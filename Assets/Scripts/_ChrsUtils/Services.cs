@@ -7,6 +7,7 @@ public class Services
     public static GameEventsManager GameEventManager { get; set; }
     public static TaskManager GeneralTaskManager { get; set; }
     public static PrefabDB Prefabs { get; set; }
+    public static CameraController CameraController { get; set; }
     
     public static InputManager InputManager { get; set; }
     

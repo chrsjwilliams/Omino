@@ -67,8 +67,8 @@ public class MapManager : MonoBehaviour
             _mapHeight = level.height;
         }
 
-        Camera.main.transform.position = 
-            new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, -10);
+        Services.CameraController.SetPosition(
+            new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, -10));
         Services.GameScene.backgroundImage.transform.position = 
             new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, 0);
 

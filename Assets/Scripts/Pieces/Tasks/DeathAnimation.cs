@@ -12,6 +12,9 @@ public class DeathAnimation : Task
     private Vector3[] targetPositions;
     private const float explosionDistanceMin = 1.5f;
     private const float explosionDistanceMax = 5f;
+    private const float shakeDur = 0.5f;
+    private const float shakeMag = 0.3f;
+    private const float shakeSpeed = 40f;
 
     public DeathAnimation(Polyomino piece_)
     {
@@ -20,6 +23,7 @@ public class DeathAnimation : Task
 
     protected override void Init()
     {
+        Services.CameraController.StartShake(shakeDur, shakeSpeed, shakeMag);
         timeElapsed = 0;
         duration = Polyomino.deathAnimDur;
         initialColor = piece.tiles[0].mainSr.color;

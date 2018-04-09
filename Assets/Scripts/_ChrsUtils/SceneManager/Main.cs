@@ -91,7 +91,7 @@ public class Main : MonoBehaviour
         Services.Clips = Resources.Load<ClipLibrary>("Audio/ClipLibrary");
         Services.InputManager = new InputManager();
         Services.Scenes = new GameSceneManager<TransitionData>(gameObject, Services.Prefabs.Scenes);
-        
+        Services.CameraController = Camera.main.GetComponent<CameraController>();
     }
 
     private void Update()

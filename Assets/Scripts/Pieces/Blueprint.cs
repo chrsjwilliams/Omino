@@ -289,7 +289,6 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
     protected override void OnPlace()
     {
-        Services.AudioManager.CreateTempAudio(Services.Clips.BlueprintPlaced, 1);
         foreach(Tile tile in tiles)
         {
             if(Services.MapManager.Map[tile.coord.x, tile.coord.y].occupyingPiece.connected)
@@ -435,7 +434,9 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
     public virtual void OnConnect()
     {
-        Services.GeneralTaskManager.Do(new FloatText(onGainText, GetCenterpoint(),
+        Task floatingTextSequence = new Wait(0.4f);
+        floatingTextSequence.Then(new FloatText(onGainText, GetCenterpoint(),
             owner, 2, 1));
+        Services.GeneralTaskManager.Do(floatingTextSequence);
     }
 }

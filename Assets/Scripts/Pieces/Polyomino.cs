@@ -519,11 +519,6 @@ public class Polyomino : IVertex
         PlaceAtCurrentLocation(false);
     }
 
-    protected void SetAlphaToOne()
-    {
-        SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 1), 1);
-    }
-
     protected virtual void AssignLocation(Coord coord)
     {
         placed = true;

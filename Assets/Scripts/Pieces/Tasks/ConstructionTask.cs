@@ -20,6 +20,10 @@ public class ConstructionTask : Task
     private Vector3 targetScale = Vector3.one;
     private Vector3 settleTargetOffset = new Vector3(0.35f, 0.35f);
     private bool[] soundPlayed;
+    private const float shakeDur = 0.1f;
+    private const float shakeMag = 0.1f;
+    private const float shakeSpeed = 40f;
+    private const float shakeStartTime = 0.2f;
 
     public ConstructionTask(Polyomino piece_, List<Polyomino> subpieces_)
     {
@@ -95,6 +99,7 @@ public class ConstructionTask : Task
                             soundPlayed[i] = true;
                             GameObject.Instantiate(Services.Prefabs.DustCloud,
                                 blockTargets[i], Quaternion.identity);
+                            Services.CameraController.StartShake(shakeDur, shakeSpeed, shakeMag);
                             if (piece is Destructor)
                             {
                                 GameObject.Instantiate(Services.Prefabs.FireBurst,
@@ -127,7 +132,7 @@ public class ConstructionTask : Task
                             Services.Clips.BlockConstructed, 1);
                         if (!subpieces[i].dead)
                             subpieces[i].tiles[0].SetAlpha(1f);
-                        
+
                     }
                 }
             }
