@@ -4,10 +4,12 @@ using System;
 
 public class BombFactory : Blueprint
 {
+    public static float drawRateBonus;
     public BombFactory(Player owner_) : base(BuildingType.BOMBFACTORY, owner_)
     {
         maxRotations = 4;
         destructorDrawRateBonus = 1f / 60f;
+        drawRateBonus = destructorDrawRateBonus;
         onGainText = "+1 Attack Piece Production";
     }
 

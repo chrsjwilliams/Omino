@@ -3,10 +3,13 @@ using System.Collections;
 using System;
 
 public class Factory : Blueprint
-{ 
+{
+    public static float drawRateBonus;
+
     public Factory(Player player_) : base(BuildingType.FACTORY, player_)
     {
         normalDrawRateBonus = 1f / 30f;
+        drawRateBonus = normalDrawRateBonus;
         onGainText = "+1 Normal Piece Production";
     }
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections.ObjectModel;
 
-public class Move 
+public class Move
 {
     public float score;
     public const int MAX_SCORE = 100;
@@ -26,13 +26,13 @@ public class Move
     float disconnectionWeight = 0.4f;
 
     float normalPieceForBlueprintWeight = 1;
-    float destructorForBlueprintWeight = 0.5f;
+    float destructorForBlueprintWeight = 4.0f;
     public int finalCutSize;
 
-    public Move(Polyomino _piece, Coord _targetCoord, int _rotations, 
-        List<BlueprintMap> _possibleBlueprintMoves, 
-        List<CutCoordSet> _possibleCutMoves, float winWeight, 
-        float structureWeight, float destructionWeight, float mineWeight, 
+    public Move(Polyomino _piece, Coord _targetCoord, int _rotations,
+        List<BlueprintMap> _possibleBlueprintMoves,
+        List<CutCoordSet> _possibleCutMoves, float winWeight,
+        float structureWeight, float destructionWeight, float mineWeight,
         float factoryWeight, float bombFactoryWeight)
     {
         piece = _piece;
@@ -54,75 +54,222 @@ public class Move
 
     public float CalculateScore(float winWeight, float structWeight, float destructionWeight, float mineWeight, float factoryWeight, float bombFactoryWeight)
     {
-        HashSet<Coord> pieceCoords = new HashSet<Coord>();
-        foreach(Tile tile in piece.tiles)
+        if (piece is Blueprint)
         {
-            pieceCoords.Add(tile.relativeCoord.Add(targetCoord));
+            Debug.Log("Blueprint Maps (B): " + possibleBlueprintMoves.Count);
+
+            return 0;
         }
+        else
+        {
+            HashSet<Coord> pieceCoords = new HashSet<Coord>();
+            foreach (Tile tile in piece.tiles)
+            {
+                pieceCoords.Add(tile.relativeCoord.Add(targetCoord));
+            }
+            pCoord = pieceCoords;
+            Move mineMove = null;
+            Move factoryMove = null;
+            Move bombFactoryMove = null;
+
+            BlueprintMap closestSmithMap = null;
+            BlueprintMap closestBrickworksMap = null;
+            BlueprintMap closestBarracksMap = null;
+
+            int smithCoordDifference = int.MaxValue;
+            int brickworkdsCoordDifference = int.MaxValue;
+            int barracksCoordDifference = int.MaxValue;
+
+            int x = 0;
+            foreach (BlueprintMap blueprintMap in possibleBlueprintMoves)
+            {
+
+                //  TODO:   BLUEPRINT FORESIGHT
+                //
+                //  Instead of finding iff superset or subset, find the difference
+                //  There should also be something that finds the difference between the two
+                //  and adds that to score in some way
+
+                HashSet<Coord> relativeComplement = new HashSet<Coord> (blueprintMap.missingCoords);
+                relativeComplement.ExceptWith(pieceCoords);
+                //Debug.Log("Missing Coords: " + blueprintMap.missingCoords.Count + " Blueprint: " + blueprintMap.blueprint);
+                /*
+                if (relativeComplement.Count == 0 && blueprintMap.blueprint is Mine)
+                {
+                    Debug.Log(blueprintMap.blueprint);
+                    Debug.Log("Target Coord: " + blueprintMap.targetCoord);
+                    Debug.Log("Rotations: " + rotations);
+                    blueprintMap.blueprint.SetTileCoords(blueprintMap.targetCoord);
+                    foreach (Tile tile in blueprintMap.blueprint.tiles)
+                    {
+                        Debug.Log("         " + tile.coord.ToString());
+                    }
+                }
+                */
+
+                /*
+                Debug.Log("---------------------------------------------");
+
+                foreach (Coord coord in relativeComplement)
+                {
+                    Debug.Log("Map Coords:" + coord.ToString());
+                }
+                Debug.Log("---------------------------------------------");
+                foreach (Coord coord in pieceCoords)
+                {
+                    Debug.Log("Piece Coords:" + coord.ToString());
+                }
+                Debug.Log("---------------------------------------------");
+               
+                */
+                
+                 relativeComplement.ExceptWith(pieceCoords);
+
+                 if (blueprintMap.blueprint is Mine)
+                 {
+                     if (relativeComplement.Count < smithCoordDifference)
+                     {
+                         missingCoords = relativeComplement;
+                         closestSmithMap = blueprintMap;
+                         smithCoordDifference = relativeComplement.Count;
+                     }
+                 }
+                 else if (blueprintMap.blueprint is Factory)
+                 {
+                     if (relativeComplement.Count < brickworkdsCoordDifference)
+                     {
+                         closestBrickworksMap = blueprintMap;
+                         brickworkdsCoordDifference = relativeComplement.Count;
+                     }
+                 }
+                 else if (blueprintMap.blueprint is BombFactory)
+                 {
+                     if (relativeComplement.Count < barracksCoordDifference)
+                     {
+                         closestBarracksMap = blueprintMap;
+                         barracksCoordDifference = relativeComplement.Count;
+                     }
+                 }
+                 
+                //  How to do this:
+                //  We need to go through all blueprint maps and get the min difference of all 
+                //  blueprint types
+                //  apply that score to blueprint score
+                //  
+                //  then instead of passing moves to the blueprint score
+                //  calc, we pass in difference and if the difference is 
+                //  0, we make the blueprint move
+                /*
+                if (pieceCoords.IsSupersetOf(blueprintMap.missingCoords))
+                {
+                    if (blueprintMap.blueprint is Mine)
+                    {
+                        mineMove = new Move(blueprintMap.blueprint, blueprintMap.targetCoord, blueprintMap.rotations);
+                    }
+                    else if(blueprintMap.blueprint is Factory)
+                    {
+                        factoryMove = new Move(blueprintMap.blueprint, blueprintMap.targetCoord, blueprintMap.rotations);
+                    }
+                    else if (blueprintMap.blueprint is BombFactory)
+                    {
+                        bombFactoryMove = new Move(blueprintMap.blueprint, blueprintMap.targetCoord, blueprintMap.rotations);
+                    }
+                    if (mineMove != null && factoryMove != null && bombFactoryMove != null) break;
+
+                }
+                */
+            }
+
+            float score = 0;
+            if (piece is Destructor && piece.owner.splashDamage)
+            {
+                score = DestructionScore(destructionWeight, pieceCoords);
+            }
+            else
+            {
+                score = WinAndStructScore(winWeight, structWeight) +
+                    BlueprintScore(closestSmithMap, closestBrickworksMap,
+                                    closestBarracksMap, smithCoordDifference,
+                                    brickworkdsCoordDifference, barracksCoordDifference,
+                                    mineWeight, factoryWeight, bombFactoryWeight) +
+                    DestructionScore(destructionWeight, pieceCoords);
+            }
+
+            return score;
+        }
+    }
+
+    HashSet<Coord> missingCoords = new HashSet<Coord>();
+
+
+    private float BlueprintScore(   BlueprintMap smithMap, BlueprintMap brickWorksMap, 
+                                    BlueprintMap barracksMap, int missingSmithCoords, 
+                                    int missingBrickWorksCoords, int missingBarracksCoords, 
+                                    float mineWeight, float factoryWeight, float bombFactoryWeight)
+    {
+        if (piece is Blueprint) return 0;
+        float destructorModifier = piece is Destructor ? destructorForBlueprintWeight : 2;
 
         Move mineMove = null;
         Move factoryMove = null;
         Move bombFactoryMove = null;
 
-        foreach (BlueprintMap blueprintMap in possibleBlueprintMoves)
-        {
-            if (pieceCoords.IsSupersetOf(blueprintMap.missingCoords))
-            {
-                if (blueprintMap.blueprint is Mine)
-                {
-                    mineMove = new Move(blueprintMap.blueprint, blueprintMap.targetCoord, blueprintMap.rotations);
-                }
-                else if(blueprintMap.blueprint is Factory)
-                {
-                    factoryMove = new Move(blueprintMap.blueprint, blueprintMap.targetCoord, blueprintMap.rotations);
-                }
-                else if (blueprintMap.blueprint is BombFactory)
-                {
-                    bombFactoryMove = new Move(blueprintMap.blueprint, blueprintMap.targetCoord, blueprintMap.rotations);
-                }
-                if (mineMove != null && factoryMove != null && bombFactoryMove != null) break;
-            }
-        }
-        float score = 0;
-        if (piece is Destructor && piece.owner.splashDamage)
-        {
-            score = DestructionScore(destructionWeight, pieceCoords);
-        }
-        else
-        {
-            score = WinAndStructScore(winWeight, structWeight) +
-                BlueprintScore(mineMove, factoryMove, bombFactoryMove, mineWeight,
-                                factoryWeight, bombFactoryWeight) +
-                DestructionScore(destructionWeight, pieceCoords);
-        }
+        float smithScore;
+        float brickWorksScore;
+        float barracksScore;
 
-        return score;
-    }
-
-    private float BlueprintScore(Move mineMove, Move factoryMove, Move bombFactoryMove, float mineWeight, float factoryWeight,
-        float bombFactoryWeight)
-    {
-        float destructorModifier = piece is Destructor ? destructorForBlueprintWeight : 1;
-
+        float smithBlueprintMod;
+        float brickWorksBlueprintMod;
+        float barracksBlueprintMod;
 
         float blueprintScore = 0;
-        if (mineMove != null)
+        if (missingSmithCoords == 0)
         {
-            blueprintScore = mineWeight * destructorModifier;
-            blueprintMove = mineMove;
+            Debug.Log("Make Smith!");
+            mineMove = new Move(smithMap.blueprint, smithMap.targetCoord, smithMap.rotations);
         }
-        if (factoryMove != null && factoryWeight > blueprintScore)
+        else if (missingBrickWorksCoords == 0)
         {
-            blueprintScore = factoryWeight * destructorModifier;
-            blueprintMove = factoryMove;
+            factoryMove = new Move(brickWorksMap.blueprint, brickWorksMap.targetCoord, brickWorksMap.rotations);
         }
-        if (bombFactoryMove != null && bombFactoryWeight > blueprintScore)
+        else if (missingBarracksCoords == 0)
         {
-            blueprintScore = bombFactoryWeight * destructorModifier;
-            blueprintMove = bombFactoryMove;
+            bombFactoryMove = new Move(barracksMap.blueprint, barracksMap.targetCoord, barracksMap.rotations);
+        }
+
+        smithBlueprintMod = Mathf.Pow(1 /destructorModifier, missingSmithCoords);
+        brickWorksBlueprintMod = Mathf.Pow(1 / destructorModifier, missingBrickWorksCoords);
+        barracksBlueprintMod = Mathf.Pow(1 / destructorModifier, missingBarracksCoords);
+
+        smithScore = mineWeight * smithBlueprintMod;
+        brickWorksScore = factoryWeight * brickWorksBlueprintMod;
+        barracksScore = bombFactoryWeight * barracksBlueprintMod;
+        
+        if (smithScore > blueprintScore)
+        {
+            blueprintScore = smithScore;
+            if (mineMove != null)
+            {
+                blueprintMove = mineMove;
+            }
+        }
+        if (brickWorksScore > blueprintScore)
+        {
+            blueprintScore = brickWorksScore;
+            if (factoryMove != null)
+            {
+                blueprintMove = factoryMove;
+            }
+        }
+        if (barracksScore > blueprintScore)
+        {
+            blueprintScore = barracksScore;
+            if (bombFactoryMove != null)
+            {
+                blueprintMove = bombFactoryMove;
+            }
         }
         return blueprintScore;
-
     }
 
     private float DestructionScore(float destructionWeight, HashSet<Coord> pieceCoords)
@@ -130,6 +277,11 @@ public class Move
         if (!(piece is Destructor)) return 0;
         else
         {
+            //  TODO:   SAVE DESTRUCTORS
+            //
+            //          Find out how many tiles i will destroy
+            //          relate the destruction score to my score in
+            //          general
             List<Blueprint> blueprintsDestroyed = new List<Blueprint>();
             int destructionRange = piece.owner.splashDamage ? 1 : 0;
             int cutSize = 0;
@@ -263,6 +415,10 @@ public class Move
         return winScore + structScore;
     }
 
+
+    HashSet<Coord> rComp = new HashSet<Coord>();
+    HashSet<Coord> pCoord = new HashSet<Coord>();
+
     public void ExecuteMove()
     {
         Task playTask;
@@ -271,7 +427,8 @@ public class Move
             playTask = new PlayTask(this);
         }
         else
-        {      
+        {
+            
             playTask = new PlayTask(this);
             playTask.Then(new ActionTask(blueprintMove.ExecuteMove));
         }

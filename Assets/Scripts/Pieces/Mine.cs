@@ -4,9 +4,11 @@ using System;
 
 public class Mine : Blueprint
 {
+    public static float resourceRateBonus;
     public Mine(Player player_) : base(BuildingType.MINE, player_)
     {
         resourceGainRateBonus = 1f / 32f;
+        resourceRateBonus = resourceGainRateBonus;
         onGainText = "+1 Hammer Production";
     }
 

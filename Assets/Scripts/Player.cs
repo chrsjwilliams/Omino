@@ -173,7 +173,7 @@ public class Player : MonoBehaviour
         {
             UpdateMeters();
 
-            if (Input.GetKeyDown(KeyCode.Space) && selectedPiece != null)
+            if ((Input.GetKeyDown(KeyCode.Space) && !(this is AIPlayer)) && selectedPiece != null)
             {
                 selectedPiece.Rotate();
             }

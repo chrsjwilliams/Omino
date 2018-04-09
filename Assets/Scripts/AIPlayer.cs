@@ -1,8 +1,25 @@
-﻿using System;
-using System.Linq;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+
+/*
+ * 
+ *      TODO:
+ *              Have a weight for each structure
+ *              (*)Blueprint foresight
+ *              (*)Have AI save destructors
+ *              (*)Have AI know when it's in danger
+ *              Discrete AI levels
+ * 
+ */
+
+//  TODO:   AI KNOW WHEN IN DANGER
+//
+//          Have AI examine the area near its home base
+//          if opponent is an a range of 6 away,
+//          we are in danger
+//          block base or perfrom a cut or destroy their piece
 
 public class AIPlayer : Player
 {
@@ -13,7 +30,13 @@ public class AIPlayer : Player
     private const int rollsPerLevel = 2;
     private int level;
     private const int bestMovesCount = 20;
+    private float baseBrickWorkRate;
+    private float baseBarracksRate;
+    private float baseSmithRate;
 
+    private float futileBrickWorksPercentInc;
+    private float futileSmithPercentInc;
+    private float futileBarracksPercentInc;
 
     private int coordCountBuffer;
     private int movesTriedBuffer;
@@ -45,6 +68,12 @@ public class AIPlayer : Player
 
         level = level_;
 
+        
+
+        futileBrickWorksPercentInc = Factory.drawRateBonus * 0.25f;
+        futileBarracksPercentInc = BombFactory.drawRateBonus * 0.25f;
+        futileSmithPercentInc = Mine.resourceRateBonus * 0.25f;
+
         winWeight = strategy.winWeight;
         structWeight = strategy.structWeight;
         blueprintWeight = strategy.blueprintWeight;
@@ -73,6 +102,13 @@ public class AIPlayer : Player
          Debug.Log("disconnection weight: " + disconnectionWeight + 
                     "\ndestructor4Blueprint weight: " + destructorForBlueprintWeight);
 
+
+        int normalPieceCost = biggerBricks ? 5 : 4;
+        int destructorCost = biggerBombs ? 4 : 3;
+
+        baseBrickWorkRate = Factory.drawRateBonus / (normalDrawRate * normalPieceCost);
+        baseBarracksRate = BombFactory.drawRateBonus / (destructorDrawRate * destructorCost);
+        baseSmithRate = Mine.resourceRateBonus / resourceGainRate;
         if (playerNum == 1)
         {
             primaryTargets = new List<Coord>()
@@ -287,7 +323,7 @@ public class AIPlayer : Player
 
     protected IEnumerator GeneratePossibleMoves()
     {
-        Debug.Log("starting to think at time " + Time.time);
+        //Debug.Log("starting to think at time " + Time.time);
         isThinking = true;
         List<Polyomino> currentHand = new List<Polyomino>(hand);
         List<Polyomino> currentBoardPieces = new List<Polyomino> (boardPieces);
@@ -369,18 +405,27 @@ public class AIPlayer : Player
         int normalPieceCost = biggerBricks ? 5 : 4;
         int destructorCost = biggerBombs ? 4 : 3;
 
-        float expenditurePerSecond = (normalDrawRate * normalPieceCost) + (destructorDrawRate * destructorCost);
+        float normalPieceExpenditure = normalDrawRate * normalPieceCost;
+        float destructivePieceExpenditure = destructorDrawRate * destructorCost;
 
-        float productionRatio = expenditurePerSecond / resourceGainRate;
+        float expenditurePerSecond = normalPieceExpenditure + destructivePieceExpenditure;
 
-        if(productionRatio > 1)
+        float brickWorksWeightMod = (Factory.drawRateBonus / normalPieceExpenditure) / baseBrickWorkRate;
+        float barracksWeightMod = (BombFactory.drawRateBonus / destructivePieceExpenditure) / baseBarracksRate;
+        float smithWeightMod = (Mine.resourceRateBonus / resourceGainRate) / baseSmithRate;
+
+        float productionRatio = expenditurePerSecond / (resourceGainRate * 3);
+        if (productionRatio > 1)
         {
-            mineWeight = blueprintWeight;
+            mineWeight = blueprintWeight * smithWeightMod;
+            
         }
-        else
+        else if (productionRatio < 1)
         {
-            factoryWeight = blueprintWeight;
-            bombFactoryWeight = blueprintWeight;
+
+            factoryWeight = blueprintWeight * brickWorksWeightMod;
+            bombFactoryWeight = blueprintWeight * barracksWeightMod;
+
         }
 
         #endregion
@@ -522,7 +567,7 @@ public class AIPlayer : Player
                             yield return null;
                         }
 
-                        if (missingCoordHashSet.Count() <= tilesUntilBlueprint)
+                        if (missingCoordHashSet.Count > 0  && missingCoordHashSet.Count() <= tilesUntilBlueprint )
                         {
                             BlueprintMap blueprintMap = new BlueprintMap(blueprint, missingCoordHashSet, coord, (rotations + 1) % 4);
                             possibleBlueprintMoves.Add(blueprintMap);
@@ -533,6 +578,7 @@ public class AIPlayer : Player
         }
         //Debug.Log("Blueprints Tried: " + blueprintsTried);
         #endregion
+        
         #region Polyomino Placement Logic
         int movesTried = 0;
         foreach (Polyomino piece in currentHand)
@@ -634,7 +680,7 @@ public class AIPlayer : Player
                     nextPlay = potentialMove;
                 }
             }
-            Debug.Log("picking move of score " + nextPlay.score);
+            //Debug.Log("picking move of score " + nextPlay.score);
         }
         if (nextPlay != null && nextPlay.score > 0)
         {

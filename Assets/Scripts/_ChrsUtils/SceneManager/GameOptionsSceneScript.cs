@@ -149,6 +149,11 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
         if (Services.GameManager.tutorialMode)
         {
+            ToggleHumanPlayer(1);
+            for(int i = 0; i < 2; i++)
+            {
+                aiLevelSliders[i].gameObject.SetActive(false);
+            }
             levelButtonParent.SetActive(false);
             levelSelectionIndicator.gameObject.SetActive(false);
             levelSelected = 4;
@@ -235,7 +240,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         }
         for (int i = 0; i < joinButtonJoinTexts.Length; i++)
         {
-            if (!humanPlayers[i])
+            if (!humanPlayers[i] && !Services.GameManager.tutorialMode)
             {
                 joinButtonJoinTexts[i].transform.localScale =
                     Vector3.Lerp(Vector3.one, textPulseMaxScale * Vector3.one,
@@ -271,8 +276,11 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     public void ToggleHumanPlayer(int playerNum)
     {
+        
         int index = playerNum - 1;
-        humanPlayers[index] = !humanPlayers[index];
+        if (Services.GameManager.tutorialMode) humanPlayers[index] = true;
+        else humanPlayers[index] = !humanPlayers[index];
+
         if (humanPlayers[index])
         {
             joinButtonPlayerTypeTexts[index].text = "Human\n ";
@@ -282,7 +290,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             joinButtonPlayerTypeTexts[index].color = Color.white;
             aiLevelSliders[index].gameObject.SetActive(false);
         }
-        else
+        else if (!Services.GameManager.tutorialMode)
         {
             joinButtonPlayerTypeTexts[index].text = "CPU\n ";
             joinButtonJoinTexts[index].text = "\nTap to Join";
@@ -295,7 +303,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     public void SetAILevel(int playerNum)
     {
-        int level = Mathf.RoundToInt(aiLevelSliders[playerNum - 1].value);
+        int level = Services.GameManager.tutorialMode? 
+                        1 : Mathf.RoundToInt(aiLevelSliders[playerNum - 1].value);
         Services.GameManager.aiLevels[playerNum - 1] = level;
         aiLevelTexts[playerNum - 1].text = "AI Level: " + level;
     }
