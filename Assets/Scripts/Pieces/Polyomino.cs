@@ -556,14 +556,17 @@ public class Polyomino : IVertex
         {
             monominos[i].AssignLocation(tiles[i].coord);
         }
-        foreach (Polyomino monomino in monominos)
+        if (!(this is Destructor && owner.splashDamage))
         {
-            monomino.adjacentPieces =
-                monomino.GetAdjacentPolyominos(monomino.owner);
-            foreach (Polyomino adjPiece in monomino.adjacentPieces)
+            foreach (Polyomino monomino in monominos)
             {
-                if (!adjPiece.adjacentPieces.Contains(monomino))
-                    adjPiece.adjacentPieces.Add(monomino);
+                monomino.adjacentPieces =
+                    monomino.GetAdjacentPolyominos(monomino.owner);
+                foreach (Polyomino adjPiece in monomino.adjacentPieces)
+                {
+                    if (!adjPiece.adjacentPieces.Contains(monomino))
+                        adjPiece.adjacentPieces.Add(monomino);
+                }
             }
         }
         owner.OnPiecePlaced(this, monominos);

@@ -7,7 +7,6 @@ using UnityEngine;
  * 
  *      TODO:
  *              Have a weight for each structure
- *              (*)Blueprint foresight
  *              (*)Have AI save destructors
  *              (*)Have AI know when it's in danger
  *              Discrete AI levels
@@ -103,11 +102,11 @@ public class AIPlayer : Player
                     "\ndestructor4Blueprint weight: " + destructorForBlueprintWeight);
 
 
-        int normalPieceCost = biggerBricks ? 5 : 4;
-        int destructorCost = biggerBombs ? 4 : 3;
+        int normalPieceCost = 1;
+        int destructorCost = 1;
 
-        baseBrickWorkRate = Factory.drawRateBonus / (normalDrawRate * normalPieceCost);
-        baseBarracksRate = BombFactory.drawRateBonus / (destructorDrawRate * destructorCost);
+        baseBrickWorkRate = Factory.drawRateBonus / normalDrawRate;
+        baseBarracksRate = BombFactory.drawRateBonus / destructorDrawRate;
         baseSmithRate = Mine.resourceRateBonus / resourceGainRate;
         if (playerNum == 1)
         {
@@ -172,7 +171,7 @@ public class AIPlayer : Player
                 foreach(Polyomino adjPiece in adjPieces)
                 {
                     Edge<Polyomino> edge = null;
-                    if (!graph.EdgeDict.ContainsKey(adjPiece))
+                    if (!graph.EdgeDict.ContainsKey(adjPiece) && adjPiece.owner != this)
                     {
                         edge = new Edge<Polyomino>(piece, adjPiece);
                         graph.Edges.Add(edge);
@@ -405,8 +404,8 @@ public class AIPlayer : Player
         int normalPieceCost = biggerBricks ? 5 : 4;
         int destructorCost = biggerBombs ? 4 : 3;
 
-        float normalPieceExpenditure = normalDrawRate * normalPieceCost;
-        float destructivePieceExpenditure = destructorDrawRate * destructorCost;
+        float normalPieceExpenditure = normalDrawRate;
+        float destructivePieceExpenditure = destructorDrawRate;
 
         float expenditurePerSecond = normalPieceExpenditure + destructivePieceExpenditure;
 
@@ -414,7 +413,7 @@ public class AIPlayer : Player
         float barracksWeightMod = (BombFactory.drawRateBonus / destructivePieceExpenditure) / baseBarracksRate;
         float smithWeightMod = (Mine.resourceRateBonus / resourceGainRate) / baseSmithRate;
 
-        float productionRatio = expenditurePerSecond / (resourceGainRate * 3);
+        float productionRatio = expenditurePerSecond / resourceGainRate;
         if (productionRatio > 1)
         {
             mineWeight = blueprintWeight * smithWeightMod;
