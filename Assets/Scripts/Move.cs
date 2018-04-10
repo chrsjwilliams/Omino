@@ -227,6 +227,7 @@ public class Move
             //          relate the destruction score to my score in
             //          general
             List<Blueprint> blueprintsDestroyed = new List<Blueprint>();
+            int tilesIdestroy = 0;
             int destructionRange = piece.owner.splashDamage ? 1 : 0;
             int cutSize = 0;
             HashSet<Coord> coordsToBeDestroyed = new HashSet<Coord>();
@@ -248,6 +249,7 @@ public class Move
                                 mapTile.occupyingPiece.owner != piece.owner &&
                                 !(mapTile.occupyingPiece is Structure))
                             {
+                                tilesIdestroy++;
                                 Blueprint blueprint = mapTile.occupyingBlueprint;
                                 if( blueprint != null &&
                                     !blueprintsDestroyed.Contains(blueprint))

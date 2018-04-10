@@ -7,10 +7,8 @@ using UnityEngine;
  * 
  *      TODO:
  *              Have a weight for each structure
- *              (*)Blueprint foresight
  *              (*)Have AI save destructors
  *              (*)Have AI know when it's in danger
- *              Discrete AI levels
  * 
  */
 
@@ -21,6 +19,8 @@ using UnityEngine;
 //          we are in danger
 //          block base or perfrom a cut or destroy their piece
 
+public enum AILEVEL { EASY = 3, MEDIUM = 6, HARD = 10}
+
 public class AIPlayer : Player
 {
     public bool drawingPiece { get; protected set; }
@@ -29,6 +29,7 @@ public class AIPlayer : Player
     public List<Coord> primaryTargets { get; protected set; }
     private const int rollsPerLevel = 2;
     private int level;
+    private AILEVEL aiLevel;
     private const int bestMovesCount = 20;
     private float baseBrickWorkRate;
     private float baseBarracksRate;
@@ -53,7 +54,7 @@ public class AIPlayer : Player
     protected float destructorForBlueprintWeight;
     private IEnumerator thinkingCoroutine;
 
-    public override void Init(int playerNum_, AIStrategy strategy, int level_)
+    public override void Init(int playerNum_, AIStrategy strategy, AILEVEL level_)
     {
         playingPiece = false;
         isThinking = false;
@@ -66,7 +67,7 @@ public class AIPlayer : Player
         totalRandomizations = 100;
         kargerAlgorithmBuffer = 10;
 
-        level = level_;
+        aiLevel = level_;
 
         
 
@@ -103,13 +104,11 @@ public class AIPlayer : Player
                     "\ndestructor4Blueprint weight: " + destructorForBlueprintWeight);
 
 
-        //int normalPieceCost = biggerBricks ? 5 : 4;
         int normalPieceCost = 1;
-        //int destructorCost = biggerBombs ? 4 : 3;
         int destructorCost = 1;
 
-        baseBrickWorkRate = Factory.drawRateBonus / (normalDrawRate * normalPieceCost);
-        baseBarracksRate = BombFactory.drawRateBonus / (destructorDrawRate * destructorCost);
+        baseBrickWorkRate = Factory.drawRateBonus / normalDrawRate;
+        baseBarracksRate = BombFactory.drawRateBonus / destructorDrawRate;
         baseSmithRate = Mine.resourceRateBonus / resourceGainRate;
         if (playerNum == 1)
         {
@@ -174,7 +173,7 @@ public class AIPlayer : Player
                 foreach(Polyomino adjPiece in adjPieces)
                 {
                     Edge<Polyomino> edge = null;
-                    if (!graph.EdgeDict.ContainsKey(adjPiece))
+                    if (!graph.EdgeDict.ContainsKey(adjPiece) && adjPiece.owner != this)
                     {
                         edge = new Edge<Polyomino>(piece, adjPiece);
                         graph.Edges.Add(edge);
@@ -409,8 +408,8 @@ public class AIPlayer : Player
         //int destructorCost = biggerBombs ? 4 : 3;
         int destructorCost = 1;
 
-        float normalPieceExpenditure = normalDrawRate * normalPieceCost;
-        float destructivePieceExpenditure = destructorDrawRate * destructorCost;
+        float normalPieceExpenditure = normalDrawRate;
+        float destructivePieceExpenditure = destructorDrawRate;
 
         float expenditurePerSecond = normalPieceExpenditure + destructivePieceExpenditure;
 
@@ -672,7 +671,7 @@ public class AIPlayer : Player
             //{
             //    Debug.Log(move.score);
             //}
-            for (int i = 0; i < level * rollsPerLevel; i++)
+            for (int i = 0; i < (int)aiLevel * rollsPerLevel; i++)
             {
                 int randomIndex = UnityEngine.Random.Range(0, movesToConsider.Count);
                 Move potentialMove = movesToConsider[randomIndex];

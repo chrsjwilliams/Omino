@@ -217,7 +217,10 @@ public class Destructor : Polyomino
     protected override void AssignLocation(Coord coord)
     {
         base.AssignLocation(coord);
-        if (owner.splashDamage) Remove();
+        if (owner.splashDamage)
+        {
+            Remove();
+        }
         iconSr.enabled = false;
 
     }
