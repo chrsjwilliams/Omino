@@ -9,7 +9,6 @@ using UnityEngine;
  *              Have a weight for each structure
  *              (*)Have AI save destructors
  *              (*)Have AI know when it's in danger
- *              Discrete AI levels
  * 
  */
 
@@ -20,6 +19,8 @@ using UnityEngine;
 //          we are in danger
 //          block base or perfrom a cut or destroy their piece
 
+public enum AILEVEL { EASY = 3, MEDIUM = 6, HARD = 10}
+
 public class AIPlayer : Player
 {
     public bool drawingPiece { get; protected set; }
@@ -28,6 +29,7 @@ public class AIPlayer : Player
     public List<Coord> primaryTargets { get; protected set; }
     private const int rollsPerLevel = 2;
     private int level;
+    private AILEVEL aiLevel;
     private const int bestMovesCount = 20;
     private float baseBrickWorkRate;
     private float baseBarracksRate;
@@ -52,7 +54,7 @@ public class AIPlayer : Player
     protected float destructorForBlueprintWeight;
     private IEnumerator thinkingCoroutine;
 
-    public override void Init(int playerNum_, AIStrategy strategy, int level_)
+    public override void Init(int playerNum_, AIStrategy strategy, AILEVEL level_)
     {
         playingPiece = false;
         isThinking = false;
@@ -65,7 +67,7 @@ public class AIPlayer : Player
         totalRandomizations = 100;
         kargerAlgorithmBuffer = 10;
 
-        level = level_;
+        aiLevel = level_;
 
         
 
@@ -670,7 +672,7 @@ public class AIPlayer : Player
             //{
             //    Debug.Log(move.score);
             //}
-            for (int i = 0; i < level * rollsPerLevel; i++)
+            for (int i = 0; i < (int)aiLevel * rollsPerLevel; i++)
             {
                 int randomIndex = UnityEngine.Random.Range(0, movesToConsider.Count);
                 Move potentialMove = movesToConsider[randomIndex];

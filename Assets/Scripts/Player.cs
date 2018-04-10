@@ -110,7 +110,7 @@ public class Player : MonoBehaviour
     private int dangerDistance;
 
 
-    public virtual void Init(int playerNum_, AIStrategy strategy, int level_)
+    public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_)
     {
         Init(playerNum_);
     }

@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public readonly int MIN_PLAYERS = 0;
     
     private bool[] humanPlayers;
-    public int[] aiLevels = new int[2] { 1, 1 };
+    public AILEVEL[] aiLevels = new AILEVEL[2] { AILEVEL.EASY, AILEVEL.EASY  };
 
     [SerializeField] private Camera _mainCamera;
     public Camera MainCamera
@@ -202,7 +202,7 @@ public class GameManager : MonoBehaviour
             Color[] colorScheme = i == 0 ? _player1ColorScheme : _player2ColorScheme;
             AIStrategy strategy = currentStrategies[i];
 
-            _players[i].Init(playerNum, strategy, 10);
+            _players[i].Init(playerNum, strategy, AILEVEL.HARD);
         }
         for (int i = 0; i < 2; i++)
         {
