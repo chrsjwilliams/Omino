@@ -103,8 +103,10 @@ public class AIPlayer : Player
                     "\ndestructor4Blueprint weight: " + destructorForBlueprintWeight);
 
 
-        int normalPieceCost = biggerBricks ? 5 : 4;
-        int destructorCost = biggerBombs ? 4 : 3;
+        //int normalPieceCost = biggerBricks ? 5 : 4;
+        int normalPieceCost = 1;
+        //int destructorCost = biggerBombs ? 4 : 3;
+        int destructorCost = 1;
 
         baseBrickWorkRate = Factory.drawRateBonus / (normalDrawRate * normalPieceCost);
         baseBarracksRate = BombFactory.drawRateBonus / (destructorDrawRate * destructorCost);
@@ -402,8 +404,10 @@ public class AIPlayer : Player
         float factoryWeight = 0;
         float bombFactoryWeight = 0;
 
-        int normalPieceCost = biggerBricks ? 5 : 4;
-        int destructorCost = biggerBombs ? 4 : 3;
+        //int normalPieceCost = biggerBricks ? 5 : 4;
+        int normalPieceCost = 1;
+        //int destructorCost = biggerBombs ? 4 : 3;
+        int destructorCost = 1;
 
         float normalPieceExpenditure = normalDrawRate * normalPieceCost;
         float destructivePieceExpenditure = destructorDrawRate * destructorCost;
@@ -414,18 +418,15 @@ public class AIPlayer : Player
         float barracksWeightMod = (BombFactory.drawRateBonus / destructivePieceExpenditure) / baseBarracksRate;
         float smithWeightMod = (Mine.resourceRateBonus / resourceGainRate) / baseSmithRate;
 
-        float productionRatio = expenditurePerSecond / (resourceGainRate * 3);
+        float productionRatio = expenditurePerSecond / resourceGainRate;
         if (productionRatio > 1)
         {
             mineWeight = blueprintWeight * smithWeightMod;
-            
         }
-        else if (productionRatio < 1)
+        else
         {
-
             factoryWeight = blueprintWeight * brickWorksWeightMod;
             bombFactoryWeight = blueprintWeight * barracksWeightMod;
-
         }
 
         #endregion

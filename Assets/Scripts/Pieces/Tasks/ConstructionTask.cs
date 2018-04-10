@@ -20,10 +20,9 @@ public class ConstructionTask : Task
     private Vector3 targetScale = Vector3.one;
     private Vector3 settleTargetOffset = new Vector3(0.35f, 0.35f);
     private bool[] soundPlayed;
-    private const float shakeDur = 0.1f;
-    private const float shakeMag = 0.1f;
+    private const float shakeDur = 0.15f;
+    private const float shakeMag = 0.05f;
     private const float shakeSpeed = 40f;
-    private const float shakeStartTime = 0.2f;
 
     public ConstructionTask(Polyomino piece_, List<Polyomino> subpieces_)
     {

@@ -72,7 +72,7 @@ public class Move
         BlueprintMap closestBarracksMap = null;
 
         int smithCoordDifference = int.MaxValue;
-        int brickworkdsCoordDifference = int.MaxValue;
+        int brickworksCoordDifference = int.MaxValue;
         int barracksCoordDifference = int.MaxValue;
 
         foreach (BlueprintMap blueprintMap in possibleBlueprintMoves)
@@ -90,10 +90,10 @@ public class Move
             }
             else if (blueprintMap.blueprint is Factory)
             {
-                if (relativeComplement.Count < brickworkdsCoordDifference)
+                if (relativeComplement.Count < brickworksCoordDifference)
                 {
                     closestBrickworksMap = blueprintMap;
-                    brickworkdsCoordDifference = relativeComplement.Count;
+                    brickworksCoordDifference = relativeComplement.Count;
                 }
             }
             else if (blueprintMap.blueprint is BombFactory)
@@ -138,7 +138,7 @@ public class Move
             score = WinAndStructScore(winWeight, structWeight) +
                 BlueprintScore(closestSmithMap, closestBrickworksMap,
                                 closestBarracksMap, smithCoordDifference,
-                                brickworkdsCoordDifference, barracksCoordDifference,
+                                brickworksCoordDifference, barracksCoordDifference,
                                 mineWeight, factoryWeight, bombFactoryWeight) +
                 DestructionScore(destructionWeight, pieceCoords);
         }

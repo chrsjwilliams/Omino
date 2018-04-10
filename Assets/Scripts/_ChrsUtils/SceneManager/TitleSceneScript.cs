@@ -4,6 +4,8 @@ public class TitleSceneScript : Scene<TransitionData>
 {
     public KeyCode startGame = KeyCode.Space;
 
+    public enum GameMode { TwoPlayers, PlayerVsAI, Demo, Tutorial }
+
     private const float SECONDS_TO_WAIT = 0.01f;
 
     private TaskManager _tm = new TaskManager();
@@ -45,6 +47,18 @@ public class TitleSceneScript : Scene<TransitionData>
     public void Play(bool tutorialModeChosen)
     {
         Services.GameManager.tutorialMode = tutorialModeChosen;
+        StartGame();
+    }
+
+    public void PlayPlayerVsAI()
+    {
+        Services.GameManager.mode = GameMode.PlayerVsAI;
+        StartGame();
+    }
+
+    public void Play2Players()
+    {
+        Services.GameManager.mode = GameMode.TwoPlayers;
         StartGame();
     }
 

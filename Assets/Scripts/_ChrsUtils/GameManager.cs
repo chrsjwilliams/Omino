@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     
     private bool[] humanPlayers;
     public int[] aiLevels = new int[2] { 1, 1 };
+    public TitleSceneScript.GameMode mode;
 
     [SerializeField] private Camera _mainCamera;
     public Camera MainCamera

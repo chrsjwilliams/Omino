@@ -127,6 +127,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
 
         levelButtons = levelButtonParent.GetComponentsInChildren<Button>();
+        levelButtonParent.SetActive(false);
         SelectLevel(0);
         aiOptionsMenu.SetActive(false);
         humanPlayers = new bool[2] { false, false };
@@ -147,24 +148,82 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             aiLevelTexts[i] = aiLevelSliders[i].GetComponentInChildren<TextMeshProUGUI>();
         }
 
-        if (Services.GameManager.tutorialMode)
+        switch (Services.GameManager.mode)
         {
-            ToggleHumanPlayer(1);
-            for(int i = 0; i < 2; i++)
-            {
-                aiLevelSliders[i].gameObject.SetActive(false);
-            }
-            levelButtonParent.SetActive(false);
-            levelSelectionIndicator.gameObject.SetActive(false);
-            levelSelected = 4;
-            joinButtons[1].gameObject.SetActive(false);
-            aiLevelSliders[1].gameObject.SetActive(false);
+            case TitleSceneScript.GameMode.TwoPlayers:
+                StartTwoPlayerMode();
+                break;
+            case TitleSceneScript.GameMode.PlayerVsAI:
+                StartPlayerVsAIMode();
+                break;
+            case TitleSceneScript.GameMode.Demo:
+                break;
+            case TitleSceneScript.GameMode.Tutorial:
+                StartTutorialMode();
+                break;
+            default:
+                break;
         }
     }
 
     internal override void OnExit()
     {
         PlayerPrefs.Save();
+    }
+
+    private void StartPlayerVsAIMode()
+    {
+        for (int i = 0; i < joinButtons.Length; i++)
+        {
+            joinButtons[i].gameObject.SetActive(false);
+        }
+        SideChooseEntrance entrance = new SideChooseEntrance(joinButtons, false);
+        Services.GeneralTaskManager.Do(entrance);
+    }
+
+    private void StartTutorialMode()
+    {
+        ToggleHumanPlayer(1);
+        for (int i = 0; i < 2; i++)
+        {
+            aiLevelSliders[i].gameObject.SetActive(false);
+        }
+        levelButtonParent.SetActive(false);
+        levelSelectionIndicator.gameObject.SetActive(false);
+        levelSelected = 4;
+        joinButtons[1].gameObject.SetActive(false);
+        aiLevelSliders[1].gameObject.SetActive(false);
+    }
+
+    private void StartTwoPlayerMode()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            joinButtons[i].gameObject.SetActive(false);
+            humanPlayers[i] = true;
+            aiLevelSliders[i].gameObject.SetActive(false);
+        }
+        SlideInLevelButtons();
+    }
+
+    private void SlideInLevelButtons()
+    {
+        levelButtonParent.SetActive(true);
+        for (int i = 0; i < levelButtons.Length; i++)
+        {
+            levelButtons[i].gameObject.SetActive(false);
+        }
+        levelSelectionIndicator.gameObject.SetActive(false);
+        GameObject levelSelectText = 
+            levelButtonParent.GetComponentInChildren<TextMeshProUGUI>().gameObject;
+        levelSelectText.SetActive(false);
+        LevelSelectTextEntrance entrance = 
+            new LevelSelectTextEntrance(levelSelectText);
+        LevelSelectButtonEntranceTask buttonEntrance =
+            new LevelSelectButtonEntranceTask(levelButtons);
+        //entrance.Then(buttonEntrance);
+        Services.GeneralTaskManager.Do(entrance);
+        Services.GeneralTaskManager.Do(buttonEntrance);
     }
 
     public void SetWinWeight()
@@ -258,6 +317,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     public void SelectLevel(int levelNum)
     {
+        levelSelectionIndicator.gameObject.SetActive(true);
         levelSelected = levelNum;
         MoveLevelSelector(levelNum);
     }
@@ -307,5 +367,10 @@ public class GameOptionsSceneScript : Scene<TransitionData>
                         1 : Mathf.RoundToInt(aiLevelSliders[playerNum - 1].value);
         Services.GameManager.aiLevels[playerNum - 1] = level;
         aiLevelTexts[playerNum - 1].text = "AI Level: " + level;
+    }
+
+    public void ReturnToTitle()
+    {
+        Services.Scenes.Swap<TitleSceneScript>();
     }
 }
