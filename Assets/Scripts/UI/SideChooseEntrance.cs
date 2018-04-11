@@ -9,7 +9,7 @@ public class SideChooseEntrance : Task
     private GameObject[] optionBars;
     private Vector3[] startPositions;
     private Vector3[] targetPositions;
-    private const float initialOffset = 200;
+    private const float initialOffset = 250;
     private bool exit;
 
     public SideChooseEntrance(Button[] joinButtons, bool exit_)
@@ -35,7 +35,6 @@ public class SideChooseEntrance : Task
             Vector3 offset;
             offset = i == 0 ? initialOffset * Vector3.left :
                 initialOffset * Vector3.right;
-            if (exit) offset *= -1;
             optionBar.transform.position += offset;
             startPositions[i] = optionBar.transform.position;
         }
@@ -47,10 +46,20 @@ public class SideChooseEntrance : Task
 
         for (int i = 0; i < optionBars.Length; i++)
         {
-            optionBars[i].transform.position = Vector3.Lerp(
-                startPositions[i],
-                targetPositions[i],
-                EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
+            if (!exit)
+            {
+                optionBars[i].transform.position = Vector3.Lerp(
+                    startPositions[i],
+                    targetPositions[i],
+                    EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
+            }
+            else
+            {
+                optionBars[i].transform.position = Vector3.Lerp(
+                    targetPositions[i],
+                    startPositions[i],
+                    EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
+            }
         }
 
         if (timeElapsed >= duration) SetStatus(TaskStatus.Success);

@@ -17,33 +17,13 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private Button[] levelButtons;
     [SerializeField]
     private Image levelSelectionIndicator;
-    [SerializeField]
-    private Image[] aiLevelSecltionIndicator;
-    [SerializeField]
-    private Slider winWeightSlider;
-    [SerializeField]
-    private Slider structureWeightSlider;
-    [SerializeField]
-    private Slider blueprintWeightSlider;
-    [SerializeField]
-    private Slider attackWeightSlider;
-    [SerializeField]
-    private Slider blueprintDestructionWeightSlider;
-    [SerializeField]
-    private Slider disconnectionWeightSlider;
-    [SerializeField]
-    private Slider destructorForBlueprintWeightSlider;
 
     [SerializeField]
     private Button[] joinButtons;
     private TextMeshProUGUI[] joinButtonJoinTexts;
-    private TextMeshProUGUI[] joinButtonPlayerTypeTexts;
     [SerializeField]
-    private Slider[] aiLevelSliders;
-    [SerializeField]
-    private GameObject[] aiLevelButtons;
-    [SerializeField]
-    private AILEVEL[] aiLevel;
+    private GameObject[] aiLevelButtonZones;
+    private Button[][] aiLevelButtons;
     private TextMeshProUGUI[] aiLevelTexts;
     private Color[] baseColors;
     [SerializeField]
@@ -68,91 +48,39 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private TaskManager _tm = new TaskManager();
 
-    private bool aiOptionsActive;
-    [SerializeField]
-    private GameObject aiOptionsMenu;
-
     internal override void OnEnter(TransitionData data)
     {
-        if (PlayerPrefs.HasKey("winWeight"))
-        {
-            winWeightSlider.value = PlayerPrefs.GetFloat("winWeight");
-        }
-        else
-        {
-            winWeightSlider.value = defaultWinWeight;
-        }
-        if (PlayerPrefs.HasKey("structWeight"))
-        {
-            structureWeightSlider.value = PlayerPrefs.GetFloat("structWeight");
-        }
-        else
-        {
-            structureWeightSlider.value = defaultStructWeight;
-        }
-        if (PlayerPrefs.HasKey("blueprintWeight"))
-        {
-            blueprintWeightSlider.value = PlayerPrefs.GetFloat("blueprintWeight");
-        }
-        else
-        {
-            blueprintWeightSlider.value = defaultBlueprintWeight;
-        }
-        if (PlayerPrefs.HasKey("attackWeight"))
-        {
-            attackWeightSlider.value = PlayerPrefs.GetFloat("attackWeight");
-        }
-        else
-        {
-            attackWeightSlider.value = defaultAttackWeight;
-        }
-        if (PlayerPrefs.HasKey("blueprintDestructionWeight"))
-        {
-            blueprintDestructionWeightSlider.value = PlayerPrefs.GetFloat("blueprintDestructionWeight");
-        }
-        else
-        {
-            blueprintDestructionWeightSlider.value = defaultBlueprintDestructionWeight;
-        }
-        if (PlayerPrefs.HasKey("disconnectionWeight"))
-        {
-            disconnectionWeightSlider.value = PlayerPrefs.GetFloat("disconnectionWeight");
-        }
-        else
-        {
-            disconnectionWeightSlider.value = defaultDisconnectionWeight;
-        }
-        if (PlayerPrefs.HasKey("destructorForBlueprintWeight"))
-        {
-            destructorForBlueprintWeightSlider.value = PlayerPrefs.GetFloat("destructorForBlueprintWeight");
-        }
-        else
-        {
-            destructorForBlueprintWeightSlider.value = defaultDestructorForBlueprintWeight;
-        }
-
-
+        Services.GameManager.SetWinWeight(defaultWinWeight);
+        Services.GameManager.SetStructureWeight(defaultStructWeight);
+        Services.GameManager.SetBlueprintWeight(defaultBlueprintWeight);
+        Services.GameManager.SetAttackWeight(defaultAttackWeight);
+        Services.GameManager.SetBlueprintDestructionWeight(defaultBlueprintDestructionWeight);
+        Services.GameManager.SetDisconnectionWeight(defaultDisconnectionWeight);
+        Services.GameManager.SetDestructorForBlueprintWeight(defaultDestructorForBlueprintWeight);
+        
         levelButtons = levelButtonParent.GetComponentsInChildren<Button>();
-        aiLevelButtons = GameObject.FindGameObjectsWithTag("DifficultyButton");
         levelButtonParent.SetActive(false);
-        SelectLevel(0);
-        aiOptionsMenu.SetActive(false);
         humanPlayers = new bool[2] { false, false };
-        joinButtonPlayerTypeTexts = new TextMeshProUGUI[2] {
+        joinButtonJoinTexts = new TextMeshProUGUI[2] {
             joinButtons[0].GetComponentInChildren<TextMeshProUGUI>(),
             joinButtons[1].GetComponentInChildren<TextMeshProUGUI>()
         };
-        joinButtonJoinTexts = new TextMeshProUGUI[2] {
-            joinButtons[0].GetComponentsInChildren<TextMeshProUGUI>()[1],
-            joinButtons[1].GetComponentsInChildren<TextMeshProUGUI>()[1]
-        };
         baseColors = new Color[2] { Services.GameManager.Player1ColorScheme[0],
                         Services.GameManager.Player2ColorScheme[0] };
-        //aiLevelTexts = new TextMeshProUGUI[2];
+        aiLevelTexts = new TextMeshProUGUI[2];
+        aiLevelButtons = new Button[2][];
+
         for (int i = 0; i < 2; i++)
         {
             joinButtons[i].GetComponent<Image>().color = (baseColors[i] + Color.white) / 2;
-            //aiLevelTexts[i] = aiLevelSliders[i].GetComponentInChildren<TextMeshProUGUI>();
+            Button[] buttons = aiLevelButtonZones[i].GetComponentsInChildren<Button>();
+            aiLevelButtons[i] = new Button[buttons.Length];
+            for (int j = 0; j < buttons.Length; j++)
+            {
+                aiLevelButtons[i][j] = buttons[j];
+            }
+            aiLevelTexts[i] = aiLevelButtonZones[i].GetComponentInChildren<TextMeshProUGUI>();
+            aiLevelButtonZones[i].SetActive(false);
         }
 
         switch (Services.GameManager.mode)
@@ -164,6 +92,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
                 StartPlayerVsAIMode();
                 break;
             case TitleSceneScript.GameMode.Demo:
+                StartDemoMode();
                 break;
             case TitleSceneScript.GameMode.Tutorial:
                 StartTutorialMode();
@@ -175,7 +104,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     internal override void OnExit()
     {
-        PlayerPrefs.Save();
+     //   PlayerPrefs.Save();
     }
 
     private void StartPlayerVsAIMode()
@@ -190,16 +119,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void StartTutorialMode()
     {
-        ToggleHumanPlayer(1);
-        for (int i = 0; i < 2; i++)
-        {
-            aiLevelSliders[i].gameObject.SetActive(false);
-        }
-        levelButtonParent.SetActive(false);
-        levelSelectionIndicator.gameObject.SetActive(false);
         levelSelected = 4;
-        joinButtons[1].gameObject.SetActive(false);
-        aiLevelSliders[1].gameObject.SetActive(false);
+        StartPlayerVsAIMode();
     }
 
     private void StartTwoPlayerMode()
@@ -208,13 +129,31 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             joinButtons[i].gameObject.SetActive(false);
             humanPlayers[i] = true;
-            aiLevelSliders[i].gameObject.SetActive(false);
+        }
+        SlideInLevelButtons();
+    }
+
+    private void StartDemoMode()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            joinButtons[i].gameObject.SetActive(false);
+            humanPlayers[i] = false;
+            Services.GameManager.aiLevels[i] = AIPlayer.AiLevels[2];
         }
         SlideInLevelButtons();
     }
 
     private void SlideInLevelButtons()
     {
+        if (humanPlayers[0] && !humanPlayers[1])
+        {
+            levelButtonParent.transform.eulerAngles = new Vector3(0, 0, -90);
+        }
+        else if (!humanPlayers[0] && humanPlayers[1])
+        {
+            levelButtonParent.transform.eulerAngles = new Vector3(0, 0, 90);
+        }
         levelButtonParent.SetActive(true);
         for (int i = 0; i < levelButtons.Length; i++)
         {
@@ -231,41 +170,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         //entrance.Then(buttonEntrance);
         Services.GeneralTaskManager.Do(entrance);
         Services.GeneralTaskManager.Do(buttonEntrance);
-    }
-
-    public void SetWinWeight()
-    {
-        Services.GameManager.SetWinWeight(winWeightSlider.value);
-    }
-
-    public void SetStructureWeight()
-    {
-        Services.GameManager.SetStructureWeight(structureWeightSlider.value);
-    }
-
-    public void SetBlueprintWeight()
-    {
-        Services.GameManager.SetBlueprintWeight(blueprintWeightSlider.value);
-    }
-
-    public void SetAttackWeight()
-    {
-        Services.GameManager.SetAttackWeight(attackWeightSlider.value);
-    }
-
-    public void SetBlueprintDestructionWeight()
-    {
-        Services.GameManager.SetBlueprintDestructionWeight(blueprintDestructionWeightSlider.value);
-    }
-
-    public void SetDisconnectionWeight()
-    {
-        Services.GameManager.SetDisconnectionWeight(disconnectionWeightSlider.value);
-    }
-
-    public void SetDestructorForBlueprintWeight()
-    {
-        Services.GameManager.SetDestructorForBlueprintWeight(destructorForBlueprintWeightSlider.value);
     }
 
     public void StartGame()
@@ -327,28 +231,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         levelSelectionIndicator.gameObject.SetActive(true);
         levelSelected = levelNum;
         MoveLevelSelector(levelNum);
-    }
-
-    public void SetAILevel_(string playerLevel)
-    {    
-        int playerIndex = playerLevel.Contains("P1") ? 0 : 1;
-        int level = int.Parse(playerLevel.Substring(0, 1));
-        switch (level)
-        {
-            case 1:
-                aiLevel[playerIndex] = AILEVEL.EASY;
-                break;
-            case 2:
-                aiLevel[playerIndex] = AILEVEL.MEDIUM;
-                break;
-            case 3:
-                aiLevel[playerIndex] = AILEVEL.HARD;
-                break;
-            default:
-                aiLevel[playerIndex] = AILEVEL.MEDIUM;
-                break;
-        }
-        MoveAILevelIndicator(playerIndex, aiLevel[playerIndex]);
+        StartGame();
     }
 
     void MoveLevelSelector(int levelNum)
@@ -357,56 +240,49 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             levelButtons[levelNum].transform.position;
     }
 
-    void MoveAILevelIndicator(int playerIndex, AILEVEL level)
-    {
-        aiLevelSecltionIndicator[playerIndex].transform.position =
-            aiLevelButtons[playerIndex].transform.Find(level.ToString() + "_P" + (playerIndex + 1)).transform.position;
-    }
-
-    public void ToggleAIOptionsMenu()
-    {
-        aiOptionsActive = !aiOptionsActive;
-        aiOptionsMenu.SetActive(aiOptionsActive);
-    }
-
     public void ToggleHumanPlayer(int playerNum)
     {
-        
         int index = playerNum - 1;
-        if (Services.GameManager.tutorialMode) humanPlayers[index] = true;
-        else humanPlayers[index] = !humanPlayers[index];
+        humanPlayers[index] = true;
 
-        if (humanPlayers[index])
+        joinButtonJoinTexts[index].text = "SIDE CHOSEN";
+        joinButtons[index].GetComponent<Image>().color = baseColors[index];
+        joinButtonJoinTexts[index].color = Color.white;
+
+        SideChooseEntrance exit = new SideChooseEntrance(joinButtons, true);
+        for (int i = 0; i < joinButtons.Length; i++)
         {
-            joinButtonPlayerTypeTexts[index].text = "Human\n ";
-            joinButtonJoinTexts[index].text = "\nTap to Withdraw";
-            joinButtons[index].GetComponent<Image>().color = baseColors[index];
-            joinButtonJoinTexts[index].color = Color.white;
-            joinButtonPlayerTypeTexts[index].color = Color.white;
-            //aiLevelSliders[index].gameObject.SetActive(false);
-            aiLevelButtons[index].SetActive(false);
-            aiLevelSecltionIndicator[index].gameObject.SetActive(false);
+            joinButtons[i].enabled = false;
         }
-        else if (!Services.GameManager.tutorialMode)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.PlayerVsAI)
         {
-            joinButtonPlayerTypeTexts[index].text = "CPU\n ";
-            joinButtonJoinTexts[index].text = "\nTap to Join";
-            joinButtons[index].GetComponent<Image>().color = (baseColors[index] + Color.white) / 2;
-            joinButtonJoinTexts[index].color = Color.black;
-            joinButtonPlayerTypeTexts[index].color = Color.black;
-            //aiLevelSliders[index].gameObject.SetActive(true);
-            aiLevelButtons[index].SetActive(true);
-            aiLevelSecltionIndicator[index].gameObject.SetActive(true);
+            exit.Then(new AILevelSlideIn(aiLevelTexts[index], aiLevelButtons[index],
+                playerNum == 1, false));
         }
+        else
+        {
+            exit.Then(new ActionTask(StartGame));
+        }
+        Services.GeneralTaskManager.Do(exit);
     }
 
-    public void SetAILevel(int playerNum)
+    public void SetP1AILevel(int level)
     {
-        int level = Services.GameManager.tutorialMode? 
-                        1 : Mathf.RoundToInt(aiLevelSliders[playerNum - 1].value);
-        AILEVEL aiLevel_ = aiLevel[playerNum - 1];
-        Services.GameManager.aiLevels[playerNum - 1] = aiLevel_;
-        aiLevelTexts[playerNum - 1].text = "AI Level: " + level;
+        SetAILevel(1, level);
+    }
+
+    public void SetP2AILevel(int level)
+    {
+        SetAILevel(2, level);
+    }
+
+    private void SetAILevel(int playerNum, int level)
+    {
+        Services.GameManager.aiLevels[playerNum - 1] = AIPlayer.AiLevels[level];
+        AILevelSlideIn slideOut = new AILevelSlideIn(aiLevelTexts[playerNum % 2],
+            aiLevelButtons[playerNum % 2], playerNum != 1, true);
+        slideOut.Then(new ActionTask(SlideInLevelButtons));
+        Services.GeneralTaskManager.Do(slideOut);
     }
 
     public void ReturnToTitle()

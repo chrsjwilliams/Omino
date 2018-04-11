@@ -23,6 +23,8 @@ public enum AILEVEL { EASY = 3, MEDIUM = 6, HARD = 10}
 
 public class AIPlayer : Player
 {
+    public static AILEVEL[] AiLevels =
+        new AILEVEL[3] { AILEVEL.EASY, AILEVEL.MEDIUM, AILEVEL.HARD };
     public bool drawingPiece { get; protected set; }
     public bool playingPiece { get; protected set; }
     public bool isThinking { get; protected set; }

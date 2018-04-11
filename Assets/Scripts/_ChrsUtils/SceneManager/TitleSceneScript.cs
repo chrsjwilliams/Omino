@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class TitleSceneScript : Scene<TransitionData>
 {
     public KeyCode startGame = KeyCode.Space;
+    [SerializeField]
+    private Button[] buttons;
+    [SerializeField]
+    private Button playButton;
 
     public enum GameMode { TwoPlayers, PlayerVsAI, Demo, Tutorial }
 
@@ -14,6 +19,10 @@ public class TitleSceneScript : Scene<TransitionData>
     {
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<ButtonPressed>(OnButtonPressed);
+        foreach(Button button in buttons)
+        {
+            button.gameObject.SetActive(false);
+        }
     }
 
     internal override void OnExit()
@@ -62,6 +71,19 @@ public class TitleSceneScript : Scene<TransitionData>
         StartGame();
     }
 
+    public void PlayTutorialMode()
+    {
+        Services.GameManager.mode = GameMode.Tutorial;
+        Services.GameManager.tutorialMode = true;
+        StartGame();
+    }
+
+    public void DemoMode()
+    {
+        Services.GameManager.mode = GameMode.Demo;
+        StartGame();
+    }
+
     private void ChangeScene()
     {
         Services.Scenes.Swap<GameOptionsSceneScript>();
@@ -71,5 +93,12 @@ public class TitleSceneScript : Scene<TransitionData>
     {
         _tm.Update();
         //if (Input.GetMouseButtonDown(0)) StartGame();
+    }
+
+    public void OnPlayHit()
+    {
+        playButton.gameObject.SetActive(false);
+        Services.GeneralTaskManager.Do(
+            new SlideInTitleScreenButtons(buttons, playButton.transform.position));
     }
 }

@@ -40,11 +40,11 @@ public class LevelSelectButtonEntranceTask : Task
             else
             {
                 offset = initialOffset * Vector3.right;
-
             }
-            targetPositions[i] = button.transform.position;
-            button.transform.position += offset;
-            startPositions[i] = button.transform.position;
+
+            targetPositions[i] = button.transform.localPosition;
+            button.transform.localPosition += offset;
+            startPositions[i] = button.transform.localPosition;
         }
     }
 
@@ -57,7 +57,7 @@ public class LevelSelectButtonEntranceTask : Task
             if (timeElapsed >= i * staggerTime && 
                 timeElapsed <= duration + (i*staggerTime))
             {
-                buttons[i].transform.position = Vector3.Lerp(
+                buttons[i].transform.localPosition = Vector3.Lerp(
                     startPositions[i],
                     targetPositions[i],
                     EasingEquations.Easing.QuadEaseOut(
@@ -88,7 +88,8 @@ public class LevelSelectTextEntrance: Task
     {
         levelSelectText.SetActive(true);
         targetPos = levelSelectText.transform.position;
-        levelSelectText.transform.position += initialOffset * Vector3.up;
+
+            levelSelectText.transform.position += initialOffset * Vector3.up;
         startPos = levelSelectText.transform.position;
         timeElapsed = 0;
     }
