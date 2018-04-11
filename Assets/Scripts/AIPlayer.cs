@@ -7,19 +7,12 @@ using UnityEngine;
  * 
  *      TODO:
  *              Have a weight for each structure
- *              (*)Have AI save destructors
  *              (*)Have AI know when it's in danger
  * 
  */
 
-//  TODO:   AI KNOW WHEN IN DANGER
-//
-//          Have AI examine the area near its home base
-//          if opponent is an a range of 6 away,
-//          we are in danger
-//          block base or perfrom a cut or destroy their piece
 
-public enum AILEVEL { EASY = 3, MEDIUM = 6, HARD = 10}
+public enum AILEVEL { TUTORIAL = 1, EASY = 3, MEDIUM = 6, HARD = 10}
 
 public class AIPlayer : Player
 {
@@ -730,6 +723,13 @@ public class AIPlayer : Player
 
     public override void OnOpposingPiecePlaced(Polyomino piece)
     {
+        //  TODO:   AI KNOW WHEN IN DANGER
+        //
+        //          Have AI examine the area near its home base
+        //          if opponent is an a range of 6 away,
+        //          we are in danger
+        //          block base or perfrom a cut or destroy their piece
+        //          Make a cut that cotains the tile closest to my base
         base.OnOpposingPiecePlaced(piece);
         StopThinking();
     }

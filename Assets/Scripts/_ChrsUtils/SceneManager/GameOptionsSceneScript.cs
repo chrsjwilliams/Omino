@@ -113,6 +113,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             joinButtons[i].gameObject.SetActive(false);
         }
+        levelButtonParent.SetActive(true);
+        levelSelectionIndicator.gameObject.SetActive(true);
         SideChooseEntrance entrance = new SideChooseEntrance(joinButtons, false);
         Services.GeneralTaskManager.Do(entrance);
     }
