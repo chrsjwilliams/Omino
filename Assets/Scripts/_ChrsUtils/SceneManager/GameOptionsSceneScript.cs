@@ -41,7 +41,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     [SerializeField]
     private Slider[] aiLevelSliders;
     [SerializeField]
-    private GameObject[] aiLevelButtons;
+    private GameObject[] aiLevelButtonHolders;
     [SerializeField]
     private AILEVEL[] aiLevel;
     private TextMeshProUGUI[] aiLevelTexts;
@@ -133,7 +133,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
 
         levelButtons = levelButtonParent.GetComponentsInChildren<Button>();
-        aiLevelButtons = GameObject.FindGameObjectsWithTag("DifficultyButton");
         levelButtonParent.SetActive(false);
         SelectLevel(0);
         aiOptionsMenu.SetActive(false);
@@ -184,6 +183,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             joinButtons[i].gameObject.SetActive(false);
         }
+        levelButtonParent.SetActive(true);
+        levelSelectionIndicator.gameObject.SetActive(true);
         SideChooseEntrance entrance = new SideChooseEntrance(joinButtons, false);
         Services.GeneralTaskManager.Do(entrance);
     }
@@ -208,6 +209,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             joinButtons[i].gameObject.SetActive(false);
             humanPlayers[i] = true;
+            aiLevelButtonHolders[i].SetActive(false);
             aiLevelSliders[i].gameObject.SetActive(false);
         }
         SlideInLevelButtons();
@@ -360,7 +362,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     void MoveAILevelIndicator(int playerIndex, AILEVEL level)
     {
         aiLevelSecltionIndicator[playerIndex].transform.position =
-            aiLevelButtons[playerIndex].transform.Find(level.ToString() + "_P" + (playerIndex + 1)).transform.position;
+            aiLevelButtonHolders[playerIndex].transform.Find(level.ToString() + "_P" + (playerIndex + 1)).transform.position;
     }
 
     public void ToggleAIOptionsMenu()
@@ -384,7 +386,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             joinButtonJoinTexts[index].color = Color.white;
             joinButtonPlayerTypeTexts[index].color = Color.white;
             //aiLevelSliders[index].gameObject.SetActive(false);
-            aiLevelButtons[index].SetActive(false);
+            aiLevelButtonHolders[index].SetActive(false);
             aiLevelSecltionIndicator[index].gameObject.SetActive(false);
         }
         else if (!Services.GameManager.tutorialMode)
@@ -395,7 +397,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             joinButtonJoinTexts[index].color = Color.black;
             joinButtonPlayerTypeTexts[index].color = Color.black;
             //aiLevelSliders[index].gameObject.SetActive(true);
-            aiLevelButtons[index].SetActive(true);
+            aiLevelButtonHolders[index].SetActive(true);
             aiLevelSecltionIndicator[index].gameObject.SetActive(true);
         }
     }

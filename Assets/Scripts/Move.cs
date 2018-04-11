@@ -221,11 +221,6 @@ public class Move
         if (!(piece is Destructor)) return 0;
         else
         {
-            //  TODO:   SAVE DESTRUCTORS
-            //
-            //          Find out how many tiles i will destroy
-            //          relate the destruction score to my score in
-            //          general
             List<Blueprint> blueprintsDestroyed = new List<Blueprint>();
             int tilesIdestroy = 0;
             int destructionRange = piece.owner.splashDamage ? 1 : 0;
@@ -301,11 +296,13 @@ public class Move
                     }
                 }
             }
+
+            float destructionMod = tilesIdestroy > 0 ? 1 : 0.75f;
             finalCutSize = cutSize;
             float blueprintDestructionScore = blueprintsDestroyed.Count * blueprintDestructionWeight;
             float disconnectionScore = cutSize * disconnectionWeight;
 
-            return destructionWeight*(blueprintDestructionScore + disconnectionScore);
+            return destructionWeight * (blueprintDestructionScore + disconnectionScore) * destructionMod;
         }
     }
     
