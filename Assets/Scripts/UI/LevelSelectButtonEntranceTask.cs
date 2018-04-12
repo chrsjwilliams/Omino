@@ -11,7 +11,7 @@ public class LevelSelectButtonEntranceTask : Task
     private GameObject[] buttons;
     private Vector3[] startPositions;
     private Vector3[] targetPositions;
-    private const float initialOffset = 600;
+    private float initialOffset = 600;
 
     public LevelSelectButtonEntranceTask(Button[] buttons_)
     {
@@ -25,6 +25,7 @@ public class LevelSelectButtonEntranceTask : Task
     protected override void Init()
     {
         timeElapsed = 0;
+        initialOffset *= (Screen.width / 1027f);
         totalDuration = duration + (staggerTime * buttons.Length);
         startPositions = new Vector3[buttons.Length];
         targetPositions = new Vector3[buttons.Length];

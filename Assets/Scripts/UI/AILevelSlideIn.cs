@@ -9,7 +9,7 @@ public class AILevelSlideIn : Task
     private const float duration = 0.4f;
     private float timeElapsed;
     private const float staggerTime = 0.05f;
-    private const float initialOffset = 280f;
+    private float initialOffset = 280f;
     private float totalDuration;
     private GameObject[] objectsToSlideIn;
     private Vector3[] startPositions;
@@ -32,6 +32,7 @@ public class AILevelSlideIn : Task
 
     protected override void Init()
     {
+        initialOffset *= (Screen.width/ 1027f);
         timeElapsed = 0;
         totalDuration = duration + (objectsToSlideIn.Length * staggerTime);
         objectsToSlideIn[0].transform.parent.gameObject.SetActive(true);

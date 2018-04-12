@@ -9,7 +9,7 @@ public class SideChooseEntrance : Task
     private GameObject[] optionBars;
     private Vector3[] startPositions;
     private Vector3[] targetPositions;
-    private const float initialOffset = 250;
+    private float initialOffset = 250;
     private bool exit;
 
     public SideChooseEntrance(Button[] joinButtons, bool exit_)
@@ -25,6 +25,7 @@ public class SideChooseEntrance : Task
     protected override void Init()
     {
         timeElapsed = 0;
+        initialOffset *= (Screen.width / 1027f);
         startPositions = new Vector3[optionBars.Length];
         targetPositions = new Vector3[optionBars.Length];
         for (int i = 0; i < optionBars.Length; i++)
