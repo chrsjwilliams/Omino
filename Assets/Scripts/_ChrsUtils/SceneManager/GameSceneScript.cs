@@ -67,6 +67,7 @@ public class GameSceneScript : Scene<TransitionData>
     public void GameWin(Player winner)
     {
         Services.UIManager.StartBannerScroll(winner);
+        Services.AudioManager.CreateTempAudio(Services.Clips.Victory, 0.3f);
         foreach(Player player in Services.GameManager.Players)
         {
             player.OnGameOver();

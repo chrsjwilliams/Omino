@@ -23,6 +23,7 @@ public class TitleSceneScript : Scene<TransitionData>
         {
             button.gameObject.SetActive(false);
         }
+        Services.GameManager.tutorialMode = false;
     }
 
     internal override void OnExit()

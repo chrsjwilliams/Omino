@@ -210,7 +210,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         }
         for (int i = 0; i < joinButtonJoinTexts.Length; i++)
         {
-            if (!humanPlayers[i] && !Services.GameManager.tutorialMode)
+            if (!humanPlayers[i])
             {
                 joinButtonJoinTexts[i].transform.localScale =
                     Vector3.Lerp(Vector3.one, textPulseMaxScale * Vector3.one,
