@@ -160,6 +160,12 @@ public class UIManager : MonoBehaviour {
             UpdateDrawMeters(i + 1, 0, 0, 0, 0);
             //resourceSymbols[i] = resourceCounters[i].GetComponentInChildren<Image>();
             //resourceSymbols[i].fillAmount = 0;
+            if (!Services.GameManager.destructorsEnabled)
+            {
+                destructorDrawMeters[i].gameObject.SetActive(false);
+                destructorPieceTimers[i].gameObject.SetActive(false);
+                destLevelTexts[i].gameObject.SetActive(false);
+            }
         }
         pauseMenu.SetActive(false);
 	}

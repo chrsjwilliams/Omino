@@ -14,8 +14,6 @@ public class GameSceneScript : Scene<TransitionData>
     private bool demoMode;
     [SerializeField]
     private bool evolutionMode;
-    private bool tutorialMode;
-    public bool normalPlayMode { get { return !demoMode && !evolutionMode && !tutorialMode; } }
 
     [SerializeField]
     private Color _backgroundColor;
@@ -34,16 +32,11 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GameScene = this;
         Services.UIManager = GetComponentInChildren<UIManager>();
         Services.TutorialManager = GetComponentInChildren<TutorialManager>();
-        tutorialMode = Services.GameManager.tutorialMode;
         _colorChangeTime = 0f;
         Services.MapManager.GenerateMap();
         if (evolutionMode)
         {
             Services.GameManager.InitPlayersEvoMode();
-        }
-        else if (tutorialMode)
-        {
-            Services.GameManager.InitPlayersTutorialMode();
         }
         else
         {
@@ -101,7 +94,9 @@ public class GameSceneScript : Scene<TransitionData>
     {
         gameStarted = true;
         TogglePlayerHandLock(false);
-        if (tutorialMode) Services.TutorialManager.Init();
+        if (Services.MapManager.currentLevel != null &&
+            Services.MapManager.currentLevel.tooltips.Length > 0)
+            Services.TutorialManager.Init();
     }
 
     void TogglePlayerHandLock(bool locked)

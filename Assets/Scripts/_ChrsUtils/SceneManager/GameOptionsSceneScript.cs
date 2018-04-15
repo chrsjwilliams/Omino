@@ -11,10 +11,13 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private const float SECONDS_TO_WAIT = 0.01f;
     private bool[] humanPlayers;
 
-    private int levelSelected;
+    private Level levelSelected;
     [SerializeField]
     private GameObject levelButtonParent;
     private Button[] levelButtons;
+    [SerializeField]
+    private GameObject campaignLevelButtonParent;
+    private Button[] campaignLevelButtons;
     [SerializeField]
     private Image levelSelectionIndicator;
 
@@ -60,6 +63,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         
         levelButtons = levelButtonParent.GetComponentsInChildren<Button>();
         levelButtonParent.SetActive(false);
+        campaignLevelButtons = campaignLevelButtonParent.GetComponentsInChildren<Button>();
+        campaignLevelButtonParent.SetActive(false);
         humanPlayers = new bool[2] { false, false };
         joinButtonJoinTexts = new TextMeshProUGUI[2] {
             joinButtons[0].GetComponentInChildren<TextMeshProUGUI>(),
@@ -94,8 +99,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             case TitleSceneScript.GameMode.Demo:
                 StartDemoMode();
                 break;
-            case TitleSceneScript.GameMode.Tutorial:
-                StartTutorialMode();
+            case TitleSceneScript.GameMode.Campaign:
+                StartCampaignMode();
                 break;
             default:
                 break;
@@ -117,9 +122,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GeneralTaskManager.Do(entrance);
     }
 
-    private void StartTutorialMode()
+    private void StartCampaignMode()
     {
-        levelSelected = 4;
         StartPlayerVsAIMode();
     }
 
@@ -146,27 +150,34 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void SlideInLevelButtons()
     {
+        GameObject buttonParent =
+            Services.GameManager.mode == TitleSceneScript.GameMode.Campaign ?
+             campaignLevelButtonParent : levelButtonParent;
+        Button[] buttons =
+            Services.GameManager.mode == TitleSceneScript.GameMode.Campaign ?
+            campaignLevelButtons : levelButtons;
+
         if (humanPlayers[0] && !humanPlayers[1])
         {
-            levelButtonParent.transform.eulerAngles = new Vector3(0, 0, -90);
+            buttonParent.transform.eulerAngles = new Vector3(0, 0, -90);
         }
         else if (!humanPlayers[0] && humanPlayers[1])
         {
-            levelButtonParent.transform.eulerAngles = new Vector3(0, 0, 90);
+            buttonParent.transform.eulerAngles = new Vector3(0, 0, 90);
         }
-        levelButtonParent.SetActive(true);
-        for (int i = 0; i < levelButtons.Length; i++)
+        buttonParent.SetActive(true);
+        for (int i = 0; i < buttons.Length; i++)
         {
-            levelButtons[i].gameObject.SetActive(false);
+            buttons[i].gameObject.SetActive(false);
         }
         levelSelectionIndicator.gameObject.SetActive(false);
         GameObject levelSelectText = 
-            levelButtonParent.GetComponentInChildren<TextMeshProUGUI>().gameObject;
+            buttonParent.GetComponentInChildren<TextMeshProUGUI>().gameObject;
         levelSelectText.SetActive(false);
         LevelSelectTextEntrance entrance = 
             new LevelSelectTextEntrance(levelSelectText);
         LevelSelectButtonEntranceTask buttonEntrance =
-            new LevelSelectButtonEntranceTask(levelButtons);
+            new LevelSelectButtonEntranceTask(buttons);
         //entrance.Then(buttonEntrance);
         Services.GeneralTaskManager.Do(entrance);
         Services.GeneralTaskManager.Do(buttonEntrance);
@@ -226,18 +237,12 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         }
     }
 
-    public void SelectLevel(int levelNum)
+    public void SelectLevel(LevelButton levelButton)
     {
         levelSelectionIndicator.gameObject.SetActive(true);
-        levelSelected = levelNum;
-        MoveLevelSelector(levelNum);
+        levelSelected = levelButton.level;
+        levelSelectionIndicator.transform.position = levelButton.transform.position;
         StartGame();
-    }
-
-    void MoveLevelSelector(int levelNum)
-    {
-        levelSelectionIndicator.transform.position = 
-            levelButtons[levelNum].transform.position;
     }
 
     public void ToggleHumanPlayer(int playerNum)
@@ -261,7 +266,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         }
         else
         {
-            exit.Then(new ActionTask(StartGame));
+            //exit.Then(new ActionTask(StartGame));
+            exit.Then(new ActionTask(SlideInLevelButtons));
         }
         Services.GeneralTaskManager.Do(exit);
     }

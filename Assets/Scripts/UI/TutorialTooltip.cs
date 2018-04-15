@@ -45,18 +45,17 @@ public class TutorialTooltip : MonoBehaviour {
         }
     }
 
-    public void Init(Vector2 location, string text, bool dismissable, 
-        Vector2 arrowLocation, float arrowRotation)
+    public void Init(TooltipInfo info)
     {
-        GetComponent<RectTransform>().anchoredPosition = location;
-        textComponent.text = text;
-        GetComponent<Button>().enabled = dismissable;
-        dismissText.enabled = dismissable;
-        if (arrowLocation == Vector2.zero) arrow.enabled = false;
+        GetComponent<RectTransform>().anchoredPosition = info.location;
+        textComponent.text = info.text;
+        GetComponent<Button>().enabled = info.dismissable;
+        dismissText.enabled = info.dismissable;
+        if (info.arrowLocation == Vector2.zero) arrow.enabled = false;
         else
         {
-            arrow.GetComponent<RectTransform>().anchoredPosition = arrowLocation;
-            arrow.transform.rotation = Quaternion.Euler(0, 0, arrowRotation);
+            arrow.GetComponent<RectTransform>().anchoredPosition = info.arrowLocation;
+            arrow.transform.localRotation = Quaternion.Euler(0, 0, info.arrowRotation);
         }
         transform.localScale = Vector3.zero;
         scalingUp = true;

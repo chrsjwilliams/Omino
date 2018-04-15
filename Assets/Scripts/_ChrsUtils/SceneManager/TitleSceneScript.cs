@@ -9,7 +9,7 @@ public class TitleSceneScript : Scene<TransitionData>
     [SerializeField]
     private Button playButton;
 
-    public enum GameMode { TwoPlayers, PlayerVsAI, Demo, Tutorial }
+    public enum GameMode { TwoPlayers, PlayerVsAI, Demo, Campaign }
 
     private const float SECONDS_TO_WAIT = 0.01f;
 
@@ -23,7 +23,6 @@ public class TitleSceneScript : Scene<TransitionData>
         {
             button.gameObject.SetActive(false);
         }
-        Services.GameManager.tutorialMode = false;
     }
 
     internal override void OnExit()
@@ -54,9 +53,8 @@ public class TitleSceneScript : Scene<TransitionData>
         );
     }
 
-    public void Play(bool tutorialModeChosen)
+    public void Play()
     {
-        Services.GameManager.tutorialMode = tutorialModeChosen;
         StartGame();
     }
 
@@ -72,10 +70,9 @@ public class TitleSceneScript : Scene<TransitionData>
         StartGame();
     }
 
-    public void PlayTutorialMode()
+    public void PlayCampaignMode()
     {
-        Services.GameManager.mode = GameMode.Tutorial;
-        Services.GameManager.tutorialMode = true;
+        Services.GameManager.mode = GameMode.Campaign;
         StartGame();
     }
 

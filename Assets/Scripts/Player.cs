@@ -129,25 +129,24 @@ public class Player : MonoBehaviour
         boardPieces = new List<Polyomino>();
 
         InitializeNormalDeck();
-        InitializeDestructorDeck();
-        if (Services.GameManager.tutorialMode && !(this is AIPlayer))
-        {
-            DrawPiece(new Polyomino(4, 1, this));
-        }
-        else DrawPieces(startingHandSize);
+        if(Services.GameManager.destructorsEnabled)
+            InitializeDestructorDeck();
+        DrawPieces(startingHandSize);
         OrganizeHand(hand, true);
-        QueueUpNextPiece(true);
+        if(Services.GameManager.destructorsEnabled) QueueUpNextPiece(true);
         QueueUpNextPiece(false);
 
-        Factory factory = new Factory(this);
-        AddBluePrint(factory);
+        if (Services.GameManager.blueprintsEnabled)
+        {
+            Factory factory = new Factory(this);
+            AddBluePrint(factory);
 
-        Mine mine = new Mine(this);
-        AddBluePrint(mine);
+            Mine mine = new Mine(this);
+            AddBluePrint(mine);
 
-        BombFactory bombFactory = new BombFactory(this);
-        AddBluePrint(bombFactory);
-
+            BombFactory bombFactory = new BombFactory(this);
+            AddBluePrint(bombFactory);
+        }
 
         if (playerNum == 1) homeBasePos = new Coord(1, 1);
         else
@@ -216,7 +215,8 @@ public class Player : MonoBehaviour
             DrawPieces(1, new Vector3(rawDrawPos.x,rawDrawPos.y, 0));
             normalDrawMeterFillAmt -= 1;
         }
-        if (destructorDrawMeterFillAmt >= 1)
+        if (destructorDrawMeterFillAmt >= 1 && 
+            Services.GameManager.destructorsEnabled)
         {
             Vector3 rawDrawPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
                 Services.UIManager.bombFactoryBlueprintLocations[playerNum - 1].position);

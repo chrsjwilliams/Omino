@@ -7,11 +7,12 @@ public class GameManager : MonoBehaviour
     public string PLAYER = "Player";
 
     public readonly int MAX_PLAYERS = 2;
-    public readonly int MIN_PLAYERS = 0;
     
     private bool[] humanPlayers;
     public AILEVEL[] aiLevels = new AILEVEL[2] { AILEVEL.EASY, AILEVEL.EASY  };
     public TitleSceneScript.GameMode mode;
+    public bool destructorsEnabled = true;
+    public bool blueprintsEnabled = true;
 
     [SerializeField] private Camera _mainCamera;
     public Camera MainCamera
@@ -46,10 +47,10 @@ public class GameManager : MonoBehaviour
     }
 
     [SerializeField]
-    private Color superDestructorResourceColor;
-    public Color NeutralColor { get { return superDestructorResourceColor; } }
+    private Color neutralColor;
+    public Color NeutralColor { get { return neutralColor; } }
 
-    public int levelSelected { get; private set; }
+    public Level levelSelected { get; private set; }
     private float winWeight;
     private float structureWeight;
     private float blueprintWeight;
@@ -59,8 +60,6 @@ public class GameManager : MonoBehaviour
     private float destructorForBlueprintWeight;
 
     private AIStrategy[] currentStrategies;
-
-    public bool tutorialMode;
 
     private void Awake()
     {
@@ -73,9 +72,11 @@ public class GameManager : MonoBehaviour
         };
     }
 
-    public void SetUserPreferences(int levelNum)
+    public void SetUserPreferences(Level level)
     {
-        levelSelected = levelNum;
+        levelSelected = level;
+        blueprintsEnabled = level.blueprintsEnabled;
+        destructorsEnabled = level.destructorsEnabled;
     }
 
     public void Init()
@@ -145,6 +146,9 @@ public class GameManager : MonoBehaviour
         AIStrategy strategy = new AIStrategy(winWeight, structureWeight,
             blueprintWeight, destructionWeight, blueprintDestructionWeight,
             disconnectionWeight, destructorForBlueprintWeight);
+        if (Services.MapManager.currentLevel != null &&
+            Services.MapManager.currentLevel.overrideStrategy.overrideDefault)
+            strategy = Services.MapManager.currentLevel.overrideStrategy;
         for (int i = 0; i < 2; i++)
         {
             int playerNum = i + 1;

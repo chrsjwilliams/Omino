@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6e3d42f2220bb342a28180320c2b637, type: 3}
+  m_Name: Campaign_1
+  m_EditorClassIdentifier: 
+  availableStructures: 
+  structCoords: []
+  width: 13
+  height: 13
+  cornerBases: 0
+  destructorsEnabled: 0
+  blueprintsEnabled: 0
+  tooltips:
+  - text: This is your opponent's base. Connect from your base to your opponent's
+      to win.
+    location: {x: 400, y: -300}
+    arrowLocation: {x: -450, y: 0}
+    arrowRotation: 180
+    dismissable: 1
+  - text: This is your hand. You can play pieces from here by tapping and dragging.
+    location: {x: -400, y: 400}
+    arrowLocation: {x: 0, y: -250}
+    arrowRotation: -90
+    dismissable: 1
+  - text: Pieces must be played connected to your base.
+    location: {x: -300, y: 400}
+    arrowLocation: {x: 450, y: 0}
+    arrowRotation: 0
+    dismissable: 1
+  - text: Try placing a piece now!
+    location: {x: -500, y: 400}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 90
+    dismissable: 0
+  - text: Each piece costs 1 hammer to play. Hammers replenish over time.
+    location: {x: -300, y: 400}
+    arrowLocation: {x: 0, y: -250}
+    arrowRotation: -90
+    dismissable: 1
+  - text: You also draw new pieces into your hand over time.
+    location: {x: -300, y: -150}
+    arrowLocation: {x: 0, y: -250}
+    arrowRotation: -90
+    dismissable: 1
+  - text: You can rotate a piece you're holding by tapping next to your finger - try
+      using your index finger to drag and your middle finger to rotate!
+    location: {x: -500, y: 400}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 90
+    dismissable: 0
+  - text: Try connecting to the opposing base to win!
+    location: {x: -500, y: 400}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 90
+    dismissable: 0
+  overrideStrategy:
+    winWeight: 0
+    structWeight: 0
+    blueprintWeight: 0
+    destructionWeight: 0
+    blueprintDestructionWeight: 0
+    disconnectionWeight: 0
+    destructorForBlueprintWeight: 0
+    overrideDefault: 1

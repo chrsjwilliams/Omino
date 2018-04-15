@@ -786,7 +786,8 @@ public class AIPlayer : Player
     }
 }
 
-public struct AIStrategy
+[System.Serializable]
+public class AIStrategy
 {
     public float winWeight;
     public float structWeight;
@@ -795,6 +796,7 @@ public struct AIStrategy
     public float blueprintDestructionWeight;
     public float disconnectionWeight;
     public float destructorForBlueprintWeight;
+    public bool overrideDefault;
 
     public AIStrategy(  float winWeight_, float structWeight_, float blueprintWeight_, float destructionWeight_,
                         float blueprintDestructionWeight_, float disconnectionWeight_, float destructorForBlueprintWeight_)

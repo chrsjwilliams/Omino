@@ -9,4 +9,8 @@ public class Level : ScriptableObject
     public int width;
     public int height;
     public bool cornerBases;
+    public bool destructorsEnabled = true;
+    public bool blueprintsEnabled = true;
+    public TooltipInfo[] tooltips;
+    public AIStrategy overrideStrategy;
 }

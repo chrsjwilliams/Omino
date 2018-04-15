@@ -8,15 +8,13 @@ public class TutorialManager : MonoBehaviour {
     private TutorialTooltip currentTooltip;
     public GameObject tutorialTooltipPrefab;
     private int currentIndex;
-    public Vector2[] tooltipLocations;
-    [TextArea]
-    public string[] tooltipTexts;
-    public bool[] tooltipsDismissable;
-    public Vector2[] arrowLocations;
-    public float[] arrowRotations;
     public GameObject backDim;
     private TaskManager tm;
     public float delayDur;
+    private TooltipInfo[] tooltipInfos { get { return Services.MapManager.currentLevel.tooltips; } }
+    [SerializeField]
+    private Transform tooltipZone;
+    private int humanPlayerNum = 1;
 
     private void Awake()
     {
@@ -37,17 +35,22 @@ public class TutorialManager : MonoBehaviour {
     {
         currentIndex = 0;
         CreateTooltip();
+        if (Services.GameManager.Players[0] is AIPlayer)
+        {
+            tooltipZone.localRotation = Quaternion.Euler(0, 0, 180);
+            humanPlayerNum = 2;
+        }
     }
 
 
     public void OnDismiss()
     {
-        if (tooltipsDismissable[currentIndex])
+        if (tooltipInfos[currentIndex].dismissable)
         {
             Services.GameScene.UnpauseGame();
             backDim.SetActive(false);
         }
-        if (currentIndex < tooltipTexts.Length - 1) MoveToNextStep();
+        if (currentIndex < tooltipInfos.Length - 1) MoveToNextStep();
     }
 
     private void MoveToNextStep()
@@ -57,33 +60,42 @@ public class TutorialManager : MonoBehaviour {
         //wait.Then(new ActionTask(CreateTooltip));
         //tm.Do(wait);
         CreateTooltip();
-        if (!tooltipsDismissable[currentIndex])
+        if (!tooltipInfos[currentIndex].dismissable)
             Services.GameEventManager.Register<PiecePlaced>(OnPiecePlaced);
     }
 
     private void OnPiecePlaced(PiecePlaced e)
     {
-        if (e.piece.owner.playerNum == 1)
+        if (e.piece.owner.playerNum == humanPlayerNum)
         {
             Services.GameEventManager.Unregister<PiecePlaced>(OnPiecePlaced);
-            currentTooltip.Dismiss();
+            Task dismissTask = new Wait(1.2f);
+            dismissTask.Then(new ActionTask(currentTooltip.Dismiss));
+            tm.Do(dismissTask);
         }
     }
 
     private void CreateTooltip()
     {
         currentTooltip = Instantiate(Services.Prefabs.TutorialTooltip,
-            Services.UIManager.canvas).GetComponent<TutorialTooltip>();
-        currentTooltip.Init(
-            tooltipLocations[currentIndex],
-            tooltipTexts[currentIndex],
-            tooltipsDismissable[currentIndex],
-            arrowLocations[currentIndex],
-            arrowRotations[currentIndex]);
-        if (tooltipsDismissable[currentIndex])
+            tooltipZone).GetComponent<TutorialTooltip>();
+        TooltipInfo nextTooltipInfo = tooltipInfos[currentIndex];
+        currentTooltip.Init(nextTooltipInfo);
+        if (nextTooltipInfo.dismissable)
         {
             Services.GameScene.PauseGame();
             backDim.SetActive(true);
         }
     }
+}
+
+[System.Serializable]
+public class TooltipInfo
+{
+    [TextArea]
+    public string text;
+    public Vector2 location;
+    public Vector2 arrowLocation;
+    public float arrowRotation;
+    public bool dismissable = true;
 }

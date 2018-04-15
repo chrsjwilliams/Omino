@@ -342,6 +342,8 @@ MonoBehaviour:
   PLAYER: Player
   aiLevels: 0100000001000000
   mode: 0
+  destructorsEnabled: 1
+  blueprintsEnabled: 1
   _mainCamera: {fileID: 0}
   _players: []
   _player1ColorScheme:
@@ -352,8 +354,7 @@ MonoBehaviour:
   - {r: 0.72794116, g: 0.84996766, b: 1, a: 1}
   _mapColorScheme:
   - {r: 0, g: 0, b: 0, a: 0.039215688}
-  superDestructorResourceColor: {r: 0.3882353, g: 0.34117648, b: 0.34117648, a: 1}
-  tutorialMode: 0
+  neutralColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &1356268955
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -52,6 +52,13 @@ public class MapManager : MonoBehaviour
     private int procGenTriesMax;
     [SerializeField]
     private Level[] levels;
+    public Level currentLevel
+    {
+        get
+        {
+            return Services.GameManager.levelSelected;
+        }
+    }
 
     public void Init()
     {
@@ -60,9 +67,9 @@ public class MapManager : MonoBehaviour
 
     public void GenerateMap()
     {
-        if(Services.GameManager.levelSelected != 0)
+        if(Services.GameManager.levelSelected != null)
         {
-            Level level = levels[Services.GameManager.levelSelected - 1];
+            Level level = currentLevel;
             _mapWidth = level.width;
             _mapHeight = level.height;
         }
@@ -90,13 +97,13 @@ public class MapManager : MonoBehaviour
                 tile.SetHighlightStatus(false);
             }
         }
-        if(Services.GameManager.levelSelected == 0)
+        if(Services.GameManager.levelSelected == null)
         {
             GenerateStructures(null);
         }
         else
         {
-            GenerateStructures(levels[Services.GameManager.levelSelected - 1]);
+            GenerateStructures(Services.GameManager.levelSelected);
         }
     }
 
