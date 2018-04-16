@@ -25,28 +25,38 @@ MonoBehaviour:
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
   - text: 'There are two types of pieces: Normal pieces, and attack pieces. Attack
       pieces have a sword icon.'
     location: {x: -400, y: 200}
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
     dismissable: 1
+    windowLocation: {x: -875, y: 150}
+    windowSize: {x: 150, y: 150}
   - text: Attack pieces act just like normal pieces, except that they can be played
       on top of opposing pieces, removing anything they overlap with.
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
   - text: Attack pieces are drawn using a separate timer from normal pieces.
     location: {x: -500, y: -200}
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
     dismissable: 1
+    windowLocation: {x: -940, y: -175}
+    windowSize: {x: 150, y: 225}
   - text: Try to win before your opponent!
-    location: {x: 300, y: 400}
+    location: {x: 500, y: -200}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
   overrideStrategy:
     winWeight: 1
     structWeight: 0

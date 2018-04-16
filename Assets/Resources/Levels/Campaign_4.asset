@@ -29,34 +29,46 @@ MonoBehaviour:
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
   - text: To mix things up, there are special neutral Structures spread across the
       map!
-    location: {x: 300, y: 400}
+    location: {x: 300, y: 450}
     arrowLocation: {x: 450, y: 0}
     arrowRotation: 0
     dismissable: 1
+    windowLocation: {x: 275, y: -275}
+    windowSize: {x: 250, y: 250}
   - text: To claim a Structure, simply connect to it.
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
   - text: Structures cannot be destroyed, but you can reclaim them from your opponent
       if you cut them off!
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
   - text: Each structure bestows a unique power. Tap and hold on a structure to read
       about its effect.
     location: {x: -250, y: -350}
     arrowLocation: {x: -450, y: 0}
     arrowRotation: 180
     dismissable: 1
+    windowLocation: {x: -275, y: 275}
+    windowSize: {x: 250, y: 250}
   - text: You decide what to prioritize! And don't forget about Blueprints!
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
   overrideStrategy:
     winWeight: 0
     structWeight: 0

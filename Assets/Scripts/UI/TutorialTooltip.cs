@@ -59,6 +59,10 @@ public class TutorialTooltip : MonoBehaviour {
         }
         transform.localScale = Vector3.zero;
         scalingUp = true;
+        RectTransform windowRect = 
+            Services.TutorialManager.backDim.GetComponent<RectTransform>();
+        windowRect.sizeDelta = info.windowSize;
+        windowRect.anchoredPosition = info.windowLocation;
     }
 
     public void Dismiss()

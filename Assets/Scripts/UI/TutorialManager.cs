@@ -98,4 +98,6 @@ public class TooltipInfo
     public Vector2 arrowLocation;
     public float arrowRotation;
     public bool dismissable = true;
+    public Vector2 windowLocation;
+    public Vector2 windowSize;
 }

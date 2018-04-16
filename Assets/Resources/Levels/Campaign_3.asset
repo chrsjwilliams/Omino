@@ -25,40 +25,54 @@ MonoBehaviour:
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
   - text: There are 3 different Blueprints, each making a unique Building.
     location: {x: -500, y: -300}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
+    windowLocation: {x: -850, y: -500}
+    windowSize: {x: 200, y: 500}
   - text: The Smithy increases your production of hammers, letting you play pieces
       faster!
-    location: {x: -800, y: 300}
+    location: {x: -800, y: 350}
     arrowLocation: {x: 450, y: 0}
     arrowRotation: 0
     dismissable: 1
+    windowLocation: {x: -850, y: -350}
+    windowSize: {x: 150, y: 175}
   - text: The Brickworks increases your production of normal pieces, giving you a
       bigger supply!
     location: {x: -400, y: -200}
     arrowLocation: {x: 300, y: -250}
     arrowRotation: -90
     dismissable: 1
+    windowLocation: {x: -850, y: -525}
+    windowSize: {x: 150, y: 150}
   - text: The Barracks increases your production of attack pieces, helping you go
       on the offensive!
     location: {x: -400, y: -325}
     arrowLocation: {x: 300, y: -250}
     arrowRotation: -90
     dismissable: 1
+    windowLocation: {x: -850, y: -675}
+    windowSize: {x: 150, y: 150}
   - text: To create a Building, you must first pave out the appropriate shape on the
       board, then you can place a Blueprint on top.
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
   - text: Now go forth, and let your economy flourish!
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
   overrideStrategy:
     winWeight: 0
     structWeight: 0

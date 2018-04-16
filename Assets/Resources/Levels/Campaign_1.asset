@@ -18,6 +18,7 @@ MonoBehaviour:
   cornerBases: 0
   destructorsEnabled: 0
   blueprintsEnabled: 0
+  stackDestructorInOpeningHand: 0
   tooltips:
   - text: This is your opponent's base. Connect from your base to your opponent's
       to win.
@@ -25,42 +26,58 @@ MonoBehaviour:
     arrowLocation: {x: -450, y: 0}
     arrowRotation: 180
     dismissable: 1
+    windowLocation: {x: 350, y: 350}
+    windowSize: {x: 250, y: 250}
   - text: This is your hand. You can play pieces from here by tapping and dragging.
     location: {x: -400, y: 400}
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
     dismissable: 1
+    windowLocation: {x: -900, y: 350}
+    windowSize: {x: 200, y: 800}
   - text: Pieces must be played connected to your base.
     location: {x: -300, y: 400}
     arrowLocation: {x: 450, y: 0}
     arrowRotation: 0
     dismissable: 1
+    windowLocation: {x: -350, y: -350}
+    windowSize: {x: 250, y: 250}
   - text: Try placing a piece now!
     location: {x: -500, y: 400}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
   - text: Each piece costs 1 hammer to play. Hammers replenish over time.
     location: {x: -300, y: 400}
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
     dismissable: 1
+    windowLocation: {x: -750, y: 300}
+    windowSize: {x: 100, y: 400}
   - text: You also draw new pieces into your hand over time.
     location: {x: -300, y: -150}
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
     dismissable: 1
+    windowLocation: {x: -800, y: -175}
+    windowSize: {x: 200, y: 250}
   - text: You can rotate a piece you're holding by tapping next to your finger - try
       using your index finger to drag and your middle finger to rotate!
     location: {x: -500, y: 400}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
   - text: Try connecting to the opposing base to win!
     location: {x: -500, y: 400}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
   overrideStrategy:
     winWeight: 0
     structWeight: 0
