@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6e3d42f2220bb342a28180320c2b637, type: 3}
+  m_Name: Campaign_2
+  m_EditorClassIdentifier: 
+  availableStructures: 
+  structCoords: []
+  width: 13
+  height: 13
+  cornerBases: 0
+  destructorsEnabled: 1
+  blueprintsEnabled: 0
+  stackDestructorInOpeningHand: 1
+  tooltips:
+  - text: Ok, this time, we'll give you an actual opponent to play against!
+    location: {x: -300, y: -300}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    dismissable: 1
+  - text: 'There are two types of pieces: Normal pieces, and attack pieces. Attack
+      pieces have a sword icon.'
+    location: {x: -400, y: 200}
+    arrowLocation: {x: 0, y: -250}
+    arrowRotation: -90
+    dismissable: 1
+  - text: Attack pieces act just like normal pieces, except that they can be played
+      on top of opposing pieces, removing anything they overlap with.
+    location: {x: 0, y: 0}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    dismissable: 1
+  - text: Attack pieces are drawn using a separate timer from normal pieces.
+    location: {x: -500, y: -200}
+    arrowLocation: {x: 0, y: -250}
+    arrowRotation: -90
+    dismissable: 1
+  - text: Try to win before your opponent!
+    location: {x: 300, y: 400}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    dismissable: 0
+  overrideStrategy:
+    winWeight: 1
+    structWeight: 0
+    blueprintWeight: 0
+    destructionWeight: 0.1
+    blueprintDestructionWeight: 0
+    disconnectionWeight: 0
+    destructorForBlueprintWeight: 0
+    overrideDefault: 1

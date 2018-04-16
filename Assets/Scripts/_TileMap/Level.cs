@@ -11,6 +11,7 @@ public class Level : ScriptableObject
     public bool cornerBases;
     public bool destructorsEnabled = true;
     public bool blueprintsEnabled = true;
+    public bool stackDestructorInOpeningHand;
     public TooltipInfo[] tooltips;
     public AIStrategy overrideStrategy;
 }

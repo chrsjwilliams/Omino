@@ -38,7 +38,7 @@ MonoBehaviour:
   - text: Try placing a piece now!
     location: {x: -500, y: 400}
     arrowLocation: {x: 0, y: 0}
-    arrowRotation: 90
+    arrowRotation: 0
     dismissable: 0
   - text: Each piece costs 1 hammer to play. Hammers replenish over time.
     location: {x: -300, y: 400}
@@ -54,12 +54,12 @@ MonoBehaviour:
       using your index finger to drag and your middle finger to rotate!
     location: {x: -500, y: 400}
     arrowLocation: {x: 0, y: 0}
-    arrowRotation: 90
+    arrowRotation: 0
     dismissable: 0
   - text: Try connecting to the opposing base to win!
     location: {x: -500, y: 400}
     arrowLocation: {x: 0, y: 0}
-    arrowRotation: 90
+    arrowRotation: 0
     dismissable: 0
   overrideStrategy:
     winWeight: 0

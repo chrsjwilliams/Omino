@@ -131,7 +131,15 @@ public class Player : MonoBehaviour
         InitializeNormalDeck();
         if(Services.GameManager.destructorsEnabled)
             InitializeDestructorDeck();
-        DrawPieces(startingHandSize);
+        if (Services.GameManager.levelSelected.stackDestructorInOpeningHand)
+        {
+            DrawPieces(startingHandSize - 1);
+            DrawPieces(1, true);
+        }
+        else
+        {
+            DrawPieces(startingHandSize);
+        }
         OrganizeHand(hand, true);
         if(Services.GameManager.destructorsEnabled) QueueUpNextPiece(true);
         QueueUpNextPiece(false);
@@ -288,7 +296,7 @@ public class Player : MonoBehaviour
         hand.Remove(piece);
     }
 
-    public void DrawPieces(int numPiecesToDraw)
+    public void DrawPieces(int numPiecesToDraw, bool onlyDestructors)
     {
         int handSpace = maxHandSize - hand.Count;
         if (selectedPiece != null && !(selectedPiece is Blueprint)) handSpace -= 1;
@@ -299,9 +307,16 @@ public class Player : MonoBehaviour
         }
         for (int i = 0; i < numPiecesToDraw; i++)
         {
-            DrawPiece();
+            DrawPiece(onlyDestructors);
         }
     }
+
+    public void DrawPieces(int numPiecesToDraw)
+    {
+        DrawPieces(numPiecesToDraw, false);
+    }
+
+
 
     public void DrawPieces(int numPiecesToDraw, Vector3 startPos)
     {
@@ -331,10 +346,15 @@ public class Player : MonoBehaviour
     }
 
     //draw instantly
+    public virtual void DrawPiece(bool onlyDestructors)
+    {
+        Polyomino piece = GetRandomPieceFromDeck(onlyDestructors);
+        DrawPiece(piece);
+    }
+
     public virtual void DrawPiece()
     {
-        Polyomino piece = GetRandomPieceFromDeck(false);
-        DrawPiece(piece);
+        DrawPiece(false);
     }
 
     //draw with task
