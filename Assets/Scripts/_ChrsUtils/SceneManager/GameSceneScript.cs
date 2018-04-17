@@ -84,7 +84,7 @@ public class GameSceneScript : Scene<TransitionData>
             restartTask.Then(new ActionTask(Reload));
             Services.GeneralTaskManager.Do(restartTask);
         }
-        if (Services.GameManager.levelSelected != null)
+        if (Services.GameManager.levelSelected != null && !(winner is AIPlayer))
         {
             int progress = 0;
             if (File.Exists(GameOptionsSceneScript.progressFileName))
