@@ -66,6 +66,11 @@ public class LevelSelectButtonEntranceTask : Task
                     EasingEquations.Easing.QuadEaseOut(
                         (timeElapsed - (i * staggerTime)) / duration));
             }
+
+            if(timeElapsed >= duration + (i * staggerTime))
+            {
+                buttons[i].transform.localPosition = targetPositions[i];
+            }
         }
 
         if (timeElapsed >= totalDuration) SetStatus(TaskStatus.Success);
@@ -106,5 +111,10 @@ public class LevelSelectTextEntrance: Task
             EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
 
         if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
+    }
+
+    protected override void OnSuccess()
+    {
+        levelSelectText.transform.localPosition = targetPos;
     }
 }
