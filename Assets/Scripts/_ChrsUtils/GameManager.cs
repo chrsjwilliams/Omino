@@ -75,8 +75,11 @@ public class GameManager : MonoBehaviour
     public void SetUserPreferences(Level level)
     {
         levelSelected = level;
-        blueprintsEnabled = level.blueprintsEnabled;
-        destructorsEnabled = level.destructorsEnabled;
+        if (level != null)
+        {
+            blueprintsEnabled = level.blueprintsEnabled;
+            destructorsEnabled = level.destructorsEnabled;
+        }
     }
 
     public void Init()

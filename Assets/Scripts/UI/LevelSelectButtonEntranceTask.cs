@@ -11,9 +11,9 @@ public class LevelSelectButtonEntranceTask : Task
     private GameObject[] buttons;
     private Vector3[] startPositions;
     private Vector3[] targetPositions;
-    private float initialOffset = 600;
+    private float initialOffset = 1000;
 
-    public LevelSelectButtonEntranceTask(Button[] buttons_)
+    public LevelSelectButtonEntranceTask(LevelButton[] buttons_)
     {
         buttons = new GameObject[buttons_.Length];
         for (int i = 0; i < buttons_.Length; i++)
@@ -32,16 +32,18 @@ public class LevelSelectButtonEntranceTask : Task
         for (int i = 0; i < buttons.Length; i++)
         {
             GameObject button = buttons[i];
-            button.SetActive(true);
+            LevelButton levelButton = button.GetComponent<LevelButton>();
+            button.SetActive(levelButton.unlocked);
             Vector3 offset;
-            if (button.GetComponent<RectTransform>().anchoredPosition.x < 0)
-            {
-                offset = initialOffset * Vector3.left;
-            }
-            else
-            {
-                offset = initialOffset * Vector3.right;
-            }
+            //if (button.GetComponent<RectTransform>().anchoredPosition.x < 0)
+            //{
+            //    offset = initialOffset * Vector3.left;
+            //}
+            //else
+            //{
+            //    offset = initialOffset * Vector3.right;
+            //}
+            offset = initialOffset * Vector3.down;
 
             targetPositions[i] = button.transform.localPosition;
             button.transform.localPosition += offset;
@@ -77,7 +79,7 @@ public class LevelSelectTextEntrance: Task
     private GameObject levelSelectText;
     private Vector3 startPos;
     private Vector3 targetPos;
-    private const float initialOffset = 200;
+    private const float initialOffset = 1000;
 
     public LevelSelectTextEntrance(GameObject levelSelectText_)
     {
@@ -88,10 +90,9 @@ public class LevelSelectTextEntrance: Task
     protected override void Init()
     {
         levelSelectText.SetActive(true);
-        targetPos = levelSelectText.transform.position;
-
-            levelSelectText.transform.position += initialOffset * Vector3.up;
-        startPos = levelSelectText.transform.position;
+        targetPos = levelSelectText.transform.localPosition;
+        levelSelectText.transform.localPosition += initialOffset * Vector3.down;
+        startPos = levelSelectText.transform.localPosition;
         timeElapsed = 0;
     }
 
@@ -99,7 +100,7 @@ public class LevelSelectTextEntrance: Task
     {
         timeElapsed += Time.deltaTime;
 
-        levelSelectText.transform.position = Vector3.Lerp(
+        levelSelectText.transform.localPosition = Vector3.Lerp(
             startPos,
             targetPos,
             EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));

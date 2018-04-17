@@ -131,7 +131,8 @@ public class Player : MonoBehaviour
         InitializeNormalDeck();
         if(Services.GameManager.destructorsEnabled)
             InitializeDestructorDeck();
-        if (Services.GameManager.levelSelected.stackDestructorInOpeningHand)
+        if (Services.GameManager.levelSelected != null &&
+            Services.GameManager.levelSelected.stackDestructorInOpeningHand)
         {
             DrawPieces(startingHandSize - 1);
             DrawPieces(1, true);

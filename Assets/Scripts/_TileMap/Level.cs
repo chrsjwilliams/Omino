@@ -4,6 +4,7 @@ using System.Collections;
 [CreateAssetMenu(menuName = "Level")]
 public class Level : ScriptableObject
 {
+    public int campaignLevelNum;
     public BuildingType[] availableStructures;
     public Coord[] structCoords;
     public int width;

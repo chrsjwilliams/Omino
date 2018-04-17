@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.IO;
 
 public class GameOptionsSceneScript : Scene<TransitionData>
 {
@@ -11,13 +12,21 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private const float SECONDS_TO_WAIT = 0.01f;
     private bool[] humanPlayers;
 
+    public static string progressFileName
+    {
+        get {
+            return Application.persistentDataPath + Path.DirectorySeparatorChar +
+              "progress.txt";
+        }
+    }
+
     private Level levelSelected;
     [SerializeField]
     private GameObject levelButtonParent;
-    private Button[] levelButtons;
+    private LevelButton[] levelButtons;
     [SerializeField]
     private GameObject campaignLevelButtonParent;
-    private Button[] campaignLevelButtons;
+    private LevelButton[] campaignLevelButtons;
     [SerializeField]
     private Image levelSelectionIndicator;
 
@@ -61,9 +70,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GameManager.SetDisconnectionWeight(defaultDisconnectionWeight);
         Services.GameManager.SetDestructorForBlueprintWeight(defaultDestructorForBlueprintWeight);
         
-        levelButtons = levelButtonParent.GetComponentsInChildren<Button>();
+        levelButtons = levelButtonParent.GetComponentsInChildren<LevelButton>();
         levelButtonParent.SetActive(false);
-        campaignLevelButtons = campaignLevelButtonParent.GetComponentsInChildren<Button>();
+        campaignLevelButtons = campaignLevelButtonParent.GetComponentsInChildren<LevelButton>();
         campaignLevelButtonParent.SetActive(false);
         humanPlayers = new bool[2] { false, false };
         joinButtonJoinTexts = new TextMeshProUGUI[2] {
@@ -122,8 +131,46 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GeneralTaskManager.Do(entrance);
     }
 
+    private void SetLevelProgress(int progress)
+    {
+        for (int i = 0; i < campaignLevelButtons.Length; i++)
+        {
+            LevelButton button = campaignLevelButtons[i].GetComponent<LevelButton>();
+            if (i > progress)
+            {
+                button.unlocked = false;
+                button.gameObject.SetActive(false);
+            }
+            else if (i <= progress)
+            {
+                button.unlocked = true;
+                button.gameObject.SetActive(true);
+                button.GetComponentsInChildren<Image>()[1].enabled = i < progress;
+            }
+        }
+    }
+
+    public void UnlockAllLevels()
+    {
+        SetLevelProgress(4);
+        File.WriteAllText(GameOptionsSceneScript.progressFileName,"4");
+    }
+
+    public void LockAllLevels()
+    {
+        SetLevelProgress(0);
+        File.WriteAllText(GameOptionsSceneScript.progressFileName, "0");
+    }
+
     private void StartCampaignMode()
     {
+        int progress = 0;
+        if (File.Exists(progressFileName))
+        {
+            string fileText = File.ReadAllText(progressFileName);
+            int.TryParse(fileText, out progress);
+        }
+        SetLevelProgress(progress);
         StartPlayerVsAIMode();
     }
 
@@ -153,7 +200,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         GameObject buttonParent =
             Services.GameManager.mode == TitleSceneScript.GameMode.Campaign ?
              campaignLevelButtonParent : levelButtonParent;
-        Button[] buttons =
+        LevelButton[] buttons =
             Services.GameManager.mode == TitleSceneScript.GameMode.Campaign ?
             campaignLevelButtons : levelButtons;
 

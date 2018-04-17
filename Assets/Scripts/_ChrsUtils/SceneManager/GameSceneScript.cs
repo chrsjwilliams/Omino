@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GameSceneScript : Scene<TransitionData>
@@ -61,7 +62,7 @@ public class GameSceneScript : Scene<TransitionData>
     {
         Services.UIManager.StartBannerScroll(winner);
         Services.AudioManager.CreateTempAudio(Services.Clips.Victory, 0.3f);
-        foreach(Player player in Services.GameManager.Players)
+        foreach (Player player in Services.GameManager.Players)
         {
             player.OnGameOver();
         }
@@ -77,6 +78,21 @@ public class GameSceneScript : Scene<TransitionData>
             Task restartTask = new Wait(1f);
             restartTask.Then(new ActionTask(Reload));
             Services.GeneralTaskManager.Do(restartTask);
+        }
+        if (Services.GameManager.levelSelected != null)
+        {
+            int progress = 0;
+            if (File.Exists(GameOptionsSceneScript.progressFileName))
+            {
+                string fileText = File.ReadAllText(GameOptionsSceneScript.progressFileName);
+                int.TryParse(fileText, out progress);
+            }
+            int levelBeaten = Services.GameManager.levelSelected.campaignLevelNum;
+            if (levelBeaten > progress)
+            {
+                File.WriteAllText(GameOptionsSceneScript.progressFileName,
+                    levelBeaten.ToString());
+            }
         }
     }
 
