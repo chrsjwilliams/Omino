@@ -551,7 +551,7 @@ public class Polyomino : IVertex
             monominos.Add(monomino);
         }
         ConstructionTask construct = new ConstructionTask(this, monominos);
-        Services.GeneralTaskManager.Do(construct);
+        Services.GameScene.tm.Do(construct);
         for (int i = 0; i < monominos.Count; i++)
         {
             monominos[i].AssignLocation(tiles[i].coord);
@@ -927,7 +927,7 @@ public class Polyomino : IVertex
 
             DeathAnimation die = new DeathAnimation(this);
             die.Then(new ActionTask(DestroyThis));
-            Services.GeneralTaskManager.Do(die);
+            Services.GameScene.tm.Do(die);
         }
         else
         {
@@ -1681,7 +1681,7 @@ public class Polyomino : IVertex
         SortOnSelection(true);
         BurnPiece burnTask = new BurnPiece(this);
         burnTask.Then(new ActionTask(DestroyThis));
-        Services.GeneralTaskManager.Do(burnTask);
+        Services.GameScene.tm.Do(burnTask);
         burningFromHand = true;
         foreach (Tile tile in tiles) tile.OnRemove();
     }

@@ -69,6 +69,12 @@ public class GameEventsManager
         }
     }
     
+    public void Clear()
+    {
+        delegateLookup = new Dictionary<Delegate, GameEventDelegate>();
+        delegates = new Dictionary<Type, GameEventDelegate>();
+    }
+
     /*--------------------------------------------------------------------------------------*/
     /*																						*/
     /*	Unregister<T>: Unregisters script for a GameEvent          							*/

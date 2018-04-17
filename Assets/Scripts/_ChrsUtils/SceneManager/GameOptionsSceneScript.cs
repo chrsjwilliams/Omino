@@ -233,12 +233,10 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     public void StartGame()
     {
         Services.GameManager.SetUserPreferences(levelSelected);
-        _tm.Do
-        (
-                    new Wait(SECONDS_TO_WAIT))
-              .Then(new ActionTask(ChangeScene)
-        );
-        
+        Task changeScene = new WaitUnscaled(0.01f);
+        changeScene.Then(new ActionTask(ChangeScene));
+
+        _tm.Do(changeScene);
     }
 
     private void ChangeScene()

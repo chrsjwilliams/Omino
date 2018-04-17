@@ -373,7 +373,7 @@ public class Player : MonoBehaviour
             queuedNormalPiece = null;
         }
         Task drawTask = new DrawTask(piece, startPos);
-        Services.GeneralTaskManager.Do(drawTask);
+        Services.GameScene.tm.Do(drawTask);
         QueueUpNextPiece(onlyDestructors);
     }
 

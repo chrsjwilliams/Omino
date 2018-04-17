@@ -10,6 +10,7 @@ public class GameSceneScript : Scene<TransitionData>
 
     private float _colorChangeTime;
     public Transform backgroundImage;
+    public TaskManager tm;
 
     [SerializeField]
     private bool demoMode;
@@ -31,6 +32,8 @@ public class GameSceneScript : Scene<TransitionData>
         tileMapHolder = GameObject.Find(TILE_MAP_HOLDER).transform;
         Time.timeScale = 1;
         Services.GameScene = this;
+        tm = new TaskManager();
+        Services.GameEventManager = new GameEventsManager();
         Services.UIManager = GetComponentInChildren<UIManager>();
         Services.TutorialManager = GetComponentInChildren<TutorialManager>();
         _colorChangeTime = 0f;
@@ -49,6 +52,7 @@ public class GameSceneScript : Scene<TransitionData>
     internal override void OnExit()
     {
         Time.timeScale = 1;
+        Services.GameEventManager.Clear();
     }
 
 	// Update is called once per frame
@@ -56,6 +60,7 @@ public class GameSceneScript : Scene<TransitionData>
     {
         _colorChangeTime += Time.deltaTime;
         Services.GameManager.MainCamera.backgroundColor = Color.Lerp(Color.black, _backgroundColor, _colorChangeTime);
+        tm.Update();
     }
 
     public void GameWin(Player winner)
@@ -96,9 +101,28 @@ public class GameSceneScript : Scene<TransitionData>
         }
     }
 
+    public void Replay()
+    {
+        Task reload = new WaitUnscaled(0.01f);
+        reload.Then(new ActionTask(Reload));
+        Services.GeneralTaskManager.Do(reload);
+    }
+
     void Reload()
     {
         Services.Scenes.Swap<GameSceneScript>();
+    }
+
+    public void ReturnToLevelSelect()
+    {
+        Task returnToLevelSelect = new WaitUnscaled(0.01f);
+        returnToLevelSelect.Then(new ActionTask(LoadLevelSelect));
+        Services.GeneralTaskManager.Do(returnToLevelSelect);
+    }
+
+    void LoadLevelSelect()
+    {
+        Services.Scenes.Swap<GameOptionsSceneScript>();
     }
 
     public void Reset()
@@ -127,7 +151,7 @@ public class GameSceneScript : Scene<TransitionData>
     {
         Task scrollBanners = new ScrollOffReadyBanners(Services.UIManager.readyBanners);
         scrollBanners.Then(new ActionTask(StartGame));
-        Services.GeneralTaskManager.Do(scrollBanners);
+        Services.GameScene.tm.Do(scrollBanners);
     }
 
     public void PauseGame()

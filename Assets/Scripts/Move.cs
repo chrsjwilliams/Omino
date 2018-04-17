@@ -374,7 +374,7 @@ public class Move
             playTask = new PlayTask(this);
             playTask.Then(new ActionTask(blueprintMove.ExecuteMove));
         }
-        Services.GeneralTaskManager.Do(playTask);
+        Services.GameScene.tm.Do(playTask);
         //Debug.Log("player " + piece.owner.playerNum + " making move of score: " + score + " at time " + Time.time);
         //if (finalCutSize > 0) Debug.Log("making cut of size" + finalCutSize);
         //if(!(piece is Blueprint))

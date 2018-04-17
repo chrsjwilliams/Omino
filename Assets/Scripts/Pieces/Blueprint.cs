@@ -298,7 +298,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             }
         }
         ListenForInput(true);
-        Services.GeneralTaskManager.Do(new BlueprintPlacementTask(this));
+        Services.GameScene.tm.Do(new BlueprintPlacementTask(this));
         //MakeDustClouds();
         //spriteOverlay.color = spriteOverlay.color = new Color(spriteOverlay.color.r, spriteOverlay.color.g,
         //spriteOverlay.color.b, 1);
@@ -437,6 +437,6 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         Task floatingTextSequence = new Wait(0.4f);
         floatingTextSequence.Then(new FloatText(onGainText, GetCenterpoint(),
             owner, 2, 1));
-        Services.GeneralTaskManager.Do(floatingTextSequence);
+        Services.GameScene.tm.Do(floatingTextSequence);
     }
 }

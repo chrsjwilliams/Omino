@@ -70,6 +70,24 @@ public abstract class TimedTask : Task
 }
 
 
+public class WaitUnscaled : Task
+{
+    private float duration;
+    private float timeElapsed;
+
+    public WaitUnscaled(float dur)
+    {
+        timeElapsed = 0;
+        duration = dur;
+    }
+
+    internal override void Update()
+    {
+        timeElapsed += Time.unscaledDeltaTime;
+        if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
+    }
+}
+
 // A VERY simple wait task
 public class Wait : TimedTask
 {
