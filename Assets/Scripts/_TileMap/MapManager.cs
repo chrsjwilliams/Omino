@@ -73,6 +73,11 @@ public class MapManager : MonoBehaviour
             _mapWidth = level.width;
             _mapHeight = level.height;
         }
+        else
+        {
+            _mapWidth = 20;
+            _mapHeight = 20;
+        }
 
         Services.CameraController.SetPosition(
             new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, -10));
