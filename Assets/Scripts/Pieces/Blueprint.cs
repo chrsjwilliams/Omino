@@ -285,6 +285,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         owner.OnPieceRemoved(this);
         GameObject.Destroy(holder.gameObject);
         HideFromInput();
+        Debug.Log("removing blueprint from player " + owner.playerNum + " at time " + Time.time);
     }
 
     protected override void OnPlace()
@@ -430,6 +431,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
     public virtual void OnDisconnect()
     {
+        Debug.Log("disconnecting blueprint from player " + owner.playerNum + " at time " + Time.time);
     }
 
     public virtual void OnConnect()

@@ -168,6 +168,11 @@ public class UIManager : MonoBehaviour {
             }
         }
         pauseMenu.SetActive(false);
+        for (int i = 0; i < readyBanners.Length; i++)
+        {
+            if (Services.GameManager.Players[i] is AIPlayer)
+                readyBanners[i].enabled = false;
+        }
 	}
 	
 	// Update is called once per frame
@@ -510,6 +515,10 @@ public class UIManager : MonoBehaviour {
         }
         if (allReady)
         {
+            for (int i = 0; i < readyBanners.Length; i++)
+            {
+                readyBanners[i].enabled = false;
+            }
             Services.GameScene.StartGameSequence();
         }
     }

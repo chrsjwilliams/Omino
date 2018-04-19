@@ -679,19 +679,22 @@ public class Player : MonoBehaviour
     public void AugmentResourceGainRate(float gainRateAmt)
     {
         resourceGainRate += gainRateAmt;
-        resourceProdLevel += gainRateAmt > 0 ? 1 : -1;
+        int levelChange = gainRateAmt > 0 ? 1 : -1;
+        resourceProdLevel += levelChange;
     }
 
     public void AugmentNormalDrawRate(float drawRateAmt)
     {
         normalDrawRate += drawRateAmt;
-        normProdLevel += drawRateAmt > 0 ? 1 : -1;
+        int levelChange = drawRateAmt > 0 ? 1 : -1;
+        normProdLevel += levelChange;
     }
 
     public void AugmentDestructorDrawRate(float drawRateAmt)
     {
         destructorDrawRate += drawRateAmt;
-        destProdLevel += drawRateAmt > 0 ? 1 : -1;
+        int levelChange = drawRateAmt > 0 ? 1 : -1;
+        destProdLevel += levelChange;
     }
 
     public void AugmentResourceGainIncrementFactor(float factorChangeIncrement)
