@@ -167,6 +167,7 @@ public class AIPlayer : Player
                 List<Edge<Polyomino>> pieceEdges = new List<Edge<Polyomino>>();
                 foreach(Polyomino adjPiece in adjPieces)
                 {
+                    if (!currentAllBoardPieces.Contains(adjPiece)) continue;
                     Edge<Polyomino> edge = null;
                     if (!graph.EdgeDict.ContainsKey(adjPiece) && adjPiece.owner != this)
                     {
@@ -730,8 +731,9 @@ public class AIPlayer : Player
         //          we are in danger
         //          block base or perfrom a cut or destroy their piece
         //          Make a cut that cotains the tile closest to my base
+
         base.OnOpposingPiecePlaced(piece);
-        StopThinking();
+        //StopThinking("opponent placed");
     }
 
     public void PlayTaskComplete(Move playedMove)

@@ -13,6 +13,7 @@ public class Move
     //private AdjacencyListGraph<Tile,Edge<bool>> opponentPieces;
 
     public Move blueprintMove { get; private set; }
+    public Task playTask { get; private set; }
 
     //public Dictionary<Tile, Coord> relativeCoords { get; private set; }
     public Polyomino piece { get; private set; }
@@ -60,7 +61,6 @@ public class Move
         {
             pieceCoords.Add(tile.relativeCoord.Add(targetCoord));
         }
-        pCoord = pieceCoords;
         #region OLD BLUEPRINT CREATION TECHNIQUE
         Move mineMove = null;
         Move factoryMove = null;
@@ -358,13 +358,9 @@ public class Move
         return winScore + structScore;
     }
 
-
-    HashSet<Coord> rComp = new HashSet<Coord>();
-    HashSet<Coord> pCoord = new HashSet<Coord>();
-
     public void ExecuteMove()
     {
-        Task playTask;
+        
         if (blueprintMove == null)
         {
             playTask = new PlayTask(this);

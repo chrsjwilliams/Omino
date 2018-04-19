@@ -66,6 +66,10 @@ public class PlayTask : Task
     protected override void OnAbort()
     {
         base.OnAbort();
+        if (move.blueprintMove != null)
+        {
+            move.blueprintMove.playTask.Abort();
+        }
         player.PlayTaskAborted(piece);
     }
 
