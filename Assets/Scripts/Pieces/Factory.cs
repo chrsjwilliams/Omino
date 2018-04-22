@@ -8,7 +8,7 @@ public class Factory : Blueprint
 
     public Factory(Player player_) : base(BuildingType.FACTORY, player_)
     {
-        normalDrawRateBonus = 1f / 30f;
+        normalDrawRateBonus = 0.04f;
         drawRateBonus = normalDrawRateBonus;
         onGainText = "+1 Normal Piece Production";
     }

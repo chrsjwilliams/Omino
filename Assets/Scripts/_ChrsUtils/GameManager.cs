@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
         };
     }
 
-    public void SetUserPreferences(Level level)
+    public void SetCurrentLevel(Level level)
     {
         levelSelected = level;
         if (level != null)

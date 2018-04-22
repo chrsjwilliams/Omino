@@ -46,4 +46,7 @@ public class ClipLibrary : ScriptableObject {
 
     [SerializeField] private AudioClip victory;
     public AudioClip Victory { get { return victory; } }
+
+    [SerializeField] private AudioClip defeat;
+    public AudioClip Defeat { get { return defeat; } }
 }

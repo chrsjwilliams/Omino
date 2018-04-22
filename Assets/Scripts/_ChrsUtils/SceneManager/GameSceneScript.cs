@@ -66,7 +66,14 @@ public class GameSceneScript : Scene<TransitionData>
     public void GameWin(Player winner)
     {
         Services.UIManager.StartBannerScroll(winner);
-        Services.AudioManager.CreateTempAudio(Services.Clips.Victory, 0.3f);
+        if (winner is AIPlayer)
+        {
+            Services.AudioManager.CreateTempAudio(Services.Clips.Defeat, 0.6f);
+        }
+        else
+        {
+            Services.AudioManager.CreateTempAudio(Services.Clips.Victory, 0.3f);
+        }
         foreach (Player player in Services.GameManager.Players)
         {
             player.OnGameOver();
@@ -84,19 +91,26 @@ public class GameSceneScript : Scene<TransitionData>
             restartTask.Then(new ActionTask(Reload));
             Services.GeneralTaskManager.Do(restartTask);
         }
-        if (Services.GameManager.levelSelected != null && !(winner is AIPlayer))
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Campaign)
         {
-            int progress = 0;
-            if (File.Exists(GameOptionsSceneScript.progressFileName))
+            Task showCampaignMenu = new Wait(0.5f);
+            showCampaignMenu.Then(new ParameterizedActionTask<Player>(
+                Services.UIManager.ShowCampaignLevelCompleteMenu, winner));
+            Services.GameScene.tm.Do(showCampaignMenu);
+            if (Services.GameManager.levelSelected != null && !(winner is AIPlayer))
             {
-                string fileText = File.ReadAllText(GameOptionsSceneScript.progressFileName);
-                int.TryParse(fileText, out progress);
-            }
-            int levelBeaten = Services.GameManager.levelSelected.campaignLevelNum;
-            if (levelBeaten > progress)
-            {
-                File.WriteAllText(GameOptionsSceneScript.progressFileName,
-                    levelBeaten.ToString());
+                int progress = 0;
+                if (File.Exists(GameOptionsSceneScript.progressFileName))
+                {
+                    string fileText = File.ReadAllText(GameOptionsSceneScript.progressFileName);
+                    int.TryParse(fileText, out progress);
+                }
+                int levelBeaten = Services.GameManager.levelSelected.campaignLevelNum;
+                if (levelBeaten > progress)
+                {
+                    File.WriteAllText(GameOptionsSceneScript.progressFileName,
+                        levelBeaten.ToString());
+                }
             }
         }
     }
@@ -123,6 +137,16 @@ public class GameSceneScript : Scene<TransitionData>
     void LoadLevelSelect()
     {
         Services.Scenes.Swap<GameOptionsSceneScript>();
+    }
+
+    public void MoveToNextLevel()
+    {
+        Level nextLevel = Services.MapManager.GetNextLevel();
+        if(nextLevel != null)
+        {
+            Services.GameManager.SetCurrentLevel(nextLevel);
+            Replay();
+        }
     }
 
     public void Reset()

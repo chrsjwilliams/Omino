@@ -232,7 +232,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     public void StartGame()
     {
-        Services.GameManager.SetUserPreferences(levelSelected);
+        Services.GameManager.SetCurrentLevel(levelSelected);
         Task changeScene = new WaitUnscaled(0.01f);
         changeScene.Then(new ActionTask(ChangeScene));
 

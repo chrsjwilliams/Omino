@@ -8,9 +8,9 @@ public class Base : Structure
 
     public Base() : base(0)
     {
-        normalDrawRateBonus = 1f / 30f;
-        destructorDrawRateBonus = 1f / 60f;
-        resourceGainRateBonus = 1f / 32f;
+        normalDrawRateBonus = 0.04f;
+        destructorDrawRateBonus = 0.02f;
+        resourceGainRateBonus = 0.0375f;
         buildingType = BuildingType.BASE;
         isFortified = true;
     }
@@ -19,9 +19,9 @@ public class Base : Structure
     {
         mainBase = _mainBase;
         owner = _player;
-        resourceGainRateBonus = 1f / 16f;
-        normalDrawRateBonus = 1f / 20f;
-        destructorDrawRateBonus = 1f / 40f;
+        normalDrawRateBonus = 0.06f;
+        destructorDrawRateBonus = 0.03f;
+        resourceGainRateBonus = 0.08f;
     }
 
     public override void Update()

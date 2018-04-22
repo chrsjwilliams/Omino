@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
     public bool gameOver { get; private set; }
     public List<Polyomino> boardPieces { get; protected set; }
     [SerializeField]
-    protected int startingResources;
+    protected float startingResources;
     [SerializeField]
     protected int baseMaxResources;
     protected int maxResources;
@@ -166,7 +166,8 @@ public class Player : MonoBehaviour
         }
         Services.MapManager.CreateMainBase(this, homeBasePos);
         maxResources = baseMaxResources;
-        resources = startingResources;
+        resources = Mathf.FloorToInt(startingResources);
+        resourceMeterFillAmt = startingResources - resources;
         resourceGainFactor = 1;
         drawRateFactor = 1;
         ToggleHandLock(true);

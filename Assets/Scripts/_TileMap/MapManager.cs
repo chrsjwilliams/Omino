@@ -52,6 +52,7 @@ public class MapManager : MonoBehaviour
     private int procGenTriesMax;
     [SerializeField]
     private Level[] levels;
+    public Level[] campaignLevels;
     public Level currentLevel
     {
         get
@@ -592,5 +593,20 @@ public class MapManager : MonoBehaviour
                     adjPiece.adjacentPieces.Add(monomino);
             }
         }
+    }
+
+    public Level GetNextLevel()
+    {
+        Level nextLevel = null;
+        for (int i = 0; i < campaignLevels.Length; i++)
+        {
+            Level level = campaignLevels[i];
+            if(level == currentLevel && i < campaignLevels.Length -1)
+            {
+                nextLevel = campaignLevels[i + 1];
+                break;
+            }
+        }
+        return nextLevel;
     }
 }

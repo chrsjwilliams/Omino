@@ -64,8 +64,15 @@ MonoBehaviour:
     dismissable: 1
     windowLocation: {x: -800, y: -175}
     windowSize: {x: 200, y: 250}
-  - text: You can rotate a piece you're holding by tapping next to your finger - try
-      using your index finger to drag and your middle finger to rotate!
+  - text: You can rotate the piece you're holding by tapping next to your finger (not
+      next to the piece).
+    location: {x: -500, y: 400}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    dismissable: 1
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+  - text: Try using your index finger to drag and your middle finger to rotate!
     location: {x: -500, y: 400}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0

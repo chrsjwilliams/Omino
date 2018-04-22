@@ -40,6 +40,8 @@ public class UIManager : MonoBehaviour {
     public Button[] readyBanners;
     [SerializeField]
     private GameObject pauseMenu;
+    [SerializeField]
+    private GameObject campaignLevelCompleteMenu;
     public Transform uiTileHolder;
     public Transform overlayIconHolder;
     public Transform canvas;
@@ -167,7 +169,10 @@ public class UIManager : MonoBehaviour {
                 destLevelTexts[i].gameObject.SetActive(false);
             }
         }
+
         pauseMenu.SetActive(false);
+        campaignLevelCompleteMenu.SetActive(false);
+
         for (int i = 0; i < readyBanners.Length; i++)
         {
             if (Services.GameManager.Players[i] is AIPlayer)
@@ -181,6 +186,7 @@ public class UIManager : MonoBehaviour {
         HighlightResourceGained();
         HighlightResourcesMissing();
         if (Input.GetKeyDown(KeyCode.P)) Debug.Break();
+        if (Input.GetKeyDown(KeyCode.M)) ShowCampaignLevelCompleteMenu(Services.GameManager.Players[0]);
 	}
 
 	//public void UpdateTouchCount(Touch[] touches){
@@ -558,4 +564,8 @@ public class UIManager : MonoBehaviour {
         destLevelTexts[playerNum - 1].text = "LV " + level;
     }
 
+    public void ShowCampaignLevelCompleteMenu(Player winner)
+    {
+        campaignLevelCompleteMenu.GetComponent<CampaignMenuManager>().Show(winner);
+    }
 }

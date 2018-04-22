@@ -84,7 +84,7 @@ public class AIPlayer : Player
         startingHandSize = 4;
         maxHandSize = 5;
         piecesPerHandColumn = 5;
-        startingResources = 2;
+        startingResources = 1.5f;
         baseMaxResources = 3;
         boardPieces = new List<Polyomino>();
         resourceGainFactor = 1;
