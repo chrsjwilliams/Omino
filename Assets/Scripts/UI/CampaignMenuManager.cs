@@ -19,6 +19,8 @@ public class CampaignMenuManager : MonoBehaviour {
     private Image defeatSymbol;
     [SerializeField]
     private GameObject wreathHolder;
+    [SerializeField]
+    private Color highlightedButtonColor;
 
 	// Use this for initialization
 	void Start () {
@@ -41,6 +43,7 @@ public class CampaignMenuManager : MonoBehaviour {
             wreathHolder.SetActive(false);
             defeatSymbol.gameObject.SetActive(true);
             resultImage = defeatSymbol;
+            buttons[1].GetComponent<Image>().color = highlightedButtonColor;
         }
         else
         {
@@ -63,6 +66,7 @@ public class CampaignMenuManager : MonoBehaviour {
         else
         {
             nextLevelDisabled.enabled = false;
+            buttons[0].GetComponent<Image>().color = highlightedButtonColor;
         }
         transform.localScale = Vector3.zero;
         for (int i = 0; i < buttons.Length; i++)
