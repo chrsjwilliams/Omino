@@ -667,13 +667,20 @@ public class AIPlayer : Player
             //{
             //    Debug.Log(move.score);
             //}
-            for (int i = 0; i < (int)aiLevel * rollsPerLevel; i++)
+            if (aiLevel == AILEVEL.HARD)
             {
-                int randomIndex = UnityEngine.Random.Range(0, movesToConsider.Count);
-                Move potentialMove = movesToConsider[randomIndex];
-                if(nextPlay == null || potentialMove.score > nextPlay.score)
+                nextPlay = movesToConsider[movesToConsider.Count - 1];
+            }
+            else
+            {
+                for (int i = 0; i < (int)aiLevel * rollsPerLevel; i++)
                 {
-                    nextPlay = potentialMove;
+                    int randomIndex = UnityEngine.Random.Range(0, movesToConsider.Count);
+                    Move potentialMove = movesToConsider[randomIndex];
+                    if (nextPlay == null || potentialMove.score > nextPlay.score)
+                    {
+                        nextPlay = potentialMove;
+                    }
                 }
             }
             //Debug.Log("picking move of score " + nextPlay.score);

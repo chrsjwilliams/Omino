@@ -108,6 +108,10 @@ public class Player : MonoBehaviour
     private Coord homeBasePos;
     [SerializeField]
     private int dangerDistance;
+    private HashSet<Mine> activeMines;
+    private HashSet<Factory> activeFactories;
+    private HashSet<BombFactory> activeBombFactories;
+    private HashSet<Base> activeExpansions;
 
 
     public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_)
@@ -170,6 +174,11 @@ public class Player : MonoBehaviour
         resourceMeterFillAmt = startingResources - resources;
         resourceGainFactor = 1;
         drawRateFactor = 1;
+        activeMines = new HashSet<Mine>();
+        activeFactories = new HashSet<Factory>();
+        activeBombFactories = new HashSet<BombFactory>();
+        activeExpansions = new HashSet<Base>();
+        SetProductionValues();
         ToggleHandLock(true);
         //testing
         ToggleAutoFortify(true);
@@ -658,17 +667,6 @@ public class Player : MonoBehaviour
         int resourcesGained = resources - prevResources;
         if(resourcesGained > 0)
             Services.AudioManager.CreateTempAudio(Services.Clips.ResourceGained, 0.2f);
-        //Vector3 resourceUILocation = Services.GameManager.MainCamera.ScreenToWorldPoint(
-        //    Services.UIManager.resourceCounters[playerNum - 1].transform.position);
-        //resourceUILocation = new Vector3(resourceUILocation.x, resourceUILocation.y, 0);
-        //Vector3 offset = Services.UIManager.resourceGainAnimationOffset;
-        //if (playerNum == 2) offset = new Vector3(offset.x, -offset.y, offset.z);
-        //resourceUILocation += offset;
-        //FloatText floatText = new FloatText("+" + resourcesGained,
-        //   resourceUILocation, this,
-        //   Services.UIManager.resourceGainAnimationDist, 
-        //   Services.UIManager.resourceGainAnimationDur);
-        //Services.GeneralTaskManager.Do(floatText);
         return resourcesGained;
     }
 
@@ -773,5 +771,69 @@ public class Player : MonoBehaviour
                 blueprints[i].Unlock();
             }
         }
+    }
+
+    public void AddActiveExpansion(Base expansion)
+    {
+        activeExpansions.Add(expansion);
+        SetProductionValues();
+    }
+
+    public void RemoveActiveExpansion(Base expansion)
+    {
+        activeExpansions.Remove(expansion);
+        SetProductionValues();
+    }
+
+    public void AddActiveBlueprint(Blueprint blueprint)
+    {
+        switch (blueprint.buildingType)
+        {
+            case BuildingType.FACTORY:
+                activeFactories.Add(blueprint as Factory);
+                break;
+            case BuildingType.MINE:
+                activeMines.Add(blueprint as Mine);
+                break;
+            case BuildingType.BOMBFACTORY:
+                activeBombFactories.Add(blueprint as BombFactory);
+                break;
+            default:
+                break;
+        }
+        SetProductionValues();
+    }
+
+    public void RemoveActiveBlueprint(Blueprint blueprint)
+    {
+        switch (blueprint.buildingType)
+        {
+            case BuildingType.FACTORY:
+                activeFactories.Remove(blueprint as Factory);
+                break;
+            case BuildingType.MINE:
+                activeMines.Remove(blueprint as Mine);
+                break;
+            case BuildingType.BOMBFACTORY:
+                activeBombFactories.Remove(blueprint as BombFactory);
+                break;
+            default:
+                break;
+        }
+        SetProductionValues();
+    }
+
+    private void SetProductionValues()
+    {
+        int expansionCount = activeExpansions.Count;
+        normProdLevel = activeFactories.Count + expansionCount + 1;
+        destProdLevel = activeBombFactories.Count + expansionCount + 1;
+        resourceProdLevel = activeMines.Count + expansionCount + 1;
+        normalDrawRate = Base.normalDrawRate + 
+            ((normProdLevel - 1) * Factory.drawRateBonus);
+        destructorDrawRate = Base.destDrawRate +
+            ((destProdLevel - 1) * BombFactory.drawRateBonus);
+        resourceGainRate = Base.resourceGainRate +
+            ((resourceProdLevel - 1) * Mine.resourceRateBonus);
     }
 }

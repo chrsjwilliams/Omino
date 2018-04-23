@@ -283,6 +283,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             constituentPieces[i].RemoveOccupyingBlueprint(this);
         }
         owner.OnPieceRemoved(this);
+        owner.RemoveActiveBlueprint(this);
         GameObject.Destroy(holder.gameObject);
         HideFromInput();
         Debug.Log("removing blueprint from player " + owner.playerNum + " at time " + Time.time);
@@ -432,6 +433,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     public virtual void OnDisconnect()
     {
         Debug.Log("disconnecting blueprint from player " + owner.playerNum + " at time " + Time.time);
+        owner.RemoveActiveBlueprint(this);
     }
 
     public virtual void OnConnect()
@@ -440,5 +442,6 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         floatingTextSequence.Then(new FloatText(onGainText, GetCenterpoint(),
             owner, 2, 1));
         Services.GameScene.tm.Do(floatingTextSequence);
+        owner.AddActiveBlueprint(this);
     }
 }

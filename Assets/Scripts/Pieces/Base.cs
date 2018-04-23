@@ -6,11 +6,12 @@ public class Base : Structure
 {
     public bool mainBase { get; private set; }
 
+    public const float normalDrawRate = 0.06f;
+    public const float destDrawRate = 0.03f;
+    public const float resourceGainRate = 0.08f;
+
     public Base() : base(0)
     {
-        normalDrawRateBonus = 0.04f;
-        destructorDrawRateBonus = 0.02f;
-        resourceGainRateBonus = 0.0375f;
         buildingType = BuildingType.BASE;
         isFortified = true;
     }
@@ -19,9 +20,6 @@ public class Base : Structure
     {
         mainBase = _mainBase;
         owner = _player;
-        normalDrawRateBonus = 0.06f;
-        destructorDrawRateBonus = 0.03f;
-        resourceGainRateBonus = 0.08f;
     }
 
     public override void Update()
@@ -32,30 +30,19 @@ public class Base : Structure
 
     protected override void OnPlace()
     {
-        //CreateTimerUI();
         ToggleCostUIStatus(false);
-        if (owner != null)
-        {
-            owner.AugmentNormalDrawRate(normalDrawRateBonus);
-            owner.AugmentDestructorDrawRate(destructorDrawRateBonus);
-            owner.AugmentResourceGainRate(resourceGainRateBonus);
-        }
     }
 
     public override void OnClaim(Player player)
     {
         base.OnClaim(player);
         TogglePieceConnectedness(true);
-        player.AugmentNormalDrawRate(normalDrawRateBonus);
-        player.AugmentDestructorDrawRate(destructorDrawRateBonus);
-        player.AugmentResourceGainRate(resourceGainRateBonus);
+        player.AddActiveExpansion(this);
     }
 
     public override void OnClaimLost()
     {
-        owner.AugmentNormalDrawRate(-normalDrawRateBonus);
-        owner.AugmentDestructorDrawRate(-destructorDrawRateBonus);
-        owner.AugmentResourceGainRate(-resourceGainRateBonus);
+        owner.RemoveActiveExpansion(this);
         base.OnClaimLost();
     }
 

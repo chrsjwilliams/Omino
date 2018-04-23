@@ -61,9 +61,6 @@ public class Polyomino : IVertex
 
     public bool isFortified;
     public List<Blueprint> occupyingBlueprints { get; protected set; }
-    protected float resourceGainRateBonus;
-    protected float normalDrawRateBonus;
-    protected float destructorDrawRateBonus;
     public int cost { get; protected set; }
     protected TextMesh costText;
     private bool affordable;

@@ -4,42 +4,10 @@ using System;
 
 public class Mine : Blueprint
 {
-    public static float resourceRateBonus;
+    public const float resourceRateBonus = 0.0375f;
     public Mine(Player player_) : base(BuildingType.MINE, player_)
     {
-        resourceGainRateBonus = 0.0375f;
-        resourceRateBonus = resourceGainRateBonus;
         onGainText = "+1 Hammer Production";
-    }
-
-    public override void Update()
-    {
-        base.Update();
-        //UpdateResourceMeter();
-    }
-
-    protected override void OnPlace()
-    {
-        base.OnPlace();
-        //owner.AugmentResourceGainRate(resourceGainRateBonus);
-    }
-
-    public override void Remove()
-    {
-        owner.AugmentResourceGainRate(-resourceGainRateBonus);
-        base.Remove();
-    }
-
-    public override void OnDisconnect()
-    {
-        base.OnDisconnect();
-        owner.AugmentResourceGainRate(-resourceGainRateBonus);
-    }
-
-    public override void OnConnect()
-    {
-        base.OnConnect();
-        owner.AugmentResourceGainRate(resourceGainRateBonus);
     }
 
     protected override string GetName()
