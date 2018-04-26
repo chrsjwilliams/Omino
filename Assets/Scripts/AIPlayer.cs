@@ -64,7 +64,7 @@ public class AIPlayer : Player
 
         aiLevel = level_;
 
-        
+        dangerDistance = 11;
 
         futileBrickWorksPercentInc = Factory.drawRateBonus * 0.25f;
         futileBarracksPercentInc = BombFactory.drawRateBonus * 0.25f;
@@ -346,7 +346,11 @@ public class AIPlayer : Player
             }
             //Graph tempGraph = new Graph(opponentGraph);
             Graph tempGraph = MakeOpponentPieceGraph(opposingBoardPieces);
-            int cutSize = tempGraph.ApplyKarger();
+            int cutSize = int.MinValue;
+
+            if (inDanger) cutSize = tempGraph.ApplyKarger(dangerTile);
+            else cutSize = tempGraph.ApplyKarger();
+
             //Debug.Log("cut includes: ");
             //foreach (Edge<Polyomino> edge in opponentGraph.Edges)
             //{
@@ -413,6 +417,10 @@ public class AIPlayer : Player
         float barracksWeightMod = (BombFactory.drawRateBonus / destructivePieceExpenditure) / baseBarracksRate;
         float smithWeightMod = (Mine.resourceRateBonus / resourceGainRate) / baseSmithRate;
 
+        bool usePredictiveSmith = resourceProdLevel < 2 ? true : false;
+        bool usePredictiveBrickworks = normProdLevel < 2 ? true : false;
+        bool usePredictiveBarracks = destProdLevel < 2 ? true : false;
+
         float productionRatio = expenditurePerSecond / resourceGainRate;
         if (productionRatio > 1)
         {
@@ -423,7 +431,6 @@ public class AIPlayer : Player
             factoryWeight = blueprintWeight * brickWorksWeightMod;
             bombFactoryWeight = blueprintWeight * barracksWeightMod;
         }
-
         #endregion
 
         //  Finding tiles that my center coord could be placed
@@ -632,7 +639,8 @@ public class AIPlayer : Player
                                 Move newMove = new Move(piece, playableCoords[i], (rotations + 1) % 4, 
                                                         possibleBlueprintMoves, possibleCutMoves,
                                                         winWeight, structWeight, destructionWeight, 
-                                                        mineWeight, factoryWeight, bombFactoryWeight);
+                                                        mineWeight, factoryWeight, bombFactoryWeight,
+                                                        usePredictiveSmith, usePredictiveBrickworks, usePredictiveBarracks);
                                 
                                 //if (nextPlay == null) nextPlay = newMove;
                                 //else if (newMove.score > nextPlay.score)
@@ -740,7 +748,8 @@ public class AIPlayer : Player
         //          Make a cut that cotains the tile closest to my base
 
         base.OnOpposingPiecePlaced(piece);
-        //StopThinking("opponent placed");
+        
+        //StopThinking();
     }
 
     public void PlayTaskComplete(Move playedMove)

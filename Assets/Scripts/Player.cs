@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
     protected float resourceGainRate;
     protected float normalDrawRate;
     protected float destructorDrawRate;
-    private int resourceProdLevel
+    protected int resourceProdLevel
     {
         get { return resourceProdLevel_; }
         set
@@ -76,7 +76,7 @@ public class Player : MonoBehaviour
         }
     }
     private int resourceProdLevel_;
-    private int normProdLevel
+    protected int normProdLevel
     {
         get { return normProdLevel_; }
         set
@@ -86,7 +86,7 @@ public class Player : MonoBehaviour
         }
     }
     private int normProdLevel_;
-    private int destProdLevel
+    protected int destProdLevel
     {
         get { return destProdLevel_; }
         set
@@ -107,11 +107,15 @@ public class Player : MonoBehaviour
     private bool handLocked;
     private Coord homeBasePos;
     [SerializeField]
-    private int dangerDistance;
+    protected int dangerDistance;
     private HashSet<Mine> activeMines;
     private HashSet<Factory> activeFactories;
     private HashSet<BombFactory> activeBombFactories;
     private HashSet<Base> activeExpansions;
+    [SerializeField]
+    public bool inDanger;
+    [SerializeField]
+    protected Tile dangerTile;
 
 
     public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_)
@@ -182,6 +186,8 @@ public class Player : MonoBehaviour
         ToggleHandLock(true);
         //testing
         ToggleAutoFortify(true);
+
+        inDanger = false;
     }
 
     // Update is called once per frame
@@ -557,6 +563,17 @@ public class Player : MonoBehaviour
         if (!(piece is Blueprint))
         {
             resources -= piece.cost;
+            if(piece is Destructor && dangerTile != null)
+            {
+                if (dangerTile.occupyingPiece == null ||
+                    dangerTile.occupyingPiece.owner == null ||
+                    dangerTile.occupyingPiece.owner == this ||
+                    !dangerTile.occupyingPiece.connected)
+                {
+                    dangerTile = null;
+                    inDanger = false;
+                }
+            }
         }
         else if(piece is Blueprint)
         {
@@ -572,7 +589,7 @@ public class Player : MonoBehaviour
             if (!subpiece.dead) boardPieces.Add(subpiece);
         }
         Services.MapManager.DetermineConnectedness(this);
-        if (Services.MapManager.CheckForWin(piece))
+        if (!(piece is Destructor && splashDamage) && Services.MapManager.CheckForWin(piece))
             Services.GameScene.GameWin(this);
         if (Services.GameManager.Players[playerNum % 2] != null)
             Services.GameManager.Players[playerNum % 2].OnOpposingPiecePlaced(piece);
@@ -596,15 +613,18 @@ public class Player : MonoBehaviour
             float dist = tile.coord.Distance(homeBasePos);
             if (dist < dangerDistance)
             {
+                inDanger = true;
                 if(dist < minDist)
                 {
                     minDist = dist;
                     pos = tile.transform.position;
                     closeEnough = true;
+                    Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                    dangerTile = mapTile;
                 }
             }
         }
-        if (closeEnough)
+        if (closeEnough && !this is AIPlayer)
         {
             GameObject dangerEffect = GameObject.Instantiate(Services.Prefabs.DangerEffect);
             dangerEffect.transform.position = pos;

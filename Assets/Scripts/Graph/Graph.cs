@@ -138,6 +138,11 @@ public class Graph
 
     public virtual int ApplyKarger()
     {
+        return ApplyKarger(null);
+    }
+
+    public virtual int ApplyKarger(Tile tile)
+    {
         var random = new System.Random();
         if (Edges.Count == 0)
         {
@@ -145,10 +150,18 @@ public class Graph
         }
         Dictionary<Polyomino, int> collapsedSizes = new Dictionary<Polyomino, int>();
         Dictionary<Polyomino, bool> containsMainBase = new Dictionary<Polyomino, bool>();
+        Dictionary<Polyomino, bool> containsTargetTile = new Dictionary<Polyomino, bool>();
         foreach(Polyomino vertex in Vertices)
         {
             collapsedSizes[vertex] = 1;
             containsMainBase[vertex] = false;
+            containsTargetTile[vertex] = false;
+
+            if(tile != null && vertex.centerCoord.Equals(tile.coord))
+            {
+                containsTargetTile[vertex] = true;
+            }
+
             if (vertex is Base)
             {
                 Base baseVertex = vertex as Base;
@@ -165,6 +178,9 @@ public class Graph
             collapsedSizes[firstVertex] += collapsedSizes[secondVertex];
             if (containsMainBase[secondVertex])
                 containsMainBase[firstVertex] = true;
+
+            if (containsTargetTile[secondVertex])
+                containsTargetTile[firstVertex] = true;
             //Merge
             foreach (Edge<Polyomino> edge in EdgeDict[secondVertex])
             {
@@ -196,7 +212,15 @@ public class Graph
 
         foreach(Polyomino vertex in Vertices)
         {
-            if (!containsMainBase[vertex]) return collapsedSizes[vertex];
+            if (tile != null)
+            {
+                if (!containsTargetTile[vertex])
+                    return collapsedSizes[vertex];
+            }
+            else
+            {
+                if (!containsMainBase[vertex]) return collapsedSizes[vertex];
+            }
         }
         return 0;
     }

@@ -69,6 +69,7 @@ public class PlayTask : Task
         if (move.blueprintMove != null)
         {
             move.blueprintMove.playTask.Abort();
+            Debug.Log("ABORT");
         }
         player.PlayTaskAborted(piece);
     }
