@@ -563,12 +563,12 @@ public class Player : MonoBehaviour
         if (!(piece is Blueprint))
         {
             resources -= piece.cost;
-            if(piece is Destructor)
+            if(piece is Destructor && dangerTile != null)
             {
-                if (dangerTile != null &&
-                    (dangerTile.occupyingPiece.owner == null ||
+                if (dangerTile.occupyingPiece == null ||
+                    dangerTile.occupyingPiece.owner == null ||
                     dangerTile.occupyingPiece.owner == this ||
-                    !dangerTile.occupyingPiece.connected))
+                    !dangerTile.occupyingPiece.connected)
                 {
                     dangerTile = null;
                     inDanger = false;
@@ -641,7 +641,6 @@ public class Player : MonoBehaviour
 
     public virtual void CancelSelectedPiece()
     {
-        if (gameOver) return;
         if (selectedPiece.cost > resources)
             Services.UIManager.FailedPlayFromLackOfResources(this, 
                 selectedPiece.cost - resources);
