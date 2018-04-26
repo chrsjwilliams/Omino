@@ -26,6 +26,6 @@ public class BombFactory : Blueprint
     {
         //return "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) + 
         //    "</color> <color=red>DESTRUCTIVE</color> pieces per second";
-        return "<color=red>Attack</color> Road Production Level +1";
+        return "<color=red>Attack</color> Piece Draw Level +1";
     }
 }

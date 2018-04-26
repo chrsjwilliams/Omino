@@ -37,8 +37,8 @@ public class BurnPiece : Task
 
         piece.holder.transform.position = Vector3.Lerp(startPos, targetPos,
             EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
-        piece.SetTint(new Color(piece.baseColor.r, piece.baseColor.g, piece.baseColor.b, 
-            Mathf.Lerp(1,0,EasingEquations.Easing.QuadEaseIn(timeElapsed/duration))), 1);
+        piece.SetAlpha(Mathf.Lerp(1, 0,
+            EasingEquations.Easing.QuadEaseIn(timeElapsed / duration)));
 
         if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
     }

@@ -185,55 +185,37 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     {
         foreach(Tile tile in tiles)
         {
-            tile.mainSr.sprite = Services.UIManager.blueprintTile;
+            //tile.mainSr.sprite = Services.UIManager.blueprintTile;
+            tile.mainSr.enabled = false;
+            tile.topSr.enabled = false;
         }
     }
 
     protected override void SetIconSprite()
     {
         base.SetIconSprite();
-        iconSr.enabled = false;
-        //iconSr.enabled = true;
-        //switch (buildingType)
-        //{
-        //    case BuildingType.FACTORY:
-        //        iconSr.sprite = Services.UIManager.factoryIcon;
-        //        break;
-        //    case BuildingType.MINE:
-        //        iconSr.sprite = Services.UIManager.mineIcon;
-        //        break;
-        //    case BuildingType.BOMBFACTORY:
-        //        iconSr.sprite = Services.UIManager.bombFactoryIcon;
-        //        break;
-        //    case BuildingType.NONE:
-        //        iconSr.enabled = false;
-        //        break;
-        //    default:
-        //        break;
-        //}
-    }
-
-    protected override void SetOverlaySprite()
-    {
-        base.SetOverlaySprite();
-        spriteOverlay.color = Color.white;
-        int spriteIndex = 0; 
+        iconSr.transform.localPosition = Vector3.zero;
+        iconSr.enabled = true;
+        int spriteIndex = 0;
         switch (buildingType)
         {
             case BuildingType.FACTORY:
-                spriteIndex = ((owner.playerNum - 1) * 2) + numRotations % 2;
-                spriteOverlay.sprite = 
-                    Services.UIManager.factoryOverlays[spriteIndex];
+                spriteIndex = numRotations % 2;
+                spriteOverlay.sprite =
+                    Services.UIManager.factoryBottoms[spriteIndex];
+                iconSr.sprite = Services.UIManager.factoryTops[spriteIndex];
                 break;
             case BuildingType.MINE:
-                spriteIndex = ((owner.playerNum - 1) * 2) + numRotations % 2;
-                spriteOverlay.sprite = 
-                    Services.UIManager.mineOverlays[spriteIndex];
+                spriteIndex = numRotations % 2;
+                spriteOverlay.sprite =
+                    Services.UIManager.mineBottoms[spriteIndex];
+                iconSr.sprite = Services.UIManager.mineTops[spriteIndex];
                 break;
             case BuildingType.BOMBFACTORY:
-                spriteIndex = ((owner.playerNum - 1) * 4) + numRotations % 4;
-                spriteOverlay.sprite = 
-                    Services.UIManager.bombFactoryOverlays[spriteIndex];
+                spriteIndex = numRotations % 4;
+                spriteOverlay.sprite =
+                    Services.UIManager.bombFactoryBottoms[spriteIndex];
+                iconSr.sprite = Services.UIManager.bombFactoryTops[spriteIndex];
                 break;
             case BuildingType.NONE:
                 spriteOverlay.enabled = false;
@@ -241,6 +223,13 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             default:
                 break;
         }
+    }
+
+    protected override void SetOverlaySprite()
+    {
+        base.SetOverlaySprite();
+        spriteOverlay.color = owner.ColorScheme[0];
+
         if (!placed)
         {
             spriteOverlay.color = new Color(spriteOverlay.color.r, spriteOverlay.color.g,

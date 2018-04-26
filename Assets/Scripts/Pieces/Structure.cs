@@ -121,6 +121,7 @@ public abstract class Structure : Polyomino
         }
         adjacentPieces = new List<Polyomino>();
         SortOverlay();
+        SetOverlaySprite();
     }
 
     protected override void OnPlace()
@@ -186,22 +187,26 @@ public abstract class Structure : Polyomino
         }
     }
 
+    protected override void SetIconSprite()
+    {
+        base.SetIconSprite();
+        iconSr.enabled = true;
+    }
+
     protected override void SetOverlaySprite()
     {
         base.SetOverlaySprite();
         spriteOverlay.sprite = Services.UIManager.structureOverlay;
-        if (owner != null)
+        secondOverlay.enabled = false;
+        if (owner == null)
         {
-            secondOverlay.sprite = 
-                Services.UIManager.structureOverlayToppers[owner.playerNum - 1];
-            secondOverlay.enabled = true;
+            spriteOverlay.color = new Color(0.6f, 0.6f, 0.6f);
         }
         else
         {
-            secondOverlay.enabled = false;
+            spriteOverlay.color = owner.ColorScheme[0];
         }
-        spriteOverlay.color = Color.white;
-        secondOverlay.transform.position = GetCenterpoint();
+        //secondOverlay.transform.position = GetCenterpoint();
     }
 
     public override void OnInputDown(bool fromPlayTask)

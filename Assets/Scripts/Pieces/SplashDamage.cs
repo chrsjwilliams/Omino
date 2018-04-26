@@ -25,17 +25,17 @@ public class SplashDamage : Structure
     {
         base.SetIconSprite();
         iconSr.enabled = true;
-        iconSr.sprite = Services.UIManager.splashIcon;
+        iconSr.sprite = Services.UIManager.splashStructIcon;
     }
 
     protected override string GetName()
     {
-        return "Splash Damage";
+        return "Combustion";
     }
 
     protected override string GetDescription()
     {
-        return "<color=red>Attack</color> roads also destroy adjacent enemy " +
-            "roads, but are removed after placement.";
+        return "<color=red>Attack</color> pieces explode, destroying adjacent enemy " +
+            "pieces and themeselves.";
     }
 }

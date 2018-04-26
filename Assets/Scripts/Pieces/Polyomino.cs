@@ -13,7 +13,7 @@ public class Polyomino : IVertex
     public List<Coord> pieceCoords = new List<Coord>();
     //public Dictionary<Tile, Coord> tileRelativeCoords { get; protected set; }
     protected SpriteRenderer holderSr;
-    protected SpriteRenderer iconSr;
+    public SpriteRenderer iconSr { get; protected set; }
     public SpriteRenderer spriteOverlay { get; protected set; }
     protected SpriteRenderer secondOverlay;
     protected SpriteRenderer legalityOverlay;
@@ -53,7 +53,7 @@ public class Polyomino : IVertex
     public const float resourceGainAnimNoiseMag = 4;
     private const float handPosApproachFactor = 0.25f;
     public const float burnPieceDuration = 0.5f;
-    public static Vector3 burnPieceOffset = new Vector3(3, 0, 0);
+    public static Vector3 burnPieceOffset = new Vector3(2, 0, 0);
     private const float alphaWhileUnaffordable = 0.3f;
     private const float alphaWhileAffordable = 0.8f;
     private List<Structure> highlightedStructures;
@@ -841,6 +841,14 @@ public class Polyomino : IVertex
         }
     }
 
+    public void SetAlpha(float alpha)
+    {
+        foreach(Tile tile in tiles)
+        {
+            tile.SetAlpha(alpha);
+        }
+    }
+
     public void ShiftColor(Color color)
     {
         foreach (Tile tile in tiles) tile.ShiftColor(color);
@@ -1074,8 +1082,7 @@ public class Polyomino : IVertex
     {
         iconSr = holder.gameObject.GetComponentsInChildren<SpriteRenderer>()[1];
         iconSr.transform.position = GetCenterpoint();
-        if (buildingType == BuildingType.BASE) iconSr.sprite = Services.UIManager.baseIcon;
-        else iconSr.enabled = false;
+        iconSr.enabled = false;
     }
 
     public Vector3 GetCenterpoint(bool centerTile)

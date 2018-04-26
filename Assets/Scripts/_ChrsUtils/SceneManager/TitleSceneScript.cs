@@ -96,7 +96,7 @@ public class TitleSceneScript : Scene<TransitionData>
     public void OnPlayHit()
     {
         playButton.gameObject.SetActive(false);
-        Services.GeneralTaskManager.Do(
+        _tm.Do(
             new SlideInTitleScreenButtons(buttons, playButton.transform.position));
     }
 }

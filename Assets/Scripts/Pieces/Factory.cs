@@ -8,18 +8,18 @@ public class Factory : Blueprint
 
     public Factory(Player player_) : base(BuildingType.FACTORY, player_)
     {
-        onGainText = "+1 Normal Piece Production";
+        onGainText = "+1 Normal Piece Draw Level";
     }
 
     protected override string GetName()
     {
-        return "Brickworks";
+        return "Factory";
     }
 
     protected override string GetDescription()
     {
         //return "+<color=green>" + Math.Round((double)normalDrawRateBonus, 3) + 
         //    "</color> normal pieces per second";
-        return "Normal Road Production Level +1";
+        return "Normal Piece Draw Level +1";
     }
 }

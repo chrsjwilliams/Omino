@@ -32,12 +32,12 @@ public class AssemblyLine : Structure
 
     protected override string GetName()
     {
-        return "Assembly Line";
+        return "Supply Boost";
     }
 
     protected override string GetDescription()
     {
-        return "Increases road creation rate by <color=green>"
+        return "Increases piece draw rate by <color=green>"
             + 100 * drawRateMultiplier + "</color>%";
     }
 }

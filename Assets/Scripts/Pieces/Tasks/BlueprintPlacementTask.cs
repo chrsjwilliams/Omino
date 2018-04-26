@@ -12,6 +12,7 @@ public class BlueprintPlacementTask : Task
     private Vector3 targetPos;
     private Blueprint blueprint;
     private Transform overlayTransform;
+    private Transform iconTransform;
     private Vector3[] dustLocations;
     private const float shakeDur = 0.3f;
     private const float shakeMag = 0.2f;
@@ -24,6 +25,7 @@ public class BlueprintPlacementTask : Task
     {
         blueprint = blueprint_;
         overlayTransform = blueprint.spriteOverlay.transform;
+        iconTransform = blueprint.iconSr.transform;
         dustLocations = new Vector3[blueprint.tiles.Count];
         for (int i = 0; i < dustLocations.Length; i++)
         {
@@ -43,9 +45,11 @@ public class BlueprintPlacementTask : Task
         timeElapsed = 0;
         //blueprint.spriteOverlay.enabled = true;
         blueprint.spriteOverlay.sortingLayerName = "Overlay";
+        blueprint.iconSr.sortingLayerName = "Overlay";
         Color color = blueprint.spriteOverlay.color;
         blueprint.spriteOverlay.color = new Color(color.r, color.g, color.b, 1);
         overlayTransform.position = startPos;
+        iconTransform.position = startPos;
     }
 
     internal override void Update()
@@ -61,7 +65,11 @@ public class BlueprintPlacementTask : Task
             EasingEquations.Easing.BounceEaseOut(timeElapsed / duration));
         overlayTransform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one,
             EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
-        if(timeElapsed > dustTime && !dustDropped)
+        iconTransform.position = Vector3.Lerp(startPos, targetPos,
+            EasingEquations.Easing.BounceEaseOut(timeElapsed / duration));
+        iconTransform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one,
+            EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
+        if (timeElapsed > dustTime && !dustDropped)
         {
             for (int i = 0; i < dustLocations.Length; i++)
             {

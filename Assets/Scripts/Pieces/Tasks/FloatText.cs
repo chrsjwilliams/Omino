@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class FloatText : Task
 {
@@ -8,7 +9,7 @@ public class FloatText : Task
     private Vector3 targetPos;
     private float timeElapsed;
     private float duration;
-    private TextMesh textMesh;
+    private TextMeshPro textMesh;
     private Player player;
     private Color baseColor;
     private Color alphaOutColor;
@@ -29,7 +30,7 @@ public class FloatText : Task
         Quaternion rot = 
             player.playerNum == 1 ? Quaternion.Euler(0, 0, -90) : Quaternion.Euler(0, 0, 90);
         textMesh = GameObject.Instantiate(Services.Prefabs.FloatingText, startPos,
-            rot, Services.GameScene.transform).GetComponent<TextMesh>();
+            rot, Services.GameScene.transform).GetComponent<TextMeshPro>();
         textMesh.GetComponent<MeshRenderer>().sortingLayerName = "Effects";
         textMesh.text = text;
         timeElapsed = 0;

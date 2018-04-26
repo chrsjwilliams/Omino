@@ -19,8 +19,11 @@ public class Tile : MonoBehaviour, IVertex
     public Coord relativeCoord;
     public BoxCollider2D boxCol { get; private set; }
     public SpriteRenderer mainSr;
+    public SpriteRenderer topSr;
     [SerializeField]
     private SpriteRenderer fillOverlay;
+    [SerializeField]
+    private SpriteRenderer fillOverlayTop;
     //private SpriteGlow glow;
     public Material material { get; set; }
     public Polyomino occupyingPiece { get; private set; }
@@ -75,6 +78,8 @@ public class Tile : MonoBehaviour, IVertex
         shieldSr.enabled = false;
         highlightSr.enabled = false;
         legalitySr.enabled = false;
+        topSr.enabled = false;
+
         transform.position = new Vector3(coord.x, coord.y, 0);
 
         mainSr.color = Services.GameManager.MapColorScheme[0];
@@ -88,6 +93,7 @@ public class Tile : MonoBehaviour, IVertex
         pieceParent = pieceParent_;
         Init(coord_);
         relativeCoord = coord_;
+        topSr.enabled = true;
     }
 
     public void ToggleIllegalLocationIcon(bool status)
@@ -121,6 +127,7 @@ public class Tile : MonoBehaviour, IVertex
     private void SetSrAndUIColor(Color color)
     {
         mainSr.color = color;
+        topSr.color = new Color(1, 1, 1, color.a);
         fillOverlay.color = new Color(color.r, color.g, color.b, 1);
     }
 
@@ -210,6 +217,7 @@ public class Tile : MonoBehaviour, IVertex
         SetSrAndUIColor(Color.Lerp(prevColor, targetColor,
             colorChangeTimeElapsed / colorChangeDuration));
         baseColor = mainSr.color;
+        topSr.color = new Color(1, 1, 1, mainSr.color.a);
         if(colorChangeTimeElapsed >= colorChangeDuration)
         {
             changingColor = false;
@@ -221,6 +229,7 @@ public class Tile : MonoBehaviour, IVertex
         mainSr.sprite = sprites[spriteIndex];
         shieldSr.sprite = shieldSprites[spriteIndex];
         fillOverlay.sprite = mainSr.sprite;
+        fillOverlayTop.sprite = topSr.sprite;
     }
 
     public void ShiftAlpha(float alpha)
@@ -232,6 +241,9 @@ public class Tile : MonoBehaviour, IVertex
     {
         mainSr.color = new Color(mainSr.color.r, mainSr.color.g, mainSr.color.b, alpha);
         targetColor = mainSr.color;
+        topSr.color = new Color(1, 1, 1, alpha);
+        fillOverlay.color = mainSr.color;
+        fillOverlayTop.color = new Color(1, 1, 1, alpha);
     }
 
     public void IncrementSortingOrder(int inc)
@@ -278,6 +290,7 @@ public class Tile : MonoBehaviour, IVertex
     public void SetFilledUIFillAmount(float fillProportion)
     {
         fillOverlay.material.SetFloat("_Cutoff", 1 - fillProportion);
+        fillOverlayTop.material.SetFloat("_Cutoff", 1 - fillProportion);
     }
 
     public void ToggleConnectedness(bool connected)

@@ -17,6 +17,9 @@ public class Destructor : Polyomino
         iconSr.enabled = true;
         iconSr.sprite = owner.splashDamage ?
                 Services.UIManager.splashIcon : Services.UIManager.destructorIcon;
+        iconSr.color = Color.black;
+        if (owner.playerNum == 2)
+            iconSr.transform.localRotation = Quaternion.Euler(0, 0, 180);
     }
 
     public override bool IsPlacementLegal(List<Polyomino> adjacentPieces)

@@ -51,20 +51,26 @@ public class Base : Structure
         base.SetOverlaySprite();
         secondOverlay.enabled = false;
         if (mainBase)
-            spriteOverlay.sprite =
-                Services.UIManager.baseOverlays[owner.playerNum - 1];
-        else if( owner!=null)
-            spriteOverlay.sprite =
-                Services.UIManager.sideBaseOverlays[owner.playerNum - 1];
+        {
+            iconSr.sprite = Services.UIManager.baseOverlay;
+            spriteOverlay.sprite = Services.UIManager.baseBottom;
+        }
         else
         {
-            spriteOverlay.sprite = Services.UIManager.sideBaseOverlays[2];
+            iconSr.sprite = Services.UIManager.sideBaseOverlay;
         }
     }
 
     protected override string GetName()
     {
-        return "Base";
+        if (mainBase)
+        {
+            return "Home Base";
+        }
+        else
+        {
+            return "Expansion";
+        }
     }
 
     protected override string GetDescription()
@@ -81,9 +87,9 @@ public class Base : Structure
         }
         else
         {
-            return "Normal Road Production Level +1 \n" +
-                "<color=red>Attack</color> Road Production Level +1 \n" +
-                "Hammer Production Level +1";
+            return "Normal Piece Draw Level +1 \n" +
+                "<color=red>Attack</color> Piece Draw Level +1 \n" +
+                "Play Rate Level +1";
         }
     }
 }

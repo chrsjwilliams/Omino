@@ -32,12 +32,12 @@ public class MiningDrill : Structure
 
     protected override string GetName()
     {
-        return "Wheelbarrow";
+        return "Fast Forward";
     }
 
     protected override string GetDescription()
     {
-        return "Increases Hammer Production by <color=green>" 
+        return "Increases Draw Rate by <color=green>" 
             + 100 * resourceGainIncrementMultiplier + "</color>%";
     }
 

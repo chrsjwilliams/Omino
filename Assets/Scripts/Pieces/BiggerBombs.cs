@@ -30,7 +30,7 @@ public class BiggerBombs : Structure
 
     protected override string GetName()
     {
-        return "Bigger Militia";
+        return "Attack Upsize";
     }
 
     protected override string GetDescription()

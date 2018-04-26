@@ -56,13 +56,18 @@ public class UIManager : MonoBehaviour {
     public Sprite steelIcon;
     public Sprite bricksIcon;
     public Sprite bigBombIcon;
+    public Sprite splashStructIcon;
     public Sprite splashIcon;
     public Sprite shieldIcon;
-    public Sprite[] factoryOverlays;
-    public Sprite[] mineOverlays;
-    public Sprite[] baseOverlays;
-    public Sprite[] sideBaseOverlays;
-    public Sprite[] bombFactoryOverlays;
+    public Sprite[] factoryBottoms;
+    public Sprite[] factoryTops;
+    public Sprite[] mineBottoms;
+    public Sprite[] mineTops;
+    public Sprite baseBottom;
+    public Sprite baseOverlay;
+    public Sprite sideBaseOverlay;
+    public Sprite[] bombFactoryBottoms;
+    public Sprite[] bombFactoryTops;
     public Sprite structureOverlay;
     public Sprite[] structureOverlayToppers;
     public Sprite notEnoughResourcesIcon;
@@ -122,6 +127,11 @@ public class UIManager : MonoBehaviour {
                 slotTopsP2[i / 3] = slotsP2[i];
                 slotTopsP1[i / 3].color = Services.GameManager.Player1ColorScheme[0];
                 slotTopsP2[i / 3].color = Services.GameManager.Player2ColorScheme[0];
+            }
+            else if(i %3 == 0)
+            {
+                slotsP1[i].color = Services.GameManager.Player1ColorScheme[0];
+                slotsP2[i].color = Services.GameManager.Player2ColorScheme[0];
             }
             else if (i%3 == 2)
             {
@@ -314,8 +324,9 @@ public class UIManager : MonoBehaviour {
             if (slotImage.fillAmount < 1)
             {
                 slotImage.color = new Color(slotImage.color.r, slotImage.color.g,
-                    slotImage.color.b, fillProportion * (2f/3));
-                slotImage.fillAmount = fillProportion;
+                    slotImage.color.b, 0.5f);
+                slotImage.fillAmount =
+                    EasingEquations.Easing.QuadEaseIn(fillProportion);
                 break;
             }
         }
