@@ -418,8 +418,8 @@ public class AIPlayer : Player
         float smithWeightMod = (Mine.resourceRateBonus / resourceGainRate) / baseSmithRate;
 
         bool usePredictiveSmith = resourceProdLevel < 2 ? true : false;
-        bool usePredictiveBrickworks = false;   // normProdLevel < 2 ? true : false;
-        bool usePredictiveBarracks = false;     // destProdLevel < 2 ? true : false;
+        bool usePredictiveBrickworks = normProdLevel < 2 ? true : false;
+        bool usePredictiveBarracks = destProdLevel < 2 ? true : false;
 
         float productionRatio = expenditurePerSecond / resourceGainRate;
         if (productionRatio > 1)

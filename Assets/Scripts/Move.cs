@@ -322,7 +322,7 @@ public class Move
             float destructionMod = 1;
             if (piece.owner.inDanger && tilesIdestroy > 0)
             {
-                destructionMod = 3.0f;
+                destructionMod = 2.0f;
             }
             else if (tilesIdestroy < 1)
             {
