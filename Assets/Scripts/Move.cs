@@ -390,7 +390,7 @@ public class Move
 
     public void ExecuteMove()
     {
-        
+        Debug.Log("Score: " + score);
         if (blueprintMove == null)
         {
             playTask = new PlayTask(this);

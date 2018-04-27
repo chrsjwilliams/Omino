@@ -624,7 +624,7 @@ public class Player : MonoBehaviour
                 }
             }
         }
-        if (closeEnough && !this is AIPlayer)
+        if (closeEnough && !(this is AIPlayer))
         {
             GameObject dangerEffect = GameObject.Instantiate(Services.Prefabs.DangerEffect);
             dangerEffect.transform.position = pos;
