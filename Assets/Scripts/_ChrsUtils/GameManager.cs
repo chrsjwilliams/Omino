@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public readonly int MAX_PLAYERS = 2;
     
     private bool[] humanPlayers;
-    public AILEVEL[] aiLevels = new AILEVEL[2] { AILEVEL.HARD, AILEVEL.HARD  };
+    public AILEVEL[] aiLevels;
     public TitleSceneScript.GameMode mode;
     public bool destructorsEnabled = true;
     public bool blueprintsEnabled = true;

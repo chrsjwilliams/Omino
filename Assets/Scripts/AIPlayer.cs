@@ -99,9 +99,6 @@ public class AIPlayer : Player
                     "\ndestructor4Blueprint weight: " + destructorForBlueprintWeight);
 
 
-        int normalPieceCost = 1;
-        int destructorCost = 1;
-
         baseBrickWorkRate = Factory.drawRateBonus / normalDrawRate;
         baseBarracksRate = BombFactory.drawRateBonus / destructorDrawRate;
         baseSmithRate = Mine.resourceRateBonus / resourceGainRate;

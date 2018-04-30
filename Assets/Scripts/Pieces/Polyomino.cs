@@ -547,11 +547,12 @@ public class Polyomino : IVertex
             Polyomino monomino = CreateSubPiece();
             monominos.Add(monomino);
         }
-        ConstructionTask construct = new ConstructionTask(this, monominos);
-        Services.GameScene.tm.Do(construct);
+        //ConstructionTask construct = new ConstructionTask(this, monominos);
+        //Services.GameScene.tm.Do(construct);
         for (int i = 0; i < monominos.Count; i++)
         {
             monominos[i].AssignLocation(tiles[i].coord);
+            //monominos[i].tiles[0].StartScaling(i * Tile.scaleUpStaggerTime);
         }
         if (!(this is Destructor && owner.splashDamage))
         {
@@ -564,6 +565,51 @@ public class Polyomino : IVertex
                     if (!adjPiece.adjacentPieces.Contains(monomino))
                         adjPiece.adjacentPieces.Add(monomino);
                 }
+            }
+        }
+        List<List<Polyomino>> distanceLevels = new List<List<Polyomino>>();
+        //find distance level 0
+        List<Polyomino> distanceLevelZero = new List<Polyomino>();
+        List<Polyomino> tempMonominos = new List<Polyomino>(monominos);
+        foreach (Polyomino monomino in monominos)
+        {
+            foreach (Polyomino neighbor in monomino.adjacentPieces)
+            {
+                if (!monominos.Contains(neighbor))
+                {
+                    distanceLevelZero.Add(monomino);
+                    tempMonominos.Remove(monomino);
+                    break;
+                }
+            }
+        }
+        distanceLevels.Add(distanceLevelZero);
+        for (int i = 0; i < 5; i++)
+        {
+            if (distanceLevels[i].Count == 0) break;
+            List<Polyomino> nextDistanceLevel = new List<Polyomino>();
+            foreach(Polyomino monomino in tempMonominos)
+            {
+                foreach(Polyomino neighbor in monomino.adjacentPieces)
+                {
+                    if (distanceLevels[i].Contains(neighbor))
+                    {
+                        nextDistanceLevel.Add(monomino);
+                        break;
+                    }
+                }
+            }
+            foreach(Polyomino monomino in nextDistanceLevel)
+            {
+                tempMonominos.Remove(monomino);
+            }
+            distanceLevels.Add(nextDistanceLevel);
+        }
+        for (int i = 0; i < distanceLevels.Count; i++)
+        {
+            foreach(Polyomino monomino in distanceLevels[i])
+            {
+                monomino.tiles[0].StartScaling(Tile.scaleUpStaggerTime * i);
             }
         }
         owner.OnPiecePlaced(this, monominos);
@@ -1333,7 +1379,7 @@ public class Polyomino : IVertex
             QueuePosition(roundedInputCoord);
         }
 
-        SetLegalityGlowStatus();
+        if(!Services.Main.disableUI) SetLegalityGlowStatus();
     }
 
     protected virtual void CleanUpUI()
@@ -1511,7 +1557,7 @@ public class Polyomino : IVertex
             }
 
             SetIconSprite();
-            SetLegalityGlowStatus();
+            if(!Services.Main.disableUI) SetLegalityGlowStatus();
             //Quaternion prevRotation = spriteOverlay.transform.localRotation;
             //spriteOverlay.transform.localRotation = Quaternion.Euler(prevRotation.eulerAngles.x,
             //    prevRotation.eulerAngles.y, prevRotation.eulerAngles.z + 90);

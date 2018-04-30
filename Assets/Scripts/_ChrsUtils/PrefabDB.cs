@@ -79,4 +79,7 @@ public class PrefabDB : ScriptableObject
 
     [SerializeField] private GameObject dangerEffect;
     public GameObject DangerEffect { get { return dangerEffect; } }
+
+    [SerializeField] private GameObject rippleEffect;
+    public GameObject RippleEffect { get { return rippleEffect; } }
 }

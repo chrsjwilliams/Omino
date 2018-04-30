@@ -16,12 +16,10 @@ public class UIManager : MonoBehaviour {
     private Image[] normalDrawMeters;
     [SerializeField]
     private TextMeshProUGUI[] normalPieceTimers;
-    private Transform[] normalQueueMeters;
     [SerializeField]
     private Image[] destructorDrawMeters;
     [SerializeField]
     private TextMeshProUGUI[] destructorPieceTimers;
-    private Transform[] destructorQueueMeters;
     [SerializeField]
     private TextMeshProUGUI[] resourceLevelTexts;
     [SerializeField]
@@ -40,6 +38,8 @@ public class UIManager : MonoBehaviour {
     public Button[] readyBanners;
     [SerializeField]
     private GameObject pauseMenu;
+    [SerializeField]
+    private GameObject pauseButton;
     [SerializeField]
     private GameObject campaignLevelCompleteMenu;
     public Transform uiTileHolder;
@@ -188,6 +188,21 @@ public class UIManager : MonoBehaviour {
             if (Services.GameManager.Players[i] is AIPlayer)
                 readyBanners[i].enabled = false;
         }
+        if (Services.Main.disableUI)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                normalDrawMeters[i].enabled = false;
+                normalPieceTimers[i].enabled = false;
+                destructorDrawMeters[i].enabled = false;
+                destructorPieceTimers[i].enabled = false;
+                destLevelTexts[i].enabled = false;
+                normLevelTexts[i].enabled = false;
+                resourceLevelTexts[i].enabled = false;
+                resourceSlotZones[i].gameObject.SetActive(false);
+            }
+            pauseButton.SetActive(false);
+        }
 	}
 	
 	// Update is called once per frame
@@ -199,47 +214,6 @@ public class UIManager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.M)) ShowCampaignLevelCompleteMenu(Services.GameManager.Players[0]);
 	}
 
-	//public void UpdateTouchCount(Touch[] touches){
-	//	string newText = "";
-	//	for (int i = 0; i < touches.Length; i++) {
-	//		newText += "touch "+ touches[i].fingerId + " at :" + touches [i].position.x + ", " + touches [i].position.y + "\n";
-	//	}
-	//	touchCount.text = newText;
-	//}
-
-
-
-    void InitializeQueueMeters()
-    {
-        normalQueueMeters = new Transform[2];
-        destructorQueueMeters = new Transform[2];
-        for (int i = 0; i < 2; i++)
-        {
-            Quaternion rotation;
-            Vector3 offset = queueMeterOffset;
-            if(i == 0)
-            {
-                rotation = Quaternion.Euler(0, 0, -90);
-            }
-            else
-            {
-                rotation = Quaternion.Euler(0, 0, 90);
-                offset = new Vector3(offset.x, -offset.y, 0);
-            }
-            Vector3 normalPos = Services.GameManager.MainCamera
-                .ScreenToWorldPoint(normalDrawMeters[i].transform.position) + offset;
-            Transform normalQueueBar = Instantiate(Services.Prefabs.QueueBar,
-                new Vector3(normalPos.x, normalPos.y, 0),
-                rotation).transform;
-            normalQueueMeters[i] = normalQueueBar;
-            Vector3 destructorPos = Services.GameManager.MainCamera
-                 .ScreenToWorldPoint(destructorDrawMeters[i].transform.position) + offset;
-            Transform destructorQueueBar = Instantiate(Services.Prefabs.QueueBar,
-                 new Vector3(destructorPos.x, destructorPos.y, 0),
-                 rotation).transform;
-            destructorQueueMeters[i] = destructorQueueBar;
-        }
-    }
 
     public void UpdateDrawMeters(int playerNum, float normalFillProportion, 
         float destructorFillProportion, float normalTimeLeft, float destructorTimeLeft)

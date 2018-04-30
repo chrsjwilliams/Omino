@@ -37,7 +37,7 @@ public class MiningDrill : Structure
 
     protected override string GetDescription()
     {
-        return "Increases Draw Rate by <color=green>" 
+        return "Increases Play Rate by <color=green>" 
             + 100 * resourceGainIncrementMultiplier + "</color>%";
     }
 

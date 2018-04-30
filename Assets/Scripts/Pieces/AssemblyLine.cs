@@ -37,7 +37,7 @@ public class AssemblyLine : Structure
 
     protected override string GetDescription()
     {
-        return "Increases piece draw rate by <color=green>"
+        return "Increases piece production rate by <color=green>"
             + 100 * drawRateMultiplier + "</color>%";
     }
 }

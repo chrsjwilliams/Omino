@@ -299,7 +299,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     public override void OnInputDown(bool fromPlayTask)
     {
         base.OnInputDown(fromPlayTask);
-        if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID))
+        if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID) && !Services.Main.disableUI)
         {
             Vector3 tooltipLocation;
             if (placed || owner.playerNum == 2)
@@ -427,10 +427,13 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
     public virtual void OnConnect()
     {
-        Task floatingTextSequence = new Wait(0.4f);
-        floatingTextSequence.Then(new FloatText(onGainText, GetCenterpoint(),
-            owner, 2, 1));
-        Services.GameScene.tm.Do(floatingTextSequence);
+        if (!Services.Main.disableUI)
+        {
+            Task floatingTextSequence = new Wait(0.4f);
+            floatingTextSequence.Then(new FloatText(onGainText, GetCenterpoint(),
+                owner, 2, 1));
+            Services.GameScene.tm.Do(floatingTextSequence);
+        }
         owner.AddActiveBlueprint(this);
     }
 }

@@ -11,7 +11,11 @@ public class InputManager
     //  BUG: Button Presses Register twice for both players
     public void GetInput()
     {
-        if (Input.GetButtonDown("Reset")) Services.GameEventManager.Fire(new Reset());
+        if (Input.GetButtonDown("Reset"))
+        {
+            //Services.GameEventManager.Fire(new Reset());
+            Services.GameManager.Reset(new Reset());
+        }
 		for (int i = 0; i < Input.touches.Length; i++)
         {
 			Touch touch = Input.touches [i];

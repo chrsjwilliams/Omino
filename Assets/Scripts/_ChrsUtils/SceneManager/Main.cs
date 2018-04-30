@@ -61,6 +61,7 @@ using UnityEngine.Assertions;
 public class Main : MonoBehaviour
 {
     [SerializeField] private bool debug;
+    public bool disableUI;
 
     private void Awake()
     {

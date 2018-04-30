@@ -7,7 +7,7 @@ public class Mine : Blueprint
     public const float resourceRateBonus = 0.0375f;
     public Mine(Player player_) : base(BuildingType.MINE, player_)
     {
-        onGainText = "+1 Play Rate";
+        onGainText = "+1 Play Rate Level";
     }
 
     protected override string GetName()

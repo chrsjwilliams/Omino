@@ -66,9 +66,12 @@ public class Tile : MonoBehaviour, IVertex
     private const float redPulsePeriod = 0.6f;
     private static Color redPulseColor = new Color(0.5f, 0, 0.5f);
     private bool toRed;
-    //private Image uiTile;
-    //private OverlayIcon illegalLocationIcon;
-    //public SpriteMask mask { get; private set; }
+    private float scaleUpTimeElapsed;
+    private float scaleUpDelayTime;
+    private const float scaleUpDuration = 0.3f;
+    public const float scaleUpStaggerTime = 0.1f;
+    private bool scaling;
+    private bool rippleEmitted;
 
     public void Init(Coord coord_)
     {
@@ -209,6 +212,41 @@ public class Tile : MonoBehaviour, IVertex
     private void Update()
     {
         if (changingColor) LerpToTargetColor();
+        if (scaling) ScaleUp();
+    }
+
+    private void ScaleUp()
+    {
+        scaleUpTimeElapsed += Time.deltaTime;
+
+        if (scaleUpTimeElapsed > scaleUpDelayTime)
+        {
+            if (!rippleEmitted)
+            {
+                GameObject ripple = Instantiate(Services.Prefabs.RippleEffect, Services.GameScene.transform);
+                ripple.transform.position = transform.position;
+                ParticleSystem ripplePs = ripple.GetComponent<ParticleSystem>();
+                ParticleSystem.MainModule main = ripplePs.main;
+                main.startColor = pieceParent.owner.ColorScheme[0];
+                rippleEmitted = true;
+            }
+            transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one,
+                EasingEquations.Easing.QuadEaseOut(
+                    Mathf.Min(1,
+                    (scaleUpTimeElapsed - scaleUpDelayTime) / scaleUpDuration)));
+        }
+        if(scaleUpTimeElapsed > scaleUpDelayTime + scaleUpDuration)
+        {
+            scaling = false;
+        }
+    }
+
+    public void StartScaling(float delay)
+    {
+        scaling = true;
+        scaleUpDelayTime = delay;
+        scaleUpTimeElapsed = 0;
+        transform.localScale = Vector3.zero;
     }
 
     void LerpToTargetColor()
