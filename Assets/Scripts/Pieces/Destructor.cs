@@ -14,25 +14,28 @@ public class Destructor : Polyomino
     protected override void SetIconSprite()
     {
         base.SetIconSprite();
-        iconSr.enabled = true;
-        iconSr.sprite = owner.splashDamage ?
-                Services.UIManager.splashIcon : Services.UIManager.destructorIcon;
-        iconSr.color = Color.black;
-        if (owner.splashDamage)
+        if (!placed)
         {
-            if(owner.playerNum == 2)
+            iconSr.enabled = true;
+            iconSr.sprite = owner.splashDamage ?
+                    Services.UIManager.splashIcon : Services.UIManager.destructorIcon;
+            iconSr.color = Color.black;
+            if (owner.splashDamage)
             {
-                iconSr.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                if (owner.playerNum == 2)
+                {
+                    iconSr.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                }
+                else
+                {
+                    iconSr.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                }
             }
             else
             {
-                iconSr.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                if (owner.playerNum == 2)
+                    iconSr.transform.localRotation = Quaternion.Euler(0, 0, 180);
             }
-        }
-        else
-        {
-            if (owner.playerNum == 2)
-                iconSr.transform.localRotation = Quaternion.Euler(0, 0, 180);
         }
     }
 
