@@ -589,8 +589,10 @@ public class Player : MonoBehaviour
         {
             if (!subpiece.dead) boardPieces.Add(subpiece);
         }
+        bool hadSplashDamage = splashDamage;
         Services.MapManager.DetermineConnectedness(this);
-        if (!(piece is Destructor && splashDamage) && Services.MapManager.CheckForWin(piece))
+        if (!(piece is Destructor && hadSplashDamage) 
+            && Services.MapManager.CheckForWin(piece))
             Services.GameScene.GameWin(this);
         else if (Services.GameManager.Players[playerNum % 2] != null)
             Services.GameManager.Players[playerNum % 2].OnOpposingPiecePlaced(piece);
