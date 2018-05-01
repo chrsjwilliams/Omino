@@ -18,8 +18,22 @@ public class Destructor : Polyomino
         iconSr.sprite = owner.splashDamage ?
                 Services.UIManager.splashIcon : Services.UIManager.destructorIcon;
         iconSr.color = Color.black;
-        if (owner.playerNum == 2)
-            iconSr.transform.localRotation = Quaternion.Euler(0, 0, 180);
+        if (owner.splashDamage)
+        {
+            if(owner.playerNum == 2)
+            {
+                iconSr.transform.localRotation = Quaternion.Euler(0, 0, 90);
+            }
+            else
+            {
+                iconSr.transform.localRotation = Quaternion.Euler(0, 0, -90);
+            }
+        }
+        else
+        {
+            if (owner.playerNum == 2)
+                iconSr.transform.localRotation = Quaternion.Euler(0, 0, 180);
+        }
     }
 
     public override bool IsPlacementLegal(List<Polyomino> adjacentPieces)
@@ -212,8 +226,7 @@ public class Destructor : Polyomino
     {
         if (e.player == owner)
         {
-            iconSr.sprite = owner.splashDamage ?
-                Services.UIManager.splashIcon : Services.UIManager.destructorIcon;
+            SetIconSprite();
         }
     }
 

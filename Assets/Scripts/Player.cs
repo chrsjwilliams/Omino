@@ -391,6 +391,7 @@ public class Player : MonoBehaviour
         Task drawTask = new DrawTask(piece, startPos);
         Services.GameScene.tm.Do(drawTask);
         QueueUpNextPiece(onlyDestructors);
+        Services.AudioManager.CreateTempAudio(Services.Clips.PieceDrawn, 1);
     }
 
     void QueueUpNextPiece(bool destructor)
@@ -591,7 +592,7 @@ public class Player : MonoBehaviour
         Services.MapManager.DetermineConnectedness(this);
         if (!(piece is Destructor && splashDamage) && Services.MapManager.CheckForWin(piece))
             Services.GameScene.GameWin(this);
-        if (Services.GameManager.Players[playerNum % 2] != null)
+        else if (Services.GameManager.Players[playerNum % 2] != null)
             Services.GameManager.Players[playerNum % 2].OnOpposingPiecePlaced(piece);
 
     }

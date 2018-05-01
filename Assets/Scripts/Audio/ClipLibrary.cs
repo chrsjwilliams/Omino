@@ -14,6 +14,9 @@ public class ClipLibrary : ScriptableObject {
     [SerializeField] private AudioClip piecePicked;
     public AudioClip PiecePicked { get { return piecePicked; } }
 
+    [SerializeField] private AudioClip pieceDrawn;
+    public AudioClip PieceDrawn { get { return pieceDrawn; } }
+
     [SerializeField] private AudioClip pieceDestroyed;
     public AudioClip PieceDestroyed { get { return pieceDestroyed; } }
 

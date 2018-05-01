@@ -613,6 +613,7 @@ public class Polyomino : IVertex
             }
         }
         owner.OnPiecePlaced(this, monominos);
+        Services.AudioManager.CreateTempAudio(Services.Clips.PiecePlaced, 0.5f);
     }
 
     public List<Coord> GetAdjacentEmptyTiles()
