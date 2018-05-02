@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
     private float blueprintDestructionWeight;
     private float disconnectionWeight;
     private float destructorForBlueprintWeight;
+    private float dangerMod;
 
     private AIStrategy[] currentStrategies;
 
@@ -148,7 +149,7 @@ public class GameManager : MonoBehaviour
     {
         AIStrategy strategy = new AIStrategy(winWeight, structureWeight,
             blueprintWeight, destructionWeight, blueprintDestructionWeight,
-            disconnectionWeight, destructorForBlueprintWeight);
+            disconnectionWeight, destructorForBlueprintWeight, dangerMod);
         if (Services.MapManager.currentLevel != null &&
             Services.MapManager.currentLevel.overrideStrategy.overrideDefault)
             strategy = Services.MapManager.currentLevel.overrideStrategy;
@@ -227,7 +228,7 @@ public class GameManager : MonoBehaviour
             {
                 string strategyString = PlayerPrefs.GetString("strategy" + i);
                 string[] weightArrays = strategyString.Split(',');
-                if (weightArrays.Length == 7)
+                if (weightArrays.Length == 8)
                 {
                     currentStrategies[i] = new AIStrategy(
                         float.Parse(weightArrays[0]),
@@ -236,6 +237,7 @@ public class GameManager : MonoBehaviour
                         float.Parse(weightArrays[3]),
                         float.Parse(weightArrays[4]),
                         float.Parse(weightArrays[5]),
+                        float.Parse(weightArrays[6]),
                         float.Parse(weightArrays[6]));
                 }
                 else
@@ -243,13 +245,15 @@ public class GameManager : MonoBehaviour
                     float winWeight = 1;
                     float structWeight = 0.11f;
                     float blueprintWeight = 0.23f;
-                    float destructionWeight = 0.15f;
-                    float blueprintDestructionWeight = 0.2f;
-                    float disconnectionWeight = 0.4f;
+                    float destructionWeight = 0.2f;
+                    float blueprintDestructionWeight = 0.25f;
+                    float disconnectionWeight = 0.6f;
                     float destructorForBlueprintWeight = 0.5f;
+                    float dangerMod = 1.75f;
                     currentStrategies[i] = new AIStrategy(
                         winWeight, structWeight, blueprintWeight, destructionWeight,
-                        blueprintDestructionWeight, disconnectionWeight, destructorForBlueprintWeight);
+                        blueprintDestructionWeight, disconnectionWeight, destructorForBlueprintWeight,
+                        dangerMod);
                 }
             }
             else
@@ -257,13 +261,15 @@ public class GameManager : MonoBehaviour
                 float winWeight = 1;
                 float structWeight = 0.11f;
                 float blueprintWeight = 0.23f;
-                float destructionWeight = 0.15f;
-                float blueprintDestructionWeight = 0.2f;
-                float disconnectionWeight = 0.4f;
+                float destructionWeight = 0.2f;
+                float blueprintDestructionWeight = 0.25f;
+                float disconnectionWeight = 0.6f;
                 float destructorForBlueprintWeight = 0.5f;
+                float dangerMod = 1.75f;
                 currentStrategies[i] = new AIStrategy(
                     winWeight, structWeight, blueprintWeight, destructionWeight,
-                    blueprintDestructionWeight, disconnectionWeight, destructorForBlueprintWeight);
+                    blueprintDestructionWeight, disconnectionWeight, destructorForBlueprintWeight,
+                    dangerMod);
             }
         }
 
@@ -281,13 +287,15 @@ public class GameManager : MonoBehaviour
         float mutatedBlueprintDestructionWeight = winningStrat.blueprintDestructionWeight + Random.Range(-mutationRange, mutationRange);
         float mutatedDisconnectionWeight = winningStrat.disconnectionWeight + Random.Range(-mutationRange, mutationRange);
         float mutatedDestructorForBlueprintWeight = winningStrat.destructorForBlueprintWeight + Random.Range(-mutationRange, mutationRange);
+        float mutatedDangerMod = winningStrat.dangerMod + Random.Range(-mutationRange, mutationRange);
 
         float highestWeight = Mathf.Max(mutatedWinWeight, mutatedStructWeight,
             mutatedBlueprintWeight,
             mutatedDestructionWeight,
             mutatedBlueprintDestructionWeight,
             mutatedDisconnectionWeight,
-            mutatedDestructorForBlueprintWeight);
+            mutatedDestructorForBlueprintWeight,
+            mutatedDangerMod);
 
         mutatedWinWeight /= highestWeight;
         mutatedStructWeight /= highestWeight;
@@ -296,6 +304,7 @@ public class GameManager : MonoBehaviour
         mutatedBlueprintDestructionWeight /= highestWeight;
         mutatedDisconnectionWeight /= highestWeight;
         mutatedDestructorForBlueprintWeight /= highestWeight;
+       
 
         AIStrategy mutatedStrat = new AIStrategy(
             mutatedWinWeight, 
@@ -304,7 +313,8 @@ public class GameManager : MonoBehaviour
             mutatedDestructionWeight,
             mutatedBlueprintDestructionWeight,
             mutatedDisconnectionWeight,
-            mutatedDestructorForBlueprintWeight);
+            mutatedDestructorForBlueprintWeight,
+            mutatedDangerMod);
 
         currentStrategies[winner.playerNum % 2] = mutatedStrat;
 
@@ -318,7 +328,8 @@ public class GameManager : MonoBehaviour
                 strat.destructionWeight + "," +
                 strat.blueprintDestructionWeight + "," +
                 strat.disconnectionWeight + "," +
-                strat.destructorForBlueprintWeight;
+                strat.destructorForBlueprintWeight + "," +
+                strat.dangerMod;
 
             PlayerPrefs.SetString("strategy" + i, strategyString);
         }
@@ -326,7 +337,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("current best strat: WW: " + winningStrat.winWeight + ", Struct: " +
             winningStrat.structWeight + ", BP: " + winningStrat.blueprintWeight + ", ATK: "
             + winningStrat.destructionWeight + ", BPATTK: " + winningStrat.blueprintDestructionWeight +
-            "DISCON: , " + winningStrat.disconnectionWeight + ", DES4BP: " + winningStrat.destructorForBlueprintWeight);
+            " DISCON: , " + winningStrat.disconnectionWeight + ", DES4BP: " + winningStrat.destructorForBlueprintWeight +
+            " DNGR: " + winningStrat.dangerMod);
     }
 
     public void ChangeCameraTo(Camera camera)

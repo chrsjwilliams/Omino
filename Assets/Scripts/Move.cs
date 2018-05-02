@@ -28,7 +28,9 @@ public class Move
 
     float normalPieceForBlueprintWeight = 1;
     float destructorForBlueprintWeight = 8.0f;
+    float dangerMod;
     public int finalCutSize;
+    int tilesIdestroy;
 
     bool predictiveSmith;
     bool predictiveBrickworks;
@@ -39,7 +41,7 @@ public class Move
         List<CutCoordSet> _possibleCutMoves, float winWeight,
         float structureWeight, float destructionWeight, float mineWeight,
         float factoryWeight, float bombFactoryWeight, 
-        bool usePredictiveSmith, bool usePredictiveBrickWorks, bool usePredictiveBarracks)
+        bool usePredictiveSmith, bool usePredictiveBrickWorks, bool usePredictiveBarracks, float _dangerMod)
     {
         piece = _piece;
         //relativeCoords = piece.tileRelativeCoords;
@@ -51,7 +53,7 @@ public class Move
         predictiveSmith = usePredictiveSmith;
         predictiveBrickworks = usePredictiveBrickWorks;
         predictiveBarracks = usePredictiveBarracks;
-
+        dangerMod = _dangerMod;
         score = CalculateScore(winWeight, structureWeight, destructionWeight, mineWeight, factoryWeight, bombFactoryWeight);
     }
 
@@ -146,7 +148,8 @@ public class Move
         float score = 0;
         if (piece is Destructor && piece.owner.splashDamage)
         {
-            score = DestructionScore(destructionWeight, pieceCoords);
+            int effectiveUseMod = tilesIdestroy > 0 ? 1 : 0;
+            score = DestructionScore(destructionWeight, pieceCoords) + (WinAndStructScore(winWeight, 0) * effectiveUseMod);
         }
         else
         {
@@ -244,7 +247,7 @@ public class Move
         else
         {
             List<Blueprint> blueprintsDestroyed = new List<Blueprint>();
-            int tilesIdestroy = 0;
+            tilesIdestroy = 0;
             int destructionRange = piece.owner.splashDamage ? 1 : 0;
             int cutSize = 0;
             HashSet<Coord> coordsToBeDestroyed = new HashSet<Coord>();
@@ -314,7 +317,7 @@ public class Move
                     if (cutSet.size > cutSize)
                     {
                         cutSize = cutSet.size;
-                        Debug.Log("move has cutsize score of " + cutSize);
+                        //Debug.Log("move has cutsize score of " + cutSize);
                     }
                 }
             }
@@ -322,11 +325,11 @@ public class Move
             float destructionMod = 1;
             if (piece.owner.inDanger && tilesIdestroy > 0)
             {
-                destructionMod = 1.75f;
+                destructionMod = dangerMod;
             }
             else if (tilesIdestroy < 1)
             {
-                destructionMod = 0.75f;
+                destructionMod = piece.owner.splashDamage ? 0 : 0.75f;
             }
             finalCutSize = cutSize;
             float blueprintDestructionScore = blueprintsDestroyed.Count * blueprintDestructionWeight;
@@ -390,7 +393,6 @@ public class Move
 
     public void ExecuteMove()
     {
-        Debug.Log("Score: " + score);
         if (blueprintMove == null)
         {
             playTask = new PlayTask(this);

@@ -421,7 +421,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
     public virtual void OnDisconnect()
     {
-        Debug.Log("disconnecting blueprint from player " + owner.playerNum + " at time " + Time.time);
+        //Debug.Log("disconnecting blueprint from player " + owner.playerNum + " at time " + Time.time);
         owner.RemoveActiveBlueprint(this);
     }
 

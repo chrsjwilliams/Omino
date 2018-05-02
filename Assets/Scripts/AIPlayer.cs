@@ -47,6 +47,7 @@ public class AIPlayer : Player
     protected float blueprintdestructionWeight;
     protected float disconnectionWeight;
     protected float destructorForBlueprintWeight;
+    protected float dangerMod;
     private IEnumerator thinkingCoroutine;
 
     public override void Init(int playerNum_, AIStrategy strategy, AILEVEL level_)
@@ -77,6 +78,7 @@ public class AIPlayer : Player
         blueprintdestructionWeight = strategy.blueprintDestructionWeight;
         disconnectionWeight = strategy.disconnectionWeight;
         destructorForBlueprintWeight = strategy.destructorForBlueprintWeight;
+        dangerMod = strategy.dangerMod;
 
         handSpacing = new Vector3(5.5f, -2.35f, 0);
         handOffset = new Vector3(-12.6f, 9.125f, 0);
@@ -97,6 +99,7 @@ public class AIPlayer : Player
                     "\nblueprint destruction weight: " + blueprintdestructionWeight); 
          Debug.Log("disconnection weight: " + disconnectionWeight + 
                     "\ndestructor4Blueprint weight: " + destructorForBlueprintWeight);
+        Debug.Log("danger mod: " + dangerMod);
 
 
         baseBrickWorkRate = Factory.drawRateBonus / normalDrawRate;
@@ -637,7 +640,7 @@ public class AIPlayer : Player
                                                         possibleBlueprintMoves, possibleCutMoves,
                                                         winWeight, structWeight, destructionWeight, 
                                                         mineWeight, factoryWeight, bombFactoryWeight,
-                                                        usePredictiveSmith, usePredictiveBrickworks, usePredictiveBarracks);
+                                                        usePredictiveSmith, usePredictiveBrickworks, usePredictiveBarracks, dangerMod);
                                 
                                 //if (nextPlay == null) nextPlay = newMove;
                                 //else if (newMove.score > nextPlay.score)
@@ -672,12 +675,26 @@ public class AIPlayer : Player
             //{
             //    Debug.Log(move.score);
             //}
+            List<Move> movesToRemove = new List<Move>();
+            foreach (Move move in movesToConsider)
+            {
+                if (!hand.Contains(move.piece) && !(movesToRemove.Contains(move)))
+                {
+                    movesToRemove.Add(move);
+                }
+            }
+
+            foreach (Move move in movesToRemove)
+            {
+                movesToConsider.Remove(move);
+            }
+
             if (aiLevel == AILEVEL.HARD)
             {
                 nextPlay = movesToConsider[movesToConsider.Count - 1];
             }
             else
-            {
+            {   
                 for (int i = 0; i < (int)aiLevel * rollsPerLevel; i++)
                 {
                     int randomIndex = UnityEngine.Random.Range(0, movesToConsider.Count);
@@ -768,7 +785,7 @@ public class AIPlayer : Player
     protected override void BurnFromHand(Polyomino piece)
     {
         base.BurnFromHand(piece);
-        StopThinking();
+        //StopThinking();
     }
 
     public override void OnPieceRemoved(Polyomino piece)
@@ -811,10 +828,12 @@ public class AIStrategy
     public float blueprintDestructionWeight;
     public float disconnectionWeight;
     public float destructorForBlueprintWeight;
+    public float dangerMod;
     public bool overrideDefault;
 
     public AIStrategy(  float winWeight_, float structWeight_, float blueprintWeight_, float destructionWeight_,
-                        float blueprintDestructionWeight_, float disconnectionWeight_, float destructorForBlueprintWeight_)
+                        float blueprintDestructionWeight_, float disconnectionWeight_, float destructorForBlueprintWeight_,
+                        float dangerMod_)
     {
         winWeight = winWeight_;
         structWeight = structWeight_;
@@ -823,5 +842,6 @@ public class AIStrategy
         blueprintDestructionWeight = blueprintDestructionWeight_;
         disconnectionWeight = disconnectionWeight_;
         destructorForBlueprintWeight = destructorForBlueprintWeight_;
+        dangerMod = dangerMod_;
     }
 }
