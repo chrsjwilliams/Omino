@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
     {
         Services.GameEventManager.Register<Reset>(Reset);
         Input.simulateMouseWithTouches = false;
+        //UnityEditor.PlayerSettings.iOS.deferSystemGesturesMode = UnityEngine.iOS.SystemGestureDeferMode.All;
         colorSchemes = new Color[][]
         {
             _player1ColorScheme,
