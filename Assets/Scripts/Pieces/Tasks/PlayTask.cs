@@ -66,7 +66,8 @@ public class PlayTask : Task
     protected override void OnAbort()
     {
         base.OnAbort();
-        if (move.blueprintMove != null)
+        if (move.blueprintMove != null && 
+            (move.blueprintMove.playTask.IsWorking || move.blueprintMove.playTask.IsPending))
         {
             move.blueprintMove.playTask.Abort();
             Debug.Log("ABORT");

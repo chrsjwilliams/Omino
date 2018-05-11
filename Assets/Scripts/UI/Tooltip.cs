@@ -13,7 +13,7 @@ public class Tooltip : MonoBehaviour {
     [SerializeField]
     private Vector2 inHandOffset;
     private RectTransform rect;
-
+   
 	// Use this for initialization
 	void Start () {
 		

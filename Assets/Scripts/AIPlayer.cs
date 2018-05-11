@@ -344,6 +344,7 @@ public class AIPlayer : Player
             {
                 yield return null;
             }
+            //  FIX: Edges are being added when opponent places piece while applying algorithm
             //Graph tempGraph = new Graph(opponentGraph);
             Graph tempGraph = MakeOpponentPieceGraph(opposingBoardPieces);
             int cutSize = int.MinValue;
@@ -586,6 +587,7 @@ public class AIPlayer : Player
         int movesTried = 0;
         foreach (Polyomino piece in currentHand)
         {
+            if (!hand.Contains(piece)) continue;
             if (piece.cost <= resources)
             {
                 //  Check the target coord and center coord

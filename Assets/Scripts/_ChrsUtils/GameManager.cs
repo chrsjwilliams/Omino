@@ -137,6 +137,12 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetFloat("destructorForBlueprintWeight", destructionWeight);
     }
 
+    public void SetDangerWeight(float weight)
+    {
+        dangerMod = weight;
+        PlayerPrefs.SetFloat("dangerMod", dangerMod);
+    }
+
     public void InitPlayersTutorialMode()
     {
         winWeight = 1;
@@ -345,6 +351,11 @@ public class GameManager : MonoBehaviour
     public void ChangeCameraTo(Camera camera)
     {
         _mainCamera = camera;
+    }
+
+    public Color AdjustColorAlpha(Color color, float alpha)
+    {
+        return new Color(color.r, color.g, color.b, alpha);
     }
 
     // Update is called once per frame
