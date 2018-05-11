@@ -61,13 +61,16 @@ public class UIManager : MonoBehaviour {
     public Sprite shieldIcon;
     public Sprite[] factoryBottoms;
     public Sprite[] factoryTops;
+    public Sprite[] factoryIcons;
     public Sprite[] mineBottoms;
     public Sprite[] mineTops;
+    public Sprite[] mineIcons;
     public Sprite baseBottom;
     public Sprite baseOverlay;
     public Sprite sideBaseOverlay;
     public Sprite[] bombFactoryBottoms;
     public Sprite[] bombFactoryTops;
+    public Sprite[] bombFactoryIcons;
     public Sprite structureOverlay;
     public Sprite[] structureOverlayToppers;
     public Sprite notEnoughResourcesIcon;

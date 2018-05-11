@@ -16,25 +16,25 @@ public class Destructor : Polyomino
         base.SetIconSprite();
         if (!placed)
         {
-            iconSr.enabled = true;
-            iconSr.sprite = owner.splashDamage ?
+            holder.icon.enabled = true;
+            holder.icon.sprite = owner.splashDamage ?
                     Services.UIManager.splashIcon : Services.UIManager.destructorIcon;
-            iconSr.color = Color.black;
+            holder.icon.color = Color.black;
             if (owner.splashDamage)
             {
                 if (owner.playerNum == 2)
                 {
-                    iconSr.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                    holder.icon.transform.localRotation = Quaternion.Euler(0, 0, 90);
                 }
                 else
                 {
-                    iconSr.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                    holder.icon.transform.localRotation = Quaternion.Euler(0, 0, -90);
                 }
             }
             else
             {
                 if (owner.playerNum == 2)
-                    iconSr.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                    holder.icon.transform.localRotation = Quaternion.Euler(0, 0, 180);
             }
         }
     }
@@ -110,7 +110,7 @@ public class Destructor : Polyomino
     protected override void OnPlace()
     {
         base.OnPlace();
-        iconSr.enabled = false;
+        holder.icon.enabled = false;
         List<Polyomino> piecesToRemove = GetPiecesInRange();
         if (piecesToRemove.Count > 0)
             Services.AudioManager.CreateTempAudio(Services.Clips.PieceDestroyed, 1);
@@ -240,7 +240,7 @@ public class Destructor : Polyomino
         {
             Remove();
         }
-        iconSr.enabled = false;
+        holder.icon.enabled = false;
 
     }
 

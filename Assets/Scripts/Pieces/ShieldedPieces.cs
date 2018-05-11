@@ -8,7 +8,6 @@ public class ShieldedPieces : Structure
     public ShieldedPieces() : base(0)
     {
         buildingType = BuildingType.SHIELDEDPIECES;
-        isFortified = true;
     }
 
     public override void OnClaim(Player player)
@@ -26,8 +25,7 @@ public class ShieldedPieces : Structure
     protected override void SetIconSprite()
     {
         base.SetIconSprite();
-        iconSr.enabled = true;
-        iconSr.sprite = Services.UIManager.shieldIcon;
+        holder.icon.sprite = Services.UIManager.shieldIcon;
     }
 
     protected override string GetName()

@@ -7,7 +7,6 @@ public class AssemblyLine : Structure
 
     public AssemblyLine() : base(1)
     {
-        isFortified = true;
         buildingType = BuildingType.ASSEMBLYLINE;
     }
 
@@ -26,8 +25,7 @@ public class AssemblyLine : Structure
     protected override void SetIconSprite()
     {
         base.SetIconSprite();
-        iconSr.enabled = true;
-        iconSr.sprite = Services.UIManager.gearIcon;
+        holder.icon.sprite = Services.UIManager.gearIcon;
     }
 
     protected override string GetName()

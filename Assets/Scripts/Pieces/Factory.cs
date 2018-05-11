@@ -22,4 +22,15 @@ public class Factory : Blueprint
         //    "</color> normal pieces per second";
         return "Normal Piece Production Level +1";
     }
+
+    protected override void SetIconSprite()
+    {
+        base.SetIconSprite();
+        int spriteIndex = numRotations % 2;
+        holder.spriteBottom.sprite =
+            Services.UIManager.factoryBottoms[spriteIndex];
+        holder.dropShadow.sprite = Services.UIManager.factoryTops[spriteIndex];
+        holder.icon.sprite = Services.UIManager.factoryIcons
+            [(2 * (owner.playerNum - 1)) + spriteIndex];
+    }
 }

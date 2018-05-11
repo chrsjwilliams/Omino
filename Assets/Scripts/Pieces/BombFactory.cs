@@ -14,7 +14,7 @@ public class BombFactory : Blueprint
     protected override void SetOverlaySprite()
     {
         base.SetOverlaySprite();
-        spriteOverlay.transform.position = GetCenterpoint(true);
+        holder.spriteBottom.transform.position = GetCenterpoint(true);
     }
 
     protected override string GetName()
@@ -27,5 +27,16 @@ public class BombFactory : Blueprint
         //return "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) + 
         //    "</color> <color=red>DESTRUCTIVE</color> pieces per second";
         return "<color=red>Attack</color> Piece Production Level +1";
+    }
+
+    protected override void SetIconSprite()
+    {
+        base.SetIconSprite();
+        int spriteIndex = numRotations % 4;
+        holder.spriteBottom.sprite =
+            Services.UIManager.bombFactoryBottoms[spriteIndex];
+        holder.dropShadow.sprite = Services.UIManager.bombFactoryTops[spriteIndex];
+        holder.icon.sprite = Services.UIManager.bombFactoryIcons
+            [(4 * (owner.playerNum - 1)) + spriteIndex];
     }
 }

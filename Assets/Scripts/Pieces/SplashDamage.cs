@@ -6,7 +6,6 @@ public class SplashDamage : Structure
     public SplashDamage() : base(0)
     {
         buildingType = BuildingType.SPLASHDAMAGE;
-        isFortified = true;
     }
 
     public override void OnClaim(Player player)
@@ -24,8 +23,7 @@ public class SplashDamage : Structure
     protected override void SetIconSprite()
     {
         base.SetIconSprite();
-        iconSr.enabled = true;
-        iconSr.sprite = Services.UIManager.splashStructIcon;
+        holder.icon.sprite = Services.UIManager.splashStructIcon;
     }
 
     protected override string GetName()

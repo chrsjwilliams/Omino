@@ -13,7 +13,6 @@ public class Base : Structure
     public Base() : base(0)
     {
         buildingType = BuildingType.BASE;
-        isFortified = true;
     }
 
     public Base(Player _player, bool _mainBase) : base(9, 0, _player)
@@ -26,11 +25,6 @@ public class Base : Structure
     {
         //UpdateDrawMeter();
         //UpdateResourceMeter();
-    }
-
-    protected override void OnPlace()
-    {
-        ToggleCostUIStatus(false);
     }
 
     public override void OnClaim(Player player)
@@ -49,15 +43,14 @@ public class Base : Structure
     protected override void SetOverlaySprite()
     {
         base.SetOverlaySprite();
-        secondOverlay.enabled = false;
         if (mainBase)
         {
-            iconSr.sprite = Services.UIManager.baseOverlay;
-            spriteOverlay.sprite = Services.UIManager.baseBottom;
+            holder.icon.sprite = Services.UIManager.baseOverlay;
+            holder.spriteBottom.sprite = Services.UIManager.baseBottom;
         }
         else
         {
-            iconSr.sprite = Services.UIManager.sideBaseOverlay;
+            holder.icon.sprite = Services.UIManager.sideBaseOverlay;
         }
     }
 

@@ -6,7 +6,6 @@ public class BiggerBricks : Structure
     public BiggerBricks() : base(0)
     {
         buildingType = BuildingType.BIGGERBRICKS;
-        isFortified = true;
     }
 
     public override void OnClaim(Player player)
@@ -24,8 +23,7 @@ public class BiggerBricks : Structure
     protected override void SetIconSprite()
     {
         base.SetIconSprite();
-        iconSr.enabled = true;
-        iconSr.sprite = Services.UIManager.bricksIcon;
+        holder.icon.sprite = Services.UIManager.bricksIcon;
     }
 
     protected override string GetName()

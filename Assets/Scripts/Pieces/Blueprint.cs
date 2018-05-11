@@ -134,16 +134,9 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     public override void MakePhysicalPiece()
     {
         holder = GameObject.Instantiate(Services.Prefabs.PieceHolder,
-            Services.GameScene.transform).transform;
+            Services.GameScene.transform).GetComponent<PieceHolder>();
         holder.gameObject.name = holderName;
-        holderSr = holder.gameObject.GetComponent<SpriteRenderer>();
-        SpriteRenderer[] childSrs = holder.GetComponentsInChildren<SpriteRenderer>();
-        spriteOverlay = childSrs[2];
-        secondOverlay = childSrs[3];
-        legalityOverlay = childSrs[4];
-        legalityOverlay.enabled = false;
-        costText = holder.gameObject.GetComponentInChildren<TextMesh>();
-        ToggleCostUIStatus(false);
+        holder.legalityOverlay.enabled = false;
         tooltips = new List<Tooltip>();
 
         if (piece == null) return;
@@ -155,7 +148,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             {
                 if (piece[index, x, y] == 1)
                 {
-                    Tile newpiece = MonoBehaviour.Instantiate(Services.Prefabs.Tile, holder);
+                    Tile newpiece = MonoBehaviour.Instantiate(Services.Prefabs.Tile, holder.transform);
 
                     Coord myCoord = new Coord(-2 + x, -2 + y);
                     newpiece.Init(myCoord, this);
@@ -194,47 +187,20 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     protected override void SetIconSprite()
     {
         base.SetIconSprite();
-        iconSr.transform.localPosition = Vector3.zero;
-        iconSr.enabled = true;
-        int spriteIndex = 0;
-        switch (buildingType)
-        {
-            case BuildingType.FACTORY:
-                spriteIndex = numRotations % 2;
-                spriteOverlay.sprite =
-                    Services.UIManager.factoryBottoms[spriteIndex];
-                iconSr.sprite = Services.UIManager.factoryTops[spriteIndex];
-                break;
-            case BuildingType.MINE:
-                spriteIndex = numRotations % 2;
-                spriteOverlay.sprite =
-                    Services.UIManager.mineBottoms[spriteIndex];
-                iconSr.sprite = Services.UIManager.mineTops[spriteIndex];
-                break;
-            case BuildingType.BOMBFACTORY:
-                spriteIndex = numRotations % 4;
-                spriteOverlay.sprite =
-                    Services.UIManager.bombFactoryBottoms[spriteIndex];
-                iconSr.sprite = Services.UIManager.bombFactoryTops[spriteIndex];
-                break;
-            case BuildingType.NONE:
-                spriteOverlay.enabled = false;
-                break;
-            default:
-                break;
-        }
+        holder.icon.transform.localPosition = Vector3.zero;
+        holder.icon.enabled = true;
     }
 
     protected override void SetOverlaySprite()
     {
         base.SetOverlaySprite();
-        spriteOverlay.color = owner.ColorScheme[0];
+        holder.spriteBottom.color = owner.ColorScheme[0];
 
         if (!placed)
         {
-            spriteOverlay.color = new Color(spriteOverlay.color.r, spriteOverlay.color.g,
-                spriteOverlay.color.b, overlayAlphaPrePlacement);
-            //spriteOverlay.enabled = false;
+            Color prevColor = holder.spriteBottom.color;
+            holder.spriteBottom.color = new Color(prevColor.r, prevColor.g,
+                prevColor.b, overlayAlphaPrePlacement);
         }
     }
 
@@ -401,7 +367,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         base.SortOnSelection(selected);
         if (selected)
         {
-            spriteOverlay.sortingLayerName = "SelectedPieceUnderlay";
+            holder.spriteBottom.sortingLayerName = "SelectedPieceUnderlay";
         }
         //else
         //{

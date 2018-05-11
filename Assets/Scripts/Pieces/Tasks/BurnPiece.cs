@@ -18,7 +18,7 @@ public class BurnPiece : Task
     {
         timeElapsed = 0;
         duration = Polyomino.burnPieceDuration;
-        startPos = piece.holder.position;
+        startPos = piece.holder.transform.position;
         targetPos = startPos;
         Vector3 offset = Polyomino.burnPieceOffset;
         if(piece.owner.playerNum == 1)

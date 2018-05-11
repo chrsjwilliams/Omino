@@ -24,8 +24,8 @@ public class BlueprintPlacementTask : Task
     public BlueprintPlacementTask(Blueprint blueprint_)
     {
         blueprint = blueprint_;
-        overlayTransform = blueprint.spriteOverlay.transform;
-        iconTransform = blueprint.iconSr.transform;
+        overlayTransform = blueprint.holder.spriteBottom.transform;
+        iconTransform = blueprint.holder.icon.transform;
         dustLocations = new Vector3[blueprint.tiles.Count];
         for (int i = 0; i < dustLocations.Length; i++)
         {
@@ -44,10 +44,10 @@ public class BlueprintPlacementTask : Task
         startPos = targetPos + (dropHeight * Vector3.up);
         timeElapsed = 0;
         //blueprint.spriteOverlay.enabled = true;
-        blueprint.spriteOverlay.sortingLayerName = "Overlay";
-        blueprint.iconSr.sortingLayerName = "Overlay";
-        Color color = blueprint.spriteOverlay.color;
-        blueprint.spriteOverlay.color = new Color(color.r, color.g, color.b, 1);
+        blueprint.holder.spriteBottom.sortingLayerName = "Overlay";
+        blueprint.holder.icon.sortingLayerName = "Overlay";
+        Color color = blueprint.holder.spriteBottom.color;
+        blueprint.holder.spriteBottom.color = new Color(color.r, color.g, color.b, 1);
         overlayTransform.position = startPos;
         iconTransform.position = startPos;
     }

@@ -60,7 +60,6 @@ public abstract class Structure : Polyomino
     {
         index = _index;
         isActivated = false;
-        isFortified = true;
         placed = true;
 
         holderName = "StructureHolder";
@@ -84,7 +83,7 @@ public abstract class Structure : Polyomino
         ScaleHolder(Vector3.one);
         neutralColor = tiles[0].mainSr.color;
         //spriteOverlay.color = neutralColor;
-        spriteOverlay.color = Color.white;
+        holder.spriteBottom.color = Color.white;
         TurnOffGlow();
         //SetGlow(Color.white);
         //IncrementSortingOrder(500);
@@ -122,12 +121,6 @@ public abstract class Structure : Polyomino
         adjacentPieces = new List<Polyomino>();
         SortOverlay();
         SetOverlaySprite();
-    }
-
-    protected override void OnPlace()
-    {
-        //CreateTimerUI();
-        ToggleCostUIStatus(false);
     }
 
     public virtual void OnClaim(Player player)
@@ -190,21 +183,20 @@ public abstract class Structure : Polyomino
     protected override void SetIconSprite()
     {
         base.SetIconSprite();
-        iconSr.enabled = true;
+        holder.icon.enabled = true;
     }
 
     protected override void SetOverlaySprite()
     {
         base.SetOverlaySprite();
-        spriteOverlay.sprite = Services.UIManager.structureOverlay;
-        secondOverlay.enabled = false;
+        holder.spriteBottom.sprite = Services.UIManager.structureOverlay;
         if (owner == null)
         {
-            spriteOverlay.color = new Color(0.6f, 0.6f, 0.6f);
+            holder.spriteBottom.color = new Color(0.6f, 0.6f, 0.6f);
         }
         else
         {
-            spriteOverlay.color = owner.ColorScheme[0];
+            holder.spriteBottom.color = owner.ColorScheme[0];
         }
         //secondOverlay.transform.position = GetCenterpoint();
     }

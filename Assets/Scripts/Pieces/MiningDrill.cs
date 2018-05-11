@@ -7,7 +7,6 @@ public class MiningDrill : Structure
 
     public MiningDrill() : base(0)
     {
-        isFortified = true;
         buildingType = BuildingType.MININGDRILL;
     }
 
@@ -26,8 +25,7 @@ public class MiningDrill : Structure
     protected override void SetIconSprite()
     {
         base.SetIconSprite();
-        iconSr.enabled = true;
-        iconSr.sprite = Services.UIManager.drillIcon;
+        holder.icon.sprite = Services.UIManager.drillIcon;
     }
 
     protected override string GetName()
