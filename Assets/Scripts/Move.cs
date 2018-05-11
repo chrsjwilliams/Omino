@@ -146,6 +146,7 @@ public class Move
         }
 
         float score = 0;
+        //  FIX: If I can win, make that move really really good!
         if (piece is Destructor && piece.owner.splashDamage)
         {
             int effectiveUseMod = tilesIdestroy > 0 ? 1 : 0;
@@ -329,7 +330,7 @@ public class Move
             }
             else if (tilesIdestroy < 1)
             {
-                destructionMod = piece.owner.splashDamage ? 0 : 0.75f;
+                destructionMod = piece.owner.splashDamage ? -1 : 0.75f;
             }
             finalCutSize = cutSize;
             float blueprintDestructionScore = blueprintsDestroyed.Count * blueprintDestructionWeight;

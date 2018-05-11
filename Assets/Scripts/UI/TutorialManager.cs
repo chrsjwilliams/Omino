@@ -15,6 +15,7 @@ public class TutorialManager : MonoBehaviour {
     [SerializeField]
     private Transform tooltipZone;
     private int humanPlayerNum = 1;
+    private int rotateToolTipIndex = 5;
 
     private void Awake()
     {
@@ -80,7 +81,17 @@ public class TutorialManager : MonoBehaviour {
         currentTooltip = Instantiate(Services.Prefabs.TutorialTooltip,
             tooltipZone).GetComponent<TutorialTooltip>();
         TooltipInfo nextTooltipInfo = tooltipInfos[currentIndex];
+        nextTooltipInfo.imageColor = Color.black;
+
+        if (humanPlayerNum == 1) nextTooltipInfo.subImageColor = Services.GameManager.AdjustColorAlpha(Services.GameManager.Player1ColorScheme[0], 0.5f);
+        else nextTooltipInfo.subImageColor = Services.GameManager.AdjustColorAlpha(Services.GameManager.Player2ColorScheme[0], 0.5f);
+
         currentTooltip.Init(nextTooltipInfo);
+
+        if (Services.MapManager.currentLevel.campaignLevelNum == 1 && currentIndex >= rotateToolTipIndex)
+        {
+            currentTooltip.ToggleImageAnimation("RotateAnimation", true);
+        }
         if (nextTooltipInfo.dismissable)
         {
             Services.GameScene.PauseGame();
@@ -100,4 +111,11 @@ public class TooltipInfo
     public bool dismissable = true;
     public Vector2 windowLocation;
     public Vector2 windowSize;
+    public bool haveImage;
+    public Vector2 imageLocation;
+    public float imageRotation;
+    public Color imageColor;
+    public Vector2 subImageLocation;
+    public float subImageRotation;
+    public Color subImageColor;
 }

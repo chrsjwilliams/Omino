@@ -52,6 +52,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private float defaultDisconnectionWeight;
     [SerializeField]
     private float defaultDestructorForBlueprintWeight;
+    [SerializeField]
+    private float defaultDangerWeight;
 
     private float timeElapsed;
     private const float textPulsePeriod = 0.35f;
@@ -69,6 +71,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GameManager.SetBlueprintDestructionWeight(defaultBlueprintDestructionWeight);
         Services.GameManager.SetDisconnectionWeight(defaultDisconnectionWeight);
         Services.GameManager.SetDestructorForBlueprintWeight(defaultDestructorForBlueprintWeight);
+        Services.GameManager.SetDangerWeight(defaultDangerWeight);
         
         levelButtons = levelButtonParent.GetComponentsInChildren<LevelButton>();
         levelButtonParent.SetActive(false);
