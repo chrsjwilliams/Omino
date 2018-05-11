@@ -10,8 +10,8 @@ public class DeathAnimation : Task
     private Color targetColor;
     private Vector3[] startPositions;
     private Vector3[] targetPositions;
-    private const float explosionDistanceMin = 1.5f;
-    private const float explosionDistanceMax = 5f;
+    private const float explosionDistanceMin = 1f;
+    private const float explosionDistanceMax = 3f;
     private const float shakeDur = 0.5f;
     private const float shakeMag = 0.3f;
     private const float shakeSpeed = 40f;
