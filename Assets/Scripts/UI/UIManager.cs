@@ -112,6 +112,7 @@ public class UIManager : MonoBehaviour {
     private int[] numResourcesMissing;
     private bool[] resourceMissingAnimActive;
     private bool[] resourceMissingAnimIncreasing;
+    public bool tooltipsDisabled;
 
 
     private void Awake()

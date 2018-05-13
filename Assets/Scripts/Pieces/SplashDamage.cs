@@ -34,6 +34,6 @@ public class SplashDamage : Structure
     protected override string GetDescription()
     {
         return "<color=red>Attack</color> pieces explode, destroying adjacent enemy " +
-            "pieces and themeselves.";
+            "pieces and themselves.";
     }
 }

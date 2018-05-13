@@ -203,7 +203,8 @@ public abstract class Structure : Polyomino
 
     public override void OnInputDown(bool fromPlayTask)
     {
-        if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID))
+        if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID) &&
+            !Services.UIManager.tooltipsDisabled)
         {
             Tooltip tooltipLeft = GameObject.Instantiate(Services.Prefabs.Tooltip,
                 Services.UIManager.canvas).GetComponent<Tooltip>();

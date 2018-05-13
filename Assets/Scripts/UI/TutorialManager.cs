@@ -51,6 +51,7 @@ public class TutorialManager : MonoBehaviour {
             Services.GameScene.UnpauseGame();
             backDim.SetActive(false);
         }
+        Services.UIManager.tooltipsDisabled = false;
         if (currentIndex < tooltipInfos.Length - 1) MoveToNextStep();
     }
 
@@ -97,6 +98,7 @@ public class TutorialManager : MonoBehaviour {
             Services.GameScene.PauseGame();
             backDim.SetActive(true);
         }
+        Services.UIManager.tooltipsDisabled = !nextTooltipInfo.enableTooltips;
     }
 }
 
@@ -109,6 +111,7 @@ public class TooltipInfo
     public Vector2 arrowLocation;
     public float arrowRotation;
     public bool dismissable = true;
+    public bool enableTooltips;
     public Vector2 windowLocation;
     public Vector2 windowSize;
     public bool haveImage;
