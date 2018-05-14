@@ -84,7 +84,7 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private Vector3 queueMeterOffset;
     [SerializeField]
-    private Color notReadyColor;
+    private Color[] notReadyColors;
     [SerializeField]
     private Color readyColor;
     public float readyBannerScrollOffTime;
@@ -113,7 +113,7 @@ public class UIManager : MonoBehaviour {
     private bool[] resourceMissingAnimActive;
     private bool[] resourceMissingAnimIncreasing;
     public bool tooltipsDisabled;
-
+    public Color legalGlowColor;
 
     private void Awake()
     {
@@ -498,7 +498,7 @@ public class UIManager : MonoBehaviour {
         {
             readyBanners[playerNum - 1].GetComponentInChildren<TextMeshProUGUI>().text =
                 "READY?";
-            readyBanners[playerNum - 1].GetComponent<Image>().color = notReadyColor;
+            readyBanners[playerNum - 1].GetComponent<Image>().color = notReadyColors[playerNum-1];
         }
         bool allReady = true;
         for (int i = 0; i < Services.GameManager.Players.Length; i++)

@@ -1313,7 +1313,7 @@ public class Polyomino : IVertex
         }
         if (isLegal && (affordable || this is Blueprint))
         {
-            SetGlow(new Color(0.2f, 1, 0.2f));
+            SetGlow(Services.UIManager.legalGlowColor);
             holder.legalityOverlay.enabled = false;
         }
         else if (isLegal && !affordable && !(this is Blueprint))

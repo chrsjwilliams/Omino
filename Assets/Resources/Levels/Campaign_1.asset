@@ -27,6 +27,7 @@ MonoBehaviour:
     arrowLocation: {x: -450, y: 0}
     arrowRotation: 180
     dismissable: 1
+    enableTooltips: 0
     windowLocation: {x: 350, y: 350}
     windowSize: {x: 250, y: 250}
     haveImage: 0
@@ -41,6 +42,7 @@ MonoBehaviour:
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
     dismissable: 1
+    enableTooltips: 0
     windowLocation: {x: -900, y: 350}
     windowSize: {x: 200, y: 800}
     haveImage: 0
@@ -55,6 +57,7 @@ MonoBehaviour:
     arrowLocation: {x: 450, y: 0}
     arrowRotation: 0
     dismissable: 1
+    enableTooltips: 0
     windowLocation: {x: -350, y: -350}
     windowSize: {x: 250, y: 250}
     haveImage: 0
@@ -69,6 +72,7 @@ MonoBehaviour:
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
+    enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
@@ -83,6 +87,7 @@ MonoBehaviour:
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
     dismissable: 1
+    enableTooltips: 0
     windowLocation: {x: -750, y: 300}
     windowSize: {x: 100, y: 400}
     haveImage: 0
@@ -97,6 +102,7 @@ MonoBehaviour:
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
     dismissable: 1
+    enableTooltips: 0
     windowLocation: {x: -800, y: -175}
     windowSize: {x: 200, y: 250}
     haveImage: 0
@@ -112,6 +118,7 @@ MonoBehaviour:
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
+    enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 1
@@ -126,6 +133,7 @@ MonoBehaviour:
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
+    enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 1
@@ -140,15 +148,16 @@ MonoBehaviour:
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
+    enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
-    haveImage: 1
+    haveImage: 0
     imageLocation: {x: -200, y: 350}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: -16, y: 200}
     subImageRotation: 180
-    subImageColor: {r: 0, g: 0, b: 0, a: 0}
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
   overrideStrategy:
     winWeight: 0
     structWeight: 0
