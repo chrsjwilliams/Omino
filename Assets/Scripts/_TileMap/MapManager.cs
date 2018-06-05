@@ -111,6 +111,20 @@ public class MapManager : MonoBehaviour
         {
             GenerateStructures(Services.GameManager.levelSelected);
         }
+        foreach (Tile mapTile in Map)
+        {
+            mapTile.gameObject.SetActive(false);
+        }
+        foreach(Structure structure in structuresOnMap)
+        {
+            structure.holder.gameObject.SetActive(false);
+        }
+        Task boardAnimationTask = new Wait(0.5f);
+        boardAnimationTask
+            .Then(new BoardEntryAnimation())
+            .Then(new InitialBuildingEntryAnimation());
+
+        Services.GameScene.tm.Do(boardAnimationTask);
     }
 
     Structure GenerateStructure(BuildingType type)

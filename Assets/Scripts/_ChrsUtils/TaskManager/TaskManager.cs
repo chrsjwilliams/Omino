@@ -6,6 +6,7 @@ public class TaskManager
 {
 
     private readonly List<Task> _tasks = new List<Task>();
+    public bool hasActiveTasks { get { return _tasks.Count > 0; } }
 
     // Tasks can only be added and you have to abort them
     // to remove them before they complete on their own

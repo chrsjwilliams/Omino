@@ -33,7 +33,7 @@ public abstract class TimedTask : Task
 
     protected TimedTask(float duration)
     {
-        Debug.Assert(duration > 0, "Cannot create a timed task with duration less than 0");
+        Debug.Assert(duration >= 0, "Cannot create a timed task with duration less than 0");
         Duration = duration;
     }
 

@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour {
     public Text[] resourceCounters;
     public GameObject[] resourceSlotZones;
     private Image[][] resourceSlots;
+    private Image[][] resourceSlotBacks;
     private Image[][] resourceMissingIndicators;
     public RectTransform[] blueprintUIZones;
     [SerializeField]
@@ -121,6 +122,8 @@ public class UIManager : MonoBehaviour {
         Image[] slotsP2 = resourceSlotZones[1].GetComponentsInChildren<Image>();
         Image[] slotTopsP1 = new Image[slotsP1.Length / 3];
         Image[] slotTopsP2 = new Image[slotsP1.Length / 3];
+        Image[] slotBacksP1 = new Image[slotsP1.Length / 3];
+        Image[] slotBacksP2 = new Image[slotsP1.Length / 3];
         Image[] missingIndicatorsP1 = new Image[slotsP1.Length / 3];
         Image[] missingIndicatorsP2 = new Image[slotsP1.Length / 3];
         for (int i = 0; i < slotsP1.Length; i++)
@@ -132,8 +135,10 @@ public class UIManager : MonoBehaviour {
                 slotTopsP1[i / 3].color = Services.GameManager.Player1ColorScheme[0];
                 slotTopsP2[i / 3].color = Services.GameManager.Player2ColorScheme[0];
             }
-            else if(i %3 == 0)
+            else if(i % 3 == 0)
             {
+                slotBacksP1[i / 3] = slotsP1[i];
+                slotBacksP2[i / 3] = slotsP2[i];
                 slotsP1[i].color = Services.GameManager.Player1ColorScheme[0];
                 slotsP2[i].color = Services.GameManager.Player2ColorScheme[0];
             }
@@ -150,6 +155,7 @@ public class UIManager : MonoBehaviour {
         }
 
         resourceSlots = new Image[][] { slotTopsP1, slotTopsP2 };
+        resourceSlotBacks = new Image[][] { slotBacksP1, slotBacksP2 };
         resourceMissingIndicators = new Image[][] { missingIndicatorsP1, missingIndicatorsP2 };
         resourceGainHighlightIndices = new int[2] { 0, 0 };
         resourceGainHighlightTimeElapsed = new float[2] { 0, 0 };
@@ -300,12 +306,14 @@ public class UIManager : MonoBehaviour {
         for (int i = 0; i < resourceSlots[playerNum - 1].Length; i++)
         {
             Image slotImage = resourceSlots[playerNum - 1][i];
+            Color slotColor = slotImage.color;
             if (slotImage.fillAmount < 1)
             {
-                slotImage.color = new Color(slotImage.color.r, slotImage.color.g,
-                    slotImage.color.b, 0.5f);
+                slotImage.color = new Color(slotColor.r, slotColor.g,
+                    slotColor.b, 0.5f);
                 slotImage.fillAmount =
                     EasingEquations.Easing.QuadEaseIn(fillProportion);
+                resourceSlotBacks[playerNum - 1][i].color = new Color(slotColor.r, slotColor.g, slotColor.b, 1);
                 break;
             }
         }
@@ -318,11 +326,14 @@ public class UIManager : MonoBehaviour {
         for (int i = 0; i < resourceSlots[playerIndex].Length; i++)
         {
             Image slotImage = resourceSlots[playerIndex][i];
+            Image slotBack = resourceSlotBacks[playerIndex][i];
+            Color slotColor = new Color(slotImage.color.r,
+                    slotImage.color.g, slotImage.color.b, 1);
             if (i < resourceCount)
             {
                 slotImage.fillAmount = 1;
-                slotImage.color = new Color(slotImage.color.r, 
-                    slotImage.color.g, slotImage.color.b, 1);
+                slotImage.color = slotColor;
+                slotBack.color = slotColor;
                 if (resourceCount > lastResourceCount[playerIndex]
                     && i == resourceCount - 1)
                 {
@@ -333,6 +344,7 @@ public class UIManager : MonoBehaviour {
             else
             {
                 slotImage.fillAmount = 0;
+                slotBack.color = new Color(slotColor.r, slotColor.g, slotColor.b, 0);
             }
         }
         if(resourceCount != lastResourceCount[playerIndex] 

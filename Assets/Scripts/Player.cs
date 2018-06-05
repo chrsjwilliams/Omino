@@ -603,6 +603,7 @@ public class Player : MonoBehaviour
     {
         boardPieces.Add(mainBase_);
         mainBase = mainBase_;
+        mainBase.holder.gameObject.SetActive(false);
     }
 
     public virtual void OnOpposingPiecePlaced(Polyomino piece)
