@@ -246,11 +246,6 @@ public class ScrollRectSnap : MonoBehaviour
             }
         }
 
-        Debug.Log(direction.ToString());
-
-        if(Mathf.Abs(initalTouchPos.y - screenInputPos.y) == imageDistance)
-            Debug.Log(initalTouchPos.y - screenInputPos.y);
-
         if (twoPlayers)
         {
             travelDistance = Mathf.Abs(initalTouchPos.x - screenInputPos.x);
