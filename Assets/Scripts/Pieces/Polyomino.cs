@@ -730,11 +730,19 @@ public class Polyomino : IVertex
         List<Tile> illegalTiles = new List<Tile>();
         foreach (Tile tile in tiles)
         {
-            if (!Services.MapManager.IsCoordContainedInMap(tile.coord) ||
-                Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied())
+            if (Services.MapManager.IsCoordContainedInMap(tile.coord))
+            {
+                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                if (mapTile.IsOccupied() && (mapTile.occupyingPiece.connected || mapTile.occupyingPiece is Structure))
+                {
+                    illegalTiles.Add(tile);
+                }
+            }
+            else
             {
                 illegalTiles.Add(tile);
             }
+                
         }
         return illegalTiles;
     }
@@ -763,7 +771,9 @@ public class Polyomino : IVertex
         foreach (Tile tile in tiles)
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
-            if (Services.MapManager.Map[tile.coord.x, tile.coord.y].IsOccupied()) return false;
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            if (mapTile.IsOccupied() && (mapTile.occupyingPiece.connected || mapTile.occupyingPiece is Structure))
+                return false;
         }
         return true;
     }
@@ -838,6 +848,21 @@ public class Polyomino : IVertex
 
     protected virtual void OnPlace()
     {
+        List<Polyomino> piecesToRemove = new List<Polyomino>();
+        foreach (Tile tile in tiles)
+        {
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            if (mapTile.occupyingPiece != null && !piecesToRemove.Contains(mapTile.occupyingPiece))
+            {
+                piecesToRemove.Add(mapTile.occupyingPiece);
+            }
+        }
+        if (piecesToRemove.Count > 0)
+            Services.AudioManager.CreateTempAudio(Services.Clips.PieceDestroyed, 1);
+        for (int i = piecesToRemove.Count - 1; i >= 0; i--)
+        {
+            piecesToRemove[i].Remove();
+        }
     }
 
     protected void MakeDustClouds()

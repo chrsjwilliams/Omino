@@ -471,8 +471,7 @@ public class AIPlayer : Player
                                 if (
                                     //!playableCoords.Contains(candidateCoord) &&
                                     containedInMap &&
-                                    mapTile.occupyingPiece == null &&
-                                    mapTile.occupyingStructure == null)
+                                    mapTile.occupyingPiece == null)
                                 {
                                     playableCoords.Add(candidateCoord);
                                 }
@@ -480,7 +479,7 @@ public class AIPlayer : Player
                                 if (
                                     //!possibleBlueprintCoords.Contains(candidateCoord) &&
                                     containedInMap &&
-                                    mapTile.occupyingStructure == null &&
+                                    (mapTile.occupyingPiece == null || !(mapTile.occupyingPiece is Structure)) &&
                                     mapTile.occupyingBlueprint == null)
                                 {
                                     possibleBlueprintCoords.Add(candidateCoord);

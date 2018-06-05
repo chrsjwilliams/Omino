@@ -56,7 +56,8 @@ public class Destructor : Polyomino
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-            if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner) return false;
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner && mapTile.occupyingPiece.connected)
+                return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece is Structure) return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.shieldDurationRemaining > 0) return false;
         }
@@ -77,7 +78,7 @@ public class Destructor : Polyomino
             {
                 Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                 bool occupied = mapTile.IsOccupied();
-                if ((occupied && mapTile.occupyingPiece.owner == owner) ||
+                if ((occupied && mapTile.occupyingPiece.owner == owner && mapTile.occupyingPiece.connected) ||
                     (occupied && mapTile.occupyingPiece is Structure) ||
                     (occupied && mapTile.occupyingPiece.shieldDurationRemaining > 0))
                 {
@@ -95,7 +96,8 @@ public class Destructor : Polyomino
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
             if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>())) return false;
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-            if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner) return false;
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner && mapTile.occupyingPiece.connected)
+                return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece is Structure) return false;
         }
 
@@ -117,10 +119,6 @@ public class Destructor : Polyomino
         for (int i = piecesToRemove.Count - 1; i >= 0; i--)
         {
             piecesToRemove[i].Remove();
-        }
-        foreach(Tile tile in tiles)
-        {
-            tile.StartSettlingToNormalPiece();
         }
         //MakeFireBurst();
     }
@@ -190,8 +188,7 @@ public class Destructor : Polyomino
         foreach (Tile tile in tiles)
         {
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-            if (mapTile.occupyingPiece != null && mapTile.occupyingPiece.owner != owner &&
-                !enemyPiecesInRange.Contains(mapTile.occupyingPiece))
+            if (mapTile.occupyingPiece != null  && !enemyPiecesInRange.Contains(mapTile.occupyingPiece))
             {
                 enemyPiecesInRange.Add(mapTile.occupyingPiece);
             }

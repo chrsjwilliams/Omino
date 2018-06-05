@@ -29,7 +29,6 @@ public class Tile : MonoBehaviour, IVertex
     public Polyomino occupyingPiece { get; private set; }
     public Polyomino pieceParent { get; private set; }
     public Blueprint occupyingBlueprint { get; private set; }
-    public Structure occupyingStructure { get; private set; }
     private Color prevColor;
     private Color targetColor_;
     private Color targetColor
@@ -182,11 +181,6 @@ public class Tile : MonoBehaviour, IVertex
         occupyingBlueprint = blueprint;
     }
 
-    public void SetOccupyingStructure(Structure structure)
-    {
-        occupyingStructure = structure;
-    }
-
     public bool IsOccupied()
     {
         return occupyingPiece != null;
@@ -306,12 +300,6 @@ public class Tile : MonoBehaviour, IVertex
     public void PrintCoord()
     {
         Debug.Log("X: " + coord.x + ", Y: " + coord.y);
-    }
-
-    public void StartSettlingToNormalPiece()
-    {
-        bombSettling = true;
-        bombSettleTimeElapsed = 0;
     }
 
     public void SetShieldStatus(bool status)

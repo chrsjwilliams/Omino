@@ -114,7 +114,6 @@ public abstract class Structure : Polyomino
         foreach (Tile tile in tiles)
         {
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-            mapTile.SetOccupyingStructure(this);
             mapTile.SetOccupyingPiece(this);
             tile.OnPlace();
         }

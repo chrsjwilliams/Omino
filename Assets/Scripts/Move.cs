@@ -359,7 +359,7 @@ public class Move
 
             foreach (Coord coord in Services.MapManager.structureCoords)
             {
-                if (Services.MapManager.Map[coord.x, coord.y].occupyingStructure.owner == null) {
+                if (Services.MapManager.Map[coord.x, coord.y].occupyingPiece.owner == null) {
                     float testDistance = coord.Distance(tileRelCoord.Add(targetCoord));
 
                     if (testDistance < structDist)
