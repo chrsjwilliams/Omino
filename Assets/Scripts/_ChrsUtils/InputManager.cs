@@ -72,6 +72,4 @@ public class InputManager
 		}
 		return new Touch ();
 	}
-
-
 }

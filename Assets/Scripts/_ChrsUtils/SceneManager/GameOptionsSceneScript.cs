@@ -10,7 +10,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     public KeyCode startGame = KeyCode.Space;
 
     private const float SECONDS_TO_WAIT = 0.01f;
-    private bool[] humanPlayers;
+    public bool[] humanPlayers { get; private set; }
 
     public static string progressFileName
     {
@@ -220,10 +220,10 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             buttons[i].gameObject.SetActive(false);
         }
-        levelSelectionIndicator.gameObject.SetActive(false);
+        levelSelectionIndicator.gameObject.SetActive(true);
         GameObject levelSelectText = 
             buttonParent.GetComponentInChildren<TextMeshProUGUI>().gameObject;
-        levelSelectText.SetActive(false);
+        levelSelectText.SetActive(true);
         LevelSelectTextEntrance entrance = 
             new LevelSelectTextEntrance(levelSelectText);
         LevelSelectButtonEntranceTask buttonEntrance =
