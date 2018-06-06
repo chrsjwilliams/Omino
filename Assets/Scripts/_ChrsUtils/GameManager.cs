@@ -143,15 +143,6 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetFloat("dangerMod", dangerMod);
     }
 
-    public void InitPlayersTutorialMode()
-    {
-        winWeight = 1;
-        structureWeight = 0;
-        blueprintWeight = 0;
-        destructionWeight = 0;
-        InitPlayers();
-    }
-
     public void InitPlayers()
     {
         AIStrategy strategy = new AIStrategy(winWeight, structureWeight,

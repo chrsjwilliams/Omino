@@ -5,7 +5,7 @@ public class BoardEntryAnimation : Task
 {
     private float timeElapsed;
     private const float animDuration = 0.2f;
-    private const float staggerTime = 0.02f;
+    private const float staggerTime = 0.015f;
     private float totalDuration;
     private Tile[,] map { get { return Services.MapManager.Map; } }
     private int largerDimension;

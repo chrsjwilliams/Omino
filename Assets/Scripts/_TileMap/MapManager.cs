@@ -119,12 +119,13 @@ public class MapManager : MonoBehaviour
         {
             structure.holder.gameObject.SetActive(false);
         }
-        Task boardAnimationTask = new Wait(0.5f);
-        boardAnimationTask
-            .Then(new BoardEntryAnimation())
-            .Then(new InitialBuildingEntryAnimation());
+        TaskQueue boardAnimationTasks = new TaskQueue(new List<Task>() {
+            new Wait(0.3f),
+            new BoardEntryAnimation(),
+            new InitialBuildingEntryAnimation()
+            });
 
-        Services.GameScene.tm.Do(boardAnimationTask);
+        Services.GameScene.tm.Do(boardAnimationTasks);
     }
 
     Structure GenerateStructure(BuildingType type)

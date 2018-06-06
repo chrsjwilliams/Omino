@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     protected int deckClumpCount;
     protected List<List<Polyomino>> deckClumped;
-    protected List<Polyomino> hand;
+    public List<Polyomino> hand { get; protected set; }
     public int handCount { get { return hand.Count; } }
     private List<Vector3> handTargetPositions;
     public List<Blueprint> blueprints { get; protected set; }
@@ -150,7 +150,11 @@ public class Player : MonoBehaviour
             DrawPieces(startingHandSize);
         }
         OrganizeHand(hand, true);
-        if(Services.GameManager.destructorsEnabled) QueueUpNextPiece(true);
+        foreach(Polyomino piece in hand)
+        {
+            piece.holder.gameObject.SetActive(false);
+        }
+        if (Services.GameManager.destructorsEnabled) QueueUpNextPiece(true);
         QueueUpNextPiece(false);
 
         if (Services.GameManager.blueprintsEnabled)
@@ -487,6 +491,14 @@ public class Player : MonoBehaviour
         blueprint.MakePhysicalPiece();
         blueprint.Reposition(GetBlueprintPosition(blueprint));
         //OrganizeHand(blueprints);
+    }
+
+    public void TurnOnHand()
+    {
+        foreach(Polyomino piece in hand)
+        {
+            piece.holder.gameObject.SetActive(true);
+        }
     }
 
     void OrganizeHand<T>(List<T> heldpieces) where T : Polyomino

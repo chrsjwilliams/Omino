@@ -173,9 +173,13 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void StartGameSequence()
     {
-        Task scrollBanners = new ScrollOffReadyBanners(Services.UIManager.readyBanners);
-        scrollBanners.Then(new ActionTask(StartGame));
-        Services.GameScene.tm.Do(scrollBanners);
+        TaskTree startSequence =
+            new TaskTree(new ScrollOffReadyBanners(Services.UIManager.readyBanners),
+            new TaskTree(new HandPieceEntry(Services.GameManager.Players[0].hand)),
+            new TaskTree(new HandPieceEntry(Services.GameManager.Players[1].hand)));
+        startSequence
+            .Then(new ActionTask(StartGame));
+        Services.GameScene.tm.Do(startSequence);
     }
 
     public void PauseGame()

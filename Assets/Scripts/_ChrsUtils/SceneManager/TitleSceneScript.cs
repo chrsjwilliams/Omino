@@ -8,6 +8,8 @@ public class TitleSceneScript : Scene<TransitionData>
     private Button[] buttons;
     [SerializeField]
     private Button playButton;
+    [SerializeField]
+    private GameObject title;
 
     public enum GameMode { TwoPlayers, PlayerVsAI, Demo, Campaign }
 
@@ -46,11 +48,10 @@ public class TitleSceneScript : Scene<TransitionData>
 
     private void StartGame()
     {
-        _tm.Do
-        (
-                    new Wait(SECONDS_TO_WAIT))
-              .Then(new ActionTask(ChangeScene)
-        );
+        Task start = new Wait(SECONDS_TO_WAIT);
+        start.Then(new ActionTask(ChangeScene));
+
+        _tm.Do(start);
     }
 
     public void Play()
@@ -97,6 +98,6 @@ public class TitleSceneScript : Scene<TransitionData>
     {
         playButton.gameObject.SetActive(false);
         _tm.Do(
-            new SlideInTitleScreenButtons(buttons, playButton.transform.position));
+            new SlideInTitleScreenButtons(buttons, playButton.transform.localPosition, title));
     }
 }

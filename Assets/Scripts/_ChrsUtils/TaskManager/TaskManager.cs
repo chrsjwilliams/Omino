@@ -1,49 +1,58 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class TaskManager
 {
+    private readonly List<Task> tasks = new List<Task>();
+    public int tasksInProcessCount { get { return tasks.Count; } }
 
-    private readonly List<Task> _tasks = new List<Task>();
-    public bool hasActiveTasks { get { return _tasks.Count > 0; } }
-
-    // Tasks can only be added and you have to abort them
-    // to remove them before they complete on their own
-    public Task Do(Task task)
+    public void Do(Task task)
     {
         Debug.Assert(task != null);
-        // NOTE: Only add tasks that aren't already attached.
-        // Don't want multiple task managers updating the same task
         Debug.Assert(!task.IsAttached);
-        _tasks.Add(task);
+        tasks.Add(task);
         task.SetStatus(Task.TaskStatus.Pending);
-        return task;
+    }
+
+    public void Do(TaskTree taskTree)
+    {
+        Debug.Assert(taskTree.root != null);
+        Debug.Assert(!taskTree.root.IsAttached);
+        tasks.Add(taskTree.DistributedTree());
+        taskTree.root.SetStatus(Task.TaskStatus.Pending);
+    }
+
+    public void Do(TaskQueue taskQueue)
+    {
+        Do(taskQueue.tasks[0]);
+        for (int i = 1; i < taskQueue.tasks.Count; i++)
+        {
+            taskQueue.tasks[i - 1].Then(taskQueue.tasks[i]);
+        }
     }
 
     public void Update()
     {
-        // iterate through all the tasks
-        for (var i = _tasks.Count - 1; i >= 0; --i)
+        Task task;
+        for (int i = tasks.Count - 1; i >= 0; i--)
         {
-            var task = _tasks[i];
-            // Initialize any tasks that have just been added
+            task = tasks[i];
+
             if (task.IsPending)
             {
                 task.SetStatus(Task.TaskStatus.Working);
+                //Debug.Log("starting task " + task.GetType() + " at time " + Time.time);
             }
 
-            // A task could finish during initialization (e.g. the task has to
-            // abort because the conditions for executing no longer exist) so
-            // you need to check before the update
             if (task.IsFinished)
             {
                 HandleCompletion(task, i);
             }
             else
             {
-                // update the task and clear it if it's done
                 task.Update();
+                //Debug.Log("working on task " + task.GetType() + " at time " + Time.time);
                 if (task.IsFinished)
                 {
                     HandleCompletion(task, i);
@@ -54,17 +63,14 @@ public class TaskManager
 
     private void HandleCompletion(Task task, int taskIndex)
     {
-        // If the finished task has a "next" task
-        // queue it up - but only if the original task was
-        // successful
-        if (task.NextTask != null && task.IsSuccessful)
+        if ((task.nextTasks != null) && task.IsSuccessful)
         {
-            Do(task.NextTask);
+            foreach (Task nextTask in task.nextTasks) Do(nextTask);
         }
-        // clear the task from the manager and let it know
-        // it's nodsa longer being managed
-        _tasks.RemoveAt(taskIndex);
-        task.SetStatus(Task.TaskStatus.Detached);
-    }
-}
 
+        tasks.RemoveAt(taskIndex);
+        task.SetStatus(Task.TaskStatus.Detached);
+        //Debug.Log("task " + task.GetType() + " completed" + " at time " + Time.time);
+    }
+
+}

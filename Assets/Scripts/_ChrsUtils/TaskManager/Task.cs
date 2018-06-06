@@ -1,64 +1,105 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
 
-
-public abstract class Task
+public class Task
 {
 
-    // An enum representing the current state of the task
     public enum TaskStatus : byte
     {
-        Detached, // Task has not been attached to a TaskManager
-        Pending, // Task has not been initialized
-        Working, // Task has been initialized
-        Success, // Task completed successfully
-        Fail, // Task completed unsuccessfully
-        Aborted // Task was aborted
+        Detached,
+        Pending,
+        Working,
+        Success,
+        Fail,
+        Aborted
     }
 
-    // The only member variable that a base task has is its status
-    public TaskStatus Status { get; private set; }
+    public TaskStatus status { get; private set; }
 
-    // Convenience status checking
-    public bool IsDetached { get { return Status == TaskStatus.Detached; } }
-    public bool IsAttached { get { return Status != TaskStatus.Detached; } }
-    public bool IsPending { get { return Status == TaskStatus.Pending; } }
-    public bool IsWorking { get { return Status == TaskStatus.Working; } }
-    public bool IsSuccessful { get { return Status == TaskStatus.Success; } }
-    public bool IsFailed { get { return Status == TaskStatus.Fail; } }
-    public bool IsAborted { get { return Status == TaskStatus.Aborted; } }
-    public bool IsFinished { get { return (Status == TaskStatus.Fail || Status == TaskStatus.Success || Status == TaskStatus.Aborted); } }
+    public bool IsDetached
+    {
+        get
+        {
+            return (status == TaskStatus.Detached);
+        }
+    }
 
-    // Convenience method for external classes to abort the task
+    public bool IsAttached
+    {
+        get
+        {
+            return (status != TaskStatus.Detached);
+        }
+    }
+
+    public bool IsPending
+    {
+        get
+        {
+            return (status == TaskStatus.Pending);
+        }
+    }
+
+    public bool IsWorking
+    {
+        get
+        {
+            return (status == TaskStatus.Working);
+        }
+    }
+
+    public bool IsSuccessful
+    {
+        get
+        {
+            return (status == TaskStatus.Success);
+        }
+    }
+
+    public bool IsFailure
+    {
+        get
+        {
+            return (status == TaskStatus.Fail);
+        }
+    }
+
+    public bool IsAborted
+    {
+        get
+        {
+            return (status == TaskStatus.Aborted);
+        }
+    }
+
+    public bool IsFinished
+    {
+        get
+        {
+            return ((status == TaskStatus.Aborted) || (status == TaskStatus.Fail) || (status == TaskStatus.Success));
+        }
+    }
+
     public void Abort()
     {
         SetStatus(TaskStatus.Aborted);
     }
 
-    // A method for changing the status of the task
-    // It's marked internal so that the manager can access it
     internal void SetStatus(TaskStatus newStatus)
     {
-        if (Status == newStatus) return;
+        if (status == newStatus)
+        {
+            return;
+        }
 
-        Status = newStatus;
+        status = newStatus;
 
         switch (newStatus)
         {
-            // Initialize the task when the Task first starts
-            // It's important to separate initialization from
-            // the constructor, since tasks may not start
-            // running until long after they've been constructed
             case TaskStatus.Working:
                 Init();
-                break;
-
-            // Success/Aborted/Failed are the completed states of a task.
-            // Subclasses are notified when entering one of these states
-            // and are given the opportunity to do any clean up
-            case TaskStatus.Success:
-                OnSuccess();
-                CleanUp();
                 break;
 
             case TaskStatus.Aborted:
@@ -71,15 +112,21 @@ public abstract class Task
                 CleanUp();
                 break;
 
-            // These are "internal" states that are mostly relevant for
-            // the task manager
+            case TaskStatus.Success:
+                OnSuccess();
+                CleanUp();
+                break;
+
             case TaskStatus.Detached:
             case TaskStatus.Pending:
                 break;
+
             default:
                 throw new ArgumentOutOfRangeException(newStatus.ToString(), newStatus, null);
         }
     }
+
+    protected virtual void Init() { }
 
     protected virtual void OnAbort() { }
 
@@ -87,36 +134,166 @@ public abstract class Task
 
     protected virtual void OnFail() { }
 
-    // Override this to handle initialization of the task.
-    // This is called when the task enters the Working state
-    protected virtual void Init()
+    internal virtual void Update() { }
+
+    protected virtual void CleanUp() { }
+
+    public List<Task> nextTasks { get; private set; }
+
+    public void Then(params Task[] tasks)
     {
+        nextTasks = new List<Task>();
+        foreach (Task task in tasks)
+        {
+            Debug.Assert(!task.IsAttached);
+            nextTasks.Add(task);
+        }
     }
 
-    // Called whenever the TaskManager updates. Your tasks' work
-    // generally goes here
-    internal virtual void Update()
+    public void Then(List<Task> tasks)
     {
+        nextTasks = new List<Task>();
+        foreach (Task task in tasks)
+        {
+            Debug.Assert(!task.IsAttached);
+            nextTasks.Add(task);
+        }
     }
 
-    // This is called when the tasks completes (i.e. is aborted,
-    // fails, or succeeds). It is called after the status change
-    // handlers are called
-    protected virtual void CleanUp()
+    public void Then(TaskTree taskTree)
     {
+        Debug.Assert(!taskTree.root.IsAttached);
+        nextTasks = new List<Task>() { taskTree.DistributedTree() };
     }
 
-    // Assign a task to be run if this task runs successfully
-    public Task NextTask { get; private set; }
-
-    // Sets a task to be automatically attached when this one completes successfully
-    // NOTE: if a task is aborted or fails, its next task will not be queued
-    // NOTE: **DO NOT** assign attached tasks with this method.
-    public Task Then(Task task)
+    public Task Then(TaskQueue taskQueue)
     {
-        Debug.Assert(!task.IsAttached);
-        NextTask = task;
-        return task;
+        foreach (Task task in taskQueue.tasks)
+        {
+            Debug.Assert(!task.IsAttached);
+        }
+
+        nextTasks = new List<Task>();
+
+        nextTasks.Add(taskQueue.tasks[0]);
+
+        for (int i = 1; i < taskQueue.tasks.Count; i++)
+        {
+            taskQueue.tasks[i - 1].nextTasks.Add(taskQueue.tasks[i]);
+        }
+        return taskQueue.tasks[taskQueue.tasks.Count - 1];
     }
 }
+
+public class TaskTree
+{
+    public Task root;
+    public List<TaskTree> children;
+
+    public TaskTree(Task _root, params TaskTree[] _children)
+    {
+        root = _root;
+        children = new List<TaskTree>();
+        foreach (TaskTree child in _children) children.Add(child);
+    }
+
+    public TaskTree AddChild(Task child)
+    {
+        return AddChild(new TaskTree(child));
+    }
+
+    public TaskTree AddChild(TaskTree child)
+    {
+        children.Add(child);
+        return this;
+    }
+
+    public TaskTree AddChildren(List<TaskTree> children_)
+    {
+        children.AddRange(children_);
+        return this;
+    }
+
+    public TaskTree AddChildren(List<Task> children_)
+    {
+        for (int i = 0; i < children_.Count; i++)
+        {
+            children.Add(new TaskTree(children_[i]));
+        }
+        return this;
+    }
+
+    public Task DistributedTree()
+    {
+        List<Task> childrenDistributed = new List<Task>();
+        if (children.Count > 0) foreach (TaskTree child in children) childrenDistributed.Add(child.DistributedTree());
+        root.Then(childrenDistributed);
+        return root;
+    }
+
+    public TaskTree Then(TaskTree nextTree)
+    {
+        if (children.Count > 0)
+        {
+            return children[0].Then(nextTree);
+        }
+        else
+        {
+            return AddChild(nextTree);
+        }
+    }
+
+    public TaskTree Then(Task nextTask)
+    {
+        return Then(new TaskTree(nextTask));
+    }
+
+    public int Depth()
+    {
+        if (children.Count == 0)
+        {
+            return 1;
+        }
+        else
+        {
+            return 1 + children[0].Depth();
+        }
+    }
+}
+
+public class EmptyTask : Task
+{
+    protected override void Init()
+    {
+        SetStatus(TaskStatus.Success);
+    }
+}
+
+public class TaskQueue
+{
+    public List<Task> tasks;
+
+    public TaskQueue(List<Task> taskList)
+    {
+        tasks = taskList;
+    }
+
+    public TaskQueue()
+    {
+        tasks = new List<Task>();
+    }
+
+    public TaskQueue Then(TaskQueue taskQueue)
+    {
+        tasks.AddRange(taskQueue.tasks);
+        return this;
+    }
+
+    public TaskQueue Add(Task task)
+    {
+        tasks.Add(task);
+        return this;
+    }
+}
+
 
