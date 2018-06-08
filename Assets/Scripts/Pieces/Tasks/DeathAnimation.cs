@@ -38,7 +38,7 @@ public class DeathAnimation : Task
             float explosionDist = Random.Range(explosionDistanceMin, explosionDistanceMax);
             float angleOffset = Random.Range(5f, 10f);
             angleOffset *= Random.Range(0, 2) == 0 ? 1 : -1;
-            Vector3 tileOffset = (tilePos - piece.GetCenterpoint()).normalized;
+            Vector3 tileOffset = (tilePos - (piece.holder.transform.position + piece.GetCenterpoint())).normalized;
             float explosionAngle = (Mathf.Atan2(tileOffset.y, tileOffset.x) * Mathf.Rad2Deg)
                 + angleOffset;
             //Vector3 offset = explosionDist * new Vector3(Mathf.Sin(explosionAngle),

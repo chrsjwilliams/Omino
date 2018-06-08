@@ -37,16 +37,16 @@ public class Tooltip : MonoBehaviour {
     public void Reposition(Vector2 basePos, float rot, bool blueprintInHand)
     {
         Vector2 offset = blueprintInHand ? inHandOffset : tooltipOffset;
-        offset *= Screen.width / 2048f;
+        offset *= Screen.height / 2048f;
 
-        if (basePos.y > Screen.height / 2)
-        {
-            offset = new Vector2(offset.x, -offset.y);
-        }
-
-        if (rot < 0)
+        if (basePos.x > Screen.width / 2)
         {
             offset = new Vector2(-offset.x, offset.y);
+        }
+
+        if (rot > 0)
+        {
+            offset = new Vector2(offset.x, -offset.y);
         }
         transform.position = basePos + offset;
     }

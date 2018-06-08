@@ -268,38 +268,38 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID) && !Services.Main.disableUI)
         {
             Vector3 tooltipLocation;
-            if (placed || owner.playerNum == 2)
+            if (placed || owner.playerNum == 1)
             {
                 Tooltip tooltipLeft = GameObject.Instantiate(Services.Prefabs.Tooltip,
                     Services.UIManager.canvas).GetComponent<Tooltip>();
                 if (placed)
                 {
                     tooltipLocation = Services.GameManager.MainCamera.WorldToScreenPoint(
-                        GetCenterpoint());
+                        holder.transform.position + GetCenterpoint());
                 }
                 else
                 {
                     tooltipLocation = 
-                        Services.UIManager.blueprintUIZones[1].transform.position;
+                        Services.UIManager.blueprintUIZones[0].transform.position;
                 }
-                tooltipLeft.Init(GetName(), GetDescription(), 90, tooltipLocation, !placed);
+                tooltipLeft.Init(GetName(), GetDescription(), 0, tooltipLocation, !placed);
                 tooltips.Add(tooltipLeft);
             }
-            if (placed || owner.playerNum == 1)
+            if (placed || owner.playerNum == 2)
             {
                 Tooltip tooltipRight = GameObject.Instantiate(Services.Prefabs.Tooltip,
                 Services.UIManager.canvas).GetComponent<Tooltip>();
                 if (placed)
                 {
                     tooltipLocation = Services.GameManager.MainCamera.WorldToScreenPoint(
-                        GetCenterpoint());
+                        holder.transform.position + GetCenterpoint());
                 }
                 else
                 {
                     tooltipLocation =
-                        Services.UIManager.blueprintUIZones[0].transform.position;
+                        Services.UIManager.blueprintUIZones[1].transform.position;
                 }
-                tooltipRight.Init(GetName(), GetDescription(), -90, tooltipLocation, !placed);
+                tooltipRight.Init(GetName(), GetDescription(), 180, tooltipLocation, !placed);
                 tooltips.Add(tooltipRight);
             }
 
@@ -321,10 +321,10 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         if (tooltips.Count > 0)
         {
             float rot;
-            if (owner.playerNum == 2) rot = 90;
-            else rot = -90;
+            if (owner.playerNum == 2) rot = 0;
+            else rot = 180;
             tooltips[0].Reposition(Services.GameManager.MainCamera.WorldToScreenPoint(
-                    GetCenterpoint()), rot, true);
+                    holder.transform.position + GetCenterpoint()), rot, true);
         }
     }
 
@@ -397,7 +397,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         if (!Services.Main.disableUI)
         {
             Task floatingTextSequence = new Wait(0.4f);
-            floatingTextSequence.Then(new FloatText(onGainText, GetCenterpoint(),
+            floatingTextSequence.Then(new FloatText(onGainText, holder.transform.position + GetCenterpoint(),
                 owner, 2, 1));
             Services.GameScene.tm.Do(floatingTextSequence);
         }

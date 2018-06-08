@@ -27,9 +27,9 @@ public class ScrollOffReadyBanners : Task
         targetPositions = new Vector3[2];
         for (int i = 0; i < 2; i++)
         {
-            startPositions[i] = banners[i].position;
-            Vector3 offset = banners[i].gameObject.GetComponent<RectTransform>().sizeDelta.y * Vector3.right;
-            if (i == 0) offset *= -1;
+            startPositions[i] = banners[i].localPosition;
+            Vector3 offset = banners[i].gameObject.GetComponent<RectTransform>().sizeDelta.y * Vector3.down;
+            if (i == 1) offset *= -1;
             targetPositions[i] = startPositions[i] + offset;
         }
     }
@@ -40,7 +40,7 @@ public class ScrollOffReadyBanners : Task
 
         for (int i = 0; i < banners.Length; i++)
         {
-            banners[i].transform.position = Vector3.Lerp(startPositions[i], targetPositions[i],
+            banners[i].transform.localPosition = Vector3.Lerp(startPositions[i], targetPositions[i],
                 EasingEquations.Easing.QuadEaseIn(timeElapsed / duration));
         }
 

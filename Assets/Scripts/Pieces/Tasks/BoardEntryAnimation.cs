@@ -57,7 +57,6 @@ public class BoardEntryAnimation : Task
                     //    EasingEquations.Easing.QuadEaseOut(progress)));
                     mapTile.transform.position = Vector3.Lerp(basePositions[i, j] + offset,
                         basePositions[i, j], EasingEquations.Easing.QuadEaseOut(progress));
-
                 }
             }
         }
@@ -67,6 +66,19 @@ public class BoardEntryAnimation : Task
             currentIndex += 1;
         }
         if (timeElapsed >= totalDuration) SetStatus(TaskStatus.Success);
+    }
+
+    protected override void OnSuccess()
+    {
+        base.OnSuccess();
+        for (int i = 0; i < mapWidth; i++)
+        {
+            for (int j = 0; j < mapHeight; j++)
+            {
+                map[i, j].gameObject.SetActive(true);
+                map[i, j].transform.position = basePositions[i, j];
+            }
+        }
     }
 
 }

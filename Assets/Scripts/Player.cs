@@ -482,6 +482,8 @@ public class Player : MonoBehaviour
                 break;
         }
         Vector3 rawWorldPos = Services.GameManager.MainCamera.ScreenToWorldPoint(screenPos);
+        Vector3 centerpoint = blueprint.GetCenterpoint() * Polyomino.unselectedScale.x;
+        rawWorldPos -= centerpoint;
         return new Vector3(rawWorldPos.x, rawWorldPos.y, 0);
     }
 
@@ -508,6 +510,7 @@ public class Player : MonoBehaviour
 
     void OrganizeHand<T>(List<T> heldpieces, bool instant) where T :Polyomino
     {
+        Debug.Log("organizing at time " + Time.time);
         int provisionalHandCount = heldpieces.Count;
         bool emptySpace = false;
         if (selectedPiece != null && !(selectedPiece is Blueprint)) {
@@ -517,7 +520,6 @@ public class Player : MonoBehaviour
         handTargetPositions = new List<Vector3>();
         for (int i = 0; i < provisionalHandCount; i++)
         {
-            Vector3 newPos = GetHandPosition(i);
             int handPos = i;
             if(emptySpace && i > selectedPieceHandPos)
             {
@@ -525,7 +527,9 @@ public class Player : MonoBehaviour
             }
             if (!emptySpace || (emptySpace && i != selectedPieceHandPos))
             {
-                if (instant) heldpieces[handPos].Reposition(newPos);
+                Vector3 newPos = GetHandPosition(i);
+                Debug.Log("piece " + i + " moving to " + newPos);
+                if (instant) heldpieces[handPos].Reposition(newPos, true);
                 handTargetPositions.Add(newPos);
             }
         }
@@ -540,12 +544,13 @@ public class Player : MonoBehaviour
             spacingMultiplier = -1;
             offset = new Vector3(-handOffset.x, -handOffset.y, handOffset.z);
         }
-        //offset += Services.GameManager.MainCamera.ScreenToWorldPoint(handZone.transform.position);
-        offset += Services.GameManager.MainCamera.transform.position;
+        offset += Services.CameraController.screenEdges[playerNum - 1];
+        //offset += Services.GameManager.MainCamera.transform.position;
         offset = new Vector3(offset.x, offset.y, 0);
         Vector3 newPos = new Vector3(
                 handSpacing.x * (handIndex / piecesPerHandColumn) * spacingMultiplier,
-                handSpacing.y * (handIndex % piecesPerHandColumn) * spacingMultiplier, 0) + offset;
+                handSpacing.y * (handIndex % piecesPerHandColumn) * spacingMultiplier, 0) 
+                + offset;
         return newPos;
     }
     #endregion

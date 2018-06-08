@@ -25,8 +25,8 @@ public class Mine : Blueprint
     protected override void SetIconSprite()
     {
         base.SetIconSprite();
-        holder.icon.transform.position = GetCenterpoint();
-        holder.dropShadow.transform.position = GetCenterpoint();
+        holder.icon.transform.localPosition = GetCenterpoint();
+        holder.dropShadow.transform.localPosition = GetCenterpoint();
         int spriteIndex = numRotations % 2;
         holder.spriteBottom.sprite =
             Services.UIManager.mineBottoms[spriteIndex];

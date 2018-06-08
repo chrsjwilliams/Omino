@@ -10,10 +10,17 @@ public class CameraController : MonoBehaviour {
     private float currentSeed;
     private float shakeSpeed;
     private float shakeMag;
+    public Vector3[] screenEdges;
+    private Camera theCamera;
 
 	// Use this for initialization
 	void Start () {
-        
+        theCamera = GetComponent<Camera>();
+        screenEdges = new Vector3[2]
+        {
+            theCamera.ScreenToWorldPoint(new Vector3(Screen.width/2,0)),
+            theCamera.ScreenToWorldPoint(new Vector3(Screen.width/2, Screen.height))
+        };
 	}
 	
     public void SetPosition(Vector3 pos)

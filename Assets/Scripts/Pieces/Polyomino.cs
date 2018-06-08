@@ -35,9 +35,9 @@ public class Polyomino : IVertex
     public bool placed { get; protected set; }
     private const float rotationInputRadius = 8f;
     protected int touchID;
-    private readonly Vector3 baseDragOffset = 5f * Vector3.right;
+    private readonly Vector3 baseDragOffset = 5f * Vector3.up;
     public static Vector3 unselectedScale = 0.5f * Vector3.one;
-    public static Vector3 queueScale = 0.25f * Vector3.one;
+    public static Vector3 queueScale = 0.2f * Vector3.one;
     public const float drawAnimDur = 0.5f;
     public const float deathAnimDur = 0.5f;
     public const float deathAnimScaleUp = 1.5f;
@@ -439,9 +439,12 @@ public class Polyomino : IVertex
             tile.SetHighlightColor(new Color(0, 0, 0, 0));
         }
         SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 0.75f), 1);
-        Vector3 centerOffset = GetCenterpoint() - holder.transform.position;
-        Reposition(holder.transform.position - centerOffset);
         ScaleHolder(queueScale);
+        Vector3 centerpoint = GetCenterpoint() * holder.transform.localScale.x;
+        //Debug.Log("base pos: " + holder.transform.position);
+        //Debug.Log("piece centerpoint: " + centerpoint);
+        //Debug.Log("adjusted pos: " + (holder.transform.position - centerpoint));
+        Reposition(holder.transform.position);
     }
 
     public void OnDrawn()
@@ -973,14 +976,15 @@ public class Polyomino : IVertex
         GameObject.Destroy(holder.gameObject);
     }
 
-    public void Reposition(Vector3 pos)
+    public void Reposition(Vector3 pos, bool centered = false)
     {
+        if (centered) pos -= (GetCenterpoint() * unselectedScale.x);
         holder.transform.position = pos;
-        //change localposition of the piece container in player UI to value
     }
 
     public void ApproachHandPosition(Vector3 targetPos)
     {
+        targetPos -= (GetCenterpoint() * unselectedScale.x);
         holder.transform.position += (targetPos - holder.transform.position) * handPosApproachFactor;
     }
 
@@ -1067,7 +1071,7 @@ public class Polyomino : IVertex
 
     protected virtual void SetIconSprite()
     {
-        holder.icon.transform.position = GetCenterpoint();
+        holder.icon.transform.localPosition = GetCenterpoint();
         holder.icon.enabled = false;
     }
 
@@ -1076,7 +1080,7 @@ public class Polyomino : IVertex
         Vector3 centerPos = Vector3.zero;
         foreach (Tile tile in tiles)
         {
-            centerPos += tile.transform.position;
+            centerPos += tile.transform.localPosition;
         }
         centerPos /= tiles.Count;
         if (centerTile)
@@ -1085,14 +1089,14 @@ public class Polyomino : IVertex
             float closestDistance = Mathf.Infinity;
             foreach (Tile tile in tiles)
             {
-                float dist = Vector3.Distance(tile.transform.position, centerPos);
+                float dist = Vector3.Distance(tile.transform.localPosition, centerPos);
                 if(dist < closestDistance)
                 {
                     closestTile = tile;
                     closestDistance = dist;
                 }
             }
-            return closestTile.transform.position;
+            return closestTile.transform.localPosition;
         }
 
         return centerPos;
@@ -1296,13 +1300,13 @@ public class Polyomino : IVertex
             Vector3 screenOffset;
             if (owner.playerNum == 1)
             {
-                screenOffset = baseDragOffset + ((1 - (2 * baseDragOffset.x / Screen.width))
-                    * screenInputPos.x * Vector3.right);
+                screenOffset = baseDragOffset + ((1 - (2 * baseDragOffset.y / Screen.height))
+                    * screenInputPos.y * Vector3.up);
             }
             else
             {
-                screenOffset = -baseDragOffset + ((1 - (2 * baseDragOffset.x / Screen.width)) 
-                    * (Screen.width - screenInputPos.x) * Vector3.left);
+                screenOffset = -baseDragOffset + ((1 - (2 * baseDragOffset.y / Screen.height)) 
+                    * (Screen.height - screenInputPos.y) * Vector3.down);
             }
             Vector3 offsetInputPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
                 screenInputPos + screenOffset);
@@ -1592,7 +1596,7 @@ public class Polyomino : IVertex
             overlayColor = Services.GameManager.NeutralColor;
         }
         holder.spriteBottom.color = overlayColor;
-        holder.spriteBottom.transform.position = GetCenterpoint();
+        holder.spriteBottom.transform.localPosition = GetCenterpoint();
     }
 
     protected void SetSprites()

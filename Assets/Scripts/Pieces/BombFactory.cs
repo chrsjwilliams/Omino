@@ -14,7 +14,7 @@ public class BombFactory : Blueprint
     protected override void SetOverlaySprite()
     {
         base.SetOverlaySprite();
-        holder.spriteBottom.transform.position = GetCenterpoint(true);
+        holder.spriteBottom.transform.localPosition = GetCenterpoint(true);
     }
 
     protected override string GetName()

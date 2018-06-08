@@ -56,7 +56,7 @@ MonoBehaviour:
   - {r: 0, g: 0, b: 0, a: 0}
   deckClumpCount: 4
   handSpacing: {x: 5.5, y: -2.35, z: 0}
-  handOffset: {x: -12.6, y: 9.125, z: 0}
+  handOffset: {x: 2, y: 9.5, z: 0}
   startingHandSize: 4
   maxHandSize: 5
   piecesPerHandColumn: 5
@@ -64,3 +64,5 @@ MonoBehaviour:
   baseMaxResources: 3
   resourcesPerTick: 1
   dangerDistance: 11
+  inDanger: 0
+  dangerTile: {fileID: 0}

@@ -130,7 +130,7 @@ public abstract class Structure : Polyomino
         Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
         owner.GainOwnership(this);
         StructClaimAura effect = GameObject.Instantiate(Services.Prefabs.StructClaimEffect, 
-            GetCenterpoint(), Quaternion.identity).GetComponent<StructClaimAura>();
+            holder.transform.position + GetCenterpoint(), Quaternion.identity).GetComponent<StructClaimAura>();
         effect.Init(owner);
         adjacentPieces = GetAdjacentPolyominos(owner);
         foreach(Polyomino piece in adjacentPieces)
@@ -207,14 +207,14 @@ public abstract class Structure : Polyomino
         {
             Tooltip tooltipLeft = GameObject.Instantiate(Services.Prefabs.Tooltip,
                 Services.UIManager.canvas).GetComponent<Tooltip>();
-            tooltipLeft.Init(GetName(), GetDescription(), 90,
+            tooltipLeft.Init(GetName(), GetDescription(), 0,
                 Services.GameManager.MainCamera.WorldToScreenPoint(
-                GetCenterpoint()));
+                holder.transform.position + GetCenterpoint()));
             Tooltip tooltipRight = GameObject.Instantiate(Services.Prefabs.Tooltip,
                 Services.UIManager.canvas).GetComponent<Tooltip>();
-            tooltipRight.Init(GetName(), GetDescription(), -90,
+            tooltipRight.Init(GetName(), GetDescription(), 180,
                 Services.GameManager.MainCamera.WorldToScreenPoint(
-                GetCenterpoint()));
+                holder.transform.position + GetCenterpoint()));
             tooltips.Add(tooltipLeft);
             tooltips.Add(tooltipRight);
             Services.GameEventManager.Register<TouchUp>(OnTouchUp);
