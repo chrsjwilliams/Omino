@@ -9,27 +9,38 @@ public class ScrollRectSnap : MonoBehaviour
 
     protected int touchID;
     public bool dragging;
-    public bool twoPlayers;
+    public bool landscapeMode;
     public float swipeSpeed;
+    public float dir = 1;
+    public int currentIndex;
     public int selectedIndex;
     public int prevSelectedIndex;
+    public int anticipatedIndex;
+    public int imageDistance;
     public DIRECTION direction;
+    public DIRECTION anticipatedDirection;
     public RectTransform panel;
     public Image[] images;
     public RectTransform center;
+    public float moveBuffer;
 
-    
-    private float[] distance;
-    public int imageDistance; 
+    private bool levelSelected;
+    private float[] distance;   
     private int minImageIndex;
     private float travelDistance;
+    private Vector3 screenInputPos;
     private Vector3 initalTouchPos;
-    private Vector3 maxSize = new Vector3(0.5f, 0.5f, 1.0f);
-    private Vector3 minSize = new Vector3(0.3f, 0.3f, 1.0f);
+    private Vector3 prevTouchPos;
+    private Vector3 maxSize = new Vector3(0.66f, 0.66f, 1.0f);
+    private Vector3 minSize = new Vector3(0.33f, 0.33f, 1.0f);
+
+    public float t;
 
     // Use this for initialization
     public void Start ()
     {
+        levelSelected = false;
+        moveBuffer = 150;
         panel = GameObject.Find("ScrollPanel").GetComponent<RectTransform>();
         center = GameObject.Find("SelectedLevel").GetComponent<RectTransform>();
         int numOfLevels = panel.transform.childCount;
@@ -47,13 +58,16 @@ public class ScrollRectSnap : MonoBehaviour
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
 
-        twoPlayers = ((GameOptionsSceneScript)Services.Scenes.CurrentScene).humanPlayers[0] ==
-            ((GameOptionsSceneScript)Services.Scenes.CurrentScene).humanPlayers[1];
+        landscapeMode = true;
 
         swipeSpeed = 30.0f;
         direction = DIRECTION.IDLE;
+        anticipatedDirection = DIRECTION.IDLE;
         minImageIndex = 0;
         touchID = -1;
+
+        prevSelectedIndex = 0;
+        anticipatedIndex = 0;
     }
 
     private void OnDestroy()
@@ -77,48 +91,86 @@ public class ScrollRectSnap : MonoBehaviour
 
         float minDistance = Mathf.Min(distance);
 
-        prevSelectedIndex = selectedIndex;
+        prevSelectedIndex = minImageIndex;
+
         for (int i = 0; i < images.Length; i++)
         {
             if (minDistance == distance[i])
             {
-                selectedIndex = i;
-                if (selectedIndex > 5)
-                    selectedIndex = 5;
+                currentIndex = i;
+                if (currentIndex > 5)
+                    currentIndex = 5;
             }
         }
 
-        ScaleSelectedImage(selectedIndex, prevSelectedIndex, travelDistance / imageDistance);
+        ScaleSelectedImage(anticipatedIndex, currentIndex, EasingEquations.Easing.Linear(t));
+
         if (!dragging)
         {
             LerpToImage(minImageIndex * -imageDistance);
-
         }
+
     }
 
     public void SelectLevel()
     {
+        levelSelected = true;
         LevelButton selectedLevel = images[selectedIndex].GetComponent<LevelButton>();
         ((GameOptionsSceneScript)Services.Scenes.CurrentScene).SelectLevel(selectedLevel);
     }
 
     void LerpToImage(int position)
     {
+        selectedIndex = currentIndex;
+
         float posX = Mathf.Lerp(panel.anchoredPosition.x, position, Time.deltaTime * 4f);
         Vector2 newPos = new Vector2(posX, panel.anchoredPosition.y);
 
         panel.anchoredPosition = newPos;
     }
 
-    void ScaleSelectedImage(int currentIndex, int prevIndex, float duration)
+    void ScaleSelectedImage(int anticipatedIndex, int prevIndex, float duration)
     {
-        images[currentIndex].transform.localScale = Vector3.Lerp(images[currentIndex].transform.localScale,
-                                                               maxSize, duration);
-        for(int i = 0; i < images.Length; i++)
+        if (levelSelected) return;
+        if(anticipatedDirection == DIRECTION.LEFT)
         {
-            if(i != currentIndex)
+            if (anticipatedIndex > selectedIndex)
             {
-                images[i].transform.localScale = Vector3.Lerp(images[i].transform.localScale, minSize, duration);
+                images[anticipatedIndex].transform.localScale = Vector3.Lerp(minSize, maxSize, duration);
+                images[selectedIndex].transform.localScale = Vector3.Lerp(maxSize, minSize, duration);
+            }
+            else if (anticipatedIndex < selectedIndex)
+            {
+                images[anticipatedIndex].transform.localScale = Vector3.Lerp(minSize, maxSize, 1 - duration);
+                images[selectedIndex].transform.localScale = Vector3.Lerp(maxSize, minSize, 1 - duration);
+            }
+        }
+        else if(anticipatedDirection == DIRECTION.RIGHT)
+        {
+            if (anticipatedIndex < selectedIndex)
+            {
+                images[anticipatedIndex].transform.localScale = Vector3.Lerp(minSize, maxSize, 1 - duration);
+                images[selectedIndex].transform.localScale = Vector3.Lerp(maxSize, minSize, 1 - duration);
+            }
+            else if (anticipatedIndex > selectedIndex)
+            {
+                images[anticipatedIndex].transform.localScale = Vector3.Lerp(minSize, maxSize, duration);
+                images[selectedIndex].transform.localScale = Vector3.Lerp(maxSize, minSize, duration);
+            }
+        }
+
+        if (!dragging)
+        {
+            for (int i = 0; i < images.Length; i++)
+            {
+                if (i != selectedIndex)
+                {
+                    images[i].transform.localScale = Vector3.Lerp(images[i].transform.localScale, minSize, duration);
+                }
+                else
+                {
+                    images[i].transform.localScale = Vector3.Lerp(images[i].transform.localScale, maxSize, duration);
+                }
             }
         }
     }
@@ -136,16 +188,15 @@ public class ScrollRectSnap : MonoBehaviour
 
     protected void OnMouseDownEvent(MouseDown e)
     {
-
         Vector3 mouseWorldPos =
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos);
         OnInputDown(mouseWorldPos);
-
     }
 
     public virtual void OnInputDown(Vector3 touchPos)
     {
         initalTouchPos = Services.GameManager.MainCamera.WorldToScreenPoint(touchPos);
+        selectedIndex = currentIndex;
 
         Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<TouchMove>(OnTouchMove);
@@ -175,20 +226,17 @@ public class ScrollRectSnap : MonoBehaviour
         dragging = false;
         switch (direction)
         {
-            case DIRECTION.LEFT:
+            case DIRECTION.RIGHT:
                 minImageIndex--;
                 if (minImageIndex < 0) minImageIndex = 0;
                 break;
-            case DIRECTION.RIGHT:
+            case DIRECTION.LEFT:
                 minImageIndex++;
                 if (minImageIndex > images.Length - 1) minImageIndex = images.Length - 1;
-
                 break;
             default:
                 break;
         }
-    
-        direction = DIRECTION.IDLE;
 
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
@@ -197,6 +245,10 @@ public class ScrollRectSnap : MonoBehaviour
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
         Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
         Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
+
+        selectedIndex = currentIndex;
+        direction = DIRECTION.IDLE;
+        anticipatedDirection = DIRECTION.IDLE;
     }
 
     protected void OnMouseMoveEvent(MouseMove e)
@@ -216,50 +268,113 @@ public class ScrollRectSnap : MonoBehaviour
     {
         
         dragging = true;
-        Vector3 screenInputPos =
-                Services.GameManager.MainCamera.WorldToScreenPoint(inputPos);
+        screenInputPos = Services.GameManager.MainCamera.WorldToScreenPoint(inputPos);
 
-        float dir = 1;
-        if (twoPlayers)
+        if (landscapeMode)
         {
-            if (screenInputPos.x < initalTouchPos.x)
+            if (prevTouchPos.x > screenInputPos.x)
+            {
+                anticipatedDirection = DIRECTION.LEFT;
+            }
+            else if (prevTouchPos.x < screenInputPos.x)
+            {
+                anticipatedDirection = DIRECTION.RIGHT;
+            }
+
+            prevTouchPos = screenInputPos;
+
+            if (screenInputPos.x > initalTouchPos.x)
+            {
+                dir = 1;
+
+                anticipatedIndex = selectedIndex - 1;
+                if (anticipatedIndex < 0) anticipatedIndex = 0;
+            }
+            else
             {
                 dir = -1;
-                direction = DIRECTION.RIGHT;
+
+                anticipatedIndex = selectedIndex + 1;
+                if (anticipatedIndex > images.Length - 1) anticipatedIndex = images.Length - 1;
             }
-            else if (screenInputPos.x > initalTouchPos.x)
+
+            if (screenInputPos.x  > initalTouchPos.x + moveBuffer)
+            {
+                direction = DIRECTION.RIGHT;
+
+            }
+            else if (screenInputPos.x < initalTouchPos.x - moveBuffer)
             {
                 direction = DIRECTION.LEFT;
             }
-        }
-        else
-        {
-            if (screenInputPos.y < initalTouchPos.y)
+            else
             {
-                direction = DIRECTION.LEFT;
+                direction = DIRECTION.IDLE;
             }
-            else if (screenInputPos.y > initalTouchPos.y)
-            {
-                dir = -1;
 
-                direction = DIRECTION.RIGHT;
-            }
-        }
-
-        if (twoPlayers)
-        {
             travelDistance = Mathf.Abs(initalTouchPos.x - screenInputPos.x);
         }
         else
         {
+            if (prevTouchPos.y > screenInputPos.y)
+            {
+                anticipatedDirection = DIRECTION.RIGHT;
+            }
+            else if (prevTouchPos.y < screenInputPos.y)
+            {
+                anticipatedDirection = DIRECTION.LEFT;
+            }
+
+            if (screenInputPos.y > initalTouchPos.y)
+            {
+                dir = 1;
+
+                anticipatedIndex = selectedIndex - 1;
+                if (anticipatedIndex < 0) anticipatedIndex = 0;
+            }
+            else
+            {
+                dir = -1;
+
+                anticipatedIndex = selectedIndex + 1;
+                if (anticipatedIndex > images.Length - 1) anticipatedIndex = images.Length - 1;
+            }
+
+            if (screenInputPos.y > initalTouchPos.y) dir = 1;
+            else dir = -1;
+
+            if (screenInputPos.y < initalTouchPos.y - moveBuffer)
+            {
+                direction = DIRECTION.LEFT;
+            }
+            else if (screenInputPos.y > initalTouchPos.y + moveBuffer)
+            {
+                direction = DIRECTION.RIGHT;
+            }
+            else
+            {
+                direction = DIRECTION.IDLE;
+            }
+
             travelDistance = Mathf.Abs(initalTouchPos.y - screenInputPos.y);
         }
+
+        prevTouchPos = screenInputPos;
 
         if (travelDistance > imageDistance) travelDistance = imageDistance;
 
         Vector3 newPanelPos = new Vector3(travelDistance * dir + ((minImageIndex * -imageDistance)), 0, 0);
        
         panel.anchoredPosition = Vector3.Lerp(panel.anchoredPosition, newPanelPos, Time.deltaTime * swipeSpeed);
-        
+
+
+        float directionLimit = ((anticipatedIndex * imageDistance));
+        float anchorPos = selectedIndex * imageDistance;
+
+        float min = anchorPos < directionLimit ? anchorPos : directionLimit;
+        float max = min == anchorPos ? directionLimit : anchorPos;
+
+        t = landscapeMode? (Mathf.Abs(panel.anchoredPosition.x) - min) / (max - min) : (Mathf.Abs(panel.anchoredPosition.x) - min) / (max - min);
+
     }
 }

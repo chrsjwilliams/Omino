@@ -149,7 +149,7 @@ public class Player : MonoBehaviour
         {
             DrawPieces(startingHandSize);
         }
-        OrganizeHand(hand, true);
+        
         foreach(Polyomino piece in hand)
         {
             piece.holder.gameObject.SetActive(false);
@@ -508,7 +508,7 @@ public class Player : MonoBehaviour
         OrganizeHand<T>(heldpieces, false);
     }
 
-    void OrganizeHand<T>(List<T> heldpieces, bool instant) where T :Polyomino
+    public void OrganizeHand<T>(List<T> heldpieces, bool instant) where T :Polyomino
     {
         Debug.Log("organizing at time " + Time.time);
         int provisionalHandCount = heldpieces.Count;

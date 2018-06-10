@@ -403,6 +403,9 @@ public class Move
             playTask = new PlayTask(this);
             playTask.Then(new ActionTask(blueprintMove.ExecuteMove));
         }
+        string playerColor = piece.owner.playerNum == 1 ? "Red" : "Blue";
+        Debug.Log("Player " + playerColor+ " Score: " + score);
+
         Services.GameScene.tm.Do(playTask);
         //Debug.Log("player " + piece.owner.playerNum + " making move of score: " + score + " at time " + Time.time);
         //if (finalCutSize > 0) Debug.Log("making cut of size" + finalCutSize);

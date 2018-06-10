@@ -44,8 +44,8 @@ public class AILevelSlideIn : Task
             targetPositions[i] = obj.transform.position;
             Vector3 offset;
             offset = player1 ? 
-                initialOffset * Vector3.left :
-                initialOffset * Vector3.right;
+                initialOffset * Vector3.down:
+                initialOffset * Vector3.up;
             startPositions[i] = obj.transform.position + offset;
             if (!exit) obj.transform.position = startPositions[i];
         }

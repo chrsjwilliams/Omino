@@ -122,19 +122,19 @@ public class GameManager : MonoBehaviour
     public void SetBlueprintDestructionWeight(float weight)
     {
         blueprintDestructionWeight = weight;
-        PlayerPrefs.SetFloat("blueprintDestructionWeight", structureWeight);
+        PlayerPrefs.SetFloat("blueprintDestructionWeight", blueprintDestructionWeight);
     }
 
     public void SetDisconnectionWeight(float weight)
     {
         disconnectionWeight = weight;
-        PlayerPrefs.SetFloat("disconnectionWeight", blueprintWeight);
+        PlayerPrefs.SetFloat("disconnectionWeight", disconnectionWeight);
     }
 
     public void SetDestructorForBlueprintWeight(float weight)
     {
         destructorForBlueprintWeight = weight;
-        PlayerPrefs.SetFloat("destructorForBlueprintWeight", destructionWeight);
+        PlayerPrefs.SetFloat("destructorForBlueprintWeight", destructorForBlueprintWeight);
     }
 
     public void SetDangerWeight(float weight)
