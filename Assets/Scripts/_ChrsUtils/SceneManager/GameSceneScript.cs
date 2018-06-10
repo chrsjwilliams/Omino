@@ -50,7 +50,7 @@ public class GameSceneScript : Scene<TransitionData>
         Services.CameraController.SetScreenEdges();
     }
 
-    public void PlayerHand()
+    public void InitalOrganizeHand()
     {
         for (int i = 0; i < Services.GameManager.Players.Length; i++)
         {
@@ -186,7 +186,7 @@ public class GameSceneScript : Scene<TransitionData>
             new TaskTree(new ScrollOffReadyBanners(Services.UIManager.readyBanners),
             new TaskTree(new HandPieceEntry(Services.GameManager.Players[0].hand)),
             new TaskTree(new HandPieceEntry(Services.GameManager.Players[1].hand)),
-            new TaskTree(new ActionTask(PlayerHand)));
+            new TaskTree(new ActionTask(InitalOrganizeHand)));
         startSequence
             .Then(new ActionTask(StartGame));
         Services.GameScene.tm.Do(startSequence);
