@@ -16,7 +16,6 @@ public class CameraController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         theCamera = GetComponent<Camera>();
-        SetScreenEdges();
 
     }
 
@@ -33,6 +32,7 @@ public class CameraController : MonoBehaviour {
     {
         transform.position = pos;
         basePos = pos;
+        SetScreenEdges();
     }
 
 	// Update is called once per frame

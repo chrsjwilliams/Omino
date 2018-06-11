@@ -80,12 +80,12 @@ public class AIPlayer : Player
         destructorForBlueprintWeight = strategy.destructorForBlueprintWeight + 0.3f;
         dangerMod = strategy.dangerMod;
 
-        handSpacing = new Vector3(5.5f, -2.35f, 0);
-        handOffset = new Vector3(2f, 9.5f, 0);
+        handSpacing = new Vector3(2.35f, -2.35f, 0);
+        handOffset = new Vector3(-9.25f, 1.75f, 0);
 
         startingHandSize = 4;
         maxHandSize = 5;
-        piecesPerHandColumn = 1;
+        piecesPerHandRow = 5;
         startingResources = 1.5f;
         baseMaxResources = 3;
         boardPieces = new List<Polyomino>();

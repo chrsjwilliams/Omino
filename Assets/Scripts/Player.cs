@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     protected int maxHandSize;
     [SerializeField]
-    protected int piecesPerHandColumn;
+    protected int piecesPerHandRow;
     public RectTransform handZone { get; private set; }
     public Base mainBase;
     public bool gameOver { get; private set; }
@@ -546,8 +546,9 @@ public class Player : MonoBehaviour
         //offset += Services.GameManager.MainCamera.transform.position;
         offset = new Vector3(offset.x, offset.y, 0);
         Vector3 newPos = new Vector3(
-                handSpacing.x * (handIndex / piecesPerHandColumn) * spacingMultiplier,
-                handSpacing.y * (handIndex % piecesPerHandColumn) * spacingMultiplier, 0) 
+                handSpacing.x * (handIndex % piecesPerHandRow) * spacingMultiplier,
+                handSpacing.y * (handIndex / piecesPerHandRow) * spacingMultiplier,
+                0)
                 + offset;
         return newPos;
     }
