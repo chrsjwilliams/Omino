@@ -7,8 +7,8 @@ public class NetworkGameManager : Photon.PunBehaviour {
 
 	void Awake()
 	{
-		Services.GameManager = new GameManager();
-		Services.GameManager.Init();
+		Services.GameManager = gameObject.AddComponent<GameManager>();
+		Services.GameManager.mode = TitleSceneScript.GameMode.TwoPlayers;
 	}
 	
 	// Use this for initialization
