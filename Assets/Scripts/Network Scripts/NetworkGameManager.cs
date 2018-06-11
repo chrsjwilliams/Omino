@@ -6,7 +6,7 @@ public class NetworkGameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Services.Scenes.PushScene<GameSceneScript>();
+		Services.Scenes.Swap<GameSceneScript>();
 	}
 	
 	// Update is called once per frame
