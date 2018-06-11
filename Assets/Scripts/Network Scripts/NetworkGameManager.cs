@@ -10,13 +10,14 @@ public class NetworkGameManager : Photon.PunBehaviour {
 		Services.GameManager = GameObject.Find("Main").GetComponent<GameManager>();
 		Services.GameManager.SetNumPlayers(new bool[] {true, true});
 		
-		Services.Scenes.Swap<GameSceneScript>();
+		Services.Scenes.Swap<NetworkGameSceneScript>();
 		
 		if (!PhotonNetwork.player.isMasterClient)
 		{
-			Debug.Log("I'm not the master.");
-			//Screen.orientation = ScreenOrientation.PortraitUpsideDown;
-			Camera.main.gameObject.AddComponent<MirrorFlipCamera>();
+			Color[] first_colors = Services.GameManager.colorSchemes[0];
+			Color[] second_colors = Services.GameManager.colorSchemes[1];
+			Services.GameManager.colorSchemes[0] = second_colors;
+			Services.GameManager.colorSchemes[1] = first_colors;
 		}
 	}
 	
