@@ -50,14 +50,6 @@ public class GameSceneScript : Scene<TransitionData>
         Services.CameraController.SetScreenEdges();
     }
 
-    public void InitalOrganizeHand()
-    {
-        for (int i = 0; i < Services.GameManager.Players.Length; i++)
-        {
-            Services.GameManager.Players[i].OrganizeHand(Services.GameManager.Players[i].hand, true);
-        }
-    }
-
     internal override void OnExit()
     {
         Time.timeScale = 1;
@@ -185,8 +177,7 @@ public class GameSceneScript : Scene<TransitionData>
         TaskTree startSequence =
             new TaskTree(new ScrollReadyBanners(Services.UIManager.readyBanners, false),
             new TaskTree(new HandPieceEntry(Services.GameManager.Players[0].hand)),
-            new TaskTree(new HandPieceEntry(Services.GameManager.Players[1].hand)),
-            new TaskTree(new ActionTask(InitalOrganizeHand)));
+            new TaskTree(new HandPieceEntry(Services.GameManager.Players[1].hand)));
         startSequence
             .Then(new ActionTask(StartGame));
         Services.GameScene.tm.Do(startSequence);

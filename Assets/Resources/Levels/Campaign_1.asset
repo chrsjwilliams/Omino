@@ -23,12 +23,12 @@ MonoBehaviour:
   tooltips:
   - text: This is your opponent's base. Connect from your base to your opponent's
       to win.
-    location: {x: 400, y: -300}
-    arrowLocation: {x: -450, y: 0}
-    arrowRotation: 180
+    location: {x: -300, y: 400}
+    arrowLocation: {x: 450, y: 0}
+    arrowRotation: 0
     dismissable: 1
     enableTooltips: 0
-    windowLocation: {x: 350, y: 350}
+    windowLocation: {x: 340, y: 340}
     windowSize: {x: 250, y: 250}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
@@ -38,13 +38,13 @@ MonoBehaviour:
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
   - text: This is your hand. You can play pieces from here by tapping and dragging.
-    location: {x: -400, y: 400}
+    location: {x: -300, y: -400}
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
     dismissable: 1
     enableTooltips: 0
-    windowLocation: {x: -900, y: 350}
-    windowSize: {x: 200, y: 800}
+    windowLocation: {x: -350, y: -900}
+    windowSize: {x: 800, y: 200}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
     imageRotation: 0
@@ -53,12 +53,12 @@ MonoBehaviour:
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
   - text: Pieces must be played connected to your base.
-    location: {x: -300, y: 400}
-    arrowLocation: {x: 450, y: 0}
-    arrowRotation: 0
+    location: {x: 400, y: -300}
+    arrowLocation: {x: -450, y: 0}
+    arrowRotation: 180
     dismissable: 1
     enableTooltips: 0
-    windowLocation: {x: -350, y: -350}
+    windowLocation: {x: -340, y: -340}
     windowSize: {x: 250, y: 250}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
@@ -68,7 +68,7 @@ MonoBehaviour:
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
   - text: Try placing a piece now!
-    location: {x: -500, y: 400}
+    location: {x: 400, y: -500}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
@@ -82,14 +82,14 @@ MonoBehaviour:
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: Each piece costs 1 play. Plays replenish over time.
-    location: {x: -300, y: 400}
+  - text: Each piece costs 1 play resource. Plays replenish over time.
+    location: {x: 270, y: -275}
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
     dismissable: 1
     enableTooltips: 0
-    windowLocation: {x: -750, y: 300}
-    windowSize: {x: 100, y: 400}
+    windowLocation: {x: 225, y: -775}
+    windowSize: {x: 300, y: 180}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
     imageRotation: 0
@@ -98,13 +98,13 @@ MonoBehaviour:
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
   - text: You also draw new pieces into your hand over time.
-    location: {x: -300, y: -150}
-    arrowLocation: {x: 0, y: -250}
+    location: {x: 450, y: -300}
+    arrowLocation: {x: 70, y: -250}
     arrowRotation: -90
     dismissable: 1
     enableTooltips: 0
-    windowLocation: {x: -800, y: -175}
-    windowSize: {x: 200, y: 250}
+    windowLocation: {x: 470, y: -785}
+    windowSize: {x: 180, y: 180}
     haveImage: 0
     imageLocation: {x: -200, y: 350}
     imageRotation: 0
@@ -112,9 +112,8 @@ MonoBehaviour:
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 180
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: You can rotate the piece you're holding by tapping next to your finger (not
-      next to the piece).
-    location: {x: -500, y: 400}
+  - text: You can rotate the piece you're holding by tapping next to your finger.
+    location: {x: 400, y: -500}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
@@ -129,7 +128,7 @@ MonoBehaviour:
     subImageRotation: 180
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
   - text: Try using your index finger to drag and your middle finger to rotate!
-    location: {x: -500, y: 400}
+    location: {x: 400, y: -500}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
@@ -144,7 +143,7 @@ MonoBehaviour:
     subImageRotation: 180
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
   - text: Try connecting to the opposing base to win!
-    location: {x: -500, y: 400}
+    location: {x: 400, y: -500}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
@@ -152,7 +151,7 @@ MonoBehaviour:
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
-    imageLocation: {x: -200, y: 350}
+    imageLocation: {x: 350, y: -200}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: -16, y: 200}

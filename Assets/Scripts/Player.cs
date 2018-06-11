@@ -149,7 +149,7 @@ public class Player : MonoBehaviour
         {
             DrawPieces(startingHandSize);
         }
-        
+        OrganizeHand(hand, true);
         foreach(Polyomino piece in hand)
         {
             piece.holder.gameObject.SetActive(false);

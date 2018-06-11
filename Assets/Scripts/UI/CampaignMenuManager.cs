@@ -39,7 +39,7 @@ public class CampaignMenuManager : MonoBehaviour {
         Image resultImage;
         if (winner is AIPlayer)
         {
-            rot = winner.playerNum == 2 ? -90 : 90;
+            rot = winner.playerNum == 2 ? 0 : 180;
             wreathHolder.SetActive(false);
             defeatSymbol.gameObject.SetActive(true);
             resultImage = defeatSymbol;
@@ -47,7 +47,7 @@ public class CampaignMenuManager : MonoBehaviour {
         }
         else
         {
-            rot = winner.playerNum == 1 ? -90 : 90;
+            rot = winner.playerNum == 1 ? 0 : 180;
             wreathHolder.SetActive(true);
             defeatSymbol.gameObject.SetActive(false);
             resultImage = victorySymbol;

@@ -26,38 +26,78 @@ MonoBehaviour:
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
+    enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLocation: {x: 0, y: 0}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
   - text: 'There are two types of pieces: Normal pieces, and attack pieces. Attack
       pieces have a hammer icon.'
-    location: {x: -400, y: 200}
+    location: {x: -100, y: -400}
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
     dismissable: 1
-    windowLocation: {x: -875, y: 150}
+    enableTooltips: 0
+    windowLocation: {x: -150, y: -900}
     windowSize: {x: 150, y: 150}
+    haveImage: 0
+    imageLocation: {x: 0, y: 0}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
   - text: Attack pieces act just like normal pieces, except that they can be played
       on top of opposing pieces, removing anything they overlap with.
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
+    enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLocation: {x: 0, y: 0}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
   - text: Attack pieces are drawn using a separate timer from normal pieces.
-    location: {x: -500, y: -200}
-    arrowLocation: {x: 0, y: -250}
+    location: {x: 450, y: -300}
+    arrowLocation: {x: 270, y: -250}
     arrowRotation: -90
     dismissable: 1
-    windowLocation: {x: -940, y: -175}
-    windowSize: {x: 150, y: 225}
+    enableTooltips: 0
+    windowLocation: {x: 670, y: -785}
+    windowSize: {x: 170, y: 170}
+    haveImage: 0
+    imageLocation: {x: 0, y: 0}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
   - text: Try to win before your opponent!
     location: {x: 500, y: -200}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
+    enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLocation: {x: 0, y: 0}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
   overrideStrategy:
     winWeight: 1
     structWeight: 0
@@ -66,4 +106,5 @@ MonoBehaviour:
     blueprintDestructionWeight: 0
     disconnectionWeight: 0
     destructorForBlueprintWeight: 0
+    dangerMod: 0
     overrideDefault: 1
