@@ -440,16 +440,15 @@ public class Polyomino : IVertex
         }
         SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 0.75f), 1);
         ScaleHolder(queueScale);
-        Vector3 centerpoint = GetCenterpoint() * holder.transform.localScale.x;
+        Vector3 centerpoint = GetCenterpoint() * queueScale.x;
         //Debug.Log("base pos: " + holder.transform.position);
         //Debug.Log("piece centerpoint: " + centerpoint);
         //Debug.Log("adjusted pos: " + (holder.transform.position - centerpoint));
-        Reposition(holder.transform.position);
+        Reposition(holder.transform.position - centerpoint);
     }
 
     public void OnDrawn()
     {
-        //ToggleCostUIStatus(true);
         ListenForInput(false);
     }
 

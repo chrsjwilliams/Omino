@@ -89,7 +89,8 @@ public class TutorialManager : MonoBehaviour {
 
         currentTooltip.Init(nextTooltipInfo);
 
-        if (Services.MapManager.currentLevel.campaignLevelNum == 1 && currentIndex >= rotateToolTipIndex)
+        if (Services.MapManager.currentLevel.campaignLevelNum == 1 
+            && currentIndex >= rotateToolTipIndex)
         {
             currentTooltip.ToggleImageAnimation("RotateAnimation", true);
         }

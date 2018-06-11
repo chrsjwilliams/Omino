@@ -122,7 +122,8 @@ public class MapManager : MonoBehaviour
         TaskQueue boardAnimationTasks = new TaskQueue(new List<Task>() {
             new Wait(0.3f),
             new BoardEntryAnimation(),
-            new InitialBuildingEntryAnimation()
+            new InitialBuildingEntryAnimation(),
+            new ScrollReadyBanners(Services.UIManager.readyBanners, true)
             });
 
         Services.GameScene.tm.Do(boardAnimationTasks);

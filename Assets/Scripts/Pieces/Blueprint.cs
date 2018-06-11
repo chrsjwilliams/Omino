@@ -398,7 +398,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         {
             Task floatingTextSequence = new Wait(0.4f);
             floatingTextSequence.Then(new FloatText(onGainText, holder.transform.position + GetCenterpoint(),
-                owner, 2, 1));
+                owner, 2, 2));
             Services.GameScene.tm.Do(floatingTextSequence);
         }
         owner.AddActiveBlueprint(this);

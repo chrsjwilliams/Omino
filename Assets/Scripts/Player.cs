@@ -510,7 +510,6 @@ public class Player : MonoBehaviour
 
     void OrganizeHand<T>(List<T> heldpieces, bool instant) where T :Polyomino
     {
-        Debug.Log("organizing at time " + Time.time);
         int provisionalHandCount = heldpieces.Count;
         bool emptySpace = false;
         if (selectedPiece != null && !(selectedPiece is Blueprint)) {
@@ -528,7 +527,6 @@ public class Player : MonoBehaviour
             if (!emptySpace || (emptySpace && i != selectedPieceHandPos))
             {
                 Vector3 newPos = GetHandPosition(i);
-                Debug.Log("piece " + i + " moving to " + newPos);
                 if (instant) heldpieces[handPos].Reposition(newPos, true);
                 handTargetPositions.Add(newPos);
             }

@@ -88,7 +88,6 @@ public class UIManager : MonoBehaviour {
     private Color[] notReadyColors;
     [SerializeField]
     private Color readyColor;
-    public float readyBannerScrollOffTime;
     public float resourceGainAnimationDist;
     public float resourceGainAnimationDur;
     public Vector3 resourceGainAnimationOffset;
@@ -174,6 +173,7 @@ public class UIManager : MonoBehaviour {
         {
             victoryBanners[i].gameObject.SetActive(false);
             defeatBanners[i].gameObject.SetActive(false);
+            readyBanners[i].gameObject.SetActive(false);
         }
         touchIdsMakingTooltips = new List<int>();
         //InitializeQueueMeters();

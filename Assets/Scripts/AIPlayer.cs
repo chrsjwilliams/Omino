@@ -81,7 +81,7 @@ public class AIPlayer : Player
         dangerMod = strategy.dangerMod;
 
         handSpacing = new Vector3(5.5f, -2.35f, 0);
-        handOffset = new Vector3(-12.6f, 9.125f, 0);
+        handOffset = new Vector3(2f, 9.5f, 0);
 
         startingHandSize = 4;
         maxHandSize = 5;

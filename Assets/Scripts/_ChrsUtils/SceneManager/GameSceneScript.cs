@@ -174,7 +174,7 @@ public class GameSceneScript : Scene<TransitionData>
     public void StartGameSequence()
     {
         TaskTree startSequence =
-            new TaskTree(new ScrollOffReadyBanners(Services.UIManager.readyBanners),
+            new TaskTree(new ScrollReadyBanners(Services.UIManager.readyBanners, false),
             new TaskTree(new HandPieceEntry(Services.GameManager.Players[0].hand)),
             new TaskTree(new HandPieceEntry(Services.GameManager.Players[1].hand)));
         startSequence
