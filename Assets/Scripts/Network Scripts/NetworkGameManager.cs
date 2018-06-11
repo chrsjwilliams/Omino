@@ -11,7 +11,9 @@ public class NetworkGameManager : Photon.PunBehaviour {
 
 		if (!PhotonNetwork.isMasterClient)
 		{
-			Screen.orientation = ScreenOrientation.PortraitUpsideDown;
+			Debug.Log("I'm not the master.");
+			//Screen.orientation = ScreenOrientation.PortraitUpsideDown;
+			Camera.main.gameObject.AddComponent<MirrorFlipCamera>();
 		}
 	}
 	
