@@ -5,7 +5,6 @@ using UnityEngine.SocialPlatforms.GameCenter;
 
 namespace OminoNetwork
 {
-	[RequireComponent(typeof(InputField))]
 	public class GameCenterPlayerName : MonoBehaviour
 	{
 		#region Private Variables

@@ -104,6 +104,11 @@ namespace OminoNetwork
             
         }
 
+        public void ClickedReady()
+        {
+            Services.NetData.ReadyForMatch(true);
+        }
+
         public void ReadyForGame()
         {
             findButton.SetActive(false);
@@ -113,7 +118,6 @@ namespace OminoNetwork
 
         public void WaitingForOpponent()
         {
-            Services.NetData.ReadyForMatch(true);
             findButton.SetActive(false);
             startButton.SetActive(false);
             statusText.text = "Waiting for\n" + PhotonNetwork.otherPlayers[0].NickName + ".";
