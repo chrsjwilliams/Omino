@@ -61,7 +61,7 @@ namespace OminoNetwork
                 {
                     PhotonPlayer opponent = PhotonNetwork.otherPlayers[0];
                     object value;
-                    if (opponent.CustomProperties.TryGetValue(Services.NetData.READYFORMATCH, out value)
+                    if (opponent.CustomProperties.TryGetValue(Services.NetData.READYFORMATCH, out value))
                     {
                         if (value.ToString() == "false")
                         {
@@ -117,11 +117,6 @@ namespace OminoNetwork
             findButton.SetActive(false);
             startButton.SetActive(false);
             statusText.text = "Waiting for\n" + PhotonNetwork.otherPlayers[0].NickName + ".";
-        }
-
-        public void StartGame()
-        {
-            if ()
         }
 
     #endregion
