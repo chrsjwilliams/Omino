@@ -72,6 +72,15 @@ public class GameManager : MonoBehaviour
             _player1ColorScheme,
             _player2ColorScheme
         };
+
+        if ((PhotonNetwork.connected) && (!PhotonNetwork.player.isMasterClient))
+        {
+            colorSchemes = new Color[][]
+            {
+                _player2ColorScheme,
+                _player1ColorScheme
+            };
+        }
     }
 
     public void SetCurrentLevel(Level level)

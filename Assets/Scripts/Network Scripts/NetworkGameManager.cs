@@ -11,14 +11,6 @@ public class NetworkGameManager : Photon.PunBehaviour {
 		Services.GameManager.SetNumPlayers(new bool[] {true, true});
 		
 		Services.Scenes.Swap<NetworkGameSceneScript>();
-		
-		if (!PhotonNetwork.player.isMasterClient)
-		{
-			Color[] first_colors = Services.GameManager.colorSchemes[0];
-			Color[] second_colors = Services.GameManager.colorSchemes[1];
-			Services.GameManager.colorSchemes[0] = second_colors;
-			Services.GameManager.colorSchemes[1] = first_colors;
-		}
 	}
 	
 	// Update is called once per frame
