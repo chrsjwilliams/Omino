@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class NetworkGameManager : MonoBehaviour {
+public class NetworkGameManager : Photon.PunBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -10,7 +11,7 @@ public class NetworkGameManager : MonoBehaviour {
 
 		if (!PhotonNetwork.isMasterClient)
 		{
-			Camera.main.transform.Rotate(Vector3.back * 180);
+			Camera.main.transform.Rotate(0, 0, 180);
 		}
 	}
 	
@@ -22,5 +23,11 @@ public class NetworkGameManager : MonoBehaviour {
 	void ReturnToTitle()
 	{
 		
+	}
+
+	private void OnPlayerDisconnected(NetworkPlayer player)
+	{
+		Services.NetData.SetGameOverMessage("Opponent Disconnected");
+		SceneManager.LoadScene(0);
 	}
 }

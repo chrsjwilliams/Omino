@@ -151,6 +151,11 @@ namespace OminoNetwork
             statusText.text = "Waiting for\n" + PhotonNetwork.otherPlayers[0].NickName + ".";
         }
 
+        public void Pop()
+        {
+            Services.Scenes.PopScene();
+        }
+
     #endregion
         
         #region Photon.PunBehaviour CallBacks
