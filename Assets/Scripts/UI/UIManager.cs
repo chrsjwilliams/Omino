@@ -193,6 +193,13 @@ public class UIManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        if ((PhotonNetwork.connected) && (!PhotonNetwork.player.isMasterClient))
+        {
+            Button banner_0 = readyBanners[0];
+            readyBanners[0] = readyBanners[1];
+            readyBanners[1] = banner_0;
+        }
+
         for (int i = 0; i < victoryBanners.Length; i++)
         {
             victoryBanners[i].gameObject.SetActive(false);
