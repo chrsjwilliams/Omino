@@ -195,9 +195,9 @@ public class UIManager : MonoBehaviour {
     void Start () {
         if ((PhotonNetwork.connected) && (!PhotonNetwork.player.isMasterClient))
         {
-            Button banner_0 = readyBanners[0];
+            Color banner_0_color = readyBanners[0].image.color;
             readyBanners[0].image.color = readyBanners[1].image.color;
-            readyBanners[1].image.color = banner_0.image.color;
+            readyBanners[1].image.color = banner_0_color;
         }
 
         for (int i = 0; i < victoryBanners.Length; i++)
