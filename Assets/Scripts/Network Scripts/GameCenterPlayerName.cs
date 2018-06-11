@@ -18,16 +18,16 @@ namespace OminoNetwork
 
 		void Start () {
 			string defaultName = "Player " + Random.Range(0, 100);
-			if (Services.GameCenter.localUser.userName != null)
+			
+			/*if (Services.GameCenter.localUser.userName != null)
 			{
 				defaultName = Services.GameCenter.localUser.userName;
-			}
+			} */
 
 			PhotonNetwork.playerName =  defaultName;
 		}
 
 		#endregion
-
 
 		#region Public Methods
 
