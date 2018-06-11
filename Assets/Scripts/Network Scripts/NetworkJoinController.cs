@@ -82,6 +82,7 @@ namespace OminoNetwork
                     object value;
                     if (opponent.CustomProperties.TryGetValue(Services.NetData.READYFORMATCH, out value))
                     {
+                        Debug.Log("Got here.");
                         if (value.ToString() == "false")
                         {
                             Debug.Log("Opponent not ready.");
