@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Networking;
 using WebSocketSharp;
 using UnityEngine.SocialPlatforms.GameCenter;
 
@@ -11,11 +14,19 @@ namespace OminoNetwork
         public PhotonLogLevel Loglevel = PhotonLogLevel.Informational;
         public byte MaxPlayersPerRoom = 2;
 
+        [Tooltip("The button to start searching for a game, with the \"Start Game\" Button.")]
+        public GameObject findButton;
+        [Tooltip("The button once both are connected, with the \"Start Game\" Button.")]
+        public GameObject startButton;
+        [Tooltip("The UI Label to inform the user of the status.")]
+        public GameObject statusTextGameObject;
+
         #endregion
 
         #region Private Variables
 
-        string _gameVersion = "1.6";
+        private string _gameVersion = "1.6";
+        private TextMeshProUGUI statusText;
 
         #endregion
 
@@ -28,33 +39,39 @@ namespace OminoNetwork
             PhotonNetwork.logLevel = Loglevel;
         }
 
+        void Start()
+        {
+            statusText = statusTextGameObject.GetComponent<TextMeshProUGUI>();
+            
+            findButton.SetActive(true);
+            startButton.SetActive(false);
+            statusText.text = "Click \"Find\"\nto search for\na game.";
+        }
+
         #endregion
 
         #region Public Methods
 
-
-        /// <summary>
-        /// Start the connection process. 
-        /// - If already connected, we attempt joining a random room
-        /// - if not yet connected, Connect this application instance to Photon Cloud Network
-        /// </summary>
         public void Connect()
         {
-
-
-            // we check if we are connected or not, we join if we are , else we initiate the connection to the server.
+            findButton.SetActive(false);
+            startButton.SetActive(false);
+            statusText.text = "Connecting...";
+            
             if (PhotonNetwork.connected)
             {
-                // #Critical we need at this point to attempt joining a Random Room. If it fails, we'll get notified in OnPhotonRandomJoinFailed() and we'll create one.
                 PhotonNetwork.JoinRandomRoom();
             }
             else
             {
-                // #Critical, we must first and foremost connect to Photon Online Server.
                 PhotonNetwork.ConnectUsingSettings(_gameVersion);
             }
         }
 
+        public void StartGame()
+        {
+            
+        }
 
     #endregion
         
@@ -75,11 +92,33 @@ namespace OminoNetwork
         public override void OnJoinedRoom()
         {
             Debug.Log("DemoAnimator/Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
+            findButton.SetActive(false);
+            startButton.SetActive(false);
+            statusText.text = "Connected!\n\nSearching for\nopponent...";
         }
 
         public override void OnDisconnectedFromPhoton()
         {
-            Debug.LogWarning("Omino/Launcher: OnDisconnectedFromPhoton() was called by PUN");        
+            Debug.LogWarning("Omino/Launcher: OnDisconnectedFromPhoton() was called by PUN");       
+            
+            findButton.SetActive(true);
+            startButton.SetActive(false);
+            statusText.text = "Disconnected...";
+        }
+
+        private void OnPlayerConnected(NetworkPlayer player)
+        {
+            
+            findButton.SetActive(false);
+            startButton.SetActive(true);
+            statusText.text = "Found Player!";
+        }
+
+        private void OnPlayerDisconnected(NetworkPlayer player)
+        {
+            findButton.SetActive(false);
+            startButton.SetActive(false);
+            statusText.text = "Opponent\nDisconnected.";
         }
 
         #endregion
