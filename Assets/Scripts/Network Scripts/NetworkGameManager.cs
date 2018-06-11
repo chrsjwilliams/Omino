@@ -10,7 +10,7 @@ public class NetworkGameManager : Photon.PunBehaviour {
 		Services.GameManager = GameObject.Find("Main").GetComponent<GameManager>();
 		Services.GameManager.SetNumPlayers(new bool[] {true, true});
 		
-		Services.Scenes.Swap<NetworkGameSceneScript>();
+		Services.Scenes.Swap<GameSceneScript>();
 	}
 	
 	// Update is called once per frame
