@@ -11,7 +11,7 @@ public class NetworkGameManager : Photon.PunBehaviour {
 
 		if (!PhotonNetwork.isMasterClient)
 		{
-			Camera.main.transform.Rotate(0, 0, 180);
+			Screen.orientation = ScreenOrientation.PortraitUpsideDown;
 		}
 	}
 	
