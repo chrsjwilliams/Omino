@@ -5,11 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class NetworkGameManager : Photon.PunBehaviour {
 
+	void Awake()
+	{
+		Services.GameManager = new GameManager();
+		Services.GameManager.Init();
+	}
+	
 	// Use this for initialization
 	void Start () {
-		Services.Scenes.Swap<GameSceneScript>();
-
-		if (!PhotonNetwork.isMasterClient)
+		Services.Scenes.Swap<GameOptionsSceneScript>();
+		
+		if (!PhotonNetwork.player.isMasterClient)
 		{
 			Debug.Log("I'm not the master.");
 			//Screen.orientation = ScreenOrientation.PortraitUpsideDown;
