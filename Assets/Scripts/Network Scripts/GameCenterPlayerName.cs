@@ -5,7 +5,6 @@ using UnityEngine.SocialPlatforms.GameCenter;
 
 namespace OminoNetwork
 {
-	[RequireComponent(typeof(InputField))]
 	public class GameCenterPlayerName : MonoBehaviour
 	{
 		#region Private Variables
@@ -19,16 +18,21 @@ namespace OminoNetwork
 
 		void Start () {
 			string defaultName = "Player " + Random.Range(0, 100);
-			if (Services.GameCenter.localUser.userName != null)
+			
+			/*if (Services.GameCenter.localUser.userName != null)
 			{
 				defaultName = Services.GameCenter.localUser.userName;
+			} */
+
+			if (PlayerPrefs.HasKey(playerNamePrefKey))
+			{
+				
 			}
 
 			PhotonNetwork.playerName =  defaultName;
 		}
 
 		#endregion
-
 
 		#region Public Methods
 

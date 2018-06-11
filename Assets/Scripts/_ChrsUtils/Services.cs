@@ -23,4 +23,5 @@ public class Services
     public static ClipLibrary Clips { get; set; }
     
     public static GameCenterPlatform GameCenter { get; set; }
+    public static NetworkData NetData { get; set; }
 }

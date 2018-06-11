@@ -7,7 +7,7 @@ using UnityEngine.SocialPlatforms.GameCenter;
 
 namespace OminoNetwork
 {
-    public class Launcher : Photon.PunBehaviour
+    public class NetworkJoinController : Photon.PunBehaviour
     {
         #region Public Variables
 
@@ -20,13 +20,25 @@ namespace OminoNetwork
         public GameObject startButton;
         [Tooltip("The UI Label to inform the user of the status.")]
         public GameObject statusTextGameObject;
+        [Tooltip("The game object holding the player text mesh pro.")]
+        public GameObject playerNameBoxGameObject;
+        [Tooltip("The game object with the input field for player name.")]
+        public GameObject playerNameInputFieldGameObject;
 
+        #endregion
+        
+        #region Static Definitions
+        
+        static string playerNamePrefKey = "PlayerName";
+        
         #endregion
 
         #region Private Variables
 
         private string _gameVersion = "1.6";
         private TextMeshProUGUI statusText;
+        private TextMeshProUGUI playerNameBox;
+        private string player_name = "";
 
         #endregion
 
@@ -37,21 +49,55 @@ namespace OminoNetwork
             PhotonNetwork.autoJoinLobby = false;
             PhotonNetwork.automaticallySyncScene = true;
             PhotonNetwork.logLevel = Loglevel;
+            Services.NetData = new NetworkData();
         }
 
         void Start()
         {
             statusText = statusTextGameObject.GetComponent<TextMeshProUGUI>();
+            playerNameBox = playerNameBoxGameObject.GetComponentInChildren<TextMeshProUGUI>();
             
             findButton.SetActive(true);
             startButton.SetActive(false);
-            statusText.text = "Click \"Find\"\nto search for\na game.";
+            statusText.text = "Set Name\nThen\nClick \"Find\"";
+            
+            if (PlayerPrefs.HasKey(playerNamePrefKey))
+                playerNameBox.text = PlayerPrefs.GetString(playerNamePrefKey);
+            else
+                playerNameBox.text = "Type Name Here";
         }
 
         void Update()
         {
             if (PhotonNetwork.playerList.Length > 1)
-                ReadyForGame();
+            {
+                if (!Services.NetData.IsReadyForMatch())
+                {
+                    ReadyForGame();
+                }
+                else
+                {
+                    Debug.Log("I am ready.");
+                    PhotonPlayer opponent = PhotonNetwork.otherPlayers[0];
+                    object value;
+                    if (opponent.CustomProperties.TryGetValue(Services.NetData.READYFORMATCH, out value))
+                    {
+                        Debug.Log("Got here.");
+                        if (value.ToString() == "false")
+                        {
+                            Debug.Log("Opponent not ready.");
+                            WaitingForOpponent();
+                        }
+                        else
+                        {
+                            if (PhotonNetwork.isMasterClient)
+                            {
+                                LoadNetworkGame();
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         #endregion
@@ -60,8 +106,15 @@ namespace OminoNetwork
 
         public void Connect()
         {
+            PhotonNetwork.playerName = playerNameBox.text;
+            
+            PlayerPrefs.SetString(playerNamePrefKey, playerNameBox.text);
+            PlayerPrefs.Save();
+            
+            playerNameBoxGameObject.SetActive(false);
             findButton.SetActive(false);
             startButton.SetActive(false);
+            playerNameInputFieldGameObject.SetActive(false);
             statusText.text = "Connecting...";
             
             if (PhotonNetwork.connected)
@@ -74,16 +127,28 @@ namespace OminoNetwork
             }
         }
 
+        public void LoadNetworkGame()
+        {
+            PhotonNetwork.LoadLevel("_NetworkedScene");
+        }
+
+        public void ClickedReady()
+        {
+            Services.NetData.ReadyForMatch(true);
+        }
+
         public void ReadyForGame()
         {
             findButton.SetActive(false);
             startButton.SetActive(true);
-            statusText.text = "Found Player\n" + PhotonNetwork.otherPlayers[0] + ".";
+            statusText.text = "Found Player\n" + PhotonNetwork.otherPlayers[0].NickName + ".";
         }
 
-        public void StartGame()
+        public void WaitingForOpponent()
         {
-            
+            findButton.SetActive(false);
+            startButton.SetActive(false);
+            statusText.text = "Waiting for\n" + PhotonNetwork.otherPlayers[0].NickName + ".";
         }
 
     #endregion
