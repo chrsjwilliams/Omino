@@ -8,7 +8,8 @@ public class NetworkGameManager : Photon.PunBehaviour {
 	// Use this for initialization
 	void Start () {
 		Services.GameManager = GameObject.Find("Main").GetComponent<GameManager>();
-		Services.Scenes.Swap<GameOptionsSceneScript>();
+		
+		Services.Scenes.Swap<GameSceneScript>();
 		
 		if (!PhotonNetwork.player.isMasterClient)
 		{
