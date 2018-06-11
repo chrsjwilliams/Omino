@@ -124,9 +124,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4948558412555388}
-  - component: {fileID: 114768328690315736}
+  - component: {fileID: 114102956072096366}
   m_Layer: 0
-  m_Name: NetworkJoinScene
+  m_Name: NetworkJoinSceneScript
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -307,6 +307,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114102956072096366
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1262081784284366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5406308da4f04b24824e4b83200b449, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114135486829557880
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -773,7 +784,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114768328690315736}
+      - m_Target: {fileID: 0}
         m_MethodName: ReturnToTitle
         m_Mode: 1
         m_Arguments:
@@ -1012,35 +1023,6 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &114768328690315736
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1262081784284366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3896490ba591ce647a4e7f9ef18930a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startGame: 32
-  levelButtonParent: {fileID: 0}
-  campaignLevelButtonParent: {fileID: 1440704847111978}
-  backButtonParent: {fileID: 1545949044852942}
-  joinButtons:
-  - {fileID: 0}
-  - {fileID: 0}
-  aiLevelButtonZones:
-  - {fileID: 0}
-  - {fileID: 0}
-  defaultWinWeight: 1
-  defaultStructWeight: 0.2
-  defaultBlueprintWeight: 0.34
-  defaultAttackWeight: 0.2
-  defaultBlueprintDestructionWeight: 0.33
-  defaultDisconnectionWeight: 0.4
-  defaultDestructorForBlueprintWeight: 0.52
-  defaultDangerWeight: 0.52
 --- !u!114 &114853095082412980
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -78,7 +78,7 @@ namespace OminoNetwork
         {
             findButton.SetActive(false);
             startButton.SetActive(true);
-            statusText.text = "Found Player!";
+            statusText.text = "Found Player\n" + PhotonNetwork.otherPlayers[0] + ".";
         }
 
         public void StartGame()
