@@ -7,7 +7,7 @@ using UnityEngine.SocialPlatforms.GameCenter;
 
 namespace OminoNetwork
 {
-    public class Launcher : Photon.PunBehaviour
+    public class NetworkJoinController : Photon.PunBehaviour
     {
         #region Public Variables
 
@@ -20,13 +20,25 @@ namespace OminoNetwork
         public GameObject startButton;
         [Tooltip("The UI Label to inform the user of the status.")]
         public GameObject statusTextGameObject;
+        [Tooltip("The game object holding the player text mesh pro.")]
+        public GameObject playerNameBoxGameObject;
+        [Tooltip("The game object with the input field for player name.")]
+        public GameObject playerNameInputFieldGameObject;
 
+        #endregion
+        
+        #region Static Definitions
+        
+        static string playerNamePrefKey = "PlayerName";
+        
         #endregion
 
         #region Private Variables
 
         private string _gameVersion = "1.6";
         private TextMeshProUGUI statusText;
+        private TextMeshProUGUI playerNameBox;
+        private string player_name = "";
 
         #endregion
 
@@ -43,10 +55,16 @@ namespace OminoNetwork
         void Start()
         {
             statusText = statusTextGameObject.GetComponent<TextMeshProUGUI>();
+            playerNameBox = playerNameBoxGameObject.GetComponentInChildren<TextMeshProUGUI>();
             
             findButton.SetActive(true);
             startButton.SetActive(false);
-            statusText.text = "Click \"Find\"\nto search for\na game.";
+            statusText.text = "Set Name\nThen\nClick \"Find\"";
+            
+            if (PlayerPrefs.HasKey(playerNamePrefKey))
+                playerNameBox.text = PlayerPrefs.GetString(playerNamePrefKey);
+            else
+                playerNameBox.text = "Type Name Here";
         }
 
         void Update()
@@ -85,8 +103,15 @@ namespace OminoNetwork
 
         public void Connect()
         {
+            PhotonNetwork.playerName = playerNameBox.text;
+            
+            PlayerPrefs.SetString(playerNamePrefKey, playerNameBox.text);
+            PlayerPrefs.Save();
+            
+            playerNameBoxGameObject.SetActive(false);
             findButton.SetActive(false);
             startButton.SetActive(false);
+            playerNameInputFieldGameObject.SetActive(false);
             statusText.text = "Connecting...";
             
             if (PhotonNetwork.connected)
@@ -101,7 +126,7 @@ namespace OminoNetwork
 
         public void LoadNetworkGame()
         {
-            
+            PhotonNetwork.LoadLevel("_NetworkedScene");
         }
 
         public void ClickedReady()

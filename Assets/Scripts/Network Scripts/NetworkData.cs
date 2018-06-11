@@ -21,6 +21,7 @@ public class NetworkData {
 
 	private ExitGames.Client.Photon.Hashtable player_state;
 	private PhotonPlayer opponent;
+	private string titleScreenMessage = "";
 	
 	#endregion
 	
@@ -67,6 +68,21 @@ public class NetworkData {
 		return false;
 	}
 
+	public void ResetTitleScreenMessage()
+	{
+		titleScreenMessage = "";
+	}
+
+	public string GetTitleScreenMessage()
+	{
+		return titleScreenMessage;
+	}
+
+	public void SetTitleScreenMessage(string messageIn)
+	{
+		titleScreenMessage = messageIn;
+	}
+	
 	public PhotonPlayer GetOpponent()
 	{
 		return opponent;

@@ -24,6 +24,11 @@ namespace OminoNetwork
 				defaultName = Services.GameCenter.localUser.userName;
 			} */
 
+			if (PlayerPrefs.HasKey(playerNamePrefKey))
+			{
+				
+			}
+
 			PhotonNetwork.playerName =  defaultName;
 		}
 
