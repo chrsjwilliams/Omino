@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class InitialBuildingEntryAnimation : Task
 {
     private TaskManager subtaskManager;
-    private const float baseStaggerTime = 0.3f;
-    private const float structStaggerTime = 0.15f;
+    private const float baseStaggerTime = 0.2f;
+    private const float structStaggerTime = 0.1f;
 
     protected override void Init()
     {

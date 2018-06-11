@@ -101,8 +101,8 @@ public class Player : MonoBehaviour
     private float destructorDrawMeterFillAmt;
     [SerializeField]
     protected int resourcesPerTick;
-    private Polyomino queuedNormalPiece;
-    private Polyomino queuedDestructor;
+    public Polyomino queuedNormalPiece { get; private set; }
+    public Polyomino queuedDestructor { get; private set; }
     public bool ready { get; private set; }
     private bool handLocked;
     private Coord homeBasePos;
@@ -154,8 +154,13 @@ public class Player : MonoBehaviour
         {
             piece.holder.gameObject.SetActive(false);
         }
-        if (Services.GameManager.destructorsEnabled) QueueUpNextPiece(true);
+        if (Services.GameManager.destructorsEnabled)
+        {
+            QueueUpNextPiece(true);
+            queuedDestructor.holder.gameObject.SetActive(false);
+        }
         QueueUpNextPiece(false);
+        queuedNormalPiece.holder.gameObject.SetActive(false);
 
         if (Services.GameManager.blueprintsEnabled)
         {
@@ -167,6 +172,11 @@ public class Player : MonoBehaviour
 
             BombFactory bombFactory = new BombFactory(this);
             AddBluePrint(bombFactory);
+        }
+
+        foreach(Blueprint blueprint in blueprints)
+        {
+            blueprint.holder.gameObject.SetActive(false);
         }
 
         if (playerNum == 1) homeBasePos = new Coord(1, 1);

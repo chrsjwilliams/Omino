@@ -175,10 +175,22 @@ public class GameSceneScript : Scene<TransitionData>
     public void StartGameSequence()
     {
         TaskTree startSequence =
-            new TaskTree(new ScrollReadyBanners(Services.UIManager.readyBanners, false),
-            new TaskTree(new HandPieceEntry(Services.GameManager.Players[0].hand)),
-            new TaskTree(new HandPieceEntry(Services.GameManager.Players[1].hand)));
+            new TaskTree(new ScrollReadyBanners(Services.UIManager.readyBanners, false));
+        TaskTree uiEntry =
+            new TaskTree(new EmptyTask(),
+                new TaskTree(
+                    new UIEntryAnimation(Services.UIManager.meters[0], Services.GameManager.Players[0].blueprints)),
+                new TaskTree(
+                    new UIEntryAnimation(Services.UIManager.meters[1], Services.GameManager.Players[1].blueprints)));
+        TaskTree handEntry = 
+            new TaskTree(new EmptyTask(),
+                new TaskTree(
+                new HandPieceEntry(Services.GameManager.Players[0].hand)),
+                new TaskTree(
+                    new HandPieceEntry(Services.GameManager.Players[1].hand)));
         startSequence
+            .Then(uiEntry)
+            .Then(handEntry)
             .Then(new ActionTask(StartGame));
         Services.GameScene.tm.Do(startSequence);
     }

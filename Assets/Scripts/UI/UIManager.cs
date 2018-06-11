@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour {
     private Image[][] resourceSlotBacks;
     private Image[][] resourceMissingIndicators;
     public RectTransform[] blueprintUIZones;
+    public GameObject[][] meters;
     [SerializeField]
     private Image[] normalDrawMeters;
     [SerializeField]
@@ -165,6 +166,29 @@ public class UIManager : MonoBehaviour {
         resourceMissingAnimIncreasing = new bool[2] { true, true };
         resourceMissingTimeElapsed = new float[2] { 0, 0 };
         numResourcesMissing = new int[2] { 0, 0 };
+
+        meters = new GameObject[2][]
+        {
+            new GameObject[3]
+            {
+                resourceCounters[0].gameObject,
+                normalDrawMeters[0].transform.parent.gameObject,
+                destructorDrawMeters[0].transform.parent.gameObject
+            },
+            new GameObject[3]
+            {
+                resourceCounters[1].gameObject,
+                normalDrawMeters[1].transform.parent.gameObject,
+                destructorDrawMeters[1].transform.parent.gameObject
+            }
+        };
+        foreach(GameObject[] meterArray in meters)
+        {
+            foreach(GameObject obj in meterArray)
+            {
+                obj.SetActive(false);
+            }
+        }
     }
 
     // Use this for initialization
