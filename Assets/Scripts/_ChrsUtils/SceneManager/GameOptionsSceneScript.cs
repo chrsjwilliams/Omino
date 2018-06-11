@@ -28,7 +28,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private GameObject campaignLevelButtonParent;
     private LevelButton[] campaignLevelButtons;
     [SerializeField]
-    private Image levelSelectionIndicator;
+    private GameObject backButtonParent;
+    private LevelButton[] backButton;
 
     [SerializeField]
     private Button[] joinButtons;
@@ -72,7 +73,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GameManager.SetDisconnectionWeight(defaultDisconnectionWeight);
         Services.GameManager.SetDestructorForBlueprintWeight(defaultDestructorForBlueprintWeight);
         Services.GameManager.SetDangerWeight(defaultDangerWeight);
-        
+
+        backButton = backButtonParent.GetComponentsInChildren<LevelButton>();
+        backButtonParent.SetActive(false);
         levelButtons = levelButtonParent.GetComponentsInChildren<LevelButton>();
         levelButtonParent.SetActive(false);
         campaignLevelButtons = campaignLevelButtonParent.GetComponentsInChildren<LevelButton>();
@@ -184,7 +187,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             joinButtons[i].gameObject.SetActive(false);
             humanPlayers[i] = true;
         }
+        
         SlideInLevelButtons();
+        SlideInBackButton();
     }
 
     private void StartDemoMode()
@@ -195,7 +200,27 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             humanPlayers[i] = false;
             Services.GameManager.aiLevels[i] = AIPlayer.AiLevels[2];
         }
+
         SlideInLevelButtons();
+        SlideInBackButton();
+    }
+
+    private void RemoveOpposingPlayerMenuText(LevelButton[] buttons)
+    {
+        if (buttons == campaignLevelButtons) return;
+        
+        for (int i =0; i < buttons.Length; i++)
+        {
+            TextMeshProUGUI[] buttonText = buttons[i].GetComponentsInChildren<TextMeshProUGUI>();
+            for (int k = 0; k < buttonText.Length; k++)
+            {
+                if(buttonText[k].name.Contains("2") &&
+                    humanPlayers[0] != humanPlayers[1])
+                {
+                    buttonText[k].gameObject.SetActive(false);
+                }
+            }
+        }
     }
 
     private void SlideInLevelButtons()
@@ -207,20 +232,22 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             Services.GameManager.mode == TitleSceneScript.GameMode.Campaign ?
             campaignLevelButtons : levelButtons;
 
+        buttonParent.transform.eulerAngles = new Vector3(0, 0, 0);
+        RemoveOpposingPlayerMenuText(buttons);
         if (humanPlayers[0] && !humanPlayers[1])
         {
-            buttonParent.transform.eulerAngles = new Vector3(0, 0, -90);
+            buttonParent.transform.eulerAngles = new Vector3(0, 0, 0);
         }
         else if (!humanPlayers[0] && humanPlayers[1])
         {
-            buttonParent.transform.eulerAngles = new Vector3(0, 0, 90);
+            buttonParent.transform.eulerAngles = new Vector3(0, 0, 180);
         }
         buttonParent.SetActive(true);
         for (int i = 0; i < buttons.Length; i++)
         {
             buttons[i].gameObject.SetActive(false);
         }
-        levelSelectionIndicator.gameObject.SetActive(true);
+        //levelSelectionIndicator.gameObject.SetActive(true);
         GameObject levelSelectText = 
             buttonParent.GetComponentInChildren<TextMeshProUGUI>().gameObject;
         levelSelectText.SetActive(true);
@@ -231,6 +258,18 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         //entrance.Then(buttonEntrance);
         Services.GeneralTaskManager.Do(entrance);
         Services.GeneralTaskManager.Do(buttonEntrance);
+    }
+
+    public void SlideInBackButton()
+    {
+        if (humanPlayers[1] && !humanPlayers[0]) backButtonParent.transform.rotation = Quaternion.Euler(0, 0, 180);
+        else backButtonParent.transform.rotation = Quaternion.Euler(0, 0, 0);
+
+        backButtonParent.SetActive(true);
+
+        LevelSelectButtonEntranceTask backButtonEntrance =
+            new LevelSelectButtonEntranceTask(backButton);
+        Services.GeneralTaskManager.Do(backButtonEntrance);
     }
 
     public void StartGame()
@@ -287,9 +326,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     public void SelectLevel(LevelButton levelButton)
     {
-        levelSelectionIndicator.gameObject.SetActive(true);
+        //levelSelectionIndicator.gameObject.SetActive(true);
         levelSelected = levelButton.level;
-        levelSelectionIndicator.transform.position = levelButton.transform.position;
+        //levelSelectionIndicator.transform.position = levelButton.transform.position;
         StartGame();
     }
 
@@ -310,12 +349,13 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         if (Services.GameManager.mode == TitleSceneScript.GameMode.PlayerVsAI)
         {
             exit.Then(new AILevelSlideIn(aiLevelTexts[index], aiLevelButtons[index],
-                playerNum == 1, false));
+                playerNum == 1, false), new ActionTask(SlideInBackButton));
+
         }
         else
         {
             //exit.Then(new ActionTask(StartGame));
-            exit.Then(new ActionTask(SlideInLevelButtons));
+            exit.Then(new ActionTask(SlideInLevelButtons), new ActionTask(SlideInBackButton));
         }
         Services.GeneralTaskManager.Do(exit);
     }

@@ -276,14 +276,14 @@ public class UIManager : MonoBehaviour {
             if(i == winner.playerNum - 1)
             {
                 victoryBanners[i].anchoredPosition =
-                    Vector2.Lerp(new Vector2(xOffset, 0), Vector2.zero,
+                    Vector2.Lerp(new Vector2(0, xOffset), Vector2.zero,
                     EasingEquations.Easing.QuadEaseOut(
                         bannerScrollTimeElapsed / bannerScrollDuration));
             }
             else
             {
                 defeatBanners[i].anchoredPosition =
-                    Vector2.Lerp(new Vector2(xOffset, 0), Vector2.zero,
+                    Vector2.Lerp(new Vector2(0, xOffset), Vector2.zero,
                     EasingEquations.Easing.QuadEaseOut(
                         bannerScrollTimeElapsed / bannerScrollDuration));
             }

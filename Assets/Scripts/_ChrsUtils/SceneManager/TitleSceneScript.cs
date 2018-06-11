@@ -54,6 +54,14 @@ public class TitleSceneScript : Scene<TransitionData>
         _tm.Do(start);
     }
 
+    private void StartNetworkedMode()
+    {
+        Task start = new Wait(SECONDS_TO_WAIT);
+        start.Then(new ActionTask(() => { Services.Scenes.Swap<NetworkJoinSceneScript>(); }));
+
+        _tm.Do(start);
+    }
+
     public void Play()
     {
         StartGame();
@@ -92,6 +100,7 @@ public class TitleSceneScript : Scene<TransitionData>
     {
         _tm.Update();
         //if (Input.GetMouseButtonDown(0)) StartGame();
+        if (Input.GetKey(KeyCode.N))  StartNetworkedMode();
     }
 
     public void OnPlayHit()

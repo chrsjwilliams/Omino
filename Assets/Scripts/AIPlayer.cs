@@ -77,7 +77,7 @@ public class AIPlayer : Player
         destructionWeight = strategy.destructionWeight;
         blueprintdestructionWeight = strategy.blueprintDestructionWeight;
         disconnectionWeight = strategy.disconnectionWeight;
-        destructorForBlueprintWeight = strategy.destructorForBlueprintWeight;
+        destructorForBlueprintWeight = strategy.destructorForBlueprintWeight + 0.3f;
         dangerMod = strategy.dangerMod;
 
         handSpacing = new Vector3(5.5f, -2.35f, 0);
@@ -85,7 +85,7 @@ public class AIPlayer : Player
 
         startingHandSize = 4;
         maxHandSize = 5;
-        piecesPerHandColumn = 5;
+        piecesPerHandColumn = 1;
         startingResources = 1.5f;
         baseMaxResources = 3;
         boardPieces = new List<Polyomino>();

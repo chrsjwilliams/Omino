@@ -34,8 +34,8 @@ public class SideChooseEntrance : Task
             optionBar.SetActive(true);
             targetPositions[i] = optionBar.transform.position;
             Vector3 offset;
-            offset = i == 0 ? initialOffset * Vector3.left :
-                initialOffset * Vector3.right;
+            offset = i == 0 ? initialOffset * Vector3.down :
+                initialOffset * Vector3.up;
             optionBar.transform.position += offset;
             startPositions[i] = optionBar.transform.position;
         }

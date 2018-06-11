@@ -16,12 +16,18 @@ public class CameraController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         theCamera = GetComponent<Camera>();
+        SetScreenEdges();
+
+    }
+
+    public void SetScreenEdges()
+    {
         screenEdges = new Vector3[2]
         {
             theCamera.ScreenToWorldPoint(new Vector3(Screen.width/2,0)),
             theCamera.ScreenToWorldPoint(new Vector3(Screen.width/2, Screen.height))
         };
-	}
+    }
 	
     public void SetPosition(Vector3 pos)
     {
