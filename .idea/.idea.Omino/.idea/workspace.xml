@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c7948811-78ad-4f0d-8a31-976e356c09f9" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkJoinController.cs" afterPath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkJoinController.cs" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs" afterPath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameManager.cs" afterPath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameManager.cs" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -31,52 +32,53 @@
       <file leaf-file-name="NetworkGameManager.cs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameManager.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="14" column="5" lean-forward="false" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
+            <state relative-caret-position="160">
+              <caret line="12" column="61" lean-forward="false" selection-start-line="12" selection-start-column="61" selection-end-line="12" selection-end-column="61" />
               <folding>
-                <marker date="1528734308000" expanded="false" signature="6:78" ph="..." />
-                <marker date="1528734308000" expanded="true" signature="128:321" ph="{...}" />
-                <marker date="1528734308000" expanded="true" signature="178:225" ph="{...}" />
-                <marker date="1528734308000" expanded="true" signature="280:287" ph="{...}" />
-                <marker date="1528734308000" expanded="true" signature="310:319" ph="{...}" />
+                <marker date="1528734624000" expanded="false" signature="6:78" ph="..." />
+                <marker date="1528734624000" expanded="true" signature="128:420" ph="{...}" />
+                <marker date="1528734624000" expanded="true" signature="178:324" ph="{...}" />
+                <marker date="1528734624000" expanded="true" signature="260:321" ph="{...}" />
+                <marker date="1528734624000" expanded="true" signature="379:386" ph="{...}" />
+                <marker date="1528734624000" expanded="true" signature="409:418" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NetworkData.cs" pinned="false" current-in-tab="false">
+      <file leaf-file-name="NetworkData.cs" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="545">
-              <caret line="79" column="0" lean-forward="false" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+            <state relative-caret-position="238">
+              <caret line="32" column="46" lean-forward="true" selection-start-line="32" selection-start-column="46" selection-end-line="32" selection-end-column="46" />
               <folding>
-                <marker date="1528733645000" expanded="true" signature="6:130" ph="..." />
-                <marker date="1528733645000" expanded="true" signature="158:1551" ph="{...}" />
-                <marker date="1528733645000" expanded="false" signature="163:201" ph="Public Variables" />
-                <marker date="1528733645000" expanded="true" signature="205:305" ph="Static Definitions" />
-                <marker date="1528733645000" expanded="true" signature="309:479" ph="Private Variables" />
-                <marker date="1528733645000" expanded="true" signature="483:646" ph="Constructors" />
-                <marker date="1528733645000" expanded="true" signature="527:632" ph="{...}" />
-                <marker date="1528733645000" expanded="true" signature="650:1549" ph="Public Functions" />
-                <marker date="1528733645000" expanded="false" signature="734:763" ph="{...}" />
-                <marker date="1528733645000" expanded="true" signature="809:1045" ph="{...}" />
-                <marker date="1528733645000" expanded="true" signature="835:985" ph="{...}" />
-                <marker date="1528733645000" expanded="false" signature="1077:1231" ph="{...}" />
-                <marker date="1528733645000" expanded="false" signature="1130:1212" ph="{...}" />
-                <marker date="1528733645000" expanded="true" signature="1271:1304" ph="{...}" />
-                <marker date="1528733645000" expanded="true" signature="1344:1379" ph="{...}" />
-                <marker date="1528733645000" expanded="true" signature="1433:1473" ph="{...}" />
-                <marker date="1528733645000" expanded="true" signature="1510:1535" ph="{...}" />
+                <marker date="1528734654000" expanded="true" signature="6:130" ph="..." />
+                <marker date="1528734654000" expanded="true" signature="158:1608" ph="{...}" />
+                <marker date="1528734654000" expanded="false" signature="163:201" ph="Public Variables" />
+                <marker date="1528734654000" expanded="true" signature="205:305" ph="Static Definitions" />
+                <marker date="1528734654000" expanded="true" signature="309:479" ph="Private Variables" />
+                <marker date="1528734654000" expanded="true" signature="483:703" ph="Constructors" />
+                <marker date="1528734654000" expanded="true" signature="527:689" ph="{...}" />
+                <marker date="1528734654000" expanded="true" signature="707:1606" ph="Public Functions" />
+                <marker date="1528734654000" expanded="false" signature="791:820" ph="{...}" />
+                <marker date="1528734654000" expanded="true" signature="866:1102" ph="{...}" />
+                <marker date="1528734654000" expanded="true" signature="892:1042" ph="{...}" />
+                <marker date="1528734654000" expanded="false" signature="1134:1288" ph="{...}" />
+                <marker date="1528734654000" expanded="false" signature="1187:1269" ph="{...}" />
+                <marker date="1528734654000" expanded="true" signature="1328:1361" ph="{...}" />
+                <marker date="1528734654000" expanded="true" signature="1401:1436" ph="{...}" />
+                <marker date="1528734654000" expanded="true" signature="1490:1530" ph="{...}" />
+                <marker date="1528734654000" expanded="true" signature="1567:1592" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NetworkJoinController.cs" pinned="false" current-in-tab="true">
+      <file leaf-file-name="NetworkJoinController.cs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkJoinController.cs">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="322">
-              <caret line="84" column="47" lean-forward="true" selection-start-line="84" selection-start-column="47" selection-end-line="84" selection-end-column="47" />
+              <caret line="84" column="47" lean-forward="false" selection-start-line="84" selection-start-column="47" selection-end-line="84" selection-end-column="47" />
               <folding>
                 <marker date="1528734424000" expanded="false" signature="6:143" ph="..." />
                 <marker date="1528734424000" expanded="true" signature="167:6500" ph="{...}" />
@@ -156,9 +158,9 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkJoinSceneScript.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/GameCenterPlayerName.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/Launcher.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameManager.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkJoinController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs" />
       </list>
     </option>
   </component>
@@ -262,12 +264,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1528720021576</updated>
-      <workItem from="1528720023986" duration="11332000" />
+      <workItem from="1528720023986" duration="11550000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11332000" />
+    <option name="totallyTimeSpent" value="11550000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -711,63 +713,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="545">
-          <caret line="79" column="0" lean-forward="false" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
-          <folding>
-            <marker date="1528733645000" expanded="true" signature="6:130" ph="..." />
-            <marker date="1528733645000" expanded="true" signature="158:1551" ph="{...}" />
-            <marker date="1528733645000" expanded="false" signature="163:201" ph="Public Variables" />
-            <marker date="1528733645000" expanded="true" signature="205:305" ph="Static Definitions" />
-            <marker date="1528733645000" expanded="true" signature="309:479" ph="Private Variables" />
-            <marker date="1528733645000" expanded="true" signature="483:646" ph="Constructors" />
-            <marker date="1528733645000" expanded="true" signature="527:632" ph="{...}" />
-            <marker date="1528733645000" expanded="true" signature="650:1549" ph="Public Functions" />
-            <marker date="1528733645000" expanded="false" signature="734:763" ph="{...}" />
-            <marker date="1528733645000" expanded="true" signature="809:1045" ph="{...}" />
-            <marker date="1528733645000" expanded="true" signature="835:985" ph="{...}" />
-            <marker date="1528733645000" expanded="false" signature="1077:1231" ph="{...}" />
-            <marker date="1528733645000" expanded="false" signature="1130:1212" ph="{...}" />
-            <marker date="1528733645000" expanded="true" signature="1271:1304" ph="{...}" />
-            <marker date="1528733645000" expanded="true" signature="1344:1379" ph="{...}" />
-            <marker date="1528733645000" expanded="true" signature="1433:1473" ph="{...}" />
-            <marker date="1528733645000" expanded="true" signature="1510:1535" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameManager.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="14" column="5" lean-forward="false" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
-          <folding>
-            <marker date="1528734308000" expanded="false" signature="6:78" ph="..." />
-            <marker date="1528734308000" expanded="true" signature="128:321" ph="{...}" />
-            <marker date="1528734308000" expanded="true" signature="178:225" ph="{...}" />
-            <marker date="1528734308000" expanded="true" signature="280:287" ph="{...}" />
-            <marker date="1528734308000" expanded="true" signature="310:319" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkJoinSceneScript.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="9" column="45" lean-forward="false" selection-start-line="9" selection-start-column="45" selection-end-line="9" selection-end-column="45" />
-          <folding>
-            <marker date="1528728961000" expanded="false" signature="6:107" ph="..." />
-            <marker date="1528728961000" expanded="true" signature="169:333" ph="{...}" />
-            <marker date="1528728961000" expanded="true" signature="224:273" ph="{...}" />
-            <marker date="1528728961000" expanded="true" signature="310:331" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkJoinController.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="322">
-          <caret line="84" column="47" lean-forward="true" selection-start-line="84" selection-start-column="47" selection-end-line="84" selection-end-column="47" />
+          <caret line="84" column="47" lean-forward="false" selection-start-line="84" selection-start-column="47" selection-end-line="84" selection-end-column="47" />
           <folding>
             <marker date="1528734424000" expanded="false" signature="6:143" ph="..." />
             <marker date="1528734424000" expanded="true" signature="167:6500" ph="{...}" />
@@ -800,6 +749,60 @@
             <marker date="1528734424000" expanded="false" signature="5639:5925" ph="{...}" />
             <marker date="1528734424000" expanded="false" signature="5982:6247" ph="{...}" />
             <marker date="1528734424000" expanded="false" signature="6312:6472" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameManager.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="12" column="61" lean-forward="false" selection-start-line="12" selection-start-column="61" selection-end-line="12" selection-end-column="61" />
+          <folding>
+            <marker date="1528734624000" expanded="false" signature="6:78" ph="..." />
+            <marker date="1528734624000" expanded="true" signature="128:420" ph="{...}" />
+            <marker date="1528734624000" expanded="true" signature="178:324" ph="{...}" />
+            <marker date="1528734624000" expanded="true" signature="260:321" ph="{...}" />
+            <marker date="1528734624000" expanded="true" signature="379:386" ph="{...}" />
+            <marker date="1528734624000" expanded="true" signature="409:418" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkJoinSceneScript.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="96">
+          <caret line="9" column="45" lean-forward="false" selection-start-line="9" selection-start-column="45" selection-end-line="9" selection-end-column="45" />
+          <folding>
+            <marker date="1528728961000" expanded="false" signature="6:107" ph="..." />
+            <marker date="1528728961000" expanded="true" signature="169:333" ph="{...}" />
+            <marker date="1528728961000" expanded="true" signature="224:273" ph="{...}" />
+            <marker date="1528728961000" expanded="true" signature="310:331" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="32" column="46" lean-forward="true" selection-start-line="32" selection-start-column="46" selection-end-line="32" selection-end-column="46" />
+          <folding>
+            <marker date="1528734654000" expanded="true" signature="6:130" ph="..." />
+            <marker date="1528734654000" expanded="true" signature="158:1608" ph="{...}" />
+            <marker date="1528734654000" expanded="false" signature="163:201" ph="Public Variables" />
+            <marker date="1528734654000" expanded="true" signature="205:305" ph="Static Definitions" />
+            <marker date="1528734654000" expanded="true" signature="309:479" ph="Private Variables" />
+            <marker date="1528734654000" expanded="true" signature="483:703" ph="Constructors" />
+            <marker date="1528734654000" expanded="true" signature="527:689" ph="{...}" />
+            <marker date="1528734654000" expanded="true" signature="707:1606" ph="Public Functions" />
+            <marker date="1528734654000" expanded="false" signature="791:820" ph="{...}" />
+            <marker date="1528734654000" expanded="true" signature="866:1102" ph="{...}" />
+            <marker date="1528734654000" expanded="true" signature="892:1042" ph="{...}" />
+            <marker date="1528734654000" expanded="false" signature="1134:1288" ph="{...}" />
+            <marker date="1528734654000" expanded="false" signature="1187:1269" ph="{...}" />
+            <marker date="1528734654000" expanded="true" signature="1328:1361" ph="{...}" />
+            <marker date="1528734654000" expanded="true" signature="1401:1436" ph="{...}" />
+            <marker date="1528734654000" expanded="true" signature="1490:1530" ph="{...}" />
+            <marker date="1528734654000" expanded="true" signature="1567:1592" ph="{...}" />
           </folding>
         </state>
       </provider>

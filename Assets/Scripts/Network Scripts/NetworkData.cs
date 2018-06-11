@@ -31,6 +31,7 @@ public class NetworkData {
 	{
 		player_state = new ExitGames.Client.Photon.Hashtable();
 		player_state[READYFORMATCH] = "false";
+		PhotonNetwork.SetPlayerCustomProperties(player_state);
 	}
 	
 	#endregion
