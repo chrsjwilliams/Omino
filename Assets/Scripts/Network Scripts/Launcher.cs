@@ -48,6 +48,12 @@ namespace OminoNetwork
             statusText.text = "Click \"Find\"\nto search for\na game.";
         }
 
+        void Update()
+        {
+            if (PhotonNetwork.playerList.Length > 1)
+                ReadyForGame();
+        }
+
         #endregion
 
         #region Public Methods
@@ -66,6 +72,13 @@ namespace OminoNetwork
             {
                 PhotonNetwork.ConnectUsingSettings(_gameVersion);
             }
+        }
+
+        public void ReadyForGame()
+        {
+            findButton.SetActive(false);
+            startButton.SetActive(true);
+            statusText.text = "Found Player!";
         }
 
         public void StartGame()
@@ -104,14 +117,6 @@ namespace OminoNetwork
             findButton.SetActive(true);
             startButton.SetActive(false);
             statusText.text = "Disconnected...";
-        }
-
-        private void OnPlayerConnected(NetworkPlayer player)
-        {
-            
-            findButton.SetActive(false);
-            startButton.SetActive(true);
-            statusText.text = "Found Player!";
         }
 
         private void OnPlayerDisconnected(NetworkPlayer player)
