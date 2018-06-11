@@ -25,6 +25,14 @@ public class TitleSceneScript : Scene<TransitionData>
         {
             button.gameObject.SetActive(false);
         }
+
+        if (Services.NetData != null)
+        {
+            if (Services.NetData.GetGameOverMessage() != "")
+            {
+                Services.Scenes.PushScene<NetworkGameOverMessageScreen>();
+            }
+        }
     }
 
     internal override void OnExit()
@@ -56,10 +64,7 @@ public class TitleSceneScript : Scene<TransitionData>
 
     private void StartNetworkedMode()
     {
-        Task start = new Wait(SECONDS_TO_WAIT);
-        start.Then(new ActionTask(() => { Services.Scenes.Swap<NetworkJoinSceneScript>(); }));
-
-        _tm.Do(start);
+        Services.Scenes.PushScene<NetworkJoinSceneScript>();
     }
 
     public void Play()

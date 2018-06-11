@@ -69,17 +69,17 @@ public class NetworkData {
 		return false;
 	}
 
-	public void ResetTitleScreenMessage()
+	public void ResetGameOverMessage()
 	{
 		titleScreenMessage = "";
 	}
 
-	public string GetTitleScreenMessage()
+	public string GetGameOverMessage()
 	{
 		return titleScreenMessage;
 	}
 
-	public void SetTitleScreenMessage(string messageIn)
+	public void SetGameOverMessage(string messageIn)
 	{
 		titleScreenMessage = messageIn;
 	}

@@ -77,15 +77,12 @@ namespace OminoNetwork
                 }
                 else
                 {
-                    Debug.Log("I am ready.");
                     PhotonPlayer opponent = PhotonNetwork.otherPlayers[0];
                     object value;
                     if (opponent.CustomProperties.TryGetValue(Services.NetData.READYFORMATCH, out value))
                     {
-                        Debug.Log("Got here.");
                         if (value.ToString() == "false")
                         {
-                            Debug.Log("Opponent not ready.");
                             WaitingForOpponent();
                         }
                         else
@@ -149,6 +146,11 @@ namespace OminoNetwork
             findButton.SetActive(false);
             startButton.SetActive(false);
             statusText.text = "Waiting for\n" + PhotonNetwork.otherPlayers[0].NickName + ".";
+        }
+
+        public void Pop()
+        {
+            Services.Scenes.PopScene();
         }
 
     #endregion
