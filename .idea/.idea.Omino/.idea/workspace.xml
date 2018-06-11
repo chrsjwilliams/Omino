@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c7948811-78ad-4f0d-8a31-976e356c09f9" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Omino/.idea/contentModel.xml" afterPath="$PROJECT_DIR$/.idea/.idea.Omino/.idea/contentModel.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Omino/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/.idea.Omino/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/PrefabDB.asset" afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/PrefabDB.asset" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/ScenePrefabs/NetworkJoinSceneScript.prefab" afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/ScenePrefabs/NetworkJoinSceneScript.prefab" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs" afterPath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameManager.cs" afterPath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameManager.cs" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkJoinController.cs" afterPath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkJoinController.cs" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/TitleSceneScript.cs" afterPath="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/TitleSceneScript.cs" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -38,16 +33,16 @@
       <file leaf-file-name="NetworkGameManager.cs" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameManager.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="30" column="34" lean-forward="true" selection-start-line="30" selection-start-column="34" selection-end-line="30" selection-end-column="34" />
+            <state relative-caret-position="352">
+              <caret line="22" column="28" lean-forward="false" selection-start-line="22" selection-start-column="28" selection-end-line="22" selection-end-column="28" />
               <folding>
-                <marker date="1528740911000" expanded="true" signature="6:113" ph="..." />
-                <marker date="1528740911000" expanded="true" signature="169:609" ph="{...}" />
-                <marker date="1528740911000" expanded="true" signature="219:356" ph="{...}" />
-                <marker date="1528740911000" expanded="true" signature="301:353" ph="{...}" />
-                <marker date="1528740911000" expanded="true" signature="411:418" ph="{...}" />
-                <marker date="1528740911000" expanded="true" signature="441:450" ph="{...}" />
-                <marker date="1528740911000" expanded="true" signature="508:607" ph="{...}" />
+                <marker date="1528741223000" expanded="true" signature="6:113" ph="..." />
+                <marker date="1528741223000" expanded="true" signature="169:611" ph="{...}" />
+                <marker date="1528741223000" expanded="true" signature="219:356" ph="{...}" />
+                <marker date="1528741223000" expanded="true" signature="301:353" ph="{...}" />
+                <marker date="1528741223000" expanded="true" signature="411:551" ph="{...}" />
+                <marker date="1528741223000" expanded="true" signature="455:548" ph="{...}" />
+                <marker date="1528741223000" expanded="true" signature="574:609" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -168,41 +163,41 @@
       <file leaf-file-name="NetworkJoinController.cs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkJoinController.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="11" column="8" lean-forward="false" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="32" />
+            <state relative-caret-position="286">
+              <caret line="89" column="61" lean-forward="false" selection-start-line="89" selection-start-column="61" selection-end-line="89" selection-end-column="61" />
               <folding>
-                <marker date="1528735699000" expanded="false" signature="6:143" ph="..." />
-                <marker date="1528735699000" expanded="true" signature="167:6587" ph="{...}" />
-                <marker date="1528735699000" expanded="true" signature="230:6585" ph="{...}" />
-                <marker date="1528735699000" expanded="true" signature="245:1037" ph="Public Variables" />
-                <marker date="1528735699000" expanded="false" signature="1055:1174" ph="Static Definitions" />
-                <marker date="1528735699000" expanded="false" signature="1184:1407" ph="Private Variables" />
-                <marker date="1528735699000" expanded="false" signature="1417:3445" ph="MonoBehaviour CallBacks" />
-                <marker date="1528735699000" expanded="false" signature="1470:1693" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="1715:2287" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="2310:3425" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="2373:3415" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="2444:2516" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="2537:3401" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="2816:3383" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="2943:3107" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="3136:3361" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="3224:3335" ph="{...}" />
-                <marker date="1528735699000" expanded="true" signature="3455:5001" ph="Public Methods" />
-                <marker date="1528735699000" expanded="false" signature="3508:4205" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="4008:4084" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="4101:4195" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="4244:4320" ph="{...}" />
-                <marker date="1528735699000" expanded="true" signature="4356:4426" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="4462:4659" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="4701:4898" ph="{...}" />
-                <marker date="1528735699000" expanded="true" signature="4925:4985" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="5019:6579" ph="Photon.PunBehaviour CallBacks" />
-                <marker date="1528735699000" expanded="false" signature="5108:5254" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="5339:5681" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="5726:6012" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="6069:6334" ph="{...}" />
-                <marker date="1528735699000" expanded="false" signature="6399:6559" ph="{...}" />
+                <marker date="1528741151000" expanded="false" signature="6:143" ph="..." />
+                <marker date="1528741151000" expanded="true" signature="167:6431" ph="{...}" />
+                <marker date="1528741151000" expanded="true" signature="230:6429" ph="{...}" />
+                <marker date="1528741151000" expanded="true" signature="245:1037" ph="Public Variables" />
+                <marker date="1528741151000" expanded="false" signature="1055:1174" ph="Static Definitions" />
+                <marker date="1528741151000" expanded="false" signature="1184:1407" ph="Private Variables" />
+                <marker date="1528741151000" expanded="true" signature="1417:3289" ph="MonoBehaviour CallBacks" />
+                <marker date="1528741151000" expanded="false" signature="1470:1693" ph="{...}" />
+                <marker date="1528741151000" expanded="false" signature="1715:2287" ph="{...}" />
+                <marker date="1528741151000" expanded="true" signature="2310:3269" ph="{...}" />
+                <marker date="1528741151000" expanded="true" signature="2373:3259" ph="{...}" />
+                <marker date="1528741151000" expanded="false" signature="2444:2516" ph="{...}" />
+                <marker date="1528741151000" expanded="true" signature="2537:3245" ph="{...}" />
+                <marker date="1528741151000" expanded="true" signature="2770:3227" ph="{...}" />
+                <marker date="1528741151000" expanded="true" signature="2849:2951" ph="{...}" />
+                <marker date="1528741151000" expanded="true" signature="2980:3205" ph="{...}" />
+                <marker date="1528741151000" expanded="true" signature="3068:3179" ph="{...}" />
+                <marker date="1528741151000" expanded="true" signature="3299:4845" ph="Public Methods" />
+                <marker date="1528741151000" expanded="false" signature="3352:4049" ph="{...}" />
+                <marker date="1528741151000" expanded="false" signature="3852:3928" ph="{...}" />
+                <marker date="1528741151000" expanded="false" signature="3945:4039" ph="{...}" />
+                <marker date="1528741151000" expanded="false" signature="4088:4164" ph="{...}" />
+                <marker date="1528741151000" expanded="true" signature="4200:4270" ph="{...}" />
+                <marker date="1528741151000" expanded="false" signature="4306:4503" ph="{...}" />
+                <marker date="1528741151000" expanded="false" signature="4545:4742" ph="{...}" />
+                <marker date="1528741151000" expanded="true" signature="4769:4829" ph="{...}" />
+                <marker date="1528741151000" expanded="false" signature="4863:6423" ph="Photon.PunBehaviour CallBacks" />
+                <marker date="1528741151000" expanded="false" signature="4952:5098" ph="{...}" />
+                <marker date="1528741151000" expanded="false" signature="5183:5525" ph="{...}" />
+                <marker date="1528741151000" expanded="false" signature="5570:5856" ph="{...}" />
+                <marker date="1528741151000" expanded="false" signature="5913:6178" ph="{...}" />
+                <marker date="1528741151000" expanded="false" signature="6243:6403" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -221,6 +216,7 @@
       <find>network</find>
       <find>connect</find>
       <find>n</find>
+      <find>debug</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -257,8 +253,8 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameOverMessageScreen.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/TitleSceneScript.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkJoinController.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameOverController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkJoinController.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameManager.cs" />
       </list>
     </option>
@@ -380,12 +376,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1528720021576</updated>
-      <workItem from="1528720023986" duration="13541000" />
+      <workItem from="1528720023986" duration="13772000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13541000" />
+    <option name="totallyTimeSpent" value="13772000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -802,32 +798,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="451">
-          <caret line="81" column="34" lean-forward="false" selection-start-line="81" selection-start-column="16" selection-end-line="81" selection-end-column="34" />
-          <folding>
-            <marker date="1528735169000" expanded="true" signature="6:130" ph="..." />
-            <marker date="1528735169000" expanded="true" signature="158:1599" ph="{...}" />
-            <marker date="1528735169000" expanded="false" signature="163:201" ph="Public Variables" />
-            <marker date="1528735169000" expanded="true" signature="205:305" ph="Static Definitions" />
-            <marker date="1528735169000" expanded="true" signature="309:479" ph="Private Variables" />
-            <marker date="1528735169000" expanded="true" signature="483:703" ph="Constructors" />
-            <marker date="1528735169000" expanded="true" signature="527:689" ph="{...}" />
-            <marker date="1528735169000" expanded="true" signature="707:1597" ph="Public Functions" />
-            <marker date="1528735169000" expanded="false" signature="791:820" ph="{...}" />
-            <marker date="1528735169000" expanded="true" signature="866:1102" ph="{...}" />
-            <marker date="1528735169000" expanded="true" signature="892:1042" ph="{...}" />
-            <marker date="1528735169000" expanded="false" signature="1134:1288" ph="{...}" />
-            <marker date="1528735169000" expanded="false" signature="1187:1269" ph="{...}" />
-            <marker date="1528735169000" expanded="true" signature="1325:1358" ph="{...}" />
-            <marker date="1528735169000" expanded="true" signature="1395:1430" ph="{...}" />
-            <marker date="1528735169000" expanded="true" signature="1481:1521" ph="{...}" />
-            <marker date="1528735169000" expanded="true" signature="1558:1583" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameOverMessageScreen.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="48">
@@ -890,47 +860,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkJoinController.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="11" column="8" lean-forward="false" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="32" />
-          <folding>
-            <marker date="1528735699000" expanded="false" signature="6:143" ph="..." />
-            <marker date="1528735699000" expanded="true" signature="167:6587" ph="{...}" />
-            <marker date="1528735699000" expanded="true" signature="230:6585" ph="{...}" />
-            <marker date="1528735699000" expanded="true" signature="245:1037" ph="Public Variables" />
-            <marker date="1528735699000" expanded="false" signature="1055:1174" ph="Static Definitions" />
-            <marker date="1528735699000" expanded="false" signature="1184:1407" ph="Private Variables" />
-            <marker date="1528735699000" expanded="false" signature="1417:3445" ph="MonoBehaviour CallBacks" />
-            <marker date="1528735699000" expanded="false" signature="1470:1693" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="1715:2287" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="2310:3425" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="2373:3415" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="2444:2516" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="2537:3401" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="2816:3383" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="2943:3107" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="3136:3361" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="3224:3335" ph="{...}" />
-            <marker date="1528735699000" expanded="true" signature="3455:5001" ph="Public Methods" />
-            <marker date="1528735699000" expanded="false" signature="3508:4205" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="4008:4084" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="4101:4195" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="4244:4320" ph="{...}" />
-            <marker date="1528735699000" expanded="true" signature="4356:4426" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="4462:4659" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="4701:4898" ph="{...}" />
-            <marker date="1528735699000" expanded="true" signature="4925:4985" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="5019:6579" ph="Photon.PunBehaviour CallBacks" />
-            <marker date="1528735699000" expanded="false" signature="5108:5254" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="5339:5681" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="5726:6012" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="6069:6334" ph="{...}" />
-            <marker date="1528735699000" expanded="false" signature="6399:6559" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameOverController.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="434">
@@ -978,6 +907,73 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkJoinController.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="89" column="61" lean-forward="false" selection-start-line="89" selection-start-column="61" selection-end-line="89" selection-end-column="61" />
+          <folding>
+            <marker date="1528741151000" expanded="false" signature="6:143" ph="..." />
+            <marker date="1528741151000" expanded="true" signature="167:6431" ph="{...}" />
+            <marker date="1528741151000" expanded="true" signature="230:6429" ph="{...}" />
+            <marker date="1528741151000" expanded="true" signature="245:1037" ph="Public Variables" />
+            <marker date="1528741151000" expanded="false" signature="1055:1174" ph="Static Definitions" />
+            <marker date="1528741151000" expanded="false" signature="1184:1407" ph="Private Variables" />
+            <marker date="1528741151000" expanded="true" signature="1417:3289" ph="MonoBehaviour CallBacks" />
+            <marker date="1528741151000" expanded="false" signature="1470:1693" ph="{...}" />
+            <marker date="1528741151000" expanded="false" signature="1715:2287" ph="{...}" />
+            <marker date="1528741151000" expanded="true" signature="2310:3269" ph="{...}" />
+            <marker date="1528741151000" expanded="true" signature="2373:3259" ph="{...}" />
+            <marker date="1528741151000" expanded="false" signature="2444:2516" ph="{...}" />
+            <marker date="1528741151000" expanded="true" signature="2537:3245" ph="{...}" />
+            <marker date="1528741151000" expanded="true" signature="2770:3227" ph="{...}" />
+            <marker date="1528741151000" expanded="true" signature="2849:2951" ph="{...}" />
+            <marker date="1528741151000" expanded="true" signature="2980:3205" ph="{...}" />
+            <marker date="1528741151000" expanded="true" signature="3068:3179" ph="{...}" />
+            <marker date="1528741151000" expanded="true" signature="3299:4845" ph="Public Methods" />
+            <marker date="1528741151000" expanded="false" signature="3352:4049" ph="{...}" />
+            <marker date="1528741151000" expanded="false" signature="3852:3928" ph="{...}" />
+            <marker date="1528741151000" expanded="false" signature="3945:4039" ph="{...}" />
+            <marker date="1528741151000" expanded="false" signature="4088:4164" ph="{...}" />
+            <marker date="1528741151000" expanded="true" signature="4200:4270" ph="{...}" />
+            <marker date="1528741151000" expanded="false" signature="4306:4503" ph="{...}" />
+            <marker date="1528741151000" expanded="false" signature="4545:4742" ph="{...}" />
+            <marker date="1528741151000" expanded="true" signature="4769:4829" ph="{...}" />
+            <marker date="1528741151000" expanded="false" signature="4863:6423" ph="Photon.PunBehaviour CallBacks" />
+            <marker date="1528741151000" expanded="false" signature="4952:5098" ph="{...}" />
+            <marker date="1528741151000" expanded="false" signature="5183:5525" ph="{...}" />
+            <marker date="1528741151000" expanded="false" signature="5570:5856" ph="{...}" />
+            <marker date="1528741151000" expanded="false" signature="5913:6178" ph="{...}" />
+            <marker date="1528741151000" expanded="false" signature="6243:6403" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="451">
+          <caret line="81" column="34" lean-forward="false" selection-start-line="81" selection-start-column="16" selection-end-line="81" selection-end-column="34" />
+          <folding>
+            <marker date="1528735169000" expanded="true" signature="6:130" ph="..." />
+            <marker date="1528735169000" expanded="true" signature="158:1599" ph="{...}" />
+            <marker date="1528735169000" expanded="false" signature="163:201" ph="Public Variables" />
+            <marker date="1528735169000" expanded="true" signature="205:305" ph="Static Definitions" />
+            <marker date="1528735169000" expanded="true" signature="309:479" ph="Private Variables" />
+            <marker date="1528735169000" expanded="true" signature="483:703" ph="Constructors" />
+            <marker date="1528735169000" expanded="true" signature="527:689" ph="{...}" />
+            <marker date="1528735169000" expanded="true" signature="707:1597" ph="Public Functions" />
+            <marker date="1528735169000" expanded="false" signature="791:820" ph="{...}" />
+            <marker date="1528735169000" expanded="true" signature="866:1102" ph="{...}" />
+            <marker date="1528735169000" expanded="true" signature="892:1042" ph="{...}" />
+            <marker date="1528735169000" expanded="false" signature="1134:1288" ph="{...}" />
+            <marker date="1528735169000" expanded="false" signature="1187:1269" ph="{...}" />
+            <marker date="1528735169000" expanded="true" signature="1325:1358" ph="{...}" />
+            <marker date="1528735169000" expanded="true" signature="1395:1430" ph="{...}" />
+            <marker date="1528735169000" expanded="true" signature="1481:1521" ph="{...}" />
+            <marker date="1528735169000" expanded="true" signature="1558:1583" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkJoinSceneScript.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="96">
@@ -993,16 +989,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkGameManager.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="30" column="34" lean-forward="true" selection-start-line="30" selection-start-column="34" selection-end-line="30" selection-end-column="34" />
+        <state relative-caret-position="352">
+          <caret line="22" column="28" lean-forward="false" selection-start-line="22" selection-start-column="28" selection-end-line="22" selection-end-column="28" />
           <folding>
-            <marker date="1528740911000" expanded="true" signature="6:113" ph="..." />
-            <marker date="1528740911000" expanded="true" signature="169:609" ph="{...}" />
-            <marker date="1528740911000" expanded="true" signature="219:356" ph="{...}" />
-            <marker date="1528740911000" expanded="true" signature="301:353" ph="{...}" />
-            <marker date="1528740911000" expanded="true" signature="411:418" ph="{...}" />
-            <marker date="1528740911000" expanded="true" signature="441:450" ph="{...}" />
-            <marker date="1528740911000" expanded="true" signature="508:607" ph="{...}" />
+            <marker date="1528741223000" expanded="true" signature="6:113" ph="..." />
+            <marker date="1528741223000" expanded="true" signature="169:611" ph="{...}" />
+            <marker date="1528741223000" expanded="true" signature="219:356" ph="{...}" />
+            <marker date="1528741223000" expanded="true" signature="301:353" ph="{...}" />
+            <marker date="1528741223000" expanded="true" signature="411:551" ph="{...}" />
+            <marker date="1528741223000" expanded="true" signature="455:548" ph="{...}" />
+            <marker date="1528741223000" expanded="true" signature="574:609" ph="{...}" />
           </folding>
         </state>
       </provider>

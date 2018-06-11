@@ -17,17 +17,15 @@ public class NetworkGameManager : Photon.PunBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (PhotonNetwork.room.PlayerCount == 1)
+		{
+			Services.NetData.SetGameOverMessage("Opponent Disconnected");
+			ReturnToTitle();
+		}
 	}
 
 	void ReturnToTitle()
 	{
-		
-	}
-
-	private void OnPlayerDisconnected(NetworkPlayer player)
-	{
-		Services.NetData.SetGameOverMessage("Opponent Disconnected");
 		SceneManager.LoadScene(0);
 	}
 }
