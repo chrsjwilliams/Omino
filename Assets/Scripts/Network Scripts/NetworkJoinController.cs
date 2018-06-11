@@ -77,12 +77,14 @@ namespace OminoNetwork
                 }
                 else
                 {
+                    Debug.Log("I am ready.");
                     PhotonPlayer opponent = PhotonNetwork.otherPlayers[0];
                     object value;
                     if (opponent.CustomProperties.TryGetValue(Services.NetData.READYFORMATCH, out value))
                     {
                         if (value.ToString() == "false")
                         {
+                            Debug.Log("Opponent not ready.");
                             WaitingForOpponent();
                         }
                         else
