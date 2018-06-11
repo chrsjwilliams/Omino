@@ -3,15 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="c7948811-78ad-4f0d-8a31-976e356c09f9" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Omino/.idea/contentModel.xml" afterPath="$PROJECT_DIR$/.idea/.idea.Omino/.idea/contentModel.xml" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Network Prefabs/NetworkGameSceneScript.prefab" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Network Prefabs/NetworkGameSceneScript.prefab.meta" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Network Prefabs/NetworkJoinScene.prefab" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Network Prefabs/NetworkJoinScene.prefab.meta" afterPath="" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/Launcher.cs" afterPath="$PROJECT_DIR$/Assets/Scripts/Network Scripts/Launcher.cs" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkGameSceneScript.cs" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkGameSceneScript.cs.meta" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/TitleSceneScript.cs" afterPath="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/TitleSceneScript.cs" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Main.unity" afterPath="$PROJECT_DIR$/Assets/_Main.unity" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkJoinSceneScript.cs" afterPath="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkJoinSceneScript.cs" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/Services.cs" afterPath="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/Services.cs" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,142 +16,81 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Launcher.cs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/Launcher.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1277">
-              <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
-              <folding>
-                <marker date="1528725509000" expanded="true" signature="6:143" ph="..." />
-                <marker date="1528725509000" expanded="true" signature="167:3932" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="217:3930" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="232:769" ph="Public Variables" />
-                <marker date="1528725509000" expanded="true" signature="779:914" ph="Private Variables" />
-                <marker date="1528725509000" expanded="true" signature="924:1586" ph="MonoBehaviour CallBacks" />
-                <marker date="1528725509000" expanded="true" signature="977:1150" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="1172:1438" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="1461:1566" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="1596:2346" ph="Public Methods" />
-                <marker date="1528725509000" expanded="true" signature="1649:2040" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="1843:1919" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="1936:2030" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="2076:2264" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="2297:2330" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="2364:3924" ph="Photon.PunBehaviour CallBacks" />
-                <marker date="1528725509000" expanded="true" signature="2453:2599" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="2684:3026" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="3071:3357" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="3414:3679" ph="{...}" />
-                <marker date="1528725509000" expanded="true" signature="3744:3904" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="NetworkJoinSceneScript.cs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkJoinSceneScript.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="13" column="8" lean-forward="false" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="8" />
+            <state relative-caret-position="96">
+              <caret line="9" column="45" lean-forward="false" selection-start-line="9" selection-start-column="45" selection-end-line="9" selection-end-column="45" />
               <folding>
-                <marker date="1528727641000" expanded="false" signature="6:78" ph="..." />
-                <marker date="1528727641000" expanded="true" signature="140:276" ph="{...}" />
-                <marker date="1528727641000" expanded="true" signature="195:216" ph="{...}" />
-                <marker date="1528727641000" expanded="true" signature="253:274" ph="{...}" />
+                <marker date="1528728961000" expanded="false" signature="6:107" ph="..." />
+                <marker date="1528728961000" expanded="true" signature="169:333" ph="{...}" />
+                <marker date="1528728961000" expanded="true" signature="224:273" ph="{...}" />
+                <marker date="1528728961000" expanded="true" signature="310:331" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TitleSceneScript.cs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/TitleSceneScript.cs">
+      <file leaf-file-name="NetworkData.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="471">
-              <caret line="102" column="59" lean-forward="false" selection-start-line="102" selection-start-column="59" selection-end-line="102" selection-end-column="59" />
+            <state relative-caret-position="154">
+              <caret line="15" column="40" lean-forward="false" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="40" />
               <folding>
-                <marker date="1528728002000" expanded="false" signature="6:40" ph="..." />
-                <marker date="1528728002000" expanded="true" signature="95:2625" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="523:789" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="715:783" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="826:986" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="1029:1064" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="1115:1225" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="1174:1219" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="1255:1388" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="1427:1606" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="1630:1663" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="1697:1787" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="1819:1909" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="1945:2033" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="2061:2145" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="2177:2245" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="2272:2422" ph="{...}" />
-                <marker date="1528728002000" expanded="true" signature="2451:2623" ph="{...}" />
+                <marker date="1528730264000" expanded="true" signature="6:130" ph="..." />
+                <marker date="1528730264000" expanded="true" signature="158:1209" ph="{...}" />
+                <marker date="1528730264000" expanded="false" signature="163:201" ph="Public Variables" />
+                <marker date="1528730264000" expanded="true" signature="205:305" ph="Static Definitions" />
+                <marker date="1528730264000" expanded="false" signature="309:438" ph="Private Variables" />
+                <marker date="1528730264000" expanded="false" signature="442:547" ph="Constructors" />
+                <marker date="1528730264000" expanded="false" signature="486:533" ph="{...}" />
+                <marker date="1528730264000" expanded="true" signature="551:1207" ph="Public Functions" />
+                <marker date="1528730264000" expanded="false" signature="635:664" ph="{...}" />
+                <marker date="1528730264000" expanded="true" signature="710:946" ph="{...}" />
+                <marker date="1528730264000" expanded="true" signature="736:886" ph="{...}" />
+                <marker date="1528730264000" expanded="false" signature="978:1132" ph="{...}" />
+                <marker date="1528730264000" expanded="false" signature="1031:1113" ph="{...}" />
+                <marker date="1528730264000" expanded="true" signature="1168:1193" ph="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SceneManager.cs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/SceneManager.cs">
+      <file leaf-file-name="Launcher.cs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/Launcher.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="23" column="12" lean-forward="false" selection-start-line="23" selection-start-column="12" selection-end-line="23" selection-end-column="28" />
+            <state relative-caret-position="1072">
+              <caret line="103" column="12" lean-forward="false" selection-start-line="103" selection-start-column="12" selection-end-line="103" selection-end-column="12" />
               <folding>
-                <marker date="1528315633000" expanded="false" signature="6:157" ph="..." />
-                <marker date="1528315633000" expanded="true" signature="208:3226" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="517:638" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="537:631" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="723:1066" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="803:1059" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="1142:1746" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="1291:1394" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="1432:1499" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="1532:1593" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="1630:1739" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="1859:2177" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="2060:2170" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="2285:2748" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="2382:2487" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="2523:2628" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="2811:3223" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Main.cs" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/Main.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="533">
-              <caret line="90" column="69" lean-forward="false" selection-start-line="90" selection-start-column="61" selection-end-line="90" selection-end-column="69" />
-              <folding>
-                <marker date="1528315633000" expanded="false" signature="6:48" ph="..." />
-                <marker date="1528315633000" expanded="true" signature="50:1684" ph="Main.cs Overview" />
-                <marker date="1528315633000" expanded="true" signature="1686:2599" ph="Quick Overview of Prefab Database" />
-                <marker date="1528315633000" expanded="true" signature="2601:4254" ph="Quick Overview of Game Event System" />
-                <marker date="1528315633000" expanded="true" signature="4256:5914" ph="Quick Overview of SceneManagement System" />
-                <marker date="1528315633000" expanded="true" signature="5948:7139" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="6044:6224" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="6139:6218" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="6262:7052" ph="{...}" />
-                <marker date="1528315633000" expanded="true" signature="7079:7137" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GameCenterAuthenticator.cs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/GameCenterAuthenticator.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
-              <caret line="25" column="5" lean-forward="false" selection-start-line="25" selection-start-column="5" selection-end-line="25" selection-end-column="5" />
-              <folding>
-                <marker date="1528722736000" expanded="false" signature="6:173" ph="..." />
-                <marker date="1528722736000" expanded="true" signature="197:675" ph="{...}" />
-                <marker date="1528722736000" expanded="true" signature="256:673" ph="{...}" />
-                <marker date="1528722736000" expanded="true" signature="283:442" ph="{...}" />
-                <marker date="1528722736000" expanded="true" signature="492:667" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="6:143" ph="..." />
+                <marker date="1528730578000" expanded="true" signature="167:5210" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="217:5208" ph="{...}" />
+                <marker date="1528730578000" expanded="false" signature="232:769" ph="Public Variables" />
+                <marker date="1528730578000" expanded="false" signature="779:914" ph="Private Variables" />
+                <marker date="1528730578000" expanded="true" signature="924:2489" ph="MonoBehaviour CallBacks" />
+                <marker date="1528730578000" expanded="false" signature="977:1200" ph="{...}" />
+                <marker date="1528730578000" expanded="false" signature="1222:1488" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="1511:2469" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="1574:2459" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="1645:1717" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="1738:2445" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="2049:2151" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="2180:2405" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="2268:2379" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="2499:3624" ph="Public Methods" />
+                <marker date="1528730578000" expanded="true" signature="2552:2943" ph="{...}" />
+                <marker date="1528730578000" expanded="false" signature="2746:2822" ph="{...}" />
+                <marker date="1528730578000" expanded="false" signature="2839:2933" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="2982:3015" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="3051:3248" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="3290:3537" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="3570:3608" ph="{...}" />
+                <marker date="1528730578000" expanded="true" signature="3642:5202" ph="Photon.PunBehaviour CallBacks" />
+                <marker date="1528730578000" expanded="false" signature="3731:3877" ph="{...}" />
+                <marker date="1528730578000" expanded="false" signature="3962:4304" ph="{...}" />
+                <marker date="1528730578000" expanded="false" signature="4349:4635" ph="{...}" />
+                <marker date="1528730578000" expanded="false" signature="4692:4957" ph="{...}" />
+                <marker date="1528730578000" expanded="false" signature="5022:5182" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -168,11 +101,11 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>maxplayers</find>
-      <find>connect</find>
       <find>ChangeScene</find>
       <find>swap</find>
-      <find>input</find>
       <find>scenePrefabs</find>
+      <find>connect</find>
+      <find>input</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -188,6 +121,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/Scene.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/Launcher.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/SceneManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/TitleSceneScript.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/GameSceneScript.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/Main.cs" root0="FORCE_HIGHLIGHTING" />
@@ -197,12 +131,13 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkGameSceneScript.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/Services.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/GameCenterAuthenticator.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/GameCenterPlayerName.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/Launcher.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkJoinSceneScript.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/TitleSceneScript.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/Services.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkJoinSceneScript.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Network Scripts/Launcher.cs" />
       </list>
     </option>
   </component>
@@ -306,12 +241,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1528720021576</updated>
-      <workItem from="1528720023986" duration="6429000" />
+      <workItem from="1528720023986" duration="8789000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6429000" />
+    <option name="totallyTimeSpent" value="8789000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -445,16 +380,6 @@
             <marker date="1523355671000" expanded="true" signature="8073:8742" ph="{...}" />
             <marker date="1523355671000" expanded="true" signature="8583:8738" ph="{...}" />
             <marker date="1523355671000" expanded="true" signature="8638:8679" ph="/* ##Critical ... */" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/Services.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="22" column="49" lean-forward="false" selection-start-line="22" selection-start-column="49" selection-end-line="22" selection-end-column="49" />
-          <folding>
-            <marker date="1528722633000" expanded="true" signature="68:961" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -635,36 +560,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/Launcher.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1277">
-          <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
-          <folding>
-            <marker date="1528725509000" expanded="true" signature="6:143" ph="..." />
-            <marker date="1528725509000" expanded="true" signature="167:3932" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="217:3930" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="232:769" ph="Public Variables" />
-            <marker date="1528725509000" expanded="true" signature="779:914" ph="Private Variables" />
-            <marker date="1528725509000" expanded="true" signature="924:1586" ph="MonoBehaviour CallBacks" />
-            <marker date="1528725509000" expanded="true" signature="977:1150" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="1172:1438" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="1461:1566" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="1596:2346" ph="Public Methods" />
-            <marker date="1528725509000" expanded="true" signature="1649:2040" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="1843:1919" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="1936:2030" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="2076:2264" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="2297:2330" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="2364:3924" ph="Photon.PunBehaviour CallBacks" />
-            <marker date="1528725509000" expanded="true" signature="2453:2599" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="2684:3026" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="3071:3357" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="3414:3679" ph="{...}" />
-            <marker date="1528725509000" expanded="true" signature="3744:3904" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/GameOptionsSceneScript.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="765">
@@ -728,19 +623,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkJoinSceneScript.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="13" column="8" lean-forward="false" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="8" />
-          <folding>
-            <marker date="1528727641000" expanded="false" signature="6:78" ph="..." />
-            <marker date="1528727641000" expanded="true" signature="140:276" ph="{...}" />
-            <marker date="1528727641000" expanded="true" signature="195:216" ph="{...}" />
-            <marker date="1528727641000" expanded="true" signature="253:274" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/Scene.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -751,33 +633,6 @@
             <marker date="1528315633000" expanded="true" signature="376:531" ph="{...}" />
             <marker date="1528315633000" expanded="true" signature="560:621" ph="{...}" />
             <marker date="1528315633000" expanded="true" signature="726:929" ph="/* internal virtual void Init() { } ... */" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/TitleSceneScript.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="471">
-          <caret line="102" column="59" lean-forward="false" selection-start-line="102" selection-start-column="59" selection-end-line="102" selection-end-column="59" />
-          <folding>
-            <marker date="1528728002000" expanded="false" signature="6:40" ph="..." />
-            <marker date="1528728002000" expanded="true" signature="95:2625" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="523:789" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="715:783" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="826:986" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="1029:1064" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="1115:1225" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="1174:1219" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="1255:1388" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="1427:1606" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="1630:1663" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="1697:1787" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="1819:1909" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="1945:2033" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="2061:2145" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="2177:2245" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="2272:2422" ph="{...}" />
-            <marker date="1528728002000" expanded="true" signature="2451:2623" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -810,8 +665,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/Main.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="533">
-          <caret line="90" column="69" lean-forward="false" selection-start-line="90" selection-start-column="61" selection-end-line="90" selection-end-column="69" />
+        <state relative-caret-position="405">
+          <caret line="82" column="59" lean-forward="false" selection-start-line="82" selection-start-column="59" selection-end-line="82" selection-end-column="59" />
           <folding>
             <marker date="1528315633000" expanded="false" signature="6:48" ph="..." />
             <marker date="1528315633000" expanded="true" signature="50:1684" ph="Main.cs Overview" />
@@ -823,6 +678,117 @@
             <marker date="1528315633000" expanded="true" signature="6139:6218" ph="{...}" />
             <marker date="1528315633000" expanded="true" signature="6262:7052" ph="{...}" />
             <marker date="1528315633000" expanded="true" signature="7079:7137" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/TitleSceneScript.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="471">
+          <caret line="102" column="59" lean-forward="false" selection-start-line="102" selection-start-column="59" selection-end-line="102" selection-end-column="59" />
+          <folding>
+            <marker date="1528728002000" expanded="false" signature="6:40" ph="..." />
+            <marker date="1528728002000" expanded="true" signature="95:2625" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="523:789" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="715:783" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="826:986" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="1029:1064" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="1115:1225" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="1174:1219" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="1255:1388" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="1427:1606" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="1630:1663" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="1697:1787" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="1819:1909" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="1945:2033" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="2061:2145" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="2177:2245" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="2272:2422" ph="{...}" />
+            <marker date="1528728002000" expanded="true" signature="2451:2623" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/Services.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="25" column="29" lean-forward="false" selection-start-line="25" selection-start-column="18" selection-end-line="25" selection-end-column="29" />
+          <folding>
+            <marker date="1528728893000" expanded="true" signature="68:1013" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/NetworkJoinSceneScript.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="96">
+          <caret line="9" column="45" lean-forward="false" selection-start-line="9" selection-start-column="45" selection-end-line="9" selection-end-column="45" />
+          <folding>
+            <marker date="1528728961000" expanded="false" signature="6:107" ph="..." />
+            <marker date="1528728961000" expanded="true" signature="169:333" ph="{...}" />
+            <marker date="1528728961000" expanded="true" signature="224:273" ph="{...}" />
+            <marker date="1528728961000" expanded="true" signature="310:331" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/NetworkData.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="15" column="40" lean-forward="false" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="40" />
+          <folding>
+            <marker date="1528730264000" expanded="true" signature="6:130" ph="..." />
+            <marker date="1528730264000" expanded="true" signature="158:1209" ph="{...}" />
+            <marker date="1528730264000" expanded="false" signature="163:201" ph="Public Variables" />
+            <marker date="1528730264000" expanded="true" signature="205:305" ph="Static Definitions" />
+            <marker date="1528730264000" expanded="false" signature="309:438" ph="Private Variables" />
+            <marker date="1528730264000" expanded="false" signature="442:547" ph="Constructors" />
+            <marker date="1528730264000" expanded="false" signature="486:533" ph="{...}" />
+            <marker date="1528730264000" expanded="true" signature="551:1207" ph="Public Functions" />
+            <marker date="1528730264000" expanded="false" signature="635:664" ph="{...}" />
+            <marker date="1528730264000" expanded="true" signature="710:946" ph="{...}" />
+            <marker date="1528730264000" expanded="true" signature="736:886" ph="{...}" />
+            <marker date="1528730264000" expanded="false" signature="978:1132" ph="{...}" />
+            <marker date="1528730264000" expanded="false" signature="1031:1113" ph="{...}" />
+            <marker date="1528730264000" expanded="true" signature="1168:1193" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Network Scripts/Launcher.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1072">
+          <caret line="103" column="12" lean-forward="false" selection-start-line="103" selection-start-column="12" selection-end-line="103" selection-end-column="12" />
+          <folding>
+            <marker date="1528730578000" expanded="true" signature="6:143" ph="..." />
+            <marker date="1528730578000" expanded="true" signature="167:5210" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="217:5208" ph="{...}" />
+            <marker date="1528730578000" expanded="false" signature="232:769" ph="Public Variables" />
+            <marker date="1528730578000" expanded="false" signature="779:914" ph="Private Variables" />
+            <marker date="1528730578000" expanded="true" signature="924:2489" ph="MonoBehaviour CallBacks" />
+            <marker date="1528730578000" expanded="false" signature="977:1200" ph="{...}" />
+            <marker date="1528730578000" expanded="false" signature="1222:1488" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="1511:2469" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="1574:2459" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="1645:1717" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="1738:2445" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="2049:2151" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="2180:2405" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="2268:2379" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="2499:3624" ph="Public Methods" />
+            <marker date="1528730578000" expanded="true" signature="2552:2943" ph="{...}" />
+            <marker date="1528730578000" expanded="false" signature="2746:2822" ph="{...}" />
+            <marker date="1528730578000" expanded="false" signature="2839:2933" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="2982:3015" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="3051:3248" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="3290:3537" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="3570:3608" ph="{...}" />
+            <marker date="1528730578000" expanded="true" signature="3642:5202" ph="Photon.PunBehaviour CallBacks" />
+            <marker date="1528730578000" expanded="false" signature="3731:3877" ph="{...}" />
+            <marker date="1528730578000" expanded="false" signature="3962:4304" ph="{...}" />
+            <marker date="1528730578000" expanded="false" signature="4349:4635" ph="{...}" />
+            <marker date="1528730578000" expanded="false" signature="4692:4957" ph="{...}" />
+            <marker date="1528730578000" expanded="false" signature="5022:5182" ph="{...}" />
           </folding>
         </state>
       </provider>

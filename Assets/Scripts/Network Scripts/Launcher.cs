@@ -37,6 +37,7 @@ namespace OminoNetwork
             PhotonNetwork.autoJoinLobby = false;
             PhotonNetwork.automaticallySyncScene = true;
             PhotonNetwork.logLevel = Loglevel;
+            Services.NetData = new NetworkData();
         }
 
         void Start()
@@ -51,7 +52,31 @@ namespace OminoNetwork
         void Update()
         {
             if (PhotonNetwork.playerList.Length > 1)
-                ReadyForGame();
+            {
+                if (!Services.NetData.IsReadyForMatch())
+                {
+                    ReadyForGame();
+                }
+                else
+                {
+                    PhotonPlayer opponent = PhotonNetwork.otherPlayers[0];
+                    object value;
+                    if (opponent.CustomProperties.TryGetValue(Services.NetData.READYFORMATCH, out value)
+                    {
+                        if (value.ToString() == "false")
+                        {
+                            WaitingForOpponent();
+                        }
+                        else
+                        {
+                            if (PhotonNetwork.isMasterClient)
+                            {
+                                LoadNetworkGame();
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         #endregion
@@ -74,16 +99,29 @@ namespace OminoNetwork
             }
         }
 
+        public void LoadNetworkGame()
+        {
+            
+        }
+
         public void ReadyForGame()
         {
             findButton.SetActive(false);
             startButton.SetActive(true);
-            statusText.text = "Found Player\n" + PhotonNetwork.otherPlayers[0] + ".";
+            statusText.text = "Found Player\n" + PhotonNetwork.otherPlayers[0].NickName + ".";
+        }
+
+        public void WaitingForOpponent()
+        {
+            Services.NetData.ReadyForMatch(true);
+            findButton.SetActive(false);
+            startButton.SetActive(false);
+            statusText.text = "Waiting for\n" + PhotonNetwork.otherPlayers[0].NickName + ".";
         }
 
         public void StartGame()
         {
-            
+            if ()
         }
 
     #endregion
