@@ -28,6 +28,7 @@ public class NetworkData {
 	
 	public NetworkData()
 	{
+		player_state = new ExitGames.Client.Photon.Hashtable();
 		player_state[READYFORMATCH] = "false";
 	}
 	
