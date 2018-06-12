@@ -89,10 +89,12 @@ public class Main : MonoBehaviour
         Services.AudioManager = new AudioManager();
         Services.GeneralTaskManager = new TaskManager();
         Services.Prefabs = Resources.Load<PrefabDB>("Prefabs/PrefabDB");
-        Services.Clips = Resources.Load<ClipLibrary>("Audio/ClipLibrary");
+        Services.Clips = Resources.Load<ClipLibrary>("Audio/PreIncubatorClipLibrary");
         Services.InputManager = new InputManager();
         Services.Scenes = new GameSceneManager<TransitionData>(gameObject, Services.Prefabs.Scenes);
         Services.CameraController = Camera.main.GetComponent<CameraController>();
+
+        gameObject.AddComponent<ClipSwitcher>();
     }
 
     private void Update()
