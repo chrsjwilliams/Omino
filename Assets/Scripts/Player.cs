@@ -32,7 +32,6 @@ public class Player : MonoBehaviour
     public List<Blueprint> blueprints { get; protected set; }
     public Polyomino selectedPiece { get; protected set; }
     private int selectedPieceHandPos;
-    public RectTransform handZone { get; private set; }
     public Base mainBase;
     public bool gameOver { get; private set; }
     public List<Polyomino> boardPieces { get; protected set; }
