@@ -2180,18 +2180,18 @@ MonoBehaviour:
   dragging: 0
   landscapeMode: 0
   swipeSpeed: 0
+  dir: 1
   currentIndex: 0
   selectedIndex: 0
   prevSelectedIndex: 0
   anticipatedIndex: 0
+  imageDistance: 0
   direction: 0
   anticipatedDirection: 0
   panel: {fileID: 0}
   images: []
   center: {fileID: 0}
   moveBuffer: 0
-  imageDistance: 0
-  dir: 1
   t: 0
 --- !u!114 &114128443560616682
 MonoBehaviour:
@@ -5327,9 +5327,9 @@ MonoBehaviour:
   defaultBlueprintWeight: 0.34
   defaultAttackWeight: 0.2
   defaultBlueprintDestructionWeight: 0.33
-  defaultDisconnectionWeight: 0.4
+  defaultDisconnectionWeight: 0.5
   defaultDestructorForBlueprintWeight: 0.52
-  defaultDangerWeight: 0.52
+  defaultDangerWeight: 0.25
 --- !u!114 &114783195762075142
 MonoBehaviour:
   m_ObjectHideFlags: 1

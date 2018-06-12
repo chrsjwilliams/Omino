@@ -21,6 +21,7 @@ public class AIPlayer : Player
     public bool drawingPiece { get; protected set; }
     public bool playingPiece { get; protected set; }
     public bool isThinking { get; protected set; }
+    public bool hasAttackPiece { get; protected set; }
     public List<Coord> primaryTargets { get; protected set; }
     private const int rollsPerLevel = 2;
     private int level;
@@ -47,7 +48,7 @@ public class AIPlayer : Player
     protected float blueprintdestructionWeight;
     protected float disconnectionWeight;
     protected float destructorForBlueprintWeight;
-    protected float dangerMod;
+    protected float dangerWeight;
     private IEnumerator thinkingCoroutine;
 
     public override void Init(int playerNum_, AIStrategy strategy, AILEVEL level_)
@@ -78,7 +79,7 @@ public class AIPlayer : Player
         blueprintdestructionWeight = strategy.blueprintDestructionWeight;
         disconnectionWeight = strategy.disconnectionWeight;
         destructorForBlueprintWeight = strategy.destructorForBlueprintWeight + 0.3f;
-        dangerMod = strategy.dangerMod;
+        dangerWeight = strategy.dangerMod;
 
         handSpacing = new Vector3(2.35f, -2.35f, 0);
         handOffset = new Vector3(-9.25f, 1.75f, 0);
@@ -99,7 +100,7 @@ public class AIPlayer : Player
                     "\nblueprint destruction weight: " + blueprintdestructionWeight); 
          Debug.Log("disconnection weight: " + disconnectionWeight + 
                     "\ndestructor4Blueprint weight: " + destructorForBlueprintWeight);
-        Debug.Log("danger mod: " + dangerMod);
+        Debug.Log("danger mod: " + dangerWeight);
 
 
         baseBrickWorkRate = Factory.drawRateBonus / normalDrawRate;
@@ -127,6 +128,19 @@ public class AIPlayer : Player
                 new Coord(2,0)
             };
         }
+    }
+
+    public bool HasAttackPiece(List<Polyomino> currentHand)
+    {
+        foreach(Polyomino piece in currentHand)
+        {
+            if(piece is Destructor)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // Update is called once per frame
@@ -641,18 +655,23 @@ public class AIPlayer : Player
                                                         possibleBlueprintMoves, possibleCutMoves,
                                                         winWeight, structWeight, destructionWeight, 
                                                         mineWeight, factoryWeight, bombFactoryWeight,
-                                                        usePredictiveSmith, usePredictiveBrickworks, usePredictiveBarracks, dangerMod);
-                                
+                                                        usePredictiveSmith, usePredictiveBrickworks, usePredictiveBarracks, dangerWeight);
+
                                 //if (nextPlay == null) nextPlay = newMove;
                                 //else if (newMove.score > nextPlay.score)
                                 //{
                                 //    nextPlay = newMove;
                                 //}
+                                if (HasAttackPiece(currentHand) && inDanger && !(newMove.isWinningMove || (newMove.piece is Destructor)))
+                                {
+                                    continue;
+                                }
+                                
                                 if(movesToConsider.Count < bestMovesCount ||
                                     newMove.score > movesToConsider[0].score)
                                 {
                                     movesToConsider = InsertMoveIntoSortedList(
-                                        newMove, movesToConsider);
+                                    newMove, movesToConsider);
                                     if(movesToConsider.Count > bestMovesCount)
                                     {
                                         movesToConsider.RemoveAt(0);

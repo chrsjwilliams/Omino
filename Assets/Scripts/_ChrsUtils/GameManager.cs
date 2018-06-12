@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     private float blueprintDestructionWeight;
     private float disconnectionWeight;
     private float destructorForBlueprintWeight;
-    private float dangerMod;
+    private float dangerWeight;
 
     private AIStrategy[] currentStrategies;
 
@@ -148,15 +148,15 @@ public class GameManager : MonoBehaviour
 
     public void SetDangerWeight(float weight)
     {
-        dangerMod = weight;
-        PlayerPrefs.SetFloat("dangerMod", dangerMod);
+        dangerWeight = weight;
+        PlayerPrefs.SetFloat("dangerMod", dangerWeight);
     }
 
     public void InitPlayers()
     {
         AIStrategy strategy = new AIStrategy(winWeight, structureWeight,
             blueprintWeight, destructionWeight, blueprintDestructionWeight,
-            disconnectionWeight, destructorForBlueprintWeight, dangerMod);
+            disconnectionWeight, destructorForBlueprintWeight, dangerWeight);
         if (Services.MapManager.currentLevel != null &&
             Services.MapManager.currentLevel.overrideStrategy.overrideDefault)
             strategy = Services.MapManager.currentLevel.overrideStrategy;

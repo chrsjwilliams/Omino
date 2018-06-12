@@ -53,6 +53,7 @@ public class Tile : MonoBehaviour, IVertex
     //private SpriteRenderer moltenLines;
     [SerializeField]
     private SpriteRenderer shieldSr;
+    public bool shielded { get; private set; }
     [SerializeField]
     private SpriteRenderer legalitySr;
     private bool bombSettling;
@@ -304,6 +305,7 @@ public class Tile : MonoBehaviour, IVertex
 
     public void SetShieldStatus(bool status)
     {
+        shielded = status;
         shieldSr.enabled = status;
     }
 

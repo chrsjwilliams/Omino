@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 
 public class Move
 {
+    public bool isWinningMove;
     public float score;
     public const int MAX_SCORE = 100;
     public const int MAX_ROTATIONS = 3;
@@ -28,7 +29,7 @@ public class Move
 
     float normalPieceForBlueprintWeight = 1;
     float destructorForBlueprintWeight = 8.0f;
-    float dangerMod;
+    float dangerWeight;
     public int finalCutSize;
     int tilesIdestroy;
 
@@ -41,7 +42,7 @@ public class Move
         List<CutCoordSet> _possibleCutMoves, float winWeight,
         float structureWeight, float destructionWeight, float mineWeight,
         float factoryWeight, float bombFactoryWeight, 
-        bool usePredictiveSmith, bool usePredictiveBrickWorks, bool usePredictiveBarracks, float _dangerMod)
+        bool usePredictiveSmith, bool usePredictiveBrickWorks, bool usePredictiveBarracks, float _dangerWeight)
     {
         piece = _piece;
         //relativeCoords = piece.tileRelativeCoords;
@@ -53,7 +54,8 @@ public class Move
         predictiveSmith = usePredictiveSmith;
         predictiveBrickworks = usePredictiveBrickWorks;
         predictiveBarracks = usePredictiveBarracks;
-        dangerMod = _dangerMod;
+        dangerWeight = _dangerWeight;
+        isWinningMove = false;
         score = CalculateScore(winWeight, structureWeight, destructionWeight, mineWeight, factoryWeight, bombFactoryWeight);
     }
 
@@ -268,7 +270,9 @@ public class Move
                             if( mapTile.occupyingPiece!= null &&
                                 mapTile.occupyingPiece.owner != null &&
                                 mapTile.occupyingPiece.owner != piece.owner &&
-                                !(mapTile.occupyingPiece is Structure))
+                                mapTile.occupyingPiece.connected &&
+                                !(mapTile.occupyingPiece is Structure) &&
+                                !mapTile.shielded)
                             {
                                 tilesIdestroy++;
                                 Blueprint blueprint = mapTile.occupyingBlueprint;
@@ -324,11 +328,12 @@ public class Move
             }
 
             float destructionMod = 1;
-            if (piece.owner.inDanger && tilesIdestroy > 0)
+            if (piece.owner.inDanger && tilesIdestroy > 1)
             {
-                destructionMod = dangerMod;
+                destructionMod += dangerWeight;
+                disconnectionWeight += dangerWeight;
             }
-            else if (tilesIdestroy < 1)
+            else// if (tilesIdestroy < 1)
             {
                 destructionMod = piece.owner.splashDamage ? -1 : 0.75f;
             }
@@ -336,7 +341,7 @@ public class Move
             float blueprintDestructionScore = blueprintsDestroyed.Count * blueprintDestructionWeight;
             float disconnectionScore = cutSize * disconnectionWeight;
 
-            return destructionWeight * (blueprintDestructionScore + disconnectionScore) * destructionMod;
+            return destructionWeight * (blueprintDestructionScore + disconnectionScore + tilesIdestroy) * destructionMod;
         }
     }
     
@@ -376,11 +381,13 @@ public class Move
         if (pieceDistFromTarget == 0)
         {
             winScore = winWeight;
+            isWinningMove = true;
         }
         else
         {
             winScore = winWeight / Mathf.Pow(pieceDistFromTarget, 2);
         }
+
         if(structDist == 0)
         {
             structScore = structWeight;
@@ -389,6 +396,7 @@ public class Move
         {
             structScore = structWeight / Mathf.Pow(structDist, 2);
         }
+
         return winScore + structScore;
     }
 

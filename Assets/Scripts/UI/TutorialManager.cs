@@ -38,7 +38,7 @@ public class TutorialManager : MonoBehaviour {
         CreateTooltip();
         if (Services.GameManager.Players[0] is AIPlayer)
         {
-            tooltipZone.localRotation = Quaternion.Euler(0, 0, 180);
+            tooltipZone.localRotation = Quaternion.Euler(0, 0, -90);
             humanPlayerNum = 2;
         }
     }

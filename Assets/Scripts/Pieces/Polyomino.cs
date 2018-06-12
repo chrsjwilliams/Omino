@@ -57,6 +57,7 @@ public class Polyomino : IVertex
     private bool affordable;
     public bool connected { get; protected set; }
     public bool dead { get; private set; }
+    public bool sheilded { get; private set; }
     public float shieldDurationRemaining { get; private set; }
     protected List<Tooltip> tooltips;
     private int baseSortingOrder;
