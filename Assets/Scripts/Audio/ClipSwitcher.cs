@@ -15,5 +15,13 @@ public class ClipSwitcher : MonoBehaviour {
 		{
 			Services.Clips = Resources.Load<ClipLibrary>("Audio/PreIncubatorClipLibrary");
 		}
+		else if (Input.GetKeyDown(KeyCode.Alpha2))
+		{
+			Services.Clips = Resources.Load<ClipLibrary>("Audio/MaterialClipLibrary");
+		}
+		else if (Input.GetKeyDown(KeyCode.Alpha3))
+		{
+			Services.Clips = Resources.Load<ClipLibrary>("Audio/SynthClipLibrary");
+		}
 	}
 }
