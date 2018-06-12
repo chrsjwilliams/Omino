@@ -151,9 +151,6 @@ public class MapManager : MonoBehaviour
                 case BuildingType.ASSEMBLYLINE:
                     structure = new AssemblyLine();
                     break;
-                case BuildingType.FORTIFIEDSTEEL:
-                    structure = new FortifiedSteel();
-                    break;
                 case BuildingType.BIGGERBRICKS:
                     structure = new BiggerBricks();
                     break;

@@ -35,7 +35,6 @@ public class Player : MonoBehaviour
     protected int maxHandSize;
     [SerializeField]
     protected int piecesPerHandRow;
-    public RectTransform handZone { get; private set; }
     public Base mainBase;
     public bool gameOver { get; private set; }
     public List<Polyomino> boardPieces { get; protected set; }
@@ -129,8 +128,6 @@ public class Player : MonoBehaviour
         playerNum = playerNum_;
 
         colorScheme = Services.GameManager.colorSchemes[playerNum - 1];
-
-        handZone = Services.UIManager.handZones[playerNum - 1];
 
         hand = new List<Polyomino>();
         blueprints = new List<Blueprint>();

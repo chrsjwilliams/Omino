@@ -29,26 +29,11 @@ public class PrefabDB : ScriptableObject
         get { return pieceHolder; }
     }
 
-    [SerializeField] private GameObject ringTimer;
-    public GameObject RingTimer { get { return ringTimer; } }
-
     [SerializeField] private GameObject floatingText;
     public GameObject FloatingText { get { return floatingText; } }
 
-    [SerializeField] private GameObject resourceToken;
-    public GameObject ResourceToken { get { return resourceToken; } }
-
-    [SerializeField] private GameObject structureParticles;
-    public GameObject StructureParticles { get { return structureParticles; } }
-
     [SerializeField] private GameObject tooltip;
     public GameObject Tooltip { get { return tooltip; } }
-
-    [SerializeField] private GameObject shield;
-    public GameObject Shield { get { return shield; } }
-
-    [SerializeField] private GameObject queueBar;
-    public GameObject QueueBar { get { return queueBar; } }
 
     [SerializeField] private GameObject dustCloud;
     public GameObject DustCloud { get { return dustCloud; } }
@@ -56,23 +41,11 @@ public class PrefabDB : ScriptableObject
     [SerializeField] private GameObject fireBurst;
     public GameObject FireBurst { get { return fireBurst; } }
 
-    [SerializeField] private GameObject block;
-    public GameObject Block { get { return block; } }
-
     [SerializeField] private GameObject structClaimEffect;
     public GameObject StructClaimEffect { get { return structClaimEffect; } }
 
-    [SerializeField] private GameObject uiTile;
-    public GameObject UITile { get { return uiTile; } }
-
     [SerializeField] private GameObject tutorialTooltip;
     public GameObject TutorialTooltip { get { return tutorialTooltip; } }
-
-    [SerializeField] private GameObject swordIcon;
-    public GameObject SwordIcon { get { return swordIcon; } }
-
-    [SerializeField] private GameObject legalityOverlay;
-    public GameObject LegalityOverlay { get { return legalityOverlay; } }
 
     [SerializeField] private GameObject dangerEffect;
     public GameObject DangerEffect { get { return dangerEffect; } }

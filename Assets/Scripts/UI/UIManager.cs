@@ -6,7 +6,6 @@ using TMPro;
 
 public class UIManager : MonoBehaviour {
 
-    public RectTransform[] handZones;
     public Text[] resourceCounters;
     public GameObject[] resourceSlotZones;
     private Image[][] resourceSlots;
@@ -29,11 +28,11 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private TextMeshProUGUI[] destLevelTexts;
     [SerializeField]
-    private Image[] greyOutBoxes;
-    [SerializeField]
     private RectTransform[] victoryBanners;
     [SerializeField]
     private RectTransform[] defeatBanners;
+    private Vector3[] gameEndBannerStartPositions;
+    private Vector3[] gameEndBannerTargetPositions;
     public Transform[] mineBlueprintLocations;
     public Transform[] factoryBlueprintLocations;
     public Transform[] bombFactoryBlueprintLocations;
@@ -44,18 +43,11 @@ public class UIManager : MonoBehaviour {
     private GameObject pauseButton;
     [SerializeField]
     private GameObject campaignLevelCompleteMenu;
-    public Transform uiTileHolder;
-    public Transform overlayIconHolder;
     public Transform canvas;
     public Sprite blueprintTile;
     public Sprite destructorIcon;
-    public Sprite bombFactoryIcon;
-    public Sprite factoryIcon;
-    public Sprite mineIcon;
-    public Sprite baseIcon;
     public Sprite drillIcon;
     public Sprite gearIcon;
-    public Sprite steelIcon;
     public Sprite bricksIcon;
     public Sprite bigBombIcon;
     public Sprite splashStructIcon;
@@ -74,9 +66,6 @@ public class UIManager : MonoBehaviour {
     public Sprite[] bombFactoryTops;
     public Sprite[] bombFactoryIcons;
     public Sprite structureOverlay;
-    public Sprite[] structureOverlayToppers;
-    public Sprite notEnoughResourcesIcon;
-    public Sprite notConnectedIcon;
     private bool scrollingInBanners;
     private Player winner;
     private float bannerScrollTimeElapsed;
@@ -84,14 +73,9 @@ public class UIManager : MonoBehaviour {
     private float bannerScrollDuration;
     private List<int> touchIdsMakingTooltips;
     [SerializeField]
-    private Vector3 queueMeterOffset;
-    [SerializeField]
     private Color[] notReadyColors;
     [SerializeField]
     private Color readyColor;
-    public float resourceGainAnimationDist;
-    public float resourceGainAnimationDur;
-    public Vector3 resourceGainAnimationOffset;
     [SerializeField]
     private float radialMeterFillMin;
     [SerializeField]
@@ -207,12 +191,9 @@ public class UIManager : MonoBehaviour {
             readyBanners[i].gameObject.SetActive(false);
         }
         touchIdsMakingTooltips = new List<int>();
-        //InitializeQueueMeters();
         for (int i = 0; i < 2; i++)
         {
             UpdateDrawMeters(i + 1, 0, 0, 0, 0);
-            //resourceSymbols[i] = resourceCounters[i].GetComponentInChildren<Image>();
-            //resourceSymbols[i].fillAmount = 0;
             if (!Services.GameManager.destructorsEnabled)
             {
                 destructorDrawMeters[i].gameObject.SetActive(false);
@@ -248,11 +229,12 @@ public class UIManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        //if (Input.GetKeyDown(KeyCode.Y)) StartBannerScroll(Services.GameManager.Players[0]);
         if (scrollingInBanners) ScrollBanners();
         HighlightResourceGained();
         HighlightResourcesMissing();
         if (Input.GetKeyDown(KeyCode.P)) Debug.Break();
-        if (Input.GetKeyDown(KeyCode.M)) ShowCampaignLevelCompleteMenu(Services.GameManager.Players[0]);
+        //if (Input.GetKeyDown(KeyCode.M)) ShowCampaignLevelCompleteMenu(Services.GameManager.Players[0]);
 	}
 
 
@@ -271,29 +253,31 @@ public class UIManager : MonoBehaviour {
 
         normalPieceTimers[playerNum - 1].text = Mathf.CeilToInt(normalTimeLeft).ToString();
         destructorPieceTimers[playerNum - 1].text = Mathf.CeilToInt(destructorTimeLeft).ToString();
-
-        //normalQueueMeters[playerNum - 1].localScale = 
-        //    new Vector3(normalFillProportion, 1, 1);
-        //destructorQueueMeters[playerNum - 1].localScale =
-        //    new Vector3(destructorFillProportion, 1, 1);
     }
 
     public void StartBannerScroll(Player winner_)
     {
         scrollingInBanners = true;
         winner = winner_;
+        gameEndBannerStartPositions = new Vector3[2];
+        gameEndBannerTargetPositions = new Vector3[2];
         for (int i = 0; i < victoryBanners.Length; i++)
         {
-            if(i == winner.playerNum - 1)
+            RectTransform banner;
+            if (i == winner.playerNum - 1)
             {
-                victoryBanners[i].gameObject.SetActive(true);
-                victoryBanners[i].anchoredPosition = new Vector2(0, 1536);
+                banner = victoryBanners[i];
             }
             else
             {
-                defeatBanners[i].gameObject.SetActive(true);
-                defeatBanners[i].anchoredPosition = new Vector2(0, 1536);
+                banner = defeatBanners[i];
             }
+            gameEndBannerTargetPositions[i] = banner.localPosition;
+            banner.gameObject.SetActive(true);
+            Vector3 offset = banner.sizeDelta.y * Vector3.down;
+            if (i == 1) offset *= -1;
+            banner.localPosition += offset;
+            gameEndBannerStartPositions[i] = banner.localPosition;
         }
         bannerScrollTimeElapsed = 0;
     }
@@ -303,33 +287,25 @@ public class UIManager : MonoBehaviour {
         bannerScrollTimeElapsed += Time.deltaTime;
         for (int i = 0; i < victoryBanners.Length; i++)
         {
-            float xOffset = i == 0 ? -320 : 320;
-            if(i == winner.playerNum - 1)
+            RectTransform banner;
+            if (i == winner.playerNum - 1)
             {
-                victoryBanners[i].anchoredPosition =
-                    Vector2.Lerp(new Vector2(0, xOffset), Vector2.zero,
-                    EasingEquations.Easing.QuadEaseOut(
-                        bannerScrollTimeElapsed / bannerScrollDuration));
+                banner = victoryBanners[i];
             }
             else
             {
-                defeatBanners[i].anchoredPosition =
-                    Vector2.Lerp(new Vector2(0, xOffset), Vector2.zero,
-                    EasingEquations.Easing.QuadEaseOut(
-                        bannerScrollTimeElapsed / bannerScrollDuration));
+                banner = defeatBanners[i];
             }
+            float progress = bannerScrollTimeElapsed / bannerScrollDuration;
+            banner.localPosition = Vector3.Lerp(
+                gameEndBannerStartPositions[i], 
+                gameEndBannerTargetPositions[i],
+                    EasingEquations.Easing.QuadEaseOut(progress));
         }
         if (bannerScrollTimeElapsed >= bannerScrollDuration)
         {
             scrollingInBanners = false;
-            //if (!Services.GameScene.gamePaused && Services.GameScene.normalPlayMode)
-            //    TogglePauseMenu();
         }
-    }
-
-    public void SetGreyOutBox(int playerNum, bool status)
-    {
-        greyOutBoxes[playerNum - 1].enabled = status;
     }
 
     public void UpdateResourceMeter(int playerNum, float fillProportion)
@@ -352,7 +328,6 @@ public class UIManager : MonoBehaviour {
 
     public void UpdateResourceCount(int resourceCount, int maxResources, Player player)
     {
-        //resourceCounters[player.playerNum - 1].text = resourceCount + "/" + maxResources;
         int playerIndex = player.playerNum - 1;
         for (int i = 0; i < resourceSlots[playerIndex].Length; i++)
         {
