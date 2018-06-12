@@ -12,21 +12,26 @@ public class LevelSelectButtonEntranceTask : Task
     private Vector3[] startPositions;
     private Vector3[] targetPositions;
     private float initialOffset = 1000;
+    private GameObject playButton;
+    private Vector3 playStartPos;
+    private Vector3 playTargetPos;
 
-    public LevelSelectButtonEntranceTask(LevelButton[] buttons_)
+    public LevelSelectButtonEntranceTask(LevelButton[] buttons_, 
+        GameObject playButton_ = null)
     {
         buttons = new GameObject[buttons_.Length];
         for (int i = 0; i < buttons_.Length; i++)
         {
             buttons[i] = buttons_[i].gameObject;
         }
+        playButton = playButton_;
     }
 
     protected override void Init()
     {
         timeElapsed = 0;
         initialOffset *= (Screen.width / 1027f);
-        totalDuration = duration + (staggerTime * buttons.Length);
+        totalDuration = duration + (staggerTime * (buttons.Length + 1));
         startPositions = new Vector3[buttons.Length];
         targetPositions = new Vector3[buttons.Length];
         for (int i = 0; i < buttons.Length; i++)
@@ -35,19 +40,18 @@ public class LevelSelectButtonEntranceTask : Task
             LevelButton levelButton = button.GetComponent<LevelButton>();
             button.SetActive(levelButton.unlocked);
             Vector3 offset;
-            //if (button.GetComponent<RectTransform>().anchoredPosition.x < 0)
-            //{
-            //    offset = initialOffset * Vector3.left;
-            //}
-            //else
-            //{
-            //    offset = initialOffset * Vector3.right;
-            //}
             offset = initialOffset * Vector3.down;
 
             targetPositions[i] = button.transform.localPosition;
             button.transform.localPosition += offset;
             startPositions[i] = button.transform.localPosition;
+        }
+        if (playButton != null)
+        {
+            playButton.SetActive(true);
+            playTargetPos = playButton.transform.localPosition;
+            playButton.transform.localPosition += (initialOffset * Vector3.down);
+            playStartPos = playButton.transform.localPosition;
         }
     }
 
@@ -73,13 +77,22 @@ public class LevelSelectButtonEntranceTask : Task
             }
         }
 
+        if(timeElapsed >= (buttons.Length-1) * staggerTime && playButton != null)
+        {
+            playButton.transform.localPosition = Vector3.Lerp(
+                playStartPos, playTargetPos,
+                EasingEquations.Easing.QuadEaseOut(
+                    Mathf.Min(1,(timeElapsed - ((buttons.Length - 1) * staggerTime)) 
+                    / duration)));
+        }
+
         if (timeElapsed >= totalDuration) SetStatus(TaskStatus.Success);
     }
 }
 
 public class LevelSelectTextEntrance: Task
 {
-    private const float duration = 0.2f;
+    private const float duration = 0.25f;
     private float timeElapsed;
     private GameObject levelSelectText;
     private Vector3 startPos;

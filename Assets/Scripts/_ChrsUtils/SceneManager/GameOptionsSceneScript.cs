@@ -28,12 +28,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private GameObject campaignLevelButtonParent;
     private LevelButton[] campaignLevelButtons;
     [SerializeField]
-    private GameObject backButtonParent;
     private LevelButton[] backButton;
-
     [SerializeField]
-    private Button[] joinButtons;
-    private TextMeshProUGUI[] joinButtonJoinTexts;
+    private GameObject playButton;
     [SerializeField]
     private GameObject[] aiLevelButtonZones;
     private Button[][] aiLevelButtons;
@@ -74,25 +71,19 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GameManager.SetDestructorForBlueprintWeight(defaultDestructorForBlueprintWeight);
         Services.GameManager.SetDangerWeight(defaultDangerWeight);
 
-        backButton = backButtonParent.GetComponentsInChildren<LevelButton>();
-        backButtonParent.SetActive(false);
+        backButton[0].gameObject.SetActive(false);
         levelButtons = levelButtonParent.GetComponentsInChildren<LevelButton>();
         levelButtonParent.SetActive(false);
         campaignLevelButtons = campaignLevelButtonParent.GetComponentsInChildren<LevelButton>();
         campaignLevelButtonParent.SetActive(false);
         humanPlayers = new bool[2] { false, false };
-        joinButtonJoinTexts = new TextMeshProUGUI[2] {
-            joinButtons[0].GetComponentInChildren<TextMeshProUGUI>(),
-            joinButtons[1].GetComponentInChildren<TextMeshProUGUI>()
-        };
         baseColors = new Color[2] { Services.GameManager.Player1ColorScheme[0],
                         Services.GameManager.Player2ColorScheme[0] };
-        aiLevelTexts = new TextMeshProUGUI[2];
-        aiLevelButtons = new Button[2][];
+        aiLevelTexts = new TextMeshProUGUI[1];
+        aiLevelButtons = new Button[1][];
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < aiLevelButtonZones.Length; i++)
         {
-            joinButtons[i].GetComponent<Image>().color = (baseColors[i] + Color.white) / 2;
             Button[] buttons = aiLevelButtonZones[i].GetComponentsInChildren<Button>();
             aiLevelButtons[i] = new Button[buttons.Length];
             for (int j = 0; j < buttons.Length; j++)
@@ -129,12 +120,12 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void StartPlayerVsAIMode()
     {
-        for (int i = 0; i < joinButtons.Length; i++)
-        {
-            joinButtons[i].gameObject.SetActive(false);
-        }
-        SideChooseEntrance entrance = new SideChooseEntrance(joinButtons, false);
-        Services.GeneralTaskManager.Do(entrance);
+        humanPlayers[0] = true;
+        humanPlayers[1] = false;
+        TaskTree aiLevelSelect = new TaskTree( new EmptyTask(),
+            new TaskTree(new AILevelSlideIn(aiLevelTexts[0], aiLevelButtons[0], true, false)), 
+            new TaskTree(new LevelSelectButtonEntranceTask(backButton)));
+        Services.GeneralTaskManager.Do(aiLevelSelect);
     }
 
     private void SetLevelProgress(int progress)
@@ -170,6 +161,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void StartCampaignMode()
     {
+        humanPlayers[0] = true;
+        humanPlayers[1] = false;
         int progress = 0;
         if (File.Exists(progressFileName))
         {
@@ -177,32 +170,29 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             int.TryParse(fileText, out progress);
         }
         SetLevelProgress(progress);
-        StartPlayerVsAIMode();
+        SlideInLevelButtons();
+        _tm.Do(new LevelSelectButtonEntranceTask(backButton));
     }
 
     private void StartTwoPlayerMode()
     {
         for (int i = 0; i < 2; i++)
         {
-            joinButtons[i].gameObject.SetActive(false);
             humanPlayers[i] = true;
         }
-        
         SlideInLevelButtons();
-        SlideInBackButton();
+        _tm.Do(new LevelSelectButtonEntranceTask(backButton));
     }
 
     private void StartDemoMode()
     {
         for (int i = 0; i < 2; i++)
         {
-            joinButtons[i].gameObject.SetActive(false);
             humanPlayers[i] = false;
             Services.GameManager.aiLevels[i] = AIPlayer.AiLevels[2];
         }
-
         SlideInLevelButtons();
-        SlideInBackButton();
+        _tm.Do(new LevelSelectButtonEntranceTask(backButton));
     }
 
     private void RemoveOpposingPlayerMenuText(LevelButton[] buttons)
@@ -247,29 +237,17 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             buttons[i].gameObject.SetActive(false);
         }
+        playButton.SetActive(false);
         //levelSelectionIndicator.gameObject.SetActive(true);
         GameObject levelSelectText = 
             buttonParent.GetComponentInChildren<TextMeshProUGUI>().gameObject;
-        levelSelectText.SetActive(true);
+        levelSelectText.SetActive(false);
         LevelSelectTextEntrance entrance = 
             new LevelSelectTextEntrance(levelSelectText);
         LevelSelectButtonEntranceTask buttonEntrance =
-            new LevelSelectButtonEntranceTask(buttons);
-        //entrance.Then(buttonEntrance);
-        Services.GeneralTaskManager.Do(entrance);
-        Services.GeneralTaskManager.Do(buttonEntrance);
-    }
-
-    public void SlideInBackButton()
-    {
-        if (humanPlayers[1] && !humanPlayers[0]) backButtonParent.transform.rotation = Quaternion.Euler(0, 0, 180);
-        else backButtonParent.transform.rotation = Quaternion.Euler(0, 0, 0);
-
-        backButtonParent.SetActive(true);
-
-        LevelSelectButtonEntranceTask backButtonEntrance =
-            new LevelSelectButtonEntranceTask(backButton);
-        Services.GeneralTaskManager.Do(backButtonEntrance);
+            new LevelSelectButtonEntranceTask(buttons, playButton);
+        _tm.Do(entrance);
+        _tm.Do(buttonEntrance);
     }
 
     public void StartGame()
@@ -306,22 +284,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             pulsingUp = true;
         }
-        for (int i = 0; i < joinButtonJoinTexts.Length; i++)
-        {
-            if (!humanPlayers[i])
-            {
-                joinButtonJoinTexts[i].transform.localScale =
-                    Vector3.Lerp(Vector3.one, textPulseMaxScale * Vector3.one,
-                    EasingEquations.Easing.QuadEaseOut(timeElapsed / textPulsePeriod));
-                //joinButtonJoinTexts[i].color = Color.Lerp(new Color(1,1,1,0.8f), Color.white,
-                //    EasingEquations.Easing.QuadEaseOut(timeElapsed / textPulsePeriod));
-
-            }
-            else
-            {
-                joinButtonJoinTexts[i].transform.localScale = Vector3.one;
-            }
-        }
     }
 
     public void SelectLevel(LevelButton levelButton)
@@ -330,34 +292,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         levelSelected = levelButton.level;
         //levelSelectionIndicator.transform.position = levelButton.transform.position;
         StartGame();
-    }
-
-    public void ToggleHumanPlayer(int playerNum)
-    {
-        int index = playerNum - 1;
-        humanPlayers[index] = true;
-
-        joinButtonJoinTexts[index].text = "SIDE CHOSEN";
-        joinButtons[index].GetComponent<Image>().color = baseColors[index];
-        joinButtonJoinTexts[index].color = Color.white;
-
-        SideChooseEntrance exit = new SideChooseEntrance(joinButtons, true);
-        for (int i = 0; i < joinButtons.Length; i++)
-        {
-            joinButtons[i].enabled = false;
-        }
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.PlayerVsAI)
-        {
-            exit.Then(new AILevelSlideIn(aiLevelTexts[index], aiLevelButtons[index],
-                playerNum == 1, false), new ActionTask(SlideInBackButton));
-
-        }
-        else
-        {
-            //exit.Then(new ActionTask(StartGame));
-            exit.Then(new ActionTask(SlideInLevelButtons), new ActionTask(SlideInBackButton));
-        }
-        Services.GeneralTaskManager.Do(exit);
     }
 
     public void SetP1AILevel(int level)

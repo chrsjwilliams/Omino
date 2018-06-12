@@ -6,10 +6,10 @@ using System;
 
 public class AILevelSlideIn : Task
 {
-    private const float duration = 0.4f;
+    private const float duration = 0.3f;
     private float timeElapsed;
     private const float staggerTime = 0.05f;
-    private float initialOffset = 280f;
+    private float initialOffset = 900f;
     private float totalDuration;
     private GameObject[] objectsToSlideIn;
     private Vector3[] startPositions;
