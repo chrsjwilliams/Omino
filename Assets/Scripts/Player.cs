@@ -6,42 +6,37 @@ public class Player : MonoBehaviour
 
     public int playerNum { get; private set; }
 
-    public Coord Coord { get; private set; }
-
     [SerializeField] private Color[] colorScheme = new Color[2];
     public Color[] ColorScheme
     {
         get { return colorScheme; }
     }
 
+    protected const int deckClumpCount = 4;
+    protected readonly Vector3 handSpacing = new Vector3(2.35f, -2.35f, 0f);
+    protected readonly Vector3 handOffset = new Vector3(-9.25f, 1.75f, 0f);
+    protected const int startingHandSize = 4;
+    protected const int maxHandSize = 5;
+    protected const int piecesPerHandRow = 5;
+    protected const int baseMaxResources = 3;
+    [SerializeField]
+    protected float startingResources = 1.5f;
+    [SerializeField]
+    protected int dangerDistance = 11;
+
     private List<Polyomino> normalDeck;
     private List<Destructor> destructorDeck;
-    [SerializeField]
-    protected int deckClumpCount;
-    protected List<List<Polyomino>> deckClumped;
     public List<Polyomino> hand { get; protected set; }
     public int handCount { get { return hand.Count; } }
     private List<Vector3> handTargetPositions;
     public List<Blueprint> blueprints { get; protected set; }
     public Polyomino selectedPiece { get; protected set; }
     private int selectedPieceHandPos;
-    [SerializeField]
-    protected Vector3 handSpacing;
-    [SerializeField]
-    protected Vector3 handOffset;
-    [SerializeField]
-    protected int startingHandSize;
-    [SerializeField]
-    protected int maxHandSize;
-    [SerializeField]
-    protected int piecesPerHandRow;
+    public RectTransform handZone { get; private set; }
     public Base mainBase;
     public bool gameOver { get; private set; }
     public List<Polyomino> boardPieces { get; protected set; }
-    [SerializeField]
-    protected float startingResources;
-    [SerializeField]
-    protected int baseMaxResources;
+     
     protected int maxResources;
     protected int resources_;
     public int resources {
@@ -105,8 +100,7 @@ public class Player : MonoBehaviour
     public bool ready { get; private set; }
     private bool handLocked;
     private Coord homeBasePos;
-    [SerializeField]
-    protected int dangerDistance;
+
     private HashSet<Mine> activeMines;
     private HashSet<Factory> activeFactories;
     private HashSet<BombFactory> activeBombFactories;

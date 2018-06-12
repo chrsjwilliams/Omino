@@ -3,15 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-/*
- * 
- *      TODO:
- *              Have a weight for each structure
- *              (*)Have AI know when it's in danger
- * 
- */
-
-
 public enum AILEVEL { TUTORIAL = 1, EASY = 3, MEDIUM = 6, HARD = 10}
 
 public class AIPlayer : Player
@@ -56,7 +47,6 @@ public class AIPlayer : Player
         playingPiece = false;
         isThinking = false;
         drawingPiece = false;
-        deckClumpCount = 4;
 
         movesTriedBuffer = 50;
         coordCountBuffer = 200;
@@ -65,8 +55,6 @@ public class AIPlayer : Player
         kargerAlgorithmBuffer = 10;
 
         aiLevel = level_;
-
-        dangerDistance = 11;
 
         futileBrickWorksPercentInc = Factory.drawRateBonus * 0.25f;
         futileBarracksPercentInc = BombFactory.drawRateBonus * 0.25f;
@@ -78,21 +66,17 @@ public class AIPlayer : Player
         destructionWeight = strategy.destructionWeight;
         blueprintdestructionWeight = strategy.blueprintDestructionWeight;
         disconnectionWeight = strategy.disconnectionWeight;
-        destructorForBlueprintWeight = strategy.destructorForBlueprintWeight + 0.3f;
+        destructorForBlueprintWeight = strategy.destructorForBlueprintWeight;
         dangerWeight = strategy.dangerMod;
 
-        handSpacing = new Vector3(2.35f, -2.35f, 0);
-        handOffset = new Vector3(-9.25f, 1.75f, 0);
-
-        startingHandSize = 4;
-        maxHandSize = 5;
-        piecesPerHandRow = 5;
-        startingResources = 1.5f;
-        baseMaxResources = 3;
         boardPieces = new List<Polyomino>();
-        resourceGainFactor = 1;
-        drawRateFactor = 1;
-        resourcesPerTick = 1;
+
+        resourceGainFactor = strategy.resourceGainFactor;
+        drawRateFactor = strategy.drawRateFactor;
+        resourcesPerTick = strategy.resourcesPerTick;
+
+        dangerDistance = strategy.dangerDistance;
+
         base.Init(playerNum_);
         Debug.Log("player " + playerNum + "using " + "\nwin weight: " + winWeight);
         Debug.Log("struct weight: " + structWeight + "\nblueprint weight: " + blueprintWeight);
@@ -106,6 +90,7 @@ public class AIPlayer : Player
         baseBrickWorkRate = Factory.drawRateBonus / normalDrawRate;
         baseBarracksRate = BombFactory.drawRateBonus / destructorDrawRate;
         baseSmithRate = Mine.resourceRateBonus / resourceGainRate;
+
         if (playerNum == 1)
         {
             primaryTargets = new List<Coord>()
@@ -805,7 +790,6 @@ public class AIPlayer : Player
     protected override void BurnFromHand(Polyomino piece)
     {
         base.BurnFromHand(piece);
-        //StopThinking();
     }
 
     public override void OnPieceRemoved(Polyomino piece)
@@ -817,7 +801,6 @@ public class AIPlayer : Player
     public override void AddPieceToHand(Polyomino piece)
     {
         base.AddPieceToHand(piece);
-        //StopThinking();
         drawingPiece = false;
     }
 
@@ -851,9 +834,15 @@ public class AIStrategy
     public float dangerMod;
     public bool overrideDefault;
 
-    public AIStrategy(  float winWeight_, float structWeight_, float blueprintWeight_, float destructionWeight_,
-                        float blueprintDestructionWeight_, float disconnectionWeight_, float destructorForBlueprintWeight_,
-                        float dangerMod_)
+    public float resourceGainFactor;
+    public float drawRateFactor;
+    public int resourcesPerTick;
+
+    public int dangerDistance;
+
+    public AIStrategy(float winWeight_, float structWeight_, float blueprintWeight_, float destructionWeight_,
+                       float blueprintDestructionWeight_, float disconnectionWeight_, float destructorForBlueprintWeight_,
+                       float dangerMod_)
     {
         winWeight = winWeight_;
         structWeight = structWeight_;
@@ -863,5 +852,31 @@ public class AIStrategy
         disconnectionWeight = disconnectionWeight_;
         destructorForBlueprintWeight = destructorForBlueprintWeight_;
         dangerMod = dangerMod_;
+
+        resourceGainFactor = 1;
+        drawRateFactor = 1;
+        resourcesPerTick = 1;
+
+        dangerDistance = 11;
+    }
+
+    public AIStrategy(  float winWeight_, float structWeight_, float blueprintWeight_, float destructionWeight_,
+                        float blueprintDestructionWeight_, float disconnectionWeight_, float destructorForBlueprintWeight_,
+                        float dangerMod_, float _resourceGainFactor, float _drawRateFactor, int _resourcePerTick, int _dangerDistance)
+    {
+        winWeight = winWeight_;
+        structWeight = structWeight_;
+        blueprintWeight = blueprintWeight_;
+        destructionWeight = destructionWeight_;
+        blueprintDestructionWeight = blueprintDestructionWeight_;
+        disconnectionWeight = disconnectionWeight_;
+        destructorForBlueprintWeight = destructorForBlueprintWeight_;
+        dangerMod = dangerMod_;
+
+        resourceGainFactor = _resourceGainFactor;
+        drawRateFactor = _drawRateFactor;
+        resourcesPerTick = _resourcePerTick;
+
+        dangerDistance = _dangerDistance;
     }
 }

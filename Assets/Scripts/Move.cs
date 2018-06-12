@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Collections.ObjectModel;
 
 public class Move
 {
@@ -333,7 +330,7 @@ public class Move
                 destructionMod += dangerWeight;
                 disconnectionWeight += dangerWeight;
             }
-            else// if (tilesIdestroy < 1)
+            else
             {
                 destructionMod = piece.owner.splashDamage ? -1 : 0.75f;
             }
