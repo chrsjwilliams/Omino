@@ -66,7 +66,6 @@ public class GameManager : MonoBehaviour
     {
         Services.GameEventManager.Register<Reset>(Reset);
         Input.simulateMouseWithTouches = false;
-        //UnityEditor.PlayerSettings.iOS.deferSystemGesturesMode = UnityEngine.iOS.SystemGestureDeferMode.All;
         colorSchemes = new Color[][]
         {
             _player1ColorScheme,
@@ -346,11 +345,6 @@ public class GameManager : MonoBehaviour
             + winningStrat.destructionWeight + ", BPATTK: " + winningStrat.blueprintDestructionWeight +
             " DISCON: , " + winningStrat.disconnectionWeight + ", DES4BP: " + winningStrat.destructorForBlueprintWeight +
             " DNGR: " + winningStrat.dangerMod);
-    }
-
-    public void ChangeCameraTo(Camera camera)
-    {
-        _mainCamera = camera;
     }
 
     public Color AdjustColorAlpha(Color color, float alpha)

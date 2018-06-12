@@ -11,7 +11,6 @@ public class Polyomino : IVertex
 {
     public List<Tile> tiles = new List<Tile>();
     public List<Coord> pieceCoords = new List<Coord>();
-    //public Dictionary<Tile, Coord> tileRelativeCoords { get; protected set; }
     protected string holderName;
     public PieceHolder holder { get; protected set; }
     public BuildingType buildingType { get; protected set; }
@@ -41,10 +40,6 @@ public class Polyomino : IVertex
     public const float drawAnimDur = 0.5f;
     public const float deathAnimDur = 0.5f;
     public const float deathAnimScaleUp = 1.5f;
-    public const float resourceGainAnimDur = 0.5f;
-    public const float resourceGainAnimStaggerTime = 0.06f;
-    public const float resourceGainAnimNoiseSpeed = 1;
-    public const float resourceGainAnimNoiseMag = 4;
     private const float handPosApproachFactor = 0.25f;
     public const float burnPieceDuration = 0.5f;
     public static Vector3 burnPieceOffset = new Vector3(2, 0, 0);
@@ -57,7 +52,6 @@ public class Polyomino : IVertex
     private bool affordable;
     public bool connected { get; protected set; }
     public bool dead { get; private set; }
-    public bool sheilded { get; private set; }
     public float shieldDurationRemaining { get; private set; }
     protected List<Tooltip> tooltips;
     private int baseSortingOrder;
@@ -345,8 +339,6 @@ public class Polyomino : IVertex
                                                     tetromino.GetLength(0),
                                                     pentomino.GetLength(0) };
 
-
-    public string ownerName;
     public Polyomino(int _units, int _index, Player _player)
     {
         index = _index;
@@ -354,7 +346,6 @@ public class Polyomino : IVertex
         owner = _player;
 
         occupyingBlueprints = new List<Blueprint>();
-        //cost = units;
         cost = 1;
         if (owner != null) baseColor = owner.ColorScheme[0];
 
@@ -414,7 +405,6 @@ public class Polyomino : IVertex
                 Tile tile = tiles[i];
                 if (i <= tileCompletionProportion)
                 {
-                    //tile.SetFilledUIStatus(true);
                     if (i == tileCompletionProportion)
                     {
                         tile.SetFilledUIFillAmount(
@@ -436,15 +426,11 @@ public class Polyomino : IVertex
         HideFromInput();
         foreach(Tile tile in tiles)
         {
-            //tile.mask.enabled = true;
             tile.SetHighlightColor(new Color(0, 0, 0, 0));
         }
         SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 0.75f), 1);
         ScaleHolder(queueScale);
         Vector3 centerpoint = GetCenterpoint() * queueScale.x;
-        //Debug.Log("base pos: " + holder.transform.position);
-        //Debug.Log("piece centerpoint: " + centerpoint);
-        //Debug.Log("adjusted pos: " + (holder.transform.position - centerpoint));
         Reposition(holder.transform.position - centerpoint);
     }
 
@@ -512,7 +498,6 @@ public class Polyomino : IVertex
         for (int i = 0; i < monominos.Count; i++)
         {
             monominos[i].AssignLocation(tiles[i].coord);
-            //monominos[i].tiles[0].StartScaling(i * Tile.scaleUpStaggerTime);
         }
         if (!(this is Destructor && owner.splashDamage))
         {
@@ -803,10 +788,8 @@ public class Polyomino : IVertex
 
     public void TurnOffGlow()
     {
-        //if (placed && isFortified) return;
         foreach (Tile tile in tiles)
         {
-            //tile.SetMaskSrAlpha(0);
             tile.SetHighlightStatus(false);
             tile.ToggleIllegalLocationIcon(false);
         }
@@ -820,8 +803,6 @@ public class Polyomino : IVertex
             tile.SetHighlightColor(color);
             tile.SetHighlightAlpha(0.5f);
             tile.SetHighlightStatus(true);
-            //tile.SetGlowOutLine(10);
-            //tile.SetGlowColor(color);
         }
         if (!placed) holder.legalityOverlay.enabled = true;
     }
@@ -877,22 +858,9 @@ public class Polyomino : IVertex
         }
     }
 
-    public void FortifyPiece()
-    {
-        foreach (Tile tile in tiles)
-        {
-            Polyomino monomino = new Polyomino(1, 0, owner);
-            //monomino.ToggleAltColor(true);
-            monomino.MakePhysicalPiece();
-            monomino.PlaceAtLocation(tile.coord);
-        }
-    }
-
     void CreateShield()
     {
         shieldDurationRemaining = ShieldedPieces.ShieldDuration;
-        //shield = GameObject.Instantiate(Services.Prefabs.Shield, 
-        //    GetCenterpoint(), Quaternion.identity);
         foreach (Tile tile in tiles)
         {
             tile.SetShieldStatus(true);
@@ -904,15 +872,11 @@ public class Polyomino : IVertex
     {
         shieldDurationRemaining -= Time.deltaTime;
         float shieldDecayed = ShieldedPieces.ShieldDuration - shieldDurationRemaining;
-        //shield.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero,
-        //    Mathf.Pow(EasingEquations.Easing.ExpoEaseIn(
-        //        shieldDecayed / ShieldedPieces.ShieldDuration), 2));
         foreach (Tile tile in tiles)
             tile.SetShieldAlpha(Mathf.Lerp(0.8f, 0, Mathf.Pow(EasingEquations.Easing
                 .ExpoEaseIn(shieldDecayed / ShieldedPieces.ShieldDuration),2)));
         if (shieldDurationRemaining <= 0)
         {
-            //GameObject.Destroy(shield);
             foreach (Tile tile in tiles) tile.SetShieldStatus(false);
         }
     }
@@ -932,12 +896,6 @@ public class Polyomino : IVertex
             {
                 occupyingBlueprints[i].Remove();
             }
-
-            //List<Structure> adjStructures = GetAdjacentStructures();
-            //foreach(Structure structure in adjStructures)
-            //{
-            //    structure.ToggleStructureActivation(owner);
-            //}
 
             DeathAnimation die = new DeathAnimation(this);
             die.Then(new ActionTask(DestroyThis));
@@ -996,22 +954,12 @@ public class Polyomino : IVertex
 
     public void SetTileCoords(Coord centerPos)
     {
-        //Coord oldCenter = centerCoord;
         centerCoord = centerPos;
 
         foreach(Tile tile in tiles)
         {
             tile.SetCoord(tile.relativeCoord.Add(centerPos));
         }
-
-        //foreach (KeyValuePair<Tile, Coord> tileCoord in tileRelativeCoords)
-        //{
-        //    tileCoord.Key.SetCoord(tileCoord.Value.Add(centerPos));
-        //}
-        //foreach(Tile tile in tiles)
-        //{
-        //    tile.SetCoord(centerCoord.Add(tile.coord.Subtract(oldCenter)));
-        //}
     }
 
     public void AddOccupyingBlueprint(Blueprint blueprint)
@@ -1038,7 +986,6 @@ public class Polyomino : IVertex
         adjacentPieces = new List<Polyomino>();
 
         if (piece == null) return;
-        //tileRelativeCoords = new Dictionary<Tile, Coord>();
 
         for (int x = 0; x < 5; x++)
         {
@@ -1050,7 +997,6 @@ public class Polyomino : IVertex
 
                     Coord myCoord = new Coord(-2 + x, -2 + y);
                     newTile.Init(myCoord, this);
-                    //tileRelativeCoords[newTile] = myCoord;
 
                     string pieceName = newTile.name.Replace("(Clone)", "");
                     newTile.name = pieceName;
@@ -1075,7 +1021,7 @@ public class Polyomino : IVertex
         holder.icon.enabled = false;
     }
 
-    public Vector3 GetCenterpoint(bool centerTile)
+    public Vector3 GetCenterpoint(bool centerTile = false)
     {
         Vector3 centerPos = Vector3.zero;
         foreach (Tile tile in tiles)
@@ -1100,11 +1046,6 @@ public class Polyomino : IVertex
         }
 
         return centerPos;
-    }
-
-    public Vector3 GetCenterpoint()
-    {
-        return GetCenterpoint(false);
     }
 
     protected void EnterUnselectedState(bool allowAIPlayers)
@@ -1192,9 +1133,7 @@ public class Polyomino : IVertex
             ScaleHolder(Vector3.one);
             holder.transform.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, -4);
             owner.OnPieceSelected(this);
-            //IncrementSortingOrder(30000);
             SortOnSelection(true);
-            //CreateRotationUI();
             OnInputDrag(holder.transform.position);
             Services.AudioManager.CreateTempAudio(Services.Clips.PiecePicked, 1);
 
@@ -1280,11 +1219,8 @@ public class Polyomino : IVertex
             {
                 owner.CancelSelectedPiece();
                 EnterUnselectedState(false);
-                //ToggleCostUIStatus(true);
             }
             CleanUpUI();
-            //DestroyRotationUI();
-            //IncrementSortingOrder(-30000);
             SortOnSelection(false);
             holder.transform.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
         }
@@ -1296,7 +1232,6 @@ public class Polyomino : IVertex
         {
             Vector3 screenInputPos = 
                 Services.GameManager.MainCamera.WorldToScreenPoint(inputPos);
-            //RepositionRotationUI(screenInputPos);
             Vector3 screenOffset;
             if (owner.playerNum == 1)
             {
@@ -1332,8 +1267,6 @@ public class Polyomino : IVertex
 
     public virtual void SetLegalityGlowStatus()
     {
-        //if (affordable || this is Blueprint)
-        //{
         if (!(this is Blueprint)) SetAffordableStatus(owner);
         bool isLegal = IsPlacementLegal();
         foreach (Tile tile in tiles)
@@ -1348,21 +1281,15 @@ public class Polyomino : IVertex
         else if (isLegal && !affordable && !(this is Blueprint))
         {
             SetGlow(Color.yellow);
-            //TurnOffGlow();
-            //legalityOverlay.SetStatus(true);
-            //legalityOverlay.SetSprite(Services.UIManager.notEnoughResourcesIcon);
             holder.legalityOverlay.enabled = false;
         }
         else
         {
             SetGlow(new Color(1, 0.2f, 0.2f));
-            //TurnOffGlow();
             bool connected = IsConnected();
             if(!(this is Blueprint) && !connected)
             {
-                //legalityOverlay.SetStatus(true);
                 holder.legalityOverlay.enabled = false;
-                //legalityOverlay.SetSprite(Services.UIManager.notConnectedIcon);
             }
             else
             {
@@ -1388,7 +1315,6 @@ public class Polyomino : IVertex
                 }
             }
         }
-        //}
     }
 
     protected void UnhighlightPotentialStructureClaims()
@@ -1448,7 +1374,6 @@ public class Polyomino : IVertex
         float rotAngle = 90 * Mathf.Deg2Rad;
         foreach (Tile tile in tiles)
         {
-            //Coord prevRelCoord = tileRelativeCoords[tile];
             Coord prevRelCoord = tile.relativeCoord;
             int newXCoord = Mathf.RoundToInt(
                 prevRelCoord.x * Mathf.Cos(rotAngle)
@@ -1456,7 +1381,6 @@ public class Polyomino : IVertex
             int newYCoord = Mathf.RoundToInt(
                 prevRelCoord.x * Mathf.Sin(rotAngle)
                 + (prevRelCoord.y * Mathf.Cos(rotAngle)));
-            //tileRelativeCoords[tile] = new Coord(newXCoord, newYCoord);
             tile.relativeCoord = new Coord(newXCoord, newYCoord);
         }
         SetTileCoords(centerCoord);
@@ -1464,7 +1388,6 @@ public class Polyomino : IVertex
         if ((this == owner.selectedPiece || placed) && owner is AIPlayer)
         {
             Debug.Log("rotating while selected or placed");
-            //Debug.Break();
         }        
         if (!dataOnly)
         {
@@ -1474,8 +1397,6 @@ public class Polyomino : IVertex
             {
                 foreach (Tile tile in tiles)
                 {
-                    //tile.transform.localPosition = 
-                    //new Vector3(tileRelativeCoords[tile].x, tileRelativeCoords[tile].y);
                     tile.transform.localPosition = 
                         new Vector3(tile.relativeCoord.x, tile.relativeCoord.y);
                 }
@@ -1483,9 +1404,6 @@ public class Polyomino : IVertex
 
             SetIconSprite();
             if(!Services.Main.disableUI) SetLegalityGlowStatus();
-            //Quaternion prevRotation = spriteOverlay.transform.localRotation;
-            //spriteOverlay.transform.localRotation = Quaternion.Euler(prevRotation.eulerAngles.x,
-            //    prevRotation.eulerAngles.y, prevRotation.eulerAngles.z + 90);
             SetOverlaySprite();
         }
     }
@@ -1514,36 +1432,6 @@ public class Polyomino : IVertex
     {
         holder.transform.localScale = scale;
     }
-
-    //protected void UpdateDrawMeter()
-    //{
-    //    drawMeter += drawRate * Time.deltaTime;
-    //    if (drawMeter >= 1)
-    //    {
-    //        OnDraw();
-    //        Services.AudioManager.CreateTempAudio(Services.Clips.PlayAvailable[0], 1);
-    //        drawMeter -= 1;
-    //    }
-    //}
-
-    protected virtual void OnDraw()
-    {
-        owner.DrawPieces(1, holder.transform.position);
-    }
-
-    //protected void UpdateResourceMeter()
-    //{
-    //    resourceGainMeter += resourceIncrementRate * Time.deltaTime;
-    //    if (resourceGainMeter >= 1)
-    //    {
-    //        int resourcesGained = owner.GainResources(resourcesPerIncrement);
-    //        resourceGainMeter -= 1;
-    //        Services.GeneralTaskManager.Do(new FloatText("+" + resourcesGained,
-    //            GetCenterpoint(), owner, 3, 0.75f));
-    //        Services.GeneralTaskManager.Do(new ResourceGainAnimation(resourcesGained, 
-    //            holder.transform.position, owner.playerNum));
-    //    }
-    //}
 
     public virtual void TogglePieceConnectedness(bool connected_)
     {
@@ -1637,7 +1525,6 @@ public class Polyomino : IVertex
     public void BurnFromHand()
     {
         HideFromInput();
-        //IncrementSortingOrder(10000);
         SortOnSelection(true);
         BurnPiece burnTask = new BurnPiece(this);
         burnTask.Then(new ActionTask(DestroyThis));

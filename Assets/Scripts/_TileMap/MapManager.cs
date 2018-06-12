@@ -31,21 +31,11 @@ public class MapManager : MonoBehaviour
     public List<Structure> structuresOnMap { get; private set; }
     public List<Coord> structureCoords { get; private set; }
     [SerializeField]
-    private int resourceDistMin;
-    [SerializeField]
-    private int resourceRadiusMin;
-    [SerializeField]
     private int structDistMin;
     [SerializeField]
     private int structRadiusMin;
     [SerializeField]
     private int resourceBorderMin;
-    [SerializeField]
-    private int resourceSizeMin;
-    [SerializeField]
-    private int resourceSizeMax;
-    [SerializeField]
-    private int startingResourceCount;
     [SerializeField]
     private int startingStructCount;
     [SerializeField]
@@ -85,9 +75,6 @@ public class MapManager : MonoBehaviour
         Services.GameScene.backgroundImage.transform.position = 
             new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, 0);
 
-
-        //Debug.Log("width " + MapWidth + ", height " + MapHeight);
-
         _map = new Tile[MapWidth, MapHeight];
         for (int i = 0; i < MapWidth; i++)
         {
@@ -99,7 +86,6 @@ public class MapManager : MonoBehaviour
                 tile.Init(new Coord(i, j));
                 _map[i, j] = tile;
                 tile.name = "Tile [X: " + i + ", Y: " + j + "]";
-                //tile.SetMaskSrAlpha(0);
                 tile.SetHighlightStatus(false);
             }
         }
@@ -138,7 +124,6 @@ public class MapManager : MonoBehaviour
     {
         if (structCoord != new Coord(-1, -1))
         {
-            //int numRotations = Random.Range(0, 4);
             Structure structure;
             switch (type)
             {
@@ -167,10 +152,6 @@ public class MapManager : MonoBehaviour
                     return null;
             }
             structure.MakePhysicalPiece();
-            //for (int i = 0; i < numRotations; i++)
-            //{
-            //    structure.Rotate();
-            //}
             structure.PlaceAtLocation(structCoord);
             return structure;
         }
@@ -192,12 +173,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    Coord GenerateValidStructureCoord()
-    {
-        return GenerateValidStructureCoord(false);
-    }
-
-    Coord GenerateValidStructureCoord(bool mirrored)
+    Coord GenerateValidStructureCoord(bool mirrored = false)
     {
         Coord nullCoord = new Coord(-1, -1);
         for (int i = 0; i < procGenTriesMax; i++)
@@ -237,7 +213,6 @@ public class MapManager : MonoBehaviour
         {
             BuildingType.MININGDRILL,
             BuildingType.ASSEMBLYLINE,
-            //BuildingType.FORTIFIEDSTEEL,
             BuildingType.BIGGERBRICKS,
             BuildingType.BIGGERBOMBS,
             BuildingType.SPLASHDAMAGE,
@@ -274,7 +249,6 @@ public class MapManager : MonoBehaviour
         {
             for (int i = 0; i < startingStructCount; i++)
             {
-                //List<Structure> structures = new List<Structure>();
                 BuildingType type;
                 if (structureTypes.Count == 0) structureTypes = InitStructureTypeList();
                 type = structureTypes[Random.Range(0, structureTypes.Count)];
@@ -284,10 +258,7 @@ public class MapManager : MonoBehaviour
                 {
                     break;
                 }
-                //foreach (Structure structure in structures)
-                //{
                 structuresOnMap.Add(structure);
-                //}
             }
         }
         else GenerateLevel(level);
@@ -325,7 +296,6 @@ public class MapManager : MonoBehaviour
     {
         Base playerBase = new Base(player, true);
         playerBase.MakePhysicalPiece();
-        //playerBase.ShiftColor(player.ColorScheme[0]);
         playerBase.PlaceAtLocation(coord);
         playerBase.TogglePieceConnectedness(true);
         player.AddBase(playerBase);
