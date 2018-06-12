@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class UIEntryAnimation : Task
 {
-    private const float animDuration = 0.4f;
-    private const float staggerTime = 0.1f;
+    private const float animDuration = 0.3f;
+    private const float staggerTime = 0.05f;
     private float timeElapsed;
     private GameObject[] meters;
     private List<Blueprint> blueprints;

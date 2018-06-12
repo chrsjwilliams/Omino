@@ -56,7 +56,7 @@ public class TitleSceneScript : Scene<TransitionData>
 
     private void StartGame()
     {
-        Task start = new Wait(SECONDS_TO_WAIT);
+        Task start = new SlideOutTitleScreenButtons(buttons);
         start.Then(new ActionTask(ChangeScene));
 
         _tm.Do(start);
