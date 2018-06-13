@@ -49,5 +49,8 @@ public class ClipLibrary : ScriptableObject {
     
     [SerializeField] private AudioClip uiClick;
     public AudioClip UIClick { get { return uiClick; } }
+    
+    [SerializeField] private AudioClip buildingFall;
+    public AudioClip BuildingFall { get { return buildingFall; } }
 
 }
