@@ -32,6 +32,9 @@ public class ClipLibrary : ScriptableObject {
     [SerializeField] private AudioClip piecePlaced;
     public AudioClip PiecePlaced { get { return piecePlaced; } }
     
+    [SerializeField] private AudioClip pieceRotated;
+    public AudioClip PieceRotated { get { return pieceRotated; } }
+    
     [SerializeField] private AudioClip prodLevelUp;
     public AudioClip ProdLevelUp { get { return prodLevelUp; } }
     

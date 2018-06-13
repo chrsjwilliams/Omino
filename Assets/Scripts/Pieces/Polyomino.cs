@@ -1404,6 +1404,8 @@ public class Polyomino : IVertex
             SetIconSprite();
             if(!Services.Main.disableUI) SetLegalityGlowStatus();
             SetOverlaySprite();
+            
+            Services.AudioManager.CreateTempAudio(Services.Clips.PieceRotated, 1.0f);
         }
     }
 

@@ -2468,6 +2468,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 114738086466291616}
+        m_MethodName: UIButtonPressedSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114151513580921300
@@ -2953,9 +2964,6 @@ MonoBehaviour:
   destLevelTexts:
   - {fileID: 114915558135422928}
   - {fileID: 114170977761235418}
-  greyOutBoxes:
-  - {fileID: 0}
-  - {fileID: 0}
   victoryBanners:
   - {fileID: 224614743233593588}
   - {fileID: 224604068134328034}
@@ -2980,13 +2988,8 @@ MonoBehaviour:
   canvas: {fileID: 224712141627911468}
   blueprintTile: {fileID: 21300000, guid: 11eb7b560cf35474582a11ab35ee5095, type: 3}
   destructorIcon: {fileID: 21300000, guid: 7d0996cc5e00d484ea2b830119ea3b94, type: 3}
-  bombFactoryIcon: {fileID: 21300000, guid: cc0cac3f60b6cc742a6cdbbc61549f94, type: 3}
-  factoryIcon: {fileID: 21300000, guid: e21ca96d3c1720045aa16e6a76007cc1, type: 3}
-  mineIcon: {fileID: 21300000, guid: fc61107ed2bfd244a95654a5b224d12d, type: 3}
-  baseIcon: {fileID: 21300000, guid: ea02fb0ae45638c47bd8b402b7b15366, type: 3}
   drillIcon: {fileID: 21300000, guid: ad66a501123f0f54dbcce65fd52a2056, type: 3}
   gearIcon: {fileID: 21300000, guid: 25f2b4d75d1d05b4285ce489156753be, type: 3}
-  steelIcon: {fileID: 21300000, guid: 7f66f092a3327174b9b8043891b305dc, type: 3}
   bricksIcon: {fileID: 21300000, guid: 6186a894c1c74214fbe3c00f2dd485a9, type: 3}
   bigBombIcon: {fileID: 21300000, guid: cf8bade322662364a8fe3ccd16f8dca1, type: 3}
   splashStructIcon: {fileID: 21300000, guid: 6a9c6d243c2c72f40925625f2623fba4, type: 3}
@@ -3037,21 +3040,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 266cb842c7ba72247a700abb89558885, type: 3}
   - {fileID: 21300000, guid: d3d2263d2a9ebd84d820e3df86e49ab2, type: 3}
   structureOverlay: {fileID: 21300000, guid: d7b77fda6751fd74181cb053f917422a, type: 3}
-  structureOverlayToppers:
-  - {fileID: 0}
-  - {fileID: 0}
-  notEnoughResourcesIcon: {fileID: 21300000, guid: 21c6018804fe58744914ee1d7e65f821,
-    type: 3}
-  notConnectedIcon: {fileID: 21300000, guid: c244da525912b8b40bfd196887f65485, type: 3}
   bannerScrollDuration: 0.5
-  queueMeterOffset: {x: 0, y: 1, z: 0}
   notReadyColors:
   - {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.77254903}
   - {r: 0.49019608, g: 0.49019608, b: 1, a: 0.77254903}
   readyColor: {r: 0.42352942, g: 0.68235296, b: 0.45882353, a: 0.77254903}
-  resourceGainAnimationDist: 2
-  resourceGainAnimationDur: 0.5
-  resourceGainAnimationOffset: {x: 0, y: 1, z: 0}
   radialMeterFillMin: 0.05
   radialMeterFillMax: 0.95
   resourceGainHighlightScale: 2
@@ -3381,6 +3374,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 114738086466291616}
         m_MethodName: Replay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 114738086466291616}
+        m_MethodName: UIButtonPressedSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4728,6 +4732,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 114738086466291616}
+        m_MethodName: UIButtonPressedSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114493532716340774
@@ -4974,6 +4989,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 114738086466291616}
+        m_MethodName: UIButtonPressedSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114562735409913070
@@ -5130,6 +5156,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 114252342320511668}
         m_MethodName: TogglePauseMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 114738086466291616}
+        m_MethodName: UIButtonPressedSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5850,6 +5887,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 114738086466291616}
+        m_MethodName: UIButtonPressedSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114679813991093670
@@ -6060,6 +6108,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 114738086466291616}
         m_MethodName: ReturnToLevelSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 114738086466291616}
+        m_MethodName: UIButtonPressedSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6294,6 +6353,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 114252342320511668}
         m_MethodName: TogglePauseMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 114738086466291616}
+        m_MethodName: UIButtonPressedSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6667,6 +6737,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 114738086466291616}
         m_MethodName: ReturnToLevelSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 114738086466291616}
+        m_MethodName: UIButtonPressedSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
