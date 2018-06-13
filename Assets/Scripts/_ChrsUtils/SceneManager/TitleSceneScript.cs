@@ -49,11 +49,11 @@ public class TitleSceneScript : Scene<TransitionData>
             }
         }
 
-        SetOptionButtonStatus(musicButton, Services.GameManager.musicEnabled);
-        SetOptionButtonStatus(soundFXButton, Services.GameManager.soundEffectsEnabled);
+        SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
+        SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
         SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
         Debug.Log("blueprint assist status " + Services.GameManager.BlueprintAssistEnabled);
-        Debug.Log("player prefs says " + PlayerPrefs.GetInt(Services.GameManager.blueprintAssistKey));
+        Debug.Log("player prefs says " + PlayerPrefs.GetInt(Services.GameManager.BLUEPRINTASSISTENABLED));
     }
 
     public void StartGame(GameMode mode)
@@ -165,13 +165,13 @@ public class TitleSceneScript : Scene<TransitionData>
     public void ToggleMusic()
     {
         Services.AudioManager.ToggleMusic();
-        SetOptionButtonStatus(musicButton, Services.GameManager.musicEnabled);
+        SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
     }
 
     public void ToggleSoundFX()
     {
         Services.AudioManager.ToggleSoundEffects();
-        SetOptionButtonStatus(soundFXButton, Services.GameManager.soundEffectsEnabled);
+        SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
     }
 
     public void ToggleBlueprintAssist()

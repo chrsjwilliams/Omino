@@ -213,7 +213,7 @@ public class UIManager : MonoBehaviour {
             if (Services.GameManager.Players[i] is AIPlayer)
                 readyBanners[i].enabled = false;
         }
-        if (Services.Main.disableUI)
+        if (Services.GameManager.disableUI)
         {
             for (int i = 0; i < 2; i++)
             {

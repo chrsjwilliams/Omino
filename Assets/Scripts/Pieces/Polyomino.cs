@@ -1256,7 +1256,7 @@ public class Polyomino : IVertex
             QueuePosition(roundedInputCoord);
         }
 
-        if(!Services.Main.disableUI) SetLegalityGlowStatus();
+        if(!Services.GameManager.disableUI) SetLegalityGlowStatus();
     }
 
     protected virtual void CleanUpUI()
@@ -1402,7 +1402,7 @@ public class Polyomino : IVertex
             }
 
             SetIconSprite();
-            if(!Services.Main.disableUI) SetLegalityGlowStatus();
+            if(!Services.GameManager.disableUI) SetLegalityGlowStatus();
             SetOverlaySprite();
             
             Services.AudioManager.CreateTempAudio(Services.Clips.PieceRotated, 1.0f);

@@ -60,48 +60,4 @@ using UnityEngine.Assertions;
 #endregion
 public class Main : MonoBehaviour
 {
-    [SerializeField] private bool debug;
-    public bool disableUI;
-
-    private void Awake()
-    {
-        Assert.raiseExceptions = true;
-
-        InitalizeServices();
-        if (!debug)
-        {
-            Services.Scenes.PushScene<TitleSceneScript>();
-        }
-    }
-
-    private void InitalizeServices()
-    {
-        Services.Main = this;
-
-        Services.GameEventManager = new GameEventsManager();
-
-        Services.GameManager = GetComponent<GameManager>();
-        Services.GameManager.Init();
-
-        Services.MapManager = GetComponent<MapManager>();
-        Services.MapManager.Init();
-
-        Services.Clips = Resources.Load<ClipLibrary>("Audio/PreIncubatorClipLibrary");
-        Services.AudioManager = new AudioManager();
-        Services.AudioManager.Init();
-        
-        Services.GeneralTaskManager = new TaskManager();
-        Services.Prefabs = Resources.Load<PrefabDB>("Prefabs/PrefabDB");
-        
-        Services.InputManager = new InputManager();
-        Services.Scenes = new GameSceneManager<TransitionData>(gameObject, Services.Prefabs.Scenes);
-        Services.CameraController = Camera.main.GetComponent<CameraController>();
-
-        gameObject.AddComponent<ClipSwitcher>();
-    }
-
-    private void Update()
-    {
-        Services.GeneralTaskManager.Update();
-    }
 }

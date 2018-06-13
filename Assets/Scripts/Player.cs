@@ -223,7 +223,7 @@ public class Player : MonoBehaviour
                 hand[i].SetAffordableStatus(this);
                 hand[i].ApproachHandPosition(handTargetPositions[i]);
             }
-            if (selectedPiece != null && !Services.Main.disableUI)
+            if (selectedPiece != null && !Services.GameManager.disableUI)
             {
                 selectedPiece.SetLegalityGlowStatus();
             }

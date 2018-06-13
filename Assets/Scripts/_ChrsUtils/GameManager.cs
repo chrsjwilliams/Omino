@@ -7,7 +7,10 @@ public class GameManager : MonoBehaviour
     public string PLAYER = "Player";
 
     public readonly int MAX_PLAYERS = 2;
-    
+
+    [SerializeField] private bool debug;
+    public bool disableUI;
+
     private bool[] humanPlayers;
     public AILEVEL[] aiLevels;
     public TitleSceneScript.GameMode mode;
@@ -20,13 +23,13 @@ public class GameManager : MonoBehaviour
         set
         {
             blueprintAssistEnabled = value;
-            PlayerPrefs.SetInt(blueprintAssistKey, value ? 1 : 0);
+            PlayerPrefs.SetInt(BLUEPRINTASSISTENABLED, value ? 1 : 0);
             PlayerPrefs.Save();
         }
     }
     private bool blueprintAssistEnabled = true;
 
-    public readonly string blueprintAssistKey = "BlueprintAssistEnabled";
+    public readonly string BLUEPRINTASSISTENABLED = "BlueprintAssistEnabled";
 
     private bool soundEffectsEnabled = true;
     public bool SoundEffectsEnabled
@@ -97,6 +100,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        Assert.raiseExceptions = true;
+        InitalizeServices();
+
         Services.GameEventManager.Register<Reset>(Reset);
         Input.simulateMouseWithTouches = false;
         colorSchemes = new Color[][]
@@ -116,15 +122,34 @@ public class GameManager : MonoBehaviour
 
         CheckPlayerPrefs();
 
-        if (PlayerPrefs.HasKey(blueprintAssistKey))
+        if (!debug)
         {
-            BlueprintAssistEnabled = PlayerPrefs.GetInt(blueprintAssistKey) == 1;
-            Debug.Log("has key");
+            Services.Scenes.PushScene<TitleSceneScript>();
         }
-        else
-        {
-            BlueprintAssistEnabled = true;
-        }
+    }
+
+    private void InitalizeServices()
+    {
+        Services.GameEventManager = new GameEventsManager();
+
+        Services.GameManager = this;
+        Init();
+
+        Services.MapManager = GetComponent<MapManager>();
+        Services.MapManager.Init();
+
+        Services.Clips = Resources.Load<ClipLibrary>("Audio/PreIncubatorClipLibrary");
+        Services.AudioManager = new AudioManager();
+        Services.AudioManager.Init();
+
+        Services.GeneralTaskManager = new TaskManager();
+        Services.Prefabs = Resources.Load<PrefabDB>("Prefabs/PrefabDB");
+
+        Services.InputManager = new InputManager();
+        Services.Scenes = new GameSceneManager<TransitionData>(gameObject, Services.Prefabs.Scenes);
+        Services.CameraController = Camera.main.GetComponent<CameraController>();
+
+        gameObject.AddComponent<ClipSwitcher>();
     }
 
     public void SetCurrentLevel(Level level)
@@ -398,6 +423,15 @@ public class GameManager : MonoBehaviour
 
     private void CheckPlayerPrefs()
     {
+        if (PlayerPrefs.HasKey(BLUEPRINTASSISTENABLED))
+        {
+            BlueprintAssistEnabled = PlayerPrefs.GetInt(BLUEPRINTASSISTENABLED) == 1;
+        }
+        else
+        {
+            BlueprintAssistEnabled = true;
+        }
+
         if (PlayerPrefs.HasKey(SOUNDEFFECTSENABLED))
         {
             SoundEffectsEnabled = PlayerPrefs.GetInt(SOUNDEFFECTSENABLED) == 1;
@@ -436,6 +470,7 @@ public class GameManager : MonoBehaviour
     void Update ()
     {
         Services.InputManager.Update();
+        Services.GeneralTaskManager.Update();
     }
 
     public void Reset(Reset e)

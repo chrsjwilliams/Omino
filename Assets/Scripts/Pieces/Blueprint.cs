@@ -265,7 +265,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     public override void OnInputDown(bool fromPlayTask)
     {
         base.OnInputDown(fromPlayTask);
-        if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID) && !Services.Main.disableUI)
+        if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID) && !Services.GameManager.disableUI)
         {
             Vector3 tooltipLocation;
             if (placed || owner.playerNum == 1)
@@ -394,7 +394,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
     public virtual void OnConnect()
     {
-        if (!Services.Main.disableUI)
+        if (!Services.GameManager.disableUI)
         {
             Task floatingTextSequence = new Wait(0.4f);
             floatingTextSequence.Then(new FloatText(onGainText, holder.transform.position + GetCenterpoint(),
