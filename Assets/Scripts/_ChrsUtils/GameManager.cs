@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public TitleSceneScript.GameMode mode;
     public bool destructorsEnabled = true;
     public bool blueprintsEnabled = true;
+    public bool soundEffectsEnabled = true;
+    public bool musicEnabled = true;
 
     [SerializeField] private Camera _mainCamera;
     public Camera MainCamera

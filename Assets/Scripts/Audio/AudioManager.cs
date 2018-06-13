@@ -5,6 +5,7 @@ using UnityEngine;
 public class AudioManager {
 
     private AudioSource mainTrack;
+    private float last_volume;
 
     public void CreateTempAudio(AudioClip clip, float volume)
     {
@@ -27,7 +28,36 @@ public class AudioManager {
         }
         mainTrack.clip = clip;
         mainTrack.volume = volume;
+        last_volume = volume;
         mainTrack.loop = true;
         mainTrack.Play();
+    }
+
+    public void ToggleSoundEffects()
+    {
+        Services.GameManager.soundEffectsEnabled = !Services.GameManager.soundEffectsEnabled;
+        
+        if (Services.GameManager.soundEffectsEnabled)
+        {
+            Services.Clips = Resources.Load<ClipLibrary>("Audio/PreIncubatorClipLibrary");
+        }
+        else
+        {
+            Services.Clips = Resources.Load<ClipLibrary>("Audio/SilentClipLibrary");
+        }
+    }
+    
+    public void ToggleMusic()
+    {
+        Services.GameManager.musicEnabled = !Services.GameManager.musicEnabled;
+        
+        if (Services.GameManager.musicEnabled)
+        {
+            mainTrack.volume = last_volume;
+        }
+        else
+        {
+            mainTrack.volume = 0.0f;
+        }
     }
 }

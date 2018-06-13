@@ -43,6 +43,8 @@ public class UIManager : MonoBehaviour {
     private GameObject pauseButton;
     [SerializeField]
     private GameObject campaignLevelCompleteMenu;
+    [SerializeField]
+    private GameObject optionsMenu;
     public Transform canvas;
     public Sprite blueprintTile;
     public Sprite destructorIcon;
@@ -202,6 +204,7 @@ public class UIManager : MonoBehaviour {
             }
         }
 
+        optionsMenu.SetActive(false);
         pauseMenu.SetActive(false);
         campaignLevelCompleteMenu.SetActive(false);
 
@@ -552,6 +555,74 @@ public class UIManager : MonoBehaviour {
             Services.GameScene.PauseGame();
         }
     }
+
+    public void ToggleOptionsMenu(bool state)
+    {
+        if (state)
+        {
+            optionsMenu.SetActive(true);
+            pauseMenu.SetActive(false);
+
+            _SFXButtonAppearanceToggle();
+
+            if (!Services.GameManager.musicEnabled)
+            {
+                GameObject.Find("ToggleMusic").GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
+            }
+        }
+        else
+        {
+            optionsMenu.SetActive(false);
+            pauseMenu.SetActive(true);
+        }
+    }
+
+    public void ToggleSoundFX()
+    {
+        Services.AudioManager.ToggleSoundEffects();
+        _SFXButtonAppearanceToggle();
+    }
+    
+    public void ToggleMusic()
+    {
+        Services.AudioManager.ToggleMusic();
+        _MusicButtonAppearanceToggle();
+    }
+
+    private void _SFXButtonAppearanceToggle()
+    {
+        GameObject button = GameObject.Find("ToggleSound");
+
+        if (Services.GameManager.soundEffectsEnabled)
+        {
+            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Sound FX";
+
+        }
+        else
+        {
+            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<s>Sound FX</s>";
+        }
+    }
+
+    private void _MusicButtonAppearanceToggle()
+    {
+        GameObject button = GameObject.Find("ToggleMusic");
+
+        if (Services.GameManager.musicEnabled)
+        {
+            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Music";
+
+        }
+        else
+        {
+            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<s>Music</s>";
+        }
+    }
+    
 
     public void FailedPlayFromLackOfResources(Player player, int resourceDeficit)
     {

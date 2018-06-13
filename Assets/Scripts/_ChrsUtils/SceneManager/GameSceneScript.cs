@@ -48,6 +48,7 @@ public class GameSceneScript : Scene<TransitionData>
         }
         Services.AudioManager.SetMainTrack(Services.Clips.MainTrackAudio, 0.3f);
         Services.CameraController.SetScreenEdges();
+        
     }
 
     internal override void OnExit()
@@ -221,4 +222,6 @@ public class GameSceneScript : Scene<TransitionData>
     {
         Services.AudioManager.CreateTempAudio(Services.Clips.UIButtonPressed, 0.55f);
     }
+
+    
 }
