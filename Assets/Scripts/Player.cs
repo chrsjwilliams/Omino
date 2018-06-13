@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Player : MonoBehaviour
 {
@@ -111,6 +112,11 @@ public class Player : MonoBehaviour
     [SerializeField]
     protected Tile dangerTile;
 
+    private List<Tile> bpAssistHighlightedTiles = new List<Tile>();
+    private const float bpAssistDuration = 5f;
+    private const float bpAssistFlashPeriod = 1f;
+    private float bpAssistTimeElapsed;
+
 
     public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_)
     {
@@ -220,6 +226,33 @@ public class Player : MonoBehaviour
             if (selectedPiece != null && !Services.Main.disableUI)
             {
                 selectedPiece.SetLegalityGlowStatus();
+            }
+
+            if(bpAssistHighlightedTiles.Count > 0)
+            {
+                bpAssistTimeElapsed += Time.deltaTime;
+                float alpha;
+                float periodicTime = bpAssistTimeElapsed % bpAssistFlashPeriod;
+                if (periodicTime < bpAssistFlashPeriod / 2)
+                {
+                    alpha = Mathf.Lerp(0, 1,
+                        EasingEquations.Easing.QuadEaseOut(
+                            periodicTime / (bpAssistFlashPeriod / 2)));
+                }
+                else
+                {
+                    alpha = Mathf.Lerp(1, 0,
+                        EasingEquations.Easing.QuadEaseIn(
+                            (periodicTime - (bpAssistFlashPeriod / 2)) / (bpAssistFlashPeriod / 2)));
+                }
+                foreach (Tile tile in bpAssistHighlightedTiles)
+                {
+                    tile.SetBpAssistAlpha(alpha);
+                }
+                if(bpAssistTimeElapsed >= bpAssistDuration)
+                {
+                    ClearBlueprintAssistHighlight();
+                }
             }
         }
 
@@ -565,6 +598,7 @@ public class Player : MonoBehaviour
         {
             AddBluePrint(System.Activator.CreateInstance(
                 piece.GetType(), new Object[] { this }) as Blueprint);
+            ClearBlueprintAssistHighlight();
         }
         selectedPiece = null;
         OrganizeHand(hand);
@@ -575,6 +609,10 @@ public class Player : MonoBehaviour
         }
         bool hadSplashDamage = splashDamage;
         Services.MapManager.DetermineConnectedness(this);
+        if (!(piece is Blueprint) && !(this is AIPlayer))
+        {
+            BlueprintAssistCheck(piece);
+        }
         if (!(piece is Destructor && hadSplashDamage) 
             && Services.MapManager.CheckForWin(piece))
             Services.GameScene.GameWin(this);
@@ -625,6 +663,14 @@ public class Player : MonoBehaviour
     {
         boardPieces.Remove(piece);
         Services.MapManager.DetermineConnectedness(this);
+        foreach(Tile tile in bpAssistHighlightedTiles)
+        {
+            if (piece.tiles.Contains(tile) || !tile.pieceParent.connected)
+            {
+                ClearBlueprintAssistHighlight();
+                break;
+            }
+        }
     }
 
     public virtual void CancelSelectedPiece()
@@ -837,5 +883,92 @@ public class Player : MonoBehaviour
             ((destProdLevel - 1) * BombFactory.drawRateBonus);
         resourceGainRate = Base.resourceGainRate +
             ((resourceProdLevel - 1) * Mine.resourceRateBonus);
+    }
+
+    private void BlueprintAssistCheck(Polyomino pieceJustPlaced)
+    {
+        HashSet<Coord> possibleBlueprintCoords = new HashSet<Coord>();
+        foreach(Tile tile in pieceJustPlaced.tiles)
+        {
+            Coord tileCoord = tile.coord;
+            for (int x = -3; x <= 3; x++)
+            {
+                for (int y = -3; y <= 3; y++)
+                {
+                    Coord coordCandidate = tileCoord.Add(new Coord(x, y));
+                    Tile mapTile = null;
+                    if (Services.MapManager.IsCoordContainedInMap(coordCandidate))
+                    {
+                        mapTile = Services.MapManager.Map[coordCandidate.x, coordCandidate.y];
+                    }
+                    if(mapTile != null && mapTile.occupyingBlueprint == null && 
+                        mapTile.occupyingPiece != null && !(mapTile.occupyingPiece is Structure)
+                        && mapTile.occupyingPiece.connected && mapTile.occupyingPiece.owner == this)
+                    {
+                        possibleBlueprintCoords.Add(coordCandidate);
+                    }
+                }
+            }
+        }
+        List<BlueprintMap> possibleBlueprintMoves = new List<BlueprintMap>();
+        foreach (Blueprint blueprint in blueprints)
+        {
+            Coord roundedPos = new Coord((int)blueprint.holder.transform.position.x,
+                                            (int)blueprint.holder.transform.position.y);
+
+            blueprint.SetTileCoords(roundedPos);
+            int numRotations = blueprint.maxRotations;
+            foreach (Coord coord in possibleBlueprintCoords)
+            {
+                for (int rotations = 0; rotations < 4; rotations++)
+                {
+                    blueprint.Rotate(false, true);
+                    blueprint.SetTileCoords(coord);
+                    blueprint.TurnOffGlow();
+                    if (rotations < numRotations)
+                    {
+                        if (blueprint.IsPlacementLegal())
+                        {
+                            possibleBlueprintMoves.Add(new BlueprintMap(blueprint, null, coord, rotations));
+                        }
+                    }
+                }
+            }
+        }
+        if(possibleBlueprintMoves.Count > 0)
+        {
+            BlueprintMap moveToHighlight = null;
+            List<BuildingType> priorityBlueprints = new List<BuildingType>();
+            int minProdLevel = Mathf.Min(normProdLevel, destProdLevel, resourceProdLevel);
+            if (resourceProdLevel == minProdLevel) priorityBlueprints.Add(BuildingType.MINE);
+            else if (normProdLevel == minProdLevel) priorityBlueprints.Add(BuildingType.FACTORY);
+            else if (destProdLevel == minProdLevel) priorityBlueprints.Add(BuildingType.BOMBFACTORY);
+            foreach(BlueprintMap blueprintMove in possibleBlueprintMoves)
+            {
+                if (priorityBlueprints.Contains(blueprintMove.blueprint.buildingType))
+                {
+                    moveToHighlight = blueprintMove;
+                    break;
+                }
+            }
+            if (moveToHighlight == null) moveToHighlight = possibleBlueprintMoves[0];
+            //Debug.Log("highlighting possible blueprint of type " + moveToHighlight.blueprint.buildingType +
+            //    " at coord " + moveToHighlight.targetCoord);
+            foreach(Coord coord in moveToHighlight.allCoords)
+            {
+                bpAssistHighlightedTiles.Add(
+                    Services.MapManager.Map[coord.x, coord.y].occupyingPiece.tiles[0]);
+            }
+        }
+    }
+
+    private void ClearBlueprintAssistHighlight()
+    {
+        foreach(Tile tile in bpAssistHighlightedTiles)
+        {
+            if (!tile.pieceParent.dead) tile.SetBpAssistAlpha(0);
+        }
+        bpAssistHighlightedTiles.Clear();
+        bpAssistTimeElapsed = 0;
     }
 }

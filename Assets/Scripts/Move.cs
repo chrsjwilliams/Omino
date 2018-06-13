@@ -24,7 +24,6 @@ public class Move
     float blueprintDestructionWeight = 0.2f;
     float disconnectionWeight = 0.4f;
 
-    float normalPieceForBlueprintWeight = 1;
     float destructorForBlueprintWeight = 8.0f;
     float dangerWeight;
     public int finalCutSize;

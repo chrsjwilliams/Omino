@@ -61,12 +61,12 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             case BuildingType.FACTORY:
                 holderName = "FactoryHolder";
                 piece = factory;
-                maxRotations = 1;
+                maxRotations = 2;
                 break;
             case BuildingType.MINE:
                 holderName = "MineHolder";
                 piece = mine;
-                maxRotations = 1;
+                maxRotations = 2;
                 break;
             case BuildingType.BOMBFACTORY:
                 holderName = "BombFactoryHolder";

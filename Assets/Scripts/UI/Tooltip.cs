@@ -12,7 +12,6 @@ public class Tooltip : MonoBehaviour {
     private Vector2 tooltipOffset;
     [SerializeField]
     private Vector2 inHandOffset;
-    private RectTransform rect;
    
 	// Use this for initialization
 	void Start () {
@@ -30,7 +29,6 @@ public class Tooltip : MonoBehaviour {
         nameText.text = name;
         descriptionText.text = description;
         transform.localRotation = Quaternion.Euler(0, 0, rot);
-        rect = GetComponent<RectTransform>();
         Reposition(basePos, rot, blueprintInHand);
     }
 

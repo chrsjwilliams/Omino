@@ -22,10 +22,6 @@ public class AIPlayer : Player
     private float baseBarracksRate;
     private float baseSmithRate;
 
-    private float futileBrickWorksPercentInc;
-    private float futileSmithPercentInc;
-    private float futileBarracksPercentInc;
-
     private int coordCountBuffer;
     private int movesTriedBuffer;
     private int tilesUntilBlueprint;
@@ -55,10 +51,6 @@ public class AIPlayer : Player
         kargerAlgorithmBuffer = 10;
 
         aiLevel = level_;
-
-        futileBrickWorksPercentInc = Factory.drawRateBonus * 0.25f;
-        futileBarracksPercentInc = BombFactory.drawRateBonus * 0.25f;
-        futileSmithPercentInc = Mine.resourceRateBonus * 0.25f;
 
         winWeight = strategy.winWeight;
         structWeight = strategy.structWeight;
@@ -402,11 +394,6 @@ public class AIPlayer : Player
         float mineWeight = 0;
         float factoryWeight = 0;
         float bombFactoryWeight = 0;
-
-        //int normalPieceCost = biggerBricks ? 5 : 4;
-        int normalPieceCost = 1;
-        //int destructorCost = biggerBombs ? 4 : 3;
-        int destructorCost = 1;
 
         float normalPieceExpenditure = normalDrawRate;
         float destructivePieceExpenditure = destructorDrawRate;

@@ -4,9 +4,7 @@ using UnityEngine;
 
 public abstract class Structure : Polyomino
 {
-    protected bool isActivated;
     private Color neutralColor;
-    private ParticleSystem ps;
     protected static int[,,] structure = new int[3, 5, 5]
     {   
             //  These hashes represent what the piece will look like
@@ -51,29 +49,18 @@ public abstract class Structure : Polyomino
     {
         index = _index;
         units = _units;
-        isActivated = false;
         placed = true;
+
         holderName = "StructureHolder";
     }
 
     public Structure(int _index) : base(4, _index, null)
     {
         index = _index;
-        isActivated = false;
         placed = true;
 
         holderName = "StructureHolder";
         piece = structure;
-    }
-
-    public void SetToNeutralColor()
-    {
-        //foreach (Tile tile in tiles)
-        //{
-        //    tile.ShiftColor(neutralColor);
-        //}
-        //spriteOverlay.GetComponent<ColorShifter>().ShiftColor(neutralColor);
-        SetOverlaySprite();
     }
 
     public override void MakePhysicalPiece()
@@ -81,22 +68,8 @@ public abstract class Structure : Polyomino
         base.MakePhysicalPiece();
         HideFromInput();
         ScaleHolder(Vector3.one);
-        neutralColor = tiles[0].mainSr.color;
-        //spriteOverlay.color = neutralColor;
         holder.spriteBottom.color = Color.white;
         TurnOffGlow();
-        //SetGlow(Color.white);
-        //IncrementSortingOrder(500);
-        //GameObject psObj = GameObject.Instantiate(Services.Prefabs.StructureParticles, holder);
-        //psObj.transform.position = GetCenterpoint();
-        //ps = psObj.GetComponent<ParticleSystem>();
-        //ParticleSystem.MainModule main = ps.main;
-        //main.startSizeMultiplier *= Mathf.Sqrt(tiles.Count) / 2;
-        //if (this is Base)
-        //{
-        //    Base thisAsBase = this as Base;
-        //    if (thisAsBase.mainBase) SetParticleClaimMode(true);
-        //}
         ListenForInput(false);
         foreach(Tile tile in tiles)
         {
@@ -126,7 +99,6 @@ public abstract class Structure : Polyomino
     {
         owner = player;
         SetOverlaySprite();
-        //spriteOverlay.GetComponent<ColorShifter>().ShiftColor(owner.ColorScheme[0]);
         Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
         owner.GainOwnership(this);
         StructClaimAura effect = GameObject.Instantiate(Services.Prefabs.StructClaimEffect, 
@@ -143,40 +115,12 @@ public abstract class Structure : Polyomino
     {
         owner.LoseOwnership(this);
         owner = null;
-        SetToNeutralColor();
+        SetOverlaySprite();
         foreach (Polyomino piece in adjacentPieces)
         {
             piece.adjacentPieces.Remove(this);
         }
         adjacentPieces.Clear();
-        //SetOverlaySprite();
-        //SetParticleClaimMode(false);
-    }
-
-    public override void Rotate()
-    {
-        base.Rotate();
-        //ps.transform.position = GetCenterpoint();
-    }
-
-    void SetParticleClaimMode(bool claimed)
-    {
-        ParticleSystem.MainModule main = ps.main;
-        ParticleSystem.EmissionModule emission = ps.emission;
-        if (claimed)
-        {
-            main.gravityModifierMultiplier += -0.025f;
-            main.startColor = (owner.ColorScheme[0] * 0.4f) + (Color.white * 0.6f);
-            emission.rateOverTimeMultiplier *= 2f;
-            ps.Play();
-        }
-        else
-        {
-            main.gravityModifierMultiplier -= 0.025f;
-            main.startColor = Color.white;
-            emission.rateOverTimeMultiplier /= 2f;
-            ps.Stop();
-        }
     }
 
     protected override void SetIconSprite()
@@ -197,7 +141,6 @@ public abstract class Structure : Polyomino
         {
             holder.spriteBottom.color = owner.ColorScheme[0];
         }
-        //secondOverlay.transform.position = GetCenterpoint();
     }
 
     public override void OnInputDown(bool fromPlayTask)

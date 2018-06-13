@@ -24,7 +24,6 @@ public class Tile : MonoBehaviour, IVertex
     private SpriteRenderer fillOverlay;
     [SerializeField]
     private SpriteRenderer fillOverlayTop;
-    //private SpriteGlow glow;
     public Material material { get; set; }
     public Polyomino occupyingPiece { get; private set; }
     public Polyomino pieceParent { get; private set; }
@@ -49,23 +48,20 @@ public class Tile : MonoBehaviour, IVertex
     private float colorChangeDuration;
     private bool changingColor;
     public SpriteRenderer highlightSr;
-    //private SpriteRenderer bombOverlay;
-    //private SpriteRenderer moltenLines;
     [SerializeField]
     private SpriteRenderer shieldSr;
     public bool shielded { get; private set; }
     [SerializeField]
     private SpriteRenderer legalitySr;
+    [SerializeField]
+    private SpriteRenderer bpAssistHighlightSr;
+    private readonly Color bpAssistColor = new Color(1, 1, 1);
     private bool bombSettling;
     private float bombSettleTimeElapsed;
     private const float bombSettleDuration = 0.4f;
     private float currentBombAlpha;
     private float currentNormalAlpha;
     private SortingGroup sortingGroup;
-    private float redPulseTimer;
-    private const float redPulsePeriod = 0.6f;
-    private static Color redPulseColor = new Color(0.5f, 0, 0.5f);
-    private bool toRed;
     private float scaleUpTimeElapsed;
     private float scaleUpDelayTime;
     private const float scaleUpDuration = 0.3f;
@@ -87,7 +83,6 @@ public class Tile : MonoBehaviour, IVertex
 
         mainSr.color = Services.GameManager.MapColorScheme[0];
         baseColor = mainSr.color;
-        toRed = true;
         if (pieceParent == null) IncrementSortingOrder(-5000);
     }
 
@@ -139,16 +134,6 @@ public class Tile : MonoBehaviour, IVertex
     public void ShiftColor(Color color)
     {
         targetColor = color;
-    }
-
-    public void SetGlowOutLine(int i)
-    {
-        //glow.OutlineWidth = i;
-    }
-
-    public void SetGlowColor(Color color)
-    {
-        //glow.GlowColor = color;
     }
 
     public void SetHighlightAlpha(float alpha)
@@ -325,5 +310,10 @@ public class Tile : MonoBehaviour, IVertex
     {
         if (connected) mainSr.sprite = sprites[0];
         else mainSr.sprite = disconnectedSprite;
+    }
+
+    public void SetBpAssistAlpha(float alpha)
+    {
+        bpAssistHighlightSr.color = new Color(bpAssistColor.r, bpAssistColor.g, bpAssistColor.b, alpha);
     }
 }

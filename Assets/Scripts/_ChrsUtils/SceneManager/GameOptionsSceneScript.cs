@@ -35,7 +35,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private GameObject[] aiLevelButtonZones;
     private Button[][] aiLevelButtons;
     private TextMeshProUGUI[] aiLevelTexts;
-    private Color[] baseColors;
     [SerializeField]
     private float defaultWinWeight;
     [SerializeField]
@@ -77,8 +76,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         campaignLevelButtons = campaignLevelButtonParent.GetComponentsInChildren<LevelButton>();
         campaignLevelButtonParent.SetActive(false);
         humanPlayers = new bool[2] { false, false };
-        baseColors = new Color[2] { Services.GameManager.Player1ColorScheme[0],
-                        Services.GameManager.Player2ColorScheme[0] };
         aiLevelTexts = new TextMeshProUGUI[1];
         aiLevelButtons = new Button[1][];
 

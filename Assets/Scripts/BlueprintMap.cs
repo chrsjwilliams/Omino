@@ -8,6 +8,7 @@ public class BlueprintMap
     public HashSet<Coord> missingCoords;
     public Coord targetCoord;
     public int rotations;
+    public List<Coord> allCoords;
 
     public BlueprintMap()
     {
@@ -23,5 +24,10 @@ public class BlueprintMap
         missingCoords = _missingCoords;
         targetCoord = _coord;
         rotations = _rotations;
+        allCoords = new List<Coord>();
+        foreach(Tile tile in blueprint.tiles)
+        {
+            allCoords.Add(tile.coord);
+        }
     }
 }

@@ -214,7 +214,6 @@ public class GameManager : MonoBehaviour
 
             _players[i].name = "AI " + PLAYER + playerNum;
             _players[i].transform.parent = Services.Scenes.CurrentScene.transform;
-            Color[] colorScheme = i == 0 ? _player1ColorScheme : _player2ColorScheme;
             AIStrategy strategy = currentStrategies[i];
 
             _players[i].Init(playerNum, strategy, AILEVEL.HARD);
