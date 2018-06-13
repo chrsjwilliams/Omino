@@ -30,5 +30,4 @@ public class AudioManager {
         mainTrack.loop = true;
         mainTrack.Play();
     }
-
 }
