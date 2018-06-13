@@ -579,15 +579,13 @@ public class UIManager : MonoBehaviour {
 
     public void ToggleSoundFX()
     {
-        Services.GameManager.soundEffectsEnabled = !Services.GameManager.soundEffectsEnabled;
-        Services.AudioManager.ToggleSoundEffects(Services.GameManager.soundEffectsEnabled);
+        Services.AudioManager.ToggleSoundEffects();
         _SFXButtonAppearanceToggle();
     }
     
     public void ToggleMusic()
     {
-        Services.GameManager.musicEnabled = !Services.GameManager.musicEnabled;
-        Services.AudioManager.ToggleSoundEffects(Services.GameManager.musicEnabled);
+        Services.AudioManager.ToggleMusic();
         _MusicButtonAppearanceToggle();
     }
 

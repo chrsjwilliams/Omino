@@ -33,9 +33,11 @@ public class AudioManager {
         mainTrack.Play();
     }
 
-    public void ToggleSoundEffects(bool active)
+    public void ToggleSoundEffects()
     {
-        if (active)
+        Services.GameManager.soundEffectsEnabled = !Services.GameManager.soundEffectsEnabled;
+        
+        if (Services.GameManager.soundEffectsEnabled)
         {
             Services.Clips = Resources.Load<ClipLibrary>("Audio/PreIncubatorClipLibrary");
         }
@@ -45,9 +47,11 @@ public class AudioManager {
         }
     }
     
-    public void ToggleMusic(bool active)
+    public void ToggleMusic()
     {
-        if (active)
+        Services.GameManager.musicEnabled = !Services.GameManager.musicEnabled;
+        
+        if (Services.GameManager.musicEnabled)
         {
             mainTrack.volume = last_volume;
         }
