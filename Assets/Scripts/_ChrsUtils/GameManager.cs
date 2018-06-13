@@ -393,7 +393,7 @@ public class GameManager : MonoBehaviour
         }
         
         if (PlayerPrefs.HasKey(MUSICENABLED))
-        {
+        {   
             switch (PlayerPrefs.GetInt(MUSICENABLED))
             {
                 case (1) :
@@ -415,31 +415,13 @@ public class GameManager : MonoBehaviour
 
     private void UpdateSoundEffectPlayerPrefs()
     {
-        switch (SoundEffectsEnabled)
-        {
-            case (true) :
-                PlayerPrefs.SetInt(SOUNDEFFECTSENABLED, 1);
-                break;
-            case (false) :
-                PlayerPrefs.SetInt(SOUNDEFFECTSENABLED, 0);
-                break;
-        }
-
+        PlayerPrefs.SetInt(SOUNDEFFECTSENABLED, SoundEffectsEnabled ? 1 : 0);
         PlayerPrefs.Save();
     }
 
     private void UpdateMusicPlayerPrefs()
     {
-        switch (MusicEnabled)
-        {
-            case (true) :
-                PlayerPrefs.SetInt(MUSICENABLED, 1);
-                break;
-            case (false) :
-                PlayerPrefs.SetInt(MUSICENABLED, 0);
-                break;
-        }
-
+        PlayerPrefs.SetInt(MUSICENABLED, MusicEnabled ? 1 : 0);
         PlayerPrefs.Save();
     }
     
