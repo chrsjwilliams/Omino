@@ -115,6 +115,11 @@ public class TitleSceneScript : Scene<TransitionData>
             new SlideInTitleScreenButtons(buttons, playButton.transform.localPosition, title));
     }
 
+    public void UIButtonPressedSound()
+    {
+        Services.AudioManager.CreateTempAudio(Services.Clips.UIButtonPressed, 0.55f);
+    }
+    
     public void UIClick()
     {
         Services.AudioManager.CreateTempAudio(Services.Clips.UIClick, 0.55f);
