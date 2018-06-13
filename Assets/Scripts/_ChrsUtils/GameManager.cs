@@ -12,9 +12,24 @@ public class GameManager : MonoBehaviour
     public AILEVEL[] aiLevels;
     public TitleSceneScript.GameMode mode;
     public bool destructorsEnabled = true;
+
     public bool blueprintsEnabled = true;
-    public bool soundEffectsEnabled = true;
-    public bool musicEnabled = true;
+
+    private bool soundEffectsEnabled = true;
+    public bool SoundEffectsEnabled
+    {
+        get { return soundEffectsEnabled; }
+        set { soundEffectsEnabled = value;    UpdateSoundEffectPlayerPrefs(); }
+    }
+
+    private bool musicEnabled = true;
+
+    public bool MusicEnabled
+    {
+        get { return musicEnabled; }
+        set { musicEnabled = value;    UpdateMusicPlayerPrefs(); }
+    }
+    
 
     [SerializeField] private Camera _mainCamera;
     public Camera MainCamera
@@ -62,6 +77,9 @@ public class GameManager : MonoBehaviour
     private float destructorForBlueprintWeight;
     private float dangerWeight;
 
+    private readonly string SOUNDEFFECTSENABLED = "soundEffectsEnabledKey";
+    private readonly string MUSICENABLED = "musicEnabledKey";
+
     private AIStrategy[] currentStrategies;
 
     private void Awake()
@@ -82,6 +100,8 @@ public class GameManager : MonoBehaviour
                 _player1ColorScheme
             };
         }
+
+        CheckPlayerPrefs();
     }
 
     public void SetCurrentLevel(Level level)
@@ -353,6 +373,76 @@ public class GameManager : MonoBehaviour
         return new Color(color.r, color.g, color.b, alpha);
     }
 
+    private void CheckPlayerPrefs()
+    {
+        if (PlayerPrefs.HasKey(SOUNDEFFECTSENABLED))
+        {
+            switch (PlayerPrefs.GetInt(SOUNDEFFECTSENABLED))
+            {
+                case (1) :
+                    SoundEffectsEnabled = true;
+                    break;
+                case (0) :
+                    SoundEffectsEnabled = false;
+                    break;
+            }
+        }
+        else
+        {
+            UpdateSoundEffectPlayerPrefs();
+        }
+        
+        if (PlayerPrefs.HasKey(MUSICENABLED))
+        {
+            switch (PlayerPrefs.GetInt(MUSICENABLED))
+            {
+                case (1) :
+                    MusicEnabled = true;
+                    break;
+                case (0) :
+                    MusicEnabled = false;
+                    break;
+            }
+        }
+        else
+        {
+            UpdateMusicPlayerPrefs();
+        }
+        
+        Services.AudioManager.SetMusicOnOrOff();
+        Services.AudioManager.SetSoundEffectsOnOrOff();
+    }
+
+    private void UpdateSoundEffectPlayerPrefs()
+    {
+        switch (SoundEffectsEnabled)
+        {
+            case (true) :
+                PlayerPrefs.SetInt(SOUNDEFFECTSENABLED, 1);
+                break;
+            case (false) :
+                PlayerPrefs.SetInt(SOUNDEFFECTSENABLED, 0);
+                break;
+        }
+
+        PlayerPrefs.Save();
+    }
+
+    private void UpdateMusicPlayerPrefs()
+    {
+        switch (MusicEnabled)
+        {
+            case (true) :
+                PlayerPrefs.SetInt(MUSICENABLED, 1);
+                break;
+            case (false) :
+                PlayerPrefs.SetInt(MUSICENABLED, 0);
+                break;
+        }
+
+        PlayerPrefs.Save();
+    }
+    
     // Update is called once per frame
     void Update ()
     {

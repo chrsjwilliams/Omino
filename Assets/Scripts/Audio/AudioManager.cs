@@ -5,8 +5,13 @@ using UnityEngine;
 public class AudioManager {
 
     private AudioSource mainTrack;
-    private float last_volume;
+    private float last_volume = 1.0f;
 
+    public void Init()
+    {
+        CreateTempAudio(Services.Clips.MainTrackAudio, 0.0f);
+    }
+    
     public void CreateTempAudio(AudioClip clip, float volume)
     {
         GameObject obj = new GameObject();
@@ -20,12 +25,13 @@ public class AudioManager {
 
     public void SetMainTrack(AudioClip clip, float volume)
     {
-        if(mainTrack == null)
+        if (mainTrack == null)
         {
             GameObject obj = new GameObject();
             obj.name = "Main Track: " + clip.name;
             mainTrack = obj.AddComponent<AudioSource>();
         }
+        
         mainTrack.clip = clip;
         mainTrack.volume = volume;
         last_volume = volume;
@@ -35,9 +41,13 @@ public class AudioManager {
 
     public void ToggleSoundEffects()
     {
-        Services.GameManager.soundEffectsEnabled = !Services.GameManager.soundEffectsEnabled;
-        
-        if (Services.GameManager.soundEffectsEnabled)
+        Services.GameManager.SoundEffectsEnabled = !Services.GameManager.SoundEffectsEnabled;
+        SetSoundEffectsOnOrOff();
+    }
+
+    public void SetSoundEffectsOnOrOff()
+    {
+        if (Services.GameManager.SoundEffectsEnabled)
         {
             Services.Clips = Resources.Load<ClipLibrary>("Audio/PreIncubatorClipLibrary");
         }
@@ -49,9 +59,20 @@ public class AudioManager {
     
     public void ToggleMusic()
     {
-        Services.GameManager.musicEnabled = !Services.GameManager.musicEnabled;
+        Services.GameManager.MusicEnabled = !Services.GameManager.MusicEnabled;
+        SetMusicOnOrOff();
+    }
+
+    public void SetMusicOnOrOff()
+    {
+        if (mainTrack == null)
+        {
+            GameObject obj = new GameObject();
+            obj.name = "Main Track";
+            mainTrack = obj.AddComponent<AudioSource>();
+        }
         
-        if (Services.GameManager.musicEnabled)
+        if (Services.GameManager.MusicEnabled)
         {
             mainTrack.volume = last_volume;
         }
