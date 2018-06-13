@@ -317,4 +317,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     {
         Services.Scenes.Swap<TitleSceneScript>();
     }
+    
+    public void UIClick()
+    {
+        Services.AudioManager.CreateTempAudio(Services.Clips.UIClick, 0.55f);
+    }
 }

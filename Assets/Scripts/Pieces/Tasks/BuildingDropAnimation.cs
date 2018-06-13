@@ -19,7 +19,7 @@ public class BuildingDropAnimation : Task
     private const float shakeSpeed = 40f;
     private const float shakeStartTime = 0.2f;
     private bool shakeStarted;
-
+    private bool buildingDropSound = true;
 
     public BuildingDropAnimation(Polyomino building_)
     {
@@ -30,6 +30,11 @@ public class BuildingDropAnimation : Task
             dustLocations[i] = building.tiles[i].transform.position;
         }
         transforms = new List<Transform>();
+    }
+
+    protected void SetAudioToBlueprint()
+    {
+        buildingDropSound = false;
     }
 
     protected override void Init()
@@ -87,7 +92,10 @@ public class BuildingDropAnimation : Task
         {
             Services.CameraController.StartShake(shakeDur, shakeSpeed, shakeMag);
             shakeStarted = true;
-            Services.AudioManager.CreateTempAudio(Services.Clips.BlueprintPlaced, 1);
+            if (buildingDropSound)
+                Services.AudioManager.CreateTempAudio(Services.Clips.BuildingFall, 1);
+            else
+                Services.AudioManager.CreateTempAudio(Services.Clips.BlueprintPlaced, 1);
         }
         if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
     }

@@ -33,6 +33,7 @@ public class ScrollRectSnap : MonoBehaviour
     private Vector3 prevTouchPos;
     private Vector3 maxSize = new Vector3(0.66f, 0.66f, 1.0f);
     private Vector3 minSize = new Vector3(0.33f, 0.33f, 1.0f);
+    private int lastClickIndex = 0;
 
     public float t;
 
@@ -98,8 +99,15 @@ public class ScrollRectSnap : MonoBehaviour
             if (minDistance == distance[i])
             {
                 currentIndex = i;
+                
                 if (currentIndex > 5)
                     currentIndex = 5;
+                
+                if (currentIndex != lastClickIndex)
+                {
+                    Services.AudioManager.CreateTempAudio(Services.Clips.UIClick, 1.0f);
+                    lastClickIndex = currentIndex;
+                }
             }
         }
 

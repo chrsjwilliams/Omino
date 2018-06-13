@@ -211,4 +211,9 @@ public class GameSceneScript : Scene<TransitionData>
             TogglePlayerHandLock(false);
         }
     }
+    
+    public void UIClick()
+    {
+        Services.AudioManager.CreateTempAudio(Services.Clips.UIClick, 0.55f);
+    }
 }
