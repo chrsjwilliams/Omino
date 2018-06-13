@@ -377,15 +377,7 @@ public class GameManager : MonoBehaviour
     {
         if (PlayerPrefs.HasKey(SOUNDEFFECTSENABLED))
         {
-            switch (PlayerPrefs.GetInt(SOUNDEFFECTSENABLED))
-            {
-                case (1) :
-                    SoundEffectsEnabled = true;
-                    break;
-                case (0) :
-                    SoundEffectsEnabled = false;
-                    break;
-            }
+            SoundEffectsEnabled = PlayerPrefs.GetInt(SOUNDEFFECTSENABLED) == 1;
         }
         else
         {
@@ -393,16 +385,8 @@ public class GameManager : MonoBehaviour
         }
         
         if (PlayerPrefs.HasKey(MUSICENABLED))
-        {   
-            switch (PlayerPrefs.GetInt(MUSICENABLED))
-            {
-                case (1) :
-                    MusicEnabled = true;
-                    break;
-                case (0) :
-                    MusicEnabled = false;
-                    break;
-            }
+        {
+            MusicEnabled = PlayerPrefs.GetInt(MUSICENABLED) == 1;
         }
         else
         {
