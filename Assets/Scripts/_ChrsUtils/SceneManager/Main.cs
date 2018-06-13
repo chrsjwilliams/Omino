@@ -86,10 +86,13 @@ public class Main : MonoBehaviour
         Services.MapManager = GetComponent<MapManager>();
         Services.MapManager.Init();
 
+        Services.Clips = Resources.Load<ClipLibrary>("Audio/PreIncubatorClipLibrary");
         Services.AudioManager = new AudioManager();
+        Services.AudioManager.Init();
+        
         Services.GeneralTaskManager = new TaskManager();
         Services.Prefabs = Resources.Load<PrefabDB>("Prefabs/PrefabDB");
-        Services.Clips = Resources.Load<ClipLibrary>("Audio/PreIncubatorClipLibrary");
+        
         Services.InputManager = new InputManager();
         Services.Scenes = new GameSceneManager<TransitionData>(gameObject, Services.Prefabs.Scenes);
         Services.CameraController = Camera.main.GetComponent<CameraController>();

@@ -565,7 +565,7 @@ public class UIManager : MonoBehaviour {
 
             _SFXButtonAppearanceToggle();
 
-            if (!Services.GameManager.musicEnabled)
+            if (!Services.GameManager.MusicEnabled)
             {
                 GameObject.Find("ToggleMusic").GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
             }
@@ -593,7 +593,7 @@ public class UIManager : MonoBehaviour {
     {
         GameObject button = GameObject.Find("ToggleSound");
 
-        if (Services.GameManager.soundEffectsEnabled)
+        if (Services.GameManager.SoundEffectsEnabled)
         {
             button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
             button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Sound FX";
@@ -610,7 +610,7 @@ public class UIManager : MonoBehaviour {
     {
         GameObject button = GameObject.Find("ToggleMusic");
 
-        if (Services.GameManager.musicEnabled)
+        if (Services.GameManager.MusicEnabled)
         {
             button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
             button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Music";
