@@ -18,8 +18,12 @@ public class SlideInTitleScreenButtons : Task
     private GameObject buttonParent;
     private const float buttonParentOffset = 150f;
     private Vector3 buttonParentStartPos;
+    private Button buttonNotHit;
+    private Vector3 buttonNotHitStart;
+    private Vector3 buttonNotHitTarget;
 
-    public SlideInTitleScreenButtons(Button[] buttons_, Vector3 startPos, GameObject title_)
+    public SlideInTitleScreenButtons(Button[] buttons_, Vector3 startPos, GameObject title_, 
+        Button optionsButton_)
     {
         buttons = new GameObject[buttons_.Length];
         for (int i = 0; i < buttons_.Length; i++)
@@ -28,7 +32,8 @@ public class SlideInTitleScreenButtons : Task
         }
         startPosition = startPos;
         title = title_;
-        buttonParent = buttons[0].transform.parent.gameObject;
+        buttonParent = buttons[0].transform.parent.parent.gameObject;
+        buttonNotHit = optionsButton_;
     }
 
     protected override void Init()
@@ -40,12 +45,15 @@ public class SlideInTitleScreenButtons : Task
         for (int i = 0; i < buttons.Length; i++)
         {
             GameObject button = buttons[i];
-            buttonsOn[i] = false;
             targetPositions[i] = button.transform.localPosition;
+            buttonsOn[i] = false;
             button.transform.localPosition = startPosition;
+
         }
         titleStartPos = title.transform.localPosition;
         buttonParentStartPos = buttonParent.transform.localPosition;
+        buttonNotHitStart = buttonNotHit.transform.localPosition;
+        buttonNotHitTarget = startPosition;
     }
 
     internal override void Update()
@@ -57,6 +65,7 @@ public class SlideInTitleScreenButtons : Task
             if (timeElapsed >= i * staggerTime &&
                 timeElapsed <= duration + (i * staggerTime))
             {
+
                 if (!buttonsOn[i])
                 {
                     buttons[i].SetActive(true);
@@ -67,20 +76,30 @@ public class SlideInTitleScreenButtons : Task
                     targetPositions[i],
                     EasingEquations.Easing.QuadEaseOut(
                         (timeElapsed - (i * staggerTime)) / duration));
+
             }
         }
+        float progress = EasingEquations.Easing.QuadEaseOut(
+                Mathf.Min(1, timeElapsed / duration));
 
         title.transform.localPosition = Vector3.Lerp(
-            titleStartPos, 
+            titleStartPos,
             titleStartPos + (Vector3.up * titleOffset),
-            EasingEquations.Easing.QuadEaseOut(
-                Mathf.Min(1, timeElapsed / duration)));
+            progress);
         buttonParent.transform.localPosition = Vector3.Lerp(
             buttonParentStartPos, 
             buttonParentStartPos + (Vector3.up * buttonParentOffset),
-            EasingEquations.Easing.QuadEaseOut(
-                Mathf.Min(1, timeElapsed / duration)));
+            progress);
+        buttonNotHit.transform.localPosition = Vector3.Lerp(
+            buttonNotHitStart,
+            buttonNotHitTarget,
+            progress);
 
         if (timeElapsed >= totalDuration) SetStatus(TaskStatus.Success);
+    }
+
+    protected override void OnSuccess()
+    {
+        buttonNotHit.gameObject.SetActive(false);
     }
 }

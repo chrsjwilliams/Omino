@@ -945,7 +945,17 @@ public class Player : MonoBehaviour
             else if (destProdLevel == minProdLevel) priorityBlueprints.Add(BuildingType.BOMBFACTORY);
             foreach(BlueprintMap blueprintMove in possibleBlueprintMoves)
             {
-                if (priorityBlueprints.Contains(blueprintMove.blueprint.buildingType))
+                bool containsRecentlyPlayedPiece = false;
+                foreach (Tile tile in pieceJustPlaced.tiles)
+                {
+                    if (blueprintMove.allCoords.Contains(tile.coord))
+                    {
+                        containsRecentlyPlayedPiece = true;
+                        break;
+                    }
+                }
+                if (containsRecentlyPlayedPiece &&
+                        priorityBlueprints.Contains(blueprintMove.blueprint.buildingType))
                 {
                     moveToHighlight = blueprintMove;
                     break;

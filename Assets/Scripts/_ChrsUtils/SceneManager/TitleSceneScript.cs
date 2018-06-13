@@ -5,9 +5,15 @@ public class TitleSceneScript : Scene<TransitionData>
 {
     public KeyCode startGame = KeyCode.Space;
     [SerializeField]
-    private Button[] buttons;
+    private Button[] modeButtons;
+    [SerializeField]
+    private Button[] optionButtons;
     [SerializeField]
     private Button playButton;
+    [SerializeField]
+    private Button optionsButton;
+    [SerializeField]
+    private Button backButton;
     [SerializeField]
     private GameObject title;
 
@@ -19,13 +25,15 @@ public class TitleSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
-        Services.GameEventManager.Register<TouchDown>(OnTouchDown);
-        Services.GameEventManager.Register<ButtonPressed>(OnButtonPressed);
-        foreach(Button button in buttons)
+        foreach(Button button in modeButtons)
         {
             button.gameObject.SetActive(false);
         }
-
+        foreach(Button button in optionButtons)
+        {
+            button.gameObject.SetActive(false);
+        }
+        backButton.gameObject.SetActive(false);
         if (Services.NetData != null)
         {
             if (Services.NetData.GetGameOverMessage() != "")
@@ -35,28 +43,10 @@ public class TitleSceneScript : Scene<TransitionData>
         }
     }
 
-    internal override void OnExit()
+    public void StartGame(GameMode mode)
     {
-        Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
-        Services.GameEventManager.Unregister<ButtonPressed>(OnButtonPressed);
-    }
-
-    private void OnTouchDown(TouchDown e)
-    {
-        //StartGame();
-    }
-
-    private void OnButtonPressed(ButtonPressed e)
-    {
-        if((e.button == "Start" || e.button == "A"))
-        {
-            StartGame();
-        }
-    }
-
-    private void StartGame()
-    {
-        Task start = new SlideOutTitleScreenButtons(buttons);
+        Services.GameManager.mode = mode;
+        Task start = new SlideOutTitleScreenButtons(modeButtons);
         start.Then(new ActionTask(ChangeScene));
 
         _tm.Do(start);
@@ -67,33 +57,24 @@ public class TitleSceneScript : Scene<TransitionData>
         Services.Scenes.PushScene<NetworkJoinSceneScript>();
     }
 
-    public void Play()
-    {
-        StartGame();
-    }
-
     public void PlayPlayerVsAI()
     {
-        Services.GameManager.mode = GameMode.PlayerVsAI;
-        StartGame();
+        StartGame(GameMode.PlayerVsAI);
     }
 
     public void Play2Players()
     {
-        Services.GameManager.mode = GameMode.TwoPlayers;
-        StartGame();
+        StartGame(GameMode.TwoPlayers);
     }
 
     public void PlayCampaignMode()
     {
-        Services.GameManager.mode = GameMode.Campaign;
-        StartGame();
+        StartGame(GameMode.Campaign);
     }
 
     public void DemoMode()
     {
-        Services.GameManager.mode = GameMode.Demo;
-        StartGame();
+        StartGame(GameMode.Demo);
     }
 
     private void ChangeScene()
@@ -104,15 +85,25 @@ public class TitleSceneScript : Scene<TransitionData>
     private void Update()
     {
         _tm.Update();
-        //if (Input.GetMouseButtonDown(0)) StartGame();
         if (Input.GetKey(KeyCode.N))  StartNetworkedMode();
     }
 
     public void OnPlayHit()
     {
         playButton.gameObject.SetActive(false);
-        _tm.Do(
-            new SlideInTitleScreenButtons(buttons, playButton.transform.localPosition, title));
+        optionsButton.enabled = false;
+        _tm.Do(new SlideInTitleScreenButtons(modeButtons, playButton.transform.localPosition, 
+            title, optionsButton));
+        backButton.gameObject.SetActive(true);
+    }
+
+    public void OnOptionsHit()
+    {
+        optionsButton.gameObject.SetActive(false);
+        playButton.enabled = false;
+        _tm.Do(new SlideInTitleScreenButtons(optionButtons, optionsButton.transform.localPosition,
+            title, playButton));
+        backButton.gameObject.SetActive(true);
     }
 
     public void UIButtonPressedSound()
@@ -123,5 +114,10 @@ public class TitleSceneScript : Scene<TransitionData>
     public void UIClick()
     {
         Services.AudioManager.CreateTempAudio(Services.Clips.UIClick, 0.55f);
+    }
+
+    public void Back()
+    {
+        Services.Scenes.Swap<TitleSceneScript>();
     }
 }
