@@ -609,7 +609,7 @@ public class Player : MonoBehaviour
         }
         bool hadSplashDamage = splashDamage;
         Services.MapManager.DetermineConnectedness(this);
-        if (!(piece is Blueprint) && !(this is AIPlayer))
+        if (!(piece is Blueprint) && !(this is AIPlayer) && Services.GameManager.BlueprintAssistEnabled)
         {
             BlueprintAssistCheck(piece);
         }

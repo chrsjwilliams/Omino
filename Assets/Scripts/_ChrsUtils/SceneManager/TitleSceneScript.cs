@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class TitleSceneScript : Scene<TransitionData>
 {
@@ -14,6 +15,12 @@ public class TitleSceneScript : Scene<TransitionData>
     private Button optionsButton;
     [SerializeField]
     private Button backButton;
+    [SerializeField]
+    private Button musicButton;
+    [SerializeField]
+    private Button soundFXButton;
+    [SerializeField]
+    private Button blueprintAssistButton;
     [SerializeField]
     private GameObject title;
 
@@ -41,6 +48,12 @@ public class TitleSceneScript : Scene<TransitionData>
                 Services.Scenes.PushScene<NetworkGameOverMessageScreen>();
             }
         }
+
+        SetOptionButtonStatus(musicButton, Services.GameManager.musicEnabled);
+        SetOptionButtonStatus(soundFXButton, Services.GameManager.soundEffectsEnabled);
+        SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
+        Debug.Log("blueprint assist status " + Services.GameManager.BlueprintAssistEnabled);
+        Debug.Log("player prefs says " + PlayerPrefs.GetInt(Services.GameManager.blueprintAssistKey));
     }
 
     public void StartGame(GameMode mode)
@@ -119,5 +132,51 @@ public class TitleSceneScript : Scene<TransitionData>
     public void Back()
     {
         Services.Scenes.Swap<TitleSceneScript>();
+    }
+
+    private void SetOptionButtonStatus(Button button, bool status)
+    {
+        button.GetComponent<Image>().color = status ?
+            Services.GameManager.Player2ColorScheme[0] :
+            Services.GameManager.Player2ColorScheme[1];
+        TextMeshProUGUI textMesh = button.GetComponentInChildren<TextMeshProUGUI>();
+        string textContent = textMesh.text;
+        string[] textSplit = textContent.Split('<', '>');
+        if (textSplit.Length > 1)
+        {
+            for (int i = 0; i < textSplit.Length; i++)
+            {
+                if (textSplit[i] == "s")
+                {
+                    textContent = textSplit[i + 1];
+                    break;
+                }
+            }
+        }
+        if (!status)
+        {
+            textContent = "<s>" + textContent + "</s>";
+        }
+        
+        textMesh.text = textContent;
+
+    }
+
+    public void ToggleMusic()
+    {
+        Services.AudioManager.ToggleMusic();
+        SetOptionButtonStatus(musicButton, Services.GameManager.musicEnabled);
+    }
+
+    public void ToggleSoundFX()
+    {
+        Services.AudioManager.ToggleSoundEffects();
+        SetOptionButtonStatus(soundFXButton, Services.GameManager.soundEffectsEnabled);
+    }
+
+    public void ToggleBlueprintAssist()
+    {
+        Services.GameManager.ToggleBlueprintAssist();
+        SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
     }
 }

@@ -15,6 +15,19 @@ public class GameManager : MonoBehaviour
     public bool blueprintsEnabled = true;
     public bool soundEffectsEnabled = true;
     public bool musicEnabled = true;
+    public bool BlueprintAssistEnabled
+    {
+        get { return blueprintAssistEnabled; }
+        set
+        {
+            blueprintAssistEnabled = value;
+            PlayerPrefs.SetInt(blueprintAssistKey, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+    private bool blueprintAssistEnabled = true;
+
+    public readonly string blueprintAssistKey = "BlueprintAssistEnabled";
 
     [SerializeField] private Camera _mainCamera;
     public Camera MainCamera
@@ -81,6 +94,16 @@ public class GameManager : MonoBehaviour
                 _player2ColorScheme,
                 _player1ColorScheme
             };
+        }
+
+        if (PlayerPrefs.HasKey(blueprintAssistKey))
+        {
+            BlueprintAssistEnabled = PlayerPrefs.GetInt(blueprintAssistKey) == 1;
+            Debug.Log("has key");
+        }
+        else
+        {
+            BlueprintAssistEnabled = true;
         }
     }
 
@@ -363,5 +386,10 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ToggleBlueprintAssist()
+    {
+        BlueprintAssistEnabled = !BlueprintAssistEnabled;
     }
 }

@@ -753,7 +753,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114132033372597222}
-        m_MethodName: Play2Players
+        m_MethodName: ToggleMusic
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -800,6 +800,9 @@ MonoBehaviour:
   playButton: {fileID: 114008274788771538}
   optionsButton: {fileID: 114635620731635060}
   backButton: {fileID: 114012557898288516}
+  musicButton: {fileID: 114111217620888846}
+  soundFXButton: {fileID: 114469512395281096}
+  blueprintAssistButton: {fileID: 114692960401728602}
   title: {fileID: 1794334818706732}
 --- !u!114 &114154587327525720
 MonoBehaviour:
@@ -1340,7 +1343,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114132033372597222}
-        m_MethodName: Play2Players
+        m_MethodName: ToggleSoundFX
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1723,7 +1726,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114132033372597222}
-        m_MethodName: Play2Players
+        m_MethodName: ToggleBlueprintAssist
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
