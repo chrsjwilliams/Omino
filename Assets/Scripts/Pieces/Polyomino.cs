@@ -42,7 +42,6 @@ public class Polyomino : IVertex
     public const float deathAnimScaleUp = 1.5f;
     private const float handPosApproachFactor = 0.25f;
     public const float burnPieceDuration = 0.5f;
-    public static Vector3 burnPieceOffset = new Vector3(2, 0, 0);
     private const float alphaWhileUnaffordable = 0.3f;
     private const float alphaWhileAffordable = 0.8f;
     private List<Structure> highlightedStructures;

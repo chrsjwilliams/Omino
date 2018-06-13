@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class SlideOutTitleScreenButtons : Task
 {
-    private const float animDuration = 0.3f;
+    private const float animDuration = 0.2f;
     private const float staggerTime = 0.05f;
     private float timeElapsed;
     private Button[] buttons;

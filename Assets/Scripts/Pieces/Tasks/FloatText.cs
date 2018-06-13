@@ -21,14 +21,14 @@ public class FloatText : Task
         startPos = startPos_;
         player = player_;
         duration = duration_;
-        Vector3 direction = player.playerNum == 1 ? Vector3.right : Vector3.left;
+        Vector3 direction = player.playerNum == 1 ? Vector3.up : Vector3.down;
         targetPos = startPos + (dist * direction);
     }
 
     protected override void Init()
     {
         Quaternion rot = 
-            player.playerNum == 1 ? Quaternion.Euler(0, 0, -90) : Quaternion.Euler(0, 0, 90);
+            player.playerNum == 1 ? Quaternion.Euler(0, 0, 0) : Quaternion.Euler(0, 0, 180);
         textMesh = GameObject.Instantiate(Services.Prefabs.FloatingText, startPos,
             rot, Services.GameScene.transform).GetComponent<TextMeshPro>();
         textMesh.GetComponent<MeshRenderer>().sortingLayerName = "Effects";
