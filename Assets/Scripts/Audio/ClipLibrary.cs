@@ -44,9 +44,18 @@ public class ClipLibrary : ScriptableObject {
     [SerializeField] private AudioClip structureClaimed;
     public AudioClip StructureClaimed { get { return structureClaimed; } }
 
+    [SerializeField] private AudioClip uiButtonPressed;
+    public AudioClip UIButtonPressed { get { return uiButtonPressed; } }
+    
     [SerializeField] private AudioClip uiClick;
     public AudioClip UIClick { get { return uiClick; } }
-
+    
+    [SerializeField] private AudioClip uiReadyOn;
+    public AudioClip UIReadyOn { get { return uiReadyOn; } }
+        
+    [SerializeField] private AudioClip uiReadyOff;
+    public AudioClip UIReadyOff { get { return uiReadyOff; } }
+    
     [SerializeField] private AudioClip victory;
     public AudioClip Victory { get { return victory; } }
     

@@ -216,4 +216,9 @@ public class GameSceneScript : Scene<TransitionData>
     {
         Services.AudioManager.CreateTempAudio(Services.Clips.UIClick, 0.55f);
     }
+    
+    public void UIButtonPressedSound()
+    {
+        Services.AudioManager.CreateTempAudio(Services.Clips.UIButtonPressed, 0.55f);
+    }
 }

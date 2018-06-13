@@ -511,12 +511,14 @@ public class UIManager : MonoBehaviour {
             readyBanners[playerNum - 1].GetComponentInChildren<TextMeshProUGUI>().text =
                 "READY";
             readyBanners[playerNum - 1].GetComponent<Image>().color = readyColor;
+            Services.AudioManager.CreateTempAudio(Services.Clips.UIReadyOn, 1.0f);
         }
         else
         {
             readyBanners[playerNum - 1].GetComponentInChildren<TextMeshProUGUI>().text =
                 "READY?";
             readyBanners[playerNum - 1].GetComponent<Image>().color = notReadyColors[playerNum-1];
+            Services.AudioManager.CreateTempAudio(Services.Clips.UIReadyOff, 1.0f);
         }
         bool allReady = true;
         for (int i = 0; i < Services.GameManager.Players.Length; i++)
