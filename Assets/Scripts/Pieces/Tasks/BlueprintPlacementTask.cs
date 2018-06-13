@@ -14,6 +14,7 @@ public class BlueprintPlacementTask : BuildingDropAnimation
         building.holder.icon.sortingLayerName = "Overlay";
         Color color = building.holder.spriteBottom.color;
         building.holder.spriteBottom.color = new Color(color.r, color.g, color.b, 1);
+        SetAudioToBlueprint();
     }
 
     protected override void OnSuccess()
