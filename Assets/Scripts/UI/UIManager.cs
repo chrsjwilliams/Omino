@@ -43,6 +43,8 @@ public class UIManager : MonoBehaviour {
     private GameObject pauseButton;
     [SerializeField]
     private GameObject campaignLevelCompleteMenu;
+    [SerializeField]
+    private GameObject optionsMenu;
     public Transform canvas;
     public Sprite blueprintTile;
     public Sprite destructorIcon;
@@ -202,6 +204,7 @@ public class UIManager : MonoBehaviour {
             }
         }
 
+        optionsMenu.SetActive(false);
         pauseMenu.SetActive(false);
         campaignLevelCompleteMenu.SetActive(false);
 
@@ -550,6 +553,60 @@ public class UIManager : MonoBehaviour {
         {
             pauseMenu.SetActive(true);
             Services.GameScene.PauseGame();
+        }
+    }
+
+    public void ToggleOptionsMenu(bool state)
+    {
+        if (state)
+        {
+            optionsMenu.SetActive(true);
+            pauseMenu.SetActive(false);
+
+            if (!Services.GameManager.soundEffectsEnabled)
+            {
+                GameObject.Find("ToggleSound").GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
+            }
+
+            if (!Services.GameManager.musicEnabled)
+            {
+                GameObject.Find("ToggleMusic").GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
+            }
+        }
+        else
+        {
+            optionsMenu.SetActive(false);
+            pauseMenu.SetActive(true);
+        }
+    }
+
+    public void ToggleSoundFX()
+    {
+        Services.GameManager.soundEffectsEnabled = !Services.GameManager.soundEffectsEnabled;
+        Services.AudioManager.ToggleSoundEffects(Services.GameManager.soundEffectsEnabled);
+        
+        if (Services.GameManager.soundEffectsEnabled)
+        {
+            GameObject.Find("ToggleSound").GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
+        }
+        else
+        {
+            GameObject.Find("ToggleSound").GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
+        }
+    }
+
+    public void ToggleMusic()
+    {
+        Services.GameManager.musicEnabled = !Services.GameManager.musicEnabled;
+        Services.AudioManager.ToggleSoundEffects(Services.GameManager.musicEnabled);
+        
+        if (Services.GameManager.musicEnabled)
+        {
+            GameObject.Find("ToggleMusic").GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
+        }
+        else
+        {
+            GameObject.Find("ToggleMusic").GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
         }
     }
 
