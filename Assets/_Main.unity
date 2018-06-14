@@ -265,8 +265,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8d75672a400b478bb3e3d143e10c88a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 0
-  disableUI: 0
 --- !u!114 &1356268954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,12 +277,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PLAYER: Player
+  debug: 0
+  disableUI: 0
   aiLevels: 0a0000000a000000
   mode: 0
   destructorsEnabled: 1
   blueprintsEnabled: 1
-  soundEffectsEnabled: 1
-  musicEnabled: 1
   _mainCamera: {fileID: 0}
   _players: []
   _player1ColorScheme:

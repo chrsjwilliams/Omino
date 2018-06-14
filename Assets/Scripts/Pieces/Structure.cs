@@ -170,7 +170,7 @@ public abstract class Structure : Polyomino
         }
     }
 
-    public override void OnInputUp()
+    public override void OnInputUp(bool forceCancel = false)
     {
         DestroyTooltips();
         touchID = -1;

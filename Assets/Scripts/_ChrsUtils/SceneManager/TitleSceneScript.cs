@@ -52,8 +52,6 @@ public class TitleSceneScript : Scene<TransitionData>
         SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
         SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
         SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
-        Debug.Log("blueprint assist status " + Services.GameManager.BlueprintAssistEnabled);
-        Debug.Log("player prefs says " + PlayerPrefs.GetInt(Services.GameManager.BLUEPRINTASSISTENABLED));
     }
 
     public void StartGame(GameMode mode)

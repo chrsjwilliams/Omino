@@ -335,7 +335,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         //PositionTooltips();
     }
 
-    public override void OnInputUp()
+    public override void OnInputUp(bool forceCancel = false)
     {
         DestroyTooltips();
         if (!placed)
@@ -348,7 +348,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
             //DestroyRotationUI();
             SortOnSelection(false);
-            if (IsPlacementLegal() && !owner.gameOver)
+            if (IsPlacementLegal() && !owner.gameOver && !forceCancel)
             {
                 PlaceAtCurrentLocation();
                 //ListenForInput();

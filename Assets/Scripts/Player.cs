@@ -115,6 +115,7 @@ public class Player : MonoBehaviour
     private List<Tile> bpAssistHighlightedTiles = new List<Tile>();
     private const float bpAssistDuration = 5f;
     private const float bpAssistFlashPeriod = 1f;
+    private const float bpAssistAlphaMax = 0.75f;
     private float bpAssistTimeElapsed;
 
 
@@ -223,9 +224,14 @@ public class Player : MonoBehaviour
                 hand[i].SetAffordableStatus(this);
                 hand[i].ApproachHandPosition(handTargetPositions[i]);
             }
-            if (selectedPiece != null && !Services.GameManager.disableUI)
+            if (selectedPiece != null)
             {
-                selectedPiece.SetLegalityGlowStatus();
+                if (!Services.GameManager.disableUI)
+                {
+                    selectedPiece.SetLegalityGlowStatus();
+                }
+
+                selectedPiece.CheckTouchStatus();
             }
 
             if(bpAssistHighlightedTiles.Count > 0)
@@ -235,13 +241,13 @@ public class Player : MonoBehaviour
                 float periodicTime = bpAssistTimeElapsed % bpAssistFlashPeriod;
                 if (periodicTime < bpAssistFlashPeriod / 2)
                 {
-                    alpha = Mathf.Lerp(0, 1,
+                    alpha = Mathf.Lerp(0, bpAssistAlphaMax,
                         EasingEquations.Easing.QuadEaseOut(
                             periodicTime / (bpAssistFlashPeriod / 2)));
                 }
                 else
                 {
-                    alpha = Mathf.Lerp(1, 0,
+                    alpha = Mathf.Lerp(bpAssistAlphaMax, 0,
                         EasingEquations.Easing.QuadEaseIn(
                             (periodicTime - (bpAssistFlashPeriod / 2)) / (bpAssistFlashPeriod / 2)));
                 }

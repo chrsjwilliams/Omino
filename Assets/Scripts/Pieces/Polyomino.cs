@@ -1164,7 +1164,7 @@ public class Polyomino : IVertex
         }
     }
 
-    public virtual void OnInputUp()
+    public virtual void OnInputUp(bool forceCancel = false)
     {
         if (!placed)
         {
@@ -1210,7 +1210,7 @@ public class Polyomino : IVertex
                 Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
             }
           
-            if (IsPlacementLegal() && affordable && !owner.gameOver)
+            if (IsPlacementLegal() && affordable && !owner.gameOver && !forceCancel)
             {
                 PlaceAtCurrentLocation();
             }
@@ -1257,6 +1257,16 @@ public class Polyomino : IVertex
         }
 
         if(!Services.GameManager.disableUI) SetLegalityGlowStatus();
+    }
+
+    public void CheckTouchStatus()
+    {
+        if (Input.GetMouseButton(0)) return;
+        for (int i = 0; i < Input.touches.Length; i++)
+        {
+            if (Input.touches[i].fingerId == touchID) return;
+        }
+        OnInputUp(true);
     }
 
     protected virtual void CleanUpUI()

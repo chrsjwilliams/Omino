@@ -8,7 +8,6 @@ public class InputManager
 {
     private Touch[] lastFrameTouches;
 
-    //  BUG: Button Presses Register twice for both players
     public void GetInput()
     {
         if (Input.GetButtonDown("Reset"))
