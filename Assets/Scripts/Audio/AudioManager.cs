@@ -49,7 +49,7 @@ public class AudioManager {
     {
         if (Services.GameManager.SoundEffectsEnabled)
         {
-            Services.Clips = Resources.Load<ClipLibrary>("Audio/PreIncubatorClipLibrary");
+            Services.Clips = Resources.Load<ClipLibrary>("Audio/MaterialClipLibrary");
         }
         else
         {
