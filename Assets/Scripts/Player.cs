@@ -231,7 +231,10 @@ public class Player : MonoBehaviour
                     selectedPiece.SetLegalityGlowStatus();
                 }
 
-                selectedPiece.CheckTouchStatus();
+                if(!(this is AIPlayer))
+                {
+                    selectedPiece.CheckTouchStatus();
+                }
             }
 
             if(bpAssistHighlightedTiles.Count > 0)

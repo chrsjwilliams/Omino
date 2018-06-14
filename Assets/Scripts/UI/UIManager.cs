@@ -41,6 +41,8 @@ public class UIManager : MonoBehaviour {
     private GameObject pauseMenu;
     [SerializeField]
     private GameObject pauseButton;
+    private float pauseTimer;
+    private const float pauseTimeWindow = 2f;
     [SerializeField]
     private GameObject campaignLevelCompleteMenu;
     [SerializeField]
@@ -238,6 +240,10 @@ public class UIManager : MonoBehaviour {
         HighlightResourcesMissing();
         if (Input.GetKeyDown(KeyCode.P)) Debug.Break();
         //if (Input.GetKeyDown(KeyCode.M)) ShowCampaignLevelCompleteMenu(Services.GameManager.Players[0]);
+        if(pauseTimer > 0)
+        {
+            pauseTimer -= Time.deltaTime;
+        }
 	}
 
 
@@ -549,11 +555,17 @@ public class UIManager : MonoBehaviour {
             pauseMenu.SetActive(false);
             Services.GameScene.UnpauseGame();
         }
-        else
+        else if (pauseTimer > 0)
         {
             pauseMenu.SetActive(true);
             Services.GameScene.PauseGame();
+            pauseTimer = 0;
         }
+        else
+        {
+            pauseTimer = pauseTimeWindow;
+        }
+
     }
 
     public void ToggleOptionsMenu(bool state)
