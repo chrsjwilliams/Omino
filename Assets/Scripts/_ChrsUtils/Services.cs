@@ -1,5 +1,4 @@
-﻿using UnityEngine.SocialPlatforms.GameCenter;
-
+﻿
 public class Services
 {
     public static Main Main { get; set; }
@@ -21,7 +20,4 @@ public class Services
 
     public static AudioManager AudioManager { get; set; }
     public static ClipLibrary Clips { get; set; }
-    
-    public static GameCenterPlatform GameCenter { get; set; }
-    public static NetworkData NetData { get; set; }
 }

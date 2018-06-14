@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
@@ -117,6 +118,7 @@ public class Player : MonoBehaviour
     private const float bpAssistFlashPeriod = 1f;
     private const float bpAssistAlphaMax = 0.75f;
     private float bpAssistTimeElapsed;
+    private const int bpAssistChecksPerFrame = 10;
 
 
     public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_)
@@ -620,7 +622,7 @@ public class Player : MonoBehaviour
         Services.MapManager.DetermineConnectedness(this);
         if (!(piece is Blueprint) && !(this is AIPlayer) && Services.GameManager.BlueprintAssistEnabled)
         {
-            BlueprintAssistCheck(piece);
+            StartCoroutine(BlueprintAssistCheck(piece));
         }
         if (!(piece is Destructor && hadSplashDamage) 
             && Services.MapManager.CheckForWin(piece))
@@ -894,7 +896,7 @@ public class Player : MonoBehaviour
             ((resourceProdLevel - 1) * Mine.resourceRateBonus);
     }
 
-    private void BlueprintAssistCheck(Polyomino pieceJustPlaced)
+    private IEnumerator BlueprintAssistCheck(Polyomino pieceJustPlaced)
     {
         HashSet<Coord> possibleBlueprintCoords = new HashSet<Coord>();
         foreach(Tile tile in pieceJustPlaced.tiles)
@@ -920,6 +922,7 @@ public class Player : MonoBehaviour
             }
         }
         List<BlueprintMap> possibleBlueprintMoves = new List<BlueprintMap>();
+        int blueprintMovesChecked = 0;
         foreach (Blueprint blueprint in blueprints)
         {
             Coord roundedPos = new Coord((int)blueprint.holder.transform.position.x,
@@ -934,6 +937,11 @@ public class Player : MonoBehaviour
                     blueprint.Rotate(false, true);
                     blueprint.SetTileCoords(coord);
                     blueprint.TurnOffGlow();
+                    blueprintMovesChecked += 1;
+                    if (blueprintMovesChecked % bpAssistChecksPerFrame == 0)
+                    {
+                        yield return null;
+                    }
                     if (rotations < numRotations)
                     {
                         if (blueprint.IsPlacementLegal())
@@ -971,8 +979,6 @@ public class Player : MonoBehaviour
                 }
             }
             if (moveToHighlight == null) moveToHighlight = possibleBlueprintMoves[0];
-            //Debug.Log("highlighting possible blueprint of type " + moveToHighlight.blueprint.buildingType +
-            //    " at coord " + moveToHighlight.targetCoord);
             foreach(Coord coord in moveToHighlight.allCoords)
             {
                 bpAssistHighlightedTiles.Add(

@@ -41,13 +41,6 @@ public class TitleSceneScript : Scene<TransitionData>
             button.gameObject.SetActive(false);
         }
         backButton.gameObject.SetActive(false);
-        if (Services.NetData != null)
-        {
-            if (Services.NetData.GetGameOverMessage() != "")
-            {
-                Services.Scenes.PushScene<NetworkGameOverMessageScreen>();
-            }
-        }
 
         SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
         SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
@@ -61,11 +54,6 @@ public class TitleSceneScript : Scene<TransitionData>
         start.Then(new ActionTask(ChangeScene));
 
         _tm.Do(start);
-    }
-
-    private void StartNetworkedMode()
-    {
-        Services.Scenes.PushScene<NetworkJoinSceneScript>();
     }
 
     public void PlayPlayerVsAI()
@@ -96,7 +84,6 @@ public class TitleSceneScript : Scene<TransitionData>
     private void Update()
     {
         _tm.Update();
-        if (Input.GetKey(KeyCode.N))  StartNetworkedMode();
     }
 
     public void OnPlayHit()

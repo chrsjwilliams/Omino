@@ -111,15 +111,6 @@ public class GameManager : MonoBehaviour
             _player2ColorScheme
         };
 
-        if ((PhotonNetwork.connected) && (!PhotonNetwork.player.isMasterClient))
-        {
-            colorSchemes = new Color[][]
-            {
-                _player2ColorScheme,
-                _player1ColorScheme
-            };
-        }
-
         CheckPlayerPrefs();
 
         if (!debug)
@@ -138,7 +129,7 @@ public class GameManager : MonoBehaviour
         Services.MapManager = GetComponent<MapManager>();
         Services.MapManager.Init();
 
-        Services.Clips = Resources.Load<ClipLibrary>("Audio/PreIncubatorClipLibrary");
+        Services.Clips = Resources.Load<ClipLibrary>("Audio/MaterialClipLibrary");
         Services.AudioManager = new AudioManager();
         Services.AudioManager.Init();
 
