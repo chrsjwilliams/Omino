@@ -7,6 +7,7 @@ public class ScrollRectSnap : MonoBehaviour
 {
     public enum DIRECTION { LEFT = -1, IDLE = 0, RIGHT = 1}
 
+    [SerializeField]
     protected int touchID;
     public bool dragging;
     public bool firstTouch;
@@ -62,6 +63,7 @@ public class ScrollRectSnap : MonoBehaviour
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
 
+        touchID = -1;
         landscapeMode = true;
 
         swipeSpeed = 30.0f;
