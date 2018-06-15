@@ -380,9 +380,8 @@ public class ScrollRectSnap : MonoBehaviour
         float anchorPos = selectedIndex * imageDistance;
 
         float min = anchorPos < directionLimit ? anchorPos : directionLimit;
-        float max = min == anchorPos ? directionLimit : anchorPos;
 
-        t = landscapeMode? (Mathf.Abs(panel.anchoredPosition.x) - min) / (max - min) : (Mathf.Abs(panel.anchoredPosition.x) - min) / (max - min);
+        t = (Mathf.Abs(panel.anchoredPosition.x) - min) / imageDistance;
 
     }
 }
