@@ -9,6 +9,7 @@ public class AIPlayer : Player
 {
     public static AILEVEL[] AiLevels =
         new AILEVEL[3] { AILEVEL.EASY, AILEVEL.MEDIUM, AILEVEL.HARD };
+    public bool canAffordAPiece { get; protected set; }
     public bool drawingPiece { get; protected set; }
     public bool playingPiece { get; protected set; }
     public bool isThinking { get; protected set; }
@@ -124,7 +125,7 @@ public class AIPlayer : Player
     protected override void Update ()
     {
         base.Update();
-        bool canAffordAPiece = false;
+        canAffordAPiece = false;
         for (int i = 0; i < hand.Count; i++)
         {
             if(hand[i].cost <= resources)
@@ -309,10 +310,101 @@ public class AIPlayer : Player
         
     }
 
+    struct CoordDist
+    {
+        public Coord coord;
+        public float distance;
+        public CoordDist(Coord _coord, float dist)
+        { coord = _coord; distance = dist; }
+    }
+
+    List<Coord> SortPlayableCoords(List<Coord> coords, bool inDanger)
+    {
+        // For each Coord in coords
+        //      measure it distance from primary targets
+        //          if not in danger
+        //              place coords closest to the primary targets at the front of the list
+        //          otherwise
+        //              place coords close to primary target at the back of the list
+        //
+        //  return our sorted list
+
+
+        List<CoordDist> coordDistList = new List<CoordDist>();
+
+        foreach (Coord coord in coords)
+        {
+            foreach(Coord target in primaryTargets)
+            {
+                float coordDist = coord.Distance(target);
+                CoordDist newCoordDistCoord = new CoordDist(coord, coordDist);
+                coordDistList.Add(newCoordDistCoord);
+            }
+        }
+
+        quickSort(coordDistList, 0, coordDistList.Count - 1);
+        List<Coord> sortedCoords = new List<Coord>();
+        for (int i = 0; i < coordDistList.Count; i++)
+        {
+            sortedCoords.Add(coordDistList[i].coord);
+        }
+
+        //if (inDanger) sortedCoords.Reverse();
+
+        return sortedCoords;
+    }
+
+    static int partition(List<CoordDist> coordDistList, int low,
+                                  int high)
+    {
+        CoordDist pivot = coordDistList[high];
+
+        // index of smaller element
+        int i = (low - 1);
+        for (int j = low; j < high; j++)
+        {
+            // If current element is smaller 
+            // than or equal to pivot
+            if (coordDistList[j].distance <= pivot.distance)
+            {
+                i++;
+
+                // swap arr[i] and arr[j]
+                CoordDist temp = coordDistList[i];
+                coordDistList[i] = coordDistList[j];
+                coordDistList[j] = temp;
+            }
+        }
+
+        // swap arr[i+1] and arr[high] (or pivot)
+        CoordDist temp1 = coordDistList[i + 1];
+        coordDistList[i + 1] = coordDistList[high];
+        coordDistList[high] = temp1;
+
+        return i + 1;
+    }
+
+    static void quickSort(List<CoordDist> coordDistList, int low, int high)
+    {
+        if (low < high)
+        {
+
+            /* pi is partitioning index, arr[pi] is 
+            now at right place */
+            int pi = partition(coordDistList, low, high);
+
+            // Recursively sort elements before
+            // partition and after partition
+            quickSort(coordDistList, low, pi - 1);
+            quickSort(coordDistList, pi + 1, high);
+        }
+    }
+
     protected IEnumerator GeneratePossibleMoves()
     {
         //Debug.Log("starting to think at time " + Time.time);
         isThinking = true;
+        float startTime = Time.time;
         List<Polyomino> currentHand = new List<Polyomino>(hand);
         List<Polyomino> currentBoardPieces = new List<Polyomino> (boardPieces);
 
@@ -335,7 +427,6 @@ public class AIPlayer : Player
             {
                 yield return null;
             }
-            //  FIX: Edges are being added when opponent places piece while applying algorithm
             //Graph tempGraph = new Graph(opponentGraph);
             Graph tempGraph = MakeOpponentPieceGraph(opposingBoardPieces);
             int cutSize = int.MinValue;
@@ -485,6 +576,10 @@ public class AIPlayer : Player
             }
         }
         playableCoords = playableCoords.Distinct().ToList();
+        //  Sort playable coord based on distance to winning tiles
+
+        List<Coord> sortedPlayableCoords = SortPlayableCoords(playableCoords, inDanger);
+
         possibleBlueprintCoords = new HashSet<Coord>(
             possibleBlueprintCoords.Distinct());
         touchableCoords = touchableCoords.Distinct().ToList();
@@ -583,13 +678,13 @@ public class AIPlayer : Player
 
                 int numRotations = Polyomino.pieceRotationDictionary[piece.tiles.Count][piece.index];
 
-                for (int i = 0; i < playableCoords.Count; i++)
+                for (int i = 0; i < sortedPlayableCoords.Count; i++)
                 {
                     // each piece should know how many times it can be rotated
                     for (int rotations = 0; rotations < 4; rotations++)
                     {
                         piece.Rotate(false, true);
-                        piece.SetTileCoords(playableCoords[i]);
+                        piece.SetTileCoords(sortedPlayableCoords[i]);
                         piece.TurnOffGlow();
                         if (rotations < numRotations)
                         {
@@ -623,7 +718,7 @@ public class AIPlayer : Player
                                 //    }
                                 //}
 
-                                Move newMove = new Move(piece, playableCoords[i], (rotations + 1) % 4, 
+                                Move newMove = new Move(piece, sortedPlayableCoords[i], (rotations + 1) % 4, 
                                                         possibleBlueprintMoves, possibleCutMoves,
                                                         winWeight, structWeight, destructionWeight, 
                                                         mineWeight, factoryWeight, bombFactoryWeight,
@@ -648,20 +743,29 @@ public class AIPlayer : Player
                                     {
                                         movesToConsider.RemoveAt(0);
                                     }
+                                    
                                 }
                             }
                         }
                     }
+                    if (resources >= 1 && movesToConsider.Count >= bestMovesCount)
+                    {
+                        //goto SelectMove;
+                    }
                 }
                 //  Then choose a new play position
+                
             }
             //  Choose a new piece
         }
         #endregion
 
+        
         //Debug.Log("BlueprintMaps Tried: " + blueprintMapsTried);
         // Choose a play by rolling
-        if (movesToConsider.Count > 0) {
+        SelectMove:
+        if (movesToConsider.Count > 0)
+        {
             //Debug.Log("player " + playerNum + " considering moves of score:");
             //foreach(Move move in movesToConsider)
             //{
@@ -686,7 +790,7 @@ public class AIPlayer : Player
                 nextPlay = movesToConsider[movesToConsider.Count - 1];
             }
             else
-            {   
+            {
                 for (int i = 0; i < (int)aiLevel * rollsPerLevel; i++)
                 {
                     int randomIndex = UnityEngine.Random.Range(0, movesToConsider.Count);
@@ -699,11 +803,21 @@ public class AIPlayer : Player
             }
             //Debug.Log("picking move of score " + nextPlay.score);
         }
+
         if (nextPlay != null && nextPlay.score > 0)
         {
             MakePlay(nextPlay);
         }
+        else if (nextPlay == null)
+        {
+            //nextPlay = SelectMove(movesToConsider);
+            //MakePlay(nextPlay);
+        }
+
+
         isThinking = false;
+        //string playerColor = playerNum == 1 ? "Red" : "Blue";
+        //Debug.Log("Player " + playerColor +" Thinking Time: " + (Time.time - startTime));
     }
 
     private List<Move> InsertMoveIntoSortedList(Move move, List<Move> sortedMoveList)

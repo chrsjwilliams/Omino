@@ -408,7 +408,7 @@ public class Move
             playTask.Then(new ActionTask(blueprintMove.ExecuteMove));
         }
         string playerColor = piece.owner.playerNum == 1 ? "Red" : "Blue";
-        Debug.Log("Player " + playerColor+ " Score: " + score);
+        //Debug.Log("Player " + playerColor+ " Score: " + score);
 
         Services.GameScene.tm.Do(playTask);
         //Debug.Log("player " + piece.owner.playerNum + " making move of score: " + score + " at time " + Time.time);

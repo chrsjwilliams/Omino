@@ -42,6 +42,7 @@ public class TitleSceneScript : Scene<TransitionData>
         }
         backButton.gameObject.SetActive(false);
 
+        SetOptionButtonStatus(optionsButton, true);
         SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
         SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
         SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
