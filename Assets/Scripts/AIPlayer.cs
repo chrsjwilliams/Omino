@@ -9,6 +9,9 @@ public class AIPlayer : Player
 {
     public static AILEVEL[] AiLevels =
         new AILEVEL[3] { AILEVEL.EASY, AILEVEL.MEDIUM, AILEVEL.HARD };
+
+    private bool aiThinkingShortcut = false;
+
     public bool canAffordAPiece { get; protected set; }
     public bool drawingPiece { get; protected set; }
     public bool playingPiece { get; protected set; }
@@ -38,6 +41,7 @@ public class AIPlayer : Player
     protected float destructorForBlueprintWeight;
     protected float dangerWeight;
     private IEnumerator thinkingCoroutine;
+
 
     public override void Init(int playerNum_, AIStrategy strategy, AILEVEL level_)
     {
@@ -320,16 +324,6 @@ public class AIPlayer : Player
 
     List<Coord> SortPlayableCoords(List<Coord> coords, bool inDanger)
     {
-        // For each Coord in coords
-        //      measure it distance from primary targets
-        //          if not in danger
-        //              place coords closest to the primary targets at the front of the list
-        //          otherwise
-        //              place coords close to primary target at the back of the list
-        //
-        //  return our sorted list
-
-
         List<CoordDist> coordDistList = new List<CoordDist>();
 
         foreach (Coord coord in coords)
@@ -349,56 +343,12 @@ public class AIPlayer : Player
             sortedCoords.Add(coordDistList[i].coord);
         }
 
-        //if (inDanger) sortedCoords.Reverse();
+        if (inDanger) sortedCoords.Reverse();
 
         return sortedCoords;
     }
 
-    static int partition(List<CoordDist> coordDistList, int low,
-                                  int high)
-    {
-        CoordDist pivot = coordDistList[high];
-
-        // index of smaller element
-        int i = (low - 1);
-        for (int j = low; j < high; j++)
-        {
-            // If current element is smaller 
-            // than or equal to pivot
-            if (coordDistList[j].distance <= pivot.distance)
-            {
-                i++;
-
-                // swap arr[i] and arr[j]
-                CoordDist temp = coordDistList[i];
-                coordDistList[i] = coordDistList[j];
-                coordDistList[j] = temp;
-            }
-        }
-
-        // swap arr[i+1] and arr[high] (or pivot)
-        CoordDist temp1 = coordDistList[i + 1];
-        coordDistList[i + 1] = coordDistList[high];
-        coordDistList[high] = temp1;
-
-        return i + 1;
-    }
-
-    static void quickSort(List<CoordDist> coordDistList, int low, int high)
-    {
-        if (low < high)
-        {
-
-            /* pi is partitioning index, arr[pi] is 
-            now at right place */
-            int pi = partition(coordDistList, low, high);
-
-            // Recursively sort elements before
-            // partition and after partition
-            quickSort(coordDistList, low, pi - 1);
-            quickSort(coordDistList, pi + 1, high);
-        }
-    }
+    
 
     protected IEnumerator GeneratePossibleMoves()
     {
@@ -667,6 +617,7 @@ public class AIPlayer : Player
         int movesTried = 0;
         foreach (Polyomino piece in currentHand)
         {
+            if (nextPlay != null) break;
             if (!hand.Contains(piece)) continue;
             if (piece.cost <= resources)
             {
@@ -680,9 +631,10 @@ public class AIPlayer : Player
 
                 for (int i = 0; i < sortedPlayableCoords.Count; i++)
                 {
-                    // each piece should know how many times it can be rotated
+                    if (nextPlay != null) break;
                     for (int rotations = 0; rotations < 4; rotations++)
                     {
+                        if (nextPlay != null) break;
                         piece.Rotate(false, true);
                         piece.SetTileCoords(sortedPlayableCoords[i]);
                         piece.TurnOffGlow();
@@ -709,30 +661,16 @@ public class AIPlayer : Player
 
                             if (piece.IsPlacementLegal(adjacentPolyominos))
                             {
-                                //HashSet<Coord> pieceCoords = new HashSet<Coord>();
-                                //foreach (Tile tile in piece.tiles)
-                                //{
-                                //    if (!pieceCoords.Contains(tile.coord))
-                                //    {
-                                //        pieceCoords.Add(tile.coord);
-                                //    }
-                                //}
-
                                 Move newMove = new Move(piece, sortedPlayableCoords[i], (rotations + 1) % 4, 
                                                         possibleBlueprintMoves, possibleCutMoves,
                                                         winWeight, structWeight, destructionWeight, 
                                                         mineWeight, factoryWeight, bombFactoryWeight,
                                                         usePredictiveSmith, usePredictiveBrickworks, usePredictiveBarracks, dangerWeight);
 
-                                //if (nextPlay == null) nextPlay = newMove;
-                                //else if (newMove.score > nextPlay.score)
-                                //{
-                                //    nextPlay = newMove;
-                                //}
-                                if (HasAttackPiece(currentHand) && inDanger && !(newMove.isWinningMove || (newMove.piece is Destructor)))
-                                {
+                                if (HasAttackPiece(currentHand) && 
+                                    inDanger && 
+                                    !(newMove.isWinningMove || (newMove.piece is Destructor)))
                                     continue;
-                                }
                                 
                                 if(movesToConsider.Count < bestMovesCount ||
                                     newMove.score > movesToConsider[0].score)
@@ -742,82 +680,78 @@ public class AIPlayer : Player
                                     if(movesToConsider.Count > bestMovesCount)
                                     {
                                         movesToConsider.RemoveAt(0);
-                                    }
-                                    
+                                    }   
                                 }
                             }
                         }
                     }
-                    if (resources >= 1 && movesToConsider.Count >= bestMovesCount)
+
+                    if (aiThinkingShortcut && 
+                        resources >= 1 && 
+                        movesToConsider.Count >= bestMovesCount)
                     {
-                        //goto SelectMove;
+                        //  midthinking shortcut
+                        nextPlay = SelectMove(movesToConsider);
                     }
+                    //  Then choose a new rotation
                 }
-                //  Then choose a new play position
-                
+                //  Then choose a new play position      
             }
-            //  Choose a new piece
+            //  Then choose a new piece
         }
         #endregion
 
-        
-        //Debug.Log("BlueprintMaps Tried: " + blueprintMapsTried);
+
         // Choose a play by rolling
-        SelectMove:
-        if (movesToConsider.Count > 0)
-        {
-            //Debug.Log("player " + playerNum + " considering moves of score:");
-            //foreach(Move move in movesToConsider)
-            //{
-            //    Debug.Log(move.score);
-            //}
-            List<Move> movesToRemove = new List<Move>();
-            foreach (Move move in movesToConsider)
-            {
-                if (!hand.Contains(move.piece) && !(movesToRemove.Contains(move)))
-                {
-                    movesToRemove.Add(move);
-                }
-            }
-
-            foreach (Move move in movesToRemove)
-            {
-                movesToConsider.Remove(move);
-            }
-
-            if (aiLevel == AILEVEL.HARD)
-            {
-                nextPlay = movesToConsider[movesToConsider.Count - 1];
-            }
-            else
-            {
-                for (int i = 0; i < (int)aiLevel * rollsPerLevel; i++)
-                {
-                    int randomIndex = UnityEngine.Random.Range(0, movesToConsider.Count);
-                    Move potentialMove = movesToConsider[randomIndex];
-                    if (nextPlay == null || potentialMove.score > nextPlay.score)
-                    {
-                        nextPlay = potentialMove;
-                    }
-                }
-            }
-            //Debug.Log("picking move of score " + nextPlay.score);
-        }
+        nextPlay = SelectMove(movesToConsider);
+        
 
         if (nextPlay != null && nextPlay.score > 0)
         {
             MakePlay(nextPlay);
         }
-        else if (nextPlay == null)
-        {
-            //nextPlay = SelectMove(movesToConsider);
-            //MakePlay(nextPlay);
-        }
-
 
         isThinking = false;
         //string playerColor = playerNum == 1 ? "Red" : "Blue";
         //Debug.Log("Player " + playerColor +" Thinking Time: " + (Time.time - startTime));
+    }
+
+    Move SelectMove(List<Move> movesToConsider)
+    {
+        Move nextPlay = null;
+        List<Move> movesToRemove = new List<Move>();
+
+        foreach (Move move in movesToConsider)
+        {
+            if (!hand.Contains(move.piece) && !(movesToRemove.Contains(move)))
+            {
+                movesToRemove.Add(move);
+            }
+        }
+
+        foreach (Move move in movesToRemove)
+        {
+            movesToConsider.Remove(move);
+        }
+
+        if (aiLevel == AILEVEL.HARD)
+        {
+            nextPlay = movesToConsider[movesToConsider.Count - 1];
+        }
+        else
+        {
+            for (int i = 0; i < (int)aiLevel * rollsPerLevel; i++)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, movesToConsider.Count);
+                Move potentialMove = movesToConsider[randomIndex];
+                if (nextPlay == null || potentialMove.score > nextPlay.score)
+                {
+                    nextPlay = potentialMove;
+                }
+            }
+        }        
+
+        return nextPlay;
     }
 
     private List<Move> InsertMoveIntoSortedList(Move move, List<Move> sortedMoveList)
@@ -919,6 +853,43 @@ public class AIPlayer : Player
         base.CancelSelectedPiece();
         playingPiece = false;
         StopThinking();
+    }
+
+    static int partition(List<CoordDist> coordDistList, int low,
+                                  int high)
+    {
+        CoordDist pivot = coordDistList[high];
+
+        int i = (low - 1);
+        for (int j = low; j < high; j++)
+        {
+
+            if (coordDistList[j].distance <= pivot.distance)
+            {
+                i++;
+
+                CoordDist temp = coordDistList[i];
+                coordDistList[i] = coordDistList[j];
+                coordDistList[j] = temp;
+            }
+        }
+
+        CoordDist temp1 = coordDistList[i + 1];
+        coordDistList[i + 1] = coordDistList[high];
+        coordDistList[high] = temp1;
+
+        return i + 1;
+    }
+
+    static void quickSort(List<CoordDist> coordDistList, int low, int high)
+    {
+        if (low < high)
+        {
+            int pi = partition(coordDistList, low, high);
+
+            quickSort(coordDistList, low, pi - 1);
+            quickSort(coordDistList, pi + 1, high);
+        }
     }
 }
 
