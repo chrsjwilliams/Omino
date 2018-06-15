@@ -99,7 +99,7 @@ public abstract class Structure : Polyomino
     {
         owner = player;
         SetOverlaySprite();
-        Services.AudioManager.CreateTempAudio(Services.Clips.StructureClaimed, 1);
+        Services.AudioManager.PlaySoundEffect(Services.Clips.StructureClaimed, 1);
         owner.GainOwnership(this);
         StructClaimAura effect = GameObject.Instantiate(Services.Prefabs.StructClaimEffect, 
             holder.transform.position + GetCenterpoint(), Quaternion.identity).GetComponent<StructClaimAura>();

@@ -107,12 +107,12 @@ public class TitleSceneScript : Scene<TransitionData>
 
     public void UIButtonPressedSound()
     {
-        Services.AudioManager.CreateTempAudio(Services.Clips.UIButtonPressed, 0.55f);
+        Services.AudioManager.PlaySoundEffect(Services.Clips.UIButtonPressed, 0.55f);
     }
     
     public void UIClick()
     {
-        Services.AudioManager.CreateTempAudio(Services.Clips.UIClick, 0.55f);
+        Services.AudioManager.PlaySoundEffect(Services.Clips.UIClick, 0.55f);
     }
 
     public void Back()

@@ -24,7 +24,7 @@ public class BlueprintPlacementTask : BuildingDropAnimation
         {
             tile.mainSr.enabled = false;
         }
-        Services.AudioManager.CreateTempAudio(Services.Clips.ProdLevelUp, 1);
+        Services.AudioManager.PlaySoundEffect(Services.Clips.ProdLevelUp, 1);
     }
 
 

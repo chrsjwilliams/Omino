@@ -317,11 +317,11 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     
     public void UIClick()
     {
-        Services.AudioManager.CreateTempAudio(Services.Clips.UIClick, 0.55f);
+        Services.AudioManager.PlaySoundEffect(Services.Clips.UIClick, 0.55f);
     }
     
     public void UIButtonPressedSound()
     {
-        Services.AudioManager.CreateTempAudio(Services.Clips.UIButtonPressed, 0.55f);
+        Services.AudioManager.PlaySoundEffect(Services.Clips.UIButtonPressed, 0.55f);
     }
 }

@@ -6,21 +6,50 @@ public class AudioManager {
 
     private AudioSource mainTrack;
     private float last_volume = 1.0f;
+    private List<AudioSource> effectChannels;
+    private GameObject effectsHolder;
+    private int effectChannelSize = 100;
+    private int effectChannelIndex = 0;
 
     public void Init()
     {
-        CreateTempAudio(Services.Clips.MainTrackAudio, 0.0f);
+        GameObject main = GameObject.Find("Main");
+        effectsHolder = new GameObject("Effect Tracks");
+        effectsHolder.transform.parent = main.transform;
+
+        effectChannels = new List<AudioSource>();
+
+        for (int i = 0; i < effectChannelSize; i++)
+        {
+            GameObject channel = new GameObject("Effect Channel");
+            channel.transform.parent = effectsHolder.transform;
+            
+            effectChannels.Add(channel.AddComponent<AudioSource>());
+            effectChannels[i].loop = false;
+        }
+        
+        PlaySoundEffect(Services.Clips.MainTrackAudio, 0.0f);
     }
     
-    public void CreateTempAudio(AudioClip clip, float volume)
+    public void PlaySoundEffect(AudioClip clip, float volume)
     {
-        GameObject obj = new GameObject();
-        obj.name = "Audio Clip: " + clip.name;
-        AudioSource audioSource = obj.AddComponent<AudioSource>();
-        audioSource.clip = clip;
-        audioSource.volume = volume;
-        audioSource.Play();
-        GameObject.Destroy(obj, clip.length);
+        AudioSource to_play = effectChannels[effectChannelIndex];
+        effectChannelIndex = (effectChannelIndex + 1) % effectChannelSize;
+
+        if (to_play.isPlaying)
+        {
+            GameObject channel = new GameObject("Effect Channel");
+            channel.transform.parent = effectsHolder.transform;
+            effectChannels.Insert(effectChannelIndex, channel.AddComponent<AudioSource>());
+            effectChannels[effectChannelIndex].loop = false;
+            
+            to_play = effectChannels[effectChannelIndex];
+            effectChannelIndex = (effectChannelIndex + 1) % effectChannelSize;
+        }
+
+        to_play.clip = clip;
+        to_play.volume = volume;
+        to_play.Play();
     }
 
     public void SetMainTrack(AudioClip clip, float volume)

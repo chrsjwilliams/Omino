@@ -93,9 +93,9 @@ public class BuildingDropAnimation : Task
             Services.CameraController.StartShake(shakeDur, shakeSpeed, shakeMag);
             shakeStarted = true;
             if (buildingDropSound)
-                Services.AudioManager.CreateTempAudio(Services.Clips.BuildingFall, 1);
+                Services.AudioManager.PlaySoundEffect(Services.Clips.BuildingFall, 1);
             else
-                Services.AudioManager.CreateTempAudio(Services.Clips.BlueprintPlaced, 1);
+                Services.AudioManager.PlaySoundEffect(Services.Clips.BlueprintPlaced, 1);
         }
         if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
     }

@@ -108,7 +108,7 @@ public class ScrollRectSnap : MonoBehaviour
                 
                 if (currentIndex != lastClickIndex)
                 {
-                    Services.AudioManager.CreateTempAudio(Services.Clips.UIClick, 1.0f);
+                    Services.AudioManager.PlaySoundEffect(Services.Clips.UIClick, 1.0f);
                     lastClickIndex = currentIndex;
                 }
             }

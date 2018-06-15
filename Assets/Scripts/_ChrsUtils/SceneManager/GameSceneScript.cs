@@ -70,11 +70,11 @@ public class GameSceneScript : Scene<TransitionData>
         Services.UIManager.StartBannerScroll(winner);
         if (winner is AIPlayer)
         {
-            Services.AudioManager.CreateTempAudio(Services.Clips.Defeat, 0.6f);
+            Services.AudioManager.PlaySoundEffect(Services.Clips.Defeat, 0.6f);
         }
         else
         {
-            Services.AudioManager.CreateTempAudio(Services.Clips.Victory, 0.3f);
+            Services.AudioManager.PlaySoundEffect(Services.Clips.Victory, 0.3f);
         }
         foreach (Player player in Services.GameManager.Players)
         {
@@ -215,12 +215,12 @@ public class GameSceneScript : Scene<TransitionData>
     
     public void UIClick()
     {
-        Services.AudioManager.CreateTempAudio(Services.Clips.UIClick, 0.55f);
+        Services.AudioManager.PlaySoundEffect(Services.Clips.UIClick, 0.55f);
     }
     
     public void UIButtonPressedSound()
     {
-        Services.AudioManager.CreateTempAudio(Services.Clips.UIButtonPressed, 0.55f);
+        Services.AudioManager.PlaySoundEffect(Services.Clips.UIButtonPressed, 0.55f);
     }
 
     
