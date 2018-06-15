@@ -23,6 +23,7 @@ public class ScrollRectSnap : MonoBehaviour
     public Image[] images;
     public RectTransform center;
     public float moveBuffer;
+    public float sensitivityThreshold;
 
     private bool levelSelected;
     private float[] distance;   
@@ -40,6 +41,7 @@ public class ScrollRectSnap : MonoBehaviour
     // Use this for initialization
     public void Start ()
     {
+        sensitivityThreshold = 0.01f;
         levelSelected = false;
         moveBuffer = 150;
         panel = GameObject.Find("ScrollPanel").GetComponent<RectTransform>();
@@ -122,6 +124,8 @@ public class ScrollRectSnap : MonoBehaviour
 
     public void SelectLevel()
     {
+        Debug.Log(t);
+        if (t > sensitivityThreshold) return;
         levelSelected = true;
         LevelButton selectedLevel = images[selectedIndex].GetComponent<LevelButton>();
         ((GameOptionsSceneScript)Services.Scenes.CurrentScene).SelectLevel(selectedLevel);
