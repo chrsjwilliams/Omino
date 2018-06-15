@@ -10,8 +10,9 @@ public class ScrollRectSnap : MonoBehaviour
     [SerializeField]
     protected int touchID;
     public bool dragging;
+    public bool touchMoved;
     public bool firstTouch;
-    public bool landscapeMode;
+    public bool portraitMode;
     public float swipeSpeed;
     public float dir = 1;
     public int currentIndex;
@@ -43,7 +44,7 @@ public class ScrollRectSnap : MonoBehaviour
     // Use this for initialization
     public void Start ()
     {
-        sensitivityThreshold = 0.01f;
+        sensitivityThreshold = 0.0001f;
         levelSelected = false;
         moveBuffer = 150;
         panel = GameObject.Find("ScrollPanel").GetComponent<RectTransform>();
@@ -64,13 +65,12 @@ public class ScrollRectSnap : MonoBehaviour
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
 
         touchID = -1;
-        landscapeMode = true;
+        portraitMode = true;
 
         swipeSpeed = 30.0f;
         direction = DIRECTION.IDLE;
         anticipatedDirection = DIRECTION.IDLE;
         minImageIndex = 0;
-        touchID = -1;
 
         prevSelectedIndex = 0;
         anticipatedIndex = 0;
@@ -90,9 +90,16 @@ public class ScrollRectSnap : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
+        
+
         for (int i = 0; i < images.Length; i++)
         {
             distance[i] = Mathf.Abs(center.transform.position.x - images[i].transform.position.x);
+        }
+
+        if(Input.GetMouseButtonDown(1))
+        {
+            OnInputDown(Input.mousePosition);
         }
 
         float minDistance = Mathf.Min(distance);
@@ -127,7 +134,7 @@ public class ScrollRectSnap : MonoBehaviour
 
     public void SelectLevel()
     {
-        if (t > sensitivityThreshold && !firstTouch) return;
+        if (touchMoved && !firstTouch) return;
         levelSelected = true;
         LevelButton selectedLevel = images[selectedIndex].GetComponent<LevelButton>();
         ((GameOptionsSceneScript)Services.Scenes.CurrentScene).SelectLevel(selectedLevel);
@@ -243,6 +250,8 @@ public class ScrollRectSnap : MonoBehaviour
 
     public virtual void OnInputUp()
     {
+        
+        touchMoved = false;
         dragging = false;
         switch (direction)
         {
@@ -286,11 +295,11 @@ public class ScrollRectSnap : MonoBehaviour
 
     public virtual void OnInputDrag(Vector3 inputPos)
     {
-        
+        if (t > sensitivityThreshold) touchMoved = true;
         dragging = true;
         screenInputPos = Services.GameManager.MainCamera.WorldToScreenPoint(inputPos);
 
-        if (landscapeMode)
+        if (portraitMode)
         {
             if (prevTouchPos.x > screenInputPos.x)
             {
