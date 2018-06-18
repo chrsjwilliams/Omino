@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Cross
   m_EditorClassIdentifier: 
   campaignLevelNum: 0
-  availableStructures: 06000000070000000c000000090000000a0000000b000000
+  availableStructures: 06000000070000000c000000090000000a000000
   structCoords:
   - x: 9
     y: 10
@@ -39,4 +39,9 @@ MonoBehaviour:
     blueprintDestructionWeight: 0
     disconnectionWeight: 0
     destructorForBlueprintWeight: 0
+    dangerMod: 0
     overrideDefault: 1
+    resourceGainFactor: 0
+    drawRateFactor: 0
+    resourcesPerTick: 0
+    dangerDistance: 0

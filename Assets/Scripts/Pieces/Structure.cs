@@ -146,20 +146,29 @@ public abstract class Structure : Polyomino
     public override void OnInputDown(bool fromPlayTask)
     {
         if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID) &&
-            !Services.UIManager.tooltipsDisabled)
+            !Services.UIManager.tooltipsDisabled &&
+            !Services.GameScene.gameOver &&
+            !Services.GameScene.gamePaused)
         {
-            Tooltip tooltipLeft = GameObject.Instantiate(Services.Prefabs.Tooltip,
-                Services.UIManager.canvas).GetComponent<Tooltip>();
-            tooltipLeft.Init(GetName(), GetDescription(), 0,
-                Services.GameManager.MainCamera.WorldToScreenPoint(
-                holder.transform.position + GetCenterpoint()));
-            Tooltip tooltipRight = GameObject.Instantiate(Services.Prefabs.Tooltip,
-                Services.UIManager.canvas).GetComponent<Tooltip>();
-            tooltipRight.Init(GetName(), GetDescription(), 180,
-                Services.GameManager.MainCamera.WorldToScreenPoint(
-                holder.transform.position + GetCenterpoint()));
-            tooltips.Add(tooltipLeft);
-            tooltips.Add(tooltipRight);
+            if (!(Services.GameManager.Players[0] is AIPlayer))
+            {
+                Tooltip tooltipLeft = GameObject.Instantiate(Services.Prefabs.Tooltip,
+                    Services.UIManager.canvas).GetComponent<Tooltip>();
+                tooltipLeft.Init(GetName(), GetDescription(), 0,
+                    Services.GameManager.MainCamera.WorldToScreenPoint(
+                    holder.transform.position + GetCenterpoint()));
+                tooltips.Add(tooltipLeft);
+            }
+            if (!(Services.GameManager.Players[1] is AIPlayer))
+            {
+                Tooltip tooltipRight = GameObject.Instantiate(Services.Prefabs.Tooltip,
+                    Services.UIManager.canvas).GetComponent<Tooltip>();
+                tooltipRight.Init(GetName(), GetDescription(), 180,
+                    Services.GameManager.MainCamera.WorldToScreenPoint(
+                    holder.transform.position + GetCenterpoint()));
+                tooltips.Add(tooltipRight);
+            }
+
             Services.GameEventManager.Register<TouchUp>(OnTouchUp);
             Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
 

@@ -80,9 +80,9 @@ public class Base : Structure
         }
         else
         {
-            return "Normal Piece Draw Level +1 \n" +
-                "<color=red>Attack</color> Piece Draw Level +1 \n" +
-                "Play Rate Level +1";
+            return "Normal Piece Production Level +1 \n" +
+                "<color=red>Attack</color> Piece Production Level +1 \n" +
+                "Energy Production Level +1";
         }
     }
 }

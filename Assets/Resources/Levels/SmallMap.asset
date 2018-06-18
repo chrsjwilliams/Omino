@@ -11,7 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6e3d42f2220bb342a28180320c2b637, type: 3}
   m_Name: SmallMap
   m_EditorClassIdentifier: 
-  availableStructures: 0600000007000000090000000a0000000b0000000c000000
+  campaignLevelNum: 0
+  availableStructures: 0600000007000000090000000a0000000c000000
   structCoords:
   - x: 14
     y: 1
@@ -20,3 +21,21 @@ MonoBehaviour:
   width: 16
   height: 16
   cornerBases: 0
+  destructorsEnabled: 1
+  blueprintsEnabled: 1
+  stackDestructorInOpeningHand: 0
+  tooltips: []
+  overrideStrategy:
+    winWeight: 0
+    structWeight: 0
+    blueprintWeight: 0
+    destructionWeight: 0
+    blueprintDestructionWeight: 0
+    disconnectionWeight: 0
+    destructorForBlueprintWeight: 0
+    dangerMod: 0
+    overrideDefault: 0
+    resourceGainFactor: 0
+    drawRateFactor: 0
+    resourcesPerTick: 0
+    dangerDistance: 0

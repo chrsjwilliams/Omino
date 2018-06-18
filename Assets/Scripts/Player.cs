@@ -664,8 +664,9 @@ public class Player : MonoBehaviour
         if (closeEnough && !(this is AIPlayer))
         {
             GameObject dangerEffect = GameObject.Instantiate(Services.Prefabs.DangerEffect);
-            dangerEffect.transform.position = pos;
-            float rot = playerNum == 1 ? -90 : 90;
+            //dangerEffect.transform.position = pos;
+            dangerEffect.transform.position = mainBase.holder.transform.position;
+            float rot = playerNum == 1 ? 0 : 180;
             dangerEffect.transform.rotation = Quaternion.Euler(0, 0, rot);
         }
     }
@@ -898,6 +899,7 @@ public class Player : MonoBehaviour
 
     private IEnumerator BlueprintAssistCheck(Polyomino pieceJustPlaced)
     {
+        ClearBlueprintAssistHighlight();
         HashSet<Coord> possibleBlueprintCoords = new HashSet<Coord>();
         foreach(Tile tile in pieceJustPlaced.tiles)
         {
@@ -946,7 +948,15 @@ public class Player : MonoBehaviour
                     {
                         if (blueprint.IsPlacementLegal())
                         {
-                            possibleBlueprintMoves.Add(new BlueprintMap(blueprint, null, coord, rotations));
+                            BlueprintMap blueprintMove = new BlueprintMap(blueprint, null, coord, rotations);
+                            foreach (Tile tile in pieceJustPlaced.tiles)
+                            {
+                                if (blueprintMove.allCoords.Contains(tile.coord))
+                                {
+                                    possibleBlueprintMoves.Add(blueprintMove);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
@@ -962,17 +972,7 @@ public class Player : MonoBehaviour
             else if (destProdLevel == minProdLevel) priorityBlueprints.Add(BuildingType.BOMBFACTORY);
             foreach(BlueprintMap blueprintMove in possibleBlueprintMoves)
             {
-                bool containsRecentlyPlayedPiece = false;
-                foreach (Tile tile in pieceJustPlaced.tiles)
-                {
-                    if (blueprintMove.allCoords.Contains(tile.coord))
-                    {
-                        containsRecentlyPlayedPiece = true;
-                        break;
-                    }
-                }
-                if (containsRecentlyPlayedPiece &&
-                        priorityBlueprints.Contains(blueprintMove.blueprint.buildingType))
+                if (priorityBlueprints.Contains(blueprintMove.blueprint.buildingType))
                 {
                     moveToHighlight = blueprintMove;
                     break;

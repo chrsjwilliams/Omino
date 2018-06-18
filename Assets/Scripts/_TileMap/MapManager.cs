@@ -215,7 +215,7 @@ public class MapManager : MonoBehaviour
             BuildingType.ASSEMBLYLINE,
             BuildingType.BIGGERBRICKS,
             BuildingType.BIGGERBOMBS,
-            BuildingType.SPLASHDAMAGE,
+            //BuildingType.SPLASHDAMAGE,
             BuildingType.SHIELDEDPIECES
         };
     }

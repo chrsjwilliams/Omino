@@ -208,6 +208,8 @@ public class UIManager : MonoBehaviour {
         {
             if (Services.GameManager.Players[i] is AIPlayer)
                 readyBanners[i].enabled = false;
+            readyBanners[i].GetComponent<Image>().color = Services.GameManager.colorSchemes[i][0]; //notReadyColors[playerNum-1];
+
         }
         if (Services.GameManager.disableUI)
         {
@@ -520,7 +522,7 @@ public class UIManager : MonoBehaviour {
         {
             readyBanners[playerNum - 1].GetComponentInChildren<TextMeshProUGUI>().text =
                 "READY?";
-            readyBanners[playerNum - 1].GetComponent<Image>().color = notReadyColors[playerNum-1];
+            readyBanners[playerNum - 1].GetComponent<Image>().color = Services.GameManager.colorSchemes[playerNum - 1][0]; //notReadyColors[playerNum-1];
             Services.AudioManager.PlaySoundEffect(Services.Clips.UIReadyOff, 1.0f);
         }
         bool allReady = true;
@@ -542,6 +544,8 @@ public class UIManager : MonoBehaviour {
         }
     }
 
+
+
     public void TogglePauseMenu()
     {
         if (Services.GameScene.gamePaused)
@@ -549,16 +553,16 @@ public class UIManager : MonoBehaviour {
             pauseMenu.SetActive(false);
             Services.GameScene.UnpauseGame();
         }
-        else if (pauseTimer > 0)
+        else //if (pauseTimer > 0)
         {
             pauseMenu.SetActive(true);
             Services.GameScene.PauseGame();
-            pauseTimer = 0;
+            //pauseTimer = 0;
         }
-        else
-        {
-            pauseTimer = pauseTimeWindow;
-        }
+        //else
+        //{
+        //    pauseTimer = pauseTimeWindow;
+        //}
 
     }
 

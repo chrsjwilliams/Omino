@@ -9,6 +9,7 @@ public class PieceHolder : MonoBehaviour {
     public SpriteRenderer dropShadow;
     public SpriteRenderer icon;
     public SpriteRenderer legalityOverlay;
+    public SpriteRenderer energyLevel;
     private Color prevColor;
     private Color targetColor_;
     private Color targetColor

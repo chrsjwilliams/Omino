@@ -22,9 +22,10 @@ public class GameSceneScript : Scene<TransitionData>
 
     private bool gameStarted;
     public bool gamePaused { get; private set; }
+    public bool gameOver { get; private set; }
     public bool gameInProgress
     {
-        get { return gameStarted && !gamePaused; }
+        get { return gameStarted && !gamePaused && !gameOver; }
     }
 
     internal override void OnEnter(TransitionData data)
@@ -67,6 +68,7 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void GameWin(Player winner)
     {
+        gameOver = true;
         Services.UIManager.StartBannerScroll(winner);
         if (winner is AIPlayer)
         {

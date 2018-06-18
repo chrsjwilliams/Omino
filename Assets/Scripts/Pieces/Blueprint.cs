@@ -265,7 +265,10 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     public override void OnInputDown(bool fromPlayTask)
     {
         base.OnInputDown(fromPlayTask);
-        if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID) && !Services.GameManager.disableUI)
+        if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID) && 
+            !Services.GameManager.disableUI &&
+            !Services.GameScene.gameOver &&
+            !Services.GameScene.gamePaused)
         {
             Vector3 tooltipLocation;
             if (placed || owner.playerNum == 1)
