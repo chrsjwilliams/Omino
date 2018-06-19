@@ -5,6 +5,8 @@ using System;
 public class Mine : Blueprint
 {
     public const float resourceRateBonus = 0.0375f;
+    public Player player;
+
     public Mine(Player player_) : base(BuildingType.MINE, player_)
     {
         onGainText = "+1 Energy Production Level";

@@ -10,7 +10,7 @@ public class AIPlayer : Player
     public static AILEVEL[] AiLevels =
         new AILEVEL[3] { AILEVEL.EASY, AILEVEL.MEDIUM, AILEVEL.HARD };
 
-    private bool aiThinkingShortcut = false;
+    private bool aiThinkingShortcut = true;
 
     public bool canAffordAPiece { get; protected set; }
     public bool drawingPiece { get; protected set; }
@@ -42,6 +42,12 @@ public class AIPlayer : Player
     protected float dangerWeight;
     private IEnumerator thinkingCoroutine;
 
+
+    public override void Init(int playerNum_, AIStrategy strategy, AILEVEL level_, bool blueprintValueHandicap, float handicapValue)
+    {
+        SetHandicap(blueprintValueHandicap, handicapValue);
+        Init(playerNum_, strategy, level_);
+    }
 
     public override void Init(int playerNum_, AIStrategy strategy, AILEVEL level_)
     {
@@ -75,13 +81,14 @@ public class AIPlayer : Player
         dangerDistance = strategy.dangerDistance;
 
         base.Init(playerNum_);
-        Debug.Log("player " + playerNum + "using " + "\nwin weight: " + winWeight);
-        Debug.Log("struct weight: " + structWeight + "\nblueprint weight: " + blueprintWeight);
-        Debug.Log("destruction weight: " + destructionWeight +
-                    "\nblueprint destruction weight: " + blueprintdestructionWeight); 
-         Debug.Log("disconnection weight: " + disconnectionWeight + 
-                    "\ndestructor4Blueprint weight: " + destructorForBlueprintWeight);
-        Debug.Log("danger mod: " + dangerWeight);
+
+        //Debug.Log("player " + playerNum + "using " + "\nwin weight: " + winWeight);
+        //Debug.Log("struct weight: " + structWeight + "\nblueprint weight: " + blueprintWeight);
+        //Debug.Log("destruction weight: " + destructionWeight +
+        //            "\nblueprint destruction weight: " + blueprintdestructionWeight); 
+        // Debug.Log("disconnection weight: " + disconnectionWeight + 
+        //            "\ndestructor4Blueprint weight: " + destructorForBlueprintWeight);
+        //Debug.Log("danger mod: " + dangerWeight);
 
 
         baseBrickWorkRate = Factory.drawRateBonus / normalDrawRate;
@@ -143,6 +150,8 @@ public class AIPlayer : Player
             thinkingCoroutine = GeneratePossibleMoves();
             StartCoroutine(thinkingCoroutine);
         }
+
+        if(Input.GetKeyDown(KeyCode.G)) Debug.Log("SECONDS PASSED: " + (resourceMeterFillAmt/(resourceGainRate * resourceGainFactor)));
 
     }
 
@@ -343,7 +352,7 @@ public class AIPlayer : Player
             sortedCoords.Add(coordDistList[i].coord);
         }
 
-        if (inDanger) sortedCoords.Reverse();
+        //if (inDanger) sortedCoords.Reverse();
 
         return sortedCoords;
     }
@@ -353,7 +362,9 @@ public class AIPlayer : Player
     protected IEnumerator GeneratePossibleMoves()
     {
         //Debug.Log("starting to think at time " + Time.time);
+        string playerColor = playerNum == 1 ? "Red" : "Blue";
         isThinking = true;
+        float thinkingOverride = (1 - resourceMeterFillAmt) / (resourceGainRate * resourceGainFactor) * 0.95f;
         float startTime = Time.time;
         List<Polyomino> currentHand = new List<Polyomino>(hand);
         List<Polyomino> currentBoardPieces = new List<Polyomino> (boardPieces);
@@ -686,11 +697,14 @@ public class AIPlayer : Player
                         }
                     }
 
-                    if (aiThinkingShortcut && 
-                        resources >= 1 && 
-                        movesToConsider.Count >= bestMovesCount)
+
+                    if (aiThinkingShortcut &&
+                        movesToConsider.Count > 1 &&
+                        ((resources >= 1 && resourceMeterFillAmt > 0.5f)|| 
+                       startTime - Time.time > thinkingOverride))
                     {
                         //  midthinking shortcut
+                        Debug.Log(playerColor + " Shortcut!");
                         nextPlay = SelectMove(movesToConsider);
                     }
                     //  Then choose a new rotation
@@ -701,6 +715,7 @@ public class AIPlayer : Player
         }
         #endregion
 
+       
 
         // Choose a play by rolling
         nextPlay = SelectMove(movesToConsider);
@@ -712,7 +727,7 @@ public class AIPlayer : Player
         }
 
         isThinking = false;
-        //string playerColor = playerNum == 1 ? "Red" : "Blue";
+       
         //Debug.Log("Player " + playerColor +" Thinking Time: " + (Time.time - startTime));
     }
 
