@@ -385,38 +385,41 @@ public class Polyomino : IVertex
 
     public void SetAffordableStatus(Player player)
     {
+        holder.SetEnergyDisplayStatus(true);
         affordable = player.resources >= cost;
         if (affordable)
         {
             SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, alphaWhileAffordable), 1);
-            foreach (Tile tile in tiles)
-            {
-                tile.SetFilledUIFillAmount(1);
-            }
+            //foreach (Tile tile in tiles)
+            //{
+            //    tile.SetFilledUIFillAmount(1);
+            //}
+            holder.SetEnergyLevel(1);
         }
         else
         {
+            holder.SetEnergyLevel(player.resourceMeterFillAmt);
             SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, alphaWhileUnaffordable), 1);
-            int tileCompletionProportion = 
-                Mathf.FloorToInt(player.resourceMeterFillAmt * tiles.Count);
-            for (int i = 0; i < tiles.Count; i++)
-            {
-                Tile tile = tiles[i];
-                if (i <= tileCompletionProportion)
-                {
-                    if (i == tileCompletionProportion)
-                    {
-                        tile.SetFilledUIFillAmount(
-                            (player.resourceMeterFillAmt - ((float)tileCompletionProportion / tiles.Count))
-                            * tiles.Count);
-                    }
-                    else
-                    {
-                        tile.SetFilledUIFillAmount(1);
-                    }
-                }
-                else tile.SetFilledUIFillAmount(0);
-            }
+            //int tileCompletionProportion = 
+            //    Mathf.FloorToInt(player.resourceMeterFillAmt * tiles.Count);
+            //for (int i = 0; i < tiles.Count; i++)
+            //{
+            //    Tile tile = tiles[i];
+            //    if (i <= tileCompletionProportion)
+            //    {
+            //        if (i == tileCompletionProportion)
+            //        {
+            //            tile.SetFilledUIFillAmount(
+            //                (player.resourceMeterFillAmt - ((float)tileCompletionProportion / tiles.Count))
+            //                * tiles.Count);
+            //        }
+            //        else
+            //        {
+            //            tile.SetFilledUIFillAmount(1);
+            //        }
+            //    }
+            //    else tile.SetFilledUIFillAmount(0);
+            //}
         }
     }
 
@@ -978,9 +981,11 @@ public class Polyomino : IVertex
     {
         holder = GameObject.Instantiate(Services.Prefabs.PieceHolder,
             Services.GameScene.transform).GetComponent<PieceHolder>();
+        holder.piece = this;
         holder.gameObject.name = holderName;
         holder.legalityOverlay.enabled = false;
         holder.icon.enabled = false;
+        holder.SetEnergyDisplayStatus(false);
         tooltips = new List<Tooltip>();
         adjacentPieces = new List<Polyomino>();
 
@@ -1272,6 +1277,7 @@ public class Polyomino : IVertex
     protected virtual void CleanUpUI()
     {
         UnhighlightPotentialStructureClaims();
+        holder.SetEnergyDisplayStatus(false);
     }
 
     public virtual void SetLegalityGlowStatus()
@@ -1414,7 +1420,7 @@ public class Polyomino : IVertex
             SetIconSprite();
             if(!Services.GameManager.disableUI) SetLegalityGlowStatus();
             SetOverlaySprite();
-            
+            holder.UpdateEnergyDisplayPos();
             Services.AudioManager.PlaySoundEffect(Services.Clips.PieceRotated, 1.0f);
         }
     }

@@ -135,8 +135,10 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     {
         holder = GameObject.Instantiate(Services.Prefabs.PieceHolder,
             Services.GameScene.transform).GetComponent<PieceHolder>();
+        holder.piece = this;
         holder.gameObject.name = holderName;
         holder.legalityOverlay.enabled = false;
+        holder.SetEnergyDisplayStatus(false);
         tooltips = new List<Tooltip>();
 
         if (piece == null) return;

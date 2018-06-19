@@ -103,6 +103,7 @@ public class UIManager : MonoBehaviour {
     private bool[] resourceMissingAnimIncreasing;
     public bool tooltipsDisabled;
     public Color legalGlowColor;
+    public Color notLegalGlowColor;
 
     private void Awake()
     {

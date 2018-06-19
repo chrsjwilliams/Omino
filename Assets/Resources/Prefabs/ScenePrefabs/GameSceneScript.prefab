@@ -3345,10 +3345,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d8790cc6e8946db4cba63fc5a8f9df47, type: 3}
   - {fileID: 21300000, guid: 3cef7fc6f008fbb4ead95d8a84843eca, type: 3}
   factoryIcons:
-  - {fileID: 21300000, guid: eb6dfa06a34709346854c8249fc10ebf, type: 3}
-  - {fileID: 21300000, guid: 04ebd1df883f65040b3c3da4ba24e4cf, type: 3}
-  - {fileID: 21300000, guid: b9e8590faeff5cd4e8a869f560a37616, type: 3}
-  - {fileID: 21300000, guid: e28c5966625d0d647be5b100fbb5d6ae, type: 3}
+  - {fileID: 21300000, guid: 796d25b8fb4d71f4a8fc1450b21a0ed0, type: 3}
+  - {fileID: 21300000, guid: b1f604779c6806848b0651c33dacf44e, type: 3}
+  - {fileID: 21300000, guid: 796d25b8fb4d71f4a8fc1450b21a0ed0, type: 3}
+  - {fileID: 21300000, guid: b1f604779c6806848b0651c33dacf44e, type: 3}
   mineBottoms:
   - {fileID: 21300000, guid: 944999ea70936f74da67cd7b14e7ccdf, type: 3}
   - {fileID: 21300000, guid: e84ef81363702cf498245ac18670e168, type: 3}
@@ -3387,7 +3387,7 @@ MonoBehaviour:
   notReadyColors:
   - {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.77254903}
   - {r: 0.49019608, g: 0.49019608, b: 1, a: 0.77254903}
-  readyColor: {r: 0.42352942, g: 0.68235296, b: 0.45882353, a: 0.77254903}
+  readyColor: {r: 0.52156866, g: 0.9098039, b: 0.42745098, a: 0.77254903}
   radialMeterFillMin: 0.05
   radialMeterFillMax: 0.95
   resourceGainHighlightScale: 2
@@ -3395,7 +3395,8 @@ MonoBehaviour:
   resourceMissingAnimDuration: 0.2
   resourceMissingAnimScale: 1.25
   tooltipsDisabled: 0
-  legalGlowColor: {r: 0.42352942, g: 0.68235296, b: 0.45882353, a: 1}
+  legalGlowColor: {r: 0.52156866, g: 0.9098039, b: 0.42745098, a: 1}
+  notLegalGlowColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 1}
 --- !u!114 &114258563104708436
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8130,7 +8131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9764706, g: 1, b: 0.54509807, a: 0.772}
+  m_Color: {r: 0.6737255, g: 1, b: 0.54509807, a: 0.772}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

@@ -224,7 +224,7 @@ public class Player : MonoBehaviour
 
             for (int i = 0; i < hand.Count; i++)
             {
-                hand[i].SetAffordableStatus(this);
+                //hand[i].SetAffordableStatus(this);
                 hand[i].ApproachHandPosition(handTargetPositions[i]);
             }
             if (selectedPiece != null)

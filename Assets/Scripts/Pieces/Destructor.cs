@@ -168,20 +168,6 @@ public class Destructor : Polyomino
         }
     }
 
-    public override void SetLegalityGlowStatus()
-    {
-        base.SetLegalityGlowStatus();
-        //UnhighlightTargetedPieces();
-        //if (IsPlacementLegal())
-        //{
-        //    piecesInRange = GetPiecesInRange();
-        //    for (int i = 0; i < piecesInRange.Count; i++)
-        //    {
-        //        piecesInRange[i].SetGlow(Color.magenta);
-        //    }
-        //}
-    }
-
     public List<Polyomino> GetPiecesInRange()
     {
         List<Polyomino> enemyPiecesInRange = new List<Polyomino>();
