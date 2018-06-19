@@ -250,7 +250,6 @@ public class Move
             int destructionRange = piece.owner.splashDamage ? 1 : 0;
             int cutSize = 0;
             HashSet<Coord> coordsToBeDestroyed = new HashSet<Coord>();
-            
             foreach (Tile tile in piece.tiles)
             {
                 for (int x = -destructionRange; x <= destructionRange; x++)

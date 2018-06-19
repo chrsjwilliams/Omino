@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class MapManager : MonoBehaviour
 { 
@@ -363,32 +364,32 @@ public class MapManager : MonoBehaviour
     {
         Base mainBase = player.mainBase;
         List<Polyomino> connectedPieces = new List<Polyomino>();
-        List<Polyomino> frontier = new List<Polyomino>();
+        HashSet<Polyomino> frontier = new HashSet<Polyomino>();
         connectedPieces.Add(mainBase);
-        frontier.AddRange(mainBase.GetAdjacentPolyominos());
+        frontier.UnionWith(mainBase.GetAdjacentPolyominos());
+        int iterationCount = 0;
         while (frontier.Count > 0)
         {
-            List<Polyomino> frontierQueue = new List<Polyomino>();
-            for (int i = frontier.Count - 1; i >= 0; i--)
+            iterationCount += 1;
+            if (iterationCount > 1000) return;
+            HashSet<Polyomino> frontierQueue = new HashSet<Polyomino>();
+            Polyomino piece = frontier.First();
+            if ((piece is Structure && (piece.owner == player || piece.owner == null)) || 
+                piece.owner == player)
             {
-                Polyomino piece = frontier[i];
-                if (!connectedPieces.Contains(piece) && 
-                    ((piece is Structure && 
-                    (piece.owner == player || piece.owner == null)) || piece.owner == player))
+                connectedPieces.Add(piece);
+                List<Polyomino> adjacentPieces = piece.GetAdjacentPolyominos();
+                for (int j = 0; j < adjacentPieces.Count; j++)
                 {
-                    connectedPieces.Add(piece);
-                    List<Polyomino> adjacentPieces = piece.GetAdjacentPolyominos();
-                    for (int j = 0; j < adjacentPieces.Count; j++)
+                    Polyomino adjacentPiece = adjacentPieces[j];
+                    if (!connectedPieces.Contains(adjacentPiece))
                     {
-                        Polyomino adjacentPiece = adjacentPieces[j];
-                        if (!frontier.Contains(adjacentPiece) && 
-                            !frontierQueue.Contains(adjacentPiece))
-                            frontierQueue.Add(adjacentPiece);
+                        frontierQueue.Add(adjacentPiece);
                     }
                 }
-                frontier.Remove(piece);
             }
-            frontier.AddRange(frontierQueue);
+            frontier.Remove(piece);
+            frontier.UnionWith(frontierQueue);
         }
 
         for (int i = player.boardPieces.Count - 1; i >= 0; i--)

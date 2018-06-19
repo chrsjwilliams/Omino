@@ -119,6 +119,7 @@ public class Player : MonoBehaviour
     private const float bpAssistAlphaMax = 0.75f;
     private float bpAssistTimeElapsed;
     private const int bpAssistChecksPerFrame = 10;
+    private IEnumerator bpAssistCoroutine;
 
 
     public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_)
@@ -622,7 +623,9 @@ public class Player : MonoBehaviour
         Services.MapManager.DetermineConnectedness(this);
         if (!(piece is Blueprint) && !(this is AIPlayer) && Services.GameManager.BlueprintAssistEnabled)
         {
-            StartCoroutine(BlueprintAssistCheck(piece));
+            if (bpAssistCoroutine != null) StopCoroutine(bpAssistCoroutine);
+            bpAssistCoroutine = BlueprintAssistCheck(piece);
+            StartCoroutine(bpAssistCoroutine);
         }
         if (!(piece is Destructor && hadSplashDamage) 
             && Services.MapManager.CheckForWin(piece))
