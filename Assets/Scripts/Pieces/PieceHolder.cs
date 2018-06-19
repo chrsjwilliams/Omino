@@ -29,7 +29,7 @@ public class PieceHolder : MonoBehaviour {
     private bool changingColor;
     public float colorChangeDuration;
     private const float energyCutoffMax = 0.8f;
-    private const float energyCutoffMin = 0.1f;
+    private const float energyCutoffMin = 0.18f;
     private const float energyDisplayOffset = 1.5f;
 
     // Use this for initialization
@@ -87,8 +87,9 @@ public class PieceHolder : MonoBehaviour {
 
     private void SetEnergyFillAmount(float amount)
     {
-        float fillAmt = ((1 - amount) * (energyCutoffMax-energyCutoffMin)) + energyCutoffMin;
-        energyLevelFront.material.SetFloat("_Cutoff", fillAmt);
+        float cutoff = ((1 - amount) * (energyCutoffMax-energyCutoffMin)) + energyCutoffMin;
+        if (amount >= 1) cutoff = 0;
+        energyLevelFront.material.SetFloat("_Cutoff", cutoff);
     }
 
     public void UpdateEnergyDisplayPos()
