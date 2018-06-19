@@ -50,6 +50,7 @@ public class GameSceneScript : Scene<TransitionData>
         Services.AudioManager.SetMainTrack(Services.Clips.MainTrackAudio, 0.3f);
         Services.CameraController.SetScreenEdges();
         
+        Services.AudioManager.RegisterStartLevelMusic();
     }
 
     internal override void OnExit()
@@ -72,11 +73,11 @@ public class GameSceneScript : Scene<TransitionData>
         Services.UIManager.StartBannerScroll(winner);
         if (winner is AIPlayer)
         {
-            Services.AudioManager.PlaySoundEffect(Services.Clips.Defeat, 0.6f);
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.Defeat, 0.6f);
         }
         else
         {
-            Services.AudioManager.PlaySoundEffect(Services.Clips.Victory, 0.3f);
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.Victory, 0.3f);
         }
         foreach (Player player in Services.GameManager.Players)
         {
@@ -217,12 +218,12 @@ public class GameSceneScript : Scene<TransitionData>
     
     public void UIClick()
     {
-        Services.AudioManager.PlaySoundEffect(Services.Clips.UIClick, 0.55f);
+        Services.AudioManager.RegisterSoundEffect(Services.Clips.UIClick, 0.55f);
     }
     
     public void UIButtonPressedSound()
     {
-        Services.AudioManager.PlaySoundEffect(Services.Clips.UIButtonPressed, 0.55f);
+        Services.AudioManager.RegisterSoundEffect(Services.Clips.UIButtonPressed, 0.55f);
     }
 
     
