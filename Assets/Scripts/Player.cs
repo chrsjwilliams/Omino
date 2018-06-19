@@ -121,6 +121,20 @@ public class Player : MonoBehaviour
     private const int bpAssistChecksPerFrame = 10;
     private IEnumerator bpAssistCoroutine;
 
+    public float allResourceHandicap = 1;
+    public float allBlueprintHandicap = 1;
+
+
+    public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_, bool blueprintValueHandicap, float handicap)
+    {
+        Init(playerNum_);
+    }
+
+    public virtual void Init(int playerNum_, bool blueprintValueHandicap, float handicap)
+    {
+        SetHandicap(blueprintValueHandicap, handicap);
+        Init(playerNum_);
+    }
 
     public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_)
     {
@@ -130,6 +144,7 @@ public class Player : MonoBehaviour
     // Use this for initialization
     public virtual void Init(int playerNum_)
     {
+       
         playerNum = playerNum_;
 
         colorScheme = Services.GameManager.colorSchemes[playerNum - 1];
@@ -202,6 +217,20 @@ public class Player : MonoBehaviour
         ToggleHandLock(true);
 
         inDanger = false;
+    }
+
+    protected void SetHandicap(bool blueprintValueHandicap, float handicap)
+    {
+        if (blueprintValueHandicap)
+        {
+            allResourceHandicap = 1;
+            allBlueprintHandicap = handicap;
+        }
+        else
+        {
+            allResourceHandicap = handicap;
+            allBlueprintHandicap = 1;
+        }
     }
 
     // Update is called once per frame
@@ -892,12 +921,12 @@ public class Player : MonoBehaviour
         normProdLevel = activeFactories.Count + expansionCount + 1;
         destProdLevel = activeBombFactories.Count + expansionCount + 1;
         resourceProdLevel = activeMines.Count + expansionCount + 1;
-        normalDrawRate = Base.normalDrawRate + 
-            ((normProdLevel - 1) * Factory.drawRateBonus);
-        destructorDrawRate = Base.destDrawRate +
-            ((destProdLevel - 1) * BombFactory.drawRateBonus);
-        resourceGainRate = Base.resourceGainRate +
-            ((resourceProdLevel - 1) * Mine.resourceRateBonus);
+        normalDrawRate = (Base.normalDrawRate + 
+            ((normProdLevel - 1) * Factory.drawRateBonus * allBlueprintHandicap)) * allResourceHandicap;
+        destructorDrawRate = (Base.destDrawRate +
+            ((destProdLevel - 1) * BombFactory.drawRateBonus * allBlueprintHandicap)) * allResourceHandicap;
+        resourceGainRate = (Base.resourceGainRate +
+            ((resourceProdLevel - 1) * Mine.resourceRateBonus * allBlueprintHandicap)) * allResourceHandicap;
     }
 
     private IEnumerator BlueprintAssistCheck(Polyomino pieceJustPlaced)

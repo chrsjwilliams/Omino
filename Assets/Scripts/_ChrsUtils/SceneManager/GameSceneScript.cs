@@ -45,7 +45,8 @@ public class GameSceneScript : Scene<TransitionData>
         }
         else
         {
-            Services.GameManager.InitPlayers();
+            //Services.GameManager.InitPlayers();
+            Services.GameManager.InitPlayers(Services.GameManager.useBlueprintHandicapType, Services.GameManager.handicapValue);
         }
         Services.AudioManager.SetMainTrack(Services.Clips.MainTrackAudio, 0.3f);
         Services.CameraController.SetScreenEdges();

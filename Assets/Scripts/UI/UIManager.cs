@@ -345,7 +345,7 @@ public class UIManager : MonoBehaviour {
             {
                 slotImage.fillAmount = 1;
                 slotImage.color = slotColor;
-                slotBack.color = slotColor;
+                //slotBack.color = slotColor;
                 if (resourceCount > lastResourceCount[playerIndex]
                     && i == resourceCount - 1)
                 {
@@ -356,7 +356,7 @@ public class UIManager : MonoBehaviour {
             else
             {
                 slotImage.fillAmount = 0;
-                slotBack.color = new Color(slotColor.r, slotColor.g, slotColor.b, 0);
+                //slotBack.color = new Color(slotColor.r, slotColor.g, slotColor.b, 0);
             }
         }
         if(resourceCount != lastResourceCount[playerIndex] 
