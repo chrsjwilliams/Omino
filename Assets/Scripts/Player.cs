@@ -464,7 +464,7 @@ public class Player : MonoBehaviour
         Task drawTask = new DrawTask(piece, startPos);
         Services.GameScene.tm.Do(drawTask);
         QueueUpNextPiece(onlyDestructors);
-        Services.AudioManager.PlaySoundEffect(Services.Clips.PieceDrawn, 1);
+        Services.AudioManager.RegisterSoundEffect(Services.Clips.PieceDrawn, 1);
     }
 
     void QueueUpNextPiece(bool destructor)
@@ -724,11 +724,11 @@ public class Player : MonoBehaviour
                 selectedPiece.cost - resources);
         if (selectedPiece is Destructor && (selectedPiece as Destructor).StoppedByShield())
         {
-            Services.AudioManager.PlaySoundEffect(Services.Clips.ShieldHit, 1);
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.ShieldHit, 1);
         }
         else
         {
-            Services.AudioManager.PlaySoundEffect(Services.Clips.IllegalPlay, 0.01f);
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.IllegalPlay, 0.01f);
         }
         int handPosToPlace = Mathf.Min(selectedPieceHandPos, hand.Count);
         hand.Insert(handPosToPlace, selectedPiece);
@@ -741,7 +741,7 @@ public class Player : MonoBehaviour
     {
         blueprints.Add((Blueprint)selectedPiece);
         selectedPiece.SetGlowState(false);
-        Services.AudioManager.PlaySoundEffect(Services.Clips.IllegalPlay, 0.01f);
+        Services.AudioManager.RegisterSoundEffect(Services.Clips.IllegalPlay, 0.01f);
         Blueprint selectedBlueprint = selectedPiece as Blueprint;
         selectedBlueprint.Reposition(GetBlueprintPosition(selectedBlueprint));
         selectedPiece = null;
@@ -763,7 +763,7 @@ public class Player : MonoBehaviour
         resources = Mathf.Min(maxResources, resources + numResources);
         int resourcesGained = resources - prevResources;
         if(resourcesGained > 0)
-            Services.AudioManager.PlaySoundEffect(Services.Clips.ResourceGained, 0.2f);
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.ResourceGained, 0.2f);
         return resourcesGained;
     }
 

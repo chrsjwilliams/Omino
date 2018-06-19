@@ -15,7 +15,7 @@ public class DangerEffect : MonoBehaviour {
         ps = GetComponentInChildren<ParticleSystem>();
         timeElapsed = 0;
         transform.localScale = Vector3.zero;
-        Services.AudioManager.PlaySoundEffect(Services.Clips.Warning, 1);
+        Services.AudioManager.RegisterSoundEffect(Services.Clips.Warning, 1);
 	}
 
     // Update is called once per frame

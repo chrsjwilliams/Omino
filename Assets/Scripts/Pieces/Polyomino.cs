@@ -560,7 +560,7 @@ public class Polyomino : IVertex
             }
         }
         owner.OnPiecePlaced(this, monominos);
-        Services.AudioManager.PlaySoundEffect(Services.Clips.PiecePlaced, 0.5f);
+        Services.AudioManager.RegisterSoundEffect(Services.Clips.PiecePlaced, 0.5f);
     }
 
     public List<Coord> GetAdjacentEmptyTiles()
@@ -844,7 +844,7 @@ public class Polyomino : IVertex
             }
         }
         if (piecesToRemove.Count > 0)
-            Services.AudioManager.PlaySoundEffect(Services.Clips.PieceDestroyed, 1);
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.PieceDestroyed, 1);
         for (int i = piecesToRemove.Count - 1; i >= 0; i--)
         {
             piecesToRemove[i].Remove();
@@ -1139,7 +1139,7 @@ public class Polyomino : IVertex
             owner.OnPieceSelected(this);
             SortOnSelection(true);
             OnInputDrag(holder.transform.position);
-            Services.AudioManager.PlaySoundEffect(Services.Clips.PiecePicked, 1);
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.PiecePicked, 1);
 
             if (!(owner is AIPlayer))
             {
@@ -1421,7 +1421,7 @@ public class Polyomino : IVertex
             if(!Services.GameManager.disableUI) SetLegalityGlowStatus();
             SetOverlaySprite();
             holder.UpdateEnergyDisplayPos();
-            Services.AudioManager.PlaySoundEffect(Services.Clips.PieceRotated, 1.0f);
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.PieceRotated, 1.0f);
         }
     }
 

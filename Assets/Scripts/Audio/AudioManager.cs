@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Beat;
 using UnityEngine;
 
 public class AudioManager {
@@ -10,12 +12,14 @@ public class AudioManager {
     private GameObject effectsHolder;
     private int effectChannelSize = 100;
     private int effectChannelIndex = 0;
+    private List<AudioSource> level_music_sources;
 
     public void Init()
     {
         GameObject main = GameObject.Find("Main");
         effectsHolder = new GameObject("Effect Tracks");
         effectsHolder.transform.parent = main.transform;
+        _PopulateLevelMusic();
 
         effectChannels = new List<AudioSource>();
 
@@ -28,9 +32,60 @@ public class AudioManager {
             effectChannels[i].loop = false;
         }
         
-        PlaySoundEffect(Services.Clips.MainTrackAudio, 0.0f);
+        RegisterSoundEffect(Services.Clips.MainTrackAudio, 0.0f);
     }
     
+    public void RegisterSoundEffect(AudioClip clip, float volume)
+    {
+        Clock.Instance.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, Clock.BeatValue.Sixteenth);
+    }
+    
+    private System.Action _ParameterizeAction(System.Action<AudioClip, float> function, AudioClip clip, float volume)
+    {
+        System.Action to_return = () =>
+        {
+            function(clip, volume);
+        };
+        
+        return to_return;
+    }
+
+    private void _PopulateLevelMusic()
+    {
+        level_music_sources = new List<AudioSource>();
+        
+        UnityEngine.Object[] effects = Resources.LoadAll ("Audio/Level Music", typeof(AudioClip));
+        
+        GameObject levelMusicHolder = new GameObject("Level Music Tracks");
+        levelMusicHolder.transform.parent = Clock.Instance.transform;
+
+        int i = 1;
+        
+        foreach (UnityEngine.Object o in effects) {
+            GameObject newTrack = new GameObject("Track " + i++);
+            newTrack.transform.parent = levelMusicHolder.transform;
+            AudioSource levelMusicTrack = newTrack.AddComponent<AudioSource>();
+            levelMusicTrack.clip = (AudioClip) o;
+            levelMusicTrack.loop = true;
+            levelMusicTrack.volume = 0.6f;
+            
+            level_music_sources.Add (levelMusicTrack);
+        }
+    }
+
+    public void RegisterStartLevelMusic()
+    {
+        Clock.Instance.SyncFunction(_StartLevelMusic, Clock.BeatValue.Measure);
+    }
+
+    private void _StartLevelMusic()
+    {
+        foreach (AudioSource source in level_music_sources)
+        {
+            source.Play();
+        }
+    }
+
     public void PlaySoundEffect(AudioClip clip, float volume)
     {
         AudioSource to_play = effectChannels[effectChannelIndex];
