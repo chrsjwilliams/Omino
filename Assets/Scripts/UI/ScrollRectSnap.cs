@@ -29,7 +29,8 @@ public class ScrollRectSnap : MonoBehaviour
     public float sensitivityThreshold;
 
     private bool levelSelected;
-    private float[] distance;   
+    private float[] distance;
+    private float scrollPanelOffset;
     private int minImageIndex;
     private float travelDistance;
     private Vector3 screenInputPos;
@@ -47,6 +48,7 @@ public class ScrollRectSnap : MonoBehaviour
         sensitivityThreshold = 0.0001f;
         levelSelected = false;
         moveBuffer = 150;
+        scrollPanelOffset = 90;
         panel = GameObject.Find("ScrollPanel").GetComponent<RectTransform>();
         center = GameObject.Find("SelectedLevel").GetComponent<RectTransform>();
         int numOfLevels = panel.transform.childCount;
@@ -71,7 +73,6 @@ public class ScrollRectSnap : MonoBehaviour
         direction = DIRECTION.IDLE;
         anticipatedDirection = DIRECTION.IDLE;
         minImageIndex = 0;
-
         prevSelectedIndex = 0;
         anticipatedIndex = 0;
     }
@@ -296,6 +297,12 @@ public class ScrollRectSnap : MonoBehaviour
     public virtual void OnInputDrag(Vector3 inputPos)
     {
         if (t > sensitivityThreshold) touchMoved = true;
+        if( panel.rect.height  + scrollPanelOffset < Services.GameManager.MainCamera.WorldToScreenPoint(inputPos).y ||
+            scrollPanelOffset > Services.GameManager.MainCamera.WorldToScreenPoint(inputPos).y)
+        {
+            return;
+        }
+
         dragging = true;
         screenInputPos = Services.GameManager.MainCamera.WorldToScreenPoint(inputPos);
 

@@ -52,6 +52,11 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     [SerializeField]
     private float defaultDangerWeight;
 
+    [SerializeField]
+    private HandicapSystem handicapSystem;
+    [SerializeField]
+    private GameObject handicapSystemUI;
+
     private float timeElapsed;
     private const float textPulsePeriod = 0.35f;
     private const float textPulseMaxScale = 1.075f;
@@ -78,6 +83,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         humanPlayers = new bool[2] { false, false };
         aiLevelTexts = new TextMeshProUGUI[1];
         aiLevelButtons = new Button[1][];
+
+        handicapSystemUI.SetActive(false);
 
         for (int i = 0; i < aiLevelButtonZones.Length; i++)
         {
@@ -112,6 +119,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     internal override void OnExit()
     {
+        Services.GameManager.SetHandicapType(handicapSystem.useBlueprintHandicap);
+        Services.GameManager.SetHandicapValue(handicapSystem.handicapValue);
+
      //   PlayerPrefs.Save();
     }
 
@@ -245,6 +255,16 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             new LevelSelectButtonEntranceTask(buttons, playButton);
         _tm.Do(entrance);
         _tm.Do(buttonEntrance);
+        if (Services.GameManager.mode != TitleSceneScript.GameMode.Campaign)
+            SlideInHandicapUI();
+    }
+
+    public void SlideInHandicapUI()
+    {
+        handicapSystemUI.SetActive(true);
+        SlideInHandicapUITask slideInHandicapUI =
+                new SlideInHandicapUITask(handicapSystemUI);
+        _tm.Do(slideInHandicapUI);
     }
 
     public void StartGame()
