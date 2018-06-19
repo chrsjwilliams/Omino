@@ -52,6 +52,6 @@ public class HandicapSystem : MonoBehaviour
 	void Update () {
 
         typeSlider.value = Mathf.Lerp(typeSlider.value, currentTypeValue, Time.deltaTime * lerpSpeed);
-
+        UpdateHandicapValueSlider();
 	}
 }
