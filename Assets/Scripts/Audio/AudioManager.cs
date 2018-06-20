@@ -18,7 +18,6 @@ public class AudioManager : MonoBehaviour {
     private List<float> level_music_volumes, previous_volumes;
     private readonly float BASEMUSICVOLUME = 0.6f;
     
-
     public void Awake()
     {
         effectsHolder = new GameObject("Effect Tracks");
