@@ -66,7 +66,7 @@ public class GameSceneScript : Scene<TransitionData>
         _colorChangeTime += Time.deltaTime;
         Services.GameManager.MainCamera.backgroundColor = Color.Lerp(Color.black, _backgroundColor, _colorChangeTime);
         tm.Update();
-        if (gameInProgress) Services.GameData.timeSinceMatchStarted += Time.deltaTime;
+        if (gameInProgress) Services.GameData.secondsSinceMatchStarted += Time.deltaTime;
     }
 
     public void GameWin(Player winner)
