@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class BuildingDropAnimation : Task
 {
-    private const float duration = 0.5f;
+    private float duration = 0.5f;
     private const float dropHeight = 4f;
     private const float dustTime = 0.1f;
     private bool dustDropped;
@@ -39,6 +39,8 @@ public class BuildingDropAnimation : Task
 
     protected override void Init()
     {
+        duration = Services.Clock.EighthLength();
+        
         if (building.holder == null)
         {
             SetStatus(TaskStatus.Aborted);

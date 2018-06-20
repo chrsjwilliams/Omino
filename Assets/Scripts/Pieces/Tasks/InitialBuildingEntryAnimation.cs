@@ -1,16 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Beat;
 
 public class InitialBuildingEntryAnimation : Task
 {
     private TaskManager subtaskManager;
-    private const float baseStaggerTime = 0.2f;
-    private const float structStaggerTime = 0.1f;
+    private float baseStaggerTime;
+    private float structStaggerTime;
+    private bool run_tasks = false;
 
     protected override void Init()
     {
+        baseStaggerTime = Services.Clock.QuarterLength();
+        structStaggerTime = Services.Clock.EighthLength();
+        
         subtaskManager = new TaskManager();
+        
         for (int i = 0; i < 2; i++)
         {
             Task dropTask = new Wait(baseStaggerTime * i);
@@ -23,12 +29,19 @@ public class InitialBuildingEntryAnimation : Task
             dropTask.Then(new BuildingDropAnimation(Services.MapManager.structuresOnMap[i]));
             subtaskManager.Do(dropTask);
         }
+        
+        Task waitTask = new Wait((structStaggerTime * Services.MapManager.structuresOnMap.Count) + (baseStaggerTime * 2));
+        waitTask.Then(new ActionTask(() => { SetStatus(TaskStatus.Success); }));
+        
+        subtaskManager.Do(waitTask);
+        
+        Services.Clock.SyncFunction(() => { run_tasks = true; }, Clock.BeatValue.Quarter);
     }
-
+    
     internal override void Update()
     {
-        subtaskManager.Update();
-        if (subtaskManager.tasksInProcessCount == 0) SetStatus(TaskStatus.Success);
+        if (run_tasks)
+            subtaskManager.Update();
     }
 
 }
