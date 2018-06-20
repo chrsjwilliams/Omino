@@ -1,4 +1,6 @@
 ﻿
+using Beat;
+
 public class Services
 {
     public static Main Main { get; set; }
@@ -20,4 +22,5 @@ public class Services
 
     public static AudioManager AudioManager { get; set; }
     public static ClipLibrary Clips { get; set; }
+    public static Clock Clock { get; set; }
 }

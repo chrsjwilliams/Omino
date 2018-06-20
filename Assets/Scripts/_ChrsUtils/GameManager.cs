@@ -1,6 +1,7 @@
 ﻿using UnityEngine.Assertions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Beat;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class GameManager : MonoBehaviour
     public AILEVEL[] aiLevels;
     public TitleSceneScript.GameMode mode;
     public bool destructorsEnabled = true;
+
+    public double levelBPM;
 
     public bool blueprintsEnabled = true;
     public bool BlueprintAssistEnabled
@@ -141,6 +144,8 @@ public class GameManager : MonoBehaviour
         Services.InputManager = new InputManager();
         Services.Scenes = new GameSceneManager<TransitionData>(gameObject, Services.Prefabs.Scenes);
         Services.CameraController = Camera.main.GetComponent<CameraController>();
+        Services.Clock = new GameObject("Clock").AddComponent<Clock>();
+        Services.Clock.Init(levelBPM);
 
         gameObject.AddComponent<ClipSwitcher>();
     }

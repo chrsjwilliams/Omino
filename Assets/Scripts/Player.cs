@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections;
+using Beat;
 
 public class Player : MonoBehaviour
 {
@@ -114,8 +115,8 @@ public class Player : MonoBehaviour
     protected Tile dangerTile;
 
     private List<Tile> bpAssistHighlightedTiles = new List<Tile>();
-    private const float bpAssistDuration = 5f;
-    private const float bpAssistFlashPeriod = 1f;
+    private float bpAssistDuration;
+    private float bpAssistFlashPeriod;
     private const float bpAssistAlphaMax = 0.75f;
     private float bpAssistTimeElapsed;
     private const int bpAssistChecksPerFrame = 10;
@@ -217,6 +218,9 @@ public class Player : MonoBehaviour
         ToggleHandLock(true);
 
         inDanger = false;
+        
+        bpAssistFlashPeriod = Services.Clock.HalfLength();
+        bpAssistDuration = Services.Clock.MeasureLength() * 2;
     }
 
     protected void SetHandicap(bool blueprintValueHandicap, float handicap)
@@ -1011,14 +1015,36 @@ public class Player : MonoBehaviour
                 }
             }
             if (moveToHighlight == null) moveToHighlight = possibleBlueprintMoves[0];
-            foreach(Coord coord in moveToHighlight.allCoords)
+            
+            Services.Clock.SyncFunction(_ParameterizeAction(RegisterHighlightedTiles, moveToHighlight.allCoords), Clock.BeatValue.Measure);
+            
+            /* foreach(Coord coord in moveToHighlight.allCoords)
             {
                 bpAssistHighlightedTiles.Add(
                     Services.MapManager.Map[coord.x, coord.y].occupyingPiece.tiles[0]);
-            }
+            } */
         }
     }
 
+    private void RegisterHighlightedTiles(List<Coord> allCoords)
+    {
+        foreach(Coord coord in allCoords)
+        {
+            bpAssistHighlightedTiles.Add(
+                Services.MapManager.Map[coord.x, coord.y].occupyingPiece.tiles[0]);
+        }   
+    }
+    
+    private System.Action _ParameterizeAction(System.Action<List<Coord>> function, List<Coord> coords)
+    {
+        System.Action to_return = () =>
+        {
+            function(coords);
+        };
+        
+        return to_return;
+    }
+    
     private void ClearBlueprintAssistHighlight()
     {
         foreach(Tile tile in bpAssistHighlightedTiles)

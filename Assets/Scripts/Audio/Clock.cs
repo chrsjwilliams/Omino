@@ -8,13 +8,13 @@ using UnityEngine;
 
 namespace Beat
 {
-   public class Clock : Singleton<Clock>
+   public class Clock : MonoBehaviour
    {
       protected Clock() { }
 
-      void Awake()
+      public void Init(double bpm)
       {
-         if (BPM.Equals(0.0)) Debug.LogWarning("BPM not set! Please set the BPM in the BeatClock");
+         BPM = bpm;
       }
 
       public double BPM; //stable to pretty high BPMs, but when you past the low 200s things might break down

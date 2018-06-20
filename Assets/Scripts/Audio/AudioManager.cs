@@ -31,13 +31,11 @@ public class AudioManager {
             effectChannels.Add(channel.AddComponent<AudioSource>());
             effectChannels[i].loop = false;
         }
-        
-        RegisterSoundEffect(Services.Clips.MenuSong, 0.0f);
     }
     
     public void RegisterSoundEffect(AudioClip clip, float volume)
     {
-        Clock.Instance.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, Clock.BeatValue.Eighth);
+        Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, Clock.BeatValue.Eighth);
     }
     
     private System.Action _ParameterizeAction(System.Action<AudioClip, float> function, AudioClip clip, float volume)
@@ -55,7 +53,6 @@ public class AudioManager {
         level_music_sources = new List<AudioSource>();
         
         GameObject levelMusicHolder = new GameObject("Level Music Tracks");
-        levelMusicHolder.transform.parent = Clock.Instance.transform;
 
         int i = 1;
         
@@ -73,7 +70,7 @@ public class AudioManager {
 
     public void RegisterStartLevelMusic()
     {
-        Clock.Instance.SyncFunction(_StartLevelMusic, Clock.BeatValue.Measure);
+        Services.Clock.SyncFunction(_StartLevelMusic, Clock.BeatValue.Measure);
     }
 
     private void _StartLevelMusic()
