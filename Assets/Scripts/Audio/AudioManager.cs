@@ -109,14 +109,14 @@ public class AudioManager : MonoBehaviour {
         levelMusicManager = new TaskManager();
         
         Task initialWait = new Wait(Services.Clock.MeasureLength() * 4);
-        Task changeVolumes = new ActionTask(ChangeVolumes);
+        Task changeVolumes = new ActionTask(DynamicLevelMusicVolumes);
 
         initialWait.Then(changeVolumes);
         
         levelMusicManager.Do(initialWait);
     }
 
-    private void ChangeVolumes()
+    private void DynamicLevelMusicVolumes()
     {
         previous_volumes = new List<float>();
         
@@ -151,7 +151,7 @@ public class AudioManager : MonoBehaviour {
             for (int i = 6; i < level_music_sources.Count; i++)
             {
                 previous_volumes.Add(level_music_sources[i].volume);
-                level_music_volumes[i] = Mathf.Clamp(Services.GameData.secondsSinceMatchStarted / 5.0f * 60f, 0.0f,
+                level_music_volumes[i] = Mathf.Clamp(Services.GameData.secondsSinceMatchStarted / (5.0f * 60f), 0.0f,
                     BASEMUSICVOLUME);
             }
         }
@@ -172,7 +172,7 @@ public class AudioManager : MonoBehaviour {
         }
         
         Task measureWait = new Wait(Services.Clock.MeasureLength());
-        Task changeVolumes = new ActionTask(ChangeVolumes);
+        Task changeVolumes = new ActionTask(DynamicLevelMusicVolumes);
         
         measureWait.Then(changeVolumes);
         levelMusicManager.Do(measureWait);
