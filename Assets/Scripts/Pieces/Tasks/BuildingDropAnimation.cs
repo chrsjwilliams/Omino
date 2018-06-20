@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Beat;
 
 public class BuildingDropAnimation : Task
 {
@@ -95,9 +96,9 @@ public class BuildingDropAnimation : Task
             Services.CameraController.StartShake(shakeDur, shakeSpeed, shakeMag);
             shakeStarted = true;
             if (buildingDropSound)
-                Services.AudioManager.RegisterSoundEffect(Services.Clips.BuildingFall, 1);
+                Services.AudioManager.RegisterSoundEffect(Services.Clips.BuildingFall, 1, Clock.BeatValue.Sixteenth);
             else
-                Services.AudioManager.RegisterSoundEffect(Services.Clips.BlueprintPlaced, 1);
+                Services.AudioManager.RegisterSoundEffect(Services.Clips.BlueprintPlaced, 1, Clock.BeatValue.Sixteenth);
         }
         if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
     }

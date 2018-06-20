@@ -16,8 +16,8 @@ public class GameData : MonoBehaviour
         }
     }
     public float[] productionRates = new float[2];
-    public float maxProductionRates;
-    public float timeSinceMatchStarted;
+    public float maxProductionRates = 0.5f;
+    public float secondsSinceMatchStarted = 0.0f;
     public int[] distancesToOpponentBase = new int[2];
     public int totalMapTiles;
 }
