@@ -13,7 +13,7 @@ public class InitialBuildingEntryAnimation : Task
     protected override void Init()
     {
         baseStaggerTime = Services.Clock.EighthLength();
-        structStaggerTime = Services.Clock.EighthLength();
+        structStaggerTime = Services.Clock.SixteenthLength();
         
         subtaskManager = new TaskManager();
         

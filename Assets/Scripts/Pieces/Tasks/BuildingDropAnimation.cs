@@ -15,10 +15,10 @@ public class BuildingDropAnimation : Task
     protected Polyomino building;
     protected List<Transform> transforms;
     private Vector3[] dustLocations;
-    private const float shakeDur = 0.3f;
+    private float shakeDur = 0.3f;
     private const float shakeMag = 0.2f;
     private const float shakeSpeed = 40f;
-    private const float shakeStartTime = 0.2f;
+    private float shakeStartTime = 0.2f;
     private bool shakeStarted;
     private bool buildingDropSound = true;
 
@@ -40,7 +40,9 @@ public class BuildingDropAnimation : Task
 
     protected override void Init()
     {
-        duration = Services.Clock.EighthLength();
+        duration = Services.Clock.SixteenthLength();
+        shakeStartTime = duration / 2;
+        shakeDur = 3 * duration / 4;
         
         if (building.holder == null)
         {
