@@ -17,8 +17,11 @@ public class ClipLibrary : ScriptableObject {
     [SerializeField] private AudioClip illegalPlay;
     public AudioClip IllegalPlay { get { return illegalPlay; } }
     
-    [SerializeField] private AudioClip mainTrackAudio;
-    public AudioClip MainTrackAudio { get { return mainTrackAudio; } }
+    [SerializeField] private AudioClip[] levelTracks;
+    public AudioClip[] LevelTracks { get { return levelTracks; } }
+    
+    [SerializeField] private AudioClip menuSong;
+    public AudioClip MenuSong { get { return menuSong; } }
     
     [SerializeField] private AudioClip pieceDestroyed;
     public AudioClip PieceDestroyed { get { return pieceDestroyed; } }

@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d679b194a83a31449bd9e084a5fa6813, type: 3}
+  m_Name: QuantizedClipLibrary
+  m_EditorClassIdentifier: 
+  blueprintPlaced: {fileID: 8300000, guid: 2f7b233fb2cda4b69b5aff667c855fef, type: 3}
+  buildingFall: {fileID: 8300000, guid: 7ea9a8fbf3fe946638c49b4d57d0abd6, type: 3}
+  defeat: {fileID: 8300000, guid: bdc411560b1b247c4a28fd16aeddb5c4, type: 3}
+  illegalPlay: {fileID: 8300000, guid: f2c74d01404604efc9d1a8cf5a7c4af6, type: 3}
+  levelTracks:
+  - {fileID: 8300000, guid: 25789cdce8b9b4e7198ec08c3868ce5f, type: 3}
+  - {fileID: 8300000, guid: f134c0a9ccd4b4ba1b0e27824e7c77eb, type: 3}
+  - {fileID: 8300000, guid: e3f284efc50bf4c3c93acde4dca7a0e1, type: 3}
+  - {fileID: 8300000, guid: 3109fca34c0eb49989268080166a7a52, type: 3}
+  - {fileID: 8300000, guid: dcac7d76ae8f04e53a4356288425fb13, type: 3}
+  - {fileID: 8300000, guid: 943003d6d7b2346bb83e014d100d6c57, type: 3}
+  - {fileID: 8300000, guid: 4d8a0bd2b60934d668590f327e7c33e2, type: 3}
+  menuSong: {fileID: 8300000, guid: 25789cdce8b9b4e7198ec08c3868ce5f, type: 3}
+  pieceDestroyed: {fileID: 8300000, guid: f7ba8db5a43bb4f19b9ac71ed993c992, type: 3}
+  pieceDrawn: {fileID: 8300000, guid: 28392e939144049229e00e3e12a53ce8, type: 3}
+  piecePicked: {fileID: 8300000, guid: b58aa97290b7d4705a0f54baef294f87, type: 3}
+  piecePlaced: {fileID: 8300000, guid: 5d699d8c9307748e38da7feb7f9d7c9c, type: 3}
+  pieceRotated: {fileID: 8300000, guid: cbdf903d366ca49a2bb029598ef5c0ec, type: 3}
+  prodLevelUp: {fileID: 8300000, guid: e98db761a57a640bf9f143a0abd639fb, type: 3}
+  resourceGained: {fileID: 8300000, guid: a0407921d50004f4f8d1e6df4d53d02c, type: 3}
+  shieldHit: {fileID: 8300000, guid: 8e881398d5803411d8333edf7ecd4eb9, type: 3}
+  structureClaimed: {fileID: 8300000, guid: c5f28ffa592654dcf8159d1cf7f72516, type: 3}
+  uiButtonPressed: {fileID: 8300000, guid: e5d7937056e9d4167b2dc5a54e0049db, type: 3}
+  uiClick: {fileID: 8300000, guid: 35838235ad2604f449fa258166c2eaac, type: 3}
+  uiReadyOn: {fileID: 8300000, guid: 78434abe261694aba9db63796e772ab0, type: 3}
+  uiReadyOff: {fileID: 8300000, guid: 2e3349f9bb5814e36b8a8c271e205148, type: 3}
+  victory: {fileID: 8300000, guid: bf8d117f5a22a4aef89fb3c1dfa064a0, type: 3}
+  warning: {fileID: 8300000, guid: a0eef642e5fef496abc21d73828810aa, type: 3}
