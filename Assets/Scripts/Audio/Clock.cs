@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
+using EasingEquations;
 
 namespace Beat
 {
@@ -310,7 +311,7 @@ namespace Beat
       {
          return (float)_halfLength;
       }
-
+    
       public float MeasureLength()
       {
          return (float)_measureLength;

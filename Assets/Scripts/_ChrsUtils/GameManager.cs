@@ -140,8 +140,7 @@ public class GameManager : MonoBehaviour
         Services.MapManager.Init();
 
         Services.Clips = Resources.Load<ClipLibrary>("Audio/QuantizedClipLibrary");
-        Services.AudioManager = new AudioManager();
-        Services.AudioManager.Init();
+        Services.AudioManager = new GameObject("Audio Manager").AddComponent<AudioManager>();
 
         Services.GeneralTaskManager = new TaskManager();
         Services.Prefabs = Resources.Load<PrefabDB>("Prefabs/PrefabDB");
@@ -536,7 +535,6 @@ public class GameManager : MonoBehaviour
     {
         Services.InputManager.Update();
         Services.GeneralTaskManager.Update();
-        Services.AudioManager.Update();
         InactivityCheck();
     }
 
