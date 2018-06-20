@@ -110,51 +110,6 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &505528182
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 505528184}
-  - component: {fileID: 505528183}
-  m_Layer: 0
-  m_Name: Clock
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &505528183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 505528182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f47edfc5cd684d3d92e8b2e2a9da637, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BPM: 110
-  MBT: 
-  StartDelay: 0
-  LatencyCompensation: 0
-  _secondsPerMeasure: 0
---- !u!4 &505528184
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 505528182}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 116.5, y: 185.8711, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1059191857
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,6 +283,7 @@ MonoBehaviour:
   aiLevels: 0a0000000a000000
   mode: 0
   destructorsEnabled: 1
+  levelBPM: 110
   blueprintsEnabled: 1
   _mainCamera: {fileID: 0}
   _players: []
