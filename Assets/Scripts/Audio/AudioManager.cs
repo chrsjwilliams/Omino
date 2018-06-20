@@ -32,12 +32,12 @@ public class AudioManager {
             effectChannels[i].loop = false;
         }
         
-        RegisterSoundEffect(Services.Clips.MainTrackAudio, 0.0f);
+        RegisterSoundEffect(Services.Clips.MenuSong, 0.0f);
     }
     
     public void RegisterSoundEffect(AudioClip clip, float volume)
     {
-        Clock.Instance.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, Clock.BeatValue.Sixteenth);
+        Clock.Instance.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, Clock.BeatValue.Eighth);
     }
     
     private System.Action _ParameterizeAction(System.Action<AudioClip, float> function, AudioClip clip, float volume)
@@ -54,18 +54,16 @@ public class AudioManager {
     {
         level_music_sources = new List<AudioSource>();
         
-        UnityEngine.Object[] effects = Resources.LoadAll ("Audio/Level Music", typeof(AudioClip));
-        
         GameObject levelMusicHolder = new GameObject("Level Music Tracks");
         levelMusicHolder.transform.parent = Clock.Instance.transform;
 
         int i = 1;
         
-        foreach (UnityEngine.Object o in effects) {
+        foreach (AudioClip clip in Services.Clips.LevelTracks) {
             GameObject newTrack = new GameObject("Track " + i++);
             newTrack.transform.parent = levelMusicHolder.transform;
             AudioSource levelMusicTrack = newTrack.AddComponent<AudioSource>();
-            levelMusicTrack.clip = (AudioClip) o;
+            levelMusicTrack.clip = clip;
             levelMusicTrack.loop = true;
             levelMusicTrack.volume = 0.6f;
             
@@ -133,7 +131,7 @@ public class AudioManager {
     {
         if (Services.GameManager.SoundEffectsEnabled)
         {
-            Services.Clips = Resources.Load<ClipLibrary>("Audio/MaterialClipLibrary");
+            Services.Clips = Resources.Load<ClipLibrary>("Audio/QuantizedClipLibrary");
         }
         else
         {

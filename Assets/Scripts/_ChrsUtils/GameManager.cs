@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
         Services.MapManager = GetComponent<MapManager>();
         Services.MapManager.Init();
 
-        Services.Clips = Resources.Load<ClipLibrary>("Audio/MaterialClipLibrary");
+        Services.Clips = Resources.Load<ClipLibrary>("Audio/QuantizedClipLibrary");
         Services.AudioManager = new AudioManager();
         Services.AudioManager.Init();
 
