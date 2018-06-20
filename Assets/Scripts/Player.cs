@@ -281,7 +281,7 @@ public class Player : MonoBehaviour
                 if (periodicTime < bpAssistFlashPeriod / 2)
                 {
                     alpha = Mathf.Lerp(0, bpAssistAlphaMax,
-                        EasingEquations.Easing.QuadEaseOut(
+                        EasingEquations.Easing.SineEaseInOut(
                             periodicTime / (bpAssistFlashPeriod / 2)));
                 }
                 else
@@ -1016,7 +1016,7 @@ public class Player : MonoBehaviour
             }
             if (moveToHighlight == null) moveToHighlight = possibleBlueprintMoves[0];
             
-            Services.Clock.SyncFunction(_ParameterizeAction(RegisterHighlightedTiles, moveToHighlight.allCoords), Clock.BeatValue.Measure);
+            Services.Clock.SyncFunction(_ParameterizeAction(RegisterHighlightedTiles, moveToHighlight.allCoords), Clock.BeatValue.Half);
             
             /* foreach(Coord coord in moveToHighlight.allCoords)
             {
