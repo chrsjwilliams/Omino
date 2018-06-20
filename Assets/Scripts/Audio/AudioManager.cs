@@ -7,12 +7,14 @@ using UnityEngine;
 public class AudioManager {
 
     private AudioSource mainTrack;
+    private TaskManager levelMusicManager;
     private float last_volume = 1.0f;
     private List<AudioSource> effectChannels;
     private GameObject effectsHolder;
     private int effectChannelSize = 100;
     private int effectChannelIndex = 0;
     private List<AudioSource> level_music_sources;
+    private List<float> level_music_volumes;
 
     public void Init()
     {
@@ -30,6 +32,14 @@ public class AudioManager {
             
             effectChannels.Add(channel.AddComponent<AudioSource>());
             effectChannels[i].loop = false;
+        }
+    }
+
+    public void Update()
+    {
+        if (levelMusicManager != null)
+        {
+            levelMusicManager.Update();
         }
     }
     
@@ -75,9 +85,68 @@ public class AudioManager {
 
     private void _StartLevelMusic()
     {
+        level_music_volumes = new List<float>();
+        
+        for (int i = 1; i < level_music_sources.Count; i++)
+        {
+            level_music_sources[i].volume = 0;
+        }
+        
         foreach (AudioSource source in level_music_sources)
         {
             source.Play();
+            level_music_volumes.Add(source.volume);
+        }
+        
+        levelMusicManager = new TaskManager();
+        
+        Task initialWait = new Wait(Services.Clock.MeasureLength() * 4);
+        Task changeVolumes = new ActionTask(ChangeVolumes);
+
+        initialWait.Then(changeVolumes);
+        
+        levelMusicManager.Do(initialWait);
+    }
+
+    private void ChangeVolumes()
+    {
+        List<float> previous_volumes = new List<float>();
+        
+        previous_volumes.Add(level_music_sources[0].volume);
+
+        if (level_music_sources.Count >= 2)
+        {
+            previous_volumes.Add(level_music_sources[1].volume);
+            level_music_volumes[1] = Services.GameData.totalFilledMapTiles / Services.GameData.totalMapTiles;
+        }
+
+        if (level_music_sources.Count >= 4)
+        {
+            previous_volumes.Add(level_music_sources[2].volume);
+            level_music_volumes[2] = Services.GameData.productionRates[0];
+            
+            previous_volumes.Add(level_music_sources[3].volume);
+            level_music_volumes[3] = Services.GameData.productionRates[1];
+        }
+
+        if (level_music_sources.Count >= 6)
+        {
+            
+        }
+
+        Task measureWait = new Wait(Services.Clock.MeasureLength());
+        Task changeVolumes = new ActionTask(ChangeVolumes);
+        
+        measureWait.Then(changeVolumes);
+        levelMusicManager.Do(measureWait);
+    }
+
+    public void StopLevelMusic()
+    {
+        levelMusicManager = null;
+        foreach (AudioSource source in level_music_sources)
+        {
+            source.Stop();
         }
     }
 

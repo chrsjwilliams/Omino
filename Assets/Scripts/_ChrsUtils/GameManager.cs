@@ -536,6 +536,7 @@ public class GameManager : MonoBehaviour
     {
         Services.InputManager.Update();
         Services.GeneralTaskManager.Update();
+        Services.AudioManager.Update();
         InactivityCheck();
     }
 
