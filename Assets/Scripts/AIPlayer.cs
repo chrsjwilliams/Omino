@@ -10,7 +10,7 @@ public class AIPlayer : Player
     public static AILEVEL[] AiLevels =
         new AILEVEL[3] { AILEVEL.EASY, AILEVEL.MEDIUM, AILEVEL.HARD };
 
-    private bool aiThinkingShortcut = true;
+    private bool useAIThinkingShortcut = true;
 
     public bool canAffordAPiece { get; protected set; }
     public bool drawingPiece { get; protected set; }
@@ -362,7 +362,7 @@ public class AIPlayer : Player
     protected IEnumerator GeneratePossibleMoves()
     {
         //Debug.Log("starting to think at time " + Time.time);
-        string playerColor = playerNum == 1 ? "Red" : "Blue";
+        string playerColor = playerNum == 1 ? "Orange" : "Blue";
         isThinking = true;
         float thinkingOverride = (1 - resourceMeterFillAmt) / (resourceGainRate * resourceGainFactor) * 0.95f;
         float startTime = Time.time;
@@ -648,7 +648,7 @@ public class AIPlayer : Player
                         if (nextPlay != null) break;
                         piece.Rotate(false, true);
                         piece.SetTileCoords(sortedPlayableCoords[i]);
-                        piece.TurnOffGlow();
+                        //piece.TurnOffGlow();
                         if (rotations < numRotations)
                         {
                             movesTried++;
@@ -698,9 +698,9 @@ public class AIPlayer : Player
                     }
 
 
-                    if (aiThinkingShortcut &&
+                    if (useAIThinkingShortcut &&
                         movesToConsider.Count > 1 &&
-                        ((resources >= 1 && resourceMeterFillAmt > 0.5f)|| 
+                        ((resources >= 1 && resourceMeterFillAmt > 0.6f) ||
                        startTime - Time.time > thinkingOverride))
                     {
                         //  midthinking shortcut
