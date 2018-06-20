@@ -70,6 +70,12 @@ public class MapManager : MonoBehaviour
             _mapWidth = 20;
             _mapHeight = 20;
         }
+        Services.GameData.totalMapTiles = MapWidth * MapHeight;
+        for (int i = 0; i < 2; i++)
+        {
+            Services.GameData.filledMapTiles[i] = 0;
+            Services.GameData.distancesToOpponentBase[i] = MapWidth + MapHeight - 8;
+        }
 
         Services.CameraController.SetPosition(
             new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, -10));
@@ -408,6 +414,8 @@ public class MapManager : MonoBehaviour
                 }
             }
         }
+        int minDistToOpponentBase = int.MaxValue;
+        Coord opposingBaseCoord = Services.GameManager.Players[player.playerNum % 2].mainBase.centerCoord;
         for (int i = 0; i < connectedPieces.Count; i++)
         {
             Polyomino piece = connectedPieces[i];
@@ -424,7 +432,13 @@ public class MapManager : MonoBehaviour
                     piece.TogglePieceConnectedness(true);
                 }
             }
+            int dist = piece.centerCoord.Distance(opposingBaseCoord);
+            if (dist < minDistToOpponentBase)
+            {
+                minDistToOpponentBase = dist;
+            }
         }
+        Services.GameData.distancesToOpponentBase[player.playerNum - 1] = minDistToOpponentBase;
     }
 
 	public bool ConnectedToBase(Polyomino piece, List<Polyomino> checkedPieces)

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311947, g: 0.38074, b: 0.35872698, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -279,6 +279,7 @@ GameObject:
   - component: {fileID: 1356268953}
   - component: {fileID: 1356268954}
   - component: {fileID: 1356268955}
+  - component: {fileID: 1356268956}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -367,3 +368,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 29fac00e380e7914a9e8e727fca78006, type: 2}
   - {fileID: 11400000, guid: 516da57c28974ca4baec61839716f227, type: 2}
   - {fileID: 11400000, guid: 7a3dc13a037b55a4095d06e2f8944168, type: 2}
+--- !u!114 &1356268956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1356268951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38ac8c5df8e32494a8fd01c044540d9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  filledMapTiles: 0000000000000000
+  productionRates:
+  - 0
+  - 0
+  distancesToOpponentBase: 0000000000000000
+  totalMapTiles: 0

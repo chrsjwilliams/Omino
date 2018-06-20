@@ -13,12 +13,12 @@ public class MiningDrill : Structure
     public override void OnClaim(Player player)
     {
         base.OnClaim(player);
-        owner.AugmentResourceGainIncrementFactor(resourceGainIncrementMultiplier);
+        owner.AugmentResourceGainFactor(resourceGainIncrementMultiplier);
     }
 
     public override void OnClaimLost()
     {
-        owner.AugmentResourceGainIncrementFactor(-resourceGainIncrementMultiplier);
+        owner.AugmentResourceGainFactor(-resourceGainIncrementMultiplier);
         base.OnClaimLost();
     }
 

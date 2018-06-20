@@ -634,6 +634,7 @@ public class Player : MonoBehaviour
                     inDanger = false;
                 }
             }
+            Services.GameData.filledMapTiles[playerNum - 1] += subpieces.Count;
         }
         else if(piece is Blueprint)
         {
@@ -793,9 +794,10 @@ public class Player : MonoBehaviour
         destProdLevel += levelChange;
     }
 
-    public void AugmentResourceGainIncrementFactor(float factorChangeIncrement)
+    public void AugmentResourceGainFactor(float factorChangeIncrement)
     {
         resourceGainFactor += factorChangeIncrement;
+        SetProductionValues();
     }
 
     public void ToggleShieldedPieces(bool shieldedPieces_)
@@ -927,6 +929,7 @@ public class Player : MonoBehaviour
             ((destProdLevel - 1) * BombFactory.drawRateBonus * allBlueprintHandicap)) * allResourceHandicap;
         resourceGainRate = (Base.resourceGainRate +
             ((resourceProdLevel - 1) * Mine.resourceRateBonus * allBlueprintHandicap)) * allResourceHandicap;
+        Services.GameData.productionRates[playerNum - 1] = resourceGainRate * resourceGainFactor;
     }
 
     private IEnumerator BlueprintAssistCheck(Polyomino pieceJustPlaced)

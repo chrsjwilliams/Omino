@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Assert.raiseExceptions = true;
-        InitalizeServices();
+        InitializeServices();
 
         Services.GlobalEventManager.Register<Reset>(Reset);
         Services.GlobalEventManager.Register<TouchDown>(ResetInactivity);
@@ -125,11 +125,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void InitalizeServices()
+    private void InitializeServices()
     {
         Services.GameEventManager = new GameEventsManager();
         Services.GlobalEventManager = new GameEventsManager();
         Services.GameManager = this;
+        Services.GameData = GetComponent<GameData>();
         Init();
 
         Services.MapManager = GetComponent<MapManager>();

@@ -902,6 +902,7 @@ public class Polyomino : IVertex
             DeathAnimation die = new DeathAnimation(this);
             die.Then(new ActionTask(DestroyThis));
             Services.GameScene.tm.Do(die);
+            Services.GameData.filledMapTiles[owner.playerNum - 1] -= tiles.Count;
         }
         else
         {

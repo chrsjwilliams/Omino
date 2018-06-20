@@ -21,4 +21,5 @@ public class Services
 
     public static AudioManager AudioManager { get; set; }
     public static ClipLibrary Clips { get; set; }
+    public static GameData GameData { get; set; }
 }

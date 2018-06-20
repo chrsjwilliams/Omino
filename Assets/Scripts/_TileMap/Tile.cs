@@ -100,7 +100,6 @@ public class Tile : MonoBehaviour, IVertex
     }
 
     public void OnRemove(){
-
     }
 
     public void OnPlace()
