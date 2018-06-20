@@ -4,6 +4,7 @@ public class Services
     public static Main Main { get; set; }
     public static GameManager GameManager { get; set; }
     public static GameEventsManager GameEventManager { get; set; }
+    public static GameEventsManager GlobalEventManager { get; set; }
     public static TaskManager GeneralTaskManager { get; set; }
     public static PrefabDB Prefabs { get; set; }
     public static CameraController CameraController { get; set; }

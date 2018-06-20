@@ -99,13 +99,17 @@ public class GameManager : MonoBehaviour
     private readonly string MUSICENABLED = "musicEnabledKey";
 
     private AIStrategy[] currentStrategies;
+    private float inactivityTimer;
+    private const float inactivityBeforeReset = 180f;
 
     private void Awake()
     {
         Assert.raiseExceptions = true;
         InitalizeServices();
 
-        Services.GameEventManager.Register<Reset>(Reset);
+        Services.GlobalEventManager.Register<Reset>(Reset);
+        Services.GlobalEventManager.Register<TouchDown>(ResetInactivity);
+        Services.GlobalEventManager.Register<MouseDown>(ResetInactivity);
         Input.simulateMouseWithTouches = false;
         colorSchemes = new Color[][]
         {
@@ -124,7 +128,7 @@ public class GameManager : MonoBehaviour
     private void InitalizeServices()
     {
         Services.GameEventManager = new GameEventsManager();
-
+        Services.GlobalEventManager = new GameEventsManager();
         Services.GameManager = this;
         Init();
 
@@ -526,6 +530,7 @@ public class GameManager : MonoBehaviour
     {
         Services.InputManager.Update();
         Services.GeneralTaskManager.Update();
+        InactivityCheck();
     }
 
     public void Reset(Reset e)
@@ -537,5 +542,24 @@ public class GameManager : MonoBehaviour
     public void ToggleBlueprintAssist()
     {
         BlueprintAssistEnabled = !BlueprintAssistEnabled;
+    }
+
+    private void InactivityCheck()
+    {
+        inactivityTimer += Time.deltaTime;
+        if (inactivityTimer >= inactivityBeforeReset)
+        {
+            Reset(new Reset());
+        }
+    }
+
+    private void ResetInactivity(MouseDown e)
+    {
+        inactivityTimer = 0;
+    }
+
+    private void ResetInactivity(TouchDown e)
+    {
+        inactivityTimer = 0;
     }
 }
