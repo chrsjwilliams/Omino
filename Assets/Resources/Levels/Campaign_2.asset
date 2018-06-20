@@ -35,7 +35,7 @@ MonoBehaviour:
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
   - text: 'There are two types of pieces: Normal pieces, and attack pieces. Attack
       pieces have a hammer icon.'
     location: {x: -100, y: -400}
@@ -51,7 +51,7 @@ MonoBehaviour:
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
   - text: Attack pieces act just like normal pieces, except that they can be played
       on top of opposing pieces, removing anything they overlap with.
     location: {x: 0, y: 0}
@@ -67,7 +67,7 @@ MonoBehaviour:
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
   - text: Attack pieces are drawn using a separate timer from normal pieces.
     location: {x: 450, y: -300}
     arrowLocation: {x: 270, y: -250}
@@ -82,7 +82,7 @@ MonoBehaviour:
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
   - text: Try to win before your opponent!
     location: {x: 500, y: -200}
     arrowLocation: {x: 0, y: 0}
@@ -97,7 +97,7 @@ MonoBehaviour:
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
   overrideStrategy:
     winWeight: 1
     structWeight: 0
@@ -108,3 +108,7 @@ MonoBehaviour:
     destructorForBlueprintWeight: 0
     dangerMod: 0
     overrideDefault: 1
+    resourceGainFactor: 0
+    drawRateFactor: 0
+    resourcesPerTick: 1
+    dangerDistance: 0

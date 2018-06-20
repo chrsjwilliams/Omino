@@ -715,7 +715,6 @@ public class AIPlayer : Player
         }
         #endregion
 
-       
 
         // Choose a play by rolling
         nextPlay = SelectMove(movesToConsider);
