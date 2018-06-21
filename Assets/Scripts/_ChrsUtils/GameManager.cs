@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
     }
 
     public bool useBlueprintHandicapType { get; private set; }
-    public float handicapValue { get; private set; }
+    public float[] handicapValue { get; private set; }
 
     [SerializeField] private Camera _mainCamera;
     public Camera MainCamera
@@ -228,12 +228,12 @@ public class GameManager : MonoBehaviour
         useBlueprintHandicapType = handicapType;
     }
 
-    public void SetHandicapValue(float handicapValue_)
+    public void SetHandicapValues(float[] handicapValue_)
     {
         handicapValue = handicapValue_;
     }
 
-    public void InitPlayers(bool resourceHandicap, float handicapValue)
+    public void InitPlayers(bool resourceHandicap, float[] handicapValue)
     {
         AIStrategy strategy = new AIStrategy(winWeight, structureWeight,
             blueprintWeight, destructionWeight, blueprintDestructionWeight,
@@ -250,14 +250,17 @@ public class GameManager : MonoBehaviour
                                             Services.MapManager.Map[0, 0].gameObject.transform.position,
                                             Quaternion.identity,
                                             Services.Scenes.CurrentScene.transform).GetComponent<Player>();
-                if (playerNum == 2 || !humanPlayers[1])
-                {
-                    _players[i].Init(playerNum);
-                }
-                else
-                {
-                    _players[i].Init(playerNum, resourceHandicap, handicapValue);
-                }
+                //if (playerNum == 2 || !humanPlayers[1])
+                //{
+                //    _players[i].Init(playerNum);
+                //}
+                //else
+                //{
+                //    _players[i].Init(playerNum, resourceHandicap, handicapValue[i]);
+                //}
+
+                _players[i].Init(playerNum, resourceHandicap, handicapValue[i]);
+
                 _players[i].name = PLAYER + " " + playerNum;
             }
             else
@@ -271,7 +274,7 @@ public class GameManager : MonoBehaviour
                 aiPlayerGameObject.AddComponent<AIPlayer>();
                 AIPlayer aiPlayer = aiPlayerGameObject.GetComponent<AIPlayer>();
                 _players[i] = aiPlayer;
-                _players[i].Init(playerNum, strategy, aiLevels[i], resourceHandicap, handicapValue);
+                _players[i].Init(playerNum, strategy, aiLevels[i], resourceHandicap, handicapValue[i]);
                 _players[i].name = "AI " + PLAYER + playerNum;
 
             }

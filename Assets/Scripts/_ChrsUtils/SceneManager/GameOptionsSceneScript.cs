@@ -53,9 +53,24 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private float defaultDangerWeight;
 
     [SerializeField]
+    private bool optionsMenuActive;
+
+    [SerializeField]
+    private LevelButton[] optionButton;
+    [SerializeField]
+    private GameObject optionMenu;
+
+    [SerializeField]
     private HandicapSystem handicapSystem;
     [SerializeField]
     private GameObject handicapSystemUI;
+
+    [SerializeField]
+    private Button musicButton;
+    [SerializeField]
+    private Button soundFXButton;
+    [SerializeField]
+    private Button blueprintAssistButton;
 
     private float timeElapsed;
     private const float textPulsePeriod = 0.35f;
@@ -84,7 +99,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         aiLevelTexts = new TextMeshProUGUI[1];
         aiLevelButtons = new Button[1][];
 
-        handicapSystemUI.SetActive(false);
+        optionsMenuActive = false;
+        optionMenu.SetActive(false);
+        optionButton[0].gameObject.SetActive(true);
 
         for (int i = 0; i < aiLevelButtonZones.Length; i++)
         {
@@ -119,8 +136,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     internal override void OnExit()
     {
-        Services.GameManager.SetHandicapType(handicapSystem.useBlueprintHandicap);
-        Services.GameManager.SetHandicapValue(handicapSystem.handicapValue);
+        //Services.GameManager.SetHandicapType(handicapSystem.useBlueprintHandicap);
+        Services.GameManager.SetHandicapValues(handicapSystem.handicapValues);
 
      //   PlayerPrefs.Save();
     }
@@ -220,6 +237,43 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         }
     }
 
+    private void SlideOutLevelButtons()
+    {
+        GameObject buttonParent =
+            Services.GameManager.mode == TitleSceneScript.GameMode.Campaign ?
+             campaignLevelButtonParent : levelButtonParent;
+        LevelButton[] buttons =
+            Services.GameManager.mode == TitleSceneScript.GameMode.Campaign ?
+            campaignLevelButtons : levelButtons;
+
+        buttonParent.transform.eulerAngles = new Vector3(0, 0, 0);
+        RemoveOpposingPlayerMenuText(buttons);
+        if (humanPlayers[0] && !humanPlayers[1])
+        {
+            buttonParent.transform.eulerAngles = new Vector3(0, 0, 0);
+        }
+        else if (!humanPlayers[0] && humanPlayers[1])
+        {
+            buttonParent.transform.eulerAngles = new Vector3(0, 0, 180);
+        }
+        buttonParent.SetActive(true);
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].gameObject.SetActive(false);
+        }
+        playButton.SetActive(false);
+        //levelSelectionIndicator.gameObject.SetActive(true);
+        GameObject levelSelectText =
+            buttonParent.GetComponentInChildren<TextMeshProUGUI>().gameObject;
+        levelSelectText.SetActive(false);
+        LevelSelectTextEntrance entrance =
+            new LevelSelectTextEntrance(levelSelectText);
+        LevelSelectButtonEntranceTask buttonEntrance =
+            new LevelSelectButtonEntranceTask(buttons, playButton, true);
+        _tm.Do(entrance);
+        _tm.Do(buttonEntrance);
+    }
+
     private void SlideInLevelButtons()
     {
         GameObject buttonParent =
@@ -255,16 +309,15 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             new LevelSelectButtonEntranceTask(buttons, playButton);
         _tm.Do(entrance);
         _tm.Do(buttonEntrance);
-        if (Services.GameManager.mode != TitleSceneScript.GameMode.Campaign)
-            SlideInHandicapUI();
+        SlideOutOptionsButton(false);
     }
 
-    public void SlideInHandicapUI()
+    public void SlideOutOptionsButton(bool slideOut)
     {
-        handicapSystemUI.SetActive(true);
-        SlideInHandicapUITask slideInHandicapUI =
-                new SlideInHandicapUITask(handicapSystemUI);
-        _tm.Do(slideInHandicapUI);
+        
+        LevelSelectButtonEntranceTask slideOptionButtonTask =
+                new LevelSelectButtonEntranceTask(optionButton, null, slideOut);
+        _tm.Do(slideOptionButtonTask);
     }
 
     public void StartGame()
@@ -330,9 +383,37 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GeneralTaskManager.Do(slideOut);
     }
 
-    public void ReturnToTitle()
+    public void ToggleOptionMenu()
     {
-        Services.Scenes.Swap<TitleSceneScript>();
+        optionsMenuActive = !optionsMenuActive;
+        optionMenu.SetActive(optionsMenuActive);
+        if (optionsMenuActive)
+        {
+
+            SlideOutOptionsButton(true);
+
+        }
+        //SlideOptionsMenu(!optionsMenuActive);
+    }
+
+    public void Back()
+    {
+        if (optionsMenuActive)
+        {
+            //  TO DO:  Change back button functionality to swap between options menu
+            //          and level select
+            //
+            //          Hook Up other player handicap
+            //
+            //          Options menu entry animation
+            ToggleOptionMenu();
+            SlideInLevelButtons();
+
+        }
+        else
+        {
+            Services.Scenes.Swap<TitleSceneScript>();
+        }
     }
     
     public void UIClick()
@@ -343,5 +424,51 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     public void UIButtonPressedSound()
     {
         Services.AudioManager.PlaySoundEffect(Services.Clips.UIButtonPressed, 0.55f);
+    }
+
+    private void SetOptionButtonStatus(Button button, bool status)
+    {
+        button.GetComponent<Image>().color = status ?
+            Services.GameManager.Player2ColorScheme[0] :
+            Services.GameManager.Player2ColorScheme[1];
+        TextMeshProUGUI textMesh = button.GetComponentInChildren<TextMeshProUGUI>();
+        string textContent = textMesh.text;
+        string[] textSplit = textContent.Split('<', '>');
+        if (textSplit.Length > 1)
+        {
+            for (int i = 0; i < textSplit.Length; i++)
+            {
+                if (textSplit[i] == "s")
+                {
+                    textContent = textSplit[i + 1];
+                    break;
+                }
+            }
+        }
+        if (!status)
+        {
+            textContent = "<s>" + textContent + "</s>";
+        }
+
+        textMesh.text = textContent;
+
+    }
+
+    public void ToggleMusic()
+    {
+        Services.AudioManager.ToggleMusic();
+        SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
+    }
+
+    public void ToggleSoundFX()
+    {
+        Services.AudioManager.ToggleSoundEffects();
+        SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
+    }
+
+    public void ToggleBlueprintAssist()
+    {
+        Services.GameManager.ToggleBlueprintAssist();
+        SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
     }
 }

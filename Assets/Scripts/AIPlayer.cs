@@ -697,7 +697,6 @@ public class AIPlayer : Player
                         }
                     }
 
-
                     if (useAIThinkingShortcut &&
                         movesToConsider.Count > 1 &&
                         ((resources >= 1 && resourceMeterFillAmt > 0.6f) ||

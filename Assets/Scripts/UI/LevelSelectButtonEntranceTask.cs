@@ -16,8 +16,10 @@ public class LevelSelectButtonEntranceTask : Task
     private Vector3 playStartPos;
     private Vector3 playTargetPos;
 
+    private bool moveDown;
+
     public LevelSelectButtonEntranceTask(LevelButton[] buttons_, 
-        GameObject playButton_ = null)
+        GameObject playButton_ = null, bool moveDown_ = false)
     {
         buttons = new GameObject[buttons_.Length];
         for (int i = 0; i < buttons_.Length; i++)
@@ -25,6 +27,7 @@ public class LevelSelectButtonEntranceTask : Task
             buttons[i] = buttons_[i].gameObject;
         }
         playButton = playButton_;
+        moveDown = moveDown_;
     }
 
     protected override void Init()
@@ -40,11 +43,23 @@ public class LevelSelectButtonEntranceTask : Task
             LevelButton levelButton = button.GetComponent<LevelButton>();
             button.SetActive(levelButton.unlocked);
             Vector3 offset;
-            offset = initialOffset * Vector3.down;
+            if (moveDown)
+            {
+                offset = initialOffset * Vector3.up;
+                startPositions[i] = button.transform.localPosition;
+                //button.transform.localPosition += offset;
+                targetPositions[i] = startPositions[i] - offset;// button.transform.localPosition;
 
-            targetPositions[i] = button.transform.localPosition;
-            button.transform.localPosition += offset;
-            startPositions[i] = button.transform.localPosition;
+            }
+            else
+            {
+                offset = initialOffset * Vector3.down;
+                targetPositions[i] = button.transform.localPosition;
+                button.transform.localPosition += offset;
+                startPositions[i] = button.transform.localPosition;
+            }
+
+            
         }
         if (playButton != null)
         {
@@ -86,7 +101,19 @@ public class LevelSelectButtonEntranceTask : Task
                     / duration)));
         }
 
-        if (timeElapsed >= totalDuration) SetStatus(TaskStatus.Success);
+        if (timeElapsed >= totalDuration)
+        {
+            SetStatus(TaskStatus.Success);
+            if(moveDown)
+            {
+                for (int i = 0; i < buttons.Length; i++)
+                {
+
+                    buttons[i].transform.localPosition = startPositions[i];
+                    
+                }
+            }
+        }   
     }
 }
 

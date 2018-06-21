@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlideInHandicapUITask : Task
+public class SlideInOptionsMenuTask : Task
 {
 
     private const float duration = 0.25f;
@@ -13,11 +13,11 @@ public class SlideInHandicapUITask : Task
     private Vector3 startPosition;
     private Vector3 targetPosition;
 
-    private GameObject handicapUI;
+    private GameObject optionsMenu;
 
-    public SlideInHandicapUITask(GameObject handicapUI_)
+    public SlideInOptionsMenuTask(GameObject optionsMenu_)
     {
-        handicapUI = handicapUI_;
+        optionsMenu = optionsMenu_;
     }
 
     protected override void Init()
@@ -25,16 +25,16 @@ public class SlideInHandicapUITask : Task
         timeElapsed = 0;
         initalOffset *= (Screen.width / 1027f);
         totalDuration = duration;
-        targetPosition = handicapUI.transform.localPosition;
-        handicapUI.transform.localPosition += (initalOffset * Vector3.down);
-        startPosition = handicapUI.transform.localPosition;
+        targetPosition = optionsMenu.transform.localPosition;
+        optionsMenu.transform.localPosition += (initalOffset * Vector3.down);
+        startPosition = optionsMenu.transform.localPosition;
     }
 
     internal override void Update()
     {
         timeElapsed += Time.deltaTime;
 
-        handicapUI.transform.localPosition = Vector3.Lerp(
+        optionsMenu.transform.localPosition = Vector3.Lerp(
                         startPosition,
                         targetPosition,
                         EasingEquations.Easing.QuadEaseOut(
@@ -42,7 +42,7 @@ public class SlideInHandicapUITask : Task
 
         if(timeElapsed >= duration)
         {
-            handicapUI.transform.localPosition = targetPosition;
+            optionsMenu.transform.localPosition = targetPosition;
         }
 
         if (timeElapsed >= totalDuration) SetStatus(TaskStatus.Success);
