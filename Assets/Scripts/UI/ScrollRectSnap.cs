@@ -297,119 +297,120 @@ public class ScrollRectSnap : MonoBehaviour
     public virtual void OnInputDrag(Vector3 inputPos)
     {
         if (t > sensitivityThreshold) touchMoved = true;
-        if( panel.rect.height  + scrollPanelOffset < Services.GameManager.MainCamera.WorldToScreenPoint(inputPos).y ||
-            scrollPanelOffset > Services.GameManager.MainCamera.WorldToScreenPoint(inputPos).y)
+        if (panel.rect.height + scrollPanelOffset > Services.GameManager.MainCamera.WorldToScreenPoint(inputPos).y &&
+            scrollPanelOffset < Services.GameManager.MainCamera.WorldToScreenPoint(inputPos).y)
         {
-            return;
-        }
 
-        dragging = true;
-        screenInputPos = Services.GameManager.MainCamera.WorldToScreenPoint(inputPos);
 
-        if (portraitMode)
-        {
-            if (prevTouchPos.x > screenInputPos.x)
+
+            dragging = true;
+            screenInputPos = Services.GameManager.MainCamera.WorldToScreenPoint(inputPos);
+
+            if (portraitMode)
             {
-                anticipatedDirection = DIRECTION.LEFT;
+                if (prevTouchPos.x > screenInputPos.x)
+                {
+                    anticipatedDirection = DIRECTION.LEFT;
+                }
+                else if (prevTouchPos.x < screenInputPos.x)
+                {
+                    anticipatedDirection = DIRECTION.RIGHT;
+                }
+
+                prevTouchPos = screenInputPos;
+
+                if (screenInputPos.x > initalTouchPos.x)
+                {
+                    dir = 1;
+
+                    anticipatedIndex = selectedIndex - 1;
+                    if (anticipatedIndex < 0) anticipatedIndex = 0;
+                }
+                else
+                {
+                    dir = -1;
+
+                    anticipatedIndex = selectedIndex + 1;
+                    if (anticipatedIndex > images.Length - 1) anticipatedIndex = images.Length - 1;
+                }
+
+                if (screenInputPos.x > initalTouchPos.x + moveBuffer)
+                {
+                    direction = DIRECTION.RIGHT;
+
+                }
+                else if (screenInputPos.x < initalTouchPos.x - moveBuffer)
+                {
+                    direction = DIRECTION.LEFT;
+                }
+                else
+                {
+                    direction = DIRECTION.IDLE;
+                }
+
+                travelDistance = Mathf.Abs(initalTouchPos.x - screenInputPos.x);
             }
-            else if (prevTouchPos.x < screenInputPos.x)
+            else
             {
-                anticipatedDirection = DIRECTION.RIGHT;
+                if (prevTouchPos.y > screenInputPos.y)
+                {
+                    anticipatedDirection = DIRECTION.RIGHT;
+                }
+                else if (prevTouchPos.y < screenInputPos.y)
+                {
+                    anticipatedDirection = DIRECTION.LEFT;
+                }
+
+                if (screenInputPos.y > initalTouchPos.y)
+                {
+                    dir = 1;
+
+                    anticipatedIndex = selectedIndex - 1;
+                    if (anticipatedIndex < 0) anticipatedIndex = 0;
+                }
+                else
+                {
+                    dir = -1;
+
+                    anticipatedIndex = selectedIndex + 1;
+                    if (anticipatedIndex > images.Length - 1) anticipatedIndex = images.Length - 1;
+                }
+
+                if (screenInputPos.y > initalTouchPos.y) dir = 1;
+                else dir = -1;
+
+                if (screenInputPos.y < initalTouchPos.y - moveBuffer)
+                {
+                    direction = DIRECTION.LEFT;
+                }
+                else if (screenInputPos.y > initalTouchPos.y + moveBuffer)
+                {
+                    direction = DIRECTION.RIGHT;
+                }
+                else
+                {
+                    direction = DIRECTION.IDLE;
+                }
+
+                travelDistance = Mathf.Abs(initalTouchPos.y - screenInputPos.y);
             }
 
             prevTouchPos = screenInputPos;
 
-            if (screenInputPos.x > initalTouchPos.x)
-            {
-                dir = 1;
+            if (travelDistance > imageDistance) travelDistance = imageDistance;
 
-                anticipatedIndex = selectedIndex - 1;
-                if (anticipatedIndex < 0) anticipatedIndex = 0;
-            }
-            else
-            {
-                dir = -1;
+            Vector3 newPanelPos = new Vector3(travelDistance * dir + ((minImageIndex * -imageDistance)), 0, 0);
 
-                anticipatedIndex = selectedIndex + 1;
-                if (anticipatedIndex > images.Length - 1) anticipatedIndex = images.Length - 1;
-            }
+            panel.anchoredPosition = Vector3.Lerp(panel.anchoredPosition, newPanelPos, Time.deltaTime * swipeSpeed);
 
-            if (screenInputPos.x  > initalTouchPos.x + moveBuffer)
-            {
-                direction = DIRECTION.RIGHT;
 
-            }
-            else if (screenInputPos.x < initalTouchPos.x - moveBuffer)
-            {
-                direction = DIRECTION.LEFT;
-            }
-            else
-            {
-                direction = DIRECTION.IDLE;
-            }
+            float directionLimit = ((anticipatedIndex * imageDistance));
+            float anchorPos = selectedIndex * imageDistance;
 
-            travelDistance = Mathf.Abs(initalTouchPos.x - screenInputPos.x);
+            float min = anchorPos < directionLimit ? anchorPos : directionLimit;
+
+            t = (Mathf.Abs(panel.anchoredPosition.x) - min) / imageDistance;
         }
-        else
-        {
-            if (prevTouchPos.y > screenInputPos.y)
-            {
-                anticipatedDirection = DIRECTION.RIGHT;
-            }
-            else if (prevTouchPos.y < screenInputPos.y)
-            {
-                anticipatedDirection = DIRECTION.LEFT;
-            }
-
-            if (screenInputPos.y > initalTouchPos.y)
-            {
-                dir = 1;
-
-                anticipatedIndex = selectedIndex - 1;
-                if (anticipatedIndex < 0) anticipatedIndex = 0;
-            }
-            else
-            {
-                dir = -1;
-
-                anticipatedIndex = selectedIndex + 1;
-                if (anticipatedIndex > images.Length - 1) anticipatedIndex = images.Length - 1;
-            }
-
-            if (screenInputPos.y > initalTouchPos.y) dir = 1;
-            else dir = -1;
-
-            if (screenInputPos.y < initalTouchPos.y - moveBuffer)
-            {
-                direction = DIRECTION.LEFT;
-            }
-            else if (screenInputPos.y > initalTouchPos.y + moveBuffer)
-            {
-                direction = DIRECTION.RIGHT;
-            }
-            else
-            {
-                direction = DIRECTION.IDLE;
-            }
-
-            travelDistance = Mathf.Abs(initalTouchPos.y - screenInputPos.y);
-        }
-
-        prevTouchPos = screenInputPos;
-
-        if (travelDistance > imageDistance) travelDistance = imageDistance;
-
-        Vector3 newPanelPos = new Vector3(travelDistance * dir + ((minImageIndex * -imageDistance)), 0, 0);
-       
-        panel.anchoredPosition = Vector3.Lerp(panel.anchoredPosition, newPanelPos, Time.deltaTime * swipeSpeed);
-
-
-        float directionLimit = ((anticipatedIndex * imageDistance));
-        float anchorPos = selectedIndex * imageDistance;
-
-        float min = anchorPos < directionLimit ? anchorPos : directionLimit;
-
-        t = (Mathf.Abs(panel.anchoredPosition.x) - min) / imageDistance;
-
+        else return;
     }
 }

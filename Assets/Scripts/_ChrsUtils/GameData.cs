@@ -20,4 +20,10 @@ public class GameData : MonoBehaviour
     public float secondsSinceMatchStarted = 0.0f;
     public int[] distancesToOpponentBase = new int[2];
     public int totalMapTiles;
+
+
+    public void Reset()
+    {
+        secondsSinceMatchStarted = 0.0f;
+    }
 }

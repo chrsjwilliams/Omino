@@ -46,6 +46,9 @@ public class ClipLibrary : ScriptableObject {
     
     [SerializeField] private AudioClip shieldHit;
     public AudioClip ShieldHit { get { return shieldHit; } }
+    
+    [SerializeField] private AudioClip silence;
+    public AudioClip Silence { get { return silence; } }
 
     [SerializeField] private AudioClip structureClaimed;
     public AudioClip StructureClaimed { get { return structureClaimed; } }
