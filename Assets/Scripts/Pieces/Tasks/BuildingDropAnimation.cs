@@ -102,6 +102,12 @@ public class BuildingDropAnimation : Task
             else
                 Services.AudioManager.RegisterSoundEffect(Services.Clips.BlueprintPlaced, 1, Clock.BeatValue.Sixteenth);
         }
-        if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
+        if (timeElapsed >= duration)
+        {
+            foreach (Transform transform in transforms) 
+                transform.localScale = Vector3.one;
+
+            SetStatus(TaskStatus.Success);
+        }
     }
 }
