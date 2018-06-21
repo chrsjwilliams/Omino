@@ -41,6 +41,7 @@ public class PauseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
         else
         {
+            Services.AudioManager.PlaySoundEffect(Services.Clips.UIButtonPressed, 1.0f);
             pressed = true;
             transform.localScale = holdScale * Vector3.one;
             timeHeld = 0;
@@ -55,6 +56,7 @@ public class PauseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void Pause()
     {
+        Services.AudioManager.PlaySoundEffect(Services.Clips.UIClick, 1.0f);
         Services.UIManager.TogglePauseMenu();
         ReturnToNeutral();
     }

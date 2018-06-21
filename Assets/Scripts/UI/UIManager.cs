@@ -551,11 +551,13 @@ public class UIManager : MonoBehaviour {
     {
         if (Services.GameScene.gamePaused)
         {
+            AudioListener.volume = 1.0f;
             pauseMenu.SetActive(false);
             Services.GameScene.UnpauseGame();
         }
         else //if (pauseTimer > 0)
         {
+            AudioListener.volume = 0.55f;
             pauseMenu.SetActive(true);
             Services.GameScene.PauseGame();
             //pauseTimer = 0;
