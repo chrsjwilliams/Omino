@@ -297,8 +297,8 @@ public class ScrollRectSnap : MonoBehaviour
     public virtual void OnInputDrag(Vector3 inputPos)
     {
         if (t > sensitivityThreshold) touchMoved = true;
-        if (panel.rect.height + scrollPanelOffset > Services.GameManager.MainCamera.WorldToScreenPoint(inputPos).y &&
-            scrollPanelOffset < Services.GameManager.MainCamera.WorldToScreenPoint(inputPos).y)
+        //if (panel.rect.height + scrollPanelOffset > Services.GameManager.MainCamera.WorldToScreenPoint(inputPos).y &&
+        //    scrollPanelOffset < Services.GameManager.MainCamera.WorldToScreenPoint(inputPos).y)
         {
 
 
@@ -411,6 +411,6 @@ public class ScrollRectSnap : MonoBehaviour
 
             t = (Mathf.Abs(panel.anchoredPosition.x) - min) / imageDistance;
         }
-        else return;
+        //else return;
     }
 }
