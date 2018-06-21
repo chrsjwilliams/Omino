@@ -124,6 +124,8 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void Replay()
     {
+        Services.GameData.Reset();
+        Services.AudioManager.ResetLevelMusic();
         Task reload = new WaitUnscaled(0.01f);
         reload.Then(new ActionTask(Reload));
         Services.GeneralTaskManager.Do(reload);
@@ -131,6 +133,8 @@ public class GameSceneScript : Scene<TransitionData>
 
     void Reload()
     {
+        Services.GameData.Reset();
+        Services.AudioManager.ResetLevelMusic();
         Services.Scenes.Swap<GameSceneScript>();
     }
 
@@ -143,11 +147,13 @@ public class GameSceneScript : Scene<TransitionData>
 
     void LoadLevelSelect()
     {
+        Services.AudioManager.FadeOutLevelMusic();
         Services.Scenes.Swap<GameOptionsSceneScript>();
     }
 
     public void MoveToNextLevel()
     {
+        Services.AudioManager.FadeOutLevelMusic();
         Level nextLevel = Services.MapManager.GetNextLevel();
         if(nextLevel != null)
         {
@@ -158,6 +164,7 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void Reset()
     {
+        Services.AudioManager.FadeOutLevelMusic();
         Services.GameManager.Reset(new Reset());
     }
 

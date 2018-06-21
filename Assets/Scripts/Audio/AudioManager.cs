@@ -11,14 +11,17 @@ public class AudioManager : MonoBehaviour {
     private TaskManager levelMusicManager;
     private List<AudioSource> effectChannels;
     private GameObject effectsHolder;
+    private GameObject levelMusicHolder;
     private int effectChannelSize = 100;
     private int effectChannelIndex = 0;
-    private List<AudioSource> level_music_sources;
+    private List<AudioSource> levelMusicSources;
     private List<float> level_music_volumes, previous_volumes;
     private readonly float BASEMUSICVOLUME = 0.6f;
     
     public void Awake()
     {
+        DontDestroyOnLoad(gameObject);
+        
         effectsHolder = new GameObject("Effect Tracks");
  
         effectsHolder.transform.parent = transform;
@@ -66,9 +69,9 @@ public class AudioManager : MonoBehaviour {
 
     private void _PopulateLevelMusic()
     {
-        level_music_sources = new List<AudioSource>();
+        levelMusicSources = new List<AudioSource>();
         
-        GameObject levelMusicHolder = new GameObject("Level Music Tracks");
+        levelMusicHolder = new GameObject("Level Music Tracks");
         levelMusicHolder.transform.parent = transform;
 
         int i = 1;
@@ -81,7 +84,7 @@ public class AudioManager : MonoBehaviour {
             levelMusicTrack.loop = true;
             levelMusicTrack.volume = BASEMUSICVOLUME;
             
-            level_music_sources.Add (levelMusicTrack);
+            levelMusicSources.Add (levelMusicTrack);
         }
     }
 
@@ -94,12 +97,12 @@ public class AudioManager : MonoBehaviour {
     {
         level_music_volumes = new List<float>();
         
-        for (int i = 1; i < level_music_sources.Count; i++)
+        for (int i = 1; i < levelMusicSources.Count; i++)
         {
-            level_music_sources[i].volume = 0;
+            levelMusicSources[i].volume = 0;
         }
         
-        foreach (AudioSource source in level_music_sources)
+        foreach (AudioSource source in levelMusicSources)
         {
             source.Play();
             level_music_volumes.Add(source.volume);
@@ -121,45 +124,45 @@ public class AudioManager : MonoBehaviour {
     {
         previous_volumes = new List<float>();
         
-        previous_volumes.Add(level_music_sources[0].volume);
+        previous_volumes.Add(levelMusicSources[0].volume);
 
-        if (level_music_sources.Count >= 2)
+        if (levelMusicSources.Count >= 2)
         {
-            previous_volumes.Add(level_music_sources[1].volume);
+            previous_volumes.Add(levelMusicSources[1].volume);
             level_music_volumes[1] = Mathf.Clamp((float)Services.GameData.totalFilledMapTiles / (float)Services.GameData.totalMapTiles, 0.0f, BASEMUSICVOLUME);
         }
 
-        if (level_music_sources.Count >= 4)
+        if (levelMusicSources.Count >= 4)
         {
-            previous_volumes.Add(level_music_sources[2].volume);
+            previous_volumes.Add(levelMusicSources[2].volume);
             level_music_volumes[2] = Mathf.Clamp(Services.GameData.productionRates[0], 0.0f, BASEMUSICVOLUME);
             
-            previous_volumes.Add(level_music_sources[3].volume);
+            previous_volumes.Add(levelMusicSources[3].volume);
             level_music_volumes[3] = Mathf.Clamp(Services.GameData.productionRates[1], 0.0f, BASEMUSICVOLUME);
         }
 
-        if (level_music_sources.Count >= 6)
+        if (levelMusicSources.Count >= 6)
         {
-            previous_volumes.Add(level_music_sources[4].volume);
+            previous_volumes.Add(levelMusicSources[4].volume);
             level_music_volumes[4] = Mathf.Clamp(2.0f / Services.GameData.distancesToOpponentBase[0], 0.0f, BASEMUSICVOLUME);
             
-            previous_volumes.Add(level_music_sources[5].volume);
+            previous_volumes.Add(levelMusicSources[5].volume);
             level_music_volumes[5] = Mathf.Clamp(2.0f / Services.GameData.distancesToOpponentBase[1], 0.0f, BASEMUSICVOLUME);
         }
 
-        if (level_music_sources.Count >= 7)
+        if (levelMusicSources.Count >= 7)
         {
-            for (int i = 6; i < level_music_sources.Count; i++)
+            for (int i = 6; i < levelMusicSources.Count; i++)
             {
-                previous_volumes.Add(level_music_sources[i].volume);
+                previous_volumes.Add(levelMusicSources[i].volume);
                 level_music_volumes[i] = Mathf.Clamp(Services.GameData.secondsSinceMatchStarted / (5.0f * 60f), 0.0f,
                     BASEMUSICVOLUME);
             }
         }
 
-        for (int i = 0; i < level_music_sources.Count; i++)
+        for (int i = 0; i < levelMusicSources.Count; i++)
         {
-            AudioSource to_change = level_music_sources[i];
+            AudioSource to_change = levelMusicSources[i];
             float starting_value = previous_volumes[i];
             float new_value = level_music_volumes[i];
             
@@ -176,15 +179,6 @@ public class AudioManager : MonoBehaviour {
         
         measureWait.Then(changeVolumes);
         levelMusicManager.Do(measureWait);
-    }
-
-    public void StopLevelMusic()
-    {
-        levelMusicManager = null;
-        foreach (AudioSource source in level_music_sources)
-        {
-            source.Stop();
-        }
     }
 
     public void PlaySoundEffect(AudioClip clip, float volume = 1.0f)
@@ -210,6 +204,48 @@ public class AudioManager : MonoBehaviour {
         
         to_play.volume = volume;
         to_play.Play();
+    }
+
+    public void FadeOutLevelMusic()
+    {
+        previous_volumes = new List<float>();
+
+
+        foreach (AudioSource source in levelMusicSources)
+        {
+            previous_volumes.Add(source.volume);
+        }
+        
+        for (int i = 0; i < levelMusicSources.Count; i++)
+        {
+            AudioSource to_change = levelMusicSources[i];
+            float starting_value = previous_volumes[i];
+            float new_value = 0.0f;
+            
+            StartCoroutine(Coroutines.DoOverEasedTime(Services.Clock.MeasureLength(), Easing.Linear,
+                t =>
+                {
+                    float new_volume = Mathf.Lerp(starting_value, new_value, t);
+                    to_change.volume = new_volume;
+                }));
+        }
+
+        levelMusicManager = new TaskManager();
+        
+        Task wait = new Wait(Services.Clock.MeasureLength() * 2);
+        wait.Then(new ActionTask(() => { levelMusicHolder = null; }));
+        
+        levelMusicManager.Do(wait);
+    }
+
+    public void ResetLevelMusic()
+    {
+        foreach (AudioSource source in levelMusicSources)
+        {
+            source.volume = 0;
+        }
+        
+        levelMusicSources[0].volume = BASEMUSICVOLUME;
     }
 
     public void SetMainTrack(AudioClip clip, float volume)
@@ -241,7 +277,7 @@ public class AudioManager : MonoBehaviour {
 
     public void MuteMusicChannels()
     {        
-        foreach (AudioSource source in level_music_sources)
+        foreach (AudioSource source in levelMusicSources)
         {
             source.mute = !Services.GameManager.MusicEnabled;
         }
