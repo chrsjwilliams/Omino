@@ -561,6 +561,7 @@ public class GameManager : MonoBehaviour
         inactivityTimer += Time.deltaTime;
         if (inactivityTimer >= inactivityBeforeReset)
         {
+            Services.AudioManager.FadeOutLevelMusic();
             Reset(new Reset());
         }
     }
