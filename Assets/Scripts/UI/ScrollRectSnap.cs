@@ -129,6 +129,7 @@ public class ScrollRectSnap : MonoBehaviour
         if (!dragging)
         {
             LerpToImage(minImageIndex * -imageDistance);
+            t = Mathf.Lerp(t, 0, Time.deltaTime * 10);
         }
 
     }
@@ -246,7 +247,7 @@ public class ScrollRectSnap : MonoBehaviour
 
     public virtual void OnInputUp()
     {
-        t = 0;
+        
         touchMoved = false;
         dragging = false;
         switch (direction)
