@@ -30,10 +30,10 @@ public class InitialBuildingEntryAnimation : Task
             subtaskManager.Do(dropTask);
         }
         
-        Task waitTask = new Wait((structStaggerTime * Services.MapManager.structuresOnMap.Count) + (baseStaggerTime * 2));
-        waitTask.Then(new ActionTask(() => { SetStatus(TaskStatus.Success); }));
+        // Task waitTask = new Wait((structStaggerTime * Services.MapManager.structuresOnMap.Count) + (baseStaggerTime * 2));
+        // waitTask.Then(new ActionTask(() => { SetStatus(TaskStatus.Success); }));
         
-        subtaskManager.Do(waitTask);
+        //subtaskManager.Do(waitTask);
         
         Services.Clock.SyncFunction(() => { run_tasks = true; }, Clock.BeatValue.Quarter);
     }
@@ -41,7 +41,11 @@ public class InitialBuildingEntryAnimation : Task
     internal override void Update()
     {
         if (run_tasks)
+        {
             subtaskManager.Update();
+            if (subtaskManager.tasksInProcessCount == 0)
+                SetStatus(TaskStatus.Success);
+        }
     }
 
 }

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c7948811-78ad-4f0d-8a31-976e356c09f9" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pieces/Tasks/BuildingDropAnimation.cs" afterPath="$PROJECT_DIR$/Assets/Scripts/Pieces/Tasks/BuildingDropAnimation.cs" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pieces/Tasks/InitialBuildingEntryAnimation.cs" afterPath="$PROJECT_DIR$/Assets/Scripts/Pieces/Tasks/InitialBuildingEntryAnimation.cs" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -62,7 +62,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BuildingDropAnimation.cs" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BuildingDropAnimation.cs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Assets/Scripts/Pieces/Tasks/BuildingDropAnimation.cs">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="339">
@@ -83,6 +83,25 @@
                 <marker date="1529604286007" expanded="true" signature="2831:2986" ph="{...}" />
                 <marker date="1529604286007" expanded="true" signature="3088:3514" ph="{...}" />
                 <marker date="1529604286007" expanded="true" signature="3551:3724" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="InitialBuildingEntryAnimation.cs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Assets/Scripts/Pieces/Tasks/InitialBuildingEntryAnimation.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="431">
+              <caret line="35" column="10" lean-forward="false" selection-start-line="35" selection-start-column="10" selection-end-line="35" selection-end-column="10" />
+              <folding>
+                <marker date="1529604695968" expanded="false" signature="6:90" ph="..." />
+                <marker date="1529604695968" expanded="true" signature="141:1697" ph="{...}" />
+                <marker date="1529604695968" expanded="true" signature="327:1457" ph="{...}" />
+                <marker date="1529604695968" expanded="true" signature="550:766" ph="{...}" />
+                <marker date="1529604695968" expanded="true" signature="842:1084" ph="{...}" />
+                <marker date="1529604695968" expanded="true" signature="1102:1351" ph="/* Task waitTask = new Wait((structStaggerTime * Services.MapManager.structuresOnMap.Count) + (baseStaggerTime *  ... */" />
+                <marker date="1529604695968" expanded="true" signature="1498:1694" ph="{...}" />
+                <marker date="1529604695968" expanded="true" signature="1527:1688" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -328,7 +347,6 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/Services.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Audio/Clock.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/SceneManager/GameOptionsSceneScript.cs" />
-        <option value="$PROJECT_DIR$/Assets/Scripts/Pieces/Tasks/InitialBuildingEntryAnimation.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/UI/PauseButton.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Audio/ClipLibrary.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/_ChrsUtils/GameManager.cs" />
@@ -338,6 +356,7 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/Audio/AudioManager.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/UI/UIManager.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/Pieces/Tasks/BuildingDropAnimation.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/Pieces/Tasks/InitialBuildingEntryAnimation.cs" />
       </list>
     </option>
   </component>
@@ -480,12 +499,12 @@
       <workItem from="1529441508930" duration="3362000" />
       <workItem from="1529506748445" duration="11603000" />
       <workItem from="1529596998934" duration="3868000" />
-      <workItem from="1529601262127" duration="1192000" />
+      <workItem from="1529601262127" duration="1514000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="56129000" />
+    <option name="totallyTimeSpent" value="56451000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -717,13 +736,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="11440">
           <caret line="718" column="44" lean-forward="false" selection-start-line="718" selection-start-column="44" selection-end-line="718" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Pieces/Tasks/InitialBuildingEntryAnimation.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="25" column="75" lean-forward="false" selection-start-line="25" selection-start-column="75" selection-end-line="25" selection-end-column="75" />
         </state>
       </provider>
     </entry>
@@ -973,6 +985,23 @@
             <marker date="1529604286007" expanded="true" signature="2831:2986" ph="{...}" />
             <marker date="1529604286007" expanded="true" signature="3088:3514" ph="{...}" />
             <marker date="1529604286007" expanded="true" signature="3551:3724" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Assets/Scripts/Pieces/Tasks/InitialBuildingEntryAnimation.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="431">
+          <caret line="35" column="10" lean-forward="false" selection-start-line="35" selection-start-column="10" selection-end-line="35" selection-end-column="10" />
+          <folding>
+            <marker date="1529604695968" expanded="false" signature="6:90" ph="..." />
+            <marker date="1529604695968" expanded="true" signature="141:1697" ph="{...}" />
+            <marker date="1529604695968" expanded="true" signature="327:1457" ph="{...}" />
+            <marker date="1529604695968" expanded="true" signature="550:766" ph="{...}" />
+            <marker date="1529604695968" expanded="true" signature="842:1084" ph="{...}" />
+            <marker date="1529604695968" expanded="true" signature="1102:1351" ph="/* Task waitTask = new Wait((structStaggerTime * Services.MapManager.structuresOnMap.Count) + (baseStaggerTime *  ... */" />
+            <marker date="1529604695968" expanded="true" signature="1498:1694" ph="{...}" />
+            <marker date="1529604695968" expanded="true" signature="1527:1688" ph="{...}" />
           </folding>
         </state>
       </provider>
