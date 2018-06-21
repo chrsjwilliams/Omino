@@ -187,7 +187,7 @@ public class AudioManager : MonoBehaviour {
         }
     }
 
-    public void PlaySoundEffect(AudioClip clip, float volume)
+    public void PlaySoundEffect(AudioClip clip, float volume = 1.0f)
     {
         AudioSource to_play = effectChannels[effectChannelIndex];
         effectChannelIndex = (effectChannelIndex + 1) % effectChannelSize;
@@ -203,7 +203,11 @@ public class AudioManager : MonoBehaviour {
             effectChannelIndex = (effectChannelIndex + 1) % effectChannelSize;
         }
 
-        to_play.clip = clip;
+        if (Services.GameManager.SoundEffectsEnabled)
+            to_play.clip = clip;
+        else
+            to_play.clip = Services.Clips.Silence;
+        
         to_play.volume = volume;
         to_play.Play();
     }

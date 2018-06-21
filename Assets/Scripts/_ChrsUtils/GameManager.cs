@@ -40,15 +40,7 @@ public class GameManager : MonoBehaviour
         get { return soundEffectsEnabled; }
         set { 
             soundEffectsEnabled = value;    
-            UpdateSoundEffectPlayerPrefs(); 
-            if (soundEffectsEnabled)
-            {
-                Services.Clips = Resources.Load<ClipLibrary>("Audio/QuantizedClipLibrary");
-            }
-            else
-            {
-                Services.Clips = Resources.Load<ClipLibrary>("Audio/SilentClipLibrary");
-            }
+            UpdateSoundEffectPlayerPrefs();
         }
     }
 
