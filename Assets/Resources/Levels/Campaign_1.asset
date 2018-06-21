@@ -82,7 +82,7 @@ MonoBehaviour:
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: Each piece costs 1 play resource. Plays replenish over time.
+  - text: Placing a piece costs 1 Energy. Energy recharges over time.
     location: {x: 270, y: -275}
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
@@ -167,3 +167,7 @@ MonoBehaviour:
     destructorForBlueprintWeight: 0
     dangerMod: 0
     overrideDefault: 1
+    resourceGainFactor: 0
+    drawRateFactor: 0
+    resourcesPerTick: 0
+    dangerDistance: 0

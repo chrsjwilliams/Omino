@@ -80,9 +80,9 @@ public class Base : Structure
         }
         else
         {
-            return "Normal Piece Production Level +1 \n" +
-                "<color=red>Attack</color> Piece Production Level +1 \n" +
-                "Energy Production Level +1";
+            return "+1 Normal Piece Production Level\n" +
+                "+1 <color=red>Attack</color> Piece Production Level\n" +
+                "+1 Energy Recharge Level";
         }
     }
 }

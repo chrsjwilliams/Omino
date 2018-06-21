@@ -26,7 +26,7 @@ public class BombFactory : Blueprint
     {
         //return "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) + 
         //    "</color> <color=red>DESTRUCTIVE</color> pieces per second";
-        return "<color=red>Attack</color> Piece Production Level +1";
+        return "+1 <color=red>Attack</color> Piece Production Level";
     }
 
     protected override void SetIconSprite()

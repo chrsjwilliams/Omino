@@ -20,7 +20,7 @@ public class Factory : Blueprint
     {
         //return "+<color=green>" + Math.Round((double)normalDrawRateBonus, 3) + 
         //    "</color> normal pieces per second";
-        return "Normal Piece Production Level +1";
+        return "+1 Normal Piece Production Level";
     }
 
     protected override void SetIconSprite()

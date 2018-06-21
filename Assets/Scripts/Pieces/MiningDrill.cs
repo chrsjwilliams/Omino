@@ -30,13 +30,13 @@ public class MiningDrill : Structure
 
     protected override string GetName()
     {
-        return "Fast Forward";
+        return "Dynamo";
     }
 
     protected override string GetDescription()
     {
-        return "Increases Play Rate by <color=green>" 
-            + 100 * resourceGainIncrementMultiplier + "</color>%";
+        return "+" + 100 * resourceGainIncrementMultiplier + "%" +
+            " Energy Recharge Rate";
     }
 
 }

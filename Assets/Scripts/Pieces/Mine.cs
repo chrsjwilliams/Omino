@@ -9,7 +9,7 @@ public class Mine : Blueprint
 
     public Mine(Player player_) : base(BuildingType.MINE, player_)
     {
-        onGainText = "+1 Energy Production Level";
+        onGainText = "+1 Energy Recharge Level";
     }
 
     protected override string GetName()
@@ -21,7 +21,7 @@ public class Mine : Blueprint
     {
         //return "+<color=green>" + Math.Round((double)resourceGainRateBonus * 10, 3) + 
         //    "</color> resources per second";
-        return "Energy Production Level +1";
+        return "+1 Energy Recharge Level";
     }
 
     protected override void SetIconSprite()
