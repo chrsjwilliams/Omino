@@ -57,6 +57,8 @@ public class ScrollRectSnap : MonoBehaviour
             images[i] = panel.transform.GetChild(i).GetComponent<Image>();
         }
 
+
+        touchID = -1;
         distance = new float[numOfLevels];
 
         imageDistance = (int)Mathf.Abs(images[2].GetComponent<RectTransform>().anchoredPosition.x - 
@@ -244,7 +246,7 @@ public class ScrollRectSnap : MonoBehaviour
 
     public virtual void OnInputUp()
     {
-        
+        t = 0;
         touchMoved = false;
         dragging = false;
         switch (direction)
