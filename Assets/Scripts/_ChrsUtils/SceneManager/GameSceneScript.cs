@@ -164,7 +164,7 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void Reset()
     {
-        Services.AudioManager.FadeOutLevelMusic();
+        Services.AudioManager.FadeOutLevelMusicMainMenuCall();
         Services.GameManager.Reset(new Reset());
     }
 
