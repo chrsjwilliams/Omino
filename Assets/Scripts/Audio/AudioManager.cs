@@ -210,7 +210,6 @@ public class AudioManager : MonoBehaviour {
     {
         previous_volumes = new List<float>();
 
-
         foreach (AudioSource source in levelMusicSources)
         {
             previous_volumes.Add(source.volume);

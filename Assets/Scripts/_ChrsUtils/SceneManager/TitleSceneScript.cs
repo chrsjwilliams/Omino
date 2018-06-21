@@ -117,6 +117,7 @@ public class TitleSceneScript : Scene<TransitionData>
 
     public void Back()
     {
+        Services.AudioManager.PlaySoundEffect(Services.Clips.UIButtonPressed);
         Services.Scenes.Swap<TitleSceneScript>();
     }
 
