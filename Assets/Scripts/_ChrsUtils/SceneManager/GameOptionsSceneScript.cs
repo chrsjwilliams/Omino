@@ -406,15 +406,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     {
         if (optionsMenuActive)
         {
-            //  TO DO:  Change back button functionality to swap between options menu
-            //          and level select
-            //
-            //          Hook Up other player handicap
-            //
-            //          Options menu entry animation
             ToggleOptionMenu();
             SlideInLevelButtons();
-
         }
         else
         {
