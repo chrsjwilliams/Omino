@@ -40,7 +40,7 @@ public class BuildingDropAnimation : Task
 
     protected override void Init()
     {
-        duration = Services.Clock.SixteenthLength();
+        duration = Services.Clock.EighthLength();
         shakeStartTime = duration / 2;
         shakeDur = 3 * duration / 4;
         
