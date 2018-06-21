@@ -9,7 +9,6 @@ public class AudioManager : MonoBehaviour {
 
     private AudioSource mainTrack;
     private TaskManager levelMusicManager;
-    private float last_volume = 1.0f;
     private List<AudioSource> effectChannels;
     private GameObject effectsHolder;
     private int effectChannelSize = 100;
@@ -114,6 +113,8 @@ public class AudioManager : MonoBehaviour {
         initialWait.Then(changeVolumes);
         
         levelMusicManager.Do(initialWait);
+
+        MuteMusicChannels();
     }
 
     private void DynamicLevelMusicVolumes()
@@ -161,7 +162,6 @@ public class AudioManager : MonoBehaviour {
             AudioSource to_change = level_music_sources[i];
             float starting_value = previous_volumes[i];
             float new_value = level_music_volumes[i];
-            Debug.Log("Track " + i + ": " + starting_value + "->" + new_value);
             
             StartCoroutine(Coroutines.DoOverEasedTime(Services.Clock.HalfLength() + Services.Clock.QuarterLength(), Easing.Linear,
                 t =>
@@ -219,7 +219,6 @@ public class AudioManager : MonoBehaviour {
         
         mainTrack.clip = clip;
         mainTrack.volume = volume;
-        last_volume = volume;
         mainTrack.loop = true;
         mainTrack.Play();
     }
@@ -227,43 +226,20 @@ public class AudioManager : MonoBehaviour {
     public void ToggleSoundEffects()
     {
         Services.GameManager.SoundEffectsEnabled = !Services.GameManager.SoundEffectsEnabled;
-        SetSoundEffectsOnOrOff();
-    }
-
-    public void SetSoundEffectsOnOrOff()
-    {
-        if (Services.GameManager.SoundEffectsEnabled)
-        {
-            Services.Clips = Resources.Load<ClipLibrary>("Audio/QuantizedClipLibrary");
-        }
-        else
-        {
-            Services.Clips = Resources.Load<ClipLibrary>("Audio/SilentClipLibrary");
-        }
     }
     
     public void ToggleMusic()
     {
         Services.GameManager.MusicEnabled = !Services.GameManager.MusicEnabled;
-        SetMusicOnOrOff();
+        
+        MuteMusicChannels();
     }
 
-    public void SetMusicOnOrOff()
-    {
-        if (mainTrack == null)
+    public void MuteMusicChannels()
+    {        
+        foreach (AudioSource source in level_music_sources)
         {
-            GameObject obj = new GameObject();
-            obj.name = "Main Track";
-            mainTrack = obj.AddComponent<AudioSource>();
-        }
-        
-        if (Services.GameManager.MusicEnabled)
-        {
-            mainTrack.volume = last_volume;
-        }
-        else
-        {
-            mainTrack.volume = 0.0f;
+            source.mute = !Services.GameManager.MusicEnabled;
         }
     }
 }

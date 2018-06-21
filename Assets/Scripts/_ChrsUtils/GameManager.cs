@@ -38,7 +38,18 @@ public class GameManager : MonoBehaviour
     public bool SoundEffectsEnabled
     {
         get { return soundEffectsEnabled; }
-        set { soundEffectsEnabled = value;    UpdateSoundEffectPlayerPrefs(); }
+        set { 
+            soundEffectsEnabled = value;    
+            UpdateSoundEffectPlayerPrefs(); 
+            if (soundEffectsEnabled)
+            {
+                Services.Clips = Resources.Load<ClipLibrary>("Audio/QuantizedClipLibrary");
+            }
+            else
+            {
+                Services.Clips = Resources.Load<ClipLibrary>("Audio/SilentClipLibrary");
+            }
+        }
     }
 
     private bool musicEnabled = true;
@@ -46,7 +57,11 @@ public class GameManager : MonoBehaviour
     public bool MusicEnabled
     {
         get { return musicEnabled; }
-        set { musicEnabled = value;    UpdateMusicPlayerPrefs(); }
+        set
+        {
+            musicEnabled = value;
+            UpdateMusicPlayerPrefs();
+        }
     }
 
     public bool useBlueprintHandicapType { get; private set; }
@@ -516,9 +531,6 @@ public class GameManager : MonoBehaviour
         {
             UpdateMusicPlayerPrefs();
         }
-        
-        Services.AudioManager.SetMusicOnOrOff();
-        Services.AudioManager.SetSoundEffectsOnOrOff();
     }
 
     private void UpdateSoundEffectPlayerPrefs()
