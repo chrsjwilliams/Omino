@@ -103,6 +103,10 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         optionMenu.SetActive(false);
         optionButton[0].gameObject.SetActive(true);
 
+        handicapSystem.Init();
+
+        
+
         for (int i = 0; i < aiLevelButtonZones.Length; i++)
         {
             Button[] buttons = aiLevelButtonZones[i].GetComponentsInChildren<Button>();
@@ -389,7 +393,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         optionMenu.SetActive(optionsMenuActive);
         if (optionsMenuActive)
         {
-
+            _BlueprintAssistAppearanceToggle();
+            _MusicButtonAppearanceToggle();
+            _SFXButtonAppearanceToggle();
             SlideOutOptionsButton(true);
 
         }
@@ -454,21 +460,76 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     }
 
+    public void ToggleBlueprintAssist()
+    {
+        Services.GameManager.ToggleBlueprintAssist();
+        SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
+        
+    }
+
     public void ToggleMusic()
     {
         Services.AudioManager.ToggleMusic();
         SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
+        
     }
 
     public void ToggleSoundFX()
     {
         Services.AudioManager.ToggleSoundEffects();
         SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
+        
     }
 
-    public void ToggleBlueprintAssist()
+    
+    private void _BlueprintAssistAppearanceToggle()
     {
-        Services.GameManager.ToggleBlueprintAssist();
-        SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
+        GameObject button = GameObject.Find("ToggleBlueprintAssist");
+
+        if (Services.GameManager.BlueprintAssistEnabled)
+        {
+            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Blueprint Assist";
+
+        }
+        else
+        {
+            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<s>Blueprint Assist</s>";
+        }
+    }
+
+    private void _MusicButtonAppearanceToggle()
+    {
+        GameObject button = GameObject.Find("ToggleMusic");
+
+        if (Services.GameManager.MusicEnabled)
+        {
+            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Music";
+
+        }
+        else
+        {
+            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<s>Music</s>";
+        }
+    }
+
+    private void _SFXButtonAppearanceToggle()
+    {
+        GameObject button = GameObject.Find("ToggleSound");
+
+        if (Services.GameManager.SoundEffectsEnabled)
+        {
+            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Sound FX";
+
+        }
+        else
+        {
+            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<s>Sound FX</s>";
+        }
     }
 }

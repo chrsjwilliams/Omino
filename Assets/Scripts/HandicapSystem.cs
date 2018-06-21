@@ -23,7 +23,7 @@ public class HandicapSystem : MonoBehaviour
     private TextMeshProUGUI p2Text;
 
 	// Use this for initialization
-	void Start () {
+	public void Init () {
         handicapValues = new float[] { 1, 1 };
         lerpSpeed = 18.0f;
 	}

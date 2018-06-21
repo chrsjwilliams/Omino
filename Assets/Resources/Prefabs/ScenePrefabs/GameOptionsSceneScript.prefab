@@ -229,7 +229,7 @@ GameObject:
   - component: {fileID: 114478960144730384}
   - component: {fileID: 114785189009039366}
   m_Layer: 5
-  m_Name: Music
+  m_Name: ToggleMusic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -419,7 +419,7 @@ GameObject:
   - component: {fileID: 114310095242507354}
   - component: {fileID: 114212343749781106}
   m_Layer: 5
-  m_Name: SoundFX
+  m_Name: ToggleSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1259,7 +1259,7 @@ GameObject:
   - component: {fileID: 114160864279102068}
   - component: {fileID: 114039958768879322}
   m_Layer: 5
-  m_Name: BlueprintAssist
+  m_Name: ToggleBlueprintAssist
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1539,6 +1539,7 @@ MonoBehaviour:
   p1HandicapSlider: {fileID: 114130409037213520}
   p2HandicapSlider: {fileID: 114998009327188998}
   lerpSpeed: 0
+  handicapValues: []
   p1HandicapValue: 0
   p2HandicapValue: 0
   p1Text: {fileID: 114087648106155414}
