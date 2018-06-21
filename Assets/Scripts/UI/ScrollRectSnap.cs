@@ -11,7 +11,6 @@ public class ScrollRectSnap : MonoBehaviour
     protected int touchID;
     public bool dragging;
     public bool touchMoved;
-    public bool firstTouch;
     public bool portraitMode;
     public float swipeSpeed;
     public float dir = 1;
@@ -66,7 +65,6 @@ public class ScrollRectSnap : MonoBehaviour
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
 
-        touchID = -1;
         portraitMode = true;
 
         swipeSpeed = 30.0f;
@@ -135,7 +133,8 @@ public class ScrollRectSnap : MonoBehaviour
 
     public void SelectLevel()
     {
-        if (touchMoved && !firstTouch) return;
+        if (touchMoved) return;
+
         levelSelected = true;
         LevelButton selectedLevel = images[selectedIndex].GetComponent<LevelButton>();
         ((GameOptionsSceneScript)Services.Scenes.CurrentScene).SelectLevel(selectedLevel);
@@ -203,13 +202,8 @@ public class ScrollRectSnap : MonoBehaviour
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position);
         if (touchID == -1)
         {
-            firstTouch = true;
             touchID = e.touch.fingerId;
             OnInputDown(touchWorldPos);
-        }
-        else
-        {
-            firstTouch = false;
         }
     }
 
@@ -238,7 +232,6 @@ public class ScrollRectSnap : MonoBehaviour
     {
         if (e.touch.fingerId == touchID)
         {
-            firstTouch = false;
             OnInputUp();
             touchID = -1;
         }
