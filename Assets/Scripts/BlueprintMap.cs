@@ -27,7 +27,7 @@ public class BlueprintMap
         allCoords = new List<Coord>();
         foreach(Tile tile in blueprint.tiles)
         {
-            allCoords.Add(tile.coord);
+            allCoords.Add(_coord.Add(tile.relativeCoord));
         }
     }
 }

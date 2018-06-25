@@ -966,18 +966,12 @@ public class Player : MonoBehaviour
         int blueprintMovesChecked = 0;
         foreach (Blueprint blueprint in blueprints)
         {
-            Coord roundedPos = new Coord((int)blueprint.holder.transform.position.x,
-                                            (int)blueprint.holder.transform.position.y);
-
-            blueprint.SetTileCoords(roundedPos);
             int numRotations = blueprint.maxRotations;
             foreach (Coord coord in possibleBlueprintCoords)
             {
                 for (int rotations = 0; rotations < 4; rotations++)
                 {
                     blueprint.Rotate(false, true);
-                    blueprint.SetTileCoords(coord);
-                    blueprint.TurnOffGlow();
                     blueprintMovesChecked += 1;
                     if (blueprintMovesChecked % bpAssistChecksPerFrame == 0)
                     {
@@ -985,7 +979,7 @@ public class Player : MonoBehaviour
                     }
                     if (rotations < numRotations)
                     {
-                        if (blueprint.IsPlacementLegal())
+                        if (blueprint.IsPlacementLegal(coord))
                         {
                             BlueprintMap blueprintMove = new BlueprintMap(blueprint, null, coord, rotations);
                             foreach (Tile tile in pieceJustPlaced.tiles)

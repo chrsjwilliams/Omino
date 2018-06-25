@@ -670,7 +670,7 @@ public class AIPlayer : Player
                                 }
                             }
 
-                            if (piece.IsPlacementLegal(adjacentPolyominos))
+                            if (piece.IsPlacementLegal(adjacentPolyominos, piece.centerCoord))
                             {
                                 Move newMove = new Move(piece, sortedPlayableCoords[i], (rotations + 1) % 4, 
                                                         possibleBlueprintMoves, possibleCutMoves,

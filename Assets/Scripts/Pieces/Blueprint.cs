@@ -88,11 +88,21 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
     public override bool IsPlacementLegal()
     {
+        return IsPlacementLegal(centerCoord);
+    }
+
+    public override bool IsPlacementLegal(Coord hypotheticalCoord)
+    {
         bool isLegal = false;
-        foreach (Tile tile in tiles)
+        List<Coord> hypotheticalTileCoords = new List<Coord>();
+        foreach(Tile tile in tiles)
         {
-            if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            hypotheticalTileCoords.Add(hypotheticalCoord.Add(tile.relativeCoord));
+        }
+        foreach (Coord coord in hypotheticalTileCoords)
+        {
+            if (!Services.MapManager.IsCoordContainedInMap(coord)) return false;
+            Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
             if (!PiecesShareOwner(mapTile)) return false;
             if (mapTile.PartOfExistingBlueprint()) return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.connected)

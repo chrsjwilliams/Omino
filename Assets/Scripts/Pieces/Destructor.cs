@@ -39,7 +39,7 @@ public class Destructor : Polyomino
         }
     }
 
-    public override bool IsPlacementLegal(List<Polyomino> adjacentPieces)
+    public override bool IsPlacementLegal(List<Polyomino> adjacentPieces, Coord hypotheticalCoord)
     {
         bool connectedToBase = false;
         for (int i = 0; i < adjacentPieces.Count; i++)

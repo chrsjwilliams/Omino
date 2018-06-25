@@ -34,7 +34,7 @@ public class Polyomino : IVertex
     public bool placed { get; protected set; }
     private const float rotationInputRadius = 8f;
     protected int touchID;
-    private readonly Vector3 baseDragOffset = 5f * Vector3.up;
+    private readonly Vector3 baseDragOffset = 20f * Vector3.up;
     public static Vector3 unselectedScale = 0.5f * Vector3.one;
     public static Vector3 queueScale = 0.2f * Vector3.one;
     public const float drawAnimDur = 0.5f;
@@ -612,13 +612,23 @@ public class Polyomino : IVertex
 
     public List<Polyomino> GetAdjacentPolyominos(Player player)
     {
+        return GetAdjacentPolyominos(player, centerCoord);
+    }
+
+    public List<Polyomino> GetAdjacentPolyominos(Player player, Coord hypotheticalCenterCoord)
+    {
         List<Polyomino> adjacentPieces = new List<Polyomino>();
         List<Coord> coordsChecked = new List<Coord>();
-        foreach (Tile tile in tiles)
+        List<Coord> hypotheticalTileCoords = new List<Coord>();
+        foreach(Tile tile in tiles)
+        {
+            hypotheticalTileCoords.Add(hypotheticalCenterCoord.Add(tile.relativeCoord));
+        }
+        foreach (Coord tileCoord in hypotheticalTileCoords)
         {
             foreach (Coord direction in Coord.Directions())
             {
-                Coord adjacentCoord = tile.coord.Add(direction);
+                Coord adjacentCoord = tileCoord.Add(direction);
                 if (!coordsChecked.Contains(adjacentCoord))
                 {
                     coordsChecked.Add(adjacentCoord);
@@ -739,10 +749,15 @@ public class Polyomino : IVertex
 
     public virtual bool IsPlacementLegal()
     {
-        return IsPlacementLegal(GetAdjacentPolyominos(owner));
+        return IsPlacementLegal(GetAdjacentPolyominos(owner), centerCoord);
     }
 
-    public virtual bool IsPlacementLegal(List<Polyomino> adjacentPieces)
+    public virtual bool IsPlacementLegal(Coord hypotheticalCoord)
+    {
+        return IsPlacementLegal(GetAdjacentPolyominos(owner, hypotheticalCoord), hypotheticalCoord);
+    }
+
+    public virtual bool IsPlacementLegal(List<Polyomino> adjacentPieces, Coord hypotheticalCoord)
     {
         //determine if the pieces current location is a legal placement
         //CONDITIONS:
@@ -758,10 +773,17 @@ public class Polyomino : IVertex
             }
         }
         if (!connectedToBase) return false;
+        List<Coord> hypotheticalTileCoords = new List<Coord>();
+
         foreach (Tile tile in tiles)
         {
-            if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            hypotheticalTileCoords.Add(hypotheticalCoord.Add(tile.relativeCoord));
+        }
+
+        foreach (Coord coord in hypotheticalTileCoords)
+        {
+            if (!Services.MapManager.IsCoordContainedInMap(coord)) return false;
+            Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
             if (mapTile.IsOccupied() && (mapTile.occupyingPiece.connected || mapTile.occupyingPiece is Structure))
                 return false;
         }
@@ -1254,12 +1276,48 @@ public class Polyomino : IVertex
             Coord roundedInputCoord = new Coord(
                 Mathf.RoundToInt(offsetInputPos.x),
                 Mathf.RoundToInt(offsetInputPos.y));
-            SetTileCoords(roundedInputCoord);
+            Coord snappedCoord = roundedInputCoord;
+            if(!IsPlacementLegal(roundedInputCoord))
+            {
+                List<Coord> nearbyCoords = new List<Coord>();
+                foreach (Coord direction in Coord.Directions())
+                {
+                    Coord nearbyCoord = roundedInputCoord.Add(direction);
+                    if (nearbyCoords.Count == 0) nearbyCoords.Add(nearbyCoord);
+                    else
+                    {
+                        bool added = false;
+                        for (int i = 0; i < nearbyCoords.Count; i++)
+                        {
+                            if(Vector2.Distance(new Vector2(nearbyCoord.x, nearbyCoord.y), 
+                                offsetInputPos) <
+                                Vector2.Distance(new Vector2(nearbyCoords[i].x, nearbyCoords[i].y),
+                                offsetInputPos))
+                            {
+                                nearbyCoords.Insert(i, nearbyCoord);
+                                added = true;
+                                break;
+                            }
+                        }
+                        if (!added) nearbyCoords.Add(nearbyCoord);
+                    }
+                }
+                for (int i = 0; i < nearbyCoords.Count; i++)
+                {
+                    Coord nearbyCoord = nearbyCoords[i];
+                    if (IsPlacementLegal(nearbyCoord))
+                    {
+                        snappedCoord = nearbyCoord;
+                        break;
+                    }
+                }
+            }
+            SetTileCoords(snappedCoord);
             Reposition(new Vector3(
-                roundedInputCoord.x,
-                roundedInputCoord.y,
+                snappedCoord.x,
+                snappedCoord.y,
                 holder.transform.position.z));
-            QueuePosition(roundedInputCoord);
+            QueuePosition(snappedCoord);
         }
 
         if(!Services.GameManager.disableUI) SetLegalityGlowStatus();
