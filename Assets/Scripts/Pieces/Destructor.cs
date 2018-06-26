@@ -39,7 +39,8 @@ public class Destructor : Polyomino
         }
     }
 
-    public override bool IsPlacementLegal(List<Polyomino> adjacentPieces, Coord hypotheticalCoord)
+    public override bool IsPlacementLegal(List<Polyomino> adjacentPieces, 
+        Coord hypotheticalCoord)
     {
         bool connectedToBase = false;
         for (int i = 0; i < adjacentPieces.Count; i++)
@@ -52,10 +53,17 @@ public class Destructor : Polyomino
         }
         if (!connectedToBase) return false;
 
+        List<Coord> hypotheticalTileCoords = new List<Coord>();
+
         foreach (Tile tile in tiles)
         {
-            if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            hypotheticalTileCoords.Add(hypotheticalCoord.Add(tile.relativeCoord));
+        }
+
+        foreach (Coord coord in hypotheticalTileCoords)
+        {
+            if (!Services.MapManager.IsCoordContainedInMap(coord)) return false;
+            Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner && mapTile.occupyingPiece.connected)
                 return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece is Structure) return false;

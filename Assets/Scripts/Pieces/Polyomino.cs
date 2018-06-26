@@ -33,6 +33,7 @@ public class Polyomino : IVertex
     public Coord centerCoord;
     public bool placed { get; protected set; }
     private const float rotationInputRadius = 8f;
+    private const float rotationDeadZone = 30f;
     protected int touchID;
     private readonly Vector3 baseDragOffset = 20f * Vector3.up;
     public static Vector3 unselectedScale = 0.5f * Vector3.one;
@@ -1431,10 +1432,12 @@ public class Polyomino : IVertex
 
     protected void CheckTouchForRotateInput(TouchDown e)
     {
-        if (Vector2.Distance(
-            Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position),
-            Services.GameManager.MainCamera.ScreenToWorldPoint(Input.GetTouch(touchID).position))
-            < rotationInputRadius)
+        //if (Vector2.Distance(
+        //    Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position),
+        //    Services.GameManager.MainCamera.ScreenToWorldPoint(Input.GetTouch(touchID).position))
+        //    < rotationInputRadius)
+        if (e.touch.position.y < (Screen.height / 2 - rotationDeadZone) && owner.playerNum == 1 ||
+            e.touch.position.y > (Screen.height / 2 + rotationDeadZone) && owner.playerNum == 2)
         {
             Rotate();
         }
