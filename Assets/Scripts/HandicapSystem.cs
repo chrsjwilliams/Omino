@@ -7,6 +7,8 @@ using TMPro;
 public class HandicapSystem : MonoBehaviour
 {
 
+    private bool singlePlayerMode;
+
     public Slider p1HandicapSlider;
     public Slider p2HandicapSlider;
 
@@ -22,11 +24,33 @@ public class HandicapSystem : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI p2Text;
 
+    [SerializeField]
+    private TextMeshProUGUI p1PercentText;
+    [SerializeField]
+    private TextMeshProUGUI p2PercentText;
+
 	// Use this for initialization
-	public void Init () {
+	public void Init ()
+    {
         handicapValues = new float[] { 1, 1 };
         lerpSpeed = 18.0f;
+
+        singlePlayerMode = ((GameOptionsSceneScript)Services.Scenes.CurrentScene).humanPlayers[1] ? false : true;
 	}
+
+    public void UpdateHandicapText()
+    {
+        if(singlePlayerMode)
+        {
+            p1Text.text = "Player";
+            p2Text.text = "AI";
+        }
+        else
+        {
+            p1Text.text = "Player 1";
+            p2Text.text = "Player 2";
+        }
+    }
 
     public void UpdateTypeSlider()
     {
@@ -45,13 +69,13 @@ public class HandicapSystem : MonoBehaviour
     public void UpdatePlayer1HandicapValueSlider()
     {
         handicapValues[0] = (1 + (p1HandicapSlider.value * 0.1f));
-        p1Text.text = (handicapValues[0] * 100) + "%";
+        p1PercentText.text = (handicapValues[0] * 100) + "%";
     }
 
     public void UpdatePlayer2HandicapValueSlider()
     {
         handicapValues[1] = (1 + (p2HandicapSlider.value * 0.1f));
-        p2Text.text = (handicapValues[1] * 100) + "%";
+        p2PercentText.text = (handicapValues[1] * 100) + "%";
     }
 
     // Update is called once per frame
