@@ -6,6 +6,7 @@ using System;
 
 public class AILevelSlideIn : Task
 {
+    private bool hasExternalText;
     private const float duration = 0.3f;
     private float timeElapsed;
     private const float staggerTime = 0.05f;
@@ -20,11 +21,25 @@ public class AILevelSlideIn : Task
     public AILevelSlideIn(TextMeshProUGUI levelText, Button[] levelButtons,
         bool player1_, bool exit_)
     {
-        objectsToSlideIn = new GameObject[levelButtons.Length + 1];
-        objectsToSlideIn[0] = levelText.gameObject;
-        for (int i = 0; i < levelButtons.Length; i++)
+        hasExternalText = levelText ? true: false;
+
+        if (hasExternalText)
         {
-            objectsToSlideIn[i + 1] = levelButtons[i].gameObject;
+            objectsToSlideIn = new GameObject[levelButtons.Length + 1];
+            objectsToSlideIn[0] = levelText.gameObject;
+            for (int i = 0; i < levelButtons.Length; i++)
+            {
+                objectsToSlideIn[i + 1] = levelButtons[i].gameObject;
+            }
+        }
+        else
+        {
+            objectsToSlideIn = new GameObject[levelButtons.Length];
+            for (int i = 0; i < levelButtons.Length; i++)
+            {
+                objectsToSlideIn[i] = levelButtons[i].gameObject;
+                objectsToSlideIn[i].SetActive(true);
+            }
         }
         player1 = player1_;
         exit = exit_;
@@ -35,7 +50,10 @@ public class AILevelSlideIn : Task
         initialOffset *= (Screen.width/ 1027f);
         timeElapsed = 0;
         totalDuration = duration + (objectsToSlideIn.Length * staggerTime);
-        objectsToSlideIn[0].transform.parent.gameObject.SetActive(true);
+
+        if(hasExternalText)
+            objectsToSlideIn[0].transform.parent.gameObject.SetActive(true);
+
         startPositions = new Vector3[objectsToSlideIn.Length];
         targetPositions = new Vector3[objectsToSlideIn.Length];
         for (int i = 0; i < objectsToSlideIn.Length; i++)

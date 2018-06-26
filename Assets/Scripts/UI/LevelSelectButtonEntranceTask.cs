@@ -110,6 +110,7 @@ public class LevelSelectButtonEntranceTask : Task
                 {
 
                     buttons[i].transform.localPosition = startPositions[i];
+                    buttons[i].gameObject.SetActive(false);
                     
                 }
             }

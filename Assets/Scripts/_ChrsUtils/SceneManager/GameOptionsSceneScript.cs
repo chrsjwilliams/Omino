@@ -54,16 +54,20 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     [SerializeField]
     private bool optionsMenuActive;
-
     [SerializeField]
-    private LevelButton[] optionButton;
+    private GameObject optionButtonParent;
+    [SerializeField]
+    private LevelButton[] theOptionButton;
     [SerializeField]
     private GameObject optionMenu;
 
     [SerializeField]
+    private GameObject[] optionButtons;
+
+    [SerializeField]
     private HandicapSystem handicapSystem;
     [SerializeField]
-    private GameObject handicapSystemUI;
+    private GameObject handicapOptions;
 
     [SerializeField]
     private Button musicButton;
@@ -101,9 +105,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
         optionsMenuActive = false;
         optionMenu.SetActive(false);
-        optionButton[0].gameObject.SetActive(true);
-
-        handicapSystem.Init();
+        //optionButtonParent.SetActive(true);
+        TurnOnOptionButtons(false);
 
         
 
@@ -136,6 +139,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             default:
                 break;
         }
+
+        handicapSystem.Init();
+
     }
 
     internal override void OnExit()
@@ -146,13 +152,25 @@ public class GameOptionsSceneScript : Scene<TransitionData>
      //   PlayerPrefs.Save();
     }
 
+
+    private void  TurnOnOptionButtons(bool isOn)
+    {
+        foreach(GameObject button in optionButtons)
+        {
+            button.SetActive(isOn);
+        }
+    }
+
     private void StartPlayerVsAIMode()
     {
+        optionMenu.SetActive(true);
+        optionButtonParent.SetActive(false);
         humanPlayers[0] = true;
         humanPlayers[1] = false;
         TaskTree aiLevelSelect = new TaskTree( new EmptyTask(),
             new TaskTree(new AILevelSlideIn(aiLevelTexts[0], aiLevelButtons[0], true, false)), 
-            new TaskTree(new LevelSelectButtonEntranceTask(backButton)));
+            new TaskTree(new LevelSelectButtonEntranceTask(backButton)),
+            new TaskTree(new SlideInOptionsMenuTask(handicapOptions)));
         Services.GeneralTaskManager.Do(aiLevelSelect);
     }
 
@@ -241,43 +259,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         }
     }
 
-    private void SlideOutLevelButtons()
-    {
-        GameObject buttonParent =
-            Services.GameManager.mode == TitleSceneScript.GameMode.Campaign ?
-             campaignLevelButtonParent : levelButtonParent;
-        LevelButton[] buttons =
-            Services.GameManager.mode == TitleSceneScript.GameMode.Campaign ?
-            campaignLevelButtons : levelButtons;
-
-        buttonParent.transform.eulerAngles = new Vector3(0, 0, 0);
-        RemoveOpposingPlayerMenuText(buttons);
-        if (humanPlayers[0] && !humanPlayers[1])
-        {
-            buttonParent.transform.eulerAngles = new Vector3(0, 0, 0);
-        }
-        else if (!humanPlayers[0] && humanPlayers[1])
-        {
-            buttonParent.transform.eulerAngles = new Vector3(0, 0, 180);
-        }
-        buttonParent.SetActive(true);
-        for (int i = 0; i < buttons.Length; i++)
-        {
-            buttons[i].gameObject.SetActive(false);
-        }
-        playButton.SetActive(false);
-        //levelSelectionIndicator.gameObject.SetActive(true);
-        GameObject levelSelectText =
-            buttonParent.GetComponentInChildren<TextMeshProUGUI>().gameObject;
-        levelSelectText.SetActive(false);
-        LevelSelectTextEntrance entrance =
-            new LevelSelectTextEntrance(levelSelectText);
-        LevelSelectButtonEntranceTask buttonEntrance =
-            new LevelSelectButtonEntranceTask(buttons, playButton, true);
-        _tm.Do(entrance);
-        _tm.Do(buttonEntrance);
-    }
-
     private void SlideInLevelButtons()
     {
         GameObject buttonParent =
@@ -313,14 +294,14 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             new LevelSelectButtonEntranceTask(buttons, playButton);
         _tm.Do(entrance);
         _tm.Do(buttonEntrance);
+
         SlideOutOptionsButton(false);
     }
 
     public void SlideOutOptionsButton(bool slideOut)
     {
-        
         LevelSelectButtonEntranceTask slideOptionButtonTask =
-                new LevelSelectButtonEntranceTask(optionButton, null, slideOut);
+                new LevelSelectButtonEntranceTask(theOptionButton, null, slideOut);
         _tm.Do(slideOptionButtonTask);
     }
 
@@ -380,6 +361,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void SetAILevel(int playerNum, int level)
     {
+        TurnOffOptionMenu();
+        TurnOnOptionButtons(true);
         Services.GameManager.aiLevels[playerNum - 1] = AIPlayer.AiLevels[level];
         AILevelSlideIn slideOut = new AILevelSlideIn(aiLevelTexts[playerNum % 2],
             aiLevelButtons[playerNum % 2], playerNum != 1, true);
@@ -387,19 +370,26 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GeneralTaskManager.Do(slideOut);
     }
 
+    public void TurnOffOptionMenu()
+    {
+        optionMenu.SetActive(false);
+    }
+
     public void ToggleOptionMenu()
     {
+
         optionsMenuActive = !optionsMenuActive;
+        //optionButtonParent.SetActive(optionsMenuActive);
+        levelButtonParent.SetActive(false);
         optionMenu.SetActive(optionsMenuActive);
         if (optionsMenuActive)
         {
-            _BlueprintAssistAppearanceToggle();
-            _MusicButtonAppearanceToggle();
-            _SFXButtonAppearanceToggle();
+            //_BlueprintAssistAppearanceToggle();
+            //_MusicButtonAppearanceToggle();
+            //_SFXButtonAppearanceToggle();
             SlideOutOptionsButton(true);
 
         }
-        //SlideOptionsMenu(!optionsMenuActive);
     }
 
     public void Back()
