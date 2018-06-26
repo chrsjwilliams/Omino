@@ -83,6 +83,7 @@ public class Tile : MonoBehaviour, IVertex
 
         mainSr.color = Services.GameManager.MapColorScheme[0];
         baseColor = mainSr.color;
+        bpAssistHighlightSr.gameObject.SetActive(false);
         if (pieceParent == null) IncrementSortingOrder(-5000);
     }
 
@@ -106,7 +107,7 @@ public class Tile : MonoBehaviour, IVertex
     {
         ToggleIllegalLocationIcon(false);
         SetAlpha(0.1f);
-        SetFilledUIFillAmount(0);
+        //SetFilledUIFillAmount(0);
     }
 
     public void SetCoord(Coord newCoord)
@@ -125,7 +126,7 @@ public class Tile : MonoBehaviour, IVertex
     {
         mainSr.color = color;
         topSr.color = new Color(1, 1, 1, color.a);
-        fillOverlay.color = new Color(color.r, color.g, color.b, 1);
+        //fillOverlay.color = new Color(color.r, color.g, color.b, 1);
     }
 
     public Color GetColor() { return mainSr.color; }
@@ -245,8 +246,8 @@ public class Tile : MonoBehaviour, IVertex
     {
         mainSr.sprite = sprites[spriteIndex];
         shieldSr.sprite = shieldSprites[spriteIndex];
-        fillOverlay.sprite = mainSr.sprite;
-        fillOverlayTop.sprite = topSr.sprite;
+        //fillOverlay.sprite = mainSr.sprite;
+        //fillOverlayTop.sprite = topSr.sprite;
     }
 
     public void ShiftAlpha(float alpha)
@@ -259,8 +260,8 @@ public class Tile : MonoBehaviour, IVertex
         mainSr.color = new Color(mainSr.color.r, mainSr.color.g, mainSr.color.b, alpha);
         targetColor = mainSr.color;
         topSr.color = new Color(1, 1, 1, alpha);
-        fillOverlay.color = mainSr.color;
-        fillOverlayTop.color = new Color(1, 1, 1, alpha);
+        //fillOverlay.color = mainSr.color;
+        //fillOverlayTop.color = new Color(1, 1, 1, alpha);
     }
 
     public void IncrementSortingOrder(int inc)
@@ -301,8 +302,8 @@ public class Tile : MonoBehaviour, IVertex
 
     public void SetFilledUIFillAmount(float fillProportion)
     {
-        fillOverlay.material.SetFloat("_Cutoff", 1 - fillProportion);
-        fillOverlayTop.material.SetFloat("_Cutoff", 1 - fillProportion);
+        //fillOverlay.material.SetFloat("_Cutoff", 1 - fillProportion);
+        //fillOverlayTop.material.SetFloat("_Cutoff", 1 - fillProportion);
     }
 
     public void ToggleConnectedness(bool connected)
@@ -313,6 +314,14 @@ public class Tile : MonoBehaviour, IVertex
 
     public void SetBpAssistAlpha(float alpha)
     {
+        if(alpha == 0)
+        {
+            bpAssistHighlightSr.gameObject.SetActive(false);
+        }
+        else if (!bpAssistHighlightSr.gameObject.activeInHierarchy)
+        {
+            bpAssistHighlightSr.gameObject.SetActive(true);
+        }
         bpAssistHighlightSr.color = new Color(bpAssistColor.r, bpAssistColor.g, bpAssistColor.b, alpha);
     }
 }

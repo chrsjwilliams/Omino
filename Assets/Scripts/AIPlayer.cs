@@ -747,22 +747,25 @@ public class AIPlayer : Player
             movesToConsider.Remove(move);
         }
 
-        if (aiLevel == AILEVEL.HARD)
+        if (movesToConsider.Count > 0)
         {
-            nextPlay = movesToConsider[movesToConsider.Count - 1];
-        }
-        else
-        {
-            for (int i = 0; i < (int)aiLevel * rollsPerLevel; i++)
+            if (aiLevel == AILEVEL.HARD)
             {
-                int randomIndex = UnityEngine.Random.Range(0, movesToConsider.Count);
-                Move potentialMove = movesToConsider[randomIndex];
-                if (nextPlay == null || potentialMove.score > nextPlay.score)
+                nextPlay = movesToConsider[movesToConsider.Count - 1];
+            }
+            else
+            {
+                for (int i = 0; i < (int)aiLevel * rollsPerLevel; i++)
                 {
-                    nextPlay = potentialMove;
+                    int randomIndex = UnityEngine.Random.Range(0, movesToConsider.Count);
+                    Move potentialMove = movesToConsider[randomIndex];
+                    if (nextPlay == null || potentialMove.score > nextPlay.score)
+                    {
+                        nextPlay = potentialMove;
+                    }
                 }
             }
-        }        
+        }
 
         return nextPlay;
     }
