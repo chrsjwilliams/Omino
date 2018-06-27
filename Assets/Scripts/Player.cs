@@ -71,6 +71,7 @@ public class Player : MonoBehaviour
     // Tech Bonuses
     public float resourceGainFactor { get; protected set; }
     public float drawRateFactor { get; protected set; }
+    public float attackGainFactor { get; protected set; }
     public bool shieldedPieces { get; protected set; }
     protected bool biggerBricks;
     protected bool biggerBombs;
@@ -324,12 +325,12 @@ public class Player : MonoBehaviour
     void UpdateMeters()
     {
         normalDrawMeterFillAmt += normalDrawRate * drawRateFactor * Time.deltaTime;
-        destructorDrawMeterFillAmt += destructorDrawRate * drawRateFactor * Time.deltaTime;
+        destructorDrawMeterFillAmt += destructorDrawRate * attackGainFactor * Time.deltaTime;
         resourceMeterFillAmt += resourceGainRate * resourceGainFactor * Time.deltaTime;
         float normalTimeLeft = ((1 - normalDrawMeterFillAmt) /
             (normalDrawRate * drawRateFactor));
         float destructorTimeLeft = ((1 - destructorDrawMeterFillAmt) /
-            (destructorDrawRate * drawRateFactor));
+            (destructorDrawRate * attackGainFactor));
         Services.UIManager.UpdateDrawMeters(playerNum, normalDrawMeterFillAmt, 
             destructorDrawMeterFillAmt, normalTimeLeft, destructorTimeLeft);
         Services.UIManager.UpdateResourceMeter(playerNum, resourceMeterFillAmt);
@@ -805,6 +806,11 @@ public class Player : MonoBehaviour
     public void AugmentDrawRateFactor(float factorChangeIncrement)
     {
         drawRateFactor += factorChangeIncrement;
+    }
+    
+    public void AugmentAttackGainFactor(float gainFactorAmt)
+    {
+        attackGainFactor += gainFactorAmt;
     }
 
     public void AugmentResourceGainRate(float gainRateAmt)

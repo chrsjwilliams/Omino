@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MiningDrill : Structure
 {
-    private const float resourceGainIncrementMultiplier = 0.1f;
+    private const float resourceGainIncrementMultiplier = 0.15f;
 
     public MiningDrill() : base(0)
     {

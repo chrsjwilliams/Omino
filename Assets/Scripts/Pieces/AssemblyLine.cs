@@ -3,7 +3,7 @@ using System.Collections;
 
 public class AssemblyLine : Structure
 {
-    private const float drawRateMultiplier = 0.1f;
+    private const float drawRateMultiplier = 0.15f;
 
     public AssemblyLine() : base(1)
     {

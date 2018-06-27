@@ -56,6 +56,7 @@ public class UIManager : MonoBehaviour {
     public Sprite destructorIcon;
     public Sprite drillIcon;
     public Sprite gearIcon;
+    public Sprite hammerOutline;
     public Sprite bricksIcon;
     public Sprite bigBombIcon;
     public Sprite splashStructIcon;

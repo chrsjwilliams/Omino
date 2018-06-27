@@ -155,6 +155,9 @@ public class MapManager : MonoBehaviour
                 case BuildingType.SHIELDEDPIECES:
                     structure = new ShieldedPieces();
                     break;
+                case BuildingType.ARMORY:
+                    structure = new Armory();
+                    break;
                 default:
                     return null;
             }
@@ -221,9 +224,10 @@ public class MapManager : MonoBehaviour
             BuildingType.MININGDRILL,
             BuildingType.ASSEMBLYLINE,
             BuildingType.BIGGERBRICKS,
-            BuildingType.BIGGERBOMBS,
+            //BuildingType.BIGGERBOMBS,
             //BuildingType.SPLASHDAMAGE,
-            BuildingType.SHIELDEDPIECES
+            BuildingType.SHIELDEDPIECES,
+            BuildingType.ARMORY
         };
     }
 
