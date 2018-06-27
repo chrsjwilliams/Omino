@@ -17,6 +17,7 @@ public class AudioManager : MonoBehaviour {
     private List<AudioSource> levelMusicSources;
     private List<float> levelMusicVolumes, previousVolumes;
     private readonly float BASEMUSICVOLUME = 0.6f;
+    private Dictionary<string, AudioClip> reversedClips;
     
     public void Awake()
     {
@@ -26,6 +27,7 @@ public class AudioManager : MonoBehaviour {
  
         effectsHolder.transform.parent = transform;
         _PopulateLevelMusic();
+        _PopulateReversedEffects();
 
         effectChannels = new List<AudioSource>();
 
@@ -47,14 +49,9 @@ public class AudioManager : MonoBehaviour {
         }
     }
     
-    public void RegisterSoundEffect(AudioClip clip, float volume)
+    public void RegisterSoundEffect(AudioClip clip, float volume, Clock.BeatValue timing = Clock.BeatValue.Eighth)
     {
-        Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, Clock.BeatValue.Eighth);
-    }
-    
-    public void RegisterSoundEffect(AudioClip clip, float volume, Clock.BeatValue timing)
-    {
-        Services.AudioManager.PlaySoundEffect(clip, 0.5f, Services.Clock.ReturnAtNext(timing) - AudioSettings.dspTime );
+        Services.AudioManager.ConnectQuantizedClip(clip, Services.Clock.ReturnAtNext(timing) - AudioSettings.dspTime);
         
         Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, timing);
     }
@@ -87,6 +84,18 @@ public class AudioManager : MonoBehaviour {
             levelMusicTrack.volume = BASEMUSICVOLUME;
             
             levelMusicSources.Add (levelMusicTrack);
+        }
+    }
+
+    private void _PopulateReversedEffects()
+    {
+        UnityEngine.Object[] reversed_effects = Resources.LoadAll("Audio/ReversedAudioSamples/", typeof(AudioClip));
+
+        reversedClips = new Dictionary<string, AudioClip>();
+        
+        foreach (UnityEngine.Object effect in reversed_effects)
+        {
+            reversedClips.Add(((AudioClip)effect).name.Split('_')[1], (AudioClip)effect);
         }
     }
 
@@ -189,7 +198,30 @@ public class AudioManager : MonoBehaviour {
     {
         // find reversed clip
         
+        AudioClip reversed_clip = reversedClips[clip.name];
+        
+        AudioSource to_play = effectChannels[effectChannelIndex];
+        effectChannelIndex = (effectChannelIndex + 1) % effectChannelSize;
+
+        if (to_play.isPlaying)
+        {
+            GameObject channel = new GameObject("Effect Channel");
+            channel.transform.parent = effectsHolder.transform;
+            effectChannels.Insert(effectChannelIndex, channel.AddComponent<AudioSource>());
+            effectChannels[effectChannelIndex].loop = false;
+            
+            to_play = effectChannels[effectChannelIndex];
+            effectChannelIndex = (effectChannelIndex + 1) % effectChannelSize;
+        }
+        
+        if (Services.GameManager.SoundEffectsEnabled)
+            to_play.clip = reversed_clip;
+        else
+            to_play.clip = Services.Clips.Silence;
+        
         to_play.time = to_play.clip.length - (float)amount_to_play;
+        to_play.volume = 0.2f;
+        to_play.Play();
     }
 
     public void PlaySoundEffect(AudioClip clip, float volume = 1.0f)
