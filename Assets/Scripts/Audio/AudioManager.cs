@@ -17,6 +17,8 @@ public class AudioManager : MonoBehaviour {
     private List<AudioSource> levelMusicSources;
     private List<float> levelMusicVolumes, previousVolumes;
     private readonly float BASEMUSICVOLUME = 0.6f;
+    private Dictionary<string, AudioClip> reversedClips;
+    private Dictionary<string, AudioClip> reverbClips;
     
     public void Awake()
     {
@@ -26,6 +28,8 @@ public class AudioManager : MonoBehaviour {
  
         effectsHolder.transform.parent = transform;
         _PopulateLevelMusic();
+        _PopulateReversedEffects();
+        _PopulateReverbEffects();
 
         effectChannels = new List<AudioSource>();
 
@@ -47,13 +51,11 @@ public class AudioManager : MonoBehaviour {
         }
     }
     
-    public void RegisterSoundEffect(AudioClip clip, float volume)
+    public void RegisterSoundEffect(AudioClip clip, float volume, Clock.BeatValue timing = Clock.BeatValue.Eighth)
     {
-        Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, Clock.BeatValue.Eighth);
-    }
-    
-    public void RegisterSoundEffect(AudioClip clip, float volume, Clock.BeatValue timing)
-    {
+        // Services.AudioManager.ConnectQuantizedClipReverse(clip, Services.Clock.ReturnAtNext(timing) - AudioSettings.dspTime);
+        Services.AudioManager.PlaySoundEffectReverb(clip, 0.5f);
+        
         Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, timing);
     }
     
@@ -85,6 +87,30 @@ public class AudioManager : MonoBehaviour {
             levelMusicTrack.volume = BASEMUSICVOLUME;
             
             levelMusicSources.Add (levelMusicTrack);
+        }
+    }
+
+    private void _PopulateReversedEffects()
+    {
+        UnityEngine.Object[] reversed_effects = Resources.LoadAll("Audio/ReversedAudioSamples/", typeof(AudioClip));
+
+        reversedClips = new Dictionary<string, AudioClip>();
+        
+        foreach (UnityEngine.Object effect in reversed_effects)
+        {
+            reversedClips.Add(((AudioClip)effect).name.Split('_')[1], (AudioClip)effect);
+        }
+    }
+    
+    private void _PopulateReverbEffects()
+    {
+        UnityEngine.Object[] reversed_effects = Resources.LoadAll("Audio/ReverbAudioSamples/", typeof(AudioClip));
+
+        reversedClips = new Dictionary<string, AudioClip>();
+        
+        foreach (UnityEngine.Object effect in reversed_effects)
+        {
+            reversedClips.Add(((AudioClip)effect).name.Split('_')[1], (AudioClip)effect);
         }
     }
 
@@ -181,6 +207,64 @@ public class AudioManager : MonoBehaviour {
         
         measureWait.Then(changeVolumes);
         levelMusicManager.Do(measureWait);
+    }
+
+    private void ConnectQuantizedClipReverse(AudioClip clip, double amount_to_play)
+    {
+        // find reversed clip
+        if (clip.length > amount_to_play)
+        {
+            AudioClip reversedClip = Services.Clips.Silence;
+            
+            if ((reversedClips.ContainsKey(clip.name)) && (Services.GameManager.SoundEffectsEnabled))
+                 reversedClip = reversedClips[clip.name];
+            
+            AudioSource to_play = effectChannels[effectChannelIndex];
+            effectChannelIndex = (effectChannelIndex + 1) % effectChannelSize;
+    
+            if (to_play.isPlaying)
+            {
+                GameObject channel = new GameObject("Effect Channel");
+                channel.transform.parent = effectsHolder.transform;
+                effectChannels.Insert(effectChannelIndex, channel.AddComponent<AudioSource>());
+                effectChannels[effectChannelIndex].loop = false;
+    
+                to_play = effectChannels[effectChannelIndex];
+                effectChannelIndex = (effectChannelIndex + 1) % effectChannelSize;
+            }
+
+            to_play.clip = reversedClip;
+    
+            to_play.time = to_play.clip.length - (float) amount_to_play;
+            to_play.volume = 0.2f;
+            to_play.Play();
+        }
+    }
+
+    public void PlaySoundEffectReverb(AudioClip clip, float volume = 1.0f)
+    {
+        AudioSource to_play = effectChannels[effectChannelIndex];
+        effectChannelIndex = (effectChannelIndex + 1) % effectChannelSize;
+
+        if (to_play.isPlaying)
+        {
+            GameObject channel = new GameObject("Effect Channel");
+            channel.transform.parent = effectsHolder.transform;
+            effectChannels.Insert(effectChannelIndex, channel.AddComponent<AudioSource>());
+            effectChannels[effectChannelIndex].loop = false;
+            
+            to_play = effectChannels[effectChannelIndex];
+            effectChannelIndex = (effectChannelIndex + 1) % effectChannelSize;
+        }
+
+        to_play.clip = Services.Clips.Silence;
+        
+        if ((Services.GameManager.SoundEffectsEnabled) && (reversedClips.ContainsKey(clip.name)))
+            to_play.clip = reversedClips[clip.name];
+            
+        
+        to_play.volume = volume;
+        to_play.Play();
     }
 
     public void PlaySoundEffect(AudioClip clip, float volume = 1.0f)
