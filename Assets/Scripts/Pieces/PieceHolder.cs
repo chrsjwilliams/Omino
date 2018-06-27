@@ -12,6 +12,8 @@ public class PieceHolder : MonoBehaviour {
     public SpriteRenderer legalityOverlay;
     public SpriteRenderer energyLevelBack;
     public SpriteRenderer energyLevelFront;
+    public SpriteRenderer attackLevelBack;
+    public SpriteRenderer attackLevelFront;
     private Color prevColor;
     private Color targetColor_;
     private Color targetColor
@@ -70,6 +72,18 @@ public class PieceHolder : MonoBehaviour {
         }
     }
 
+    public void SetAttackDisplayStatus(bool status)
+    {
+        attackLevelBack.enabled = status;
+        attackLevelFront.enabled = status;
+        if (status)
+        {
+            UpdateAttackDisplayPos();
+            if (piece.owner.playerNum == 2)
+                attackLevelBack.transform.localRotation = Quaternion.Euler(0, 0, 180);
+        }
+    }
+
     public void SetEnergyLevel(float prop)
     {
         SetEnergyFillAmount(Mathf.Min(1, prop));
@@ -85,11 +99,33 @@ public class PieceHolder : MonoBehaviour {
         }
     }
 
+    public void SetAttackLevel(float prop)
+    {
+        SetAttackFillAmount(Mathf.Min(1, prop));
+        if (prop >= 1)
+        {
+            attackLevelFront.color = Services.UIManager.legalGlowColor;
+            attackLevelBack.color = Services.UIManager.legalGlowColor;
+        }
+        else
+        {
+            attackLevelFront.color = Services.UIManager.notLegalGlowColor;
+            attackLevelBack.color = Services.UIManager.notLegalGlowColor;
+        }
+    }
+
     private void SetEnergyFillAmount(float amount)
     {
         float cutoff = ((1 - amount) * (energyCutoffMax-energyCutoffMin)) + energyCutoffMin;
         if (amount >= 1) cutoff = 0;
         energyLevelFront.material.SetFloat("_Cutoff", cutoff);
+    }
+
+    private void SetAttackFillAmount(float amount)
+    {
+        float cutoff = ((1 - amount) * (energyCutoffMax - energyCutoffMin)) + energyCutoffMin;
+        if (amount >= 1) cutoff = 0;
+        attackLevelFront.material.SetFloat("_Cutoff", cutoff);
     }
 
     public void UpdateEnergyDisplayPos()
@@ -107,5 +143,22 @@ public class PieceHolder : MonoBehaviour {
         Vector3 position = (leftmostTile.transform.localPosition.x + (energyDisplayOffset * modifier))
             * Vector3.right;
         energyLevelBack.transform.localPosition = position;
+    }
+
+    public void UpdateAttackDisplayPos()
+    {
+        Tile rightmostTile = piece.tiles[0];
+        int modifier = piece.owner.playerNum == 1 ? 1 : -1;
+        foreach (Tile tile in piece.tiles)
+        {
+            if (modifier == -1 && tile.transform.localPosition.x < rightmostTile.transform.localPosition.x ||
+                modifier == 1 && tile.transform.localPosition.x > rightmostTile.transform.localPosition.x)
+            {
+                rightmostTile = tile;
+            }
+        }
+        Vector3 position = (rightmostTile.transform.localPosition.x + (energyDisplayOffset * modifier))
+            * Vector3.right;
+        attackLevelBack.transform.localPosition = position;
     }
 }

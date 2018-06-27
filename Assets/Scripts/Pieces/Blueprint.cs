@@ -91,7 +91,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         return IsPlacementLegal(centerCoord);
     }
 
-    public override bool IsPlacementLegal(Coord hypotheticalCoord)
+    public override bool IsPlacementLegal(Coord hypotheticalCoord, bool pretendAttackResource = false)
     {
         bool isLegal = false;
         List<Coord> hypotheticalTileCoords = new List<Coord>();
@@ -149,6 +149,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         holder.gameObject.name = holderName;
         holder.legalityOverlay.enabled = false;
         holder.SetEnergyDisplayStatus(false);
+        holder.SetAttackDisplayStatus(false);
         tooltips = new List<Tooltip>();
 
         if (piece == null) return;

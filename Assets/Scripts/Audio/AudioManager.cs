@@ -260,7 +260,7 @@ public class AudioManager : MonoBehaviour {
         if (mainTrack == null)
         {
             GameObject obj = new GameObject();
-            obj.name = "Main Track: " + clip.name;
+            //obj.name = "Main Track: " + clip.name;
             mainTrack = obj.AddComponent<AudioSource>();
         }
         

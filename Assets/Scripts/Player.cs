@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     protected const int maxHandSize = 5;
     protected const int piecesPerHandRow = 5;
     protected const int baseMaxResources = 3;
+    protected const int baseMaxAttackResources = 3;
     [SerializeField]
     protected float startingResources = 1.5f;
     [SerializeField]
@@ -49,6 +50,21 @@ public class Player : MonoBehaviour
         {
             resources_ = value;
             Services.UIManager.UpdateResourceCount(resources_, maxResources, this);
+        }
+    }
+
+    protected int maxAttackResources;
+    protected int attackResources_;
+    public int attackResources
+    {
+        get
+        {
+            return attackResources_;
+        }
+        set
+        {
+            attackResources_ = value;
+            Services.UIManager.UpdateResourceCount(attackResources_, maxAttackResources, this, true);
         }
     }
 
@@ -96,7 +112,7 @@ public class Player : MonoBehaviour
     private int destProdLevel_;
     public float resourceMeterFillAmt { get; private set; }
     private float normalDrawMeterFillAmt;
-    private float destructorDrawMeterFillAmt;
+    public float destructorDrawMeterFillAmt { get; private set; }
     [SerializeField]
     protected int resourcesPerTick;
     public Polyomino queuedNormalPiece { get; private set; }
@@ -156,7 +172,7 @@ public class Player : MonoBehaviour
 
         InitializeNormalDeck();
         if(Services.GameManager.destructorsEnabled)
-            InitializeDestructorDeck();
+            //InitializeDestructorDeck();
         if (Services.GameManager.levelSelected != null &&
             Services.GameManager.levelSelected.stackDestructorInOpeningHand)
         {
@@ -174,8 +190,8 @@ public class Player : MonoBehaviour
         }
         if (Services.GameManager.destructorsEnabled)
         {
-            QueueUpNextPiece(true);
-            queuedDestructor.holder.gameObject.SetActive(false);
+            //QueueUpNextPiece(true);
+            //queuedDestructor.holder.gameObject.SetActive(false);
         }
         QueueUpNextPiece(false);
         queuedNormalPiece.holder.gameObject.SetActive(false);
@@ -206,8 +222,10 @@ public class Player : MonoBehaviour
         }
         Services.MapManager.CreateMainBase(this, homeBasePos);
         maxResources = baseMaxResources;
+        maxAttackResources = baseMaxAttackResources;
         resources = Mathf.FloorToInt(startingResources);
         resourceMeterFillAmt = startingResources - resources;
+        attackResources = 0;
         resourceGainFactor = 1;
         drawRateFactor = 1;
         activeMines = new HashSet<Mine>();
@@ -315,6 +333,7 @@ public class Player : MonoBehaviour
         Services.UIManager.UpdateDrawMeters(playerNum, normalDrawMeterFillAmt, 
             destructorDrawMeterFillAmt, normalTimeLeft, destructorTimeLeft);
         Services.UIManager.UpdateResourceMeter(playerNum, resourceMeterFillAmt);
+        Services.UIManager.UpdateResourceMeter(playerNum, destructorDrawMeterFillAmt, true);
         if (normalDrawMeterFillAmt >= 1)
         {
             Vector3 rawDrawPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
@@ -325,10 +344,11 @@ public class Player : MonoBehaviour
         if (destructorDrawMeterFillAmt >= 1 && 
             Services.GameManager.destructorsEnabled)
         {
-            Vector3 rawDrawPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
-                Services.UIManager.bombFactoryBlueprintLocations[playerNum - 1].position);
-            DrawPieces(1, new Vector3(rawDrawPos.x, rawDrawPos.y, 0), true);
+            //Vector3 rawDrawPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
+            //    Services.UIManager.bombFactoryBlueprintLocations[playerNum - 1].position);
+            //DrawPieces(1, new Vector3(rawDrawPos.x, rawDrawPos.y, 0), true);
             destructorDrawMeterFillAmt -= 1;
+            GainAttackResources(1);
         }
         if (resourceMeterFillAmt >= 1)
         {
@@ -768,6 +788,16 @@ public class Player : MonoBehaviour
         resources = Mathf.Min(maxResources, resources + numResources);
         int resourcesGained = resources - prevResources;
         if(resourcesGained > 0)
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.ResourceGained, 0.2f);
+        return resourcesGained;
+    }
+
+    public int GainAttackResources(int numResources)
+    {
+        int prevResources = attackResources;
+        attackResources = Mathf.Min(maxAttackResources, attackResources + numResources);
+        int resourcesGained = attackResources - prevResources;
+        if (resourcesGained > 0)
             Services.AudioManager.RegisterSoundEffect(Services.Clips.ResourceGained, 0.2f);
         return resourcesGained;
     }

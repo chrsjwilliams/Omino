@@ -33,7 +33,7 @@ public class HandPieceEntry : Task
         timeElapsed = 0;
         if (Services.GameManager.destructorsEnabled)
         {
-            hand[0].owner.queuedDestructor.holder.gameObject.SetActive(true);
+            //hand[0].owner.queuedDestructor.holder.gameObject.SetActive(true);
         }
         hand[0].owner.queuedNormalPiece.holder.gameObject.SetActive(true);
     }

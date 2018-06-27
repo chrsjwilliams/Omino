@@ -11,6 +11,10 @@ public class UIManager : MonoBehaviour {
     private Image[][] resourceSlots;
     private Image[][] resourceSlotBacks;
     private Image[][] resourceMissingIndicators;
+    private Image[][] attackResourceMissingIndicators;
+    public GameObject[] attackResourceSlotZones;
+    private Image[][] attackResourceSlots;
+    private Image[][] attackResourceSlotBacks;
     public RectTransform[] blueprintUIZones;
     public GameObject[][] meters;
     [SerializeField]
@@ -92,7 +96,12 @@ public class UIManager : MonoBehaviour {
     private int[] resourceGainHighlightIndices;
     private bool[] resourceGainHighlightActive;
     private bool[] resourceGainHighlightIncreasing;
+    private float[] attackResourceGainHighlightTimeElapsed;
+    private int[] attackResourceGainHighlightIndices;
+    private bool[] attackResourceGainHighlightActive;
+    private bool[] attackResourceGainHighlightIncreasing;
     private int[] lastResourceCount;
+    private int[] lastAttackResourceCount;
     [SerializeField]
     private float resourceMissingAnimDuration;
     [SerializeField]
@@ -101,6 +110,10 @@ public class UIManager : MonoBehaviour {
     private int[] numResourcesMissing;
     private bool[] resourceMissingAnimActive;
     private bool[] resourceMissingAnimIncreasing;
+    private float[] attackResourceMissingTimeElapsed;
+    private int[] numAttackResourcesMissing;
+    private bool[] attackResourceMissingAnimActive;
+    private bool[] attackResourceMissingAnimIncreasing;
     public bool tooltipsDisabled;
     public Color legalGlowColor;
     public Color notLegalGlowColor;
@@ -110,51 +123,87 @@ public class UIManager : MonoBehaviour {
         Image[] slotsP1 = resourceSlotZones[0].GetComponentsInChildren<Image>();
         Image[] slotsP2 = resourceSlotZones[1].GetComponentsInChildren<Image>();
         Image[] slotTopsP1 = new Image[slotsP1.Length / 3];
-        Image[] slotTopsP2 = new Image[slotsP1.Length / 3];
+        Image[] slotTopsP2 = new Image[slotsP2.Length / 3];
         Image[] slotBacksP1 = new Image[slotsP1.Length / 3];
-        Image[] slotBacksP2 = new Image[slotsP1.Length / 3];
+        Image[] slotBacksP2 = new Image[slotsP2.Length / 3];
+        Image[] attackSlotsP1 = attackResourceSlotZones[0].GetComponentsInChildren<Image>();
+        Image[] attackSlotsP2 = attackResourceSlotZones[1].GetComponentsInChildren<Image>();
+        Image[] attackSlotTopsP1 = new Image[attackSlotsP1.Length / 3];
+        Image[] attackSlotTopsP2 = new Image[attackSlotsP2.Length / 3];
+        Image[] attackSlotBacksP1 = new Image[attackSlotsP1.Length / 3];
+        Image[] attackSlotBacksP2 = new Image[attackSlotsP2.Length / 3];
         Image[] missingIndicatorsP1 = new Image[slotsP1.Length / 3];
         Image[] missingIndicatorsP2 = new Image[slotsP1.Length / 3];
-        for (int i = 0; i < slotsP1.Length; i++)
+        Image[] attackMissingIndicatorsP1 = new Image[attackSlotsP1.Length / 3];
+        Image[] attackMissingIndicatorsP2 = new Image[attackSlotsP2.Length / 3];
+        for (int attackTrue = 0; attackTrue < 2; attackTrue++)
         {
-            if (i % 3 == 1)
+            Image[] slotArrayP1 = attackTrue == 0 ? attackSlotsP1 : slotsP1;
+            Image[] slotArrayP2 = attackTrue == 0 ? attackSlotsP2 : slotsP2;
+            Image[] slotTopArrayP1 = attackTrue == 0 ? attackSlotTopsP1 : slotTopsP1;
+            Image[] slotTopArrayP2 = attackTrue == 0 ? attackSlotTopsP2 : slotTopsP2;
+            Image[] slotBackArrayP1 = attackTrue == 0 ? attackSlotBacksP1 : slotBacksP1;
+            Image[] slotBackArrayP2 = attackTrue == 0 ? attackSlotBacksP2 : slotBacksP2;
+            Image[] missingIndicatorArrayP1 = attackTrue == 0 ? 
+                attackMissingIndicatorsP1 : missingIndicatorsP1;
+            Image[] missingIndicatorArrayP2 = attackTrue == 0 ? 
+                attackMissingIndicatorsP2 : missingIndicatorsP2;
+
+            for (int i = 0; i < slotArrayP1.Length; i++)
             {
-                slotTopsP1[i / 3] = slotsP1[i];
-                slotTopsP2[i / 3] = slotsP2[i];
-                slotTopsP1[i / 3].color = Services.GameManager.Player1ColorScheme[0];
-                slotTopsP2[i / 3].color = Services.GameManager.Player2ColorScheme[0];
+                if (i % 3 == 1)
+                {
+                    slotTopArrayP1[i / 3] = slotArrayP1[i];
+                    slotTopArrayP2[i / 3] = slotArrayP2[i];
+                    slotTopArrayP1[i / 3].color = Services.GameManager.Player1ColorScheme[0];
+                    slotTopArrayP2[i / 3].color = Services.GameManager.Player2ColorScheme[0];
+                }
+                else if (i % 3 == 0)
+                {
+                    slotBackArrayP1[i / 3] = slotArrayP1[i];
+                    slotBackArrayP2[i / 3] = slotArrayP2[i];
+                    slotArrayP1[i].color = Services.GameManager.Player1ColorScheme[0];
+                    slotArrayP2[i].color = Services.GameManager.Player2ColorScheme[0];
+                }
+                else if (i % 3 == 2)
+                {
+                    missingIndicatorArrayP1[i / 3] = slotArrayP1[i];
+                    missingIndicatorArrayP2[i / 3] = slotArrayP2[i];
+                    Color indicatorColor = missingIndicatorArrayP1[i / 3].color;
+                    missingIndicatorArrayP1[i / 3].color = new Color(indicatorColor.r,
+                        indicatorColor.g, indicatorColor.b, 0);
+                    missingIndicatorArrayP2[i / 3].color = new Color(indicatorColor.r,
+                        indicatorColor.g, indicatorColor.b, 0);
+                }
             }
-            else if(i % 3 == 0)
-            {
-                slotBacksP1[i / 3] = slotsP1[i];
-                slotBacksP2[i / 3] = slotsP2[i];
-                slotsP1[i].color = Services.GameManager.Player1ColorScheme[0];
-                slotsP2[i].color = Services.GameManager.Player2ColorScheme[0];
-            }
-            else if (i%3 == 2)
-            {
-                missingIndicatorsP1[i / 3] = slotsP1[i];
-                missingIndicatorsP2[i / 3] = slotsP2[i];
-                Color indicatorColor = missingIndicatorsP1[i / 3].color;
-                missingIndicatorsP1[i / 3].color = new Color(indicatorColor.r,
-                    indicatorColor.g, indicatorColor.b, 0);
-                missingIndicatorsP2[i / 3].color = new Color(indicatorColor.r,
-                    indicatorColor.g, indicatorColor.b, 0);
-            }
+
         }
+
 
         resourceSlots = new Image[][] { slotTopsP1, slotTopsP2 };
         resourceSlotBacks = new Image[][] { slotBacksP1, slotBacksP2 };
+        attackResourceSlots = new Image[][] { attackSlotTopsP1, attackSlotTopsP2 };
+        attackResourceSlotBacks = new Image[][] { attackSlotBacksP1, attackSlotBacksP2 };
         resourceMissingIndicators = new Image[][] { missingIndicatorsP1, missingIndicatorsP2 };
+        attackResourceMissingIndicators = new Image[][] { attackMissingIndicatorsP1, attackMissingIndicatorsP2 };
         resourceGainHighlightIndices = new int[2] { 0, 0 };
+        attackResourceGainHighlightIndices = new int[2] { 0, 0 };
         resourceGainHighlightTimeElapsed = new float[2] { 0, 0 };
+        attackResourceGainHighlightTimeElapsed = new float[2] { 0, 0 };
         resourceGainHighlightActive = new bool[2] { false, false };
+        attackResourceGainHighlightActive = new bool[2] { false, false };
         resourceGainHighlightIncreasing = new bool[2] { true, true };
+        attackResourceGainHighlightIncreasing = new bool[2] { true, true };
         lastResourceCount = new int[2] { 0, 0 };
+        lastAttackResourceCount = new int[2] { 0, 0 };
         resourceMissingAnimActive = new bool[2] { false, false };
+        attackResourceMissingAnimActive = new bool[2] { false, false };
         resourceMissingAnimIncreasing = new bool[2] { true, true };
+        attackResourceMissingAnimIncreasing = new bool[2] { true, true };
         resourceMissingTimeElapsed = new float[2] { 0, 0 };
+        attackResourceMissingTimeElapsed = new float[2] { 0, 0 };
         numResourcesMissing = new int[2] { 0, 0 };
+        numAttackResourcesMissing = new int[2] { 0, 0 };
 
         meters = new GameObject[2][]
         {
@@ -235,6 +284,8 @@ public class UIManager : MonoBehaviour {
         if (scrollingInBanners) ScrollBanners();
         HighlightResourceGained();
         HighlightResourcesMissing();
+        HighlightResourceGained(true);
+        HighlightResourcesMissing(true);
         if (Input.GetKeyDown(KeyCode.P)) Debug.Break();
         //if (Input.GetKeyDown(KeyCode.M)) ShowCampaignLevelCompleteMenu(Services.GameManager.Players[0]);
         if(pauseTimer > 0)
@@ -314,11 +365,16 @@ public class UIManager : MonoBehaviour {
         }
     }
 
-    public void UpdateResourceMeter(int playerNum, float fillProportion)
+    public void UpdateResourceMeter(int playerNum, float fillProportion, bool attack = false)
     {
-        for (int i = 0; i < resourceSlots[playerNum - 1].Length; i++)
+        Image[] slotFronts = attack ? 
+            attackResourceSlots[playerNum - 1] : resourceSlots[playerNum - 1];
+        Image[] slotBacks = attack ? 
+            attackResourceSlotBacks[playerNum - 1] : resourceSlotBacks[playerNum - 1];
+
+        for (int i = 0; i < slotFronts.Length; i++)
         {
-            Image slotImage = resourceSlots[playerNum - 1][i];
+            Image slotImage = slotFronts[i];
             Color slotColor = slotImage.color;
             if (slotImage.fillAmount < 1)
             {
@@ -326,19 +382,25 @@ public class UIManager : MonoBehaviour {
                     slotColor.b, 0.5f);
                 slotImage.fillAmount =
                     EasingEquations.Easing.QuadEaseIn(fillProportion);
-                resourceSlotBacks[playerNum - 1][i].color = new Color(slotColor.r, slotColor.g, slotColor.b, 1);
+                slotBacks[i].color = new Color(slotColor.r, slotColor.g, slotColor.b, 1);
                 break;
             }
         }
     }
 
-    public void UpdateResourceCount(int resourceCount, int maxResources, Player player)
+    public void UpdateResourceCount(int resourceCount, int maxResources, Player player, bool attack = false)
     {
         int playerIndex = player.playerNum - 1;
-        for (int i = 0; i < resourceSlots[playerIndex].Length; i++)
+        Image[] slotFronts = attack ? attackResourceSlots[playerIndex] : resourceSlots[playerIndex];
+        Image[] slotBacks = attack ? attackResourceSlotBacks[playerIndex] : resourceSlotBacks[playerIndex];
+        int lastCount = attack ? lastAttackResourceCount[playerIndex] : lastResourceCount[playerIndex];
+        int[] highlightIndices = attack ? attackResourceGainHighlightIndices : resourceGainHighlightIndices;
+        bool[] highlightsActive = attack ? attackResourceGainHighlightActive : resourceGainHighlightActive;
+        int[] resourcesMissing = attack ? numAttackResourcesMissing : numResourcesMissing;
+        for (int i = 0; i < slotFronts.Length; i++)
         {
-            Image slotImage = resourceSlots[playerIndex][i];
-            Image slotBack = resourceSlotBacks[playerIndex][i];
+            Image slotImage = slotFronts[i];
+            Image slotBack = slotBacks[i];
             Color slotColor = new Color(slotImage.color.r,
                     slotImage.color.g, slotImage.color.b, 1);
             if (i < resourceCount)
@@ -346,11 +408,10 @@ public class UIManager : MonoBehaviour {
                 slotImage.fillAmount = 1;
                 slotImage.color = slotColor;
                 //slotBack.color = slotColor;
-                if (resourceCount > lastResourceCount[playerIndex]
-                    && i == resourceCount - 1)
+                if (resourceCount > lastCount && i == resourceCount - 1)
                 {
-                    resourceGainHighlightIndices[playerIndex] = i;
-                    resourceGainHighlightActive[playerIndex] = true;
+                    highlightIndices[playerIndex] = i;
+                    highlightsActive[playerIndex] = true;
                 }
             }
             else
@@ -359,46 +420,58 @@ public class UIManager : MonoBehaviour {
                 //slotBack.color = new Color(slotColor.r, slotColor.g, slotColor.b, 0);
             }
         }
-        if(resourceCount != lastResourceCount[playerIndex] 
-            && numResourcesMissing[playerIndex] != 0)
+        if(resourceCount != lastCount
+            && resourcesMissing[playerIndex] != 0)
         {
-            numResourcesMissing[playerIndex] = Mathf.Max(0,
-                numResourcesMissing[playerIndex]
-                - (resourceCount - lastResourceCount[playerIndex]));
+            resourcesMissing[playerIndex] = Mathf.Max(0,
+                resourcesMissing[playerIndex]
+                - (resourceCount - lastCount));
         }
-        lastResourceCount[playerIndex] = resourceCount;
+        int[] lastResourceCountArray = attack ? lastAttackResourceCount : lastResourceCount;
+        lastResourceCountArray[playerIndex] = resourceCount;
     }
 
-    private void HighlightResourceGained()
+    private void HighlightResourceGained(bool attack = false)
     {
+        bool[] highlightsActive = attack ? 
+            attackResourceGainHighlightActive : resourceGainHighlightActive;
+        float[] highlightsTimeElapsed = attack ? 
+            attackResourceGainHighlightTimeElapsed : resourceGainHighlightTimeElapsed;
+        bool[] highlightsIncreasing = attack ?
+            attackResourceGainHighlightIncreasing : resourceGainHighlightIncreasing;
+        Image[][] slotFronts = attack ?
+            attackResourceSlots : resourceSlots;
+        int[] highlightIndices = attack ?
+            attackResourceGainHighlightIndices : resourceGainHighlightIndices;
+
         for (int i = 0; i < 2; i++)
         {
-            if (resourceGainHighlightActive[i])
+            if (highlightsActive[i])
             {
-                resourceGainHighlightTimeElapsed[i] += Time.deltaTime;
-                if (resourceGainHighlightIncreasing[i])
+                highlightsTimeElapsed[i] += Time.deltaTime;
+                if (highlightsIncreasing[i])
                 {
-                    resourceSlots[i][resourceGainHighlightIndices[i]].transform.localScale =
+                    slotFronts[i][highlightIndices[i]].transform.localScale =
                         Vector3.Lerp(Vector3.one, resourceGainHighlightScale * Vector3.one,
                         EasingEquations.Easing.QuadEaseOut(
-                            resourceGainHighlightTimeElapsed[i] / resourceGainHighlightDuration));
-                    if(resourceGainHighlightTimeElapsed[i] > resourceGainHighlightDuration)
+                            highlightsTimeElapsed[i] / resourceGainHighlightDuration));
+                    if(highlightsTimeElapsed[i] > resourceGainHighlightDuration)
                     {
-                        resourceGainHighlightIncreasing[i] = false;
-                        resourceGainHighlightTimeElapsed[i] = 0;
+                        highlightsIncreasing[i] = false;
+                        highlightsTimeElapsed[i] = 0;
                     }
                 }
                 else
                 {
-                    resourceSlots[i][resourceGainHighlightIndices[i]].transform.localScale =
+                    slotFronts[i][highlightIndices[i]].transform.localScale =
                         Vector3.Lerp(resourceGainHighlightScale * Vector3.one, Vector3.one,
                         EasingEquations.Easing.QuadEaseIn(
-                            resourceGainHighlightTimeElapsed[i] / resourceGainHighlightDuration));
-                    if(resourceGainHighlightTimeElapsed[i] > resourceGainHighlightDuration)
+                            highlightsTimeElapsed[i] / resourceGainHighlightDuration));
+                    if(highlightsTimeElapsed[i] > resourceGainHighlightDuration)
                     {
-                        resourceGainHighlightActive[i] = false;
-                        resourceGainHighlightIncreasing[i] = true;
-                        resourceGainHighlightTimeElapsed[i] = 0;
+                        highlightsActive[i] = false;
+                        highlightsIncreasing[i] = true;
+                        highlightsTimeElapsed[i] = 0;
                     }
                 }
             }
@@ -406,63 +479,70 @@ public class UIManager : MonoBehaviour {
 
     }
 
-    private void HighlightResourcesMissing()
+    private void HighlightResourcesMissing(bool attack = false)
     {
+        bool[] missingResourceAnimActive = attack ? attackResourceMissingAnimActive :
+            resourceMissingAnimActive;
+        int[] resourcesMissing = attack ? numAttackResourcesMissing : numResourcesMissing;
+        Image[][] indicators = attack ? attackResourceMissingIndicators : resourceMissingIndicators;
+        Image[][] slotFronts = attack ? attackResourceSlots : resourceSlots;
+        float[] timesElapsed = attack ? attackResourceMissingTimeElapsed : resourceMissingTimeElapsed;
+        bool[] increasing = attack ? attackResourceMissingAnimIncreasing : resourceMissingAnimIncreasing;
         for (int i = 0; i < 2; i++)
         {
-            Color indicatorColor = resourceMissingIndicators[i][0].color;
-            if (resourceMissingAnimActive[i])
+            Color indicatorColor = indicators[i][0].color;
+            if (missingResourceAnimActive[i])
             {
-                int resourcesMissingLeftToHighlight = numResourcesMissing[i];
+                int resourcesMissingLeftToHighlight = resourcesMissing[i];
                 if (resourcesMissingLeftToHighlight == 0)
                 {
-                    for (int j = 0; j < resourceSlots[i].Length; j++)
+                    for (int j = 0; j < slotFronts[i].Length; j++)
                     {
-                        resourceMissingIndicators[i][j].color = new Color(indicatorColor.r,
+                        indicators[i][j].color = new Color(indicatorColor.r,
                             indicatorColor.g, indicatorColor.b, 0);
                     }
                 }
                 else
                 {
-                    resourceMissingTimeElapsed[i] += Time.deltaTime;
-                    for (int j = 0; j < resourceSlots[i].Length; j++)
+                    timesElapsed[i] += Time.deltaTime;
+                    for (int j = 0; j < slotFronts[i].Length; j++)
                     {
-                        if (resourceSlots[i][j].fillAmount != 1)
+                        if (slotFronts[i][j].fillAmount != 1)
                         {
                             resourcesMissingLeftToHighlight -= 1;
-                            if (resourceMissingAnimIncreasing[i])
+                            if (increasing[i])
                             {
-                                resourceMissingIndicators[i][j].color = Color.Lerp(
+                                indicators[i][j].color = Color.Lerp(
                                     new Color(indicatorColor.r, indicatorColor.g, indicatorColor.b, 0),
                                     new Color(indicatorColor.r, indicatorColor.g, indicatorColor.b, 1),
                                     EasingEquations.Easing.QuadEaseOut(
-                                        resourceMissingTimeElapsed[i] / resourceMissingAnimDuration));
-                                resourceMissingIndicators[i][j].transform.localScale = Vector3.Lerp(
+                                        timesElapsed[i] / resourceMissingAnimDuration));
+                                indicators[i][j].transform.localScale = Vector3.Lerp(
                                     Vector3.one, resourceMissingAnimScale * Vector3.one,
                                     EasingEquations.Easing.QuadEaseOut(
-                                        resourceMissingTimeElapsed[i] / resourceMissingAnimDuration));
-                                if (resourceMissingTimeElapsed[i] > resourceMissingAnimDuration)
+                                        timesElapsed[i] / resourceMissingAnimDuration));
+                                if (timesElapsed[i] > resourceMissingAnimDuration)
                                 {
-                                    resourceMissingAnimIncreasing[i] = false;
-                                    resourceMissingTimeElapsed[i] = 0;
+                                    increasing[i] = false;
+                                    timesElapsed[i] = 0;
                                 }
                             }
                             else
                             {
-                                resourceMissingIndicators[i][j].color = Color.Lerp(
+                                indicators[i][j].color = Color.Lerp(
                                     new Color(indicatorColor.r, indicatorColor.g, indicatorColor.b, 1),
                                     new Color(indicatorColor.r, indicatorColor.g, indicatorColor.b, 0),
                                     EasingEquations.Easing.QuadEaseIn(
-                                        resourceMissingTimeElapsed[i] / resourceMissingAnimDuration));
-                                resourceMissingIndicators[i][j].transform.localScale = Vector3.Lerp(
+                                        timesElapsed[i] / resourceMissingAnimDuration));
+                                indicators[i][j].transform.localScale = Vector3.Lerp(
                                     resourceMissingAnimScale * Vector3.one, Vector3.one,
                                     EasingEquations.Easing.QuadEaseIn(
-                                        resourceMissingTimeElapsed[i] / resourceMissingAnimDuration));
-                                if (resourceMissingTimeElapsed[i] > resourceMissingAnimDuration)
+                                        timesElapsed[i] / resourceMissingAnimDuration));
+                                if (timesElapsed[i] > resourceMissingAnimDuration)
                                 {
-                                    resourceMissingAnimIncreasing[i] = true;
-                                    resourceMissingAnimActive[i] = false;
-                                    resourceMissingTimeElapsed[i] = 0;
+                                    increasing[i] = true;
+                                    missingResourceAnimActive[i] = false;
+                                    timesElapsed[i] = 0;
                                 }
                             }
                             if (resourcesMissingLeftToHighlight == 0) break;
@@ -470,11 +550,11 @@ public class UIManager : MonoBehaviour {
                     }
                 }
             }
-            for (int j = 0; j < resourceMissingIndicators[i].Length; j++)
+            for (int j = 0; j < indicators[i].Length; j++)
             {
-                if (resourceSlots[i][j].fillAmount == 1)
+                if (slotFronts[i][j].fillAmount == 1)
                 {
-                    resourceMissingIndicators[i][j].color = new Color(indicatorColor.r,
+                    indicators[i][j].color = new Color(indicatorColor.r,
                         indicatorColor.g, indicatorColor.b, 0);
                 }
             }

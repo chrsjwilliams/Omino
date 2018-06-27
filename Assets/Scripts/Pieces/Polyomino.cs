@@ -734,7 +734,7 @@ public class Polyomino : IVertex
             if (Services.MapManager.IsCoordContainedInMap(tile.coord))
             {
                 Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-                if (mapTile.IsOccupied() && (mapTile.occupyingPiece.connected || mapTile.occupyingPiece is Structure))
+                if (mapTile.IsOccupied() &&  mapTile.occupyingPiece is Structure)
                 {
                     illegalTiles.Add(tile);
                 }
@@ -753,12 +753,12 @@ public class Polyomino : IVertex
         return IsPlacementLegal(GetAdjacentPolyominos(owner), centerCoord);
     }
 
-    public virtual bool IsPlacementLegal(Coord hypotheticalCoord)
+    public virtual bool IsPlacementLegal(Coord hypotheticalCoord, bool pretendAttackResource = false)
     {
-        return IsPlacementLegal(GetAdjacentPolyominos(owner, hypotheticalCoord), hypotheticalCoord);
+        return IsPlacementLegal(GetAdjacentPolyominos(owner, hypotheticalCoord), hypotheticalCoord, pretendAttackResource);
     }
 
-    public virtual bool IsPlacementLegal(List<Polyomino> adjacentPieces, Coord hypotheticalCoord)
+    public virtual bool IsPlacementLegal(List<Polyomino> adjacentPieces, Coord hypotheticalCoord, bool pretendAttackResource = false)
     {
         //determine if the pieces current location is a legal placement
         //CONDITIONS:
@@ -785,7 +785,12 @@ public class Polyomino : IVertex
         {
             if (!Services.MapManager.IsCoordContainedInMap(coord)) return false;
             Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
-            if (mapTile.IsOccupied() && (mapTile.occupyingPiece.connected || mapTile.occupyingPiece is Structure))
+            if (mapTile.IsOccupied() &&
+                ((mapTile.occupyingPiece.connected && owner.attackResources < 1 && !pretendAttackResource) ||
+                (mapTile.occupyingPiece.connected && mapTile.occupyingPiece.owner == owner) ||
+                mapTile.occupyingPiece is Structure))
+                return false;
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece.shieldDurationRemaining > 0 && !pretendAttackResource)
                 return false;
         }
         return true;
@@ -858,12 +863,15 @@ public class Polyomino : IVertex
     protected virtual void OnPlace()
     {
         List<Polyomino> piecesToRemove = new List<Polyomino>();
+        bool removedOpposingPiece = false;
         foreach (Tile tile in tiles)
         {
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.occupyingPiece != null && !piecesToRemove.Contains(mapTile.occupyingPiece))
             {
                 piecesToRemove.Add(mapTile.occupyingPiece);
+                if (mapTile.occupyingPiece.owner != owner && mapTile.occupyingPiece.connected)
+                    removedOpposingPiece = true;
             }
         }
         if (piecesToRemove.Count > 0)
@@ -872,6 +880,7 @@ public class Polyomino : IVertex
         {
             piecesToRemove[i].Remove();
         }
+        if (removedOpposingPiece) owner.attackResources -= 1;
     }
 
     protected void MakeDustClouds()
@@ -1010,6 +1019,7 @@ public class Polyomino : IVertex
         holder.legalityOverlay.enabled = false;
         holder.icon.enabled = false;
         holder.SetEnergyDisplayStatus(false);
+        holder.SetAttackDisplayStatus(false);
         tooltips = new List<Tooltip>();
         adjacentPieces = new List<Polyomino>();
 
@@ -1278,7 +1288,7 @@ public class Polyomino : IVertex
                 Mathf.RoundToInt(offsetInputPos.x),
                 Mathf.RoundToInt(offsetInputPos.y));
             Coord snappedCoord = roundedInputCoord;
-            if(!IsPlacementLegal(roundedInputCoord))
+            if(!IsPlacementLegal(roundedInputCoord, true))
             {
                 List<Coord> nearbyCoords = new List<Coord>();
                 foreach (Coord direction in Coord.Directions())
@@ -1306,7 +1316,7 @@ public class Polyomino : IVertex
                 for (int i = 0; i < nearbyCoords.Count; i++)
                 {
                     Coord nearbyCoord = nearbyCoords[i];
-                    if (IsPlacementLegal(nearbyCoord))
+                    if (IsPlacementLegal(nearbyCoord, true))
                     {
                         snappedCoord = nearbyCoord;
                         break;
@@ -1338,16 +1348,34 @@ public class Polyomino : IVertex
     {
         UnhighlightPotentialStructureClaims();
         holder.SetEnergyDisplayStatus(false);
+        holder.SetAttackDisplayStatus(false);
     }
 
     public virtual void SetLegalityGlowStatus()
     {
         if (!(this is Blueprint)) SetAffordableStatus(owner);
         bool isLegal = IsPlacementLegal();
+        bool overEnemyPiece = false;
         foreach (Tile tile in tiles)
         {
             tile.ToggleIllegalLocationIcon(false);
+            Coord coord = tile.coord;
+            if (Services.MapManager.IsCoordContainedInMap(coord)) {
+                Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
+                if(mapTile.occupyingPiece != null && !(mapTile.occupyingPiece is Structure) &&
+                    mapTile.occupyingPiece.owner != owner)
+                {
+                    overEnemyPiece = true;
+                }
+            }
         }
+        holder.SetAttackDisplayStatus(overEnemyPiece);
+        if (overEnemyPiece)
+        {
+            if (owner.attackResources > 0) holder.SetAttackLevel(1);
+            else holder.SetAttackLevel(owner.destructorDrawMeterFillAmt);
+        }
+
         if (isLegal && (affordable || this is Blueprint))
         {
             SetGlow(Services.UIManager.legalGlowColor);
