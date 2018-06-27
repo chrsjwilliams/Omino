@@ -54,6 +54,8 @@ public class AudioManager : MonoBehaviour {
     
     public void RegisterSoundEffect(AudioClip clip, float volume, Clock.BeatValue timing)
     {
+        Services.AudioManager.PlaySoundEffect(clip, 0.5f, Services.Clock.ReturnAtNext(timing) - AudioSettings.dspTime );
+        
         Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, timing);
     }
     
@@ -181,6 +183,13 @@ public class AudioManager : MonoBehaviour {
         
         measureWait.Then(changeVolumes);
         levelMusicManager.Do(measureWait);
+    }
+
+    private void ConnectQuantizedClip(AudioClip clip, double amount_to_play)
+    {
+        // find reversed clip
+        
+        to_play.time = to_play.clip.length - (float)amount_to_play;
     }
 
     public void PlaySoundEffect(AudioClip clip, float volume = 1.0f)

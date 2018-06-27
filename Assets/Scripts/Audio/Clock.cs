@@ -242,6 +242,33 @@ namespace Beat
          callback();
       }
 
+      public double ReturnAtNext(BeatValue next)
+      {
+         switch (next)
+         {
+            case (BeatValue.Measure) :
+               return AtNextMeasure();
+               break;
+            case (BeatValue.Half) :
+               return AtNextHalf();
+               break;
+            case (BeatValue.Quarter) :
+               return AtNextQuarter();
+               break;
+            case (BeatValue.Eighth) :
+               return AtNextEighth();
+               break;
+            case (BeatValue.Sixteenth) :
+               return AtNextSixteenth();
+               break;
+            case (BeatValue.ThirtySecond) :
+               return AtNextThirtySecond();
+               break;
+         }
+
+         return 0.0d;
+      }
+      
       //Helper functions for cueing things to play (usually audio) at the next available interval
       //For playing audio, use AudioSource.PlayScheduled(AtNextThirtySecond());
       public double AtNextThirtySecond()
