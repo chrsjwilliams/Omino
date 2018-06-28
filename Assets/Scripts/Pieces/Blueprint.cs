@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Blueprint : Polyomino
 {
-    private const float overlayAlphaPrePlacement = 0.6f;
+    public const float overlayAlphaPrePlacement = 0.6f;
     private const float tileAlphaPrePlacement = 0.8f;
     public int maxRotations { get; protected set; }
     protected string onGainText;
@@ -211,10 +211,15 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
         if (!placed)
         {
-            Color prevColor = holder.spriteBottom.color;
-            holder.spriteBottom.color = new Color(prevColor.r, prevColor.g,
-                prevColor.b, overlayAlphaPrePlacement);
+            SetOverlayAlpha(overlayAlphaPrePlacement);
         }
+    }
+
+    public void SetOverlayAlpha(float alpha)
+    {
+        Color prevColor = holder.spriteBottom.color;
+        holder.spriteBottom.color = new Color(prevColor.r, prevColor.g,
+            prevColor.b, alpha);
     }
 
     public override void PlaceAtCurrentLocation()
@@ -278,6 +283,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     public override void OnInputDown(bool fromPlayTask)
     {
         base.OnInputDown(fromPlayTask);
+        if (!placed) SetOverlayAlpha(overlayAlphaPrePlacement);
         if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID) && 
             !Services.GameManager.disableUI &&
             !Services.GameScene.gameOver &&

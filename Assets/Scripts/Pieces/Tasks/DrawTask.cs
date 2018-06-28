@@ -29,7 +29,7 @@ public class DrawTask : Task
         duration = Polyomino.drawAnimDur;
         targetPos = piece.owner.GetHandPosition(piece.owner.handCount) 
             - (piece.GetCenterpoint() * Polyomino.unselectedScale.x);
-        //piece.SetAffordableStatus(piece.owner);
+        piece.SetAffordableStatus(piece.owner);
         startScale = piece.holder.transform.localScale;
         targetScale = Polyomino.unselectedScale;
     }

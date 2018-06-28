@@ -138,6 +138,9 @@ public class Player : MonoBehaviour
     private float bpAssistTimeElapsed;
     private const int bpAssistChecksPerFrame = 10;
     private IEnumerator bpAssistCoroutine;
+    private Blueprint highlightedBlueprint;
+    private readonly Vector3 bpHighlightMinScale = Polyomino.unselectedScale * 0.95f;
+    private readonly Vector3 bpHighlightMaxScale = Polyomino.unselectedScale * 1.2f;
 
     public float allResourceHandicap = 1;
     public float allBlueprintHandicap = 1;
@@ -171,9 +174,33 @@ public class Player : MonoBehaviour
         blueprints = new List<Blueprint>();
         boardPieces = new List<Polyomino>();
 
+        
+
+        if (playerNum == 1) homeBasePos = new Coord(1, 1);
+        else
+        {
+            homeBasePos = new Coord(
+                Services.MapManager.MapWidth - 2,
+                Services.MapManager.MapHeight - 2);
+        }
+        Services.MapManager.CreateMainBase(this, homeBasePos);
+        maxResources = baseMaxResources;
+        maxAttackResources = baseMaxAttackResources;
+        resources = Mathf.FloorToInt(startingResources);
+        resourceMeterFillAmt = startingResources - resources;
+        attackResources = 0;
+        resourceGainFactor = 1;
+        drawRateFactor = 1;
+        attackGainFactor = 1;
+        activeMines = new HashSet<Mine>();
+        activeFactories = new HashSet<Factory>();
+        activeBombFactories = new HashSet<BombFactory>();
+        activeExpansions = new HashSet<Base>();
+        SetProductionValues();
+
         InitializeNormalDeck();
-        if(Services.GameManager.destructorsEnabled)
-            //InitializeDestructorDeck();
+        //if(Services.GameManager.destructorsEnabled)
+        //InitializeDestructorDeck();
         if (Services.GameManager.levelSelected != null &&
             Services.GameManager.levelSelected.stackDestructorInOpeningHand)
         {
@@ -185,7 +212,7 @@ public class Player : MonoBehaviour
             DrawPieces(startingHandSize);
         }
         OrganizeHand(hand, true);
-        foreach(Polyomino piece in hand)
+        foreach (Polyomino piece in hand)
         {
             piece.holder.gameObject.SetActive(false);
         }
@@ -209,38 +236,17 @@ public class Player : MonoBehaviour
             AddBluePrint(bombFactory);
         }
 
-        foreach(Blueprint blueprint in blueprints)
+        foreach (Blueprint blueprint in blueprints)
         {
             blueprint.holder.gameObject.SetActive(false);
         }
 
-        if (playerNum == 1) homeBasePos = new Coord(1, 1);
-        else
-        {
-            homeBasePos = new Coord(
-                Services.MapManager.MapWidth - 2,
-                Services.MapManager.MapHeight - 2);
-        }
-        Services.MapManager.CreateMainBase(this, homeBasePos);
-        maxResources = baseMaxResources;
-        maxAttackResources = baseMaxAttackResources;
-        resources = Mathf.FloorToInt(startingResources);
-        resourceMeterFillAmt = startingResources - resources;
-        attackResources = 0;
-        resourceGainFactor = 1;
-        drawRateFactor = 1;
-        attackGainFactor = 1;
-        activeMines = new HashSet<Mine>();
-        activeFactories = new HashSet<Factory>();
-        activeBombFactories = new HashSet<BombFactory>();
-        activeExpansions = new HashSet<Base>();
-        SetProductionValues();
         ToggleHandLock(true);
 
         inDanger = false;
         
         bpAssistFlashPeriod = Services.Clock.HalfLength();
-        bpAssistDuration = Services.Clock.MeasureLength() * 2;
+        bpAssistDuration = Services.Clock.MeasureLength() * 3;
     }
 
     protected void SetHandicap(bool blueprintValueHandicap, float handicap)
@@ -277,7 +283,7 @@ public class Player : MonoBehaviour
 
             for (int i = 0; i < hand.Count; i++)
             {
-                //hand[i].SetAffordableStatus(this);
+                hand[i].SetAffordableStatus(this);
                 hand[i].ApproachHandPosition(handTargetPositions[i]);
             }
             if (selectedPiece != null)
@@ -296,23 +302,46 @@ public class Player : MonoBehaviour
             if(bpAssistHighlightedTiles.Count > 0)
             {
                 bpAssistTimeElapsed += Time.deltaTime;
-                float alpha;
+                float tileAlpha;
+                float bpAlpha;
+                float progress;
+                Vector3 scale;
                 float periodicTime = bpAssistTimeElapsed % bpAssistFlashPeriod;
                 if (periodicTime < bpAssistFlashPeriod / 2)
                 {
-                    alpha = Mathf.Lerp(0, bpAssistAlphaMax,
-                        EasingEquations.Easing.SineEaseInOut(
-                            periodicTime / (bpAssistFlashPeriod / 2)));
+                    progress = EasingEquations.Easing.SineEaseInOut(
+                            periodicTime / (bpAssistFlashPeriod / 2));
+                    tileAlpha = Mathf.Lerp(0, bpAssistAlphaMax, progress);
+                    bpAlpha = Mathf.Lerp(Blueprint.overlayAlphaPrePlacement,
+                        1, progress);
+                    scale = Vector3.Lerp(bpHighlightMinScale, bpHighlightMaxScale,
+                        progress);
                 }
                 else
                 {
-                    alpha = Mathf.Lerp(bpAssistAlphaMax, 0,
-                        EasingEquations.Easing.QuadEaseIn(
-                            (periodicTime - (bpAssistFlashPeriod / 2)) / (bpAssistFlashPeriod / 2)));
+                    progress = EasingEquations.Easing.SineEaseInOut(
+                            (periodicTime - (bpAssistFlashPeriod / 2)) / (bpAssistFlashPeriod / 2));
+                    tileAlpha = Mathf.Lerp(bpAssistAlphaMax, 0, progress);
+                    bpAlpha = Mathf.Lerp(1, Blueprint.overlayAlphaPrePlacement,
+                        progress);
+                    scale = Vector3.Lerp(bpHighlightMaxScale, bpHighlightMinScale,
+                        progress);
                 }
+
+                if (highlightedBlueprint != selectedPiece)
+                {
+                    highlightedBlueprint.ScaleHolder(scale);
+                    highlightedBlueprint.SetOverlayAlpha(bpAlpha);
+                }
+                else
+                {
+                    highlightedBlueprint.ScaleHolder(Vector3.one);
+                    highlightedBlueprint.SetOverlayAlpha(Blueprint.overlayAlphaPrePlacement);
+                }
+
                 foreach (Tile tile in bpAssistHighlightedTiles)
                 {
-                    tile.SetBpAssistAlpha(alpha);
+                    tile.SetBpAssistAlpha(tileAlpha);
                 }
                 if(bpAssistTimeElapsed >= bpAssistDuration)
                 {
@@ -463,6 +492,7 @@ public class Player : MonoBehaviour
     public virtual void DrawPiece(Polyomino piece)
     {
         piece.MakePhysicalPiece();
+        piece.SetAffordableStatus(this);
         AddPieceToHand(piece);
     }
 
@@ -1051,7 +1081,7 @@ public class Player : MonoBehaviour
             if (moveToHighlight == null) moveToHighlight = possibleBlueprintMoves[0];
             
             Services.Clock.SyncFunction(_ParameterizeAction(RegisterHighlightedTiles, moveToHighlight.allCoords), Clock.BeatValue.Half);
-            
+            highlightedBlueprint = moveToHighlight.blueprint;
             /* foreach(Coord coord in moveToHighlight.allCoords)
             {
                 bpAssistHighlightedTiles.Add(
@@ -1087,5 +1117,8 @@ public class Player : MonoBehaviour
         }
         bpAssistHighlightedTiles.Clear();
         bpAssistTimeElapsed = 0;
+        if (highlightedBlueprint != null && !highlightedBlueprint.placed && 
+            highlightedBlueprint != selectedPiece)
+            highlightedBlueprint.ScaleHolder(Polyomino.unselectedScale);
     }
 }

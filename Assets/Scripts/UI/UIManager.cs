@@ -118,6 +118,10 @@ public class UIManager : MonoBehaviour {
     public bool tooltipsDisabled;
     public Color legalGlowColor;
     public Color notLegalGlowColor;
+    private const float energyUIFillMin = 0.13f;
+    private const float energyUIFillMax = 0.9f;
+    private const float attackUIFillMin = 0.08f;
+    private const float attackUIFillMax = 0.94f;
 
     private void Awake()
     {
@@ -372,6 +376,8 @@ public class UIManager : MonoBehaviour {
             attackResourceSlots[playerNum - 1] : resourceSlots[playerNum - 1];
         Image[] slotBacks = attack ? 
             attackResourceSlotBacks[playerNum - 1] : resourceSlotBacks[playerNum - 1];
+        float fillMin = attack ? attackUIFillMin : energyUIFillMin;
+        float fillMax = attack ? attackUIFillMax : energyUIFillMax;
 
         for (int i = 0; i < slotFronts.Length; i++)
         {
@@ -381,8 +387,8 @@ public class UIManager : MonoBehaviour {
             {
                 slotImage.color = new Color(slotColor.r, slotColor.g,
                     slotColor.b, 0.5f);
-                slotImage.fillAmount =
-                    EasingEquations.Easing.QuadEaseIn(fillProportion);
+                slotImage.fillAmount = fillMin + ((fillMax - fillMin)*
+                    EasingEquations.Easing.QuadEaseIn(fillProportion));
                 slotBacks[i].color = new Color(slotColor.r, slotColor.g, slotColor.b, 1);
                 break;
             }
@@ -440,8 +446,8 @@ public class UIManager : MonoBehaviour {
             attackResourceGainHighlightTimeElapsed : resourceGainHighlightTimeElapsed;
         bool[] highlightsIncreasing = attack ?
             attackResourceGainHighlightIncreasing : resourceGainHighlightIncreasing;
-        Image[][] slotFronts = attack ?
-            attackResourceSlots : resourceSlots;
+        Image[][] slotBacks = attack ?
+            attackResourceSlotBacks : resourceSlotBacks;
         int[] highlightIndices = attack ?
             attackResourceGainHighlightIndices : resourceGainHighlightIndices;
 
@@ -452,10 +458,11 @@ public class UIManager : MonoBehaviour {
                 highlightsTimeElapsed[i] += Time.deltaTime;
                 if (highlightsIncreasing[i])
                 {
-                    slotFronts[i][highlightIndices[i]].transform.localScale =
-                        Vector3.Lerp(Vector3.one, resourceGainHighlightScale * Vector3.one,
+                    Vector3 scale = Vector3.Lerp(Vector3.one, resourceGainHighlightScale * Vector3.one,
                         EasingEquations.Easing.QuadEaseOut(
                             highlightsTimeElapsed[i] / resourceGainHighlightDuration));
+                    slotBacks[i][highlightIndices[i]].transform.localScale = scale;
+
                     if(highlightsTimeElapsed[i] > resourceGainHighlightDuration)
                     {
                         highlightsIncreasing[i] = false;
@@ -464,7 +471,7 @@ public class UIManager : MonoBehaviour {
                 }
                 else
                 {
-                    slotFronts[i][highlightIndices[i]].transform.localScale =
+                    slotBacks[i][highlightIndices[i]].transform.localScale =
                         Vector3.Lerp(resourceGainHighlightScale * Vector3.one, Vector3.one,
                         EasingEquations.Easing.QuadEaseIn(
                             highlightsTimeElapsed[i] / resourceGainHighlightDuration));

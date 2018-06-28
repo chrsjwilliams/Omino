@@ -384,9 +384,9 @@ public class Polyomino : IVertex
         }
     }
 
-    public void SetAffordableStatus(Player player)
+    public void SetAffordableStatus(Player player, bool energyUI = false)
     {
-        holder.SetEnergyDisplayStatus(true);
+        if (energyUI) holder.SetEnergyDisplayStatus(true);
         affordable = player.resources >= cost;
         if (affordable)
         {
@@ -1353,7 +1353,7 @@ public class Polyomino : IVertex
 
     public virtual void SetLegalityGlowStatus()
     {
-        if (!(this is Blueprint)) SetAffordableStatus(owner);
+        if (!(this is Blueprint)) SetAffordableStatus(owner, true);
         bool isLegal = IsPlacementLegal();
         bool overEnemyPiece = false;
         foreach (Tile tile in tiles)
