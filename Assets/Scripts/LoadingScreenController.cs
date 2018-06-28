@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;
 
 public class LoadingScreenController : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class LoadingScreenController : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-		if ((!load_started) && (Time.time > 6.0f))
+		if ((!load_started) && !SplashScreen.isFinished)
 		{
 			StartCoroutine(LoadGameAsync());
 			load_started = true;
