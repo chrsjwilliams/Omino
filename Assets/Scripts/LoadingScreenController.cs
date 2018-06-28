@@ -17,7 +17,7 @@ public class LoadingScreenController : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-		if ((!load_started) && !SplashScreen.isFinished)
+		if ((!load_started) && (SplashScreen.isFinished))
 		{
 			StartCoroutine(LoadGameAsync());
 			load_started = true;
