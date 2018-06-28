@@ -242,7 +242,7 @@ public class Move
 
     private float DestructionScore(float destructionWeight, HashSet<Coord> pieceCoords)
     {
-        if (!(piece is Destructor)) return 0;
+        if (piece.owner.attackResources < 1) return 0;
         else
         {
             List<Blueprint> blueprintsDestroyed = new List<Blueprint>();

@@ -229,6 +229,7 @@ public class Player : MonoBehaviour
         attackResources = 0;
         resourceGainFactor = 1;
         drawRateFactor = 1;
+        attackGainFactor = 1;
         activeMines = new HashSet<Mine>();
         activeFactories = new HashSet<Factory>();
         activeBombFactories = new HashSet<BombFactory>();
