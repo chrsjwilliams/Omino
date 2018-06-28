@@ -9,10 +9,14 @@ public class LoadingScreenController : MonoBehaviour
 
 	public TextMeshProUGUI loadingText;
 	private bool load_started = false;
+
+	void Awake() {
+		DontDestroyOnLoad (gameObject);
+	}
 	
 	// Update is called once per frame
 	void Update () {
-		if ((!load_started) && (Time.time > 1.5f))
+		if ((!load_started) && (Time.time > 6.0f))
 		{
 			StartCoroutine(LoadGameAsync());
 			load_started = true;
@@ -37,12 +41,16 @@ public class LoadingScreenController : MonoBehaviour
 
 	IEnumerator LoadGameAsync()
 	{
-		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(1);
+		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
 
 		// Wait until the asynchronous scene fully loads
 		while (!asyncLoad.isDone)
 		{
 			yield return null;
 		}
+
+		SceneManager.UnloadSceneAsync (0);
+
+		Destroy (gameObject);
 	}
 }
