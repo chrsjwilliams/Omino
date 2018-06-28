@@ -17,7 +17,7 @@ public class LoadingScreenController : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-		if (not_loaded)
+		if ((not_loaded) && (Time.time > 1.0f))
 		{
 			StartCoroutine(LoadGameAsync());
 			not_loaded = false;
