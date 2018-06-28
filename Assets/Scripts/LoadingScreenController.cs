@@ -8,14 +8,21 @@ public class LoadingScreenController : MonoBehaviour
 {
 
 	public TextMeshProUGUI loadingText;
+	private bool not_loaded = true;
 	
 	// Use this for initialization
 	void Start () {
-		StartCoroutine(LoadGameAsync());
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (not_loaded)
+		{
+			StartCoroutine(LoadGameAsync());
+			not_loaded = false;
+		}
+		
 		switch (Mathf.FloorToInt(Time.time) % 4)
 		{
 			case (0) :
