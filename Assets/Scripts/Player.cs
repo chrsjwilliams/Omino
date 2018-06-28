@@ -1117,8 +1117,11 @@ public class Player : MonoBehaviour
         }
         bpAssistHighlightedTiles.Clear();
         bpAssistTimeElapsed = 0;
-        if (highlightedBlueprint != null && !highlightedBlueprint.placed && 
+        if (highlightedBlueprint != null && !highlightedBlueprint.placed &&
             highlightedBlueprint != selectedPiece)
+        {
             highlightedBlueprint.ScaleHolder(Polyomino.unselectedScale);
+            highlightedBlueprint.SetOverlayAlpha(Blueprint.overlayAlphaPrePlacement);
+        }
     }
 }

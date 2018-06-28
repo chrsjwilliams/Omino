@@ -733,17 +733,31 @@ public class UIManager : MonoBehaviour {
 
     public void UpdateResourceLevel(int level, int playerNum)
     {
-        resourceLevelTexts[playerNum - 1].text = "LV " + level;
+        UpdateLevelText(resourceLevelTexts[playerNum - 1], level);
     }
 
     public void UpdateNormLevel(int level, int playerNum)
     {
-        normLevelTexts[playerNum - 1].text = "LV " + level;
+        UpdateLevelText(normLevelTexts[playerNum - 1], level);
     }
 
     public void UpdateDestLevel(int level, int playerNum)
     {
-        destLevelTexts[playerNum - 1].text = "LV " + level;
+        UpdateLevelText(destLevelTexts[playerNum - 1], level);
+    }
+
+    private void UpdateLevelText(TextMeshProUGUI uiText, int level)
+    {
+        int prevLevel = 1;
+        int.TryParse(uiText.text.Split(' ')[1], out prevLevel);
+        if(level > prevLevel)
+            uiText.GetComponent<ProdLevelText>().StartHighlight();
+        uiText.text = "LV " + level;
+    }
+
+    private void HighlightProdLevelIncrease(TextMeshProUGUI uiText)
+    {
+
     }
 
     public void ShowCampaignLevelCompleteMenu(Player winner)
