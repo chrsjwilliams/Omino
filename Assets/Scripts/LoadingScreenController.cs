@@ -8,21 +8,15 @@ public class LoadingScreenController : MonoBehaviour
 {
 
 	public TextMeshProUGUI loadingText;
-	private bool not_loaded = true;
 	
 	// Use this for initialization
-	void Start () {
-		
+	void OnEnable ()
+	{
+		SceneManager.sceneLoaded += OnSceneLoaded;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if ((not_loaded) && (Time.time > 1.0f))
-		{
-			StartCoroutine(LoadGameAsync());
-			not_loaded = false;
-		}
-		
 		switch (Mathf.FloorToInt(Time.time) % 4)
 		{
 			case (0) :
@@ -40,6 +34,11 @@ public class LoadingScreenController : MonoBehaviour
 		}	
 	}
 
+	void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
+		StartCoroutine(LoadGameAsync());
+	}
+
 	IEnumerator LoadGameAsync()
 	{
 		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(1);
@@ -49,5 +48,10 @@ public class LoadingScreenController : MonoBehaviour
 		{
 			yield return null;
 		}
+	}
+	
+	void OnDisable()
+	{
+		SceneManager.sceneLoaded -= OnSceneLoaded;
 	}
 }
