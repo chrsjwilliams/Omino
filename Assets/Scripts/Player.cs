@@ -81,30 +81,30 @@ public class Player : MonoBehaviour
     protected float resourceGainRate;
     protected float normalDrawRate;
     protected float destructorDrawRate;
-    protected int resourceProdLevel
+    public int resourceProdLevel
     {
         get { return resourceProdLevel_; }
-        set
+        protected set
         {
             resourceProdLevel_ = value;
             Services.UIManager.UpdateResourceLevel(resourceProdLevel_, playerNum);
         }
     }
     private int resourceProdLevel_;
-    protected int normProdLevel
+    public int normProdLevel
     {
         get { return normProdLevel_; }
-        set
+        protected set
         {
             normProdLevel_ = value;
             Services.UIManager.UpdateNormLevel(normProdLevel_, playerNum);
         }
     }
     private int normProdLevel_;
-    protected int destProdLevel
+    public  int destProdLevel
     {
         get { return destProdLevel_; }
-        set
+        protected set
         {
             destProdLevel_ = value;
             Services.UIManager.UpdateDestLevel(destProdLevel_, playerNum);
@@ -165,7 +165,6 @@ public class Player : MonoBehaviour
     // Use this for initialization
     public virtual void Init(int playerNum_)
     {
-       
         playerNum = playerNum_;
 
         colorScheme = Services.GameManager.colorSchemes[playerNum - 1];
@@ -200,12 +199,23 @@ public class Player : MonoBehaviour
 
         InitializeNormalDeck();
         //if(Services.GameManager.destructorsEnabled)
-        //InitializeDestructorDeck();
-        if (Services.GameManager.levelSelected != null &&
-            Services.GameManager.levelSelected.stackDestructorInOpeningHand)
+            //InitializeDestructorDeck();
+
+        
+        if (Services.GameManager.levelSelected != null)
         {
-            DrawPieces(startingHandSize - 1);
-            DrawPieces(1, true);
+            if (Services.GameManager.levelSelected.campaignLevelNum == 1)
+            {
+                DrawPieces(3);
+            }
+            else if (Services.GameManager.levelSelected.stackDestructorInOpeningHand)
+            {
+                DrawPieces(startingHandSize - 1);
+            }
+            else
+            {
+                DrawPieces(startingHandSize);
+            }
         }
         else
         {
@@ -247,6 +257,20 @@ public class Player : MonoBehaviour
         
         bpAssistFlashPeriod = Services.Clock.HalfLength();
         bpAssistDuration = Services.Clock.MeasureLength() * 3;
+    }
+
+    public void PauseProdutcion()
+    {
+        resourceGainFactor = 0;
+        drawRateFactor = 0;
+        attackGainFactor = 0;
+    }
+
+    public void ResumeProduction()
+    {
+        resourceGainFactor = 1;
+        drawRateFactor = 1;
+        attackGainFactor = 1;
     }
 
     protected void SetHandicap(bool blueprintValueHandicap, float handicap)

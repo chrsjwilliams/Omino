@@ -10,19 +10,29 @@ public class TutorialTooltip : MonoBehaviour {
     private int touchID;
 
     [SerializeField]
+    private string tag;
+
+    [SerializeField]
     private TextMeshProUGUI textComponent;
     [SerializeField]
     private TextMeshProUGUI dismissText;
+    private bool dismissible;
     [SerializeField]
     private Image arrow;
     
     public Image textBox;
     [SerializeField]
     private Image image;
+    private Vector3 imagePrimaryPosition;
+    private Vector3 imageSecondaryPosition = Vector3.back;
     [SerializeField]
     private Image subImage;
+    private Vector3 subImagePrimaryPosition;
+    private Vector3 subImageSecondaryPosition = Vector3.back;
     [SerializeField]
     private Image subImage2;
+    private Vector3 subImage2PrimaryPosition;
+    private Vector3 subImage2SecondaryPosition = Vector3.back;
     [SerializeField]
     private float scaleDuration;
     [SerializeField]
@@ -32,9 +42,12 @@ public class TutorialTooltip : MonoBehaviour {
     private bool scalingDown;
     private string currentAnimation;
 
+    private bool haveSelectedPiece = false;
+
 	// Use this for initialization
 	void Start () {
         textBox = GetComponent<Image>();
+        textComponent.richText = true;
     }
 
 
@@ -63,27 +76,84 @@ public class TutorialTooltip : MonoBehaviour {
                 Destroy(gameObject);
             }
         }
+
+        if(tag == "Rotate")
+        {
+            Debug.Log("Image Color: " + image.color);
+            RotationSpecificToolTipUpdates();
+        }
+        
+        if (imageSecondaryPosition.z != -1)
+        {
+            image.rectTransform.localPosition = Vector3.Lerp(image.rectTransform.localPosition, imageSecondaryPosition, EasingEquations.Easing.QuadEaseOut(Time.deltaTime));
+
+            if (tag == "Place Piece" && image.rectTransform.localPosition.y > imageSecondaryPosition.y * 0.95f)
+            {
+
+                image.rectTransform.localPosition = imagePrimaryPosition;
+            }
+        }
+    }
+
+    void RotationSpecificToolTipUpdates()
+    {
+        
+
+        if (Services.GameManager.Players[0].selectedPiece == null && !haveSelectedPiece)
+        {
+            textComponent.text = "First, drag a piece to the board";
+            ToggleImageAnimation("Place Piece");
+        }
+        else
+        {
+            if (!haveSelectedPiece) TurnOffAnimation();
+            haveSelectedPiece = true;
+            textComponent.text = "While holding the piece, tap the screen with a second finger to rotate the piece";
+            ToggleImageAnimation("Rotate");
+        }
     }
 
     public void Init(TooltipInfo info)
     {
         touchID = -1;
+        tag = info.tag;
+
+        if(tag.Contains("Show Me"))
+        {
+            dismissText.text = "Show Me";
+        }
+
         GetComponent<RectTransform>().anchoredPosition = info.location;
         textComponent.text = info.text;
+
         //GetComponent<Button>().enabled = info.dismissable;
         dismissText.enabled = info.dismissable;
 
-        image.rectTransform.anchoredPosition = info.imageLocation;
+        dismissible = info.dismissable;
+
+        imagePrimaryPosition = info.imageLocation;
+        image.rectTransform.localPosition = imagePrimaryPosition;
+        imageSecondaryPosition = info.secondaryImageLocation;
         image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.imageRotation);
+        image.rectTransform.localScale = info.imageScale;
         image.color = info.imageColor;
-        imageAnim = image.GetComponent<Animator>();
         
-        subImage.rectTransform.anchoredPosition = info.subImageLocation;
+
+        imageAnim = image.GetComponent<Animator>();
+
+        subImagePrimaryPosition = info.subImageLocation;
+        subImage.rectTransform.anchoredPosition = subImagePrimaryPosition;
+        subImageSecondaryPosition = info.secondarySubImageLocation;
         subImage.rectTransform.localRotation = Quaternion.Euler(0, 0, info.subImageRotation);
+        subImage.rectTransform.localScale = info.subImageScale;
         subImage.color = info.subImageColor;
 
-        subImage2.rectTransform.anchoredPosition = info.subImageLocation;
-        subImage2.color = subImage.color;
+        subImage2PrimaryPosition = info.subImage2Location;
+        subImage2.rectTransform.anchoredPosition = subImage2PrimaryPosition;
+        subImage2SecondaryPosition = info.secondarySubImage2Location;
+        subImage2.rectTransform.localRotation = Quaternion.Euler(0, 0, info.subImage2Rotation);
+        subImage2.rectTransform.localScale = info.subImage2Scale;
+        subImage2.color = info.subImage2Color;
 
         if (info.arrowLocation == Vector2.zero) arrow.enabled = false;
         else
@@ -91,12 +161,10 @@ public class TutorialTooltip : MonoBehaviour {
             arrow.GetComponent<RectTransform>().anchoredPosition = info.arrowLocation;
             arrow.transform.localRotation = Quaternion.Euler(0, 0, info.arrowRotation);
         }
-        if(!info.haveImage)
-        {
-            TurnOffAnimation();
-        }
 
-        
+        ToggleImageAnimation(tag);
+        if (tag == "Rotate") TurnOffAnimation();
+
 
         transform.localScale = Vector3.zero;
         scalingUp = true;
@@ -107,6 +175,7 @@ public class TutorialTooltip : MonoBehaviour {
 
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
+
     }
 
     public void Dismiss()
@@ -128,22 +197,34 @@ public class TutorialTooltip : MonoBehaviour {
         
     }
 
-    public void ToggleImageAnimation(string animationBool, bool b)
+    public void ToggleImageAnimation(string animationParam)
     {
-        if(currentAnimation == "")
+        //if(currentAnimation == "")
+        //{
+        //    currentAnimation = animationParam;
+        //}
+        //else if(currentAnimation != animationParam && b)
+        //{
+        //    imageAnim.SetBool(currentAnimation, false);
+        //    currentAnimation = animationParam;
+        //}
+        if (HasParameter(animationParam))
         {
-            currentAnimation = animationBool;
+            imageAnim.SetBool(animationParam, true);
         }
-        else if(currentAnimation != animationBool && b)
+        else if (animationParam.Contains("Block Opponent Base"))
         {
-            imageAnim.SetBool(currentAnimation, false);
-            currentAnimation = animationBool;
+            imageAnim.SetBool("Block Opponent Base", true);
         }
-        imageAnim.SetBool(currentAnimation, b);
+        else
+        {
+            TurnOffAnimation();
+        }
     }
 
     public void TurnOffAnimation()
     {
+
         image.color = Services.GameManager.AdjustColorAlpha(image.color, 0);
         subImage.enabled = false;
         subImage2.enabled = false;
@@ -177,12 +258,10 @@ public class TutorialTooltip : MonoBehaviour {
 
     public virtual void OnInputDown(Vector3 touchPos)
     {
-        Debug.Log("Touch Down OUT");
 
-        if(IsPointContainedWithinHolderArea(touchPos))
+
+        if(IsPointContainedWithinHolderArea(touchPos) && dismissible)
         {
-            Debug.Log("Touch Down IN");
-
             Dismiss();
             Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
             Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
@@ -249,5 +328,14 @@ public class TutorialTooltip : MonoBehaviour {
 
         return  0.1f < point.x && point.x < 0.9f &&
                 0.1f < point.y && point.y < 0.9f;
+    }
+
+    public bool HasParameter(string paramName)
+    {
+        foreach (AnimatorControllerParameter param in imageAnim.parameters)
+        {
+            if (param.name == paramName) return true;
+        }
+        return false;
     }
 }

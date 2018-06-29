@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public readonly int MAX_PLAYERS = 2;
 
     [SerializeField] private bool debug;
+    [SerializeField] private bool timedRestart;
     public bool disableUI;
 
     private bool[] humanPlayers;
@@ -545,7 +546,10 @@ public class GameManager : MonoBehaviour
     {
         Services.InputManager.Update();
         Services.GeneralTaskManager.Update();
-        InactivityCheck();
+        if (timedRestart)
+        {
+            InactivityCheck();
+        }
     }
 
     public void Reset(Reset e)

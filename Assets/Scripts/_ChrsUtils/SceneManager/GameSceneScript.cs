@@ -208,23 +208,55 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GameScene.tm.Do(startSequence);
     }
 
-    public void PauseGame()
+    public void PauseGame(bool tutorialToolTipActive)
     {
         gamePaused = true;
-        Time.timeScale = 0;
         TogglePlayerHandLock(true);
+        if (tutorialToolTipActive)
+        {
+            foreach(Player player in Services.GameManager.Players)
+            {
+                player.PauseProdutcion();
+            }
+        }
+        else
+        {
+            
+            Time.timeScale = 0;
+            
+        }
     }
 
-    public void UnpauseGame()
+    public void PauseGame()
     {
+        PauseGame(false);
+    }
+
+    public void UnpauseGame(bool tutorialToolTipActive)
+    {
+        if(tutorialToolTipActive)
+        {
+            foreach (Player player in Services.GameManager.Players)
+            {
+                player.ResumeProduction();
+            }
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
         gamePaused = false;
-        Time.timeScale = 1;
         if (gameStarted)
         {
             TogglePlayerHandLock(false);
         }
     }
     
+    public void UnpauseGame()
+    {
+        UnpauseGame(false);
+    }
+
     public void UIClick()
     {
         Services.AudioManager.PlaySoundEffect(Services.Clips.UIClick, 0.55f);

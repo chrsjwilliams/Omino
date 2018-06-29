@@ -21,38 +21,8 @@ MonoBehaviour:
   blueprintsEnabled: 0
   stackDestructorInOpeningHand: 0
   tooltips:
-  - text: This is your opponent's base. Connect from your base to your opponent's
-      to win.
-    location: {x: -300, y: 400}
-    arrowLocation: {x: 450, y: 0}
-    arrowRotation: 0
-    dismissable: 1
-    enableTooltips: 0
-    windowLocation: {x: 340, y: 340}
-    windowSize: {x: 250, y: 250}
-    haveImage: 0
-    imageLocation: {x: 0, y: 0}
-    imageRotation: 0
-    imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: This is your hand. You can play pieces from here by tapping and dragging.
-    location: {x: -300, y: -400}
-    arrowLocation: {x: 0, y: -250}
-    arrowRotation: -90
-    dismissable: 1
-    enableTooltips: 0
-    windowLocation: {x: -350, y: -900}
-    windowSize: {x: 800, y: 200}
-    haveImage: 0
-    imageLocation: {x: 0, y: 0}
-    imageRotation: 0
-    imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: Pieces must be played connected to your base.
+  - tag: Your Base
+    text: This is your base.
     location: {x: 400, y: -300}
     arrowLocation: {x: -450, y: 0}
     arrowRotation: 180
@@ -62,72 +32,72 @@ MonoBehaviour:
     windowSize: {x: 250, y: 250}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    imageScale: {x: 0, y: 0}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: -1}
+    subImageScale: {x: 1, y: 1}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: Try placing a piece now!
-    location: {x: 400, y: -500}
-    arrowLocation: {x: 0, y: 0}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Win Condition
+    text: Build a road to the opponent's base to win.
+    location: {x: -300, y: 400}
+    arrowLocation: {x: 450, y: 0}
     arrowRotation: 0
-    dismissable: 0
+    dismissable: 1
     enableTooltips: 0
-    windowLocation: {x: 0, y: 0}
-    windowSize: {x: 0, y: 0}
-    haveImage: 0
-    imageLocation: {x: 0, y: 0}
+    windowLocation: {x: 340, y: 340}
+    windowSize: {x: 260, y: 260}
+    haveImage: 1
+    imageLocation: {x: 350, y: -375}
+    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    imageScale: {x: 1, y: 1}
     imageRotation: 0
-    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    imageColor: {r: 1, g: 1, b: 1, a: 1}
     subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: -1}
+    subImageScale: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: Placing a piece costs 1 Energy. Energy recharges over time.
-    location: {x: 270, y: -275}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Hand
+    text: This is your hand. You can play pieces from here by tapping and dragging.
+    location: {x: -300, y: -400}
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
     dismissable: 1
     enableTooltips: 0
-    windowLocation: {x: 225, y: -775}
-    windowSize: {x: 300, y: 180}
+    windowLocation: {x: -340, y: -900}
+    windowSize: {x: 800, y: 200}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    imageScale: {x: 0, y: 0}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: -1}
+    subImageScale: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: You also draw new pieces into your hand over time.
-    location: {x: 450, y: -300}
-    arrowLocation: {x: 70, y: -250}
-    arrowRotation: -90
-    dismissable: 1
-    enableTooltips: 0
-    windowLocation: {x: 470, y: -785}
-    windowSize: {x: 180, y: 180}
-    haveImage: 0
-    imageLocation: {x: -200, y: 350}
-    imageRotation: 0
-    imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    subImageRotation: 180
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: You can rotate the piece you're holding by tapping next to your finger.
-    location: {x: 400, y: -500}
-    arrowLocation: {x: 0, y: 0}
-    arrowRotation: 0
-    dismissable: 1
-    enableTooltips: 0
-    windowLocation: {x: 0, y: 0}
-    windowSize: {x: 0, y: 0}
-    haveImage: 1
-    imageLocation: {x: -500, y: 0}
-    imageRotation: 0
-    imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: -16, y: 200}
-    subImageRotation: 180
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: Try using your index finger to drag and your middle finger to rotate!
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Place Piece
+    text: Try placing a piece now!
     location: {x: 400, y: -500}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -136,13 +106,149 @@ MonoBehaviour:
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 1
-    imageLocation: {x: -500, y: 0}
+    imageLocation: {x: -950, y: -440}
+    secondaryImageLocation: {x: -530, y: 187, z: 0}
+    imageScale: {x: 0.5, y: 0.5}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: -16, y: 200}
-    subImageRotation: 180
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: Try connecting to the opposing base to win!
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: -1}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Connection
+    text: All of your pieces must connect back to your base
+    location: {x: 400, y: -300}
+    arrowLocation: {x: -450, y: 0}
+    arrowRotation: 180
+    dismissable: 1
+    enableTooltips: 0
+    windowLocation: {x: -340, y: -340}
+    windowSize: {x: 250, y: 250}
+    haveImage: 0
+    imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    imageScale: {x: 0, y: 0}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: -1}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Energy
+    text: You need 1 <color="#F7A907FF">ENERGY</color> to place a piece. You get energy
+      over time.
+    location: {x: 270, y: -275}
+    arrowLocation: {x: 0, y: -2520}
+    arrowRotation: -90
+    dismissable: 1
+    enableTooltips: 0
+    windowLocation: {x: 225, y: -775}
+    windowSize: {x: 250, y: 180}
+    haveImage: 0
+    imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    imageScale: {x: 0, y: 0}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: -1}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Draw
+    text: You also draw new pieces into your hand over time.
+    location: {x: 450, y: -300}
+    arrowLocation: {x: 40, y: -250}
+    arrowRotation: -90
+    dismissable: 1
+    enableTooltips: 0
+    windowLocation: {x: 420, y: -785}
+    windowSize: {x: 130, y: 180}
+    haveImage: 0
+    imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    imageScale: {x: 0, y: 0}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: -1}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 1}
+  - tag: Show Me
+    text: 'You can <color="#64FF64FF">ROTATE</color> a piece before placing it. '
+    location: {x: 400, y: -500}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    dismissable: 1
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    imageScale: {x: 0, y: 0}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: -1}
+    subImageScale: {x: 2, y: 2}
+    subImageRotation: 0
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 1}
+  - tag: Rotate
+    text: Try using your index finger to drag and your middle finger to <color="#64FF64FF">ROTATE</color>!
+    location: {x: 400, y: -500}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    dismissable: 0
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    haveImage: 1
+    imageLocation: {x: -950, y: -440}
+    secondaryImageLocation: {x: -625, y: -50, z: 0}
+    imageScale: {x: 0.5, y: 0.5}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 350}
+    secondarySubImageLocation: {x: 0, y: 0, z: -1}
+    subImageScale: {x: 2, y: 2}
+    subImageRotation: 0
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
+    subImage2Location: {x: 80, y: 400}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 1, y: 1}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 1}
+  - tag: Win
+    text: Try connecting to the opposing base to win!
     location: {x: 400, y: -500}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -152,11 +258,20 @@ MonoBehaviour:
     windowSize: {x: 0, y: 0}
     haveImage: 0
     imageLocation: {x: 350, y: -200}
+    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    imageScale: {x: 0, y: 0}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: -1}
+    subImageScale: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   overrideStrategy:
     winWeight: 0
     structWeight: 0

@@ -21,7 +21,8 @@ MonoBehaviour:
   blueprintsEnabled: 1
   stackDestructorInOpeningHand: 0
   tooltips:
-  - text: Feeling slow? If you want to ramp up your economy, you can make Buildings!
+  - tag: Feeling Slow
+    text: Feeling slow? If you want to ramp up your economy, you can make <color="64FF64FF">Buildings</color>!
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -31,12 +32,23 @@ MonoBehaviour:
     windowSize: {x: 0, y: 0}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    imageScale: {x: 0, y: 0}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: There are 3 different Blueprints, each making a unique Building.
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Intro
+    text: There are 3 different <color="#BAD9FFFF">Blueprints</color>, each making
+      a unique <color="#64FF64FF">Buildings</color> and can be played at anytime.
     location: {x: 450, y: -600}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -46,13 +58,23 @@ MonoBehaviour:
     windowSize: {x: 620, y: 150}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    imageScale: {x: 0, y: 0}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: The Generator increases your energy recharge rate, letting you play pieces
-      faster!
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Generator
+    text: The <color="#64FF64FF">Generator</color> increases your energy recharge
+      rate, letting you play pieces faster!
     location: {x: 270, y: -440}
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
@@ -62,45 +84,76 @@ MonoBehaviour:
     windowSize: {x: 170, y: 170}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    imageScale: {x: 0, y: 0}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: The Factory increases your production of normal pieces, giving you a bigger
-      supply!
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Factory
+    text: The <color="#64FF64FF">Factory</color> increases the production speed of
+      pieces, giving you a bigger supply!
     location: {x: 450, y: -440}
     arrowLocation: {x: 60, y: -250}
     arrowRotation: -90
     dismissable: 1
     enableTooltips: 0
-    windowLocation: {x: 465, y: -920}
+    windowLocation: {x: 430, y: -920}
     windowSize: {x: 150, y: 150}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    imageScale: {x: 0, y: 0}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: The Barracks increases your production of attack pieces, helping you go
-      on the offensive!
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Barracks
+    text: The <color="#64FF64FF">Barracks</color> increases the production speed of
+      <color="#E56575FF">Hammers</color>, helping you go on the offensive!
     location: {x: 450, y: -440}
     arrowLocation: {x: 260, y: -250}
     arrowRotation: -90
     dismissable: 1
     enableTooltips: 0
-    windowLocation: {x: 660, y: -920}
+    windowLocation: {x: 630, y: -920}
     windowSize: {x: 150, y: 150}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    imageScale: {x: 0, y: 0}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: To create a Building, you must first form the appropriate shape on the board,
-      then you can place a Blueprint on top.
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Show Me
+    text: To create a <color="#64FF64FF">Buildings</color>, you must first form the
+      appropriate shape on the board, then you can place a <color="#BAD9FFFF">Blueprint</color>
+      on top.
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -110,13 +163,48 @@ MonoBehaviour:
     windowSize: {x: 0, y: 0}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    imageScale: {x: 0, y: 0}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: Now go forth, and let your economy flourish!
-    location: {x: 0, y: 0}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Make Building
+    text: 
+    location: {x: 90, y: 60}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    dismissable: 1
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    haveImage: 1
+    imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    imageScale: {x: 1, y: 1}
+    imageRotation: 0
+    imageColor: {r: 1, g: 1, b: 1, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: You Can Rotate
+    text: You can <color="#64FF64FF">ROTATE</color> them too!
+    location: {x: 90, y: 60}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
@@ -125,11 +213,71 @@ MonoBehaviour:
     windowSize: {x: 0, y: 0}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    imageScale: {x: 0, y: 0}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Do Not Display
+    text: 
+    location: {x: 0, y: 0}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    dismissable: 0
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    imageScale: {x: 0, y: 0}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Watch Out!
+    text: Watch out! Your opponent has built a <color="#BAD9FFFF">Blueprint</color>
+      and you haven't yet. I hope you can keep up!
+    location: {x: 450, y: -600}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    dismissable: 0
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    imageScale: {x: 0, y: 0}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   overrideStrategy:
     winWeight: 0
     structWeight: 0
