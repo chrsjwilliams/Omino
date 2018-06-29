@@ -6,9 +6,9 @@ public class Base : Structure
 {
     public bool mainBase { get; private set; }
 
-    public const float normalDrawRate = 0.06f;
-    public const float destDrawRate = 0.03f;
-    public const float resourceGainRate = 0.08f;
+    public const float normalDrawRate = 0.08f;
+    public const float destDrawRate = 0.02f;
+    public const float resourceGainRate = 0.1f;
 
     public Base() : base(0)
     {

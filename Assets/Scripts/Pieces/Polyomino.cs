@@ -1353,7 +1353,6 @@ public class Polyomino : IVertex
 
     public virtual void SetLegalityGlowStatus()
     {
-        if (!(this is Blueprint)) SetAffordableStatus(owner, true);
         bool isLegal = IsPlacementLegal();
         bool overEnemyPiece = false;
         foreach (Tile tile in tiles)
@@ -1369,7 +1368,11 @@ public class Polyomino : IVertex
                 }
             }
         }
-        holder.SetAttackDisplayStatus(overEnemyPiece);
+        if (!(this is Blueprint))
+        {
+            SetAffordableStatus(owner, true);
+            holder.SetAttackDisplayStatus(overEnemyPiece);
+        }
         if (overEnemyPiece)
         {
             if (owner.attackResources > 0) holder.SetAttackLevel(1);
@@ -1542,6 +1545,8 @@ public class Polyomino : IVertex
 
     public virtual void TogglePieceConnectedness(bool connected_)
     {
+        if (connected && !connected_) owner.OnPieceDisconnected(this);
+
         if (!(this is Structure) && !(this is Blueprint))
         {
             if (connected_)
@@ -1559,6 +1564,7 @@ public class Polyomino : IVertex
         {
             occupyingBlueprints[i].TogglePieceConnectedness(connected_);
         }
+
     }
 
     protected virtual void SortOnSelection(bool selected)

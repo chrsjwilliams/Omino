@@ -328,7 +328,7 @@ public class Player : MonoBehaviour
                         progress);
                 }
 
-                if (highlightedBlueprint != selectedPiece)
+                if (blueprints.Contains(highlightedBlueprint))
                 {
                     highlightedBlueprint.ScaleHolder(scale);
                     highlightedBlueprint.SetOverlayAlpha(bpAlpha);
@@ -774,6 +774,18 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void OnPieceDisconnected(Polyomino piece)
+    {
+        foreach(Tile tile in piece.tiles)
+        {
+            if (bpAssistHighlightedTiles.Contains(tile))
+            {
+                ClearBlueprintAssistHighlight();
+                break;
+            }
+        }
+    }
+
     public virtual void CancelSelectedPiece()
     {
         if (selectedPiece.cost > resources)
@@ -1117,8 +1129,7 @@ public class Player : MonoBehaviour
         }
         bpAssistHighlightedTiles.Clear();
         bpAssistTimeElapsed = 0;
-        if (highlightedBlueprint != null && !highlightedBlueprint.placed &&
-            highlightedBlueprint != selectedPiece)
+        if (highlightedBlueprint != null && blueprints.Contains(highlightedBlueprint))
         {
             highlightedBlueprint.ScaleHolder(Polyomino.unselectedScale);
             highlightedBlueprint.SetOverlayAlpha(Blueprint.overlayAlphaPrePlacement);
