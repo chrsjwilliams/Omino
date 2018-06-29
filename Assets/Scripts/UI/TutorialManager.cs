@@ -47,7 +47,7 @@ public class TutorialManager : MonoBehaviour {
     {
         if (tooltipInfos[currentIndex].dismissable)
         {
-            Services.GameScene.UnpauseGame();
+            Services.GameScene.UnpauseGame(true);
             backDim.SetActive(false);
         }
         Services.UIManager.tooltipsDisabled = false;
@@ -131,7 +131,7 @@ public class TutorialManager : MonoBehaviour {
 
         if (nextTooltipInfo.dismissable)
         {
-            Services.GameScene.PauseGame();
+            Services.GameScene.PauseGame(true);
             backDim.SetActive(true);
         }
         else if (!nextTooltipInfo.dismissable && currentIndex == 0)

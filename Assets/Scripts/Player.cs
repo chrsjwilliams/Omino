@@ -211,6 +211,7 @@ public class Player : MonoBehaviour
             else if (Services.GameManager.levelSelected.stackDestructorInOpeningHand)
             {
                 DrawPieces(startingHandSize - 1);
+                attackResources = 1;
             }
             else
             {

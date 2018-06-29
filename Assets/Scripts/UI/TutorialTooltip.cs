@@ -272,7 +272,6 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
         if(IsPointContainedWithinHolderArea(touchPos) && dismissible)
         {
-            Dismiss();
             Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
             Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
 
