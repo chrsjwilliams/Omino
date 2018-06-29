@@ -54,7 +54,7 @@ public class AudioManager : MonoBehaviour {
     public void RegisterSoundEffect(AudioClip clip, float volume, Clock.BeatValue timing = Clock.BeatValue.Eighth)
     {
         // Services.AudioManager.ConnectQuantizedClipReverse(clip, Services.Clock.ReturnAtNext(timing) - AudioSettings.dspTime);
-        Services.AudioManager.PlaySoundEffectReverb(clip, 0.5f);
+        // Services.AudioManager.PlaySoundEffectReverb(clip, 0.5f);
         
         Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, timing);
     }
