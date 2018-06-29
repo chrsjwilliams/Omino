@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
-public class TutorialTooltip : MonoBehaviour {
+public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
+{
 
     [SerializeField]
     private int touchID;
@@ -254,6 +256,14 @@ public class TutorialTooltip : MonoBehaviour {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(textBox.rectTransform, Input.mousePosition, null, out mouseWorldPos);
         Vector2 normalizedPoint = Rect.PointToNormalized(textBox.rectTransform.rect, mouseWorldPos);
         OnInputDown(normalizedPoint);
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (dismissible)
+        {
+            Dismiss();
+        }
     }
 
     public virtual void OnInputDown(Vector3 touchPos)
