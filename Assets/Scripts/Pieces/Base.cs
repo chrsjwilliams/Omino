@@ -6,9 +6,9 @@ public class Base : Structure
 {
     public bool mainBase { get; private set; }
 
-    public const float normalDrawRate = 0.08f;
+    public const float normalDrawRate = 0.1f;
     public const float destDrawRate = 0.02f;
-    public const float resourceGainRate = 0.1f;
+    public const float resourceGainRate = 0.09f;
 
     public Base() : base(0)
     {
@@ -80,9 +80,10 @@ public class Base : Structure
         }
         else
         {
-            return "+1 Normal Piece Production Level\n" +
-                "+1 <color=red>Attack</color> Piece Production Level\n" +
-                "+1 Energy Recharge Level";
+            return "+1 Piece Production Level\n" +
+                "+1 Energy Recharge Level\n" +
+                "+1 <color=red>Hammer</color> Production Level";
+
         }
     }
 }

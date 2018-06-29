@@ -8,7 +8,7 @@ public class BombFactory : Blueprint
     public BombFactory(Player owner_) : base(BuildingType.BOMBFACTORY, owner_)
     {
         maxRotations = 4;
-        onGainText = "+1 Attack Piece Production Level";
+        onGainText = "+1 Hammer Production Level";
     }
 
     protected override void SetOverlaySprite()
@@ -26,7 +26,7 @@ public class BombFactory : Blueprint
     {
         //return "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) + 
         //    "</color> <color=red>DESTRUCTIVE</color> pieces per second";
-        return "+1 <color=red>Attack</color> Piece Production Level";
+        return "+1 <color=red>Hammer</color> Production Level";
     }
 
     protected override void SetIconSprite()

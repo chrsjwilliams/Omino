@@ -39,13 +39,13 @@ MonoBehaviour:
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
   - text: To mix things up, there are special Tech Structures spread across the map!
     location: {x: -350, y: -200}
     arrowLocation: {x: 450, y: 0}
     arrowRotation: 0
     dismissable: 1
-    enableTooltips: 0
+    enableTooltips: 1
     windowLocation: {x: 275, y: -275}
     windowSize: {x: 200, y: 200}
     haveImage: 0
@@ -54,7 +54,7 @@ MonoBehaviour:
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
   - text: To claim a Tech Structure, simply connect to it.
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
@@ -69,7 +69,7 @@ MonoBehaviour:
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
   - text: Tech Structures cannot be destroyed, but you can reclaim them from your
       opponent if you cut them off!
     location: {x: 0, y: 0}
@@ -85,14 +85,14 @@ MonoBehaviour:
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
   - text: Each tech structure grants a unique technology. Tap and hold on a structure
       to read about its effect.
     location: {x: 440, y: 320}
     arrowLocation: {x: -450, y: 0}
     arrowRotation: 180
     dismissable: 1
-    enableTooltips: 0
+    enableTooltips: 1
     windowLocation: {x: -275, y: 275}
     windowSize: {x: 200, y: 200}
     haveImage: 0
@@ -101,7 +101,7 @@ MonoBehaviour:
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
   - text: You decide what to prioritize! And don't forget about Blueprints!
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
@@ -116,7 +116,7 @@ MonoBehaviour:
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
   overrideStrategy:
     winWeight: 0
     structWeight: 0

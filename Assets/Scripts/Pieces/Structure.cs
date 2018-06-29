@@ -146,9 +146,10 @@ public abstract class Structure : Polyomino
     public override void OnInputDown(bool fromPlayTask)
     {
         if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID) &&
-            !Services.UIManager.tooltipsDisabled &&
-            !Services.GameScene.gameOver &&
-            !Services.GameScene.gamePaused)
+            ((!Services.UIManager.tooltipsDisabled 
+                && Services.GameManager.mode == TitleSceneScript.GameMode.Campaign) 
+                || !Services.GameScene.gamePaused) &&
+            !Services.GameManager.disableUI)
         {
             if (!(Services.GameManager.Players[0] is AIPlayer))
             {

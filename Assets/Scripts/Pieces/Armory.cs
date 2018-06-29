@@ -36,6 +36,6 @@ public class Armory : Structure
     protected override string GetDescription()
     {
         return "+" + 100 * attackFactorModifier + "%" +
-            " attack recharge rate";
+            " Hammer Production rate";
     }
 }

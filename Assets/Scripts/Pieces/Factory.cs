@@ -8,7 +8,7 @@ public class Factory : Blueprint
 
     public Factory(Player player_) : base(BuildingType.FACTORY, player_)
     {
-        onGainText = "+1 Normal Piece Production Level";
+        onGainText = "+1 Piece Production Level";
     }
 
     protected override string GetName()
@@ -20,7 +20,7 @@ public class Factory : Blueprint
     {
         //return "+<color=green>" + Math.Round((double)normalDrawRateBonus, 3) + 
         //    "</color> normal pieces per second";
-        return "+1 Normal Piece Production Level";
+        return "+1 Piece Production Level";
     }
 
     protected override void SetIconSprite()
