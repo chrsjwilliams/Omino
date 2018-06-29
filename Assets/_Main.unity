@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311947, g: 0.38074005, b: 0.35872722, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -172,6 +172,51 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1067162021
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1067162023}
+  - component: {fileID: 1067162022}
+  m_Layer: 0
+  m_Name: Clock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1067162022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1067162021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f47edfc5cd684d3d92e8b2e2a9da637, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BPM: 0
+  MBT: 
+  StartDelay: 0
+  LatencyCompensation: 0
+  _secondsPerMeasure: 0
+--- !u!4 &1067162023
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1067162021}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1142172634
 Prefab:
   m_ObjectHideFlags: 0
@@ -223,6 +268,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d92c93376e4b8ed40b2136d517585ddc, type: 2}
   m_IsPrefabParent: 0
+--- !u!20 &1142172635 stripped
+Camera:
+  m_PrefabParentObject: {fileID: 20490302304154860, guid: d92c93376e4b8ed40b2136d517585ddc,
+    type: 2}
+  m_PrefabInternal: {fileID: 1142172634}
 --- !u!1 &1356268951
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,7 +335,8 @@ MonoBehaviour:
   destructorsEnabled: 1
   levelBPM: 110
   blueprintsEnabled: 1
-  _mainCamera: {fileID: 0}
+  _mainCamera: {fileID: 1142172635}
+  clock: {fileID: 1067162022}
   _players: []
   _player1ColorScheme:
   - {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 1}

@@ -12,7 +12,6 @@ public class LoadingScreenController : MonoBehaviour
 	private bool load_started = false;
 
 	void Awake() {
-		DontDestroyOnLoad (gameObject);
 	}
 	
 	// Update is called once per frame
@@ -44,14 +43,17 @@ public class LoadingScreenController : MonoBehaviour
 	{
 		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
 
+		asyncLoad.allowSceneActivation = false;
 		// Wait until the asynchronous scene fully loads
-		while (!asyncLoad.isDone)
+		while (asyncLoad.progress < 0.9f || Time.time < 3f)
 		{
+			yield return null;
+		}
+		asyncLoad.allowSceneActivation = true;
+		while (!asyncLoad.isDone) {
 			yield return null;
 		}
 
 		SceneManager.UnloadSceneAsync (0);
-
-		Destroy (gameObject);
 	}
 }

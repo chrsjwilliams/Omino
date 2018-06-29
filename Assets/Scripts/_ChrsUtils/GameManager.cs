@@ -65,6 +65,9 @@ public class GameManager : MonoBehaviour
         get { return _mainCamera; }
     }
 
+	[SerializeField]
+	private Clock clock;
+
     [SerializeField] private Player[] _players;
     public Player[] Players
     {
@@ -154,8 +157,8 @@ public class GameManager : MonoBehaviour
 
         Services.InputManager = new InputManager();
         Services.Scenes = new GameSceneManager<TransitionData>(gameObject, Services.Prefabs.Scenes);
-        Services.CameraController = Camera.main.GetComponent<CameraController>();
-        Services.Clock = new GameObject("Clock").AddComponent<Clock>();
+		Services.CameraController = MainCamera.GetComponent<CameraController>();
+		Services.Clock = clock;
         Services.Clock.Init(levelBPM);
 
         gameObject.AddComponent<ClipSwitcher>();
@@ -173,7 +176,7 @@ public class GameManager : MonoBehaviour
 
     public void Init()
     {
-        _mainCamera = Camera.main;
+        //_mainCamera = Camera.main;
     }
 
     public void SetNumPlayers(bool[] players)
