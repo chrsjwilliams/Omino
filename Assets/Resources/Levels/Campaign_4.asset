@@ -51,7 +51,7 @@ MonoBehaviour:
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - tag: 
-    text: To mix things up, there are special <color="#B0B0B08B">Tech Structures</color>
+    text: To mix things up, there are special <color=#B0B0B08B>Tech Structures</color>
       spread across the map!
     location: {x: -350, y: -200}
     arrowLocation: {x: 450, y: 0}
@@ -71,7 +71,13 @@ MonoBehaviour:
     subImageScale: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: To claim a Tech Structure, simply connect to it.
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: 
+    text: To claim a color=#B0B0B08B>Tech Structures</color>, simply connect to it.
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -90,8 +96,14 @@ MonoBehaviour:
     subImageScale: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: Tech Structures cannot be destroyed, but you can reclaim them from your
-      opponent if you cut them off!
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: 
+    text: color=#B0B0B08B>Tech Structures</color> cannot be destroyed, but you can
+      reclaim them from your opponent if you cut them off!
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -110,8 +122,14 @@ MonoBehaviour:
     subImageScale: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: Each tech structure grants a unique technology. Tap and hold on a structure
-      to read about its effect.
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: 
+    text: Each color=#B0B0B08B>Tech Structures</color> grants a unique technology.
+      Tap and hold on a structure to read about its effect.
     location: {x: 440, y: 320}
     arrowLocation: {x: -450, y: 0}
     arrowRotation: 180
@@ -130,7 +148,13 @@ MonoBehaviour:
     subImageScale: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-  - text: You decide what to prioritize! And don't forget about Blueprints!
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: 
+    text: You decide what to prioritize! And don't forget about <color=#BAD9FFFF>Blueprints</color>!
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -149,6 +173,11 @@ MonoBehaviour:
     subImageScale: {x: 0, y: 0}
     subImageRotation: 0
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   overrideStrategy:
     winWeight: 0
     structWeight: 0
