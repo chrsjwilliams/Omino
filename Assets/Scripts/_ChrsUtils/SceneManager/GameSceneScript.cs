@@ -212,19 +212,20 @@ public class GameSceneScript : Scene<TransitionData>
     {
         gamePaused = true;
         TogglePlayerHandLock(true);
-        if (tutorialToolTipActive)
-        {
-            foreach(Player player in Services.GameManager.Players)
-            {
-                player.PauseProdutcion();
-            }
-        }
-        else
-        {
+        Time.timeScale = 0;
+        //if (tutorialToolTipActive)
+        //{
+        //    foreach(Player player in Services.GameManager.Players)
+        //    {
+        //        player.PauseProdutcion();
+        //    }
+        //}
+        //else
+        //{
             
-            Time.timeScale = 0;
+        //    Time.timeScale = 0;
             
-        }
+        //}
     }
 
     public void PauseGame()
@@ -234,17 +235,18 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void UnpauseGame(bool tutorialToolTipActive)
     {
-        if(tutorialToolTipActive)
-        {
-            foreach (Player player in Services.GameManager.Players)
-            {
-                player.ResumeProduction();
-            }
-        }
-        else
-        {
-            Time.timeScale = 1;
-        }
+        Time.timeScale = 1;
+        //if (tutorialToolTipActive)
+        //{
+        //    foreach (Player player in Services.GameManager.Players)
+        //    {
+        //        player.ResumeProduction();
+        //    }
+        //}
+        //else
+        //{
+        //    Time.timeScale = 1;
+        //}
         gamePaused = false;
         if (gameStarted)
         {
