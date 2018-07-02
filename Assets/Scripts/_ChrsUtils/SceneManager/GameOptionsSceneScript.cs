@@ -163,7 +163,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void StartPlayerVsAIMode()
     {
-        optionMenu.SetActive(true);
         optionButtonParent.SetActive(false);
         humanPlayers[0] = true;
         humanPlayers[1] = false;
@@ -222,6 +221,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void StartTwoPlayerMode()
     {
+        TurnOnOptionButtons(true);
         for (int i = 0; i < 2; i++)
         {
             humanPlayers[i] = true;
