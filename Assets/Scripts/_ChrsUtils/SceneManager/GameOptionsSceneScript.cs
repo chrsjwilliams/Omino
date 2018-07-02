@@ -163,7 +163,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void StartPlayerVsAIMode()
     {
-        optionMenu.SetActive(true);
         optionButtonParent.SetActive(false);
         humanPlayers[0] = true;
         humanPlayers[1] = false;
