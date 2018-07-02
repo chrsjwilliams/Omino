@@ -73,6 +73,8 @@ public class Player : MonoBehaviour
     public float drawRateFactor { get; protected set; }
     public float attackGainFactor { get; protected set; }
     public bool shieldedPieces { get; protected set; }
+    protected bool fission;
+    protected bool recycling;
     protected bool biggerBricks;
     protected bool biggerBombs;
     public bool splashDamage { get; protected set; }
@@ -377,11 +379,14 @@ public class Player : MonoBehaviour
 
     }
 
-    void UpdateMeters()
+    void UpdateMeters(bool timeStep = true)
     {
-        normalDrawMeterFillAmt += normalDrawRate * drawRateFactor * Time.deltaTime;
-        destructorDrawMeterFillAmt += destructorDrawRate * attackGainFactor * Time.deltaTime;
-        resourceMeterFillAmt += resourceGainRate * resourceGainFactor * Time.deltaTime;
+        if (timeStep)
+        {
+            normalDrawMeterFillAmt += normalDrawRate * drawRateFactor * Time.deltaTime;
+            destructorDrawMeterFillAmt += destructorDrawRate * attackGainFactor * Time.deltaTime;
+            resourceMeterFillAmt += resourceGainRate * resourceGainFactor * Time.deltaTime;
+        }
         float normalTimeLeft = ((1 - normalDrawMeterFillAmt) /
             (normalDrawRate * drawRateFactor));
         float destructorTimeLeft = ((1 - destructorDrawMeterFillAmt) /
@@ -799,6 +804,25 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void OnDestructionOfOpposingPiece()
+    {
+        attackResources -= 1;
+        if (fission)
+        {
+            resourceMeterFillAmt += Fission.energyReward;
+            UpdateMeters(false);
+        }
+    }
+
+    public void OnDestructionOfPiece()
+    {
+        if (recycling)
+        {
+            normalDrawMeterFillAmt += 1;
+            UpdateMeters();
+        }
+    }
+
     public void OnPieceDisconnected(Polyomino piece)
     {
         foreach(Tile tile in piece.tiles)
@@ -921,6 +945,16 @@ public class Player : MonoBehaviour
     public void LoseOwnership(Structure structure)
     {
         boardPieces.Remove(structure);
+    }
+
+    public void ToggleFission(bool status)
+    {
+        fission = status;
+    }
+
+    public void ToggleRecycling(bool status)
+    {
+        recycling = status;
     }
 
     public void ToggleBiggerBricks(bool status)

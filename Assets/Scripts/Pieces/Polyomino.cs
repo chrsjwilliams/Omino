@@ -3,8 +3,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum BuildingType
-{ BASE,FACTORY, MINE, STRUCTURE,NONE, BOMBFACTORY, MININGDRILL, ASSEMBLYLINE, FORTIFIEDSTEEL,
-    BIGGERBRICKS, BIGGERBOMBS, SPLASHDAMAGE, SHIELDEDPIECES, ARMORY}
+{
+    BASE, FACTORY, MINE, STRUCTURE, NONE, BOMBFACTORY, MININGDRILL, ASSEMBLYLINE, FORTIFIEDSTEEL,
+    BIGGERBRICKS, BIGGERBOMBS, SPLASHDAMAGE, SHIELDEDPIECES, ARMORY, FISSION, RECYCLING
+}
 
 
 public class Polyomino : IVertex
@@ -880,7 +882,11 @@ public class Polyomino : IVertex
         {
             piecesToRemove[i].Remove();
         }
-        if (removedOpposingPiece) owner.attackResources -= 1;
+        if (removedOpposingPiece)
+        {
+            owner.OnDestructionOfOpposingPiece();
+            Services.GameManager.Players[owner.playerNum % 2].OnDestructionOfPiece();
+        }
     }
 
     protected void MakeDustClouds()

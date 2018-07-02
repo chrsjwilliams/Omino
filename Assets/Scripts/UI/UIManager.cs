@@ -62,6 +62,8 @@ public class UIManager : MonoBehaviour {
     public Sprite splashStructIcon;
     public Sprite splashIcon;
     public Sprite shieldIcon;
+    public Sprite fissionIcon;
+    public Sprite recyclingIcon;
     public Sprite[] factoryBottoms;
     public Sprite[] factoryTops;
     public Sprite[] factoryIcons;

@@ -158,6 +158,12 @@ public class MapManager : MonoBehaviour
                 case BuildingType.ARMORY:
                     structure = new Armory();
                     break;
+                case BuildingType.FISSION:
+                    structure = new Fission();
+                    break;
+                case BuildingType.RECYCLING:
+                    structure = new Recycling();
+                    break;
                 default:
                     return null;
             }
@@ -227,7 +233,9 @@ public class MapManager : MonoBehaviour
             //BuildingType.BIGGERBOMBS,
             //BuildingType.SPLASHDAMAGE,
             BuildingType.SHIELDEDPIECES,
-            BuildingType.ARMORY
+            BuildingType.ARMORY,
+            BuildingType.FISSION,
+            BuildingType.RECYCLING
         };
     }
 
