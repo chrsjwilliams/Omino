@@ -222,6 +222,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void StartTwoPlayerMode()
     {
+        TurnOnOptionButtons(true);
         for (int i = 0; i < 2; i++)
         {
             humanPlayers[i] = true;

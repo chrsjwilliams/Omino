@@ -36,7 +36,9 @@ public class HandicapSystem : MonoBehaviour
         lerpSpeed = 18.0f;
 
         singlePlayerMode = ((GameOptionsSceneScript)Services.Scenes.CurrentScene).humanPlayers[1] ? false : true;
-	}
+        UpdateHandicapText();
+
+    }
 
     public void UpdateHandicapText()
     {
