@@ -77,6 +77,7 @@ public class Player : MonoBehaviour
     protected bool recycling;
     protected bool biggerBricks;
     protected bool biggerBombs;
+    public bool crossSection { get; protected set; }
     public bool splashDamage { get; protected set; }
     // 
 
@@ -967,6 +968,11 @@ public class Player : MonoBehaviour
     {
         biggerBombs = status;
         InitializeDestructorDeck();
+    }
+
+    public void ToggleCrossSection(bool status)
+    {
+        crossSection = status;
     }
 
     public void ToggleSplashDamage(bool status)

@@ -164,6 +164,9 @@ public class MapManager : MonoBehaviour
                 case BuildingType.RECYCLING:
                     structure = new Recycling();
                     break;
+                case BuildingType.CROSSSECTION:
+                    structure = new CrossSection();
+                    break;
                 default:
                     return null;
             }
@@ -235,7 +238,8 @@ public class MapManager : MonoBehaviour
             BuildingType.SHIELDEDPIECES,
             BuildingType.ARMORY,
             BuildingType.FISSION,
-            BuildingType.RECYCLING
+            BuildingType.RECYCLING,
+            //BuildingType.CROSSSECTION
         };
     }
 

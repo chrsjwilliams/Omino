@@ -3710,6 +3710,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b0b8ae1bd9517243a232bd4ebf332a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interfaceToFlip:
+  - {fileID: 1046426826050126}
+  - {fileID: 1754833319668876}
+  - {fileID: 1685980755731030}
+  - {fileID: 1764671068292878}
+  - {fileID: 1816412252448872}
+  - {fileID: 1142656432160544}
+  - {fileID: 1470267720064204}
+  - {fileID: 1878206196937206}
+  - {fileID: 1295789764141990}
+  - {fileID: 1194457559573752}
+  destructorUI:
+  - {fileID: 1187264335003196}
+  - {fileID: 1590361915126866}
   resourceCounters:
   - {fileID: 114112504811170874}
   - {fileID: 114316155712960060}
@@ -3778,6 +3792,7 @@ MonoBehaviour:
   shieldIcon: {fileID: 21300000, guid: 965087a40e255d8419b0d37f956795e6, type: 3}
   fissionIcon: {fileID: 21300000, guid: d62f0c0945bb8b34c9bf65a196745e6d, type: 3}
   recyclingIcon: {fileID: 21300000, guid: e3861589f201ded49871606f2da2a8c7, type: 3}
+  crossSection: {fileID: 21300000, guid: 7d6b9e0a4eb00ff49b43a2c4a9d65b89, type: 3}
   factoryBottoms:
   - {fileID: 21300000, guid: 30e7f033b5cf63246af1baa713065fa6, type: 3}
   - {fileID: 21300000, guid: 6dae32a24bb264d4faa23b23a6e332e7, type: 3}
@@ -10314,13 +10329,13 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1142656432160544}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.0000004, y: 1.0000004, z: 1}
   m_Children: []
   m_Father: {fileID: 224143648091832826}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -50, y: 0}

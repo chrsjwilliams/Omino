@@ -5,7 +5,9 @@ using UnityEngine.UI;
 using TMPro;
 
 public class UIManager : MonoBehaviour {
-
+    
+    [SerializeField]
+    private GameObject[] interfaceToFlip;
     public Text[] resourceCounters;
     public GameObject[] resourceSlotZones;
     private Image[][] resourceSlots;
@@ -64,6 +66,7 @@ public class UIManager : MonoBehaviour {
     public Sprite shieldIcon;
     public Sprite fissionIcon;
     public Sprite recyclingIcon;
+    public Sprite crossSection;
     public Sprite[] factoryBottoms;
     public Sprite[] factoryTops;
     public Sprite[] factoryIcons;
@@ -301,6 +304,24 @@ public class UIManager : MonoBehaviour {
         }
 	}
 
+    public void UIForSinglePlayer(bool singlePlayer)
+    {
+        float bannerRotation = singlePlayer ? 0 : 180;
+        float uiElementRotation = singlePlayer ? 180 : 0;
+
+        foreach (GameObject uiElemt in interfaceToFlip)
+        {
+
+            if (uiElemt.name.Contains("Banner"))
+            {
+                uiElemt.transform.localRotation = Quaternion.Euler(0, 0, bannerRotation);
+            }
+            else
+            {
+                uiElemt.transform.localRotation = Quaternion.Euler(0, 0, uiElementRotation);
+            }       
+        }
+    }
 
     public void UpdateDrawMeters(int playerNum, float normalFillProportion, 
         float destructorFillProportion, float normalTimeLeft, float destructorTimeLeft)

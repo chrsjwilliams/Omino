@@ -17,11 +17,14 @@ public class UIEntryAnimation : Task
     private const float blueprintOffset = 10f;
     private bool[] metersOn;
     private bool[] blueprintsOn;
+    private bool showDestructors;
+    private int meterLength;
 
-    public UIEntryAnimation(GameObject[] meters_, List<Blueprint> blueprints_)
+    public UIEntryAnimation(GameObject[] meters_, List<Blueprint> blueprints_, bool showDestructors_)
     {
         meters = meters_;
         blueprints = blueprints_;
+        showDestructors = showDestructors_;
     }
 
     protected override void Init()
@@ -36,7 +39,11 @@ public class UIEntryAnimation : Task
         blueprintStartPositions = new Vector3[blueprints.Count];
         blueprintTargetPositions = new Vector3[blueprints.Count];
 
-        for (int i = 0; i < meters.Length; i++)
+        if (showDestructors) meters[meters.Length - 1].SetActive(false);
+        
+        meterLength = showDestructors ? meters.Length : meters.Length - 1;
+
+        for (int i = 0; i < meterLength; i++)
         {
             GameObject meter = meters[i];
             meterTargetPositions[i] = meter.transform.localPosition;
@@ -64,7 +71,7 @@ public class UIEntryAnimation : Task
     {
         timeElapsed += Time.deltaTime;
 
-        for (int i = 0; i < meters.Length; i++)
+        for (int i = 0; i < meterLength; i++)
         {
             if (timeElapsed >= i * staggerTime)
             {

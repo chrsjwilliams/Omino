@@ -28,6 +28,8 @@ public class GameSceneScript : Scene<TransitionData>
         get { return gameStarted && !gamePaused && !gameOver; }
     }
 
+    private bool showDestructors;
+
     internal override void OnEnter(TransitionData data)
     {
         tileMapHolder = GameObject.Find(TILE_MAP_HOLDER).transform;
@@ -48,6 +50,26 @@ public class GameSceneScript : Scene<TransitionData>
             //Services.GameManager.InitPlayers();
             Services.GameManager.InitPlayers(Services.GameManager.useBlueprintHandicapType, Services.GameManager.handicapValue);
         }
+
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.TwoPlayers)
+        {
+            Services.UIManager.UIForSinglePlayer(false);
+        }
+        else
+        {
+            Services.UIManager.UIForSinglePlayer(true);
+        }
+
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Campaign &&
+            Services.GameManager.levelSelected.campaignLevelNum == 1)
+        {
+            showDestructors = false;
+        }
+        else
+        {
+            showDestructors = true;
+        }
+
         Services.AudioManager.SetMainTrack(Services.Clips.MenuSong, 0.3f);
         Services.CameraController.SetScreenEdges();
         
@@ -192,9 +214,9 @@ public class GameSceneScript : Scene<TransitionData>
         TaskTree uiEntry =
             new TaskTree(new EmptyTask(),
                 new TaskTree(
-                    new UIEntryAnimation(Services.UIManager.meters[0], Services.GameManager.Players[0].blueprints)),
+                    new UIEntryAnimation(Services.UIManager.meters[0], Services.GameManager.Players[0].blueprints, showDestructors)),
                 new TaskTree(
-                    new UIEntryAnimation(Services.UIManager.meters[1], Services.GameManager.Players[1].blueprints)));
+                    new UIEntryAnimation(Services.UIManager.meters[1], Services.GameManager.Players[1].blueprints, showDestructors)));
         TaskTree handEntry = 
             new TaskTree(new EmptyTask(),
                 new TaskTree(
@@ -205,6 +227,8 @@ public class GameSceneScript : Scene<TransitionData>
             .Then(uiEntry)
             .Then(handEntry)
             .Then(new ActionTask(StartGame));
+
+        
         Services.GameScene.tm.Do(startSequence);
     }
 
