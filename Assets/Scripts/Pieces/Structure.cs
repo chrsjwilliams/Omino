@@ -160,7 +160,8 @@ public abstract class Structure : Polyomino
                     holder.transform.position + GetCenterpoint()));
                 tooltips.Add(tooltipLeft);
             }
-            if (!(Services.GameManager.Players[1] is AIPlayer))
+            if (!(Services.GameManager.Players[1] is AIPlayer) && 
+                Services.GameManager.mode == TitleSceneScript.GameMode.TwoPlayers)
             {
                 Tooltip tooltipRight = GameObject.Instantiate(Services.Prefabs.Tooltip,
                     Services.UIManager.canvas).GetComponent<Tooltip>();
