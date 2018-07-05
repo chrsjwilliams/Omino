@@ -28,6 +28,12 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private GameObject campaignLevelButtonParent;
     private LevelButton[] campaignLevelButtons;
     [SerializeField]
+    private GameObject dungeonRunMenu;
+    private LevelButton[] dungeonRunLevelButtons;
+    [SerializeField]
+    private GameObject techSelectMenu; 
+
+    [SerializeField]
     private LevelButton[] backButton;
     [SerializeField]
     private GameObject playButton;
@@ -76,6 +82,15 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     [SerializeField]
     private Button blueprintAssistButton;
 
+    private bool selectingTech;
+
+    [SerializeField]
+    private Button[] techPowerUpsToChoose;
+    [SerializeField]
+    private GameObject[] currentDungeonRunTechZone;
+    //private List<Structure> currentDungeonRunTech;
+    private TextMeshProUGUI[] currentTechText;
+    private Button[][] dungeonRunTechMenu;
     [SerializeField]
     private EloUIManager eloUI;
 
@@ -98,10 +113,17 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GameManager.SetDangerWeight(defaultDangerWeight);
 
         backButton[0].gameObject.SetActive(false);
+
         levelButtons = levelButtonParent.GetComponentsInChildren<LevelButton>();
         levelButtonParent.SetActive(false);
         campaignLevelButtons = campaignLevelButtonParent.GetComponentsInChildren<LevelButton>();
         campaignLevelButtonParent.SetActive(false);
+
+        dungeonRunMenu.SetActive(false);
+
+        techPowerUpsToChoose = techSelectMenu.GetComponentsInChildren<Button>();
+        techSelectMenu.SetActive(false);
+
         humanPlayers = new bool[2] { false, false };
         aiLevelTexts = new TextMeshProUGUI[1];
         aiLevelButtons = new Button[1][];
@@ -112,7 +134,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         TurnOnOptionButtons(false);
         eloUI.gameObject.SetActive(false);
 
-        
+        currentTechText = new TextMeshProUGUI[1];
+        dungeonRunTechMenu = new Button[1][];
+        selectingTech = false;
 
         for (int i = 0; i < aiLevelButtonZones.Length; i++)
         {
@@ -124,6 +148,19 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             }
             aiLevelTexts[i] = aiLevelButtonZones[i].GetComponentInChildren<TextMeshProUGUI>();
             aiLevelButtonZones[i].SetActive(false);
+        }
+
+        for (int i = 0; i < currentDungeonRunTechZone.Length; i++)
+        {
+            Button[] buttons = currentDungeonRunTechZone[i].GetComponentsInChildren<Button>();
+            dungeonRunTechMenu[i] = new Button[buttons.Length];
+            for(int j = 0; j < buttons.Length; j++)
+            {
+                dungeonRunTechMenu[i][j] = buttons[j];
+            }
+
+            currentTechText[i] = currentDungeonRunTechZone[i].GetComponentInChildren<TextMeshProUGUI>();
+            currentDungeonRunTechZone[i].SetActive(false);
         }
 
         handicapSystem.Init();
@@ -144,6 +181,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
                 break;
             case TitleSceneScript.GameMode.Campaign:
                 StartCampaignMode();
+                break;
+            case TitleSceneScript.GameMode.DungeonRun:
+                StartDungeonRunMode();
                 break;
             default:
                 break;
@@ -224,7 +264,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         }
         SetLevelProgress(progress);
         SlideInLevelButtons();
-        _tm.Do(new LevelSelectButtonEntranceTask(backButton));
     }
 
     private void StartTwoPlayerMode()
@@ -234,8 +273,40 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             humanPlayers[i] = true;
         }
-        SlideInLevelButtons();
-        _tm.Do(new LevelSelectButtonEntranceTask(backButton));
+        SlideInLevelButtons();      
+    }
+
+    private void StartDungeonRunMode()
+    {
+        humanPlayers[0] = true;
+        humanPlayers[1] = false;
+        int dungeonRunProgress = 0;
+        int completedDungeonRuns = 0;
+        if (File.Exists(progressFileName))
+        {
+            string fileText = File.ReadAllText(progressFileName);
+            int.TryParse(fileText, out dungeonRunProgress);
+            int.TryParse(fileText, out completedDungeonRuns);
+        }
+        
+        TaskTree dungeonRunChallengeSelect = new TaskTree(new EmptyTask(),
+            new TaskTree(new LevelSelectTextEntrance(dungeonRunMenu)),
+            new TaskTree(new AILevelSlideIn(currentTechText[0], dungeonRunTechMenu[0], true, false)),
+            new TaskTree(new LevelSelectButtonEntranceTask(backButton)));
+            //new TaskTree(new SlideInOptionsMenuTask(handicapOptions)));
+        Services.GeneralTaskManager.Do(dungeonRunChallengeSelect);
+
+    }
+
+    private void SetDungeonRunProgress(int progress)
+    {
+        //  Change Challenge Level Text
+        //  Retrieve all saved tech from runs in progress
+    }
+
+    private void SetCompletedDungeonRunProgress(int completedRuns)
+    {
+        //  this would be nice
     }
 
     private void StartEloMode()
@@ -257,7 +328,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             Services.GameManager.aiLevels[i] = AIPlayer.AiLevels[2];
         }
         SlideInLevelButtons();
-        _tm.Do(new LevelSelectButtonEntranceTask(backButton));
     }
 
     private void RemoveOpposingPlayerMenuText(LevelButton[] buttons)
@@ -280,12 +350,22 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void SlideInLevelButtons()
     {
-        GameObject buttonParent =
-            Services.GameManager.mode == TitleSceneScript.GameMode.Campaign ?
-             campaignLevelButtonParent : levelButtonParent;
-        LevelButton[] buttons =
-            Services.GameManager.mode == TitleSceneScript.GameMode.Campaign ?
-            campaignLevelButtons : levelButtons;
+        GameObject buttonParent;
+        LevelButton[] buttons;
+
+        switch (Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.Campaign:
+                buttonParent = campaignLevelButtonParent;
+                buttons = campaignLevelButtons;
+                break;
+            default:
+                buttonParent = levelButtonParent;
+                buttons = levelButtons;
+                break;
+        }
+
+        
 
         buttonParent.transform.eulerAngles = new Vector3(0, 0, 0);
         RemoveOpposingPlayerMenuText(buttons);
@@ -302,6 +382,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             buttons[i].gameObject.SetActive(false);
         }
+
         playButton.SetActive(false);
         //levelSelectionIndicator.gameObject.SetActive(true);
         GameObject levelSelectText = 
@@ -311,9 +392,14 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             new LevelSelectTextEntrance(levelSelectText);
         LevelSelectButtonEntranceTask buttonEntrance =
             new LevelSelectButtonEntranceTask(buttons, playButton);
-        _tm.Do(entrance);
-        _tm.Do(buttonEntrance);
+        LevelSelectButtonEntranceTask backButtonEntrance =
+                new LevelSelectButtonEntranceTask(backButton);
 
+        _tm.Do(entrance);        
+        _tm.Do(buttonEntrance);
+        _tm.Do(backButtonEntrance);
+        
+        
         SlideOutOptionsButton(false);
     }
 
