@@ -15,7 +15,14 @@ public class EloUIManager : MonoBehaviour {
     {
         winCount.text = data.totalWins.ToString();
         streakCount.text = data.winStreakCount.ToString();
-        difficultyMultipler.text = (1 + data.handicapLevel).ToString();
+        difficultyMultipler.text = 
+            Mathf.RoundToInt(100*(1 + data.handicapLevel)).ToString();
+    }
+
+    public void ResetRank()
+    {
+        ELOManager.ResetRank();
+        SetUI(ELOManager.eloData);
     }
     
 }

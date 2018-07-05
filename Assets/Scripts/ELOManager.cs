@@ -75,6 +75,12 @@ public static class ELOManager
     {
         eloData.handicapLevel = Mathf.Max(minHandicap, handicap);
     }
+
+    public static void ResetRank()
+    {
+        SetHandicap(0);
+        SaveData();
+    }
 }
 
 [System.Serializable]
