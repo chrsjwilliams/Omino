@@ -167,11 +167,19 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void Replay()
     {
-        Services.GameData.Reset();
-        Services.AudioManager.ResetLevelMusic();
-        Task reload = new WaitUnscaled(0.01f);
-        reload.Then(new ActionTask(Reload));
-        Services.GeneralTaskManager.Do(reload);
+        if (Services.GameManager.eloTrackingMode)
+        {
+            ELOManager.OnGameLoss();
+            ReturnToLevelSelect();
+        }
+        else
+        {
+            Services.GameData.Reset();
+            Services.AudioManager.ResetLevelMusic();
+            Task reload = new WaitUnscaled(0.01f);
+            reload.Then(new ActionTask(Reload));
+            Services.GeneralTaskManager.Do(reload);
+        }
     }
 
     void Reload()

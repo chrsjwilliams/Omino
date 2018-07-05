@@ -8,6 +8,7 @@ public static class ELOManager
     private const float handicapIncrement = 0.025f;
     private const int winStreakLength = 3;
     private const float winStreakHandicapIncrement = 0.05f;
+    private const float minHandicap = -0.5f;
     private const string fileName = "eloSaveData";
     public static EloData eloData { get; private set; }
 
@@ -53,11 +54,11 @@ public static class ELOManager
         eloData.winStreakCount += 1;
         if(eloData.winStreakCount >= winStreakLength)
         {
-            eloData.handicapLevel += winStreakHandicapIncrement;
+            SetHandicap(eloData.handicapLevel + winStreakHandicapIncrement);
         }
         else
         {
-            eloData.handicapLevel += handicapIncrement;
+            SetHandicap(eloData.handicapLevel + handicapIncrement);
         }
 
         SaveData();
@@ -66,8 +67,13 @@ public static class ELOManager
     public static void OnGameLoss()
     {
         eloData.winStreakCount = 0;
-        eloData.handicapLevel -= handicapIncrement;
+        SetHandicap(eloData.handicapLevel - handicapIncrement);
         SaveData();
+    }
+
+    private static void SetHandicap(float handicap)
+    {
+        eloData.handicapLevel = Mathf.Max(minHandicap, handicap);
     }
 }
 

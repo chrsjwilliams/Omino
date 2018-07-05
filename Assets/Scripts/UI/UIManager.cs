@@ -47,6 +47,8 @@ public class UIManager : MonoBehaviour {
     private GameObject pauseMenu;
     [SerializeField]
     private GameObject pauseButton;
+    [SerializeField]
+    private TextMeshProUGUI replayButtonText;
     private float pauseTimer;
     private const float pauseTimeWindow = 2f;
     [SerializeField]
@@ -240,7 +242,7 @@ public class UIManager : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
+    void Start() {
 
         for (int i = 0; i < victoryBanners.Length; i++)
         {
@@ -286,7 +288,12 @@ public class UIManager : MonoBehaviour {
             }
             pauseButton.SetActive(false);
         }
-	}
+
+        if (Services.GameManager.eloTrackingMode)
+        {
+            replayButtonText.text = "FORFEIT";
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -786,5 +793,17 @@ public class UIManager : MonoBehaviour {
     public void ShowCampaignLevelCompleteMenu(Player winner)
     {
         campaignLevelCompleteMenu.GetComponent<CampaignMenuManager>().Show(winner);
+    }
+
+    public void OnGameEndBannerTouch()
+    {
+        if (Services.GameManager.eloTrackingMode)
+        {
+            Services.GameScene.ReturnToLevelSelect();
+        }
+        else
+        {
+            TogglePauseMenu();
+        }
     }
 }
