@@ -24,7 +24,7 @@ public class TitleSceneScript : Scene<TransitionData>
     [SerializeField]
     private GameObject title;
 
-    public enum GameMode { TwoPlayers, PlayerVsAI, Demo, Campaign }
+    public enum GameMode { TwoPlayers, PlayerVsAI, Demo, Campaign, DungeonRun }
 
     private const float SECONDS_TO_WAIT = 0.01f;
 
@@ -72,6 +72,11 @@ public class TitleSceneScript : Scene<TransitionData>
     public void PlayCampaignMode()
     {
         StartGame(GameMode.Campaign);
+    }
+
+    public void PlayDungeonRunMode()
+    {
+        StartGame(GameMode.DungeonRun);
     }
 
     public void DemoMode()
