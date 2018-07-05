@@ -76,7 +76,6 @@ public class AIPlayer : Player
 
         resourceGainFactor = strategy.resourceGainFactor;
         drawRateFactor = strategy.drawRateFactor;
-        resourcesPerTick = strategy.resourcesPerTick;
 
         dangerDistance = strategy.dangerDistance;
 
@@ -924,7 +923,6 @@ public class AIStrategy
 
     public float resourceGainFactor;
     public float drawRateFactor;
-    public int resourcesPerTick;
 
     public int dangerDistance;
 
@@ -943,7 +941,6 @@ public class AIStrategy
 
         resourceGainFactor = 1;
         drawRateFactor = 1;
-        resourcesPerTick = 1;
 
         dangerDistance = 11;
     }
@@ -963,7 +960,6 @@ public class AIStrategy
 
         resourceGainFactor = _resourceGainFactor;
         drawRateFactor = _drawRateFactor;
-        resourcesPerTick = _resourcePerTick;
 
         dangerDistance = _dangerDistance;
     }

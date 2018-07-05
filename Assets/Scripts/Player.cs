@@ -117,8 +117,6 @@ public class Player : MonoBehaviour
     public float resourceMeterFillAmt { get; private set; }
     private float normalDrawMeterFillAmt;
     public float destructorDrawMeterFillAmt { get; private set; }
-    [SerializeField]
-    protected int resourcesPerTick;
     public Polyomino queuedNormalPiece { get; private set; }
     public Polyomino queuedDestructor { get; private set; }
     public bool ready { get; private set; }
@@ -414,7 +412,7 @@ public class Player : MonoBehaviour
         }
         if (resourceMeterFillAmt >= 1)
         {
-            GainResources(resourcesPerTick);
+            GainResources(1);
             resourceMeterFillAmt -= 1;
         }
     }
@@ -838,6 +836,7 @@ public class Player : MonoBehaviour
 
     public virtual void CancelSelectedPiece()
     {
+        if (selectedPiece == null) return;
         if (selectedPiece.cost > resources)
             Services.UIManager.FailedPlayFromLackOfResources(this, 
                 selectedPiece.cost - resources);

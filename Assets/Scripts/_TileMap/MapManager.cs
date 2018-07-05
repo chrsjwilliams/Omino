@@ -59,7 +59,12 @@ public class MapManager : MonoBehaviour
 
     public void GenerateMap()
     {
-        if(Services.GameManager.levelSelected != null)
+        if (Services.GameManager.eloTrackingMode)
+        {
+            Level level = levels[Random.Range(0, levels.Length)];
+            Services.GameManager.SetCurrentLevel(level);
+        }
+        if (Services.GameManager.levelSelected != null)
         {
             Level level = currentLevel;
             _mapWidth = level.width;

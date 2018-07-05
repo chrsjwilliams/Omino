@@ -41,6 +41,17 @@ public class GameSceneScript : Scene<TransitionData>
         Services.TutorialManager = GetComponentInChildren<TutorialManager>();
         _colorChangeTime = 0f;
         Services.MapManager.GenerateMap();
+        if (Services.GameManager.eloTrackingMode)
+        {
+            float[] handicaps = new float[2];
+            handicaps[0] = 1;
+            handicaps[1] = 1 + ELOManager.eloData.handicapLevel;
+            Debug.Log("handicap level: " + ELOManager.eloData.handicapLevel);
+            Debug.Log("total wins: " + ELOManager.eloData.totalWins);
+            Debug.Log("win streak: " + ELOManager.eloData.winStreakCount);
+
+            Services.GameManager.SetHandicapValues(handicaps);
+        }
         if (evolutionMode)
         {
             Services.GameManager.InitPlayersEvoMode();
@@ -97,10 +108,20 @@ public class GameSceneScript : Scene<TransitionData>
         Services.UIManager.StartBannerScroll(winner);
         if (winner is AIPlayer)
         {
+            if(Services.GameManager.mode == TitleSceneScript.GameMode.PlayerVsAI &&
+                Services.GameManager.eloTrackingMode)
+            {
+                ELOManager.OnGameLoss();
+            }
             Services.AudioManager.RegisterSoundEffect(Services.Clips.Defeat, 0.6f);
         }
         else
         {
+            if (Services.GameManager.mode == TitleSceneScript.GameMode.PlayerVsAI &&
+                Services.GameManager.eloTrackingMode)
+            {
+                ELOManager.OnGameWin();
+            }
             Services.AudioManager.RegisterSoundEffect(Services.Clips.Victory, 0.3f);
         }
         foreach (Player player in Services.GameManager.Players)

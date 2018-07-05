@@ -116,6 +116,8 @@ public class GameManager : MonoBehaviour
     private float inactivityTimer;
     private const float inactivityBeforeReset = 180f;
 
+    public bool eloTrackingMode;
+
     private void Awake()
     {
         Assert.raiseExceptions = true;
@@ -132,6 +134,8 @@ public class GameManager : MonoBehaviour
         };
 
         CheckPlayerPrefs();
+
+        ELOManager.LoadData();
 
         if (!debug)
         {

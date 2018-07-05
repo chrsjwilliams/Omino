@@ -46,6 +46,8 @@ public class TitleSceneScript : Scene<TransitionData>
         SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
         SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
         SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
+
+        Services.GameManager.eloTrackingMode = false;
     }
 
     public void StartGame(GameMode mode)
@@ -75,6 +77,12 @@ public class TitleSceneScript : Scene<TransitionData>
     public void DemoMode()
     {
         StartGame(GameMode.Demo);
+    }
+
+    public void PlayChallengeMode()
+    {
+        Services.GameManager.eloTrackingMode = true;
+        StartGame(GameMode.PlayerVsAI);
     }
 
     private void ChangeScene()

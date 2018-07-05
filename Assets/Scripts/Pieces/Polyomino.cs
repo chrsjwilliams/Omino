@@ -1369,7 +1369,8 @@ public class Polyomino : IVertex
             if (Services.MapManager.IsCoordContainedInMap(coord)) {
                 Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
                 if(mapTile.occupyingPiece != null && !(mapTile.occupyingPiece is Structure) &&
-                    mapTile.occupyingPiece.owner != owner)
+                    mapTile.occupyingPiece.owner != owner &&
+                    mapTile.occupyingPiece.connected)
                 {
                     overEnemyPiece = true;
                 }

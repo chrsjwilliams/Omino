@@ -76,6 +76,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     [SerializeField]
     private Button blueprintAssistButton;
 
+    [SerializeField]
+    private EloUIManager eloUI;
+
     private float timeElapsed;
     private const float textPulsePeriod = 0.35f;
     private const float textPulseMaxScale = 1.075f;
@@ -107,6 +110,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         optionMenu.SetActive(false);
         //optionButtonParent.SetActive(true);
         TurnOnOptionButtons(false);
+        eloUI.gameObject.SetActive(false);
 
         
 
@@ -122,13 +126,18 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             aiLevelButtonZones[i].SetActive(false);
         }
 
+        handicapSystem.Init();
+
         switch (Services.GameManager.mode)
         {
             case TitleSceneScript.GameMode.TwoPlayers:
                 StartTwoPlayerMode();
                 break;
             case TitleSceneScript.GameMode.PlayerVsAI:
-                StartPlayerVsAIMode();
+                if (Services.GameManager.eloTrackingMode)
+                    StartEloMode();
+                else
+                    StartPlayerVsAIMode();
                 break;
             case TitleSceneScript.GameMode.Demo:
                 StartDemoMode();
@@ -140,7 +149,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
                 break;
         }
 
-        handicapSystem.Init();
 
     }
 
@@ -227,6 +235,17 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             humanPlayers[i] = true;
         }
         SlideInLevelButtons();
+        _tm.Do(new LevelSelectButtonEntranceTask(backButton));
+    }
+
+    private void StartEloMode()
+    {
+        humanPlayers[0] = true;
+        humanPlayers[1] = false;
+        eloUI.gameObject.SetActive(true);
+        eloUI.SetUI(ELOManager.eloData);
+        Services.GameManager.aiLevels[1] = AILEVEL.HARD;
+        TurnOnOptionButtons(true);
         _tm.Do(new LevelSelectButtonEntranceTask(backButton));
     }
 
