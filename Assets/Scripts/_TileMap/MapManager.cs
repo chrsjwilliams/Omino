@@ -51,6 +51,8 @@ public class MapManager : MonoBehaviour
             return Services.GameManager.levelSelected;
         }
     }
+    [SerializeField]
+    private Level[] eloLevelPool;
 
     public void Init()
     {
@@ -61,7 +63,7 @@ public class MapManager : MonoBehaviour
     {
         if (Services.GameManager.eloTrackingMode)
         {
-            Level level = levels[Random.Range(0, levels.Length)];
+            Level level = eloLevelPool[Random.Range(0, eloLevelPool.Length)];
             Services.GameManager.SetCurrentLevel(level);
         }
         if (Services.GameManager.levelSelected != null)
