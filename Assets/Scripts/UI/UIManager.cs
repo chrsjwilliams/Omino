@@ -289,7 +289,7 @@ public class UIManager : MonoBehaviour {
             pauseButton.SetActive(false);
         }
 
-        if (Services.GameManager.eloTrackingMode)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
         {
             replayButtonText.text = "FORFEIT";
         }
@@ -797,7 +797,7 @@ public class UIManager : MonoBehaviour {
 
     public void OnGameEndBannerTouch()
     {
-        if (Services.GameManager.eloTrackingMode)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
         {
             Services.GameScene.ReturnToLevelSelect();
         }

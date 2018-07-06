@@ -24,7 +24,7 @@ public class TitleSceneScript : Scene<TransitionData>
     [SerializeField]
     private GameObject title;
 
-    public enum GameMode { TwoPlayers, PlayerVsAI, Demo, Campaign, DungeonRun }
+    public enum GameMode { TwoPlayers, PlayerVsAI, Demo, Campaign, DungeonRun, Elo }
 
     private const float SECONDS_TO_WAIT = 0.01f;
 
@@ -46,8 +46,6 @@ public class TitleSceneScript : Scene<TransitionData>
         SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
         SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
         SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
-
-        Services.GameManager.eloTrackingMode = false;
     }
 
     public void StartGame(GameMode mode)
@@ -86,8 +84,7 @@ public class TitleSceneScript : Scene<TransitionData>
 
     public void PlayChallengeMode()
     {
-        Services.GameManager.eloTrackingMode = true;
-        StartGame(GameMode.PlayerVsAI);
+        StartGame(GameMode.Elo);
     }
 
     private void ChangeScene()

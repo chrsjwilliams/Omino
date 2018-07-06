@@ -34,7 +34,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private GameObject techSelectMenu; 
 
     [SerializeField]
-    private LevelButton[] backButton;
+    private Button backButton;
     [SerializeField]
     private GameObject playButton;
     [SerializeField]
@@ -63,7 +63,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     [SerializeField]
     private GameObject optionButtonParent;
     [SerializeField]
-    private LevelButton[] theOptionButton;
+    private Button theOptionButton;
     [SerializeField]
     private GameObject optionMenu;
 
@@ -94,11 +94,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     [SerializeField]
     private EloUIManager eloUI;
 
-    private float timeElapsed;
-    private const float textPulsePeriod = 0.35f;
-    private const float textPulseMaxScale = 1.075f;
-    private bool pulsingUp = true;
-
     private TaskManager _tm = new TaskManager();
 
     internal override void OnEnter(TransitionData data)
@@ -112,7 +107,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GameManager.SetDestructorForBlueprintWeight(defaultDestructorForBlueprintWeight);
         Services.GameManager.SetDangerWeight(defaultDangerWeight);
 
-        backButton[0].gameObject.SetActive(false);
+        backButton.gameObject.SetActive(false);
 
         levelButtons = levelButtonParent.GetComponentsInChildren<LevelButton>();
         levelButtonParent.SetActive(false);
@@ -171,10 +166,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
                 StartTwoPlayerMode();
                 break;
             case TitleSceneScript.GameMode.PlayerVsAI:
-                if (Services.GameManager.eloTrackingMode)
-                    StartEloMode();
-                else
-                    StartPlayerVsAIMode();
+                StartPlayerVsAIMode();
                 break;
             case TitleSceneScript.GameMode.Demo:
                 StartDemoMode();
@@ -184,6 +176,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
                 break;
             case TitleSceneScript.GameMode.DungeonRun:
                 StartDungeonRunMode();
+                break;
+            case TitleSceneScript.GameMode.Elo:
+                StartEloMode();
                 break;
             default:
                 break;
@@ -428,22 +423,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private void Update()
     {
         _tm.Update();
-        if (pulsingUp)
-        {
-            timeElapsed += Time.deltaTime;
-        }
-        else
-        {
-            timeElapsed -= Time.deltaTime;
-        }
-        if (timeElapsed >= textPulsePeriod)
-        {
-            pulsingUp = false;
-        }
-        if(timeElapsed <= 0)
-        {
-            pulsingUp = true;
-        }
     }
 
     public void SelectLevel(LevelButton levelButton)
@@ -486,14 +465,19 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         optionsMenuActive = !optionsMenuActive;
         //optionButtonParent.SetActive(optionsMenuActive);
         levelButtonParent.SetActive(false);
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
+        {
+            eloUI.gameObject.SetActive(!optionsMenuActive);
+        }
+        if(Services.GameManager.mode == TitleSceneScript.GameMode.Campaign)
+        {
+            campaignLevelButtonParent.SetActive(!optionsMenuActive);
+        }
         optionMenu.SetActive(optionsMenuActive);
+        theOptionButton.gameObject.SetActive(!optionsMenuActive);
         if (optionsMenuActive)
         {
-            //_BlueprintAssistAppearanceToggle();
-            //_MusicButtonAppearanceToggle();
-            //_SFXButtonAppearanceToggle();
             SlideOutOptionsButton(true);
-
         }
     }
 
@@ -502,7 +486,14 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         if (optionsMenuActive)
         {
             ToggleOptionMenu();
-            SlideInLevelButtons();
+            if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
+            {
+                eloUI.gameObject.SetActive(true);
+            }
+            else
+            {
+                SlideInLevelButtons();
+            }
         }
         else
         {
@@ -552,72 +543,17 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     {
         Services.GameManager.ToggleBlueprintAssist();
         SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
-        
     }
 
     public void ToggleMusic()
     {
         Services.AudioManager.ToggleMusic();
         SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
-        
     }
 
     public void ToggleSoundFX()
     {
         Services.AudioManager.ToggleSoundEffects();
         SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
-        
-    }
-
-    
-    private void _BlueprintAssistAppearanceToggle()
-    {
-        GameObject button = GameObject.Find("ToggleBlueprintAssist");
-
-        if (Services.GameManager.BlueprintAssistEnabled)
-        {
-            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
-            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Blueprint Assist";
-
-        }
-        else
-        {
-            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
-            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<s>Blueprint Assist</s>";
-        }
-    }
-
-    private void _MusicButtonAppearanceToggle()
-    {
-        GameObject button = GameObject.Find("ToggleMusic");
-
-        if (Services.GameManager.MusicEnabled)
-        {
-            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
-            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Music";
-
-        }
-        else
-        {
-            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
-            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<s>Music</s>";
-        }
-    }
-
-    private void _SFXButtonAppearanceToggle()
-    {
-        GameObject button = GameObject.Find("ToggleSound");
-
-        if (Services.GameManager.SoundEffectsEnabled)
-        {
-            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
-            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Sound FX";
-
-        }
-        else
-        {
-            button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
-            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<s>Sound FX</s>";
-        }
     }
 }

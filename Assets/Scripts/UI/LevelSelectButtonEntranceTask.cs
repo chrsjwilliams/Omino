@@ -18,6 +18,14 @@ public class LevelSelectButtonEntranceTask : Task
 
     private bool moveDown;
 
+    public LevelSelectButtonEntranceTask(Button button, 
+        GameObject playButton_ = null, bool moveDown_ = false)
+    {
+        buttons = new GameObject[1] { button.gameObject };
+        playButton = playButton_;
+        moveDown = moveDown_;
+    }
+
     public LevelSelectButtonEntranceTask(LevelButton[] buttons_, 
         GameObject playButton_ = null, bool moveDown_ = false)
     {
@@ -41,7 +49,9 @@ public class LevelSelectButtonEntranceTask : Task
         {
             GameObject button = buttons[i];
             LevelButton levelButton = button.GetComponent<LevelButton>();
-            button.SetActive(levelButton.unlocked);
+            if (levelButton != null)
+                button.SetActive(levelButton.unlocked);
+            else button.SetActive(true);
             Vector3 offset;
             if (moveDown)
             {
