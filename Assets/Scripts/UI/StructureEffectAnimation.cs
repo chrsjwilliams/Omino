@@ -13,7 +13,7 @@ public class StructureEffectAnimation : MonoBehaviour
     {
         sr = GetComponent<SpriteRenderer>();
         sr.sprite = Services.TechDataLibrary.GetIcon(tech);
-        transform.localPosition = pos;
+        transform.position = pos;
     }
 
     // Update is called once per frame

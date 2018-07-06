@@ -803,17 +803,18 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void OnDestructionOfOpposingPiece(Polyomino opposingPiece)
+    public void OnDestructionOfOpposingPiece(Vector3 opposingPieceLocation)
     {
         attackResources -= 1;
         if (fission)
         {
             resourceMeterFillAmt += Fission.energyReward;
             UpdateMeters(false);
-            GameObject fissionAnim = new GameObject();
-            fissionAnim.AddComponent<StructureEffectAnimation>().Init(
-                BuildingType.FISSION, opposingPiece.GetCenterpoint());
-
+            //GameObject fissionAnim = new GameObject();
+            //fissionAnim.transform.parent = Services.GameScene.transform;
+            //fissionAnim.AddComponent<SpriteRenderer>().sortingLayerName = "Effects";
+            //fissionAnim.AddComponent<StructureEffectAnimation>().Init(
+            //    BuildingType.FISSION, opposingPieceLocation);
         }
     }
 

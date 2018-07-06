@@ -107,7 +107,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Services.GameManager.SetDestructorForBlueprintWeight(defaultDestructorForBlueprintWeight);
         Services.GameManager.SetDangerWeight(defaultDangerWeight);
 
-        backButton.gameObject.SetActive(false);
+        backButton.gameObject.SetActive(true);
 
         levelButtons = levelButtonParent.GetComponentsInChildren<LevelButton>();
         levelButtonParent.SetActive(false);
@@ -212,7 +212,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         humanPlayers[1] = false;
         TaskTree aiLevelSelect = new TaskTree( new EmptyTask(),
             new TaskTree(new AILevelSlideIn(aiLevelTexts[0], aiLevelButtons[0], true, false)), 
-            new TaskTree(new LevelSelectButtonEntranceTask(backButton)),
+            //new TaskTree(new LevelSelectButtonEntranceTask(backButton)),
             new TaskTree(new SlideInOptionsMenuTask(handicapOptions)));
         Services.GeneralTaskManager.Do(aiLevelSelect);
     }
@@ -284,11 +284,11 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             int.TryParse(fileText, out dungeonRunProgress);
             int.TryParse(fileText, out completedDungeonRuns);
         }
-        
+
         TaskTree dungeonRunChallengeSelect = new TaskTree(new EmptyTask(),
             new TaskTree(new LevelSelectTextEntrance(dungeonRunMenu)),
-            new TaskTree(new AILevelSlideIn(currentTechText[0], dungeonRunTechMenu[0], true, false)),
-            new TaskTree(new LevelSelectButtonEntranceTask(backButton)));
+            new TaskTree(new AILevelSlideIn(currentTechText[0], dungeonRunTechMenu[0], true, false)));
+            //new TaskTree(new LevelSelectButtonEntranceTask(backButton))
             //new TaskTree(new SlideInOptionsMenuTask(handicapOptions)));
         Services.GeneralTaskManager.Do(dungeonRunChallengeSelect);
 
@@ -313,7 +313,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         eloUI.SetUI(ELOManager.eloData);
         Services.GameManager.aiLevels[1] = AILEVEL.HARD;
         TurnOnOptionButtons(true);
-        _tm.Do(new LevelSelectButtonEntranceTask(backButton));
+        //_tm.Do(new LevelSelectButtonEntranceTask(backButton));
     }
 
     private void StartDemoMode()
@@ -391,7 +391,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
         _tm.Do(entrance);        
         _tm.Do(buttonEntrance);
-        _tm.Do(backButtonEntrance);
+        //_tm.Do(backButtonEntrance);
         
         
         SlideOutOptionsButton(false);
