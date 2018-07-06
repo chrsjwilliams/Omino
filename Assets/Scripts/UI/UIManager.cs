@@ -56,19 +56,8 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private GameObject optionsMenu;
     public Transform canvas;
-    public Sprite blueprintTile;
     public Sprite destructorIcon;
-    public Sprite drillIcon;
-    public Sprite gearIcon;
-    public Sprite hammerOutline;
-    public Sprite bricksIcon;
-    public Sprite bigBombIcon;
-    public Sprite splashStructIcon;
     public Sprite splashIcon;
-    public Sprite shieldIcon;
-    public Sprite fissionIcon;
-    public Sprite recyclingIcon;
-    public Sprite crossSection;
     public Sprite[] factoryBottoms;
     public Sprite[] factoryTops;
     public Sprite[] factoryIcons;

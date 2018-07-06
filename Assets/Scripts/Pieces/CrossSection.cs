@@ -21,12 +21,6 @@ public class CrossSection : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override void SetIconSprite()
-    {
-        base.SetIconSprite();
-        holder.icon.sprite = Services.UIManager.crossSection;
-    }
-
     protected override string GetName()
     {
         return "Cross Section";

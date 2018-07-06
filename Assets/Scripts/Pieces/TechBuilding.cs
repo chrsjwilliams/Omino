@@ -186,29 +186,4 @@ public abstract class TechBuilding : Polyomino
         DestroyTooltips();
         touchID = -1;
     }
-
-    public static Sprite GetIcon(BuildingType type)
-    {
-        switch (type)
-        {
-            case BuildingType.DYNAMO:
-                return Services.UIManager.drillIcon;
-            case BuildingType.SUPPLYBOOST:
-                return Services.UIManager.gearIcon;
-            case BuildingType.UPSIZE:
-                return Services.UIManager.bricksIcon;
-            case BuildingType.SHIELDEDPIECES:
-                return Services.UIManager.shieldIcon;
-            case BuildingType.ARMORY:
-                return Services.UIManager.hammerOutline;
-            case BuildingType.FISSION:
-                return Services.UIManager.fissionIcon;
-            case BuildingType.RECYCLING:
-                return Services.UIManager.recyclingIcon;
-            case BuildingType.CROSSSECTION:
-                return Services.UIManager.crossSection;
-            default:
-                return null;
-        }
-    }
 }

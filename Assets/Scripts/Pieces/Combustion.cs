@@ -20,12 +20,6 @@ public class Combustion : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override void SetIconSprite()
-    {
-        base.SetIconSprite();
-        holder.icon.sprite = Services.UIManager.splashStructIcon;
-    }
-
     protected override string GetName()
     {
         return "Combustion";
