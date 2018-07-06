@@ -122,7 +122,7 @@ public class GameSceneScript : Scene<TransitionData>
             {
                 ELOManager.OnGameWin();
             }
-            Services.AudioManager.RegisterSoundEffect(Services.Clips.Victory, 0.3f);
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.Victory, 0.5f);
         }
         foreach (Player player in Services.GameManager.Players)
         {

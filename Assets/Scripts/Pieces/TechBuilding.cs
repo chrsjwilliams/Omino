@@ -99,7 +99,7 @@ public abstract class TechBuilding : Polyomino
     {
         owner = player;
         SetOverlaySprite();
-        Services.AudioManager.RegisterSoundEffect(Services.Clips.StructureClaimed, 1);
+        Services.AudioManager.RegisterSoundEffect(Services.Clips.StructureClaimed);
         owner.GainOwnership(this);
         StructClaimAura effect = GameObject.Instantiate(Services.Prefabs.StructClaimEffect, 
             holder.transform.position + GetCenterpoint(), Quaternion.identity).GetComponent<StructClaimAura>();
