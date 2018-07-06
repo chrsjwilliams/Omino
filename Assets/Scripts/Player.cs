@@ -549,7 +549,7 @@ public class Player : MonoBehaviour
         Task drawTask = new DrawTask(piece, startPos);
         Services.GameScene.tm.Do(drawTask);
         QueueUpNextPiece(onlyDestructors);
-        Services.AudioManager.RegisterSoundEffect(Services.Clips.PieceDrawn);
+        Services.AudioManager.RegisterSoundEffectReverb(Services.Clips.PieceDrawn, 1.0f, Clock.BeatValue.Sixteenth);
     }
 
     void QueueUpNextPiece(bool destructor)
@@ -846,7 +846,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            Services.AudioManager.RegisterSoundEffect(Services.Clips.IllegalPlay, 0.2f);
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.IllegalPlay, 0.2f, Clock.BeatValue.Sixteenth);
         }
         int handPosToPlace = Mathf.Min(selectedPieceHandPos, hand.Count);
         hand.Insert(handPosToPlace, selectedPiece);
@@ -859,7 +859,7 @@ public class Player : MonoBehaviour
     {
         blueprints.Add((Blueprint)selectedPiece);
         selectedPiece.SetGlowState(false);
-        Services.AudioManager.RegisterSoundEffect(Services.Clips.IllegalPlay, 0.2f);
+        Services.AudioManager.RegisterSoundEffect(Services.Clips.IllegalPlay, 0.2f, Clock.BeatValue.Sixteenth);
         Blueprint selectedBlueprint = selectedPiece as Blueprint;
         selectedBlueprint.Reposition(GetBlueprintPosition(selectedBlueprint));
         selectedPiece = null;
