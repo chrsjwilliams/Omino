@@ -123,9 +123,9 @@ public class Player : MonoBehaviour
     private bool handLocked;
     private Coord homeBasePos;
 
-    private HashSet<Mine> activeMines;
+    private HashSet<Generator> activeMines;
     private HashSet<Factory> activeFactories;
-    private HashSet<BombFactory> activeBombFactories;
+    private HashSet<Barracks> activeBombFactories;
     private HashSet<Base> activeExpansions;
     [SerializeField]
     public bool inDanger;
@@ -192,9 +192,9 @@ public class Player : MonoBehaviour
         resourceGainFactor = 1;
         drawRateFactor = 1;
         attackGainFactor = 1;
-        activeMines = new HashSet<Mine>();
+        activeMines = new HashSet<Generator>();
         activeFactories = new HashSet<Factory>();
-        activeBombFactories = new HashSet<BombFactory>();
+        activeBombFactories = new HashSet<Barracks>();
         activeExpansions = new HashSet<Base>();
         SetProductionValues();
 
@@ -241,10 +241,10 @@ public class Player : MonoBehaviour
             Factory factory = new Factory(this);
             AddBluePrint(factory);
 
-            Mine mine = new Mine(this);
+            Generator mine = new Generator(this);
             AddBluePrint(mine);
 
-            BombFactory bombFactory = new BombFactory(this);
+            Barracks bombFactory = new Barracks(this);
             AddBluePrint(bombFactory);
         }
 
@@ -607,10 +607,10 @@ public class Player : MonoBehaviour
             case BuildingType.FACTORY:
                 screenPos = Services.UIManager.factoryBlueprintLocations[playerNum - 1].position;
                 break;
-            case BuildingType.MINE:
+            case BuildingType.GENERATOR:
                 screenPos = Services.UIManager.mineBlueprintLocations[playerNum - 1].position;
                 break;
-            case BuildingType.BOMBFACTORY:
+            case BuildingType.BARRACKS:
                 screenPos = Services.UIManager.bombFactoryBlueprintLocations[playerNum - 1].position;
                 break;
             default:
@@ -937,12 +937,12 @@ public class Player : MonoBehaviour
         shieldedPieces = shieldedPieces_;
     }
 
-    public void GainOwnership(Structure structure)
+    public void GainOwnership(TechBuilding structure)
     {
         boardPieces.Add(structure);
     }
 
-    public void LoseOwnership(Structure structure)
+    public void LoseOwnership(TechBuilding structure)
     {
         boardPieces.Remove(structure);
     }
@@ -1033,11 +1033,11 @@ public class Player : MonoBehaviour
             case BuildingType.FACTORY:
                 activeFactories.Add(blueprint as Factory);
                 break;
-            case BuildingType.MINE:
-                activeMines.Add(blueprint as Mine);
+            case BuildingType.GENERATOR:
+                activeMines.Add(blueprint as Generator);
                 break;
-            case BuildingType.BOMBFACTORY:
-                activeBombFactories.Add(blueprint as BombFactory);
+            case BuildingType.BARRACKS:
+                activeBombFactories.Add(blueprint as Barracks);
                 break;
             default:
                 break;
@@ -1052,11 +1052,11 @@ public class Player : MonoBehaviour
             case BuildingType.FACTORY:
                 activeFactories.Remove(blueprint as Factory);
                 break;
-            case BuildingType.MINE:
-                activeMines.Remove(blueprint as Mine);
+            case BuildingType.GENERATOR:
+                activeMines.Remove(blueprint as Generator);
                 break;
-            case BuildingType.BOMBFACTORY:
-                activeBombFactories.Remove(blueprint as BombFactory);
+            case BuildingType.BARRACKS:
+                activeBombFactories.Remove(blueprint as Barracks);
                 break;
             default:
                 break;
@@ -1073,9 +1073,9 @@ public class Player : MonoBehaviour
         normalDrawRate = (Base.normalDrawRate + 
             ((normProdLevel - 1) * Factory.drawRateBonus * allBlueprintHandicap)) * allResourceHandicap;
         destructorDrawRate = (Base.destDrawRate +
-            ((destProdLevel - 1) * BombFactory.drawRateBonus * allBlueprintHandicap)) * allResourceHandicap;
+            ((destProdLevel - 1) * Barracks.drawRateBonus * allBlueprintHandicap)) * allResourceHandicap;
         resourceGainRate = (Base.resourceGainRate +
-            ((resourceProdLevel - 1) * Mine.resourceRateBonus * allBlueprintHandicap)) * allResourceHandicap;
+            ((resourceProdLevel - 1) * Generator.resourceRateBonus * allBlueprintHandicap)) * allResourceHandicap;
         Services.GameData.productionRates[playerNum - 1] = resourceGainRate * resourceGainFactor;
     }
 
@@ -1097,7 +1097,7 @@ public class Player : MonoBehaviour
                         mapTile = Services.MapManager.Map[coordCandidate.x, coordCandidate.y];
                     }
                     if(mapTile != null && mapTile.occupyingBlueprint == null && 
-                        mapTile.occupyingPiece != null && !(mapTile.occupyingPiece is Structure)
+                        mapTile.occupyingPiece != null && !(mapTile.occupyingPiece is TechBuilding)
                         && mapTile.occupyingPiece.connected && mapTile.occupyingPiece.owner == this)
                     {
                         possibleBlueprintCoords.Add(coordCandidate);
@@ -1143,9 +1143,9 @@ public class Player : MonoBehaviour
             BlueprintMap moveToHighlight = null;
             List<BuildingType> priorityBlueprints = new List<BuildingType>();
             int minProdLevel = Mathf.Min(normProdLevel, destProdLevel, resourceProdLevel);
-            if (resourceProdLevel == minProdLevel) priorityBlueprints.Add(BuildingType.MINE);
+            if (resourceProdLevel == minProdLevel) priorityBlueprints.Add(BuildingType.GENERATOR);
             else if (normProdLevel == minProdLevel) priorityBlueprints.Add(BuildingType.FACTORY);
-            else if (destProdLevel == minProdLevel) priorityBlueprints.Add(BuildingType.BOMBFACTORY);
+            else if (destProdLevel == minProdLevel) priorityBlueprints.Add(BuildingType.BARRACKS);
             foreach(BlueprintMap blueprintMove in possibleBlueprintMoves)
             {
                 if (priorityBlueprints.Contains(blueprintMove.blueprint.buildingType))

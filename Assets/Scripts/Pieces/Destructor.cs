@@ -45,7 +45,7 @@ public class Destructor : Polyomino
         bool connectedToBase = false;
         for (int i = 0; i < adjacentPieces.Count; i++)
         {
-            if (adjacentPieces[i].connected || adjacentPieces[i] is Structure)
+            if (adjacentPieces[i].connected || adjacentPieces[i] is TechBuilding)
             {
                 connectedToBase = true;
                 break;
@@ -66,7 +66,7 @@ public class Destructor : Polyomino
             Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner && mapTile.occupyingPiece.connected)
                 return false;
-            if (mapTile.IsOccupied() && mapTile.occupyingPiece is Structure) return false;
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece is TechBuilding) return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.shieldDurationRemaining > 0) return false;
         }
         
@@ -87,7 +87,7 @@ public class Destructor : Polyomino
                 Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                 bool occupied = mapTile.IsOccupied();
                 if ((occupied && mapTile.occupyingPiece.owner == owner && mapTile.occupyingPiece.connected) ||
-                    (occupied && mapTile.occupyingPiece is Structure) ||
+                    (occupied && mapTile.occupyingPiece is TechBuilding) ||
                     (occupied && mapTile.occupyingPiece.shieldDurationRemaining > 0))
                 {
                     illegalTiles.Add(tile);
@@ -106,7 +106,7 @@ public class Destructor : Polyomino
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner && mapTile.occupyingPiece.connected)
                 return false;
-            if (mapTile.IsOccupied() && mapTile.occupyingPiece is Structure) return false;
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece is TechBuilding) return false;
         }
 
         return true;
@@ -194,7 +194,7 @@ public class Destructor : Polyomino
             for (int i = 0; i < adjacentEnemyPieces.Count; i++)
             {
                 Polyomino enemyPiece = adjacentEnemyPieces[i];
-                if (!enemyPiecesInRange.Contains(enemyPiece) && !(enemyPiece is Structure)
+                if (!enemyPiecesInRange.Contains(enemyPiece) && !(enemyPiece is TechBuilding)
                     && enemyPiece.shieldDurationRemaining <= 0)
                 {
                     enemyPiecesInRange.Add(enemyPiece);

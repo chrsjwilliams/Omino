@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Fission : Structure
+public class Fission : TechBuilding
 {
     public const float energyReward = 0.5f;
 

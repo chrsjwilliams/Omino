@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Armory : Structure
+public class Armory : TechBuilding
 {
     private const float attackFactorModifier = 0.15f;
 

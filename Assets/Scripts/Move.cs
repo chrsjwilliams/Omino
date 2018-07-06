@@ -92,7 +92,7 @@ public class Move
             #region BLUEPRINT FORESIGHT & OLD BLUEPRINT CREATION TECHNIQUE 
 
 
-            if (blueprintMap.blueprint is Mine)
+            if (blueprintMap.blueprint is Generator)
             {
                 if (predictiveSmith)
                 {
@@ -122,7 +122,7 @@ public class Move
                     factoryMove = new Move(blueprintMap.blueprint, blueprintMap.targetCoord, blueprintMap.rotations);
                 }
             }
-            else if (blueprintMap.blueprint is BombFactory)
+            else if (blueprintMap.blueprint is Barracks)
             {
                 if (predictiveBarracks)
                 {
@@ -266,7 +266,7 @@ public class Move
                                 mapTile.occupyingPiece.owner != null &&
                                 mapTile.occupyingPiece.owner != piece.owner &&
                                 mapTile.occupyingPiece.connected &&
-                                !(mapTile.occupyingPiece is Structure) &&
+                                !(mapTile.occupyingPiece is TechBuilding) &&
                                 !mapTile.shielded)
                             {
                                 tilesIdestroy++;

@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SplashDamage : Structure
+public class Combustion : TechBuilding
 {
-    public SplashDamage() : base(0)
+    public Combustion() : base(0)
     {
-        buildingType = BuildingType.SPLASHDAMAGE;
+        buildingType = BuildingType.COMBUSTION;
     }
 
     public override void OnClaim(Player player)

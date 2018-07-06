@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Recycling : Structure
+public class Recycling : TechBuilding
 {
     public Recycling() : base(1)
     {

@@ -91,8 +91,8 @@ public class AIPlayer : Player
 
 
         baseBrickWorkRate = Factory.drawRateBonus / normalDrawRate;
-        baseBarracksRate = BombFactory.drawRateBonus / destructorDrawRate;
-        baseSmithRate = Mine.resourceRateBonus / resourceGainRate;
+        baseBarracksRate = Barracks.drawRateBonus / destructorDrawRate;
+        baseSmithRate = Generator.resourceRateBonus / resourceGainRate;
 
         if (playerNum == 1)
         {
@@ -162,7 +162,7 @@ public class AIPlayer : Player
             if (piece.owner != null &&
                 piece.owner != this &&
                 !(piece is Blueprint) &&
-                (piece.connected || piece is Structure))
+                (piece.connected || piece is TechBuilding))
             {
                 //  the first parameter is the vertex
                 //  the second parameter are its adajcent verticies
@@ -265,8 +265,8 @@ public class AIPlayer : Player
             Coord firstCoord = edgeToBeRemoved.originalFirstVertex.centerCoord;
             Coord secondCoord = edgeToBeRemoved.originalSecondVertex.centerCoord;
 
-            bool includeFirstCoord = !(edgeToBeRemoved.originalFirstVertex is Structure);
-            bool includeSecondCoord = !(edgeToBeRemoved.originalSecondVertex is Structure);
+            bool includeFirstCoord = !(edgeToBeRemoved.originalFirstVertex is TechBuilding);
+            bool includeSecondCoord = !(edgeToBeRemoved.originalSecondVertex is TechBuilding);
 
             foreach (CutCoordSet set in sets)
             {
@@ -452,8 +452,8 @@ public class AIPlayer : Player
         float expenditurePerSecond = normalPieceExpenditure + destructivePieceExpenditure;
 
         float brickWorksWeightMod = (Factory.drawRateBonus / normalPieceExpenditure) / baseBrickWorkRate;
-        float barracksWeightMod = (BombFactory.drawRateBonus / destructivePieceExpenditure) / baseBarracksRate;
-        float smithWeightMod = (Mine.resourceRateBonus / resourceGainRate) / baseSmithRate;
+        float barracksWeightMod = (Barracks.drawRateBonus / destructivePieceExpenditure) / baseBarracksRate;
+        float smithWeightMod = (Generator.resourceRateBonus / resourceGainRate) / baseSmithRate;
 
         bool usePredictiveSmith = resourceProdLevel < 2 ? true : false;
         bool usePredictiveBrickworks = normProdLevel < 2 ? true : false;
@@ -483,7 +483,7 @@ public class AIPlayer : Player
         int countedPlayableCoords = 0;
         foreach (Polyomino piece in currentBoardPieces)
         {
-            if (piece.connected || piece is Structure)
+            if (piece.connected || piece is TechBuilding)
             {
                 foreach (Tile tile in piece.tiles)
                 {
@@ -516,7 +516,7 @@ public class AIPlayer : Player
                                 if (
                                     //!possibleBlueprintCoords.Contains(candidateCoord) &&
                                     containedInMap &&
-                                    (mapTile.occupyingPiece == null || !(mapTile.occupyingPiece is Structure)) &&
+                                    (mapTile.occupyingPiece == null || !(mapTile.occupyingPiece is TechBuilding)) &&
                                     mapTile.occupyingBlueprint == null)
                                 {
                                     possibleBlueprintCoords.Add(candidateCoord);
@@ -592,7 +592,7 @@ public class AIPlayer : Player
                             if (containedInMap) mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                             if (!containedInMap ||
                                 (mapTile.occupyingPiece != null &&
-                                    (mapTile.occupyingPiece is Structure || mapTile.occupyingPiece.owner != this ||
+                                    (mapTile.occupyingPiece is TechBuilding || mapTile.occupyingPiece.owner != this ||
                                     !mapTile.occupyingPiece.connected)) ||
                                 mapTile.occupyingBlueprint != null)
                             {

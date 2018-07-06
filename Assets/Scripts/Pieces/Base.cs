@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class Base : Structure
+public class Base : TechBuilding
 {
     public bool mainBase { get; private set; }
 

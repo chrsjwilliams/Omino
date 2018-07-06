@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShieldedPieces : Structure
+public class ShieldedPieces : TechBuilding
 {
     public const float ShieldDuration = 6f;
 

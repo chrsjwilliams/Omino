@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BiggerBricks : Structure
+public class Upsize : TechBuilding
 {
-    public BiggerBricks() : base(0)
+    public Upsize() : base(0)
     {
-        buildingType = BuildingType.BIGGERBRICKS;
+        buildingType = BuildingType.UPSIZE;
     }
 
     public override void OnClaim(Player player)

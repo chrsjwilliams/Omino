@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrossSection : Structure
+public class CrossSection : TechBuilding
 {
     public CrossSection() : base(0)
     {

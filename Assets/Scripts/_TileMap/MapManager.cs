@@ -29,7 +29,7 @@ public class MapManager : MonoBehaviour
         get { return _center; }
     }
 
-    public List<Structure> structuresOnMap { get; private set; }
+    public List<TechBuilding> structuresOnMap { get; private set; }
     public List<Coord> structureCoords { get; private set; }
     [SerializeField]
     private int structDistMin;
@@ -115,7 +115,7 @@ public class MapManager : MonoBehaviour
         {
             mapTile.gameObject.SetActive(false);
         }
-        foreach(Structure structure in structuresOnMap)
+        foreach(TechBuilding structure in structuresOnMap)
         {
             structure.holder.gameObject.SetActive(false);
         }
@@ -129,35 +129,35 @@ public class MapManager : MonoBehaviour
         Services.GameScene.tm.Do(boardAnimationTasks);
     }
 
-    Structure GenerateStructure(BuildingType type)
+    TechBuilding GenerateStructure(BuildingType type)
     {
         return GenerateStructure(type, GenerateValidStructureCoord());
     }
 
-    Structure GenerateStructure(BuildingType type, Coord structCoord)
+    TechBuilding GenerateStructure(BuildingType type, Coord structCoord)
     {
         if (structCoord != new Coord(-1, -1))
         {
-            Structure structure;
+            TechBuilding structure;
             switch (type)
             {
                 case BuildingType.BASE:
                     structure = new Base();
                     break;
-                case BuildingType.MININGDRILL:
-                    structure = new MiningDrill();
+                case BuildingType.DYNAMO:
+                    structure = new Dynamo();
                     break;
-                case BuildingType.ASSEMBLYLINE:
-                    structure = new AssemblyLine();
+                case BuildingType.SUPPLYBOOST:
+                    structure = new SupplyBoost();
                     break;
-                case BuildingType.BIGGERBRICKS:
-                    structure = new BiggerBricks();
+                case BuildingType.UPSIZE:
+                    structure = new Upsize();
                     break;
-                case BuildingType.BIGGERBOMBS:
-                    structure = new BiggerBombs();
+                case BuildingType.ATTACKUPSIZE:
+                    structure = new AttackUpsize();
                     break;
-                case BuildingType.SPLASHDAMAGE:
-                    structure = new SplashDamage();
+                case BuildingType.COMBUSTION:
+                    structure = new Combustion();
                     break;
                 case BuildingType.SHIELDEDPIECES:
                     structure = new ShieldedPieces();
@@ -187,7 +187,7 @@ public class MapManager : MonoBehaviour
     void GetStructureCoords()
     {
         structureCoords = new List<Coord>();
-        foreach (Structure structure in Services.MapManager.structuresOnMap)
+        foreach (TechBuilding structure in Services.MapManager.structuresOnMap)
         {
             foreach (Tile tile in structure.tiles)
             {
@@ -237,9 +237,9 @@ public class MapManager : MonoBehaviour
     {
         return new List<BuildingType>()
         {
-            BuildingType.MININGDRILL,
-            BuildingType.ASSEMBLYLINE,
-            BuildingType.BIGGERBRICKS,
+            BuildingType.DYNAMO,
+            BuildingType.SUPPLYBOOST,
+            BuildingType.UPSIZE,
             //BuildingType.BIGGERBOMBS,
             //BuildingType.SPLASHDAMAGE,
             BuildingType.SHIELDEDPIECES,
@@ -252,7 +252,7 @@ public class MapManager : MonoBehaviour
 
     void GenerateStructures(Level level)
     {
-        structuresOnMap = new List<Structure>();
+        structuresOnMap = new List<TechBuilding>();
         List<BuildingType> structureTypes = InitStructureTypeList();
 
         if (level == null || level.cornerBases)
@@ -283,7 +283,7 @@ public class MapManager : MonoBehaviour
                 if (structureTypes.Count == 0) structureTypes = InitStructureTypeList();
                 type = structureTypes[Random.Range(0, structureTypes.Count)];
                 structureTypes.Remove(type);
-                Structure structure = GenerateStructure(type);
+                TechBuilding structure = GenerateStructure(type);
                 if (structure == null)
                 {
                     break;
@@ -306,7 +306,7 @@ public class MapManager : MonoBehaviour
                 structureTypes = new List<BuildingType>(level.availableStructures);
             type = structureTypes[Random.Range(0, structureTypes.Count)];
             structureTypes.Remove(type);
-            Structure structure = GenerateStructure(type, level.structCoords[i]);
+            TechBuilding structure = GenerateStructure(type, level.structCoords[i]);
             structuresOnMap.Add(structure);
         }
     }
@@ -403,7 +403,7 @@ public class MapManager : MonoBehaviour
             if (iterationCount > 1000) return;
             HashSet<Polyomino> frontierQueue = new HashSet<Polyomino>();
             Polyomino piece = frontier.First();
-            if ((piece is Structure && (piece.owner == player || piece.owner == null)) || 
+            if ((piece is TechBuilding && (piece.owner == player || piece.owner == null)) || 
                 piece.owner == player)
             {
                 connectedPieces.Add(piece);
@@ -426,9 +426,9 @@ public class MapManager : MonoBehaviour
             Polyomino piece = player.boardPieces[i];
             if (!connectedPieces.Contains(piece) && !(piece is Blueprint))
             {
-                if(piece is Structure)
+                if(piece is TechBuilding)
                 {
-                    Structure structure = piece as Structure;
+                    TechBuilding structure = piece as TechBuilding;
                     structure.OnClaimLost();
                 }
                 else
@@ -442,12 +442,12 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < connectedPieces.Count; i++)
         {
             Polyomino piece = connectedPieces[i];
-            if ((!piece.connected && !(piece is Structure)) || 
-                (piece is Structure && piece.owner == null))
+            if ((!piece.connected && !(piece is TechBuilding)) || 
+                (piece is TechBuilding && piece.owner == null))
             {
-                if(piece is Structure)
+                if(piece is TechBuilding)
                 {
-                    Structure structure = piece as Structure;
+                    TechBuilding structure = piece as TechBuilding;
                     structure.OnClaim(player);
                 }
                 else

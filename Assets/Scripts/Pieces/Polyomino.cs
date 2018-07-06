@@ -4,9 +4,9 @@ using UnityEngine.UI;
 
 public enum BuildingType
 {
-    BASE, FACTORY, MINE, STRUCTURE, NONE, BOMBFACTORY, MININGDRILL, ASSEMBLYLINE, FORTIFIEDSTEEL,
-    BIGGERBRICKS, BIGGERBOMBS, SPLASHDAMAGE, SHIELDEDPIECES, ARMORY, FISSION, RECYCLING,
-    CROSSSECTION
+    BASE = -4, FACTORY = -3, GENERATOR = -2, BARRACKS = -1, NONE = 0,
+    DYNAMO, SUPPLYBOOST, UPSIZE, ATTACKUPSIZE, COMBUSTION, SHIELDEDPIECES,
+    ARMORY, FISSION, RECYCLING, CROSSSECTION
 }
 
 
@@ -48,7 +48,7 @@ public class Polyomino : IVertex
     public const float burnPieceDuration = 0.5f;
     private const float alphaWhileUnaffordable = 0.3f;
     private const float alphaWhileAffordable = 0.8f;
-    private List<Structure> highlightedStructures;
+    private List<TechBuilding> highlightedStructures;
 
     public List<Blueprint> occupyingBlueprints { get; protected set; }
     public int cost { get; protected set; }
@@ -590,9 +590,9 @@ public class Polyomino : IVertex
         return adjacentEmptyTiles;
     }
 
-    public virtual List<Structure> GetAdjacentStructures()
+    public virtual List<TechBuilding> GetAdjacentStructures()
     {
-        List<Structure> adjacentStructures = new List<Structure>();
+        List<TechBuilding> adjacentStructures = new List<TechBuilding>();
 
         foreach (Tile tile in tiles)
         {
@@ -602,10 +602,10 @@ public class Polyomino : IVertex
                 if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
                 {
                     Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
-                    if (adjTile.IsOccupied() && adjTile.occupyingPiece is Structure &&
-                        !adjacentStructures.Contains((Structure)adjTile.occupyingPiece))
+                    if (adjTile.IsOccupied() && adjTile.occupyingPiece is TechBuilding &&
+                        !adjacentStructures.Contains((TechBuilding)adjTile.occupyingPiece))
                     {
-                        adjacentStructures.Add((Structure)adjTile.occupyingPiece);
+                        adjacentStructures.Add((TechBuilding)adjTile.occupyingPiece);
                     }
                 }
             }
@@ -720,7 +720,7 @@ public class Polyomino : IVertex
         bool connectedToBase = false;
         for (int i = 0; i < adjPieces.Count; i++)
         {
-            if (adjPieces[i].connected || adjPieces[i] is Structure)
+            if (adjPieces[i].connected || adjPieces[i] is TechBuilding)
             {
                 connectedToBase = true;
                 break;
@@ -737,7 +737,7 @@ public class Polyomino : IVertex
             if (Services.MapManager.IsCoordContainedInMap(tile.coord))
             {
                 Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-                if (mapTile.IsOccupied() &&  mapTile.occupyingPiece is Structure)
+                if (mapTile.IsOccupied() &&  mapTile.occupyingPiece is TechBuilding)
                 {
                     illegalTiles.Add(tile);
                 }
@@ -770,7 +770,7 @@ public class Polyomino : IVertex
         bool connectedToBase = false;
         for (int i = 0; i < adjacentPieces.Count; i++)
         {
-            if (adjacentPieces[i].connected || adjacentPieces[i] is Structure)
+            if (adjacentPieces[i].connected || adjacentPieces[i] is TechBuilding)
             {
                 connectedToBase = true;
                 break;
@@ -791,7 +791,7 @@ public class Polyomino : IVertex
             if (mapTile.IsOccupied() &&
                 ((mapTile.occupyingPiece.connected && owner.attackResources < 1 && !pretendAttackResource) ||
                 (mapTile.occupyingPiece.connected && mapTile.occupyingPiece.owner == owner) ||
-                mapTile.occupyingPiece is Structure))
+                mapTile.occupyingPiece is TechBuilding))
                 return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.shieldDurationRemaining > 0 && !pretendAttackResource)
                 return false;
@@ -1368,7 +1368,7 @@ public class Polyomino : IVertex
             Coord coord = tile.coord;
             if (Services.MapManager.IsCoordContainedInMap(coord)) {
                 Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
-                if(mapTile.occupyingPiece != null && !(mapTile.occupyingPiece is Structure) &&
+                if(mapTile.occupyingPiece != null && !(mapTile.occupyingPiece is TechBuilding) &&
                     mapTile.occupyingPiece.owner != owner &&
                     mapTile.occupyingPiece.connected)
                 {
@@ -1416,11 +1416,11 @@ public class Polyomino : IVertex
             }
         }
         UnhighlightPotentialStructureClaims();
-        highlightedStructures = new List<Structure>();
-        List<Structure> adjStructures = GetAdjacentStructures();
+        highlightedStructures = new List<TechBuilding>();
+        List<TechBuilding> adjStructures = GetAdjacentStructures();
         if (isLegal)
         {
-            foreach (Structure structure in adjStructures)
+            foreach (TechBuilding structure in adjStructures)
             {
                 if (structure.owner == null)
                 {
@@ -1435,7 +1435,7 @@ public class Polyomino : IVertex
     {
         if (highlightedStructures != null)
         {
-            foreach (Structure structure in highlightedStructures)
+            foreach (TechBuilding structure in highlightedStructures)
             {
                 structure.TurnOffGlow();
             }
@@ -1555,7 +1555,7 @@ public class Polyomino : IVertex
     {
         if (connected && !connected_) owner.OnPieceDisconnected(this);
 
-        if (!(this is Structure) && !(this is Blueprint))
+        if (!(this is TechBuilding) && !(this is Blueprint))
         {
             if (connected_)
             {

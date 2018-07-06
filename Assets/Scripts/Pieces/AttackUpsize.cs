@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BiggerBombs : Structure
+public class AttackUpsize : TechBuilding
 {
-    public BiggerBombs() : base(0)
+    public AttackUpsize() : base(0)
     {
-        buildingType = BuildingType.BIGGERBOMBS;
+        buildingType = BuildingType.ATTACKUPSIZE;
     }
 
     public override void OnClaim(Player player)

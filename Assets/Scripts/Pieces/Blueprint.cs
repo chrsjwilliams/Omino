@@ -63,13 +63,13 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                 piece = factory;
                 maxRotations = 2;
                 break;
-            case BuildingType.MINE:
-                holderName = "MineHolder";
+            case BuildingType.GENERATOR:
+                holderName = "GeneratorHolder";
                 piece = mine;
                 maxRotations = 2;
                 break;
-            case BuildingType.BOMBFACTORY:
-                holderName = "BombFactoryHolder";
+            case BuildingType.BARRACKS:
+                holderName = "BarracksHolder";
                 piece = bombFactory;
                 maxRotations = 4;
                 break;
@@ -82,7 +82,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     protected bool PiecesShareOwner(Tile tile)
     {
         if (tile.occupyingPiece == null) return false;
-        if (tile.occupyingPiece is Structure) return false;
+        if (tile.occupyingPiece is TechBuilding) return false;
         return owner == tile.occupyingPiece.owner;
     }
 
