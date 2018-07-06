@@ -22,12 +22,6 @@ public class SupplyBoost : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override void SetIconSprite()
-    {
-        base.SetIconSprite();
-        holder.icon.sprite = Services.UIManager.gearIcon;
-    }
-
     protected override string GetName()
     {
         return "Supply Boost";

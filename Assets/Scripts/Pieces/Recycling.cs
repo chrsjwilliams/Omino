@@ -20,12 +20,6 @@ public class Recycling : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override void SetIconSprite()
-    {
-        base.SetIconSprite();
-        holder.icon.sprite = Services.UIManager.recyclingIcon;
-    }
-
     protected override string GetName()
     {
         return "Recycling";

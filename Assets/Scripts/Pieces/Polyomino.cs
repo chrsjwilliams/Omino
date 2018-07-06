@@ -868,6 +868,7 @@ public class Polyomino : IVertex
     {
         List<Polyomino> piecesToRemove = new List<Polyomino>();
         bool removedOpposingPiece = false;
+        Polyomino opposingPieceRemoved = null;
         foreach (Tile tile in tiles)
         {
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
@@ -875,7 +876,10 @@ public class Polyomino : IVertex
             {
                 piecesToRemove.Add(mapTile.occupyingPiece);
                 if (mapTile.occupyingPiece.owner != owner && mapTile.occupyingPiece.connected)
+                {
                     removedOpposingPiece = true;
+                    opposingPieceRemoved = mapTile.occupyingPiece;
+                }
             }
         }
         if (piecesToRemove.Count > 0)
@@ -886,7 +890,7 @@ public class Polyomino : IVertex
         }
         if (removedOpposingPiece)
         {
-            owner.OnDestructionOfOpposingPiece();
+            owner.OnDestructionOfOpposingPiece(opposingPieceRemoved);
             Services.GameManager.Players[owner.playerNum % 2].OnDestructionOfPiece();
         }
     }

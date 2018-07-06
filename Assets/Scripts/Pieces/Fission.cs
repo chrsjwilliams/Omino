@@ -22,12 +22,6 @@ public class Fission : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override void SetIconSprite()
-    {
-        base.SetIconSprite();
-        holder.icon.sprite = Services.UIManager.fissionIcon;
-    }
-
     protected override string GetName()
     {
         return "Fission";

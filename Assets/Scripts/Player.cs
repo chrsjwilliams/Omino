@@ -803,13 +803,17 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void OnDestructionOfOpposingPiece()
+    public void OnDestructionOfOpposingPiece(Polyomino opposingPiece)
     {
         attackResources -= 1;
         if (fission)
         {
             resourceMeterFillAmt += Fission.energyReward;
             UpdateMeters(false);
+            GameObject fissionAnim = new GameObject();
+            fissionAnim.AddComponent<StructureEffectAnimation>().Init(
+                BuildingType.FISSION, opposingPiece.GetCenterpoint());
+
         }
     }
 

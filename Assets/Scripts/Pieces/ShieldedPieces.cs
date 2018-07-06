@@ -22,12 +22,6 @@ public class ShieldedPieces : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override void SetIconSprite()
-    {
-        base.SetIconSprite();
-        holder.icon.sprite = Services.UIManager.shieldIcon;
-    }
-
     protected override string GetName()
     {
         return "Shielded Pieces";

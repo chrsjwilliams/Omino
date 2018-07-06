@@ -20,12 +20,6 @@ public class Upsize : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override void SetIconSprite()
-    {
-        base.SetIconSprite();
-        holder.icon.sprite = Services.UIManager.bricksIcon;
-    }
-
     protected override string GetName()
     {
         return "Upsize";

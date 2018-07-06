@@ -9,9 +9,9 @@ public class Services
     public static TaskManager GeneralTaskManager { get; set; }
     public static PrefabDB Prefabs { get; set; }
     public static CameraController CameraController { get; set; }
-    
+
     public static InputManager InputManager { get; set; }
-    
+
     public static GameSceneManager<TransitionData> Scenes { get; set; }
 
     public static MapManager MapManager { get; set; }
@@ -24,4 +24,6 @@ public class Services
     public static ClipLibrary Clips { get; set; }
     public static GameData GameData { get; set; }
     public static Clock Clock { get; set; }
+
+    public static TechDataLibrary TechDataLibrary { get; set; }
 }
