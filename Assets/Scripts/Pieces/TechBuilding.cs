@@ -128,6 +128,11 @@ public abstract class TechBuilding : Polyomino
         base.SetIconSprite();
         holder.icon.enabled = true;
         holder.icon.sprite = Services.TechDataLibrary.GetIcon(buildingType);
+        if (buildingType != BuildingType.BASE)
+        {
+            holder.dropShadow.sprite = Services.TechDataLibrary.techDropShadow;
+            holder.dropShadow.transform.localPosition = GetCenterpoint();
+        }
     }
 
     protected override void SetOverlaySprite()

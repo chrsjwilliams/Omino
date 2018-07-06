@@ -10,7 +10,7 @@ public class TechDataLibrary : ScriptableObject
         public BuildingType type;
         public Sprite icon;
     }
-
+    public Sprite techDropShadow;
     public TechData[] dataArray;
 
     public Sprite GetIcon(BuildingType type)
