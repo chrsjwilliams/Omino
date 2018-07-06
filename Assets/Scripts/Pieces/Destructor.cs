@@ -123,7 +123,7 @@ public class Destructor : Polyomino
         holder.icon.enabled = false;
         List<Polyomino> piecesToRemove = GetPiecesInRange();
         if (piecesToRemove.Count > 0)
-            Services.AudioManager.RegisterSoundEffect(Services.Clips.PieceDestroyed, 1);
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.PieceDestroyed);
         for (int i = piecesToRemove.Count - 1; i >= 0; i--)
         {
             piecesToRemove[i].Remove();

@@ -60,7 +60,6 @@
             <e p="SceneManager" t="Include">
               <e p="GameOptionsSceneScript.cs" t="Include" />
               <e p="GameSceneScript.cs" t="Include" />
-              <e p="Main.cs" t="Include" />
               <e p="Scene.cs" t="Include" />
               <e p="SceneManager.cs" t="Include" />
               <e p="TitleSceneScript.cs" t="Include" />
@@ -93,6 +92,8 @@
           <e p="BlueprintMap.cs" t="Include" />
           <e p="CameraController.cs" t="Include" />
           <e p="DangerEffect.cs" t="Include" />
+          <e p="DungeonRunManager.cs" t="Include" />
+          <e p="ELOManager.cs" t="Include" />
           <e p="Graph" t="Include">
             <e p="Graph.cs" t="Include" />
           </e>
@@ -102,24 +103,22 @@
           <e p="Move.cs" t="Include" />
           <e p="Pieces" t="Include">
             <e p="Armory.cs" t="Include" />
-            <e p="AssemblyLine.cs" t="Include" />
+            <e p="AttackUpsize.cs" t="Include" />
+            <e p="Barracks.cs" t="Include" />
             <e p="Base.cs" t="Include" />
-            <e p="BiggerBombs.cs" t="Include" />
-            <e p="BiggerBricks.cs" t="Include" />
             <e p="Blueprint.cs" t="Include" />
-            <e p="BombFactory.cs" t="Include" />
+            <e p="Combustion.cs" t="Include" />
             <e p="CrossSection.cs" t="Include" />
             <e p="Destructor.cs" t="Include" />
+            <e p="Dynamo.cs" t="Include" />
             <e p="Factory.cs" t="Include" />
             <e p="Fission.cs" t="Include" />
-            <e p="Mine.cs" t="Include" />
-            <e p="MiningDrill.cs" t="Include" />
+            <e p="Generator.cs" t="Include" />
             <e p="PieceHolder.cs" t="Include" />
             <e p="Polyomino.cs" t="Include" />
             <e p="Recycling.cs" t="Include" />
             <e p="ShieldedPieces.cs" t="Include" />
-            <e p="SplashDamage.cs" t="Include" />
-            <e p="Structure.cs" t="Include" />
+            <e p="SupplyBoost.cs" t="Include" />
             <e p="Tasks" t="Include">
               <e p="BlueprintPlacementTask.cs" t="Include" />
               <e p="BoardEntryAnimation.cs" t="Include" />
@@ -132,6 +131,8 @@
               <e p="PlayTask.cs" t="Include" />
               <e p="UIEntryAnimation.cs" t="Include" />
             </e>
+            <e p="TechBuilding.cs" t="Include" />
+            <e p="Upsize.cs" t="Include" />
           </e>
           <e p="Player.cs" t="Include" />
           <e p="Tasks" t="Include">
@@ -143,6 +144,7 @@
             <e p="CampaignLevelMenuEntranceTask.cs" t="Include" />
             <e p="CampaignMenuManager.cs" t="Include" />
             <e p="ColorShifter.cs" t="Include" />
+            <e p="EloUIManager.cs" t="Include" />
             <e p="LevelButton.cs" t="Include" />
             <e p="LevelSelectButtonEntranceTask.cs" t="Include" />
             <e p="ParticleSystemEnder.cs" t="Include" />

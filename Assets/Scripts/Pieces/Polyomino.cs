@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Beat;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -878,7 +879,7 @@ public class Polyomino : IVertex
             }
         }
         if (piecesToRemove.Count > 0)
-            Services.AudioManager.RegisterSoundEffect(Services.Clips.PieceDestroyed, 1);
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.PieceDestroyed);
         for (int i = piecesToRemove.Count - 1; i >= 0; i--)
         {
             piecesToRemove[i].Remove();
@@ -1180,7 +1181,7 @@ public class Polyomino : IVertex
             owner.OnPieceSelected(this);
             SortOnSelection(true);
             OnInputDrag(holder.transform.position);
-            Services.AudioManager.RegisterSoundEffect(Services.Clips.PiecePicked, 1);
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.PiecePicked);
 
             if (!(owner is AIPlayer))
             {
@@ -1522,7 +1523,7 @@ public class Polyomino : IVertex
             if(!Services.GameManager.disableUI) SetLegalityGlowStatus();
             SetOverlaySprite();
             holder.UpdateEnergyDisplayPos();
-            Services.AudioManager.RegisterSoundEffect(Services.Clips.PieceRotated, 1.0f);
+            Services.AudioManager.RegisterSoundEffectReverb(Services.Clips.PieceRotated, 1.0f, Clock.BeatValue.Sixteenth);
         }
     }
 

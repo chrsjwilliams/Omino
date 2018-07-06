@@ -19,6 +19,7 @@ public class AudioManager : MonoBehaviour {
     private readonly float BASEMUSICVOLUME = 0.6f;
     private Dictionary<string, AudioClip> reversedClips;
     private Dictionary<string, AudioClip> reverbClips;
+    private Dictionary<string, AudioClip> materialClips;
     
     public void Awake()
     {
@@ -30,6 +31,7 @@ public class AudioManager : MonoBehaviour {
         _PopulateLevelMusic();
         _PopulateReversedEffects();
         _PopulateReverbEffects();
+        _PopulateMaterialEffects();
 
         effectChannels = new List<AudioSource>();
 
@@ -51,11 +53,18 @@ public class AudioManager : MonoBehaviour {
         }
     }
     
-    public void RegisterSoundEffect(AudioClip clip, float volume, Clock.BeatValue timing = Clock.BeatValue.Eighth)
+    public void RegisterSoundEffect(AudioClip clip, float volume = 1.0f, Clock.BeatValue timing = Clock.BeatValue.Eighth)
     {
         // Services.AudioManager.ConnectQuantizedClipReverse(clip, Services.Clock.ReturnAtNext(timing) - AudioSettings.dspTime);
-        // Services.AudioManager.PlaySoundEffectReverb(clip, 0.5f);
+        Services.AudioManager.PlaySoundEffectMaterial(clip, 0.5f);
         
+        Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, timing);
+    }
+
+    public void RegisterSoundEffectReverb(AudioClip clip, float volume = 1.0f,
+        Clock.BeatValue timing = Clock.BeatValue.Eighth)
+    {
+        Services.AudioManager.PlaySoundEffectReverb(clip, 0.5f);
         Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, timing);
     }
     
@@ -111,6 +120,18 @@ public class AudioManager : MonoBehaviour {
         foreach (UnityEngine.Object effect in reversed_effects)
         {
             reversedClips.Add(((AudioClip)effect).name.Split('_')[1], (AudioClip)effect);
+        }
+    }
+
+    private void _PopulateMaterialEffects()
+    {
+        UnityEngine.Object[] material_effects = Resources.LoadAll("Audio/MaterialAudioSamples/", typeof(AudioClip));
+
+        materialClips = new Dictionary<string, AudioClip>();
+        
+        foreach (UnityEngine.Object effect in material_effects)
+        {
+            materialClips.Add(((AudioClip)effect).name, (AudioClip)effect);
         }
     }
 
@@ -265,6 +286,16 @@ public class AudioManager : MonoBehaviour {
         
         to_play.volume = volume;
         to_play.Play();
+    }
+
+    public void PlaySoundEffectMaterial(AudioClip clip, float volume = 1.0f)
+    {
+        AudioClip to_play = Services.Clips.Silence;
+        
+        if ((Services.GameManager.SoundEffectsEnabled) && (materialClips.ContainsKey(clip.name)))
+            to_play = materialClips[clip.name];
+            
+        Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, to_play, volume).Invoke, Clock.BeatValue.ThirtySecond);
     }
 
     public void PlaySoundEffect(AudioClip clip, float volume = 1.0f)
