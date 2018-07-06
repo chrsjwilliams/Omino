@@ -126,7 +126,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         optionsMenuActive = false;
         optionMenu.SetActive(false);
         //optionButtonParent.SetActive(true);
-        TurnOnOptionButtons(false);
+        TurnOnOptionButtons(true);
         eloUI.gameObject.SetActive(false);
 
         currentTechText = new TextMeshProUGUI[1];
@@ -207,6 +207,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     private void StartPlayerVsAIMode()
     {
         optionButtonParent.SetActive(false);
+        TurnOnOptionButtons(false);
         humanPlayers[0] = true;
         humanPlayers[1] = false;
         TaskTree aiLevelSelect = new TaskTree( new EmptyTask(),
@@ -359,9 +360,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
                 buttons = levelButtons;
                 break;
         }
-
         
-
         buttonParent.transform.eulerAngles = new Vector3(0, 0, 0);
         RemoveOpposingPlayerMenuText(buttons);
         if (humanPlayers[0] && !humanPlayers[1])
@@ -461,7 +460,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     public void ToggleOptionMenu()
     {
-
         optionsMenuActive = !optionsMenuActive;
         //optionButtonParent.SetActive(optionsMenuActive);
         levelButtonParent.SetActive(false);
