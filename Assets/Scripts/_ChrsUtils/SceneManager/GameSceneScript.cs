@@ -165,7 +165,8 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void Replay()
     {
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo &&
+            !Services.GameScene.gameOver)
         {
             ELOManager.OnGameLoss();
             ReturnToLevelSelect();

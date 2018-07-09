@@ -5,7 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class ELOManager
 {
-    private const float handicapIncrement = 0.025f;
+    private const float handicapIncrement = 0.03f;
     private const int winStreakLength = 3;
     private const float winStreakHandicapIncrement = 0.05f;
     private const float minHandicap = -0.5f;
@@ -50,6 +50,7 @@ public static class ELOManager
 
     public static void OnGameWin()
     {
+        int prevElo = Mathf.RoundToInt(100 * (1 + eloData.handicapLevel));
         eloData.totalWins += 1;
         eloData.winStreakCount += 1;
         if(eloData.winStreakCount >= winStreakLength)
@@ -60,14 +61,18 @@ public static class ELOManager
         {
             SetHandicap(eloData.handicapLevel + handicapIncrement);
         }
-
+        int newElo = Mathf.RoundToInt(100 * (1 + eloData.handicapLevel));
+        Services.UIManager.eloUIManager.OnGameEnd(true, prevElo, newElo);
         SaveData();
     }
 
     public static void OnGameLoss()
     {
+        int prevElo = Mathf.RoundToInt(100 * (1 + eloData.handicapLevel));
         eloData.winStreakCount = 0;
         SetHandicap(eloData.handicapLevel - handicapIncrement);
+        int newElo = Mathf.RoundToInt(100 * (1 + eloData.handicapLevel));
+        Services.UIManager.eloUIManager.OnGameEnd(false, prevElo, newElo);
         SaveData();
     }
 

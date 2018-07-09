@@ -119,6 +119,8 @@ public class UIManager : MonoBehaviour {
     private const float attackUIFillMin = 0.08f;
     private const float attackUIFillMax = 0.94f;
 
+    public EloInGameUiManager eloUIManager;
+
     private void Awake()
     {
         Image[] slotsP1 = resourceSlotZones[0].GetComponentsInChildren<Image>();
