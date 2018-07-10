@@ -1177,11 +1177,14 @@ public class Player : MonoBehaviour
 
     private void RegisterHighlightedTiles(List<Coord> allCoords)
     {
-        foreach(Coord coord in allCoords)
+        if (allCoords.Count > 0)
         {
-            bpAssistHighlightedTiles.Add(
-                Services.MapManager.Map[coord.x, coord.y].occupyingPiece.tiles[0]);
-        }   
+            foreach (Coord coord in allCoords)
+            {
+                bpAssistHighlightedTiles.Add(
+                    Services.MapManager.Map[coord.x, coord.y].occupyingPiece.tiles[0]);
+            }
+        }
     }
     
     private System.Action _ParameterizeAction(System.Action<List<Coord>> function, List<Coord> coords)
