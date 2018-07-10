@@ -302,15 +302,15 @@ public class MapManager : MonoBehaviour
         GetStructureCoords();
     }
 
-    List<BuildingType> RemoveBuildingTypesFromTechPool(BuildingType[] availableTech, List<TechBuilding> techToRemove)
+    List<BuildingType> RemoveBuildingTypesFromTechPool(BuildingType[] availableTech, List<BuildingType> techToRemove)
     {
         List<BuildingType> currentList = new List<BuildingType>(availableTech);
 
-        foreach(TechBuilding type in techToRemove)
+        foreach(BuildingType type in techToRemove)
         {
-            if (currentList.Contains(type.buildingType))
+            if (currentList.Contains(type))
             {
-                currentList.Remove(type.buildingType);
+                currentList.Remove(type);
             }
         }
 

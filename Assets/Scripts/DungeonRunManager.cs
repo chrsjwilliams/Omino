@@ -105,9 +105,9 @@ public static class DungeonRunManager
 
     private static bool PlayerHasTech(BuildingType candidate)
     {
-        foreach (TechBuilding tech in dungeonRunData.currentTech)
+        foreach (BuildingType tech in dungeonRunData.currentTech)
         {
-            if(tech.buildingType == candidate)
+            if(tech == candidate)
             {
                 return true;
             }
@@ -115,7 +115,7 @@ public static class DungeonRunManager
         return false;
     }
 
-    private static TechBuilding GenerateTech()
+    private static BuildingType GenerateTech()
     {
         int index = Random.Range(0, availableTech.Length - 1);
         BuildingType techCandidate = availableTech[index];
@@ -126,7 +126,7 @@ public static class DungeonRunManager
             techCandidate = availableTech[index];
         }
 
-        return GetBuildingFromType(techCandidate);
+        return techCandidate;
     }
 
     public static TechBuilding GetBuildingFromType(BuildingType type)
@@ -163,13 +163,13 @@ public static class DungeonRunManager
         return structure;
     }
 
-    private static List<TechBuilding> GenerateTechToChooseFrom()
+    private static List<BuildingType> GenerateTechToChooseFrom()
     {
-        List<TechBuilding> techChoices = new List<TechBuilding>();
+        List<BuildingType> techChoices = new List<BuildingType>();
 
         while(techChoices.Count < 3)
         {
-            TechBuilding candidateTechBuilding = GenerateTech();
+            BuildingType candidateTechBuilding = GenerateTech();
             if (TechSelectionIsUnique(techChoices, candidateTechBuilding))
             {
                 techChoices.Add(candidateTechBuilding);
@@ -179,7 +179,7 @@ public static class DungeonRunManager
         return techChoices;
     }
 
-    public static List<TechBuilding> GetTechBuildingSelection()
+    public static List<BuildingType> GetTechBuildingSelection()
     {
         if (dungeonRunData.techChoices.Count < 1)
         {
@@ -190,14 +190,14 @@ public static class DungeonRunManager
     }
 
 
-    private static bool TechSelectionIsUnique(List<TechBuilding> techChoices, TechBuilding tech)
+    private static bool TechSelectionIsUnique(List<BuildingType> techChoices, BuildingType tech)
     {
         if (techChoices.Count < 1) return true;
         else
         {
-            foreach(TechBuilding techChoice in techChoices)
+            foreach(BuildingType techChoice in techChoices)
             {
-                if (techChoice.buildingType == tech.buildingType)
+                if (techChoice == tech)
                     return false;
             }
 
@@ -205,7 +205,7 @@ public static class DungeonRunManager
         }
     }
 
-    public static void AddSelectedTech(TechBuilding tech)
+    public static void AddSelectedTech(BuildingType tech)
     {
         if (dungeonRunData.currentTech.Count < MAX_TECH_INVENTORY)
         {
@@ -248,12 +248,12 @@ public class DungeonRunData
 {
     public bool selectingNewTech;
     public bool completedRun;
-    public List<TechBuilding> techChoices;
-    public List<TechBuilding> currentTech;
+    public List<BuildingType> techChoices;
+    public List<BuildingType> currentTech;
     public int challenegeNum;
     public float handicapLevel;
 
-    public DungeonRunData(List<TechBuilding> ownedTech,  List<TechBuilding> techSelection, int challengeLevel, float handicap, bool selecting, bool selected)
+    public DungeonRunData(List<BuildingType> ownedTech,  List<BuildingType> techSelection, int challengeLevel, float handicap, bool selecting, bool selected)
     {
         currentTech = ownedTech;
         techChoices = techSelection;
@@ -265,8 +265,8 @@ public class DungeonRunData
 
     public DungeonRunData()
     {
-        currentTech = new List<TechBuilding>();
-        techChoices = new List<TechBuilding>();
+        currentTech = new List<BuildingType>();
+        techChoices = new List<BuildingType>();
         challenegeNum = 1;
         handicapLevel = 1;
         selectingNewTech = false;

@@ -193,14 +193,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         Button[] techSelectButtons = selectTechZone.GetComponentsInChildren<Button>();
         techSelectMenuButtons[0] = new Button[techSelectButtons.Length];
 
-        List<TechBuilding> techToChooseFrom = DungeonRunManager.GetTechBuildingSelection();
+        List<BuildingType> techToChooseFrom = DungeonRunManager.GetTechBuildingSelection();
 
-        /*
-         *      TODO:   populate currently owned tech instead of "Shielded Pieces"
-         *              Display tech powers on player's UI
-         *              Do not use power ups on map that the player already has
-         * 
-         */
         currentTechIconMenu = new Image[1][];
 
         Image[] currentTechIcons = techSelectMenuOwnedTechIcons;
@@ -218,7 +212,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
         for (int i = 0; i < DungeonRunManager.dungeonRunData.currentTech.Count; i++)
         {
-            TechBuilding tech = DungeonRunManager.dungeonRunData.currentTech[i];
+            BuildingType selectedType = DungeonRunManager.dungeonRunData.currentTech[i];
+            TechBuilding tech = DungeonRunManager.GetBuildingFromType(selectedType);
             currentTechIconMenu[0][i].GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
             currentTechIconMenu[0][i].GetComponentsInChildren<Image>()[1].color = Color.white;
             currentTechIconMenu[0][i].GetComponentInChildren<TextMeshProUGUI>().text = tech.label;
@@ -227,11 +222,13 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
         for (int j = 0; j < techToChooseFrom.Count; j++)
         {
+
+            BuildingType selectedType = techToChooseFrom[j];
             techSelectMenuButtons[0][j] = techSelectButtons[j];
 
-            techSelectMenuButtons[0][j].GetComponentInChildren<TextMeshProUGUI>().text = techToChooseFrom[j].label;
+            techSelectMenuButtons[0][j].GetComponentInChildren<TextMeshProUGUI>().text = DungeonRunManager.GetBuildingFromType(selectedType).label;
             techSelectMenuButtons[0][j].GetComponent<Image>().color = Services.GameManager.NeutralColor;
-            techSelectMenuButtons[0][j].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(techToChooseFrom[j].buildingType);
+            techSelectMenuButtons[0][j].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(techToChooseFrom[j]);
         }
 
         selectTechText = selectTechZone.GetComponentInChildren<TextMeshProUGUI>();
@@ -256,7 +253,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
         for (int i = 0; i < DungeonRunManager.dungeonRunData.currentTech.Count; i++)
         {
-            TechBuilding tech = DungeonRunManager.dungeonRunData.currentTech[i];
+            BuildingType selectedType = DungeonRunManager.dungeonRunData.currentTech[i];
+            TechBuilding tech = DungeonRunManager.GetBuildingFromType(selectedType);
             dungeonRunTechMenu[0][i].interactable = true;
             dungeonRunTechMenu[0][i].GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
             dungeonRunTechMenu[0][i].GetComponentsInChildren<Image>()[1].color = Color.white;
@@ -574,8 +572,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
                 selectedType = (BuildingType)type;
             }
         }
-        TechBuilding selectedTech = DungeonRunManager.GetBuildingFromType(selectedType);
-        DungeonRunManager.AddSelectedTech(selectedTech);
+        //TechBuilding selectedTech = DungeonRunManager.GetBuildingFromType(selectedType);
+        DungeonRunManager.AddSelectedTech(selectedType);
 
         TaskTree slideOutTechSelectMenuTasks = new TaskTree(new EmptyTask(),
                 new TaskTree(new LevelSelectTextEntrance(techSelectMenu, true)),

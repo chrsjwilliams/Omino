@@ -65,8 +65,8 @@ public class GameSceneScript : Scene<TransitionData>
             for(int i = 0; i < DungeonRunManager.dungeonRunData.currentTech.Count; i++)
             {
                 Image techBuildingIcon = Services.UIManager.techPowerUpIconArray[0].GetComponentsInChildren<Image>()[i];
-                TechBuilding techBuilding = DungeonRunManager.dungeonRunData.currentTech[i];
-                techBuildingIcon.sprite = Services.TechDataLibrary.GetIcon(techBuilding.buildingType);
+                BuildingType techBuilding = DungeonRunManager.dungeonRunData.currentTech[i];
+                techBuildingIcon.sprite = Services.TechDataLibrary.GetIcon(techBuilding);
                 techBuildingIcon.color = Services.GameManager.Player1ColorScheme[0];
             }
         }
@@ -252,9 +252,10 @@ public class GameSceneScript : Scene<TransitionData>
 
         if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
         {
-            foreach (TechBuilding tech in DungeonRunManager.dungeonRunData.currentTech)
+            foreach (BuildingType buildingType in DungeonRunManager.dungeonRunData.currentTech)
             {
-                tech.OnClaimEffect(Services.GameManager.Players[0]);
+                TechBuilding techBuilding = DungeonRunManager.GetBuildingFromType(buildingType);
+                techBuilding.OnClaimEffect(Services.GameManager.Players[0]);
             }
         }
     }
