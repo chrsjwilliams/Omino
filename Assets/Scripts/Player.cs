@@ -38,6 +38,9 @@ public class Player : MonoBehaviour
     public Base mainBase { get; private set; }
     public bool gameOver { get; private set; }
     public List<Polyomino> boardPieces { get; protected set; }
+    
+    
+    private double blueprintNextHalf = 0.0d;
      
     protected int maxResources;
     protected int resources_;
@@ -81,6 +84,8 @@ public class Player : MonoBehaviour
     public bool splashDamage { get; protected set; }
     // 
 
+    private bool blueprintsClearedCheck = false;
+    
     protected float resourceGainRate;
     protected float normalDrawRate;
     protected float destructorDrawRate;
@@ -329,55 +334,63 @@ public class Player : MonoBehaviour
 
             if(bpAssistHighlightedTiles.Count > 0)
             {
-                bpAssistTimeElapsed += Time.deltaTime;
-                float tileAlpha;
-                float bpAlpha;
-                float progress;
-                Vector3 scale;
-                float periodicTime = bpAssistTimeElapsed % bpAssistFlashPeriod;
-                if (periodicTime < bpAssistFlashPeriod / 2)
-                {
-                    progress = EasingEquations.Easing.SineEaseInOut(
-                            periodicTime / (bpAssistFlashPeriod / 2));
-                    tileAlpha = Mathf.Lerp(0, bpAssistAlphaMax, progress);
-                    bpAlpha = Mathf.Lerp(Blueprint.overlayAlphaPrePlacement,
-                        1, progress);
-                    scale = Vector3.Lerp(bpHighlightMinScale, bpHighlightMaxScale,
-                        progress);
-                }
-                else
-                {
-                    progress = EasingEquations.Easing.SineEaseInOut(
-                            (periodicTime - (bpAssistFlashPeriod / 2)) / (bpAssistFlashPeriod / 2));
-                    tileAlpha = Mathf.Lerp(bpAssistAlphaMax, 0, progress);
-                    bpAlpha = Mathf.Lerp(1, Blueprint.overlayAlphaPrePlacement,
-                        progress);
-                    scale = Vector3.Lerp(bpHighlightMaxScale, bpHighlightMinScale,
-                        progress);
-                }
-
-                if (blueprints.Contains(highlightedBlueprint))
-                {
-                    highlightedBlueprint.ScaleHolder(scale);
-                    highlightedBlueprint.SetOverlayAlpha(bpAlpha);
-                }
-                else
-                {
-                    highlightedBlueprint.ScaleHolder(Vector3.one);
-                    highlightedBlueprint.SetOverlayAlpha(Blueprint.overlayAlphaPrePlacement);
-                }
-
-                foreach (Tile tile in bpAssistHighlightedTiles)
-                {
-                    tile.SetBpAssistAlpha(tileAlpha);
-                }
-                if(bpAssistTimeElapsed >= bpAssistDuration)
-                {
-                    ClearBlueprintAssistHighlight();
-                }
+                HighlightBlueprintAssistTiles();
             }
         }
+    }
 
+    void HighlightBlueprintAssistTiles()
+    {
+        if (AudioSettings.dspTime >= blueprintNextHalf)
+        {
+            bpAssistTimeElapsed += Time.deltaTime;
+            float tileAlpha;
+            float bpAlpha;
+            float progress;
+            Vector3 scale;
+            float periodicTime = bpAssistTimeElapsed % bpAssistFlashPeriod;
+            if (periodicTime < bpAssistFlashPeriod / 2)
+            {
+                progress = EasingEquations.Easing.SineEaseInOut(
+                    periodicTime / (bpAssistFlashPeriod / 2));
+                tileAlpha = Mathf.Lerp(0, bpAssistAlphaMax, progress);
+                bpAlpha = Mathf.Lerp(Blueprint.overlayAlphaPrePlacement,
+                    1, progress);
+                scale = Vector3.Lerp(bpHighlightMinScale, bpHighlightMaxScale,
+                    progress);
+            }
+            else
+            {
+                progress = EasingEquations.Easing.SineEaseInOut(
+                    (periodicTime - (bpAssistFlashPeriod / 2)) / (bpAssistFlashPeriod / 2));
+                tileAlpha = Mathf.Lerp(bpAssistAlphaMax, 0, progress);
+                bpAlpha = Mathf.Lerp(1, Blueprint.overlayAlphaPrePlacement,
+                    progress);
+                scale = Vector3.Lerp(bpHighlightMaxScale, bpHighlightMinScale,
+                    progress);
+            }
+
+            if (blueprints.Contains(highlightedBlueprint))
+            {
+                highlightedBlueprint.ScaleHolder(scale);
+                highlightedBlueprint.SetOverlayAlpha(bpAlpha);
+            }
+            else
+            {
+                highlightedBlueprint.ScaleHolder(Vector3.one);
+                highlightedBlueprint.SetOverlayAlpha(Blueprint.overlayAlphaPrePlacement);
+            }
+
+            foreach (Tile tile in bpAssistHighlightedTiles)
+            {
+                tile.SetBpAssistAlpha(tileAlpha);
+            }
+
+            if (bpAssistTimeElapsed >= bpAssistDuration)
+            {
+                ClearBlueprintAssistHighlight();
+            }
+        }
     }
 
     void UpdateMeters(bool timeStep = true)
@@ -1165,26 +1178,25 @@ public class Player : MonoBehaviour
             }
             if (moveToHighlight == null) moveToHighlight = possibleBlueprintMoves[0];
             
-            Services.Clock.SyncFunction(_ParameterizeAction(RegisterHighlightedTiles, moveToHighlight.allCoords), Clock.BeatValue.Half);
+            //Services.Clock.SyncFunction(_ParameterizeAction(RegisterHighlightedTiles, moveToHighlight.allCoords), Clock.BeatValue.Half);
             highlightedBlueprint = moveToHighlight.blueprint;
-            /* foreach(Coord coord in moveToHighlight.allCoords)
-            {
-                bpAssistHighlightedTiles.Add(
-                    Services.MapManager.Map[coord.x, coord.y].occupyingPiece.tiles[0]);
-            } */
-        }
-    }
-
-    private void RegisterHighlightedTiles(List<Coord> allCoords)
-    {
-        if (allCoords.Count > 0)
-        {
-            foreach (Coord coord in allCoords)
+            blueprintNextHalf = Services.Clock.AtNextHalf();
+            foreach(Coord coord in moveToHighlight.allCoords)
             {
                 bpAssistHighlightedTiles.Add(
                     Services.MapManager.Map[coord.x, coord.y].occupyingPiece.tiles[0]);
             }
         }
+    }
+
+    private void RegisterHighlightedTiles(List<Coord> allCoords)
+    {
+        foreach (Coord coord in allCoords)
+        {
+            bpAssistHighlightedTiles.Add(
+                Services.MapManager.Map[coord.x, coord.y].occupyingPiece.tiles[0]);
+        }
+        
     }
     
     private System.Action _ParameterizeAction(System.Action<List<Coord>> function, List<Coord> coords)
@@ -1211,6 +1223,6 @@ public class Player : MonoBehaviour
         {
             highlightedBlueprint.ScaleHolder(Polyomino.unselectedScale);
             highlightedBlueprint.SetOverlayAlpha(Blueprint.overlayAlphaPrePlacement);
-        }
+        }   
     }
 }
