@@ -1,22 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
 public class Recycling : TechBuilding
 {
     public Recycling() : base(1)
     {
+        label = "Recycling";
         buildingType = BuildingType.RECYCLING;
+    }
+
+    public override void OnClaimEffect(Player player)
+    {
+        player.ToggleRecycling(true);
+    }
+
+    public override void OnLostEffect()
+    {
+        owner.ToggleRecycling(false);
     }
 
     public override void OnClaim(Player player)
     {
         base.OnClaim(player);
-        owner.ToggleRecycling(true);
+        OnClaimEffect(player);
     }
 
     public override void OnClaimLost()
     {
-        owner.ToggleRecycling(false);
+        OnLostEffect();
         base.OnClaimLost();
     }
 

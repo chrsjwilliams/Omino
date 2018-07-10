@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public abstract class TechBuilding : Polyomino
 {
     private Color neutralColor;
-    protected static int[,,] structure = new int[3, 5, 5]
+    public string label { get; protected set; }
+    protected static int[,,] techBuilding = new int[3, 5, 5]
     {   
             //  These hashes represent what the piece will look like
             // MINING DRILL
@@ -51,7 +53,7 @@ public abstract class TechBuilding : Polyomino
         units = _units;
         placed = true;
 
-        holderName = "StructureHolder";
+        holderName = label + " Holder";
     }
 
     public TechBuilding(int _index) : base(4, _index, null)
@@ -59,8 +61,8 @@ public abstract class TechBuilding : Polyomino
         index = _index;
         placed = true;
 
-        holderName = "StructureHolder";
-        piece = structure;
+        holderName = label + " Holder";
+        piece = techBuilding;
     }
 
     public override void MakePhysicalPiece()
@@ -94,6 +96,9 @@ public abstract class TechBuilding : Polyomino
         SortOverlay();
         SetOverlaySprite();
     }
+
+    public virtual void OnClaimEffect(Player player){ }
+    public virtual void OnLostEffect() { }
 
     public virtual void OnClaim(Player player)
     {

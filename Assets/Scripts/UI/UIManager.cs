@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour {
     private Image[][] attackResourceSlots;
     private Image[][] attackResourceSlotBacks;
     public RectTransform[] blueprintUIZones;
+    public GameObject[] techPowerUpIconArray;
     public GameObject[][] meters;
     [SerializeField]
     private Image[] normalDrawMeters;
@@ -210,11 +211,12 @@ public class UIManager : MonoBehaviour {
 
         meters = new GameObject[2][]
         {
-            new GameObject[3]
+            new GameObject[4]
             {
                 resourceCounters[0].gameObject,
                 normalDrawMeters[0].transform.parent.gameObject,
-                destructorDrawMeters[0].transform.parent.gameObject
+                destructorDrawMeters[0].transform.parent.gameObject,
+                techPowerUpIconArray[0].transform.parent.gameObject
             },
             new GameObject[3]
             {
@@ -788,7 +790,8 @@ public class UIManager : MonoBehaviour {
 
     public void OnGameEndBannerTouch()
     {
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo ||
+            Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
         {
             Services.GameScene.ReturnToLevelSelect();
         }

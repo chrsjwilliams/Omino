@@ -136,6 +136,7 @@ public class GameManager : MonoBehaviour
         CheckPlayerPrefs();
 
         ELOManager.LoadData();
+        DungeonRunManager.LoadData();
 
         if (!debug)
         {
@@ -168,6 +169,7 @@ public class GameManager : MonoBehaviour
         Services.Clock.Init(levelBPM);
 
         gameObject.AddComponent<ClipSwitcher>();
+
     }
 
     public void SetCurrentLevel(Level level)

@@ -130,16 +130,18 @@ public class LevelSelectButtonEntranceTask : Task
 
 public class LevelSelectTextEntrance: Task
 {
+    private bool exit;
     private const float duration = 0.25f;
     private float timeElapsed;
     private GameObject levelSelectText;
     private Vector3 startPos;
     private Vector3 targetPos;
-    private const float initialOffset = 1000;
+    private const float initialOffset = 1200;
 
-    public LevelSelectTextEntrance(GameObject levelSelectText_)
+    public LevelSelectTextEntrance(GameObject levelSelectText_, bool exit_ = false)
     {
         levelSelectText = levelSelectText_;
+        exit = exit_;
     }
 
 
@@ -150,22 +152,32 @@ public class LevelSelectTextEntrance: Task
         levelSelectText.transform.localPosition += initialOffset * Vector3.down;
         startPos = levelSelectText.transform.localPosition;
         timeElapsed = 0;
+        if (!exit) levelSelectText.transform.localPosition = startPos;
     }
 
     internal override void Update()
     {
         timeElapsed += Time.deltaTime;
 
-        levelSelectText.transform.localPosition = Vector3.Lerp(
+        if (exit)
+        {
+            levelSelectText.transform.localPosition = Vector3.Lerp(
+            targetPos,
+            startPos,
+            EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
+        }
+        else
+        {
+            levelSelectText.transform.localPosition = Vector3.Lerp(
             startPos,
             targetPos,
             EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
+        }
 
         if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
     }
 
     protected override void OnSuccess()
     {
-        levelSelectText.transform.localPosition = targetPos;
     }
 }

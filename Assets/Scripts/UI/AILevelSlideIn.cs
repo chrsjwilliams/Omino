@@ -51,21 +51,23 @@ public class AILevelSlideIn : Task
         timeElapsed = 0;
         totalDuration = duration + (objectsToSlideIn.Length * staggerTime);
 
-        if(hasExternalText)
+        if (hasExternalText)
+        {
             objectsToSlideIn[0].transform.parent.gameObject.SetActive(true);
+        }
 
         startPositions = new Vector3[objectsToSlideIn.Length];
         targetPositions = new Vector3[objectsToSlideIn.Length];
         for (int i = 0; i < objectsToSlideIn.Length; i++)
         {
             GameObject obj = objectsToSlideIn[i];
-            targetPositions[i] = obj.transform.position;
+            targetPositions[i] = obj.transform.localPosition;
             Vector3 offset;
             offset = player1 ? 
                 initialOffset * Vector3.down:
                 initialOffset * Vector3.up;
-            startPositions[i] = obj.transform.position + offset;
-            if (!exit) obj.transform.position = startPositions[i];
+            startPositions[i] = obj.transform.localPosition + offset;
+            if (!exit) obj.transform.localPosition = startPositions[i];
         }
         if (exit)
         {
@@ -86,7 +88,7 @@ public class AILevelSlideIn : Task
             {
                 if (exit)
                 {
-                    objectsToSlideIn[i].transform.position = Vector3.Lerp(
+                    objectsToSlideIn[i].transform.localPosition = Vector3.Lerp(
                     targetPositions[i],
                     startPositions[i],
                     EasingEquations.Easing.QuadEaseOut(
@@ -94,7 +96,7 @@ public class AILevelSlideIn : Task
                 }
                 else
                 {
-                    objectsToSlideIn[i].transform.position = Vector3.Lerp(
+                    objectsToSlideIn[i].transform.localPosition = Vector3.Lerp(
                     startPositions[i],
                     targetPositions[i],
                     EasingEquations.Easing.QuadEaseOut(

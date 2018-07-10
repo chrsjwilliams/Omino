@@ -259,6 +259,8 @@ public class Player : MonoBehaviour
         
         bpAssistFlashPeriod = Services.Clock.HalfLength();
         bpAssistDuration = Services.Clock.MeasureLength() * 3;
+
+        
     }
 
     public void PauseProdutcion()
@@ -979,7 +981,7 @@ public class Player : MonoBehaviour
         crossSection = status;
     }
 
-    public void ToggleSplashDamage(bool status)
+    public void ToggleCombustion(bool status)
     {
         splashDamage = status;
         Services.GameEventManager.Fire(new SplashDamageStatusChange(this));
