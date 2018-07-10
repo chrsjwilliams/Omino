@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
 public abstract class TechBuilding : Polyomino
 {
     private Color neutralColor;

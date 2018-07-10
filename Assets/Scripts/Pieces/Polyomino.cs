@@ -10,7 +10,6 @@ public enum BuildingType
     ARMORY, FISSION, RECYCLING, CROSSSECTION
 }
 
-[System.Serializable]
 public class Polyomino : IVertex
 {
     public List<Tile> tiles = new List<Tile>();
