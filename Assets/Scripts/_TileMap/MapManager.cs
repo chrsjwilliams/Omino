@@ -53,7 +53,8 @@ public class MapManager : MonoBehaviour
     }
     [SerializeField]
     private Level[] eloLevelPool;
-
+    [SerializeField]
+    private Level[] dungeonRunLevelPool;
     public void Init()
     {
         _center = Services.MapManager.CenterIndexOfGrid();
@@ -64,6 +65,11 @@ public class MapManager : MonoBehaviour
         if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
         {
             Level level = eloLevelPool[Random.Range(0, eloLevelPool.Length)];
+            Services.GameManager.SetCurrentLevel(level);
+        }
+        if(Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
+        {
+            Level level = dungeonRunLevelPool[Random.Range(0, dungeonRunLevelPool.Length -1)];
             Services.GameManager.SetCurrentLevel(level);
         }
         if (Services.GameManager.levelSelected != null)
@@ -296,9 +302,34 @@ public class MapManager : MonoBehaviour
         GetStructureCoords();
     }
 
+    List<BuildingType> RemoveBuildingTypesFromTechPool(BuildingType[] availableTech, List<TechBuilding> techToRemove)
+    {
+        List<BuildingType> currentList = new List<BuildingType>(availableTech);
+
+        foreach(TechBuilding type in techToRemove)
+        {
+            if (currentList.Contains(type.buildingType))
+            {
+                currentList.Remove(type.buildingType);
+            }
+        }
+
+        return currentList;
+    }
+
     void GenerateLevel(Level level)
     {
-        List<BuildingType> structureTypes = new List<BuildingType>(level.availableStructures);
+        List<BuildingType> structureTypes;
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
+        {
+            structureTypes = RemoveBuildingTypesFromTechPool(level.availableStructures,
+                                                                     DungeonRunManager.dungeonRunData.currentTech);
+        }
+        else
+        {
+            structureTypes = new List<BuildingType>(level.availableStructures);
+        }
+
         for (int i = 0; i < level.structCoords.Length; i++)
         {
             BuildingType type;

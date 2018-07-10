@@ -1,22 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
 public class AttackUpsize : TechBuilding
 {
     public AttackUpsize() : base(0)
     {
+        label = "Attack Upsize";
+
         buildingType = BuildingType.ATTACKUPSIZE;
+    }
+
+    public override void OnClaimEffect(Player player)
+    {
+        player.ToggleBiggerBombs(true);
+    }
+
+    public override void OnLostEffect()
+    {
+        owner.ToggleBiggerBombs(false);
     }
 
     public override void OnClaim(Player player)
     {
         base.OnClaim(player);
-        owner.ToggleBiggerBombs(true);
+        OnClaimEffect(player);
     }
 
     public override void OnClaimLost()
     {
-        owner.ToggleBiggerBombs(false);
+        OnLostEffect();
         base.OnClaimLost();
     }
 

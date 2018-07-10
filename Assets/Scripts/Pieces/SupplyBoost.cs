@@ -1,24 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
 public class SupplyBoost : TechBuilding
 {
     private const float drawRateMultiplier = 0.15f;
 
     public SupplyBoost() : base(1)
     {
+        label = "Supply Boost";
         buildingType = BuildingType.SUPPLYBOOST;
+    }
+
+    public override void OnClaimEffect(Player player)
+    {
+        player.AugmentDrawRateFactor(drawRateMultiplier);
+    }
+
+    public override void OnLostEffect()
+    {
+        owner.AugmentDrawRateFactor(-drawRateMultiplier);
     }
 
     public override void OnClaim(Player player)
     {
+        OnClaimEffect(player);
         base.OnClaim(player);
-        owner.AugmentDrawRateFactor(drawRateMultiplier);
     }
 
     public override void OnClaimLost()
     {
-        owner.AugmentDrawRateFactor(-drawRateMultiplier);
+        OnLostEffect();
         base.OnClaimLost();
     }
 

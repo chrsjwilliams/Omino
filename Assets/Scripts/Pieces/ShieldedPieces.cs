@@ -1,24 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
 public class ShieldedPieces : TechBuilding
 {
     public const float ShieldDuration = 6f;
 
     public ShieldedPieces() : base(0)
     {
+        label = "Shielded Pieces";
         buildingType = BuildingType.SHIELDEDPIECES;
+    }
+
+    public override void OnClaimEffect(Player player)
+    {
+        player.ToggleShieldedPieces(true);
+    }
+
+    public override void OnLostEffect()
+    {
+        owner.ToggleShieldedPieces(false);
     }
 
     public override void OnClaim(Player player)
     {
+        OnClaimEffect(player);
         base.OnClaim(player);
-        owner.ToggleShieldedPieces(true);
     }
 
     public override void OnClaimLost()
     {
-        owner.ToggleShieldedPieces(false);
+        OnLostEffect();
         base.OnClaimLost();
     }
 

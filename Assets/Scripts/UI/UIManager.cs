@@ -788,7 +788,8 @@ public class UIManager : MonoBehaviour {
 
     public void OnGameEndBannerTouch()
     {
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo ||
+            Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
         {
             Services.GameScene.ReturnToLevelSelect();
         }

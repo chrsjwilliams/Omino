@@ -6,10 +6,14 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class DungeonRunManager
 {
-    private const int MAX_TECH_CHOICES = 3;
-    private const float handicapIncrement = 0.1f;
-    private const string fileName = "dungeonRunData";    
+    public const int MAX_DUNGEON_CHALLENGES = 3;
     public static DungeonRunData dungeonRunData { get; private set; }
+
+    private const int MAX_TECH_CHOICES = 3;
+    private const int MAX_TECH_INVENTORY = MAX_DUNGEON_CHALLENGES - 1;
+    private const float handicapIncrement = 0.1f;
+    private const string fileName = "dungeonRunData";
+    
 
     private static readonly BuildingType[] availableTech =
     {
@@ -54,19 +58,52 @@ public static class DungeonRunManager
         file.Close();
     }
 
+    private static void ResetDungeonRunData()
+    {
+        string filePath = Path.Combine(
+            Application.persistentDataPath,
+            fileName);
+        FileStream file;
+        BinaryFormatter bf = new BinaryFormatter();
+
+        file = File.Create(filePath);
+        dungeonRunData = new DungeonRunData();
+        bf.Serialize(file, dungeonRunData);
+
+        file.Close();
+
+    }
+
     public static void OnGameWin()
     {
+        dungeonRunData.techChoices.Clear();
+
         dungeonRunData.challenegeNum += 1;
-        SetHandicap(dungeonRunData.handicapLevel + handicapIncrement);
+
+        if (dungeonRunData.challenegeNum > MAX_DUNGEON_CHALLENGES)
+        {
+            OnCompleteDungeonRun();
+        }
+        else
+        {
+            dungeonRunData.selectingNewTech = true;
+            SetHandicap(dungeonRunData.handicapLevel + handicapIncrement);
+        }
+        
         SaveData();
     }
 
-    public static void AddNewTech(TechBuilding tech)
+    public static void OnGameLoss()
     {
-        dungeonRunData.currentTech.Add(tech);
+        ResetDungeonRunData();
     }
 
-    private static bool ContainsTech(BuildingType candidate)
+    private static void OnCompleteDungeonRun()
+    {
+        dungeonRunData.completedRun = true;
+    }
+
+    private static bool PlayerHasTech(BuildingType candidate)
     {
         foreach (TechBuilding tech in dungeonRunData.currentTech)
         {
@@ -83,14 +120,20 @@ public static class DungeonRunManager
         int index = Random.Range(0, availableTech.Length - 1);
         BuildingType techCandidate = availableTech[index];
 
-        while(ContainsTech(techCandidate))
+        while(PlayerHasTech(techCandidate))
         {
             index = Random.Range(0, availableTech.Length - 1);
             techCandidate = availableTech[index];
         }
 
+        return GetBuildingFromType(techCandidate);
+    }
+
+    public static TechBuilding GetBuildingFromType(BuildingType type)
+    {
+        
         TechBuilding structure;
-        switch (techCandidate)
+        switch (type)
         {
             case BuildingType.DYNAMO:
                 structure = new Dynamo();
@@ -120,29 +163,62 @@ public static class DungeonRunManager
         return structure;
     }
 
-    public static List<TechBuilding> GenerateTechToChooseFrom()
+    private static List<TechBuilding> GenerateTechToChooseFrom()
     {
         List<TechBuilding> techChoices = new List<TechBuilding>();
 
-        for (int i = 0; i < MAX_TECH_CHOICES; i++)
+        while(techChoices.Count < 3)
         {
-            techChoices.Add(GenerateTech());
+            TechBuilding candidateTechBuilding = GenerateTech();
+            if (TechSelectionIsUnique(techChoices, candidateTechBuilding))
+            {
+                techChoices.Add(candidateTechBuilding);
+            }
         }
 
         return techChoices;
     }
 
-    public static void AddSelectedTech(TechBuilding tech)
+    public static List<TechBuilding> GetTechBuildingSelection()
     {
-        dungeonRunData.currentTech.Add(tech);
+        if (dungeonRunData.techChoices.Count < 1)
+        {
+            dungeonRunData.techChoices = GenerateTechToChooseFrom();
+        }
+
+        return dungeonRunData.techChoices;
     }
 
-    public static void OnGameLoss()
+
+    private static bool TechSelectionIsUnique(List<TechBuilding> techChoices, TechBuilding tech)
     {
-        dungeonRunData.challenegeNum = 1;
-        SetHandicap(0);
-        SaveData();
+        if (techChoices.Count < 1) return true;
+        else
+        {
+            foreach(TechBuilding techChoice in techChoices)
+            {
+                if (techChoice.buildingType == tech.buildingType)
+                    return false;
+            }
+
+            return true;
+        }
     }
+
+    public static void AddSelectedTech(TechBuilding tech)
+    {
+        if (dungeonRunData.currentTech.Count < MAX_TECH_INVENTORY)
+        {
+            dungeonRunData.currentTech.Add(tech);
+            dungeonRunData.selectingNewTech = false;
+        }
+        else
+        {
+            Debug.Log("Too many!");
+        }
+    }
+
+
 
     private static void SetHandicap(float handicap)
     {
@@ -151,8 +227,18 @@ public static class DungeonRunManager
 
     public static void ResetDungeonRun()
     {
-        SetHandicap(0);
-        SaveData();
+        ResetDungeonRunData();
+    }
+
+    public static void PrintCurrentTech()
+    {
+        string techList = "Current Tech: ";
+        for(int i = 0; i < dungeonRunData.currentTech.Count; i++)
+        {
+            techList += " " + dungeonRunData.currentTech[i] + ", ";
+        }
+
+        Debug.Log(techList);
     }
 }
 
@@ -160,20 +246,30 @@ public static class DungeonRunManager
 [System.Serializable]
 public class DungeonRunData
 {
+    public bool selectingNewTech;
+    public bool completedRun;
+    public List<TechBuilding> techChoices;
     public List<TechBuilding> currentTech;
     public int challenegeNum;
     public float handicapLevel;
 
-    public DungeonRunData(List<TechBuilding> ownedTech,  int challengeLevel, float handicap)
+    public DungeonRunData(List<TechBuilding> ownedTech,  List<TechBuilding> techSelection, int challengeLevel, float handicap, bool selecting, bool selected)
     {
         currentTech = ownedTech;
+        techChoices = techSelection;
         challenegeNum = challengeLevel;
         handicapLevel = handicap;
+        selectingNewTech = selecting;
+        completedRun = selected;
     }
 
     public DungeonRunData()
     {
         currentTech = new List<TechBuilding>();
+        techChoices = new List<TechBuilding>();
         challenegeNum = 1;
+        handicapLevel = 1;
+        selectingNewTech = false;
+        completedRun = false;
     }
 }

@@ -52,6 +52,16 @@ public class GameSceneScript : Scene<TransitionData>
 
             Services.GameManager.SetHandicapValues(handicaps);
         }
+
+        if(Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
+        {
+            float[] handicaps = new float[2];
+            handicaps[0] = 1;
+            handicaps[1] = DungeonRunManager.dungeonRunData.handicapLevel;
+
+            Services.GameManager.SetHandicapValues(handicaps);
+        }
+
         if (evolutionMode)
         {
             Services.GameManager.InitPlayersEvoMode();
@@ -71,15 +81,7 @@ public class GameSceneScript : Scene<TransitionData>
             Services.UIManager.UIForSinglePlayer(true);
         }
 
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Campaign &&
-            Services.GameManager.levelSelected.campaignLevelNum == 1)
-        {
-            showDestructors = false;
-        }
-        else
-        {
-            showDestructors = true;
-        }
+        
 
         Services.AudioManager.SetMainTrack(Services.Clips.MenuSong, 0.3f);
         Services.CameraController.SetScreenEdges();
@@ -108,9 +110,13 @@ public class GameSceneScript : Scene<TransitionData>
         Services.UIManager.StartBannerScroll(winner);
         if (winner is AIPlayer)
         {
-            if(Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
+            if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
             {
                 ELOManager.OnGameLoss();
+            }
+            else if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
+            {
+                DungeonRunManager.OnGameLoss();
             }
             Services.AudioManager.RegisterSoundEffect(Services.Clips.Defeat, 0.6f);
         }
@@ -119,6 +125,10 @@ public class GameSceneScript : Scene<TransitionData>
             if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
             {
                 ELOManager.OnGameWin();
+            }
+            else if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
+            {
+                DungeonRunManager.OnGameWin();
             }
             Services.AudioManager.RegisterSoundEffect(Services.Clips.Victory, 0.5f);
         }
@@ -169,6 +179,11 @@ public class GameSceneScript : Scene<TransitionData>
             !Services.GameScene.gameOver)
         {
             ELOManager.OnGameLoss();
+            ReturnToLevelSelect();
+        }
+        else if(Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
+        {
+            DungeonRunManager.OnGameLoss();
             ReturnToLevelSelect();
         }
         else
@@ -225,6 +240,14 @@ public class GameSceneScript : Scene<TransitionData>
         if (Services.MapManager.currentLevel != null &&
             Services.MapManager.currentLevel.tooltips.Length > 0)
             Services.TutorialManager.Init();
+
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
+        {
+            foreach (TechBuilding tech in DungeonRunManager.dungeonRunData.currentTech)
+            {
+                tech.OnClaimEffect(Services.GameManager.Players[0]);
+            }
+        }
     }
 
     void TogglePlayerHandLock(bool locked)
@@ -237,6 +260,16 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void StartGameSequence()
     {
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Campaign &&
+            Services.GameManager.levelSelected.campaignLevelNum == 1)
+        {
+            showDestructors = false;
+        }
+        else
+        {
+            showDestructors = true;
+        }
+        
         TaskTree startSequence =
             new TaskTree(new ScrollReadyBanners(Services.UIManager.readyBanners, false));
         TaskTree uiEntry =
