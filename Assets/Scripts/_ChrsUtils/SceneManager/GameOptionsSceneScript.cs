@@ -572,14 +572,13 @@ public class GameOptionsSceneScript : Scene<TransitionData>
                 selectedType = (BuildingType)type;
             }
         }
-        //TechBuilding selectedTech = DungeonRunManager.GetBuildingFromType(selectedType);
         DungeonRunManager.AddSelectedTech(selectedType);
 
         TaskTree slideOutTechSelectMenuTasks = new TaskTree(new EmptyTask(),
                 new TaskTree(new LevelSelectTextEntrance(techSelectMenu, true)),
-                new TaskTree(new AILevelSlideIn(selectTechText, techSelectMenuButtons[0], false, true)));
+                new TaskTree(new AILevelSlideIn(selectTechText, techSelectMenuButtons[0], true, true)));
         Services.GeneralTaskManager.Do(slideOutTechSelectMenuTasks);
-        StartDungeonRunMode();
+        Services.GeneralTaskManager.Do(new ActionTask(StartDungeonRunMode));
     }
 
     public void ResetDungeonRun()

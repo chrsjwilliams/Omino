@@ -217,6 +217,8 @@ public static class DungeonRunManager
         {
             Debug.Log("Too many!");
         }
+
+        SaveData();
     }
 
 

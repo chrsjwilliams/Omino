@@ -10,7 +10,7 @@ public class AILevelSlideIn : Task
     private const float duration = 0.3f;
     private float timeElapsed;
     private const float staggerTime = 0.05f;
-    private float initialOffset = 1500f;
+    private float initialOffset = 100;
     private float totalDuration;
     private GameObject[] objectsToSlideIn;
     private Vector3[] startPositions;
@@ -103,8 +103,24 @@ public class AILevelSlideIn : Task
                         (timeElapsed - (i * staggerTime)) / duration));
                 }
             }
-        }        
+        }
 
         if (timeElapsed >= totalDuration) SetStatus(TaskStatus.Success);
+
+    }
+
+    protected override void OnSuccess()
+    {
+        for (int i = 0; i < objectsToSlideIn.Length; i++)
+        {
+            if (exit)
+            {
+                objectsToSlideIn[i].transform.localPosition = startPositions[i];
+            }
+            else
+            {
+                objectsToSlideIn[i].transform.localPosition = targetPositions[i];
+            }
+        }
     }
 }
