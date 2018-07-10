@@ -1090,7 +1090,7 @@ public class Player : MonoBehaviour
     {
         List<Blueprint> blueprintsInHand = new List<Blueprint>(blueprints);
 
-        ClearBlueprintAssistHighlight();
+        ClearBlueprintAssistHighlight(true);
         HashSet<Coord> possibleBlueprintCoords = new HashSet<Coord>();
         foreach(Tile tile in pieceJustPlaced.tiles)
         {
@@ -1123,12 +1123,12 @@ public class Player : MonoBehaviour
             {
                 for (int rotations = 0; rotations < 4; rotations++)
                 {
-                    blueprint.Rotate(false, true);
                     blueprintMovesChecked += 1;
                     if (blueprintMovesChecked % bpAssistChecksPerFrame == 0)
                     {
                         yield return null;
                     }
+                    blueprint.Rotate(false, true);
                     if (rotations < numRotations)
                     {
                         if (blueprint.IsPlacementLegal(coord))
@@ -1194,9 +1194,11 @@ public class Player : MonoBehaviour
         return to_return;
     }
     
-    private void ClearBlueprintAssistHighlight()
+    private void ClearBlueprintAssistHighlight(bool leaveCoroutine =false)
     {
-        foreach(Tile tile in bpAssistHighlightedTiles)
+        if (bpAssistCoroutine != null && !leaveCoroutine)
+            StopCoroutine(bpAssistCoroutine);
+        foreach (Tile tile in bpAssistHighlightedTiles)
         {
             if (!tile.pieceParent.dead) tile.SetBpAssistAlpha(0);
         }
