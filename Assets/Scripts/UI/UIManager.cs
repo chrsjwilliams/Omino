@@ -55,6 +55,8 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private GameObject campaignLevelCompleteMenu;
     [SerializeField]
+    private GameObject dungeonRunChallenegeCompleteMenu;
+    [SerializeField]
     private GameObject optionsMenu;
     public Transform canvas;
     public Sprite destructorIcon;
@@ -121,6 +123,7 @@ public class UIManager : MonoBehaviour {
     private const float attackUIFillMax = 0.94f;
 
     public EloInGameUiManager eloUIManager;
+    public DungeonRunInGameUIManager dungeonRunUIManager;
 
     private void Awake()
     {
