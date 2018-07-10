@@ -30,7 +30,7 @@ public static class DungeonRunManager
         FileStream file;
         BinaryFormatter bf = new BinaryFormatter();
 
-        if (false)
+        if (File.Exists(filePath))
         {
             file = File.OpenRead(filePath);
             dungeonRunData = (DungeonRunData)bf.Deserialize(file);
@@ -77,7 +77,7 @@ public static class DungeonRunManager
     public static void OnGameWin()
     {
         dungeonRunData.techChoices.Clear();
-
+        Services.UIManager.dungeonRunUIManager.OnGameEnd(true);
         dungeonRunData.challenegeNum += 1;
 
         if (dungeonRunData.challenegeNum > MAX_DUNGEON_CHALLENGES)
@@ -95,6 +95,7 @@ public static class DungeonRunManager
 
     public static void OnGameLoss()
     {
+        Services.UIManager.dungeonRunUIManager.OnGameEnd(false);
         ResetDungeonRunData();
     }
 
