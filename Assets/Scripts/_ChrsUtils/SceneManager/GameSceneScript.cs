@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class GameSceneScript : Scene<TransitionData>
@@ -60,6 +61,14 @@ public class GameSceneScript : Scene<TransitionData>
             handicaps[1] = DungeonRunManager.dungeonRunData.handicapLevel;
 
             Services.GameManager.SetHandicapValues(handicaps);
+
+            for(int i = 0; i < DungeonRunManager.dungeonRunData.currentTech.Count; i++)
+            {
+                Image techBuildingIcon = Services.UIManager.techPowerUpIconArray[0].GetComponentsInChildren<Image>()[i];
+                TechBuilding techBuilding = DungeonRunManager.dungeonRunData.currentTech[i];
+                techBuildingIcon.sprite = Services.TechDataLibrary.GetIcon(techBuilding.buildingType);
+                techBuildingIcon.color = Services.GameManager.Player1ColorScheme[0];
+            }
         }
 
         if (evolutionMode)

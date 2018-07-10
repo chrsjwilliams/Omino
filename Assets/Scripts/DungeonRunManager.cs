@@ -30,7 +30,7 @@ public static class DungeonRunManager
         FileStream file;
         BinaryFormatter bf = new BinaryFormatter();
 
-        if (File.Exists(filePath))
+        if (false)
         {
             file = File.OpenRead(filePath);
             dungeonRunData = (DungeonRunData)bf.Deserialize(file);
