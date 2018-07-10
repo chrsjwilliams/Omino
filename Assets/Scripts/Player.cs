@@ -1088,6 +1088,8 @@ public class Player : MonoBehaviour
 
     private IEnumerator BlueprintAssistCheck(Polyomino pieceJustPlaced)
     {
+        List<Blueprint> blueprintsInHand = new List<Blueprint>(blueprints);
+
         ClearBlueprintAssistHighlight();
         HashSet<Coord> possibleBlueprintCoords = new HashSet<Coord>();
         foreach(Tile tile in pieceJustPlaced.tiles)
@@ -1114,7 +1116,7 @@ public class Player : MonoBehaviour
         }
         List<BlueprintMap> possibleBlueprintMoves = new List<BlueprintMap>();
         int blueprintMovesChecked = 0;
-        foreach (Blueprint blueprint in blueprints)
+        foreach (Blueprint blueprint in blueprintsInHand)
         {
             int numRotations = blueprint.maxRotations;
             foreach (Coord coord in possibleBlueprintCoords)
