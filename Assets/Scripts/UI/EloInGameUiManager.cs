@@ -54,9 +54,10 @@ public class EloInGameUiManager : MonoBehaviour {
 
         int diff = newElo - prevElo;
         string diffDirection = diff > 0 ? "+" : "";
-        string colorTag = diff > 0 ? "green" : "red";
+        string colorTag = diff > 0 ? "#005500" : "#550000";
 
         eloChangeText.text = "    " + prevElo + " -> " + newElo +
-            "<color=" + colorTag + "> (" + diff + ")</color>";
+            "<color=" + colorTag + "> (" + diffDirection 
+            + diff + ")</color>";
     }
 }
