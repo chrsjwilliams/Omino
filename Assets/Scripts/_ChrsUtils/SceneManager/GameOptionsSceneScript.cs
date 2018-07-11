@@ -148,10 +148,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             aiLevelTexts[i] = aiLevelButtonZones[i].GetComponentInChildren<TextMeshProUGUI>();
             aiLevelButtonZones[i].SetActive(false);
         }
-        //DungeonRunManager.dungeonRunData.selectingNewTech = true;
 
                 
-        handicapSystem.Init();
+        
 
         switch (Services.GameManager.mode)
         {
@@ -177,7 +176,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
                 break;
         }
 
-
+        handicapSystem.Init();
     }
 
     private void SetUpDungeonRunTechSelectMenu()
@@ -280,6 +279,11 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         }
     }
 
+    private void TurnOnHandicapOptions(bool isOn)
+    {
+        handicapOptions.SetActive(isOn);
+    }
+
     private void StartPlayerVsAIMode()
     {
         optionButtonParent.SetActive(false);
@@ -350,7 +354,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void StartDungeonRunMode()
     {
-       
+        TurnOnHandicapOptions(false);
 
         humanPlayers[0] = true;
         humanPlayers[1] = false;
@@ -408,6 +412,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void StartEloMode()
     {
+        TurnOnHandicapOptions(false);
         humanPlayers[0] = true;
         humanPlayers[1] = false;
         eloUI.gameObject.SetActive(true);
@@ -602,7 +607,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     public void ToggleOptionMenu()
     {
         optionsMenuActive = !optionsMenuActive;
-        //optionButtonParent.SetActive(optionsMenuActive);
+       // optionButtonParent.SetActive(false);
         levelButtonParent.SetActive(false);
         if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
         {
@@ -611,6 +616,17 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         if(Services.GameManager.mode == TitleSceneScript.GameMode.Campaign)
         {
             campaignLevelButtonParent.SetActive(!optionsMenuActive);
+        }
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
+        {
+            if (DungeonRunManager.dungeonRunData.selectingNewTech)
+            {
+                techSelectMenu.SetActive(!optionsMenuActive);
+            }
+            else
+            {
+                dungeonRunMenu.SetActive(!optionsMenuActive);
+            }
         }
         optionMenu.SetActive(optionsMenuActive);
         if (optionsMenuActive)
@@ -628,7 +644,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             {
                 eloUI.gameObject.SetActive(true);
             }
-            else
+            else if(Services.GameManager.mode != TitleSceneScript.GameMode.Campaign &&
+                    Services.GameManager.mode != TitleSceneScript.GameMode.DungeonRun)
             {
                 SlideInLevelButtons();
             }
