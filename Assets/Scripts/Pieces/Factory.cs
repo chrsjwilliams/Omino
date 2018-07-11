@@ -16,7 +16,7 @@ public class Factory : Blueprint
         return "Factory";
     }
 
-    protected override string GetDescription()
+    public override string GetDescription()
     {
         //return "+<color=green>" + Math.Round((double)normalDrawRateBonus, 3) + 
         //    "</color> normal pieces per second";

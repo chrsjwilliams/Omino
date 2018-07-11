@@ -197,7 +197,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         for(int i = 0; i < currentTechIcons.Length; i++)
         {
             techSelect_currentTechIcons[0][i] = currentTechIcons[i];
-            techSelect_currentTechIcons[0][i].GetComponentInChildren<TextMeshProUGUI>().text = "None";
+            techSelect_currentTechIcons[0][i].GetComponentsInChildren<TextMeshProUGUI>()[0].text = "None";
             techSelect_currentTechIcons[0][i].GetComponentsInChildren<Image>()[1].color = Services.GameManager.NeutralColor;
         }
 
@@ -220,11 +220,13 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             
             techSelect_MenuButtons[0][j] = techSelectButtons[j];
 
-            techSelect_MenuButtons[0][j].GetComponentInChildren<TextMeshProUGUI>().text = DungeonRunManager.GetBuildingFromType(selectedType).label;
+            techSelect_MenuButtons[0][j].GetComponentsInChildren<TextMeshProUGUI>()[0].text = DungeonRunManager.GetBuildingFromType(selectedType).label;
+            techSelect_MenuButtons[0][j].GetComponentsInChildren<TextMeshProUGUI>()[1].text = DungeonRunManager.GetBuildingFromType(selectedType).GetDescription();
+
             techSelect_MenuButtons[0][j].GetComponent<Image>().color = Services.GameManager.NeutralColor;
             techSelect_MenuButtons[0][j].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(techToChooseFrom[j]);
         }
-        Debug.Log(techSelect_MenuButtons[0][0]);
+
         techSelect_SelectTechText = techSelect_TechSelectZone.GetComponentInChildren<TextMeshProUGUI>();
     }
 

@@ -37,7 +37,7 @@ public class Recycling : TechBuilding
         return "Recycling";
     }
 
-    protected override string GetDescription()
+    public override string GetDescription()
     {
         return "Whenever one of your pieces is destroyed by a hammer, draw a piece.";
     }

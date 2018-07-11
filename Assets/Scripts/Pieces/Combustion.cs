@@ -39,7 +39,7 @@ public class Combustion : TechBuilding
         return "Combustion";
     }
 
-    protected override string GetDescription()
+    public override string GetDescription()
     {
         return "<color=red>Attack</color> pieces explode, destroying adjacent enemy " +
             "pieces and themselves.";

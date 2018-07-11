@@ -66,7 +66,7 @@ public class Base : TechBuilding
         }
     }
 
-    protected override string GetDescription()
+    public override string GetDescription()
     {
         //return "+<color=green>" + Math.Round((double)normalDrawRateBonus, 3) + 
         //    "</color> normal pieces per second" + "\n" +

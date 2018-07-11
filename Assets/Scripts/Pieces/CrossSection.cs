@@ -39,7 +39,7 @@ public class CrossSection : TechBuilding
         return "Cross Section";
     }
 
-    protected override string GetDescription()
+    public override string GetDescription()
     {
         return "Pieces can overlap neutral and friendly pieces.";
     }

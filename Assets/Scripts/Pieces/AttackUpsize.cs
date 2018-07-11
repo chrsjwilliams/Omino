@@ -38,7 +38,7 @@ public class AttackUpsize : TechBuilding
         return "Attack Upsize";
     }
 
-    protected override string GetDescription()
+    public override string GetDescription()
     {
         return "Newly drawn <color=red>Attack</color> pieces are 4 blocks rather than 3";
     }

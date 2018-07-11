@@ -22,7 +22,7 @@ public class Barracks : Blueprint
         return "Barracks";
     }
 
-    protected override string GetDescription()
+    public override string GetDescription()
     {
         //return "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) + 
         //    "</color> <color=red>DESTRUCTIVE</color> pieces per second";

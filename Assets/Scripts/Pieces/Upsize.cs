@@ -37,7 +37,7 @@ public class Upsize : TechBuilding
         return "Upsize";
     }
 
-    protected override string GetDescription()
+    public override string GetDescription()
     {
         return "Newly drawn normal pieces are 5 blocks rather than 4";
     }

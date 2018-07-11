@@ -1624,7 +1624,7 @@ public class Polyomino : IVertex
         return "";
     }
 
-    protected virtual string GetDescription()
+    public virtual string GetDescription()
     {
         return "";
     }

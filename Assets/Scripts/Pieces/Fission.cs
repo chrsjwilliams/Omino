@@ -41,7 +41,7 @@ public class Fission : TechBuilding
         return "Fission";
     }
 
-    protected override string GetDescription()
+    public override string GetDescription()
     {
         return "Whenever you destroy an opponent's piece with a hammer, gain " + energyReward + " energy.";
     }

@@ -39,7 +39,7 @@ public class SupplyBoost : TechBuilding
         return "Supply Boost";
     }
 
-    protected override string GetDescription()
+    public override string GetDescription()
     {
         return "+" + 100 * drawRateMultiplier + "%" + 
             " piece production rate";

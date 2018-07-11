@@ -41,7 +41,7 @@ public class Dynamo : TechBuilding
         return "Dynamo";
     }
 
-    protected override string GetDescription()
+    public override string GetDescription()
     {
         return "+" + 100 * resourceGainIncrementMultiplier + "%" +
             " Energy Recharge Rate";

@@ -17,7 +17,7 @@ public class Generator : Blueprint
         return "Generator";
     }
 
-    protected override string GetDescription()
+    public override string GetDescription()
     {
         //return "+<color=green>" + Math.Round((double)resourceGainRateBonus * 10, 3) + 
         //    "</color> resources per second";
