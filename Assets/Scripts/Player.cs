@@ -1131,6 +1131,7 @@ public class Player : MonoBehaviour
         int blueprintMovesChecked = 0;
         foreach (Blueprint blueprint in blueprintsInHand)
         {
+            if (!blueprints.Contains(blueprint)) yield break;
             int numRotations = blueprint.maxRotations;
             foreach (Coord coord in possibleBlueprintCoords)
             {
