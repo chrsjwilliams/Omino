@@ -67,6 +67,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     [SerializeField]
     private GameObject[] optionButtons;
+    [SerializeField]
+    private Button theOptionButton;
 
     [SerializeField]
     private HandicapSystem handicapSystem;
@@ -498,9 +500,9 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     public void SlideOutOptionsButton(bool slideOut)
     {
-        //LevelSelectButtonEntranceTask slideOptionButtonTask =
-        //        new LevelSelectButtonEntranceTask(theOptionButton, null, slideOut);
-        //_tm.Do(slideOptionButtonTask);
+        LevelSelectButtonEntranceTask slideOptionButtonTask =
+                new LevelSelectButtonEntranceTask(theOptionButton, null, slideOut);
+        _tm.Do(slideOptionButtonTask);
     }
 
     public void StartGame()
