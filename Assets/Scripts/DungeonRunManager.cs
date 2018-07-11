@@ -213,10 +213,6 @@ public static class DungeonRunManager
             dungeonRunData.currentTech.Add(tech);
             dungeonRunData.selectingNewTech = false;
         }
-        else
-        {
-            Debug.Log("Too many!");
-        }
 
         SaveData();
     }

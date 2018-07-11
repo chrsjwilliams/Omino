@@ -285,7 +285,8 @@ public class UIManager : MonoBehaviour {
             pauseButton.SetActive(false);
         }
 
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo || 
+            Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
         {
             replayButtonText.text = "FORFEIT";
         }

@@ -25,6 +25,7 @@ public class AILevelSlideIn : Task
 
         if (hasExternalText)
         {
+            
             objectsToSlideIn = new GameObject[levelButtons.Length + 1];
             objectsToSlideIn[0] = levelText.gameObject;
             for (int i = 0; i < levelButtons.Length; i++)

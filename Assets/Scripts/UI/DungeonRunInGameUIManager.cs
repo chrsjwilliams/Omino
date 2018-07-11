@@ -15,6 +15,8 @@ public class DungeonRunInGameUIManager : MonoBehaviour {
     private TextMeshProUGUI victoryText;
     [SerializeField]
     private TextMeshProUGUI dungeonRunChangeText;
+    [SerializeField]
+    private TextMeshProUGUI nextChallengeButtonText;
 
     private const float offset = 1800;
     private float timeElapsed;
@@ -58,11 +60,13 @@ public class DungeonRunInGameUIManager : MonoBehaviour {
 
         if(victory)
         {
-            victoryText.text = "Victory"; 
+            victoryText.text = "Victory";
+            nextChallengeButtonText.text = "Next Challenge";
         }
         else
         {
             victoryText.text = "Defeat";
+            nextChallengeButtonText.text = "Try Again";
         }
 
         dungeonRunChangeText.text = "Challenge " + DungeonRunManager.dungeonRunData.challenegeNum +

@@ -80,29 +80,24 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     [SerializeField]
     private Button blueprintAssistButton;
 
-    private bool selectingTech;
+    //  Dungeon Run Challenge Menu
+    [SerializeField]
+    private TextMeshProUGUI dungeonRun_ChallengeLevelText;
+    [SerializeField]
+    private TextMeshProUGUI dungeonRun_CurrentTechZone;
+    private Button[][] dungeonRun_CurrentTechMenu;
+    [SerializeField]
+    private Button dungeonRun_StartChallengeButton;
 
+    //  Dungeon Run Tech Select Menu
     [SerializeField]
-    private TextMeshProUGUI challengeLevelText;
+    private GameObject techSelect_TechSelectZone;
+    private TextMeshProUGUI techSelect_SelectTechText;
+    private Button[][] techSelect_MenuButtons;
     [SerializeField]
-    private Button[] techPowerUpsToChoose;
-    [SerializeField]
-    private TextMeshProUGUI currentDungeonRunTechZone;
-    [SerializeField]
-    private GameObject selectTechZone;
-    private TextMeshProUGUI selectTechText;
-    private TextMeshProUGUI currentTechText;
-    private Button[][] dungeonRunTechMenu;
-    private Button[][] techSelectMenuButtons;
-    [SerializeField]
-    private Image[] techSelectMenuCurrentTechSprites;
-    [SerializeField]
-    private TextMeshProUGUI currentTechTechSelectZone;
-    [SerializeField]
-    private Image[] techSelectMenuOwnedTechIcons;
-    private Image[][] currentTechIconMenu;
-    [SerializeField]
-    private Button startChallengeButton;
+    private Image[] techSelect_currentUIIcons;
+    private Image[][] techSelect_currentTechIcons;
+    
 
     [SerializeField]
     private EloUIManager eloUI;
@@ -129,7 +124,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
         dungeonRunMenu.SetActive(false);
 
-        techPowerUpsToChoose = techSelectMenu.GetComponentsInChildren<Button>();
         techSelectMenu.SetActive(false);
 
         humanPlayers = new bool[2] { false, false };
@@ -140,8 +134,6 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         optionMenu.SetActive(false);
         TurnOnOptionButtons(true);
         eloUI.gameObject.SetActive(false);
-
-        selectingTech = true;
 
         for (int i = 0; i < aiLevelButtonZones.Length; i++)
         {
@@ -188,80 +180,83 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void SetUpDungeonRunTechSelectMenu()
     {
-        techSelectMenuButtons = new Button[1][];
+        techSelect_MenuButtons = new Button[1][];
 
-        Button[] techSelectButtons = selectTechZone.GetComponentsInChildren<Button>();
-        techSelectMenuButtons[0] = new Button[techSelectButtons.Length];
+        Button[] techSelectButtons = techSelect_TechSelectZone.GetComponentsInChildren<Button>();
+        techSelect_MenuButtons[0] = new Button[techSelectButtons.Length];
 
         List<BuildingType> techToChooseFrom = DungeonRunManager.GetTechBuildingSelection();
 
-        currentTechIconMenu = new Image[1][];
+        techSelect_currentTechIcons = new Image[1][];
 
-        Image[] currentTechIcons = techSelectMenuOwnedTechIcons;
-        currentTechIconMenu[0] = new Image[currentTechIcons.Length];
+        Image[] currentTechIcons = techSelect_currentUIIcons;
+        techSelect_currentTechIcons[0] = new Image[currentTechIcons.Length];
 
         
 
         for(int i = 0; i < currentTechIcons.Length; i++)
         {
-            currentTechIconMenu[0][i] = currentTechIcons[i];
-            Debug.Log(currentTechIconMenu[0][i].name);
-            currentTechIconMenu[0][i].GetComponentInChildren<TextMeshProUGUI>().text = "None";
-            currentTechIconMenu[0][i].GetComponentsInChildren<Image>()[1].color = Services.GameManager.NeutralColor;
+            techSelect_currentTechIcons[0][i] = currentTechIcons[i];
+            techSelect_currentTechIcons[0][i].GetComponentInChildren<TextMeshProUGUI>().text = "None";
+            techSelect_currentTechIcons[0][i].GetComponentsInChildren<Image>()[1].color = Services.GameManager.NeutralColor;
         }
 
         for (int i = 0; i < DungeonRunManager.dungeonRunData.currentTech.Count; i++)
         {
             BuildingType selectedType = DungeonRunManager.dungeonRunData.currentTech[i];
             TechBuilding tech = DungeonRunManager.GetBuildingFromType(selectedType);
-            currentTechIconMenu[0][i].GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
-            currentTechIconMenu[0][i].GetComponentsInChildren<Image>()[1].color = Color.white;
-            currentTechIconMenu[0][i].GetComponentInChildren<TextMeshProUGUI>().text = tech.label;
-            currentTechIconMenu[0][i].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(tech.buildingType);
+            techSelect_currentTechIcons[0][i].GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
+            techSelect_currentTechIcons[0][i].GetComponentsInChildren<Image>()[1].color = Color.white;
+            techSelect_currentTechIcons[0][i].GetComponentInChildren<TextMeshProUGUI>().text = tech.label;
+            techSelect_currentTechIcons[0][i].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(tech.buildingType);
         }
+
+        
 
         for (int j = 0; j < techToChooseFrom.Count; j++)
         {
 
             BuildingType selectedType = techToChooseFrom[j];
-            techSelectMenuButtons[0][j] = techSelectButtons[j];
+            
+            techSelect_MenuButtons[0][j] = techSelectButtons[j];
 
-            techSelectMenuButtons[0][j].GetComponentInChildren<TextMeshProUGUI>().text = DungeonRunManager.GetBuildingFromType(selectedType).label;
-            techSelectMenuButtons[0][j].GetComponent<Image>().color = Services.GameManager.NeutralColor;
-            techSelectMenuButtons[0][j].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(techToChooseFrom[j]);
+            techSelect_MenuButtons[0][j].GetComponentInChildren<TextMeshProUGUI>().text = DungeonRunManager.GetBuildingFromType(selectedType).label;
+            techSelect_MenuButtons[0][j].GetComponent<Image>().color = Services.GameManager.NeutralColor;
+            techSelect_MenuButtons[0][j].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(techToChooseFrom[j]);
         }
-
-        selectTechText = selectTechZone.GetComponentInChildren<TextMeshProUGUI>();
+        Debug.Log(techSelect_MenuButtons[0][0]);
+        techSelect_SelectTechText = techSelect_TechSelectZone.GetComponentInChildren<TextMeshProUGUI>();
     }
 
     private void SetUpDungeonRunChallengeMenu()
     {
 
-        dungeonRunTechMenu = new Button[1][];
+        dungeonRun_CurrentTechMenu = new Button[1][];
 
-        Button[] techButtons = currentDungeonRunTechZone.GetComponentsInChildren<Button>();
-        dungeonRunTechMenu[0] = new Button[techButtons.Length];
+        Button[] techButtons = dungeonRun_CurrentTechZone.GetComponentsInChildren<Button>();
+        dungeonRun_CurrentTechMenu[0] = new Button[techButtons.Length];
 
         for (int j = 0; j < techButtons.Length; j++)
         {
-            dungeonRunTechMenu[0][j] = techButtons[j];
+            dungeonRun_CurrentTechMenu[0][j] = techButtons[j];
 
-            dungeonRunTechMenu[0][j].interactable = false;
-            dungeonRunTechMenu[0][j].GetComponentInChildren<TextMeshProUGUI>().text = "None";
-            dungeonRunTechMenu[0][j].GetComponentsInChildren<Image>()[1].color = Services.GameManager.NeutralColor;
+            dungeonRun_CurrentTechMenu[0][j].interactable = false;
+            dungeonRun_CurrentTechMenu[0][j].GetComponent<Image>().color = Services.GameManager.NeutralColor;
+            dungeonRun_CurrentTechMenu[0][j].GetComponentInChildren<TextMeshProUGUI>().text = "None";
+            dungeonRun_CurrentTechMenu[0][j].GetComponentsInChildren<Image>()[1].color = Services.GameManager.NeutralColor;
+            dungeonRun_CurrentTechMenu[0][j].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(BuildingType.NONE);
         }
 
         for (int i = 0; i < DungeonRunManager.dungeonRunData.currentTech.Count; i++)
         {
             BuildingType selectedType = DungeonRunManager.dungeonRunData.currentTech[i];
             TechBuilding tech = DungeonRunManager.GetBuildingFromType(selectedType);
-            dungeonRunTechMenu[0][i].interactable = true;
-            dungeonRunTechMenu[0][i].GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
-            dungeonRunTechMenu[0][i].GetComponentsInChildren<Image>()[1].color = Color.white;
-            dungeonRunTechMenu[0][i].GetComponentInChildren<TextMeshProUGUI>().text = tech.label;
-            dungeonRunTechMenu[0][i].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(tech.buildingType);
+            dungeonRun_CurrentTechMenu[0][i].interactable = true;
+            dungeonRun_CurrentTechMenu[0][i].GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
+            dungeonRun_CurrentTechMenu[0][i].GetComponentsInChildren<Image>()[1].color = Color.white;
+            dungeonRun_CurrentTechMenu[0][i].GetComponentInChildren<TextMeshProUGUI>().text = tech.label;
+            dungeonRun_CurrentTechMenu[0][i].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(tech.buildingType);
         }
-        currentTechText = currentDungeonRunTechZone.GetComponent<TextMeshProUGUI>();
     }
 
     internal override void OnExit()
@@ -370,7 +365,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             SetUpDungeonRunTechSelectMenu();
             TaskTree techSelectMenuTasks = new TaskTree(new EmptyTask(),
                 new TaskTree(new LevelSelectTextEntrance(techSelectMenu)),
-                new TaskTree(new AILevelSlideIn(selectTechText, techSelectMenuButtons[0], true, false)),
+                new TaskTree(new AILevelSlideIn(techSelect_SelectTechText, techSelect_MenuButtons[0], true, false)),
                 new TaskTree(new LevelSelectButtonEntranceTask(backButton)));
             Services.GeneralTaskManager.Do(techSelectMenuTasks);
         }
@@ -380,7 +375,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             SetUpDungeonRunChallengeMenu();
             TaskTree dungeonRunChallengeSelect = new TaskTree(new EmptyTask(),
                 new TaskTree(new LevelSelectTextEntrance(dungeonRunMenu)),
-                new TaskTree(new AILevelSlideIn(currentDungeonRunTechZone, dungeonRunTechMenu[0], true, false)),
+                new TaskTree(new AILevelSlideIn(dungeonRun_CurrentTechZone, dungeonRun_CurrentTechMenu[0], true, false)),
                 new TaskTree(new LevelSelectButtonEntranceTask(backButton)));
             Services.GeneralTaskManager.Do(dungeonRunChallengeSelect);
         }
@@ -392,13 +387,13 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     {
         if (DungeonRunManager.dungeonRunData.completedRun)
         {
-            challengeLevelText.text = "Run Complete";
-            startChallengeButton.GetComponentInChildren<TextMeshProUGUI>().text = "Try Again";
+            dungeonRun_ChallengeLevelText.text = "Run Complete";
+            dungeonRun_StartChallengeButton.GetComponentInChildren<TextMeshProUGUI>().text = "Try Again";
         }
         else
         {
-            startChallengeButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start Challenge";
-           challengeLevelText.text = "Challenge " + progress + "/" + DungeonRunManager.MAX_DUNGEON_CHALLENGES;
+            dungeonRun_StartChallengeButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start Challenge";
+           dungeonRun_ChallengeLevelText.text = "Challenge " + progress + "/" + DungeonRunManager.MAX_DUNGEON_CHALLENGES;
         }
     }
 
@@ -576,14 +571,23 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
         TaskTree slideOutTechSelectMenuTasks = new TaskTree(new EmptyTask(),
                 new TaskTree(new LevelSelectTextEntrance(techSelectMenu, true)),
-                new TaskTree(new AILevelSlideIn(selectTechText, techSelectMenuButtons[0], true, true)));
+                new TaskTree(new AILevelSlideIn(techSelect_SelectTechText, techSelect_MenuButtons[0], true, true)));
         Services.GeneralTaskManager.Do(slideOutTechSelectMenuTasks);
         Services.GeneralTaskManager.Do(new ActionTask(StartDungeonRunMode));
     }
 
     public void ResetDungeonRun()
     {
+        if (DungeonRunManager.dungeonRunData.selectingNewTech)
+        {
+            TaskTree slideOutTechSelectMenuTasks = new TaskTree(new EmptyTask(),
+                    new TaskTree(new LevelSelectTextEntrance(techSelectMenu, true)),
+                    new TaskTree(new AILevelSlideIn(techSelect_SelectTechText, techSelect_MenuButtons[0], true, true)));
+            Services.GeneralTaskManager.Do(slideOutTechSelectMenuTasks);  
+        }
+
         DungeonRunManager.ResetDungeonRun();
+        Services.GeneralTaskManager.Do(new ActionTask(StartDungeonRunMode));
     }
 
     public void TurnOffOptionMenu()
