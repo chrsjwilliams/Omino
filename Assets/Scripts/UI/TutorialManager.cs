@@ -65,6 +65,23 @@ public class TutorialManager : MonoBehaviour {
             Services.GameEventManager.Register<PiecePlaced>(OnPiecePlaced);
     }
 
+    private void MoveToStep(int index)
+    {
+        
+
+        if(index > tooltipInfos.Length - 1 || index < 0)
+        {
+            Debug.Log("Out of Range");
+        }
+        else
+        {
+            currentIndex = index;
+            CreateTooltip();
+            if (!tooltipInfos[currentIndex].dismissable)
+                Services.GameEventManager.Register<PiecePlaced>(OnPiecePlaced);
+        }
+    }
+
     private void OnPiecePlaced(PiecePlaced e)
     {
         
@@ -81,6 +98,25 @@ public class TutorialManager : MonoBehaviour {
             case 3:
                 int aiPlayerNumber = humanPlayerNum == 1 ? 2 : 1;
                 Player humanPlayer = Services.GameManager.Players[humanPlayerNum - 1];
+                Player aiPlayer = Services.GameManager.Players[aiPlayerNumber - 1];
+                if (humanPlayer.resourceProdLevel > 1 ||
+                    humanPlayer.normProdLevel > 1 ||
+                    humanPlayer.destProdLevel > 1)
+                {
+                    if (currentIndex == tooltipInfos.Length - 2)
+                    {
+                        Services.GameEventManager.Unregister<PiecePlaced>(OnPiecePlaced);
+
+                        dismissTask.Then(new ActionTask(currentTooltip.Dismiss));
+                        tm.Do(dismissTask);
+                    }
+                    else
+                    {
+                        MoveToStep(tooltipInfos.Length - 1);
+                        
+                    }
+                }
+
                 if (!((e.piece.owner.playerNum == aiPlayerNumber &&
                     (e.piece.owner.resourceProdLevel > 1 ||
                     e.piece.owner.normProdLevel > 1 ||
@@ -93,13 +129,8 @@ public class TutorialManager : MonoBehaviour {
             default:
                 break;
         }
+
         Services.GameEventManager.Unregister<PiecePlaced>(OnPiecePlaced);
-
-        //  Camp 2: called when opponent places 1 piece
-
-        //  Camp 3: called if AI places blueprint but player has not
-
-        //  Camp 4:  Not in camp4
 
         dismissTask.Then(new ActionTask(currentTooltip.Dismiss));
         tm.Do(dismissTask);
