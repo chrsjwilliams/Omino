@@ -76,6 +76,7 @@ public class GameSceneScript : Scene<TransitionData>
             float[] handicaps = new float[2];
             handicaps[0] = 1;
             handicaps[1] = HandicapSystem.tutorialHandicapLevels[Services.MapManager.currentLevel.campaignLevelNum - 1];
+            Services.GameManager.SetHandicapValues(handicaps);
         }
 
         if (evolutionMode)

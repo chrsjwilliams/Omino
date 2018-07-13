@@ -81,7 +81,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
         if(tag == "Rotate")
         {
-            Debug.Log("Image Color: " + image.color);
+
             RotationSpecificToolTipUpdates();
         }
         
