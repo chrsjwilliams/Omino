@@ -374,6 +374,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             if (IsPlacementLegal() && !owner.gameOver && !forceCancel)
             {
                 PlaceAtCurrentLocation();
+                Services.Analytics.PlayedBlueprint();
                 //ListenForInput();
                 //IncrementSortingOrder(-20000);
             }

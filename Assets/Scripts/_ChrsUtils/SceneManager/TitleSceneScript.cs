@@ -51,6 +51,7 @@ public class TitleSceneScript : Scene<TransitionData>
     public void StartGame(GameMode mode)
     {
         Services.GameManager.mode = mode;
+        Services.Analytics.MatchStarted(mode);
         Task start = new SlideOutTitleScreenButtons(modeButtons);
         start.Then(new ActionTask(ChangeScene));
 
@@ -60,6 +61,7 @@ public class TitleSceneScript : Scene<TransitionData>
     public void PlayPlayerVsAI()
     {
         StartGame(GameMode.PlayerVsAI);
+        
     }
 
     public void Play2Players()

@@ -8,9 +8,25 @@ namespace Tinylytics{
 	{
 		public float logInterval = 10.0f; // Logging interval in seconds
 		
-		private const string TOTAL_PLAYTIME = "TOTALPLAYTIME";
-		private const string PLAYED_TUTORIAL = "PLAYEDTUTORIAL";
-		private const string TOTAL_SESSIONS = "TOTALSESSIONS";
+		private const string TOTAL_PLAYTIME = "TOTAL PLAYTIME";
+		private const string PLAYED_TUTORIAL = "PLAYED TUTORIAL";
+		private const string TOTAL_SESSIONS = "TOTAL SESSIONS";
+		private const string PLAYED_BLUEPRINT = "PLAYED BLUEPRINT";
+		private const string ELO_PLAYTIME = "ELO PLAYTIME";
+		private const string ELO_TOTAL_MATCHES = "ELO TOTAL MATCHES";
+		private const string PVP_PLAYTIME = "PVP PLAYTIME";
+		private const string PVP_TOTAL_MATCHES = "PVP TOTAL MATCHES";
+		private const string PVAI_PLAYTIME = "PVAI PLAYTIME";
+		private const string PVAI_TOTAL_MATCHES = "PVAI TOTAL MATCHES";
+		private const string DUNGEON_RUN_PLAYTIME = "DUNGEON RUN PLAYTIME";
+		private const string DUNGEON_RUN_TOTAL_MATCHES = "DUNGEON RUN TOTAL MATCHES";
+		private const string DEMO_PLAYTIME = "DEMO PLAYTIME";
+		private const string DEMO_TOTAL_MATCHES = "DEMO TOTAL MATCHES";
+		private const string TUTORIAL_PLAYTIME = "TUTORIAL PLAYTIME";
+		private const string TUTORIAL_TOTAL_MATCHES = "TUTORIAL TOTAL MATCHES";
+
+		private float _playModeStartTime = 0.0f;
+		private int _playedBlueprint = 0;
 		private float _totalPlaytime = 0.0f;
 		private int _totalSessions = 0;
 		private float _sessionStartTime = 0.0f;
@@ -18,6 +34,9 @@ namespace Tinylytics{
 		private bool _pauseCallSent = false;
 		private int _playedTutorial = 0;
 		private TaskManager _taskManager;
+		private bool _recievedGameOver = true;
+
+		private TitleSceneScript.GameMode currentPlayMode;
 
 		private static AnalyticsManager _instance;
 		public static AnalyticsManager Instance { get { return _instance; } }
@@ -31,8 +50,9 @@ namespace Tinylytics{
 			}
 		}
 	
-	
-		void Start () {
+		void Start ()
+		{
+			_playModeStartTime = Time.time;
 			_sessionStartTime = Time.time;
 			_lastPlaytimeLog = Time.time;
 			
@@ -51,6 +71,53 @@ namespace Tinylytics{
 				_totalSessions = PlayerPrefs.GetInt(TOTAL_SESSIONS);
 			}
 
+			if (PlayerPrefs.HasKey(PLAYED_BLUEPRINT))
+			{
+				_playedBlueprint = PlayerPrefs.GetInt(PLAYED_BLUEPRINT);
+			}
+			
+			if (!PlayerPrefs.HasKey(ELO_PLAYTIME))
+			{
+				PlayerPrefs.SetFloat(ELO_PLAYTIME, 0.0f);
+			}
+			if (!PlayerPrefs.HasKey(ELO_TOTAL_MATCHES))
+			{
+				PlayerPrefs.SetInt(ELO_TOTAL_MATCHES, 0);
+			}
+			if (!PlayerPrefs.HasKey(PVP_PLAYTIME))
+			{
+				PlayerPrefs.SetFloat(PVP_PLAYTIME, 0.0f);
+			}
+			if (!PlayerPrefs.HasKey(PVP_TOTAL_MATCHES))
+			{
+				PlayerPrefs.SetInt(PVP_TOTAL_MATCHES, 0);
+			}
+			if (!PlayerPrefs.HasKey(PVAI_PLAYTIME))
+			{
+				PlayerPrefs.SetFloat(PVAI_PLAYTIME, 0.0f);
+			}
+			if (!PlayerPrefs.HasKey(PVAI_TOTAL_MATCHES))
+			{
+				PlayerPrefs.SetInt(PVAI_TOTAL_MATCHES, 0);
+			}
+			if (!PlayerPrefs.HasKey(DUNGEON_RUN_PLAYTIME))
+			{
+				PlayerPrefs.SetFloat(DUNGEON_RUN_PLAYTIME, 0.0f);
+			}
+			if (!PlayerPrefs.HasKey(DUNGEON_RUN_TOTAL_MATCHES))
+			{
+				PlayerPrefs.SetInt(DUNGEON_RUN_TOTAL_MATCHES, 0);
+			}
+			if (!PlayerPrefs.HasKey(DEMO_PLAYTIME))
+			{
+				PlayerPrefs.SetFloat(DEMO_PLAYTIME, 0.0f);
+			}
+			if (!PlayerPrefs.HasKey(DEMO_TOTAL_MATCHES))
+			{
+				PlayerPrefs.SetInt(DEMO_TOTAL_MATCHES, 0);
+			}
+
+			PlayerPrefs.Save();
 			_UpdateTotalPlaytime();
 			_taskManager = new TaskManager();
 			_LoadIntermittentLoggingTask();
@@ -144,6 +211,75 @@ namespace Tinylytics{
 				PlayerPrefs.SetInt(PLAYED_TUTORIAL, 1);
 				PlayerPrefs.Save();
 			}
+		}
+		
+		public void PlayedBlueprint()
+		{
+			if (_playedBlueprint == 0)
+			{
+				_UpdateTotalPlaytime();
+				LogMetric("Total Time Until Blueprint Played", _totalPlaytime.ToString());
+				LogMetric("Number of Sessions Until Blueprint Played", _totalSessions.ToString());
+				_playedBlueprint = 1;
+				PlayerPrefs.SetInt(PLAYED_BLUEPRINT, 1);
+				PlayerPrefs.Save();
+			}
+		}
+		
+		public void MatchStarted(TitleSceneScript.GameMode modeIn)
+		{
+			_playModeStartTime = Time.time;
+			currentPlayMode = modeIn;
+			_recievedGameOver = false;
+		}
+		
+		public void MatchEnded()
+		{
+			if (!_recievedGameOver)
+			{
+				string matchTypeToIncreaseTime = "";
+				string matchTypeToIncreaseNumberOfMatches = "";
+
+				switch (currentPlayMode)
+				{
+					case (TitleSceneScript.GameMode.Campaign):
+						matchTypeToIncreaseTime = TUTORIAL_PLAYTIME;
+						matchTypeToIncreaseNumberOfMatches = TUTORIAL_TOTAL_MATCHES;
+						break;
+					case (TitleSceneScript.GameMode.Demo):
+						matchTypeToIncreaseTime = DEMO_PLAYTIME;
+						matchTypeToIncreaseNumberOfMatches = DEMO_TOTAL_MATCHES;
+						break;
+					case (TitleSceneScript.GameMode.DungeonRun):
+						matchTypeToIncreaseTime = DUNGEON_RUN_PLAYTIME;
+						matchTypeToIncreaseNumberOfMatches = DUNGEON_RUN_TOTAL_MATCHES;
+						break;
+					case (TitleSceneScript.GameMode.Elo):
+						matchTypeToIncreaseTime = ELO_PLAYTIME;
+						matchTypeToIncreaseNumberOfMatches = ELO_TOTAL_MATCHES;
+						break;
+					case (TitleSceneScript.GameMode.PlayerVsAI):
+						matchTypeToIncreaseTime = PVAI_PLAYTIME;
+						matchTypeToIncreaseNumberOfMatches = PVAI_TOTAL_MATCHES;
+						break;
+					case (TitleSceneScript.GameMode.TwoPlayers):
+						matchTypeToIncreaseTime = PVP_PLAYTIME;
+						matchTypeToIncreaseNumberOfMatches = PVP_TOTAL_MATCHES;
+						break;
+				}
+
+				float previousTotalTime = PlayerPrefs.GetFloat(matchTypeToIncreaseTime);
+				int previousTotalMatches = PlayerPrefs.GetInt(matchTypeToIncreaseNumberOfMatches);
+
+				PlayerPrefs.SetFloat(matchTypeToIncreaseTime, previousTotalTime + (Time.time - _playModeStartTime));
+				PlayerPrefs.SetInt(matchTypeToIncreaseNumberOfMatches, previousTotalMatches + 1);
+				PlayerPrefs.Save();
+				LogMetric(matchTypeToIncreaseTime + " CURRENT MATCH", (Time.time - _playModeStartTime).ToString());
+				LogMetric(matchTypeToIncreaseTime + " TOTAL", PlayerPrefs.GetFloat(matchTypeToIncreaseTime).ToString());
+				LogMetric(matchTypeToIncreaseNumberOfMatches, PlayerPrefs.GetInt(matchTypeToIncreaseNumberOfMatches).ToString());
+			}
+
+			_recievedGameOver = true;
 		}
 	}
 }

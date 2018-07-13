@@ -123,6 +123,7 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void GameWin(Player winner)
     {
+        Services.Analytics.MatchEnded();
         gameOver = true;
         Services.UIManager.StartBannerScroll(winner);
         if (winner is AIPlayer)
@@ -192,6 +193,8 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void Replay()
     {
+        Services.Analytics.MatchEnded();
+        
         if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo &&
             !Services.GameScene.gameOver)
         {
@@ -215,6 +218,7 @@ public class GameSceneScript : Scene<TransitionData>
 
     void Reload()
     {
+        Services.Analytics.MatchEnded();
         Services.GameData.Reset();
         Services.AudioManager.ResetLevelMusic();
         Services.Scenes.Swap<GameSceneScript>();
@@ -222,6 +226,7 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void ReturnToLevelSelect()
     {
+        Services.Analytics.MatchEnded();
         Task returnToLevelSelect = new WaitUnscaled(0.01f);
         returnToLevelSelect.Then(new ActionTask(LoadLevelSelect));
         Services.GeneralTaskManager.Do(returnToLevelSelect);
@@ -246,7 +251,9 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void Reset()
     {
+        Services.Analytics.MatchEnded();
         Services.AudioManager.FadeOutLevelMusicMainMenuCall();
+        Services.Analytics.MatchEnded();
         Services.GameManager.Reset(new Reset());
     }
 
