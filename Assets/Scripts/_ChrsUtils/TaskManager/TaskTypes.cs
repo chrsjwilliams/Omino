@@ -20,6 +20,7 @@ public class ActionTask : Task
     protected override void Init()
     {
         Action();
+        SetStatus(TaskStatus.Success);
     }
 }
 
@@ -92,6 +93,11 @@ public class WaitUnscaled : Task
 public class Wait : TimedTask
 {
     public Wait(float duration) : base(duration) { }
+
+    internal override void Update()
+    {
+        base.Update();
+    }
 }
 
 
