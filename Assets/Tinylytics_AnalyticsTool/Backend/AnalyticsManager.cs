@@ -6,7 +6,7 @@ namespace Tinylytics{
 	[AddComponentMenu("")] 
 	public class AnalyticsManager : MonoBehaviour
 	{
-		public float logInterval = 1.0f; // Logging interval in seconds
+		public float logInterval = 10.0f; // Logging interval in seconds
 		
 		private const string TOTAL_PLAYTIME = "TOTALPLAYTIME";
 		private float _totalPlaytime = 0.0f;
@@ -98,8 +98,23 @@ namespace Tinylytics{
 			BackendManager.SendData("Total Playtime", PlayerPrefs.GetFloat(TOTAL_PLAYTIME).ToString());
 		}
 	
-		public static void LogCustomMetric(string metricName, string dataToSend){
+		public static void LogMetric(string metricName, string dataToSend){
 			BackendManager.SendData(metricName, dataToSend);
+		}
+
+		public void ELOWin(bool winState)
+		{
+			LogMetric("ELO Win", winState.ToString());
+		}
+
+		public void ELOStreak(int streakCount)
+		{
+			LogMetric("ELO Streak", streakCount.ToString());
+		}
+
+		public void ELOTotalWins(int totalWins)
+		{
+			LogMetric("ELO Total Wins", totalWins.ToString());
 		}
 	}
 }

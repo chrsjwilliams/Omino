@@ -64,6 +64,9 @@ public static class ELOManager
         }
         int newElo = eloData.GetRating();
         Services.UIManager.eloUIManager.OnGameEnd(true, prevElo, newElo);
+        Services.Analytics.ELOWin(true);
+        Services.Analytics.ELOStreak(eloData.winStreakCount);
+        Services.Analytics.ELOTotalWins(eloData.totalWins);
         SaveData();
     }
 
@@ -74,6 +77,7 @@ public static class ELOManager
         SetHandicap(eloData.handicapLevel - handicapIncrement);
         int newElo = eloData.GetRating();
         Services.UIManager.eloUIManager.OnGameEnd(false, prevElo, newElo);
+        Services.Analytics.ELOWin(false);
         SaveData();
     }
 
