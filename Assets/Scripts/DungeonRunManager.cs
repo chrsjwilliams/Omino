@@ -82,6 +82,7 @@ public static class DungeonRunManager
 
         if (dungeonRunData.challenegeNum > MAX_DUNGEON_CHALLENGES)
         {
+            Services.Analytics.DungeonRunWin(dungeonRunData.currentTech);
             OnCompleteDungeonRun();
         }
         else
@@ -96,6 +97,9 @@ public static class DungeonRunManager
     public static void OnGameLoss()
     {
         Services.UIManager.dungeonRunUIManager.OnGameEnd(false);
+
+        Services.Analytics.DungeonRunLoss(dungeonRunData.challenegeNum);
+        
         ResetDungeonRunData();
     }
 
@@ -190,7 +194,6 @@ public static class DungeonRunManager
         return dungeonRunData.techChoices;
     }
 
-
     private static bool TechSelectionIsUnique(List<BuildingType> techChoices, BuildingType tech)
     {
         if (techChoices.Count < 1) return true;
@@ -211,13 +214,11 @@ public static class DungeonRunManager
         if (dungeonRunData.currentTech.Count < MAX_TECH_INVENTORY)
         {
             dungeonRunData.currentTech.Add(tech);
+            Services.Analytics.TechSelected(tech, dungeonRunData.techChoices);
             dungeonRunData.selectingNewTech = false;
         }
-
         SaveData();
     }
-
-
 
     private static void SetHandicap(float handicap)
     {
@@ -241,7 +242,6 @@ public static class DungeonRunManager
     }
 }
 
-
 [System.Serializable]
 public class DungeonRunData
 {
@@ -252,11 +252,11 @@ public class DungeonRunData
     public int challenegeNum;
     public float handicapLevel;
 
-    public DungeonRunData(List<BuildingType> ownedTech,  List<BuildingType> techSelection, int challengeLevel, float handicap, bool selecting, bool selected)
+    public DungeonRunData(List<BuildingType> ownedTech,  List<BuildingType> techSelection, int challenegeNumLevel, float handicap, bool selecting, bool selected)
     {
         currentTech = ownedTech;
         techChoices = techSelection;
-        challenegeNum = challengeLevel;
+        challenegeNum = challenegeNumLevel;
         handicapLevel = handicap;
         selectingNewTech = selecting;
         completedRun = selected;

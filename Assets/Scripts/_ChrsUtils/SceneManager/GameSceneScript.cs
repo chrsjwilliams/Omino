@@ -128,6 +128,7 @@ public class GameSceneScript : Scene<TransitionData>
         Services.UIManager.StartBannerScroll(winner);
         if (winner is AIPlayer)
         {
+            Services.Analytics.PlayerWin(false);
             if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
             {
                 ELOManager.OnGameLoss();
@@ -140,6 +141,7 @@ public class GameSceneScript : Scene<TransitionData>
         }
         else
         {
+            Services.Analytics.PlayerWin();
             if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
             {
                 ELOManager.OnGameWin();

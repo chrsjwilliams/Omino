@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Win32;
 using UnityEngine;
 
 namespace Tinylytics{
@@ -18,12 +19,16 @@ namespace Tinylytics{
 		private const string PVP_TOTAL_MATCHES = "PVP TOTAL MATCHES";
 		private const string PVAI_PLAYTIME = "PVAI PLAYTIME";
 		private const string PVAI_TOTAL_MATCHES = "PVAI TOTAL MATCHES";
+		private const string PVAI_TOTAL_WINS = "PVAI TOTAL WINS";
+		private const string PVAI_TOTAL_LOSSES = "PVAI TOTAL LOSSES";
 		private const string DUNGEON_RUN_PLAYTIME = "DUNGEON RUN PLAYTIME";
 		private const string DUNGEON_RUN_TOTAL_MATCHES = "DUNGEON RUN TOTAL MATCHES";
 		private const string DEMO_PLAYTIME = "DEMO PLAYTIME";
 		private const string DEMO_TOTAL_MATCHES = "DEMO TOTAL MATCHES";
 		private const string TUTORIAL_PLAYTIME = "TUTORIAL PLAYTIME";
 		private const string TUTORIAL_TOTAL_MATCHES = "TUTORIAL TOTAL MATCHES";
+		private const string TUTORIAL_TOTAL_WINS = "TUTORIAL TOTAL WINS";
+		private const string TUTORIAL_TOTAL_LOSES = "TUTORIAL TOTAL LOSES";
 
 		private float _playModeStartTime = 0.0f;
 		private int _playedBlueprint = 0;
@@ -56,26 +61,32 @@ namespace Tinylytics{
 			_sessionStartTime = Time.time;
 			_lastPlaytimeLog = Time.time;
 			
+			_InitializePlayerPrefs();
+			
+			_UpdateTotalPlaytime();
+			_taskManager = new TaskManager();
+			_LoadIntermittentLoggingTask();
+			
+		}
+
+		private void _InitializePlayerPrefs()
+		{
 			if (PlayerPrefs.HasKey(TOTAL_PLAYTIME))
 			{
 				_totalPlaytime = PlayerPrefs.GetFloat(TOTAL_PLAYTIME);
 			}
-
 			if (PlayerPrefs.HasKey(PLAYED_TUTORIAL))
 			{
 				_playedTutorial = PlayerPrefs.GetInt(PLAYED_TUTORIAL);
 			}
-
 			if (PlayerPrefs.HasKey(TOTAL_SESSIONS))
 			{
 				_totalSessions = PlayerPrefs.GetInt(TOTAL_SESSIONS);
 			}
-
 			if (PlayerPrefs.HasKey(PLAYED_BLUEPRINT))
 			{
 				_playedBlueprint = PlayerPrefs.GetInt(PLAYED_BLUEPRINT);
 			}
-			
 			if (!PlayerPrefs.HasKey(ELO_PLAYTIME))
 			{
 				PlayerPrefs.SetFloat(ELO_PLAYTIME, 0.0f);
@@ -116,12 +127,24 @@ namespace Tinylytics{
 			{
 				PlayerPrefs.SetInt(DEMO_TOTAL_MATCHES, 0);
 			}
+			if (!PlayerPrefs.HasKey(PVAI_TOTAL_WINS))
+			{
+				PlayerPrefs.SetInt(PVAI_TOTAL_WINS, 0);
+			}
+			if (!PlayerPrefs.HasKey(PVAI_TOTAL_LOSSES))
+			{
+				PlayerPrefs.SetInt(PVAI_TOTAL_LOSSES, 0);
+			}
+			if (!PlayerPrefs.HasKey(TUTORIAL_TOTAL_WINS))
+			{
+				PlayerPrefs.SetInt(TUTORIAL_TOTAL_WINS, 0);
+			}
+			if (!PlayerPrefs.HasKey(TUTORIAL_TOTAL_LOSES))
+			{
+				PlayerPrefs.SetInt(TUTORIAL_TOTAL_LOSES, 0);
+			}
 
 			PlayerPrefs.Save();
-			_UpdateTotalPlaytime();
-			_taskManager = new TaskManager();
-			_LoadIntermittentLoggingTask();
-			
 		}
 
 		void Update()
@@ -280,6 +303,71 @@ namespace Tinylytics{
 			}
 
 			_recievedGameOver = true;
+		}
+
+		public void PlayerWin(bool playerIsWinner = true)
+		{
+			if (currentPlayMode == TitleSceneScript.GameMode.PlayerVsAI)
+			{
+				if (playerIsWinner)
+				{
+					int previousTotalWins = PlayerPrefs.GetInt(PVAI_TOTAL_WINS);
+					PlayerPrefs.SetInt(PVAI_TOTAL_WINS, previousTotalWins + 1);
+					PlayerPrefs.Save();
+					LogMetric(PVAI_TOTAL_WINS, PlayerPrefs.GetInt(PVAI_TOTAL_WINS).ToString());
+				}
+				else
+				{
+					int previousTotalWins = PlayerPrefs.GetInt(PVAI_TOTAL_LOSSES);
+					PlayerPrefs.SetInt(PVAI_TOTAL_LOSSES, previousTotalWins + 1);
+					PlayerPrefs.Save();
+					LogMetric(PVAI_TOTAL_LOSSES, PlayerPrefs.GetInt(PVAI_TOTAL_LOSSES).ToString());
+				}
+			}
+			else if (currentPlayMode == TitleSceneScript.GameMode.Campaign)
+			{
+				if (playerIsWinner)
+				{
+					int previousTotalWins = PlayerPrefs.GetInt(TUTORIAL_TOTAL_WINS);
+					PlayerPrefs.SetInt(TUTORIAL_TOTAL_WINS, previousTotalWins + 1);
+					PlayerPrefs.Save();
+					LogMetric(TUTORIAL_TOTAL_WINS, PlayerPrefs.GetInt(TUTORIAL_TOTAL_WINS).ToString());
+				}
+				else
+				{
+					int previousTotalWins = PlayerPrefs.GetInt(TUTORIAL_TOTAL_LOSES);
+					PlayerPrefs.SetInt(TUTORIAL_TOTAL_LOSES, previousTotalWins + 1);
+					PlayerPrefs.Save();
+					LogMetric(TUTORIAL_TOTAL_LOSES, PlayerPrefs.GetInt(TUTORIAL_TOTAL_LOSES).ToString());
+				}
+			}
+		}
+
+		public void TechSelected(BuildingType tech, List<BuildingType> techChoices)
+		{
+			string toReturn = "";
+			foreach (BuildingType techChoice in techChoices)
+			{
+				toReturn += techChoice.ToString() + " | ";
+			}
+
+			LogMetric("Dungeon Run Tech Selected", tech.ToString() + " from (" + toReturn + ")");
+		}
+
+		public void DungeonRunLoss(int challengeNumber)
+		{
+			LogMetric("Dungeon Run Lost - Number of Matches Won", challengeNumber.ToString());
+		}
+
+		public void DungeonRunWin(List<BuildingType> techList)
+		{
+			string toReturn = "";
+			foreach (BuildingType tech in techList)
+			{
+				toReturn += tech.ToString() + " | ";
+			}
+			
+			LogMetric("Dungeon Run Won With Tech", toReturn);
 		}
 	}
 }
