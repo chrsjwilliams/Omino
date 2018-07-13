@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Beat;
+using Tinylytics;
 
 public class GameManager : MonoBehaviour
 {
@@ -167,6 +168,8 @@ public class GameManager : MonoBehaviour
 		Services.CameraController = MainCamera.GetComponent<CameraController>();
 		Services.Clock = clock;
         Services.Clock.Init(levelBPM);
+
+        Services.Analytics = AnalyticsManager.Instance;
 
         gameObject.AddComponent<ClipSwitcher>();
 

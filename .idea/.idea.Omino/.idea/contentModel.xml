@@ -3,6 +3,7 @@
   <component name="ContentModelStore">
     <e p="$PROJECT_DIR$" t="IncludeRecursive">
       <e p="Assembly-CSharp-Editor-firstpass.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Plugins" t="Include">
@@ -242,6 +243,35 @@
               <e p="TMPro_Surface.cginc" t="Include" />
             </e>
           </e>
+        </e>
+        <e p="Tinylytics_AnalyticsTool" t="Include">
+          <e p="_DemoScene" t="Include">
+            <e p="example_customdata.cs" t="Include" />
+            <e p="example_playerscript.cs" t="Include" />
+            <e p="example_senddataviacode.cs" t="Include" />
+          </e>
+          <e p="Backend" t="Include">
+            <e p="AnalyticsInitializer.cs" t="Include" />
+            <e p="AnalyticsManager.cs" t="Include" />
+            <e p="AnalyticsTrigger.cs" t="Include" />
+            <e p="BackendManager.cs" t="Include" />
+            <e p="Tinylytics_Config.cs" t="Include" />
+            <e p="TrackableProperty" t="Include">
+              <e p="Editor" t="Include">
+                <e p="CustomEnumPopup.cs" t="Include" />
+                <e p="TrackableFieldDrawer.cs" t="Include" />
+                <e p="ValuePropertyDrawer.cs" t="Include" />
+              </e>
+              <e p="TrackableField.cs" t="Include" />
+              <e p="TrackableProperty.cs" t="Include" />
+              <e p="ValueProperty.cs" t="Include" />
+            </e>
+          </e>
+          <e p="Editor" t="Include">
+            <e p="AnalyticsTrackerEditor.cs" t="Include" />
+            <e p="Tinylytics_ConfigEditor.cs" t="Include" />
+          </e>
+          <e p="Tinylytics_MetricWidget.cs" t="Include" />
         </e>
       </e>
       <e p="Library" t="ExcludeRecursive" />

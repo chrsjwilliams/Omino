@@ -1,5 +1,6 @@
 ﻿
 using Beat;
+using Tinylytics;
 
 public class Services
 {
@@ -26,4 +27,6 @@ public class Services
     public static Clock Clock { get; set; }
 
     public static TechDataLibrary TechDataLibrary { get; set; }
+    
+    public static AnalyticsManager Analytics { get; set; }
 }
