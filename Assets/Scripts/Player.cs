@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
 
     protected readonly Vector3 handSpacing = new Vector3(2.35f, -2.35f, 0f);
     protected readonly Vector3 handOffset = new Vector3(-9.25f, 1.75f, 0f);
-    protected const int startingHandSize = 4;
+    protected const int startingHandSize = 3;
     protected const int maxHandSize = 5;
     protected const int piecesPerHandRow = 5;
     protected const int baseMaxResources = 3;
