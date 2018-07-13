@@ -10,7 +10,9 @@ namespace Tinylytics{
 		
 		private const string TOTAL_PLAYTIME = "TOTALPLAYTIME";
 		private const string PLAYED_TUTORIAL = "PLAYEDTUTORIAL";
+		private const string TOTAL_SESSIONS = "TOTALSESSIONS";
 		private float _totalPlaytime = 0.0f;
+		private int _totalSessions = 0;
 		private float _sessionStartTime = 0.0f;
 		private float _lastPlaytimeLog = 0.0f;
 		private bool _pauseCallSent = false;
@@ -44,6 +46,11 @@ namespace Tinylytics{
 				_playedTutorial = PlayerPrefs.GetInt(PLAYED_TUTORIAL);
 			}
 
+			if (PlayerPrefs.HasKey(TOTAL_SESSIONS))
+			{
+				_totalSessions = PlayerPrefs.GetInt(TOTAL_SESSIONS);
+			}
+
 			_UpdateTotalPlaytime();
 			_taskManager = new TaskManager();
 			_LoadIntermittentLoggingTask();
@@ -59,7 +66,7 @@ namespace Tinylytics{
 		private void _LoadIntermittentLoggingTask()
 		{
 			ActionTask log = new ActionTask(_IntermittentLogs);
-			Wait wait = new Wait(1.0f);
+			Wait wait = new Wait(logInterval);
 			ActionTask reset = new ActionTask(_LoadIntermittentLoggingTask);
 
 			log.Then(wait);
@@ -80,13 +87,15 @@ namespace Tinylytics{
 				if (!_pauseCallSent)
 				{
 					BackendManager.SendData("Session Playtime", (Time.time - Instance._sessionStartTime).ToString());
+					PlayerPrefs.SetInt(TOTAL_SESSIONS, _totalSessions + 1);
+					PlayerPrefs.Save();
 					_pauseCallSent = true;
 				}
 			}
-			else
+			else if (_pauseCallSent)
 			{
-				if (_pauseCallSent)
-					_sessionStartTime = Time.time;
+				_sessionStartTime = Time.time;
+				_totalSessions = PlayerPrefs.GetInt(TOTAL_SESSIONS);
 				_pauseCallSent = false;
 			}
 		}
@@ -122,6 +131,19 @@ namespace Tinylytics{
 		public void ELOTotalWins(int totalWins)
 		{
 			LogMetric("ELO Total Wins", totalWins.ToString());
+		}
+
+		public void PlayedTutorial()
+		{
+			if (_playedTutorial == 0)
+			{
+				_UpdateTotalPlaytime();
+				LogMetric("Total Time Until Tutorial Played", _totalPlaytime.ToString());
+				LogMetric("Number of Sessions Until Tutorial Played", _totalSessions.ToString());
+				_playedTutorial = 1;
+				PlayerPrefs.SetInt(PLAYED_TUTORIAL, 1);
+				PlayerPrefs.Save();
+			}
 		}
 	}
 }

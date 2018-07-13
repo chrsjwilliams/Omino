@@ -256,7 +256,10 @@ public class GameSceneScript : Scene<TransitionData>
         TogglePlayerHandLock(false);
         if (Services.MapManager.currentLevel != null &&
             Services.MapManager.currentLevel.tooltips.Length > 0)
+        {
             Services.TutorialManager.Init();
+            Services.Analytics.PlayedTutorial();
+        }
 
         if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
         {
