@@ -41,7 +41,7 @@ public class ShieldedPieces : TechBuilding
 
     public override string GetDescription()
     {
-        return "Newly placed pieces gain a temporary shield. They can't be destroyed until " +
+        return "Pieces gain a temporary shield after they're placed. They can't be destroyed until " +
             ShieldDuration + " seconds after placement.";
     }
 }

@@ -9,6 +9,7 @@ public static class ELOManager
     private const int winStreakLength = 3;
     private const float winStreakHandicapIncrement = 0.05f;
     private const float minHandicap = -0.5f;
+    public const float baseHandicap = -0.2f;
     private const string fileName = "eloSaveData";
     public static EloData eloData { get; private set; }
 
@@ -50,7 +51,7 @@ public static class ELOManager
 
     public static void OnGameWin()
     {
-        int prevElo = Mathf.RoundToInt(100 * (1 + eloData.handicapLevel));
+        int prevElo = eloData.GetRating();
         eloData.totalWins += 1;
         eloData.winStreakCount += 1;
         if(eloData.winStreakCount >= winStreakLength)
@@ -61,17 +62,17 @@ public static class ELOManager
         {
             SetHandicap(eloData.handicapLevel + handicapIncrement);
         }
-        int newElo = Mathf.RoundToInt(100 * (1 + eloData.handicapLevel));
+        int newElo = eloData.GetRating();
         Services.UIManager.eloUIManager.OnGameEnd(true, prevElo, newElo);
         SaveData();
     }
 
     public static void OnGameLoss()
     {
-        int prevElo = Mathf.RoundToInt(100 * (1 + eloData.handicapLevel));
+        int prevElo = eloData.GetRating();
         eloData.winStreakCount = 0;
         SetHandicap(eloData.handicapLevel - handicapIncrement);
-        int newElo = Mathf.RoundToInt(100 * (1 + eloData.handicapLevel));
+        int newElo = eloData.GetRating();
         Services.UIManager.eloUIManager.OnGameEnd(false, prevElo, newElo);
         SaveData();
     }
@@ -83,7 +84,7 @@ public static class ELOManager
 
     public static void ResetRank()
     {
-        SetHandicap(0);
+        SetHandicap(baseHandicap);
         SaveData();
     }
 }
@@ -105,8 +106,13 @@ public class EloData
     public EloData()
     {
         winStreakCount = 0;
-        handicapLevel = 0;
+        handicapLevel = ELOManager.baseHandicap;
         totalWins = 0;
+    }
+
+    public int GetRating()
+    {
+        return Mathf.RoundToInt(100 * (1 + handicapLevel));
     }
 }
 
