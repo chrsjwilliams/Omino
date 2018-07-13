@@ -9,10 +9,12 @@ namespace Tinylytics{
 		public float logInterval = 10.0f; // Logging interval in seconds
 		
 		private const string TOTAL_PLAYTIME = "TOTALPLAYTIME";
+		private const string PLAYED_TUTORIAL = "PLAYEDTUTORIAL";
 		private float _totalPlaytime = 0.0f;
 		private float _sessionStartTime = 0.0f;
 		private float _lastPlaytimeLog = 0.0f;
 		private bool _pauseCallSent = false;
+		private int _playedTutorial = 0;
 		private TaskManager _taskManager;
 
 		private static AnalyticsManager _instance;
@@ -35,6 +37,11 @@ namespace Tinylytics{
 			if (PlayerPrefs.HasKey(TOTAL_PLAYTIME))
 			{
 				_totalPlaytime = PlayerPrefs.GetFloat(TOTAL_PLAYTIME);
+			}
+
+			if (PlayerPrefs.HasKey(PLAYED_TUTORIAL))
+			{
+				_playedTutorial = PlayerPrefs.GetInt(PLAYED_TUTORIAL);
 			}
 
 			_UpdateTotalPlaytime();
