@@ -71,6 +71,13 @@ public class GameSceneScript : Scene<TransitionData>
             }
         }
 
+        if(Services.GameManager.mode == TitleSceneScript.GameMode.Campaign)
+        {
+            float[] handicaps = new float[2];
+            handicaps[0] = 1;
+            handicaps[1] = HandicapSystem.tutorialHandicapLevels[Services.MapManager.currentLevel.campaignLevelNum - 1];
+        }
+
         if (evolutionMode)
         {
             Services.GameManager.InitPlayersEvoMode();

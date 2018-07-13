@@ -12,6 +12,8 @@ public class HandicapSystem : MonoBehaviour
     public Slider p1HandicapSlider;
     public Slider p2HandicapSlider;
 
+    public static float[] tutorialHandicapLevels { get; private set; }
+
     [SerializeField]
     private float lerpSpeed;
 
@@ -34,7 +36,7 @@ public class HandicapSystem : MonoBehaviour
     {
         handicapValues = new float[] { 1, 1 };
         lerpSpeed = 18.0f;
-
+        tutorialHandicapLevels = new float[] { 0, 0.75f, 0.78f, 0.8f };
         singlePlayerMode = ((GameOptionsSceneScript)Services.Scenes.CurrentScene).humanPlayers[1] ? false : true;
         UpdateHandicapText();
 

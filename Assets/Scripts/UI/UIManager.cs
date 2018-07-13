@@ -217,14 +217,15 @@ public class UIManager : MonoBehaviour {
             new GameObject[4]
             {
                 resourceCounters[0].gameObject,
-                normalDrawMeters[0].transform.parent.gameObject,
-                destructorDrawMeters[0].transform.parent.gameObject,
-                techPowerUpIconArray[0].transform.parent.gameObject
+                normalDrawMeters[0].transform.parent.gameObject,           
+                techPowerUpIconArray[0].transform.parent.gameObject,
+                destructorDrawMeters[0].transform.parent.gameObject
             },
-            new GameObject[3]
+            new GameObject[4]
             {
                 resourceCounters[1].gameObject,
                 normalDrawMeters[1].transform.parent.gameObject,
+                techPowerUpIconArray[1].transform.parent.gameObject,
                 destructorDrawMeters[1].transform.parent.gameObject
             }
         };

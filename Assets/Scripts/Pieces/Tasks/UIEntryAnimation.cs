@@ -39,8 +39,9 @@ public class UIEntryAnimation : Task
         blueprintStartPositions = new Vector3[blueprints.Count];
         blueprintTargetPositions = new Vector3[blueprints.Count];
 
-        if (showDestructors) meters[meters.Length - 1].SetActive(false);
+        if (!showDestructors) meters[meters.Length - 1].SetActive(false);
         
+
         meterLength = showDestructors ? meters.Length : meters.Length - 1;
 
         for (int i = 0; i < meterLength; i++)
@@ -65,6 +66,7 @@ public class UIEntryAnimation : Task
             }
             blueprintStartPositions[i] = blueprint.holder.transform.localPosition;
         }
+
     }
 
     internal override void Update()
