@@ -640,15 +640,17 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         if (optionsMenuActive)
         {
             ToggleOptionMenu();
-            if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
-            {
-                eloUI.gameObject.SetActive(true);
-            }
-            else if(Services.GameManager.mode != TitleSceneScript.GameMode.Campaign &&
-                    Services.GameManager.mode != TitleSceneScript.GameMode.DungeonRun)
-            {
-                SlideInLevelButtons();
-            }
+			if (Services.GameManager.mode == TitleSceneScript.GameMode.TwoPlayers ||
+			            Services.GameManager.mode == TitleSceneScript.GameMode.PlayerVsAI ||
+			            Services.GameManager.mode == TitleSceneScript.GameMode.Demo) {
+				SlideInLevelButtons ();
+			} else {
+				SlideOutOptionsButton (false);
+			}
+			if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
+			{
+				eloUI.gameObject.SetActive(true);
+			}
         }
         else
         {
