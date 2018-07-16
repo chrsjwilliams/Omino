@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour {
 
+    private static bool[] viewedTutorial = new bool[] { false, false, false, false };
     private TutorialTooltip currentTooltip;
     public GameObject tutorialTooltipPrefab;
     private int currentIndex;
@@ -14,6 +15,8 @@ public class TutorialManager : MonoBehaviour {
     private TooltipInfo[] tooltipInfos { get { return Services.MapManager.currentLevel.tooltips; } }
     [SerializeField]
     private Transform tooltipZone;
+    [SerializeField]
+    private Button skipTutorialButton;
     private int humanPlayerNum = 1;
     private int placementToolTipIndex = 5;
 
@@ -24,11 +27,31 @@ public class TutorialManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        skipTutorialButton.gameObject.SetActive(false);
 	}
 	
+    public void DisplaySkipButton()
+    {
+        if (Services.GameManager.mode != TitleSceneScript.GameMode.Campaign) return;
+        if (viewedTutorial[Services.GameManager.levelSelected.campaignLevelNum - 1])
+        {
+            skipTutorialButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            skipTutorialButton.gameObject.SetActive(false);
+        }
+    }
+
 	// Update is called once per frame
 	void Update () {
         tm.Update();
+
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            SkipTutorial();
+        }
+
 	}
 
     public void Init()
@@ -67,19 +90,29 @@ public class TutorialManager : MonoBehaviour {
 
     private void MoveToStep(int index)
     {
-        
 
-        if(index > tooltipInfos.Length - 1 || index < 0)
+        
+        if (index > tooltipInfos.Length - 1 || index < 0)
         {
             Debug.Log("Out of Range");
         }
         else
         {
             currentIndex = index;
+            
+            currentTooltip.Dismiss();
             CreateTooltip();
             if (!tooltipInfos[currentIndex].dismissable)
                 Services.GameEventManager.Register<PiecePlaced>(OnPiecePlaced);
         }
+    }
+
+    public void SkipTutorial()
+    {
+        backDim.SetActive(false);
+        MoveToStep(tooltipInfos.Length - 1);
+        Services.GameScene.UnpauseGame(true);
+        skipTutorialButton.gameObject.SetActive(false);
     }
 
     private void OnPiecePlaced(PiecePlaced e)
@@ -142,14 +175,10 @@ public class TutorialManager : MonoBehaviour {
         currentTooltip = Instantiate(Services.Prefabs.TutorialTooltip,
             tooltipZone).GetComponent<TutorialTooltip>();
         TooltipInfo nextTooltipInfo = tooltipInfos[currentIndex];
-        //nextTooltipInfo.imageColor = Color.black;
-
-        //if (humanPlayerNum == 1) nextTooltipInfo.subImageColor = Services.GameManager.AdjustColorAlpha(Services.GameManager.Player1ColorScheme[0], 0.5f);
-        //else nextTooltipInfo.subImageColor = Services.GameManager.AdjustColorAlpha(Services.GameManager.Player2ColorScheme[0], 0.5f);
-
 
         currentTooltip.Init(nextTooltipInfo);
 
+        
         if(nextTooltipInfo.tag == "Do Not Display")
         {
             currentTooltip.textBox.rectTransform.sizeDelta = new Vector2(0, 0);
@@ -171,6 +200,11 @@ public class TutorialManager : MonoBehaviour {
         }
         
         Services.UIManager.tooltipsDisabled = !nextTooltipInfo.enableTooltips;
+
+        if(currentIndex == tooltipInfos.Length -1)
+        {
+            viewedTutorial[Services.GameManager.levelSelected.campaignLevelNum - 1] = true;
+        }
     }
 }
 

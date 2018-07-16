@@ -119,6 +119,8 @@ public class GameManager : MonoBehaviour
 
     public bool eloTrackingMode;
 
+    
+
     private void Awake()
     {
         Assert.raiseExceptions = true;

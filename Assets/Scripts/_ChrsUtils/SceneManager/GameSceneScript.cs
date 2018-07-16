@@ -318,9 +318,9 @@ public class GameSceneScript : Scene<TransitionData>
             .Then(uiEntry)
             .Then(handEntry)
             .Then(new ActionTask(StartGame));
-
         
         Services.GameScene.tm.Do(startSequence);
+        Services.GameScene.tm.Do(new ActionTask(Services.TutorialManager.DisplaySkipButton));
     }
 
     public void PauseGame(bool tutorialToolTipActive)

@@ -374,6 +374,8 @@ public class UIManager : MonoBehaviour {
 
     void ScrollBanners()
     {
+
+        
         bannerScrollTimeElapsed += Time.deltaTime;
         for (int i = 0; i < victoryBanners.Length; i++)
         {
