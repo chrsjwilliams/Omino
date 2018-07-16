@@ -25,7 +25,7 @@ MonoBehaviour:
   blueprintsEnabled: 1
   stackDestructorInOpeningHand: 0
   tooltips:
-  - tag: 
+  - tag: Last Thing
     text: One last thing!
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
@@ -50,7 +50,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: 
+  - tag: Mix Up
     text: To mix things up, there are special <color=#6CAE75>Tech Structures</color>
       spread across the map!
     location: {x: -350, y: -200}
@@ -76,7 +76,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: 
+  - tag: Claim
     text: To claim a <color=#6CAE75>Tech Structure</color>, simply connect to it.
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
@@ -101,7 +101,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: 
+  - tag: Not Destroyed
     text: <color=#6CAE75>Tech Structures</color> cannot be destroyed, but you can
       reclaim them from your opponent if you cut them off!
     location: {x: 0, y: 0}
@@ -127,7 +127,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: 
+  - tag: Tap and Hold
     text: Each <color=#6CAE75>Tech Structure</color> grants a unique technology. Tap
       and hold on a structure to read about its effect.
     location: {x: 440, y: 320}
@@ -153,7 +153,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: 
+  - tag: You Decide
     text: You decide what to prioritize! And don't forget about <color=#7D7DFF>Blueprints</color>!
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
@@ -175,6 +175,31 @@ MonoBehaviour:
     subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
     subImage2Location: {x: 0, y: 0}
     secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - tag: Do Not Display
+    text: 
+    location: {x: 0, y: 0}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    dismissable: 0
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    imageScale: {x: 0, y: 0}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
