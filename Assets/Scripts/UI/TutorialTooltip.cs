@@ -22,6 +22,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
     private Image arrow;
     
     public Image textBox;
+    private bool lerps;
     [SerializeField]
     private Image image;
     private Vector3 imagePrimaryPosition;
@@ -78,11 +79,11 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             RotationSpecificToolTipUpdates();
         }
         
-        if (imageSecondaryPosition.z != -1)
+        if (lerps)
         {
             image.rectTransform.localPosition = Vector3.Lerp(image.rectTransform.localPosition, imageSecondaryPosition, EasingEquations.Easing.QuadEaseOut(Time.deltaTime));
 
-            if (label == "Place Piece" && image.rectTransform.localPosition.x > imageSecondaryPosition.x * 0.95f)
+            if (label == "Place Piece" && image.rectTransform.localPosition.x > imageSecondaryPosition.x - 1)
             {
 
                 image.rectTransform.localPosition = imagePrimaryPosition;
@@ -129,6 +130,8 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         dismissText.enabled = info.dismissable;
 
         dismissible = info.dismissable;
+
+        lerps = info.imageLerps;
 
         imagePrimaryPosition = info.imageLocation;
         image.rectTransform.localPosition = imagePrimaryPosition;

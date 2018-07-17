@@ -31,6 +31,7 @@ MonoBehaviour:
     windowLocation: {x: -340, y: -340}
     windowSize: {x: 250, y: 250}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: -1}
     imageScale: {x: 0, y: 0}
@@ -56,6 +57,7 @@ MonoBehaviour:
     windowLocation: {x: 340, y: 340}
     windowSize: {x: 260, y: 260}
     haveImage: 1
+    imageLerps: 0
     imageLocation: {x: 350, y: -375}
     secondaryImageLocation: {x: 0, y: 0, z: -1}
     imageScale: {x: 1, y: 1}
@@ -72,7 +74,8 @@ MonoBehaviour:
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - label: Hand
-    text: This is your hand. You can play pieces from here by tapping and dragging.
+    text: This is your hand. You can play pieces from here by dragging them onto the
+      board.
     location: {x: -300, y: -400}
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
@@ -81,34 +84,10 @@ MonoBehaviour:
     windowLocation: {x: -340, y: -900}
     windowSize: {x: 800, y: 200}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: -1}
     imageScale: {x: 0, y: 0}
-    imageRotation: 0
-    imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: -1}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: -1}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - label: Place Piece
-    text: Try placing a piece now!
-    location: {x: -300, y: 700}
-    arrowLocation: {x: 0, y: 0}
-    arrowRotation: 0
-    dismissable: 0
-    enableTooltips: 0
-    windowLocation: {x: 0, y: 0}
-    windowSize: {x: 0, y: 0}
-    haveImage: 1
-    imageLocation: {x: -260, y: -1640}
-    secondaryImageLocation: {x: 190, y: -1010, z: 0}
-    imageScale: {x: 0.5, y: 0.5}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
@@ -131,9 +110,36 @@ MonoBehaviour:
     windowLocation: {x: -340, y: -340}
     windowSize: {x: 250, y: 250}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: -1}
     imageScale: {x: 0, y: 0}
+    imageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: -1}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: -1}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - label: Place Piece
+    text: Try placing a piece now!
+    location: {x: 400, y: -300}
+    arrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    dismissable: 0
+    enableTooltips: 0
+    windowLocation: {x: -340, y: -340}
+    windowSize: {x: 250, y: 250}
+    haveImage: 1
+    imageLerps: 1
+    imageLocation: {x: -980, y: -660}
+    secondaryImageLocation: {x: -540, y: 0, z: 0}
+    imageScale: {x: 0.5, y: 0.5}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
@@ -157,6 +163,7 @@ MonoBehaviour:
     windowLocation: {x: 225, y: -775}
     windowSize: {x: 250, y: 180}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: -1}
     imageScale: {x: 0, y: 0}
@@ -182,6 +189,7 @@ MonoBehaviour:
     windowLocation: {x: 420, y: -785}
     windowSize: {x: 130, y: 180}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: -1}
     imageScale: {x: 0, y: 0}
@@ -207,6 +215,7 @@ MonoBehaviour:
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: -1}
     imageScale: {x: 0, y: 0}
@@ -232,6 +241,7 @@ MonoBehaviour:
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 1
+    imageLerps: 1
     imageLocation: {x: -260, y: -1640}
     secondaryImageLocation: {x: -260, y: -1000, z: 0}
     imageScale: {x: 0.5, y: 0.5}
@@ -257,6 +267,7 @@ MonoBehaviour:
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 350, y: -200}
     secondaryImageLocation: {x: 0, y: 0, z: -1}
     imageScale: {x: 0, y: 0}
@@ -282,6 +293,7 @@ MonoBehaviour:
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
     imageScale: {x: 0, y: 0}

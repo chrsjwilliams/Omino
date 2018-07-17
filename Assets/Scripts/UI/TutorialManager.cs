@@ -309,6 +309,7 @@ public class TooltipInfo
     public Vector2 windowLocation;
     public Vector2 windowSize;
     public bool haveImage;
+    public bool imageLerps;
     public Vector2 imageLocation;
     public Vector3 secondaryImageLocation = Vector3.back;
     public Vector2 imageScale;
