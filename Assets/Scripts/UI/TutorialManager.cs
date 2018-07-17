@@ -9,11 +9,11 @@ public class TutorialManager : MonoBehaviour
     private static bool[] viewedTutorial = new bool[] { false, false, false, false };
     private TutorialTooltip currentTooltip;
     public GameObject tutorialTooltipPrefab;
-    private int currentIndex;
+    public int currentIndex { get; private set; }
     public GameObject backDim;
     private TaskManager tm;
     public float delayDur;
-    private TooltipInfo[] tooltipInfos { get { return Services.MapManager.currentLevel.tooltips; } }
+    public TooltipInfo[] tooltipInfos { get { return Services.MapManager.currentLevel.tooltips; } }
     [SerializeField]
     private Transform tooltipZone;
     [SerializeField]
@@ -206,11 +206,6 @@ public class TutorialManager : MonoBehaviour
             currentTooltip.textBox.rectTransform.sizeDelta = new Vector2(575, 575);
         }
 
-        //if(nextTooltipInfo.tag == "Rotate")
-        {
-            
-        }
-
         if (nextTooltipInfo.dismissable)
         {
             Services.GameScene.PauseGame(true);
@@ -243,9 +238,7 @@ public class TutorialManager : MonoBehaviour
 
     protected void CheckTouchForRotateInput(Vector3 e)
     {
-        Debug.Log("Rot");
-        completedRotation = true;
-        
+        completedRotation = true;      
     }
 
     protected void OnTouchDown(TouchDown e)

@@ -161,6 +161,12 @@ public abstract class TechBuilding : Polyomino
                 || !Services.GameScene.gamePaused) &&
             !Services.GameManager.disableUI)
         {
+            if(Services.GameManager.mode == TitleSceneScript.GameMode.Campaign &&
+                Services.TutorialManager.currentIndex == Services.TutorialManager.tooltipInfos.Length - 1)
+            {
+                Services.GameScene.PauseGame();
+            }
+
             if (!(Services.GameManager.Players[0] is AIPlayer))
             {
                 Tooltip tooltipLeft = GameObject.Instantiate(Services.Prefabs.Tooltip,
@@ -194,5 +200,10 @@ public abstract class TechBuilding : Polyomino
     {
         DestroyTooltips();
         touchID = -1;
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Campaign &&
+            Services.TutorialManager.currentIndex == Services.TutorialManager.tooltipInfos.Length - 1)
+        {
+            Services.GameScene.UnpauseGame();
+        }
     }
 }
