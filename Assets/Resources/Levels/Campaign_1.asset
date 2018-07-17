@@ -21,7 +21,7 @@ MonoBehaviour:
   blueprintsEnabled: 0
   stackDestructorInOpeningHand: 0
   tooltips:
-  - tag: Your Base
+  - label: Your Base
     text: This is your base.
     location: {x: 400, y: -300}
     arrowLocation: {x: -450, y: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Win Condition
+  - label: Win Condition
     text: Build a road to the opponent's base to win.
     location: {x: -300, y: 400}
     arrowLocation: {x: 450, y: 0}
@@ -71,7 +71,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Hand
+  - label: Hand
     text: This is your hand. You can play pieces from here by tapping and dragging.
     location: {x: -300, y: -400}
     arrowLocation: {x: 0, y: -250}
@@ -96,9 +96,9 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Place Piece
+  - label: Place Piece
     text: Try placing a piece now!
-    location: {x: 400, y: -500}
+    location: {x: -300, y: 700}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
@@ -106,8 +106,8 @@ MonoBehaviour:
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 1
-    imageLocation: {x: -950, y: -440}
-    secondaryImageLocation: {x: -530, y: 187, z: 0}
+    imageLocation: {x: -260, y: -1640}
+    secondaryImageLocation: {x: 190, y: -1010, z: 0}
     imageScale: {x: 0.5, y: 0.5}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
@@ -121,7 +121,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Connection
+  - label: Connected
     text: All of your pieces must connect back to your base.
     location: {x: 400, y: -300}
     arrowLocation: {x: -450, y: 0}
@@ -146,7 +146,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Energy
+  - label: Energy
     text: You need 1 <color=#F7A907FF>ENERGY</color> to place a piece. You get energy
       over time.
     location: {x: 270, y: -275}
@@ -172,7 +172,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Draw
+  - label: Draw
     text: You also draw new pieces into your hand over time.
     location: {x: 450, y: -300}
     arrowLocation: {x: 40, y: -250}
@@ -197,9 +197,9 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 1}
-  - tag: Show Me
+  - label: Show Me
     text: 'You can <color=#6CAE75>ROTATE</color> a piece before placing it. '
-    location: {x: 400, y: -500}
+    location: {x: -300, y: 700}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
@@ -222,9 +222,9 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 1}
-  - tag: Rotate
+  - label: Rotate
     text: Try using your index finger to drag and your middle finger to <color=#6CAE75>ROTATE</color>!
-    location: {x: 400, y: -500}
+    location: {x: -300, y: 700}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
@@ -232,8 +232,8 @@ MonoBehaviour:
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 1
-    imageLocation: {x: -950, y: -440}
-    secondaryImageLocation: {x: -625, y: -50, z: 0}
+    imageLocation: {x: -260, y: -1640}
+    secondaryImageLocation: {x: -260, y: -1000, z: 0}
     imageScale: {x: 0.5, y: 0.5}
     imageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
@@ -247,7 +247,7 @@ MonoBehaviour:
     subImage2Scale: {x: 1, y: 1}
     subImage2Rotation: 0
     subImage2Color: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 1}
-  - tag: Win
+  - label: Go Win
     text: Try connecting to the opposing base to win!
     location: {x: 400, y: -500}
     arrowLocation: {x: 0, y: 0}
@@ -272,7 +272,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Do Not Display
+  - label: Do Not Display
     text: 
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}

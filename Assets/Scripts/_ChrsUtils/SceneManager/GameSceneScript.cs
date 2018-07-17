@@ -290,30 +290,41 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void StartGameSequence()
     {
+        TaskTree startSequence = new TaskTree(new ScrollReadyBanners(Services.UIManager.readyBanners, false));
+        TaskTree uiEntry;
+        TaskTree handEntry;
         if (Services.GameManager.mode == TitleSceneScript.GameMode.Campaign &&
             Services.GameManager.levelSelected.campaignLevelNum == 1)
         {
-            showDestructors = false;
+            showDestructors = false;          
+            uiEntry =
+                new TaskTree(new EmptyTask(),
+                    new TaskTree(
+                        new UIEntryAnimation(Services.UIManager.meters[0], Services.GameManager.Players[0].blueprints, showDestructors)));
+
+           handEntry =
+           new TaskTree(new EmptyTask(),
+               new TaskTree(
+               new HandPieceEntry(Services.GameManager.Players[0].hand)));
         }
         else
         {
             showDestructors = true;
-        }
-        
-        TaskTree startSequence =
-            new TaskTree(new ScrollReadyBanners(Services.UIManager.readyBanners, false));
-        TaskTree uiEntry =
-            new TaskTree(new EmptyTask(),
-                new TaskTree(
-                    new UIEntryAnimation(Services.UIManager.meters[0], Services.GameManager.Players[0].blueprints, showDestructors)),
-                new TaskTree(
-                    new UIEntryAnimation(Services.UIManager.meters[1], Services.GameManager.Players[1].blueprints, showDestructors)));
-        TaskTree handEntry = 
+            uiEntry =
+                new TaskTree(new EmptyTask(),
+                    new TaskTree(
+                        new UIEntryAnimation(Services.UIManager.meters[0], Services.GameManager.Players[0].blueprints, showDestructors)),
+                    new TaskTree(
+                        new UIEntryAnimation(Services.UIManager.meters[1], Services.GameManager.Players[1].blueprints, showDestructors)));
+
+            handEntry =
             new TaskTree(new EmptyTask(),
                 new TaskTree(
                 new HandPieceEntry(Services.GameManager.Players[0].hand)),
                 new TaskTree(
                     new HandPieceEntry(Services.GameManager.Players[1].hand)));
+        }       
+        
         startSequence
             .Then(uiEntry)
             .Then(handEntry)

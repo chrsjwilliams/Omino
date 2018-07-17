@@ -25,7 +25,7 @@ MonoBehaviour:
   blueprintsEnabled: 1
   stackDestructorInOpeningHand: 0
   tooltips:
-  - tag: Last Thing
+  - label: Last Thing
     text: One last thing!
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
@@ -50,7 +50,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Mix Up
+  - label: Tech Structures
     text: To mix things up, there are special <color=#6CAE75>Tech Structures</color>
       spread across the map!
     location: {x: -350, y: -200}
@@ -76,7 +76,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Claim
+  - label: Claim
     text: To claim a <color=#6CAE75>Tech Structure</color>, simply connect to it.
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
@@ -101,7 +101,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Not Destroyed
+  - label: Not Destroyed
     text: <color=#6CAE75>Tech Structures</color> cannot be destroyed, but you can
       reclaim them from your opponent if you cut them off!
     location: {x: 0, y: 0}
@@ -127,7 +127,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Tap and Hold
+  - label: Tap
     text: Each <color=#6CAE75>Tech Structure</color> grants a unique technology. Tap
       and hold on a structure to read about its effect.
     location: {x: 440, y: 320}
@@ -153,7 +153,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: You Decide
+  - label: Remember Blueprints
     text: You decide what to prioritize! And don't forget about <color=#7D7DFF>Blueprints</color>!
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
@@ -178,7 +178,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Do Not Display
+  - label: Do Not Display
     text: 
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}

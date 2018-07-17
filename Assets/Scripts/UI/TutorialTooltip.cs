@@ -11,8 +11,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
     [SerializeField]
     private int touchID;
 
-    [SerializeField]
-    private string tag;
+    public string label { get; private set; }
 
     [SerializeField]
     private TextMeshProUGUI textComponent;
@@ -79,7 +78,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             }
         }
 
-        if(tag == "Rotate")
+        if(label == "Rotate")
         {
 
             RotationSpecificToolTipUpdates();
@@ -89,7 +88,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         {
             image.rectTransform.localPosition = Vector3.Lerp(image.rectTransform.localPosition, imageSecondaryPosition, EasingEquations.Easing.QuadEaseOut(Time.deltaTime));
 
-            if (tag == "Place Piece" && image.rectTransform.localPosition.y > imageSecondaryPosition.y * 0.95f)
+            if (label == "Place Piece" && image.rectTransform.localPosition.x > imageSecondaryPosition.x * 0.95f)
             {
 
                 image.rectTransform.localPosition = imagePrimaryPosition;
@@ -108,19 +107,26 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         }
         else
         {
-            if (!haveSelectedPiece) TurnOffAnimation();
+
+            if (!haveSelectedPiece)
+            {
+                TurnOffAnimation();
+                imageSecondaryPosition = new Vector2(-260, -300);
+                image.rectTransform.localPosition = imageSecondaryPosition;
+            }
             haveSelectedPiece = true;
             textComponent.text = "While holding the piece, tap the screen with a second finger to rotate the piece";
             ToggleImageAnimation("Rotate");
+            
         }
     }
 
     public void Init(TooltipInfo info)
     {
         touchID = -1;
-        tag = info.tag;
+        label = info.label;
 
-        if(tag.Contains("Show Me"))
+        if(label.Contains("Show Me"))
         {
             dismissText.text = "Show Me";
         }
@@ -164,8 +170,8 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             arrow.transform.localRotation = Quaternion.Euler(0, 0, info.arrowRotation);
         }
 
-        ToggleImageAnimation(tag);
-        if (tag == "Rotate") TurnOffAnimation();
+        ToggleImageAnimation(label);
+        if (label == "Rotate") TurnOffAnimation();
 
 
         transform.localScale = Vector3.zero;

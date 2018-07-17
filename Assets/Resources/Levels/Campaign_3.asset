@@ -21,7 +21,7 @@ MonoBehaviour:
   blueprintsEnabled: 1
   stackDestructorInOpeningHand: 0
   tooltips:
-  - tag: Feeling Slow
+  - label: Slow
     text: Feeling slow? If you want to ramp up your economy, you can make <color=#6CAE75>Buildings</color>!
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Intro
+  - label: Blueprints
     text: There are 3 different <color=#7D7DFF>Blueprints</color>, each making a unique
       <color=#6CAE75>Building</color>.
     location: {x: 450, y: -600}
@@ -72,7 +72,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Generator
+  - label: Generator
     text: The <color=#6CAE75>Generator</color> increases your energy recharge rate,
       letting you play pieces faster!
     location: {x: 270, y: -440}
@@ -98,7 +98,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Factory
+  - label: Factory
     text: The <color=#6CAE75>Factory</color> increases the production speed of pieces,
       giving you a bigger supply!
     location: {x: 450, y: -440}
@@ -124,7 +124,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Barracks
+  - label: Barracks
     text: The <color=#6CAE75>Barracks</color> increases the production speed of <color=#E56575FF>Hammers</color>,
       to help you go on the offensive!
     location: {x: 450, y: -440}
@@ -150,7 +150,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Show Me
+  - label: Show Me
     text: To create a <color=#6CAE75>Building</color>, you must first form the appropriate
       shape on the board, then place a <color=#7D7DFF>Blueprint</color> on top.
     location: {x: 0, y: 0}
@@ -176,7 +176,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Make Building
+  - label: Make Building
     text: 
     location: {x: 90, y: 60}
     arrowLocation: {x: 0, y: 0}
@@ -201,7 +201,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: You Can Rotate
+  - label: Anytime
     text: They can be played at any time and you can <color=#6CAE75>ROTATE</color>
       them too!
     location: {x: 90, y: 60}
@@ -227,7 +227,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Do Not Display
+  - label: Do Not Display
     text: 
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
@@ -252,7 +252,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Watch Out!
+  - label: Watch Out
     text: Watch out! Your opponent has built a <color=#7D7DFF>Blueprint</color> and
       you haven't yet. I hope you can keep up!
     location: {x: 450, y: -600}
@@ -278,7 +278,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Do Not Display
+  - label: Do Not Display
     text: 
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}

@@ -21,7 +21,7 @@ MonoBehaviour:
   blueprintsEnabled: 0
   stackDestructorInOpeningHand: 1
   tooltips:
-  - tag: Intro
+  - label: 
     text: Ok, this time, we'll give you an actual opponent to play against!
     location: {x: 400, y: -500}
     arrowLocation: {x: 0, y: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Show Me Block Opponent Base
+  - label: Show Me
     text: You can destroy your opponents pieces.
     location: {x: 225, y: -295}
     arrowLocation: {x: 0, y: 0}
@@ -71,7 +71,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Attack Piece
+  - label: Attack Piece
     text: 
     location: {x: 90, y: 60}
     arrowLocation: {x: 0, y: 0}
@@ -96,7 +96,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Hammer
+  - label: Hammer
     text: If you have a <color=#E56575FF>Hammer</color>...
     location: {x: 450, y: -300}
     arrowLocation: {x: 240, y: -230}
@@ -121,7 +121,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Overlap
+  - label: Destroy
     text: and place your piece on top of your opponent's piece, it will destroy what
       is underneath.
     location: {x: 450, y: -300}
@@ -147,7 +147,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Hammer Energy
+  - label: Hammer Time
     text: You get <color=#E56575FF>Hammers</color> over time.
     location: {x: 450, y: -300}
     arrowLocation: {x: 240, y: -230}
@@ -172,7 +172,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Win
+  - label: Touch Base
     text: Touch their base before they touch yours!
     location: {x: 400, y: -500}
     arrowLocation: {x: 0, y: 0}
@@ -197,7 +197,7 @@ MonoBehaviour:
     subImage2Scale: {x: 0, y: 0}
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
-  - tag: Do Not Display
+  - label: Do Not Display
     text: 
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
