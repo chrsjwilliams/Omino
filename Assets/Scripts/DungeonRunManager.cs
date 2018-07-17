@@ -106,6 +106,7 @@ public static class DungeonRunManager
     private static void OnCompleteDungeonRun()
     {
         dungeonRunData.completedRun = true;
+        Services.Analytics.MatchEnded();
     }
 
     private static bool PlayerHasTech(BuildingType candidate)
