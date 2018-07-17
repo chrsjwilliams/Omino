@@ -56,9 +56,9 @@ MonoBehaviour:
     windowLocation: {x: 166, y: 166}
     windowSize: {x: 600, y: 600}
     haveImage: 0
-    imageLocation: {x: 170, y: 700}
+    imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: -1}
-    imageScale: {x: 0.6, y: 0.6}
+    imageScale: {x: 0, y: 0}
     imageRotation: 0
     imageColor: {r: 0.6901961, g: 0.6901961, b: 0.6901961, a: 0.54509807}
     subImageLocation: {x: 0, y: 0}
@@ -104,7 +104,7 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 630, y: -785}
-    windowSize: {x: 240, y: -230}
+    windowSize: {x: 250, y: 230}
     haveImage: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
@@ -177,7 +177,7 @@ MonoBehaviour:
     location: {x: 400, y: -500}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
-    dismissable: 0
+    dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
