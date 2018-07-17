@@ -443,7 +443,16 @@ public class Player : MonoBehaviour
             {
                 pieceSize += 1;
             }
-            int numTypes = Polyomino.pieceTypes[pieceSize];
+
+            int numTypes;
+            if (Services.MapManager.currentLevel.campaignLevelNum == 1)
+            {
+                numTypes = Polyomino.pieceTypes[pieceSize] - 1;
+            }
+            else
+            {
+                numTypes = Polyomino.pieceTypes[pieceSize];
+            }
             for (int index = 0; index < numTypes; index++)
             {
                 normalDeck.Add(new Polyomino(pieceSize, index, this));
