@@ -122,6 +122,8 @@ public class UIManager : MonoBehaviour {
     private const float attackUIFillMin = 0.08f;
     private const float attackUIFillMax = 0.94f;
 
+    private bool showcampaignCompleteMenu = true;
+
     public EloInGameUiManager eloUIManager;
     public DungeonRunInGameUIManager dungeonRunUIManager;
 
@@ -801,6 +803,11 @@ public class UIManager : MonoBehaviour {
             Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
         {
             Services.GameScene.ReturnToLevelSelect();
+        }
+        else if(Services.GameManager.mode == TitleSceneScript.GameMode.Campaign)
+        {
+            showcampaignCompleteMenu = !showcampaignCompleteMenu;
+            campaignLevelCompleteMenu.SetActive(showcampaignCompleteMenu);
         }
         else
         {
