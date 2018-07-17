@@ -124,6 +124,13 @@ public class LevelSelectButtonEntranceTask : Task
                     
                 }
             }
+            else
+            {
+                for (int i = 0; i < buttons.Length; i++)
+                {
+                    buttons[i].transform.localPosition = targetPositions[i];
+                }
+            }
         }   
     }
 }
@@ -174,10 +181,10 @@ public class LevelSelectTextEntrance: Task
             EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
         }
 
-        if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
-    }
-
-    protected override void OnSuccess()
-    {
+        if (timeElapsed >= duration)
+        {
+            SetStatus(TaskStatus.Success);
+            levelSelectText.transform.localPosition = targetPos;
+        }
     }
 }

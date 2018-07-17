@@ -7,7 +7,7 @@ using TMPro;
 
 public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 {
-
+    private bool canView = true;
     [SerializeField]
     private int touchID;
 
@@ -51,12 +51,6 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         textComponent.richText = true;
     }
 
-
-    private void OnDestroy()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update () {
         if (scalingUp)
@@ -98,8 +92,6 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     void RotationSpecificToolTipUpdates()
     {
-        
-
         if (Services.GameManager.Players[0].selectedPiece == null && !haveSelectedPiece)
         {
             textComponent.text = "First, drag a piece to the board";
@@ -134,7 +126,6 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         GetComponent<RectTransform>().anchoredPosition = info.location;
         textComponent.text = info.text;
 
-        //GetComponent<Button>().enabled = info.dismissable;
         dismissText.enabled = info.dismissable;
 
         dismissible = info.dismissable;
@@ -188,7 +179,6 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public void Dismiss()
     {
-        //Destroy(gameObject);
         Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
         Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
         Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
@@ -207,15 +197,6 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public void ToggleImageAnimation(string animationParam)
     {
-        //if(currentAnimation == "")
-        //{
-        //    currentAnimation = animationParam;
-        //}
-        //else if(currentAnimation != animationParam && b)
-        //{
-        //    imageAnim.SetBool(currentAnimation, false);
-        //    currentAnimation = animationParam;
-        //}
         if (HasParameter(animationParam))
         {
             imageAnim.SetBool(animationParam, true);
@@ -282,12 +263,6 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
 
         }
-
-        //Services.GameEventManager.Register<TouchMove>(OnTouchMove);
-        //Services.GameEventManager.Register<TouchUp>(OnTouchUp);
-
-        //Services.GameEventManager.Register<MouseMove>(OnMouseMoveEvent);
-        //Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
     }
 
     protected void OnTouchUp(TouchUp e)
@@ -306,13 +281,6 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public virtual void OnInputUp()
     {
-        //Services.GameEventManager.Register<TouchDown>(OnTouchDown);
-        //Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
-        //Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
-
-        //Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
-        //Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
-        //Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
     }
 
     protected void OnMouseMoveEvent(MouseMove e)
@@ -334,7 +302,6 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public virtual bool IsPointContainedWithinHolderArea(Vector3 point)
     {
-        //Debug.Assert(holder.holderSelectionArea != null);
         Vector3 extents;
         Vector3 centerPoint;
 
