@@ -11,6 +11,15 @@ public abstract class GameEvent
    
 }
 
+public class RotationEvent : GameEvent
+{
+    public RotationEvent()
+    {
+        
+    }
+}
+
+
 public class SplashDamageStatusChange : GameEvent
 {
     public Player player;

@@ -36,8 +36,13 @@ public class TutorialManager : MonoBehaviour
     {
         skipTutorialButton.gameObject.SetActive(false);
         touchID = -1;
-        Services.GameEventManager.Register<TouchDown>(OnTouchDown);
-        Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
+        Services.GameEventManager.Register<RotationEvent>(OnRotation);
+    }
+
+
+    private void OnDestroy()
+    {
+        Services.GameEventManager.Unregister<RotationEvent>(OnRotation);
     }
 
     public void DisplaySkipButton()
@@ -57,11 +62,6 @@ public class TutorialManager : MonoBehaviour
     void Update()
     {
         tm.Update();
-
-        if(Input.GetMouseButtonDown(1) && Services.GameManager.Players[0].selectedPiece != null)
-        {
-            CheckTouchForRotateInput(Services.GameManager.MainCamera.ScreenToWorldPoint(Input.mousePosition));
-        }
 
         if (Input.GetKeyDown(KeyCode.L))
         {
@@ -224,74 +224,9 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    protected void CheckTouchForRotateInput(TouchDown e)
-    {
-        if ((Vector2.Distance(
-            Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position),
-            Services.GameManager.MainCamera.ScreenToWorldPoint(Input.GetTouch(touchID).position))
-            < rotationInputRadius) ||
-            (e.touch.position.y < (Screen.height / 2 - rotationDeadZone)))
-        {
-            completedRotation = true;
-        }
-    }
-
-    protected void CheckTouchForRotateInput(Vector3 e)
+    protected void OnRotation(RotationEvent e)
     {
         completedRotation = true;      
-    }
-
-    protected void OnTouchDown(TouchDown e)
-    {
-        Vector3 touchWorldPos =
-            Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position);
-        if (touchID == -1)
-        {
-            touchID = e.touch.fingerId;
-            OnInputDown(touchWorldPos);
-        }
-    }
-
-    protected void OnMouseDownEvent(MouseDown e)
-    {
-        Vector3 mouseWorldPos =
-            Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos);
-
-        OnInputDown(mouseWorldPos);
-    }
-
-    protected void OnTouchUp(TouchUp e)
-    {
-        if (e.touch.fingerId == touchID)
-        {
-            OnInputUp();
-            touchID = -1;
-        }
-    }
-
-    protected void OnMouseUpEvent(MouseUp e)
-    {
-        OnInputUp();
-    }
-
-    public void OnInputDown(Vector3 touchPos)
-    {
-        Services.GameEventManager.Register<TouchUp>(OnTouchUp);
-        Services.GameEventManager.Register<TouchDown>(CheckTouchForRotateInput);
-        Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
-
-        Services.GameEventManager.Register<MouseUp>(OnMouseUpEvent);
-        Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
-    }
-
-    public virtual void OnInputUp()
-    {
-        Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
-        Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
-
-        Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
-        Services.GameEventManager.Register<TouchDown>(OnTouchDown);
-        Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
     }
 }
 
