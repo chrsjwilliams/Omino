@@ -66,7 +66,7 @@ namespace Tinylytics{
 			_UpdateTotalPlaytime();
 			_taskManager = new TaskManager();
 			_LoadIntermittentLoggingTask();
-			
+
 		}
 
 		private void _InitializePlayerPrefs()
@@ -144,6 +144,12 @@ namespace Tinylytics{
 				PlayerPrefs.SetInt(TUTORIAL_TOTAL_LOSES, 0);
 			}
 
+			PlayerPrefs.Save();
+		}
+
+		private void _ResetPlayerPrefs()
+		{
+			PlayerPrefs.DeleteAll();
 			PlayerPrefs.Save();
 		}
 
