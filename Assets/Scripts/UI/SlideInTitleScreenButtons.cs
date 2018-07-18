@@ -23,7 +23,7 @@ public class SlideInTitleScreenButtons : Task
     private Vector3 buttonNotHitTarget;
 
     public SlideInTitleScreenButtons(Button[] buttons_, Vector3 startPos, GameObject title_, 
-        Button optionsButton_)
+        Button unselectedButton)
     {
         buttons = new GameObject[buttons_.Length];
         for (int i = 0; i < buttons_.Length; i++)
@@ -33,7 +33,7 @@ public class SlideInTitleScreenButtons : Task
         startPosition = startPos;
         title = title_;
         buttonParent = buttons[0].transform.parent.parent.gameObject;
-        buttonNotHit = optionsButton_;
+        buttonNotHit = unselectedButton;
     }
 
     protected override void Init()
