@@ -445,7 +445,8 @@ public class Player : MonoBehaviour
             }
 
             int numTypes;
-            if (Services.MapManager.currentLevel.campaignLevelNum == 1)
+            if (Services.MapManager.currentLevel != null &&
+                Services.MapManager.currentLevel.campaignLevelNum == 1)
             {
                 numTypes = Polyomino.pieceTypes[pieceSize] - 1;
             }
