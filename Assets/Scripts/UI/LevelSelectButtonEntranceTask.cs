@@ -184,7 +184,14 @@ public class LevelSelectTextEntrance: Task
         if (timeElapsed >= duration)
         {
             SetStatus(TaskStatus.Success);
-            levelSelectText.transform.localPosition = targetPos;
+            if (exit)
+            {
+                levelSelectText.transform.localPosition = startPos;
+            }
+            else
+            {
+                levelSelectText.transform.localPosition = targetPos;
+            }
         }
     }
 }
