@@ -1526,6 +1526,7 @@ public class Polyomino : IVertex
             if(!Services.GameManager.disableUI) SetLegalityGlowStatus();
             SetOverlaySprite();
             holder.UpdateEnergyDisplayPos();
+            Services.GameEventManager.Fire(new RotationEvent());
             Services.AudioManager.RegisterSoundEffectReverb(Services.Clips.PieceRotated, 1.0f, Clock.BeatValue.Sixteenth);
         }
     }
