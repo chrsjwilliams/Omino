@@ -67,6 +67,7 @@ public static class ELOManager
         Services.Analytics.ELOWin(true);
         Services.Analytics.ELOStreak(eloData.winStreakCount);
         Services.Analytics.ELOTotalWins(eloData.totalWins);
+        Services.Analytics.ELORating(eloData.GetRating());
         SaveData();
     }
 

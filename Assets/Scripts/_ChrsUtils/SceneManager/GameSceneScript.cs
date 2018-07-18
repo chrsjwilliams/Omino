@@ -255,7 +255,6 @@ public class GameSceneScript : Scene<TransitionData>
     {
         Services.Analytics.MatchEnded();
         Services.AudioManager.FadeOutLevelMusicMainMenuCall();
-        Services.Analytics.MatchEnded();
         Services.GameManager.Reset(new Reset());
     }
 

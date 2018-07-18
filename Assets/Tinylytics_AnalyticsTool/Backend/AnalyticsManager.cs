@@ -213,6 +213,11 @@ namespace Tinylytics{
 			LogMetric("ELO Win", winState.ToString());
 		}
 
+		public void ELORating(int rating)
+		{
+			LogMetric("ELO Rating", rating.ToString());
+		}
+
 		public void ELOStreak(int streakCount)
 		{
 			LogMetric("ELO Streak", streakCount.ToString());
