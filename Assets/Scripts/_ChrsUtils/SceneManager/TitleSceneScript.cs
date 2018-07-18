@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.IO;
 
 public class TitleSceneScript : Scene<TransitionData>
 {
@@ -9,6 +10,8 @@ public class TitleSceneScript : Scene<TransitionData>
     private Button[] modeButtons;
     [SerializeField]
     private Button[] optionButtons;
+    [SerializeField]
+    private Button[] playerCountButtons;
     [SerializeField]
     private Button playButton;
     [SerializeField]
@@ -23,6 +26,8 @@ public class TitleSceneScript : Scene<TransitionData>
     private Button blueprintAssistButton;
     [SerializeField]
     private GameObject title;
+    [SerializeField]
+    private Color[] uiColorScheme;
 
     public enum GameMode { TwoPlayers, PlayerVsAI, Demo, Campaign, DungeonRun, Elo }
 
@@ -40,19 +45,46 @@ public class TitleSceneScript : Scene<TransitionData>
         {
             button.gameObject.SetActive(false);
         }
+        foreach(Button button in playerCountButtons)
+        {
+            button.gameObject.SetActive(false);
+        }
         backButton.gameObject.SetActive(false);
 
         SetOptionButtonStatus(optionsButton, true);
         SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
         SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
         SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
+
+        int progress = 0;
+        if (File.Exists(GameOptionsSceneScript.progressFileName))
+        {
+            string fileText = File.ReadAllText(GameOptionsSceneScript.progressFileName);
+            int.TryParse(fileText, out progress);
+        }
+        if(progress == 4)
+        {
+            modeButtons[0].GetComponent<Image>().color = uiColorScheme[0];
+        }
+        else
+        {
+            modeButtons[0].GetComponent<Image>().color = uiColorScheme[1];
+        }
     }
 
     public void StartGame(GameMode mode)
     {
         Services.GameManager.mode = mode;
         Services.Analytics.MatchStarted(mode);
-        Task start = new SlideOutTitleScreenButtons(modeButtons);
+        Task start;
+        if (mode == GameMode.TwoPlayers)
+        {
+            start = new SlideOutTitleScreenButtons(playerCountButtons);
+        }
+        else
+        {
+            start = new SlideOutTitleScreenButtons(modeButtons);
+        }
         start.Then(new ActionTask(ChangeScene));
 
         _tm.Do(start);
@@ -99,11 +131,19 @@ public class TitleSceneScript : Scene<TransitionData>
         _tm.Update();
     }
 
+    public void OnSinglePlayerButtonSelected()
+    {
+        _tm.Do(new SlideInTitleScreenButtons(modeButtons, playerCountButtons[0].transform.localPosition,
+            title, playerCountButtons[1]));
+        playerCountButtons[1].enabled = false;
+        playerCountButtons[0].gameObject.SetActive(false);
+    }
+
     public void OnPlayHit()
     {
         playButton.gameObject.SetActive(false);
         optionsButton.enabled = false;
-        _tm.Do(new SlideInTitleScreenButtons(modeButtons, playButton.transform.localPosition, 
+        _tm.Do(new SlideInTitleScreenButtons(playerCountButtons, playButton.transform.localPosition, 
             title, optionsButton));
         backButton.gameObject.SetActive(true);
     }
