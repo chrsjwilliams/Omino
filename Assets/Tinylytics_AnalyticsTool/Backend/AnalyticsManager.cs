@@ -361,7 +361,7 @@ namespace Tinylytics{
 
 		public void DungeonRunLoss(int challengeNumber)
 		{
-			LogMetric("Dungeon Run Lost - Number of Matches Won", challengeNumber.ToString());
+			LogMetric("Dungeon Run Lost - Number of Matches Won", (challengeNumber - 1).ToString());
 		}
 
 		public void DungeonRunWin(List<BuildingType> techList)
