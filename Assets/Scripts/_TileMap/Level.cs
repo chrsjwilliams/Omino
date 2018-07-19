@@ -5,6 +5,8 @@ using System.Collections;
 public class Level : ScriptableObject
 {
     public int campaignLevelNum;
+    [TextArea]
+    public string[] objectives;
     public BuildingType[] availableStructures;
     public Coord[] structCoords;
     public int width;

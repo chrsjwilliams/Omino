@@ -47,7 +47,8 @@ public class CampaignLevelMenuEntranceTask : Task
         for (int i = 0; i < buttonTargetPositions.Length; i++)
         {
             buttonTargetPositions[i] = buttons[i].localPosition;
-            buttons[i].localPosition = buttonStartPos;
+            buttons[i].localPosition = new Vector2(buttonTargetPositions[i].x, 
+                                                    buttonStartPos.y);
         }
 
     }

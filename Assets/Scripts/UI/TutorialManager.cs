@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -25,6 +26,18 @@ public class TutorialManager : MonoBehaviour
     private int touchID = -1;
     private const float rotationInputRadius = 8f;
     private const float rotationDeadZone = 50f;
+    public string[] objectiveText { get; private set; }
+    public bool[] objectiveComplete { get; private set; }
+    [SerializeField]
+    private GameObject objectivesPanel;
+    [SerializeField]
+    private GameObject[] objectiveUI;
+    [SerializeField]
+    private Sprite success;
+    [SerializeField]
+    private Color successColor;
+    [SerializeField]
+    private Sprite notDone;
 
     private void Awake()
     {
@@ -34,15 +47,46 @@ public class TutorialManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        if(Services.GameManager.levelSelected.objectives.Length > 0)
+        {
+            ToggleObjectiveUI(true);
+            TaskTree slideInObjectives = new TaskTree(new EmptyTask(),
+                new TaskTree(new LevelSelectTextEntrance(objectivesPanel, true)));
+
+            tm.Do(slideInObjectives);
+        }
+        else
+        {
+            ToggleObjectiveUI(false);
+        }
+
+        objectiveText = new string[Services.GameManager.levelSelected.objectives.Length];
+        objectiveComplete = new bool[Services.GameManager.levelSelected.objectives.Length];
+        for (int i = 0; i < objectiveText.Length; i++)
+        {
+            objectiveText[i] = Services.GameManager.levelSelected.objectives[i];
+            objectiveUI[i].GetComponentInChildren<TextMeshProUGUI>().text = objectiveText[i];
+           
+            objectiveComplete[i] = false;
+            UpdateObjectiveUI(objectiveUI[i], objectiveComplete[i]);
+            DisplayObjective(i, false);
+        }
+
         skipTutorialButton.gameObject.SetActive(false);
         touchID = -1;
         Services.GameEventManager.Register<RotationEvent>(OnRotation);
+        Services.GameEventManager.Register<PieceRemoved>(OnPieceRemoved);
+        Services.GameEventManager.Register<ClaimedTechEvent>(OnClaimTech);
+        Services.GameEventManager.Register<GameEndEvent>(OnGameEnd);
     }
 
 
     private void OnDestroy()
     {
         Services.GameEventManager.Unregister<RotationEvent>(OnRotation);
+        Services.GameEventManager.Unregister<PieceRemoved>(OnPieceRemoved);
+        Services.GameEventManager.Unregister<ClaimedTechEvent>(OnClaimTech);
+        Services.GameEventManager.Unregister<GameEndEvent>(OnGameEnd);
     }
 
     public void DisplaySkipButton()
@@ -131,7 +175,28 @@ public class TutorialManager : MonoBehaviour
         skipTutorialButton.gameObject.SetActive(false);
     }
 
-    
+    public bool CompletionCheck()
+    {
+        for(int i = 0; i < objectiveComplete.Length; i++)
+        {
+            if (!objectiveComplete[i]) return false;
+        }
+        return true;
+    }
+
+    public void UpdateObjectiveUI(GameObject objective, bool done)
+    {
+        if(done)
+        {
+            objective.GetComponentInChildren<Image>().sprite = success;
+            objective.GetComponentInChildren<Image>().color = successColor;
+        }
+        else
+        {
+            objective.GetComponentInChildren<Image>().sprite = notDone;
+            objective.GetComponentInChildren<Image>().color = Color.black;
+        }
+    }
 
     private void OnPiecePlaced(PiecePlaced e)
     {
@@ -144,16 +209,22 @@ public class TutorialManager : MonoBehaviour
                 if (currentTooltip.label == "Rotate" && !completedRotation) return;
                 break;
             case 2:
+                if (e.piece.piecesToRemove.Count > 0)
+                {
+                    objectiveComplete[1] = true;
+                    UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);
+                }
                 if (e.piece.owner.playerNum == humanPlayerNum) return;
                 break;
             case 3:
                 int aiPlayerNumber = humanPlayerNum == 1 ? 2 : 1;
                 Player humanPlayer = Services.GameManager.Players[humanPlayerNum - 1];
                 Player aiPlayer = Services.GameManager.Players[aiPlayerNumber - 1];
-                if (humanPlayer.resourceProdLevel > 1 ||
-                    humanPlayer.normProdLevel > 1 ||
-                    humanPlayer.destProdLevel > 1)
+                if (e.piece is Blueprint)
                 {
+                    objectiveComplete[1] = true;
+                    UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);
+
                     if (currentIndex == tooltipInfos.Length - 2)
                     {
                         Services.GameEventManager.Unregister<PiecePlaced>(OnPiecePlaced);
@@ -162,9 +233,8 @@ public class TutorialManager : MonoBehaviour
                         tm.Do(dismissTask);
                     }
                     else
-                    {
+                    {                                              
                         MoveToStep(tooltipInfos.Length - 1);
-
                     }
                 }
 
@@ -177,6 +247,19 @@ public class TutorialManager : MonoBehaviour
                     humanPlayer.destProdLevel == 1)))
                     return;
                 break;
+            case 4:
+                if(!(e.piece.owner is AIPlayer))
+                {
+                    foreach(Polyomino piece in e.piece.owner.boardPieces)
+                    {
+                        if(piece is TechBuilding)
+                        {
+                            objectiveComplete[1] = true;
+                            UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);
+                        }
+                    }
+                }
+                break;
             default:
                 break;
         }
@@ -185,7 +268,28 @@ public class TutorialManager : MonoBehaviour
 
         dismissTask.Then(new ActionTask(currentTooltip.Dismiss));
         tm.Do(dismissTask);
+    }
 
+    public void OnPieceRemoved(PieceRemoved e)
+    {
+        switch (Services.MapManager.currentLevel.campaignLevelNum)
+        {
+            case 1:
+                break;
+            case 2:
+                if (e.piece.owner is AIPlayer)
+                {
+                    objectiveComplete[1] = true;
+                    UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);
+                }
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            default:
+                break;
+        }
     }
 
     private void CreateTooltip()
@@ -195,6 +299,11 @@ public class TutorialManager : MonoBehaviour
         TooltipInfo nextTooltipInfo = tooltipInfos[currentIndex];
 
         currentTooltip.Init(nextTooltipInfo);
+
+        if(nextTooltipInfo.displayObjective)
+        {
+            DisplayObjective(nextTooltipInfo.objectiveIndex, true);
+        }
 
 
         if (nextTooltipInfo.label == "Do Not Display")
@@ -227,6 +336,52 @@ public class TutorialManager : MonoBehaviour
     protected void OnRotation(RotationEvent e)
     {
         completedRotation = true;      
+
+        if(Services.GameManager.levelSelected.campaignLevelNum == 1)
+        {
+            objectiveComplete[1] = true;
+            UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);
+        }
+    }
+
+    public void OnClaimTech(ClaimedTechEvent e)
+    {
+        if (Services.GameManager.levelSelected.campaignLevelNum == 4)
+        {
+            objectiveComplete[1] = true;
+            UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);
+        }
+    }
+
+    protected void OnGameEnd(GameEndEvent e)
+    {
+        MoveToStep(tooltipInfos.Length - 1);
+        if (!(e.winner is AIPlayer))
+        {
+            objectiveComplete[0] = true;
+            UpdateObjectiveUI(objectiveUI[0], objectiveComplete[0]);
+        }
+
+
+        TaskTree slideOutObjectives = new TaskTree(new EmptyTask(),
+                new TaskTree(new LevelSelectTextEntrance(objectivesPanel,true, true)));
+
+        tm.Do(slideOutObjectives);
+    }
+
+    public void HideObjectiveUI()
+    {
+        objectivesPanel.SetActive(false);
+    }
+
+    public void ToggleObjectiveUI(bool show)
+    {
+        objectivesPanel.SetActive(show);
+    }
+
+    public void DisplayObjective(int index, bool display)
+    {
+        objectiveUI[index].SetActive(display);
     }
 }
 
@@ -236,6 +391,8 @@ public class TooltipInfo
     public string label;
     [TextArea]
     public string text;
+    public bool displayObjective;
+    public int objectiveIndex;
     public Vector2 location;
     public Vector2 arrowLocation;
     public float arrowRotation;

@@ -19,6 +19,14 @@ public class RotationEvent : GameEvent
     }
 }
 
+public class GameEndEvent : GameEvent
+{
+    public readonly Player winner;
+    public GameEndEvent(Player winner_)
+    {
+        winner = winner_;
+    }
+}
 
 public class SplashDamageStatusChange : GameEvent
 {
@@ -38,6 +46,26 @@ public class PiecePlaced : GameEvent
         piece = piece_;
     }
 }
+
+public class PieceRemoved : GameEvent
+{
+    public readonly  Polyomino piece;
+    public PieceRemoved(Polyomino piece_)
+    {
+        piece = piece_;
+    }
+}
+
+
+public class ClaimedTechEvent : GameEvent
+{
+    public readonly TechBuilding techBuilding;
+    public ClaimedTechEvent(TechBuilding techBuilding_)
+    {
+        techBuilding = techBuilding_;
+    }
+}
+
 
 public class MouseDown : GameEvent
 {

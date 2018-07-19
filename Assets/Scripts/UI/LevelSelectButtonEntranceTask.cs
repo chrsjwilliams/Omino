@@ -137,6 +137,7 @@ public class LevelSelectButtonEntranceTask : Task
 
 public class LevelSelectTextEntrance: Task
 {
+    private bool enterFromTop;
     private bool exit;
     private const float duration = 0.25f;
     private float timeElapsed;
@@ -145,10 +146,11 @@ public class LevelSelectTextEntrance: Task
     private Vector3 targetPos;
     private const float initialOffset = 1200;
 
-    public LevelSelectTextEntrance(GameObject levelSelectText_, bool exit_ = false)
+    public LevelSelectTextEntrance(GameObject levelSelectText_, bool enterFromTop_ = false, bool exit_ = false)
     {
         levelSelectText = levelSelectText_;
         exit = exit_;
+        enterFromTop = enterFromTop_;
     }
 
 
@@ -156,7 +158,14 @@ public class LevelSelectTextEntrance: Task
     {
         levelSelectText.SetActive(true);
         targetPos = levelSelectText.transform.localPosition;
-        levelSelectText.transform.localPosition += initialOffset * Vector3.down;
+        if (enterFromTop)
+        {
+            levelSelectText.transform.localPosition += initialOffset * Vector3.up;
+        }
+        else
+        {
+            levelSelectText.transform.localPosition += initialOffset * Vector3.down;
+        }
         startPos = levelSelectText.transform.localPosition;
         timeElapsed = 0;
         if (!exit) levelSelectText.transform.localPosition = startPos;

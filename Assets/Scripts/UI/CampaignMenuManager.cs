@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CampaignMenuManager : MonoBehaviour {
 
@@ -21,9 +22,21 @@ public class CampaignMenuManager : MonoBehaviour {
     private GameObject wreathHolder;
     [SerializeField]
     private Color highlightedButtonColor;
+    [SerializeField]
+    private Sprite success;
+    [SerializeField]
+    private Sprite fail;
+    [SerializeField]
+    private TextMeshProUGUI[] objectiveText;
+    [SerializeField]
+    private Image[] objectiveCompletionSymbol;
+    [SerializeField]
+    private Sprite lockImage;
+    [SerializeField]
+    private Color lockColor;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -34,6 +47,21 @@ public class CampaignMenuManager : MonoBehaviour {
 
     public void Show(Player winner)
     {
+        for(int i = 0; i < objectiveText.Length; i++)
+        {
+            objectiveText[i].text = Services.TutorialManager.objectiveText[i];
+
+            if (Services.TutorialManager.objectiveComplete[i])
+            {
+                objectiveCompletionSymbol[i].sprite = success;
+                objectiveCompletionSymbol[i].color = highlightedButtonColor;
+            }
+            else
+            {
+                objectiveCompletionSymbol[i].sprite = fail;
+            }
+        }
+
         float rot;
         Level nextLevel = Services.MapManager.GetNextLevel();
         Image resultImage;
@@ -58,10 +86,24 @@ public class CampaignMenuManager : MonoBehaviour {
         }
         transform.localRotation = Quaternion.Euler(0, 0, rot);
         gameObject.SetActive(true);
-        if (nextLevel == null || winner is AIPlayer)
+        if ((nextLevel == null || winner is AIPlayer) || 
+            !Services.TutorialManager.CompletionCheck())
         {
+
+            if(!Services.TutorialManager.CompletionCheck())
+            {
+                nextLevelDisabled.sprite = lockImage;
+                nextLevelDisabled.color = lockColor;
+                nextLevelDisabled.enabled = true;
+            }
+            else
+            {
+                nextLevelDisabled.enabled = false;
+                buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = "COMPLETE";
+            }
+
             nextLevelButton.enabled = false;
-            nextLevelDisabled.enabled = true;
+            
         }
         else
         {

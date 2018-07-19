@@ -49,6 +49,7 @@ public class Polyomino : IVertex
     private const float alphaWhileUnaffordable = 0.3f;
     private const float alphaWhileAffordable = 0.8f;
     private List<TechBuilding> highlightedStructures;
+    public List<Polyomino> piecesToRemove { get; private set; }
 
     public List<Blueprint> occupyingBlueprints { get; protected set; }
     public int cost { get; protected set; }
@@ -865,7 +866,7 @@ public class Polyomino : IVertex
 
     protected virtual void OnPlace()
     {
-        List<Polyomino> piecesToRemove = new List<Polyomino>();
+        piecesToRemove = new List<Polyomino>();
         bool removedOpposingPiece = false;
         Vector3 positionOfDestruction = Vector3.zero;
         foreach (Tile tile in tiles)

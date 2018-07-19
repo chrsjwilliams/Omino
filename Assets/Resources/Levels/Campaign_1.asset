@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Name: Campaign_1
   m_EditorClassIdentifier: 
   campaignLevelNum: 1
+  objectives:
+  - Connect to Opponent Base
+  - Rotate a piece
   availableStructures: 
   structCoords: []
   width: 13
@@ -23,6 +26,8 @@ MonoBehaviour:
   tooltips:
   - label: Your Base
     text: This is your base.
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: 400, y: -300}
     arrowLocation: {x: -450, y: 0}
     arrowRotation: 180
@@ -49,6 +54,8 @@ MonoBehaviour:
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - label: Win Condition
     text: Build a road to the opponent's base to win.
+    displayObjective: 1
+    objectiveIndex: 0
     location: {x: -300, y: 400}
     arrowLocation: {x: 450, y: 0}
     arrowRotation: 0
@@ -76,6 +83,8 @@ MonoBehaviour:
   - label: Hand
     text: This is your hand. You can play pieces from here by dragging them onto the
       board.
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: -300, y: -400}
     arrowLocation: {x: 0, y: -250}
     arrowRotation: -90
@@ -102,6 +111,8 @@ MonoBehaviour:
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - label: Connected
     text: All of your pieces must connect back to your base.
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: 400, y: -300}
     arrowLocation: {x: -450, y: 0}
     arrowRotation: 180
@@ -128,6 +139,8 @@ MonoBehaviour:
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - label: Place Piece
     text: Try placing a piece now!
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: 400, y: -300}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -155,6 +168,8 @@ MonoBehaviour:
   - label: Energy
     text: You need 1 <color=#F7A907FF>ENERGY</color> to place a piece. You get energy
       over time.
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: 270, y: -275}
     arrowLocation: {x: 0, y: -2520}
     arrowRotation: -90
@@ -181,6 +196,8 @@ MonoBehaviour:
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - label: Draw
     text: You also draw new pieces into your hand over time.
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: 450, y: -300}
     arrowLocation: {x: 40, y: -250}
     arrowRotation: -90
@@ -207,6 +224,8 @@ MonoBehaviour:
     subImage2Color: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 1}
   - label: Show Me
     text: 'You can <color=#6CAE75>ROTATE</color> a piece before placing it. '
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: -300, y: 700}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -233,6 +252,8 @@ MonoBehaviour:
     subImage2Color: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 1}
   - label: Rotate
     text: Try using your index finger to drag and your middle finger to <color=#6CAE75>ROTATE</color>!
+    displayObjective: 1
+    objectiveIndex: 1
     location: {x: -300, y: 700}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -259,6 +280,8 @@ MonoBehaviour:
     subImage2Color: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 1}
   - label: Go Win
     text: Try connecting to the opposing base to win!
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: 400, y: -500}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -285,6 +308,8 @@ MonoBehaviour:
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - label: Do Not Display
     text: 
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0

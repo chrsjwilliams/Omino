@@ -817,6 +817,7 @@ public class Player : MonoBehaviour
     public virtual void OnPieceRemoved(Polyomino piece)
     {
         boardPieces.Remove(piece);
+        Services.GameEventManager.Fire(new PieceRemoved(piece));
         Services.MapManager.DetermineConnectedness(this);
         foreach(Tile tile in bpAssistHighlightedTiles)
         {
@@ -970,6 +971,7 @@ public class Player : MonoBehaviour
     public void GainOwnership(TechBuilding structure)
     {
         boardPieces.Add(structure);
+        Services.GameEventManager.Fire(new ClaimedTechEvent(structure));
     }
 
     public void LoseOwnership(TechBuilding structure)

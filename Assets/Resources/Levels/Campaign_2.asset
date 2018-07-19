@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Name: Campaign_2
   m_EditorClassIdentifier: 
   campaignLevelNum: 2
+  objectives:
+  - Connect to Opponent Base
+  - Destroy Opponent's Piece
   availableStructures: 
   structCoords: []
   width: 13
@@ -23,6 +26,8 @@ MonoBehaviour:
   tooltips:
   - label: 
     text: Ok, this time, we'll give you an actual opponent to play against!
+    displayObjective: 1
+    objectiveIndex: 0
     location: {x: 400, y: -500}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -31,6 +36,7 @@ MonoBehaviour:
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
     imageScale: {x: 0, y: 0}
@@ -48,6 +54,8 @@ MonoBehaviour:
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - label: Show Me
     text: You can destroy your opponents pieces.
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: 225, y: -295}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -56,6 +64,7 @@ MonoBehaviour:
     windowLocation: {x: 166, y: 166}
     windowSize: {x: 600, y: 600}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: -1}
     imageScale: {x: 0, y: 0}
@@ -73,6 +82,8 @@ MonoBehaviour:
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - label: Attack Piece
     text: 
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: 90, y: 60}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -81,6 +92,7 @@ MonoBehaviour:
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 1
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: -1}
     imageScale: {x: 1, y: 1}
@@ -98,6 +110,8 @@ MonoBehaviour:
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - label: Hammer
     text: If you have a <color=#E56575FF>Hammer</color>...
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: 450, y: -300}
     arrowLocation: {x: 240, y: -230}
     arrowRotation: -90
@@ -106,6 +120,7 @@ MonoBehaviour:
     windowLocation: {x: 630, y: -785}
     windowSize: {x: 250, y: 230}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
     imageScale: {x: 0, y: 0}
@@ -124,6 +139,8 @@ MonoBehaviour:
   - label: Destroy
     text: and place your piece on top of your opponent's piece, it will destroy what
       is underneath.
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: 450, y: -300}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -132,6 +149,7 @@ MonoBehaviour:
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
     imageScale: {x: 0, y: 0}
@@ -149,6 +167,8 @@ MonoBehaviour:
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - label: Hammer Time
     text: You get <color=#E56575FF>Hammers</color> over time.
+    displayObjective: 1
+    objectiveIndex: 1
     location: {x: 450, y: -300}
     arrowLocation: {x: 240, y: -230}
     arrowRotation: -90
@@ -157,6 +177,7 @@ MonoBehaviour:
     windowLocation: {x: 630, y: -785}
     windowSize: {x: 250, y: 170}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
     imageScale: {x: 0, y: 0}
@@ -174,6 +195,8 @@ MonoBehaviour:
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - label: Touch Base
     text: Touch their base before they touch yours!
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: 400, y: -500}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -182,6 +205,7 @@ MonoBehaviour:
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
     imageScale: {x: 0, y: 0}
@@ -199,6 +223,8 @@ MonoBehaviour:
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - label: Do Not Display
     text: 
+    displayObjective: 0
+    objectiveIndex: 0
     location: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -207,6 +233,7 @@ MonoBehaviour:
     windowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
+    imageLerps: 0
     imageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
     imageScale: {x: 0, y: 0}

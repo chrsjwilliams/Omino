@@ -125,6 +125,7 @@ public class GameSceneScript : Scene<TransitionData>
     {
         Services.Analytics.MatchEnded();
         gameOver = true;
+        Services.GameEventManager.Fire(new GameEndEvent(winner));
         Services.UIManager.StartBannerScroll(winner);
         if (winner is AIPlayer)
         {
