@@ -358,7 +358,8 @@ public class TutorialManager : MonoBehaviour
 
     public void OnClaimTech(ClaimedTechEvent e)
     {
-        if (Services.GameManager.levelSelected.campaignLevelNum == 4)
+        if (Services.GameManager.levelSelected.campaignLevelNum == 4 && 
+            !(e.techBuilding.owner is AIPlayer))
         {
             objectiveComplete[1] = true;
             UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);

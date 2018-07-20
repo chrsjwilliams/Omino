@@ -67,7 +67,10 @@ public class CampaignMenuManager : MonoBehaviour {
                 objectiveCompletionSymbol[i].sprite = fail;
             }
         }
-
+        if (Services.GameManager.levelSelected.campaignLevelNum == 4)
+        {
+            buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = "COMPLETE";
+        }
         float rot;
         Level nextLevel = Services.MapManager.GetNextLevel();
         Image resultImage;
@@ -90,6 +93,8 @@ public class CampaignMenuManager : MonoBehaviour {
                 wreaths[i].transform.localScale = Vector3.zero;
             }
         }
+        
+
         transform.localRotation = Quaternion.Euler(0, 0, rot);
         gameObject.SetActive(true);
         if ((nextLevel == null || winner is AIPlayer) || 
@@ -98,6 +103,7 @@ public class CampaignMenuManager : MonoBehaviour {
 
             if(!Services.TutorialManager.CompletionCheck())
             {
+                nextLevelButton.enabled = false;
                 nextLevelDisabled.sprite = lockImage;
                 nextLevelDisabled.color = lockColor;
                 nextLevelDisabled.enabled = true;
@@ -105,10 +111,12 @@ public class CampaignMenuManager : MonoBehaviour {
             else
             {
                 nextLevelDisabled.enabled = false;
-                buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = "COMPLETE";
+                
+                nextLevelButton.enabled = true;
+                nextLevelButton.onClick.RemoveListener(Services.GameScene.MoveToNextLevel);
+                nextLevelButton.onClick.AddListener(Services.GameScene.Reset);
             }
 
-            nextLevelButton.enabled = false;
             
         }
         else
