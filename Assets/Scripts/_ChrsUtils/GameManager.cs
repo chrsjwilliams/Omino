@@ -13,6 +13,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool debug;
     [SerializeField] private bool timedRestart;
     public bool disableUI;
+    public bool pretendIphone;
+    public bool onIPhone
+    {
+        get
+        {
+            return SystemInfo.deviceModel.Contains("iPhone") || pretendIphone;
+        }
+    }
 
     private bool[] humanPlayers;
     public AILEVEL[] aiLevels;

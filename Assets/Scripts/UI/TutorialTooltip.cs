@@ -130,8 +130,14 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         {
             dismissText.text = "Show Me";
         }
-
-        GetComponent<RectTransform>().anchoredPosition = info.location;
+        if (Services.GameManager.onIPhone)
+        {
+            GetComponent<RectTransform>().anchoredPosition = info.iPhoneLocation;
+        }
+        else
+        {
+            GetComponent<RectTransform>().anchoredPosition = info.location;
+        }
         textComponent.text = info.text;
 
         dismissText.enabled = info.dismissable;
@@ -180,7 +186,14 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         RectTransform windowRect = 
             Services.TutorialManager.backDim.GetComponent<RectTransform>();
         windowRect.sizeDelta = info.windowSize;
-        windowRect.anchoredPosition = info.windowLocation;
+        if (Services.GameManager.onIPhone)
+        {
+            windowRect.anchoredPosition = info.iPhoneWindowLocation;
+        }
+        else
+        {
+            windowRect.anchoredPosition = info.windowLocation;
+        }
 
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);

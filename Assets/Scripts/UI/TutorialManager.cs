@@ -419,11 +419,13 @@ public class TooltipInfo
     public bool displayObjective;
     public int objectiveIndex;
     public Vector2 location;
+    public Vector2 iPhoneLocation;
     public Vector2 arrowLocation;
     public float arrowRotation;
     public bool dismissable = true;
     public bool enableTooltips;
     public Vector2 windowLocation;
+    public Vector2 iPhoneWindowLocation;
     public Vector2 windowSize;
     public bool haveImage;
     public bool imageLerps;
