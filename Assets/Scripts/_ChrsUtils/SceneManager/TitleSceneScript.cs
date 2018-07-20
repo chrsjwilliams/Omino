@@ -178,7 +178,7 @@ public class TitleSceneScript : Scene<TransitionData>
         button.GetComponent<Image>().color = status ?
             Services.GameManager.Player2ColorScheme[0] :
             Services.GameManager.Player2ColorScheme[1];
-        TextMeshProUGUI textMesh = button.GetComponentInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI textMesh = button.GetComponentInChildren<TextMeshProUGUI>(true);
         string textContent = textMesh.text;
         string[] textSplit = textContent.Split('<', '>');
         if (textSplit.Length > 1)

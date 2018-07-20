@@ -225,7 +225,7 @@ public static class DungeonRunManager
 
     private static void SetHandicap(float handicap)
     {
-        dungeonRunData.handicapLevel = Mathf.Max(1, handicap);
+        dungeonRunData.handicapLevel = Mathf.Max(0.8f, handicap);
     }
 
     public static void ResetDungeonRun()
@@ -270,7 +270,7 @@ public class DungeonRunData
         currentTech = new List<BuildingType>();
         techChoices = new List<BuildingType>();
         challenegeNum = 1;
-        handicapLevel = 1;
+        handicapLevel = 0.8f;
         selectingNewTech = false;
         completedRun = false;
     }
