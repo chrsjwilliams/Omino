@@ -161,7 +161,7 @@ public class LERP : TimedGOTask
 
     protected override void OnTick(float t)
     {
-        gameObject.transform.position = Vector3.Lerp(Start, End, t);
+        gameObject.transform.localPosition = Vector3.Lerp(Start, End, t);
     }
 }
 

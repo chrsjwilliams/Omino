@@ -38,6 +38,8 @@ public class TutorialManager : MonoBehaviour
     private Color successColor;
     [SerializeField]
     private Sprite notDone;
+    [SerializeField]
+    private GameObject secondObjectiveLocation;
 
     private void Awake()
     {
@@ -377,9 +379,26 @@ public class TutorialManager : MonoBehaviour
         objectivesPanel.SetActive(show);
     }
 
-    public void DisplayObjective(int index, bool display)
+    public void DisplaySecondObjective()
     {
-        objectiveUI[index].SetActive(display);
+        objectiveUI[1].SetActive(true);
+    }
+
+    public void DisplayObjective(int index, bool display)
+    {       
+        if (index == 1 && display)
+        {
+            TaskTree slidedDownFirstObjective = new TaskTree(new EmptyTask(),
+                new TaskTree(new LERP(objectiveUI[0], objectiveUI[0].transform.localPosition,
+                secondObjectiveLocation.transform.localPosition, 0.5f)));
+            slidedDownFirstObjective.Then(new ActionTask(DisplaySecondObjective));
+            tm.Do(slidedDownFirstObjective);
+        }
+        else
+        {
+            objectiveUI[index].SetActive(display);
+
+        }
     }
 }
 

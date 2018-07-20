@@ -254,18 +254,18 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        //if (dismissible)
-        //{
-        //    Dismiss();
-        //}
-    }
-
-    public virtual void OnInputDown(Vector3 touchPos)
-    {
         if (dismissible)
         {
             Dismiss();
         }
+    }
+
+    public virtual void OnInputDown(Vector3 touchPos)
+    {
+        //if (dismissible)
+        //{
+        //    Dismiss();
+        //}
     }
 
     protected void OnTouchUp(TouchUp e)
