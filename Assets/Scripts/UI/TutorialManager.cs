@@ -43,13 +43,20 @@ public class TutorialManager : MonoBehaviour
 
     private void Awake()
     {
+        if(Services.GameManager.mode != TitleSceneScript.GameMode.Campaign)
+        {
+            ToggleObjectiveUI(false);
+            gameObject.SetActive(false);
+        }
+        skipTutorialButton.gameObject.SetActive(false);
+
         tm = new TaskManager();
     }
 
     // Use this for initialization
     void Start()
     {
-        ToggleObjectiveUI(false);
+        
         if (Services.GameManager.levelSelected != null &&
             Services.GameManager.levelSelected.objectives.Length > 0)
         {
@@ -71,7 +78,7 @@ public class TutorialManager : MonoBehaviour
         }
 
 
-        skipTutorialButton.gameObject.SetActive(false);
+        
         
         touchID = -1;
         Services.GameEventManager.Register<RotationEvent>(OnRotation);

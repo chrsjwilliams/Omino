@@ -323,14 +323,23 @@ public class GameSceneScript : Scene<TransitionData>
                 new HandPieceEntry(Services.GameManager.Players[0].hand)),
                 new TaskTree(
                     new HandPieceEntry(Services.GameManager.Players[1].hand)));
-        }       
-        
-        startSequence
-            .Then(uiEntry)
-            .Then(handEntry)
-            .Then(new ActionTask(StartGame))
-            .Then(new Wait(1))
-            .Then(new ActionTask(Services.TutorialManager.DisplaySkipButton));
+        }
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Campaign)
+        {
+            startSequence
+                .Then(uiEntry)
+                .Then(handEntry)
+                .Then(new ActionTask(StartGame))
+                .Then(new Wait(1))
+                .Then(new ActionTask(Services.TutorialManager.DisplaySkipButton));
+        }
+        else
+        {
+            startSequence
+                .Then(uiEntry)
+                .Then(handEntry)
+                .Then(new ActionTask(StartGame));
+        }
         
         Services.GameScene.tm.Do(startSequence);
     }
