@@ -170,6 +170,11 @@ public class TutorialManager : MonoBehaviour
         MoveToStep(tooltipInfos.Length - 1);
         Services.GameScene.UnpauseGame(true);
         skipTutorialButton.gameObject.SetActive(false);
+
+        for(int i = 0; i < objectiveText.Length; i++)
+        {
+            DisplayObjective(i, true);
+        }
     }
 
     public bool CompletionCheck()
@@ -364,11 +369,6 @@ public class TutorialManager : MonoBehaviour
                 new TaskTree(new LevelSelectTextEntrance(objectivesPanel,true, true)));
 
         tm.Do(slideOutObjectives);
-    }
-
-    public void HideObjectiveUI()
-    {
-        objectivesPanel.SetActive(false);
     }
 
     public void ToggleObjectiveUI(bool show)
