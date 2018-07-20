@@ -151,6 +151,7 @@ public class Player : MonoBehaviour
     public float allResourceHandicap = 1;
     public float allBlueprintHandicap = 1;
 
+    private const float pathHighlightStagger = 0.1f;
 
     public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_, bool blueprintValueHandicap, float handicap)
     {
@@ -1237,5 +1238,10 @@ public class Player : MonoBehaviour
             highlightedBlueprint.ScaleHolder(Polyomino.unselectedScale);
             highlightedBlueprint.SetOverlayAlpha(Blueprint.overlayAlphaPrePlacement);
         }   
+    }
+
+    private void HighlightPath(Polyomino newPiece)
+    {
+
     }
 }

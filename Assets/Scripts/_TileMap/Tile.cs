@@ -69,6 +69,11 @@ public class Tile : MonoBehaviour, IVertex
     private bool scaling;
     private bool rippleEmitted;
 
+    private float pathHighlightTime;
+    private const float pathHighlightUpDuration = 0.1f;
+    private const float pathHighlightDownDuration = 0.3f;
+    private float pathHighlightDelay;
+
     public void Init(Coord coord_)
     {
         coord = coord_;
@@ -193,6 +198,38 @@ public class Tile : MonoBehaviour, IVertex
     {
         if (changingColor) LerpToTargetColor();
         if (scaling) ScaleUp();
+        if (pathHighlightTime > 0 || pathHighlightDelay > 0) PathHighlight();
+    }
+
+    public void StartPathHighlight(float delay)
+    {
+        pathHighlightDelay = delay;
+        pathHighlightTime = pathHighlightUpDuration + pathHighlightDownDuration;
+    }
+
+    private void PathHighlight()
+    {
+        if (pathHighlightDelay > 0) pathHighlightDelay -= Time.deltaTime;
+        else
+        {
+            pathHighlightTime -= Time.deltaTime;
+            float alpha;
+            if (pathHighlightTime > pathHighlightDownDuration)
+            {
+                alpha = Mathf.Lerp(1, 0,
+                    EasingEquations.Easing.QuadEaseOut(
+                        (pathHighlightTime - pathHighlightDownDuration) /
+                        pathHighlightUpDuration));
+            }
+            else
+            {
+                alpha = Mathf.Lerp(0, 1,
+                    EasingEquations.Easing.QuadEaseOut(
+                        pathHighlightTime / pathHighlightUpDuration));
+            }
+            if (pathHighlightTime <= 0) alpha = 0;
+            SetBpAssistAlpha(alpha);
+        }
     }
 
     private void ScaleUp()
