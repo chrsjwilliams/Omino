@@ -19,7 +19,7 @@ public class CampaignLevelMenuEntranceTask : Task
     private Transform[] wreaths;
     private Vector3[] buttonTargetPositions;
     private Transform[] buttons;
-    private Vector3 buttonStartPos;
+    private Vector3[] buttonStartPos;
 
     public CampaignLevelMenuEntranceTask(Transform whole, Image crown_, 
         Image[] wreaths_, Button[] buttons_)
@@ -32,12 +32,15 @@ public class CampaignLevelMenuEntranceTask : Task
             wreaths_[1].transform
         };
         buttons = new Transform[buttons_.Length];
+        buttonStartPos = new Vector3[buttons_.Length];
         for (int i = 0; i < buttons.Length; i++)
         {
             buttons[i] = buttons_[i].transform;
+            buttonStartPos[i] = new Vector2(buttons[i].localPosition.x, 
+                                            buttons[0].localPosition.y);
         }
-        buttonStartPos = buttons[0].localPosition;
         Array.Reverse(buttons);
+        Array.Reverse(buttonStartPos);
     }
 
     protected override void Init()
@@ -47,10 +50,11 @@ public class CampaignLevelMenuEntranceTask : Task
         for (int i = 0; i < buttonTargetPositions.Length; i++)
         {
             buttonTargetPositions[i] = buttons[i].localPosition;
-            buttons[i].localPosition = new Vector2(buttonTargetPositions[i].x, 
-                                                    buttonStartPos.y);
+            buttons[i].localPosition = buttonStartPos[i];
         }
 
+        buttons[buttons.Length - 1].localPosition = buttonTargetPositions[buttons.Length - 1];
+        buttons[buttons.Length - 1].gameObject.SetActive(true);
     }
 
     internal override void Update()
@@ -89,7 +93,7 @@ public class CampaignLevelMenuEntranceTask : Task
                 {
                     buttons[i].gameObject.SetActive(true);
                     if (i == buttons.Length - 2) buttons[i + 1].gameObject.SetActive(true);
-                    buttons[i].localPosition = Vector3.Lerp(buttonStartPos,
+                    buttons[i].localPosition = Vector3.Lerp(buttonStartPos[i],
                         buttonTargetPositions[i],
                         EasingEquations.Easing.QuadEaseOut(
                             (timeElapsed - buttonDelay - (i * buttonStaggerTime)) / buttonDropDur));

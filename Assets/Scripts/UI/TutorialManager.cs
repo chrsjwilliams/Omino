@@ -222,7 +222,8 @@ public class TutorialManager : MonoBehaviour
                 int aiPlayerNumber = humanPlayerNum == 1 ? 2 : 1;
                 Player humanPlayer = Services.GameManager.Players[humanPlayerNum - 1];
                 Player aiPlayer = Services.GameManager.Players[aiPlayerNumber - 1];
-                if (e.piece is Blueprint)
+                if (e.piece is Blueprint &&
+                    !(e.piece.owner is AIPlayer))
                 {
                     objectiveComplete[1] = true;
                     UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);
