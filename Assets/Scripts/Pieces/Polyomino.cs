@@ -1476,7 +1476,8 @@ public class Polyomino : IVertex
 
     protected void CheckTouchForRotateInput(TouchDown e)
     {
-        if ((Vector2.Distance(
+        if (SystemInfo.deviceModel.Contains("iPhone") ||
+            (Vector2.Distance(
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position),
             Services.GameManager.MainCamera.ScreenToWorldPoint(Input.GetTouch(touchID).position))
             < rotationInputRadius) ||
