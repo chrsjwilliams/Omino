@@ -77,7 +77,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         }
         else
         {
-            timeDisplayed += Time.unscaledDeltaTime;
+            //timeDisplayed += Time.unscaledDeltaTime;
         }
 
         if(label == "Rotate")
@@ -262,16 +262,10 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public virtual void OnInputDown(Vector3 touchPos)
     {
-        if (dismissible && 
-            imageAnim.GetCurrentAnimatorStateInfo(0).IsName("DoNotDisplay"))
+        if (dismissible)
         {
             Dismiss();
         }
-        else if (dismissible && timeDisplayed > MIN_TIME_ANIMATION_DISPLAYED)
-        {
-            Dismiss();
-        }
-
     }
 
     protected void OnTouchUp(TouchUp e)
