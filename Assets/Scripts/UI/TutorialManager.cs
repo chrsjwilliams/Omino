@@ -47,39 +47,36 @@ public class TutorialManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        if(Services.GameManager.levelSelected.objectives.Length > 0)
+        ToggleObjectiveUI(false);
+        if (Services.GameManager.levelSelected != null &&
+            Services.GameManager.levelSelected.objectives.Length > 0)
         {
-            ToggleObjectiveUI(true);
             TaskTree slideInObjectives = new TaskTree(new EmptyTask(),
                 new TaskTree(new LevelSelectTextEntrance(objectivesPanel, true)));
 
+            objectiveText = new string[Services.GameManager.levelSelected.objectives.Length];
+            objectiveComplete = new bool[Services.GameManager.levelSelected.objectives.Length];
+            for (int i = 0; i < objectiveText.Length; i++)
+            {
+                objectiveText[i] = Services.GameManager.levelSelected.objectives[i];
+                objectiveUI[i].GetComponentInChildren<TextMeshProUGUI>().text = objectiveText[i];
+
+                objectiveComplete[i] = false;
+                UpdateObjectiveUI(objectiveUI[i], objectiveComplete[i]);
+                DisplayObjective(i, false);
+            }
             tm.Do(slideInObjectives);
         }
-        else
-        {
-            ToggleObjectiveUI(false);
-        }
 
-        objectiveText = new string[Services.GameManager.levelSelected.objectives.Length];
-        objectiveComplete = new bool[Services.GameManager.levelSelected.objectives.Length];
-        for (int i = 0; i < objectiveText.Length; i++)
-        {
-            objectiveText[i] = Services.GameManager.levelSelected.objectives[i];
-            objectiveUI[i].GetComponentInChildren<TextMeshProUGUI>().text = objectiveText[i];
-           
-            objectiveComplete[i] = false;
-            UpdateObjectiveUI(objectiveUI[i], objectiveComplete[i]);
-            DisplayObjective(i, false);
-        }
 
         skipTutorialButton.gameObject.SetActive(false);
+        
         touchID = -1;
         Services.GameEventManager.Register<RotationEvent>(OnRotation);
         Services.GameEventManager.Register<PieceRemoved>(OnPieceRemoved);
         Services.GameEventManager.Register<ClaimedTechEvent>(OnClaimTech);
         Services.GameEventManager.Register<GameEndEvent>(OnGameEnd);
     }
-
 
     private void OnDestroy()
     {

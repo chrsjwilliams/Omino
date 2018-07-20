@@ -6,6 +6,7 @@ using TMPro;
 
 public class CampaignMenuManager : MonoBehaviour {
 
+    public bool inPosition { get; private set; }
     [SerializeField]
     private Button nextLevelButton;
     [SerializeField]
@@ -37,13 +38,18 @@ public class CampaignMenuManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
+        inPosition = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
+
+    public void MenuInPosition()
+    {
+        inPosition = true;
+    }
 
     public void Show(Player winner)
     {
@@ -117,7 +123,10 @@ public class CampaignMenuManager : MonoBehaviour {
         }
         resultImage.transform.localScale = Vector3.zero;
 
-        Services.GameScene.tm.Do(new CampaignLevelMenuEntranceTask(transform,
-            resultImage, wreaths, buttons));
+        TaskTree moveCampaignMenuIntoPosition = new TaskTree(new EmptyTask(),
+                new TaskTree(new CampaignLevelMenuEntranceTask(transform,
+            resultImage, wreaths, buttons)));
+        moveCampaignMenuIntoPosition.Then(new ActionTask(MenuInPosition));
+        Services.GameScene.tm.Do(moveCampaignMenuIntoPosition);
     }
 }

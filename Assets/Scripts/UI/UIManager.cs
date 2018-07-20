@@ -49,11 +49,13 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private GameObject pauseButton;
     [SerializeField]
-    private TextMeshProUGUI replayButtonText;
+    private Button replayButton;
+    [SerializeField]
+    private Button levelSelectButton;
     private float pauseTimer;
     private const float pauseTimeWindow = 2f;
     [SerializeField]
-    private GameObject campaignLevelCompleteMenu;
+    private CampaignMenuManager campaignLevelCompleteMenu;
     [SerializeField]
     private GameObject dungeonRunChallenegeCompleteMenu;
     [SerializeField]
@@ -263,7 +265,7 @@ public class UIManager : MonoBehaviour {
 
         optionsMenu.SetActive(false);
         pauseMenu.SetActive(false);
-        campaignLevelCompleteMenu.SetActive(false);
+        campaignLevelCompleteMenu.gameObject.SetActive(false);
 
         for (int i = 0; i < readyBanners.Length; i++)
         {
@@ -291,7 +293,18 @@ public class UIManager : MonoBehaviour {
         if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo || 
             Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
         {
-            replayButtonText.text = "FORFEIT";
+            
+            replayButton.gameObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(false);
+            replayButton.GetComponentInChildren<TextMeshProUGUI>(true).gameObject.SetActive(true);
+            replayButton.GetComponentInChildren<TextMeshProUGUI>(true).text = "FORFEIT";
+            levelSelectButton.gameObject.SetActive(false);
+
+        }
+        else
+        {
+            levelSelectButton.gameObject.SetActive(true);
+            replayButton.gameObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(true);
+            replayButton.GetComponentInChildren<TextMeshProUGUI>(true).gameObject.SetActive(false);
         }
     }
 	
@@ -794,7 +807,7 @@ public class UIManager : MonoBehaviour {
 
     public void ShowCampaignLevelCompleteMenu(Player winner)
     {
-        campaignLevelCompleteMenu.GetComponent<CampaignMenuManager>().Show(winner);
+        campaignLevelCompleteMenu.Show(winner);
     }
 
     public void OnGameEndBannerTouch()
@@ -806,8 +819,11 @@ public class UIManager : MonoBehaviour {
         }
         else if(Services.GameManager.mode == TitleSceneScript.GameMode.Campaign)
         {
-            showcampaignCompleteMenu = !showcampaignCompleteMenu;
-            campaignLevelCompleteMenu.SetActive(showcampaignCompleteMenu);
+            if (campaignLevelCompleteMenu.inPosition)
+            {
+                showcampaignCompleteMenu = !showcampaignCompleteMenu;
+                campaignLevelCompleteMenu.gameObject.SetActive(showcampaignCompleteMenu);
+            }
         }
         else
         {

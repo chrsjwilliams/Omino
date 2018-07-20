@@ -328,10 +328,11 @@ public class GameSceneScript : Scene<TransitionData>
         startSequence
             .Then(uiEntry)
             .Then(handEntry)
-            .Then(new ActionTask(StartGame));
+            .Then(new ActionTask(StartGame))
+            .Then(new Wait(1))
+            .Then(new ActionTask(Services.TutorialManager.DisplaySkipButton));
         
         Services.GameScene.tm.Do(startSequence);
-        Services.GameScene.tm.Do(new ActionTask(Services.TutorialManager.DisplaySkipButton));
     }
 
     public void PauseGame(bool tutorialToolTipActive)

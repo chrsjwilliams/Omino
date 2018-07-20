@@ -40,11 +40,14 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
     [SerializeField]
     private Animator imageAnim;
     private float timeElapsed;
+    private float timeDisplayed;
     private bool scalingUp;
     private bool scalingDown;
     private string currentAnimation;
 
     private bool haveSelectedPiece = false;
+
+    private const float MIN_TIME_ANIMATION_DISPLAYED = 1;
 
 	// Use this for initialization
 	void Start () {
@@ -72,13 +75,17 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
                 Destroy(gameObject);
             }
         }
+        else
+        {
+            timeDisplayed += Time.unscaledDeltaTime;
+        }
 
         if(label == "Rotate")
         {
 
             RotationSpecificToolTipUpdates();
         }
-        
+
         if (lerps)
         {
             image.rectTransform.localPosition = Vector3.Lerp(image.rectTransform.localPosition, imageSecondaryPosition, EasingEquations.Easing.QuadEaseOut(Time.deltaTime));
@@ -183,15 +190,12 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
     public void Dismiss()
     {
         Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
-        Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
         Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
 
         Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
-        Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
         Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
         Services.TutorialManager.OnDismiss();
         
-
         scalingDown = true;
         timeElapsed = 0;
 
@@ -250,22 +254,24 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (dismissible)
-        {
-            Dismiss();
-        }
+        //if (dismissible)
+        //{
+        //    Dismiss();
+        //}
     }
 
     public virtual void OnInputDown(Vector3 touchPos)
     {
-
-
-        if(IsPointContainedWithinHolderArea(touchPos) && dismissible)
+        if (dismissible && 
+            imageAnim.GetCurrentAnimatorStateInfo(0).IsName("DoNotDisplay"))
         {
-            Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
-            Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
-
+            Dismiss();
         }
+        else if (dismissible && timeDisplayed > MIN_TIME_ANIMATION_DISPLAYED)
+        {
+            Dismiss();
+        }
+
     }
 
     protected void OnTouchUp(TouchUp e)
@@ -284,35 +290,6 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public virtual void OnInputUp()
     {
-    }
-
-    protected void OnMouseMoveEvent(MouseMove e)
-    {
-        OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos));
-    }
-
-    protected void OnTouchMove(TouchMove e)
-    {
-        if (e.touch.fingerId == touchID)
-        {
-            OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position));
-        }
-    }
-
-    public virtual void OnInputDrag(Vector3 inputPos)
-    {
-    }
-
-    public virtual bool IsPointContainedWithinHolderArea(Vector3 point)
-    {
-        Vector3 extents;
-        Vector3 centerPoint;
-
-        extents = textBox.sprite.bounds.extents;
-        centerPoint = Services.GameManager.MainCamera.ScreenToWorldPoint(transform.position);
-
-        return  0.1f < point.x && point.x < 0.9f &&
-                0.1f < point.y && point.y < 0.9f;
     }
 
     public bool HasParameter(string paramName)
