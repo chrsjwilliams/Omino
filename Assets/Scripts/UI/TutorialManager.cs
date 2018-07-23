@@ -425,6 +425,7 @@ public class TooltipInfo
     public Vector2 iPhoneArrowLocation;
     public float arrowRotation;
     public float iPhoneArrowRotation;
+    public Vector2 iPhoneArrowScale;
     public bool dismissable = true;
     public bool enableTooltips;
     public Vector2 windowLocation;
@@ -436,10 +437,11 @@ public class TooltipInfo
     public Vector2 imageLocation;
     public Vector2 iPhoneImageLocation;
     public Vector3 secondaryImageLocation = Vector3.back;
+    public Vector2 iPhoneSecondaryImageLocation;
     public Vector2 imageScale;
     public Vector2 iPhoneImageScale;
     public float imageRotation;
-    public Vector2 iPhoneImageRotation;
+    public float iPhoneImageRotation;
     public Color imageColor;
 
     public Vector2 subImageLocation;

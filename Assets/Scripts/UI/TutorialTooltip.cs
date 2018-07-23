@@ -123,6 +123,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public void Init(TooltipInfo info)
     {
+        RectTransform tooltipTransform = GetComponent<RectTransform>();
         RectTransform windowRect =
             Services.TutorialManager.backDim.GetComponent<RectTransform>();
 
@@ -135,9 +136,25 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         }
         if (Services.GameManager.onIPhone)
         {
-            GetComponent<RectTransform>().anchoredPosition = info.iPhoneLocation;
-
+            tooltipTransform.anchoredPosition = info.iPhoneLocation;
+            tooltipTransform.sizeDelta = info.iPhoneToolTipSize;
             windowRect.anchoredPosition = info.iPhoneWindowLocation;
+
+            
+
+            imagePrimaryPosition = info.iPhoneImageLocation;
+            image.rectTransform.localPosition = imagePrimaryPosition;
+            imageSecondaryPosition = info.iPhoneSecondaryImageLocation;
+            image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.iPhoneImageRotation);
+            image.rectTransform.localScale = info.iPhoneImageScale;
+
+            if (info.arrowLocation == Vector2.zero) arrow.enabled = false;
+            else
+            {
+                arrow.GetComponent<RectTransform>().anchoredPosition = info.iPhoneArrowLocation;
+                arrow.transform.localRotation = Quaternion.Euler(0, 0, info.iPhoneArrowRotation);
+                arrow.transform.localScale = info.iPhoneArrowScale;
+            }
 
         }
         else
