@@ -111,9 +111,17 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             if (!haveSelectedPiece)
             {
                 TurnOffAnimation();
-                imageSecondaryPosition = new Vector2(-260, -300);
+                imageSecondaryPosition = new Vector2(-200, -250);
                 image.rectTransform.localPosition = imageSecondaryPosition;
             }
+
+            if(!haveSelectedPiece && Services.GameManager.onIPhone)
+            {
+                TurnOffAnimation();
+                imageSecondaryPosition = new Vector2(-200, -250);
+                image.rectTransform.localPosition = imageSecondaryPosition;
+            }
+
             haveSelectedPiece = true;
             textComponent.text = "While holding the piece, tap the screen with a second finger to rotate the piece";
             ToggleImageAnimation("Rotate");
