@@ -28,13 +28,14 @@ MonoBehaviour:
     text: Feeling slow? If you want to ramp up your economy, you can make <color=#6CAE75>Buildings</color>!
     displayObjective: 1
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 0, y: 0}
+    iPhoneToolTipSize: {x: 700, y: 300}
     location: {x: 50, y: 50}
     iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
     iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
@@ -46,10 +47,11 @@ MonoBehaviour:
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     secondarySubImageLocation: {x: 0, y: 0, z: 0}
@@ -66,13 +68,14 @@ MonoBehaviour:
       <color=#6CAE75>Building</color>.
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 0, y: 0}
+    iPhoneToolTipSize: {x: 700, y: 300}
     location: {x: 450, y: -600}
     iPhoneLocation: {x: 250, y: -600}
     arrowLocation: {x: 0, y: 0}
     iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 425, y: -925}
@@ -84,10 +87,11 @@ MonoBehaviour:
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     secondarySubImageLocation: {x: 0, y: 0, z: 0}
@@ -104,13 +108,14 @@ MonoBehaviour:
       letting you play pieces faster!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 0, y: 0}
+    iPhoneToolTipSize: {x: 700, y: 300}
     location: {x: 270, y: -440}
     iPhoneLocation: {x: 210, y: -440}
     arrowLocation: {x: 0, y: -250}
     iPhoneArrowLocation: {x: 0, y: -250}
     arrowRotation: -90
     iPhoneArrowRotation: -90
+    iPhoneArrowScale: {x: 1, y: 1}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 220, y: -930}
@@ -122,10 +127,11 @@ MonoBehaviour:
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     secondarySubImageLocation: {x: 0, y: 0, z: 0}
@@ -142,13 +148,14 @@ MonoBehaviour:
       giving you a bigger supply!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 0, y: 0}
+    iPhoneToolTipSize: {x: 700, y: 300}
     location: {x: 450, y: -440}
     iPhoneLocation: {x: 250, y: -440}
     arrowLocation: {x: 60, y: -250}
     iPhoneArrowLocation: {x: 120, y: -250}
     arrowRotation: -90
     iPhoneArrowRotation: -90
+    iPhoneArrowScale: {x: 1, y: 1}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 430, y: -920}
@@ -160,10 +167,11 @@ MonoBehaviour:
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     secondarySubImageLocation: {x: 0, y: 0, z: 0}
@@ -180,13 +188,14 @@ MonoBehaviour:
       to help you go on the offensive!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 0, y: 0}
+    iPhoneToolTipSize: {x: 700, y: 300}
     location: {x: 450, y: -440}
     iPhoneLocation: {x: 250, y: -440}
     arrowLocation: {x: 260, y: -250}
     iPhoneArrowLocation: {x: 285, y: -250}
     arrowRotation: -90
     iPhoneArrowRotation: -90
+    iPhoneArrowScale: {x: 1, y: 1}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 630, y: -920}
@@ -198,10 +207,11 @@ MonoBehaviour:
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     secondarySubImageLocation: {x: 0, y: 0, z: 0}
@@ -218,13 +228,14 @@ MonoBehaviour:
       shape on the board, then place a <color=#7D7DFF>Blueprint</color> on top.
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 0, y: 0}
+    iPhoneToolTipSize: {x: 700, y: 300}
     location: {x: 50, y: 50}
     iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
     iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
@@ -236,10 +247,11 @@ MonoBehaviour:
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     secondarySubImageLocation: {x: 0, y: 0, z: 0}
@@ -255,13 +267,14 @@ MonoBehaviour:
     text: 
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 0, y: 0}
+    iPhoneToolTipSize: {x: 700, y: 300}
     location: {x: 50, y: 50}
     iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
     iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
@@ -273,10 +286,11 @@ MonoBehaviour:
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: -1}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 1, y: 1}
-    iPhoneImageScale: {x: 0, y: 0}
+    iPhoneImageScale: {x: 1, y: 1}
     imageRotation: 0
-    iPhoneImageRotation: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     imageColor: {r: 1, g: 1, b: 1, a: 1}
     subImageLocation: {x: 0, y: 0}
     secondarySubImageLocation: {x: 0, y: 0, z: 0}
@@ -293,13 +307,14 @@ MonoBehaviour:
       them too!
     displayObjective: 1
     objectiveIndex: 1
-    iPhoneToolTipSize: {x: 0, y: 0}
-    location: {x: 90, y: 60}
-    iPhoneLocation: {x: 0, y: 0}
+    iPhoneToolTipSize: {x: 700, y: 300}
+    location: {x: 50, y: 50}
+    iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
     iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
@@ -311,10 +326,11 @@ MonoBehaviour:
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: -1}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     secondarySubImageLocation: {x: 0, y: 0, z: 0}
@@ -337,6 +353,7 @@ MonoBehaviour:
     iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 0
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
@@ -348,10 +365,11 @@ MonoBehaviour:
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     secondarySubImageLocation: {x: 0, y: 0, z: 0}
@@ -368,13 +386,14 @@ MonoBehaviour:
       you haven't yet. I hope you can keep up!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 0, y: 0}
+    iPhoneToolTipSize: {x: 700, y: 300}
     location: {x: 450, y: -600}
     iPhoneLocation: {x: 250, y: -600}
     arrowLocation: {x: 0, y: 0}
     iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 0
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
@@ -386,10 +405,11 @@ MonoBehaviour:
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     secondarySubImageLocation: {x: 0, y: 0, z: 0}
@@ -412,6 +432,7 @@ MonoBehaviour:
     iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 0
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
@@ -423,10 +444,11 @@ MonoBehaviour:
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     subImageLocation: {x: 0, y: 0}
     secondarySubImageLocation: {x: 0, y: 0, z: 0}

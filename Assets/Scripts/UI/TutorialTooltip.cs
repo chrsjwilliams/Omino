@@ -136,18 +136,11 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         }
         if (Services.GameManager.onIPhone)
         {
+            // TOOLTIP
             tooltipTransform.anchoredPosition = info.iPhoneLocation;
             tooltipTransform.sizeDelta = info.iPhoneToolTipSize;
-            windowRect.anchoredPosition = info.iPhoneWindowLocation;
 
-            
-
-            imagePrimaryPosition = info.iPhoneImageLocation;
-            image.rectTransform.localPosition = imagePrimaryPosition;
-            imageSecondaryPosition = info.iPhoneSecondaryImageLocation;
-            image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.iPhoneImageRotation);
-            image.rectTransform.localScale = info.iPhoneImageScale;
-
+            // ARROW
             if (info.arrowLocation == Vector2.zero) arrow.enabled = false;
             else
             {
@@ -156,17 +149,23 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
                 arrow.transform.localScale = info.iPhoneArrowScale;
             }
 
+            // WINDOW
+            windowRect.anchoredPosition = info.iPhoneWindowLocation;
+            windowRect.sizeDelta = info.iPhoneWindowSize;
+
+            // IMAGE
+            imagePrimaryPosition = info.iPhoneImageLocation;
+            image.rectTransform.localPosition = imagePrimaryPosition;
+            imageSecondaryPosition = info.iPhoneSecondaryImageLocation;
+            image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.iPhoneImageRotation);
+            image.rectTransform.localScale = info.iPhoneImageScale;
         }
         else
         {
-            GetComponent<RectTransform>().anchoredPosition = info.location;
+            // TOOLTIP
+            tooltipTransform.anchoredPosition = info.location;
 
-            imagePrimaryPosition = info.imageLocation;
-            image.rectTransform.localPosition = imagePrimaryPosition;
-            imageSecondaryPosition = info.secondaryImageLocation;
-            image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.imageRotation);
-            image.rectTransform.localScale = info.imageScale;
-
+            // ARROW
             if (info.arrowLocation == Vector2.zero) arrow.enabled = false;
             else
             {
@@ -174,10 +173,16 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
                 arrow.transform.localRotation = Quaternion.Euler(0, 0, info.arrowRotation);
             }
 
+            // WINDOW
             windowRect.sizeDelta = info.windowSize;
-
             windowRect.anchoredPosition = info.windowLocation;
 
+            // IMAGE
+            imagePrimaryPosition = info.imageLocation;
+            image.rectTransform.localPosition = imagePrimaryPosition;
+            imageSecondaryPosition = info.secondaryImageLocation;
+            image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.imageRotation);
+            image.rectTransform.localScale = info.imageScale;
         }
 
         textComponent.text = info.text;
@@ -188,23 +193,18 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
         lerps = info.imageLerps;
 
-        
-        image.color = info.imageColor;
-        
+        image.color = info.imageColor;  
 
         imageAnim = image.GetComponent<Animator>();
 
         ToggleImageAnimation(label);
         if (label == "Rotate") TurnOffAnimation();
 
-
         transform.localScale = Vector3.zero;
         scalingUp = true;
        
-
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
-
     }
 
     public void Dismiss()
