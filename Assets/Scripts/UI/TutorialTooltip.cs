@@ -123,6 +123,9 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public void Init(TooltipInfo info)
     {
+        RectTransform windowRect =
+            Services.TutorialManager.backDim.GetComponent<RectTransform>();
+
         touchID = -1;
         label = info.label;
 
@@ -133,11 +136,33 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         if (Services.GameManager.onIPhone)
         {
             GetComponent<RectTransform>().anchoredPosition = info.iPhoneLocation;
+
+            windowRect.anchoredPosition = info.iPhoneWindowLocation;
+
         }
         else
         {
             GetComponent<RectTransform>().anchoredPosition = info.location;
+
+            imagePrimaryPosition = info.imageLocation;
+            image.rectTransform.localPosition = imagePrimaryPosition;
+            imageSecondaryPosition = info.secondaryImageLocation;
+            image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.imageRotation);
+            image.rectTransform.localScale = info.imageScale;
+
+            if (info.arrowLocation == Vector2.zero) arrow.enabled = false;
+            else
+            {
+                arrow.GetComponent<RectTransform>().anchoredPosition = info.arrowLocation;
+                arrow.transform.localRotation = Quaternion.Euler(0, 0, info.arrowRotation);
+            }
+
+            windowRect.sizeDelta = info.windowSize;
+
+            windowRect.anchoredPosition = info.windowLocation;
+
         }
+
         textComponent.text = info.text;
 
         dismissText.enabled = info.dismissable;
@@ -146,36 +171,11 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
         lerps = info.imageLerps;
 
-        imagePrimaryPosition = info.imageLocation;
-        image.rectTransform.localPosition = imagePrimaryPosition;
-        imageSecondaryPosition = info.secondaryImageLocation;
-        image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.imageRotation);
-        image.rectTransform.localScale = info.imageScale;
+        
         image.color = info.imageColor;
         
 
         imageAnim = image.GetComponent<Animator>();
-
-        subImagePrimaryPosition = info.subImageLocation;
-        subImage.rectTransform.anchoredPosition = subImagePrimaryPosition;
-        subImageSecondaryPosition = info.secondarySubImageLocation;
-        subImage.rectTransform.localRotation = Quaternion.Euler(0, 0, info.subImageRotation);
-        subImage.rectTransform.localScale = info.subImageScale;
-        subImage.color = info.subImageColor;
-
-        subImage2PrimaryPosition = info.subImage2Location;
-        subImage2.rectTransform.anchoredPosition = subImage2PrimaryPosition;
-        subImage2SecondaryPosition = info.secondarySubImage2Location;
-        subImage2.rectTransform.localRotation = Quaternion.Euler(0, 0, info.subImage2Rotation);
-        subImage2.rectTransform.localScale = info.subImage2Scale;
-        subImage2.color = info.subImage2Color;
-
-        if (info.arrowLocation == Vector2.zero) arrow.enabled = false;
-        else
-        {
-            arrow.GetComponent<RectTransform>().anchoredPosition = info.arrowLocation;
-            arrow.transform.localRotation = Quaternion.Euler(0, 0, info.arrowRotation);
-        }
 
         ToggleImageAnimation(label);
         if (label == "Rotate") TurnOffAnimation();
@@ -183,17 +183,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
         transform.localScale = Vector3.zero;
         scalingUp = true;
-        RectTransform windowRect = 
-            Services.TutorialManager.backDim.GetComponent<RectTransform>();
-        windowRect.sizeDelta = info.windowSize;
-        if (Services.GameManager.onIPhone)
-        {
-            windowRect.anchoredPosition = info.iPhoneWindowLocation;
-        }
-        else
-        {
-            windowRect.anchoredPosition = info.windowLocation;
-        }
+       
 
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);

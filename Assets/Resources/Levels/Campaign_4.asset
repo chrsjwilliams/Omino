@@ -14,7 +14,7 @@ MonoBehaviour:
   campaignLevelNum: 4
   objectives:
   - Connect to Opponent's Base
-  - Connect to 1 Tech Structure
+  - Connect to a Tech Structure
   availableStructures: 010000000900000003000000
   structCoords:
   - x: 11
@@ -33,11 +33,13 @@ MonoBehaviour:
     displayObjective: 1
     objectiveIndex: 0
     location: {x: 0, y: 0}
+    iPhoneLocation: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
@@ -62,11 +64,13 @@ MonoBehaviour:
     displayObjective: 0
     objectiveIndex: 0
     location: {x: -350, y: -200}
+    iPhoneLocation: {x: 0, y: 0}
     arrowLocation: {x: 450, y: 0}
     arrowRotation: 0
     dismissable: 1
     enableTooltips: 1
     windowLocation: {x: 275, y: -275}
+    iPhoneWindowLocation: {x: 0, y: 0}
     windowSize: {x: 200, y: 200}
     haveImage: 0
     imageLerps: 0
@@ -90,11 +94,13 @@ MonoBehaviour:
     displayObjective: 0
     objectiveIndex: 0
     location: {x: 0, y: 0}
+    iPhoneLocation: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
@@ -119,11 +125,13 @@ MonoBehaviour:
     displayObjective: 0
     objectiveIndex: 0
     location: {x: 0, y: 0}
+    iPhoneLocation: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
@@ -148,11 +156,13 @@ MonoBehaviour:
     displayObjective: 0
     objectiveIndex: 0
     location: {x: 440, y: 320}
+    iPhoneLocation: {x: 0, y: 0}
     arrowLocation: {x: -450, y: 0}
     arrowRotation: 180
     dismissable: 1
     enableTooltips: 1
     windowLocation: {x: -275, y: 275}
+    iPhoneWindowLocation: {x: 0, y: 0}
     windowSize: {x: 200, y: 200}
     haveImage: 0
     imageLerps: 0
@@ -176,11 +186,13 @@ MonoBehaviour:
     displayObjective: 1
     objectiveIndex: 1
     location: {x: 0, y: 0}
+    iPhoneLocation: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
@@ -204,11 +216,13 @@ MonoBehaviour:
     displayObjective: 0
     objectiveIndex: 0
     location: {x: 0, y: 0}
+    iPhoneLocation: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
     arrowRotation: 0
     dismissable: 0
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0

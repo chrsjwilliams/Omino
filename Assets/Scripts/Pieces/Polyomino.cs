@@ -494,12 +494,35 @@ public class Polyomino : IVertex
         //place the piece on the board where it's being hovered now
         OnPlace();
         DestroyThis();
+        if (owner != null && owner.crossSection)
+        {
+            List<Tile> overlappingTilesToRemove = new List<Tile>();
+            foreach (Tile tile in tiles)
+            {
+                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                if (mapTile.occupyingPiece != null &&
+                    (mapTile.occupyingPiece.owner == owner || mapTile.occupyingPiece.owner == null) &&
+                    !overlappingTilesToRemove.Contains(tile))
+                {
+                    overlappingTilesToRemove.Add(tile);
+                }
+            }
+
+            foreach (Tile tile in overlappingTilesToRemove)
+            {
+                tiles.Remove(tile);
+            }
+        }
+
         List<Polyomino> monominos = new List<Polyomino>();
         foreach (Tile tile in tiles)
         {
-            Polyomino monomino = CreateSubPiece();
-            monominos.Add(monomino);
+                Polyomino monomino = CreateSubPiece();
+                monominos.Add(monomino);            
         }
+
+        
+       
         //ConstructionTask construct = new ConstructionTask(this, monominos);
         //Services.GameScene.tm.Do(construct);
         for (int i = 0; i < monominos.Count; i++)
@@ -789,12 +812,12 @@ public class Polyomino : IVertex
         {
             if (!Services.MapManager.IsCoordContainedInMap(coord)) return false;
             Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
-            if (mapTile.IsOccupied() &&
+            if ((mapTile.IsOccupied() && !owner.crossSection) &&
                 ((mapTile.occupyingPiece.connected && owner.attackResources < 1 && !pretendAttackResource) ||
-                (mapTile.occupyingPiece.connected && mapTile.occupyingPiece.owner == owner) ||
+                (mapTile.occupyingPiece.connected && (mapTile.occupyingPiece.owner == owner)) ||
                 mapTile.occupyingPiece is TechBuilding))
                 return false;
-            if (mapTile.IsOccupied() && mapTile.occupyingPiece.shieldDurationRemaining > 0 && !pretendAttackResource)
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece.shieldDurationRemaining > 0 && !pretendAttackResource && !owner.crossSection)
                 return false;
         }
         return true;
@@ -872,7 +895,25 @@ public class Polyomino : IVertex
         foreach (Tile tile in tiles)
         {
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-            if (mapTile.occupyingPiece != null && !piecesToRemove.Contains(mapTile.occupyingPiece))
+            if ( owner != null && 
+                !owner.crossSection && 
+                mapTile.occupyingPiece != null && // check occupying piece's owner
+                !piecesToRemove.Contains(mapTile.occupyingPiece))
+            {
+                piecesToRemove.Add(mapTile.occupyingPiece);
+                if (mapTile.occupyingPiece.owner != owner && mapTile.occupyingPiece.connected)
+                {
+                    removedOpposingPiece = true;
+                    positionOfDestruction = mapTile.transform.position;
+                }
+            }
+
+            if(owner != null &&
+                owner.crossSection &&
+                mapTile.occupyingPiece != null &&
+                mapTile.occupyingPiece.owner != null &&
+                mapTile.occupyingPiece.owner != owner &&
+                !piecesToRemove.Contains(mapTile.occupyingPiece))
             {
                 piecesToRemove.Add(mapTile.occupyingPiece);
                 if (mapTile.occupyingPiece.owner != owner && mapTile.occupyingPiece.connected)
