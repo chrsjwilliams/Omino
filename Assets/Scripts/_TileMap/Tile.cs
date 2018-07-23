@@ -70,8 +70,9 @@ public class Tile : MonoBehaviour, IVertex
     private bool rippleEmitted;
 
     private float pathHighlightTime;
+    private bool highlightingPath;
     private const float pathHighlightUpDuration = 0.1f;
-    private const float pathHighlightDownDuration = 0.3f;
+    private const float pathHighlightDownDuration = 0.6f;
     private float pathHighlightDelay;
 
     public void Init(Coord coord_)
@@ -198,38 +199,45 @@ public class Tile : MonoBehaviour, IVertex
     {
         if (changingColor) LerpToTargetColor();
         if (scaling) ScaleUp();
-        if (pathHighlightTime > 0 || pathHighlightDelay > 0) PathHighlight();
+        if (pathHighlightDelay > 0) TickDownHighlightDelay();
+        if (highlightingPath) PathHighlight();
     }
 
     public void StartPathHighlight(float delay)
     {
         pathHighlightDelay = delay;
-        pathHighlightTime = pathHighlightUpDuration + pathHighlightDownDuration;
+        pathHighlightTime = 0;
+    }
+
+    private void TickDownHighlightDelay()
+    {
+        pathHighlightDelay -= Time.deltaTime;
+        if (pathHighlightDelay <= 0) highlightingPath = true;
     }
 
     private void PathHighlight()
     {
-        if (pathHighlightDelay > 0) pathHighlightDelay -= Time.deltaTime;
+        pathHighlightTime += Time.deltaTime;
+        float alpha;
+        if (pathHighlightTime < pathHighlightUpDuration)
+        {
+            alpha = Mathf.Lerp(0, 1,
+                EasingEquations.Easing.QuadEaseOut(
+                   pathHighlightTime /pathHighlightUpDuration));
+        }
         else
         {
-            pathHighlightTime -= Time.deltaTime;
-            float alpha;
-            if (pathHighlightTime > pathHighlightDownDuration)
-            {
-                alpha = Mathf.Lerp(1, 0,
-                    EasingEquations.Easing.QuadEaseOut(
-                        (pathHighlightTime - pathHighlightDownDuration) /
-                        pathHighlightUpDuration));
-            }
-            else
-            {
-                alpha = Mathf.Lerp(0, 1,
-                    EasingEquations.Easing.QuadEaseOut(
-                        pathHighlightTime / pathHighlightUpDuration));
-            }
-            if (pathHighlightTime <= 0) alpha = 0;
-            SetBpAssistAlpha(alpha);
+            alpha = Mathf.Lerp(1, 0,
+                EasingEquations.Easing.QuadEaseOut(
+                    (pathHighlightTime- pathHighlightUpDuration) 
+                    / pathHighlightDownDuration));
         }
+        if (pathHighlightTime >= pathHighlightUpDuration + pathHighlightDownDuration)
+        {
+            alpha = 0;
+            highlightingPath = false;
+        }
+        SetBpAssistAlpha(alpha);
     }
 
     private void ScaleUp()

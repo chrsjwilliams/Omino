@@ -559,6 +559,7 @@ public class Polyomino : IVertex
             }
         }
         distanceLevels.Add(distanceLevelZero);
+        int lastDistanceLevelIndex = 0;
         for (int i = 0; i < 5; i++)
         {
             if (distanceLevels[i].Count == 0) break;
@@ -579,16 +580,40 @@ public class Polyomino : IVertex
                 tempMonominos.Remove(monomino);
             }
             distanceLevels.Add(nextDistanceLevel);
+            lastDistanceLevelIndex = i;
         }
-        for (int i = 0; i < distanceLevels.Count; i++)
-        {
-            foreach(Polyomino monomino in distanceLevels[i])
-            {
-                monomino.tiles[0].StartScaling(Tile.scaleUpStaggerTime * i);
-            }
-        }
+        //for (int i = 0; i < distanceLevels.Count; i++)
+        //{
+        //    foreach(Polyomino monomino in distanceLevels[i])
+        //    {
+        //        monomino.tiles[0].StartScaling(Tile.scaleUpStaggerTime * i);
+        //    }
+        //}
         owner.OnPiecePlaced(this, monominos);
         Services.AudioManager.RegisterSoundEffect(Services.Clips.PiecePlaced, 0.5f);
+        List<Polyomino> shortestPath = AStarSearch.ShortestPath(
+            owner.mainBase, distanceLevels[lastDistanceLevelIndex][0]);
+        shortestPath.Reverse();
+        List<Polyomino> pathToHighlight = new List<Polyomino>();
+        for (int i = 0; i < shortestPath.Count; i++)
+        {
+            Polyomino pathPiece = shortestPath[i];
+            if (pathPiece.occupyingBlueprints.Count > 0)
+            {
+                Blueprint pathBlueprint = shortestPath[i].occupyingBlueprints[0];
+                if (!pathToHighlight.Contains(pathBlueprint))
+                    pathToHighlight.Add(pathBlueprint);
+            }
+            else
+            {
+                pathToHighlight.Add(pathPiece);
+            }
+        }
+        for (int i = 0; i < pathToHighlight.Count; i++)
+        {
+            pathToHighlight[i].PathHighlight(i * Player.pathHighlightStagger);
+        }
+
     }
 
     public List<Coord> GetAdjacentEmptyTiles()
@@ -1726,5 +1751,13 @@ public class Polyomino : IVertex
         holder.spriteBottom.sortingOrder = (-centerCoord.x * 10) - (centerCoord.y * 1000);
         holder.dropShadow.sortingOrder = holder.spriteBottom.sortingOrder + 1;
         holder.icon.sortingOrder = holder.spriteBottom.sortingOrder + 2;
+    }
+
+    public virtual void PathHighlight(float delay)
+    {
+        foreach(Tile tile in tiles)
+        {
+            tile.StartPathHighlight(delay);
+        }
     }
 }

@@ -206,4 +206,9 @@ public abstract class TechBuilding : Polyomino
             Services.GameScene.UnpauseGame();
         }
     }
+
+    public override void PathHighlight(float delay)
+    {
+        holder.StartPathHighlight(delay);
+    }
 }

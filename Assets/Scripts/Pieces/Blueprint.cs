@@ -428,4 +428,9 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         owner.AddActiveBlueprint(this);
         holder.ShiftColor(owner.ColorScheme[0]);
     }
+
+    public override void PathHighlight(float delay)
+    {
+        holder.StartPathHighlight(delay);
+    }
 }

@@ -6,7 +6,6 @@ using Beat;
 
 public class Player : MonoBehaviour
 {
-
     public int playerNum { get; private set; }
 
     [SerializeField] private Color[] colorScheme = new Color[2];
@@ -151,7 +150,7 @@ public class Player : MonoBehaviour
     public float allResourceHandicap = 1;
     public float allBlueprintHandicap = 1;
 
-    private const float pathHighlightStagger = 0.1f;
+    public const float pathHighlightStagger = 0.05f;
 
     public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_, bool blueprintValueHandicap, float handicap)
     {

@@ -34,6 +34,14 @@ public class PieceHolder : MonoBehaviour {
     private const float energyCutoffMin = 0.18f;
     private const float energyDisplayOffset = 1.5f;
 
+    private float pathHighlightTime;
+    private bool highlightingPath;
+    private const float pathHighlightUpDuration = 0.1f;
+    private const float pathHighlightDownDuration = 0.6f;
+    private float pathHighlightDelay;
+    private Color baseColor;
+
+
     // Use this for initialization
     void Start () {
 		
@@ -42,6 +50,8 @@ public class PieceHolder : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (changingColor) LerpToTargetColor();
+        if (pathHighlightDelay > 0) TickDownHighlightDelay();
+        if (highlightingPath) PathHighlight();
     }
 
     public void ShiftColor(Color color)
@@ -160,5 +170,44 @@ public class PieceHolder : MonoBehaviour {
         Vector3 position = (rightmostTile.transform.localPosition.x + (energyDisplayOffset * modifier))
             * Vector3.right;
         attackLevelBack.transform.localPosition = position;
+    }
+
+
+    public void StartPathHighlight(float delay)
+    {
+        pathHighlightDelay = delay;
+        pathHighlightTime = 0;
+        baseColor = spriteBottom.color;
+    }
+
+    private void TickDownHighlightDelay()
+    {
+        pathHighlightDelay -= Time.deltaTime;
+        if (pathHighlightDelay <= 0) highlightingPath = true;
+    }
+
+    private void PathHighlight()
+    {
+        pathHighlightTime += Time.deltaTime;
+        Color color;
+        if (pathHighlightTime < pathHighlightUpDuration)
+        {
+            color = Color.Lerp(baseColor, Color.white,
+                EasingEquations.Easing.QuadEaseOut(
+                   pathHighlightTime / pathHighlightUpDuration));
+        }
+        else
+        {
+            color = Color.Lerp(Color.white, baseColor,
+                EasingEquations.Easing.QuadEaseOut(
+                    (pathHighlightTime - pathHighlightUpDuration)
+                    / pathHighlightDownDuration));
+        }
+        if (pathHighlightTime >= pathHighlightUpDuration + pathHighlightDownDuration)
+        {
+            color = baseColor;
+            highlightingPath = false;
+        }
+        spriteBottom.color = color;
     }
 }
