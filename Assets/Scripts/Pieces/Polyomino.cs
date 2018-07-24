@@ -7,7 +7,7 @@ public enum BuildingType
 {
     BASE = -4, FACTORY = -3, GENERATOR = -2, BARRACKS = -1, NONE = 0,
     DYNAMO, SUPPLYBOOST, UPSIZE, ATTACKUPSIZE, COMBUSTION, SHIELDEDPIECES,
-    ARMORY, FISSION, RECYCLING, CROSSSECTION, AMEND, BULLDOZE
+    ARMORY, FISSION, RECYCLING, CROSSSECTION, AMEND
 }
 
 public class Polyomino : IVertex
@@ -991,7 +991,7 @@ public class Polyomino : IVertex
             {
                 Polyomino enemyPiece = adjacentEnemyPieces[i];
                 if (!enemyPiecesInRange.Contains(enemyPiece) && !(enemyPiece is TechBuilding) &&
-                    !enemyPiece.connected)
+                    !enemyPiece.connected )
                 {
                     enemyPiecesInRange.Add(enemyPiece);
                 }

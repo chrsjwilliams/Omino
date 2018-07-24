@@ -183,9 +183,6 @@ public class MapManager : MonoBehaviour
                 case BuildingType.AMEND:
                     techBuilding = new Amend();
                     break;
-                case BuildingType.BULLDOZE:
-                    techBuilding = new Bulldoze();
-                    break;
                 default:
                     return null;
             }
@@ -258,7 +255,8 @@ public class MapManager : MonoBehaviour
             BuildingType.ARMORY,
             BuildingType.FISSION,
             BuildingType.RECYCLING,
-            //BuildingType.CROSSSECTION
+            BuildingType.CROSSSECTION,
+            BuildingType.AMEND
         };
     }
 

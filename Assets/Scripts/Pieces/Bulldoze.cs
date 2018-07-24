@@ -8,7 +8,7 @@ public class Bulldoze : TechBuilding
     {
         label = "Bulldoze";
 
-        buildingType = BuildingType.BULLDOZE;
+        //buildingType = BuildingType.BULLDOZE;
     }
 
     public override void OnClaimEffect(Player player)
