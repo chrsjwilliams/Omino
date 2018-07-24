@@ -6,12 +6,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class DungeonRunManager
 {
-    public const int MAX_DUNGEON_CHALLENGES = 4;
+    public const int MAX_DUNGEON_CHALLENGES = 5;
     public static DungeonRunData dungeonRunData { get; private set; }
 
     private const int MAX_TECH_CHOICES = 3;
     private const int MAX_TECH_INVENTORY = MAX_DUNGEON_CHALLENGES - 1;
-    private const float handicapIncrement = 0.15f;
+    private const float handicapIncrement = 0.11f;
     private const string fileName = "dungeonRunData";
     
 

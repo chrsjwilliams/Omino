@@ -73,6 +73,7 @@ public class GameSceneScript : Scene<TransitionData>
             if(Services.GameManager.onIPhone)
             {
                 Services.UIManager.techPowerUpIconArray[0].GetComponent<RectTransform>().localPosition = new Vector2(-600, 0);
+                Services.UIManager.techPowerUpIconArray[0].GetComponent<RectTransform>().localScale = new Vector2(0.75f, 0.75f);
             }
 
         }
