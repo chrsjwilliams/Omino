@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrossSection : TechBuilding
+public class Bulldoze : TechBuilding
 {
-    public CrossSection() : base(0)
+    public Bulldoze() : base(0)
     {
-        label = "Cross Section";
+        label = "Bulldoze";
 
-        buildingType = BuildingType.CROSSSECTION;
+        buildingType = BuildingType.BULLDOZE;
     }
 
     public override void OnClaimEffect(Player player)
     {
-        player.ToggleCrossSection(true);
+        player.ToggleBulldoze(true);
     }
 
     public override void OnLostEffect()
     {
-        owner.ToggleCrossSection(false);
+        owner.ToggleBulldoze(false);
     }
 
     public override void OnClaim(Player player)
@@ -35,11 +35,12 @@ public class CrossSection : TechBuilding
 
     protected override string GetName()
     {
-        return "Cross Section";
+        return "Bulldoze";
     }
 
     public override string GetDescription()
     {
-        return "Pieces can overlap neutral and friendly pieces.";
+        //  Should Bulldoze cost 1 hammer?
+        return "Pieces destroy adjacent opposing disconnected pieces.";
     }
 }

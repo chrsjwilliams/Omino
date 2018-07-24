@@ -144,48 +144,54 @@ public class MapManager : MonoBehaviour
     {
         if (structCoord != new Coord(-1, -1))
         {
-            TechBuilding structure;
+            TechBuilding techBuilding;
             switch (type)
             {
                 case BuildingType.BASE:
-                    structure = new Base();
+                    techBuilding = new Base();
                     break;
                 case BuildingType.DYNAMO:
-                    structure = new Dynamo();
+                    techBuilding = new Dynamo();
                     break;
                 case BuildingType.SUPPLYBOOST:
-                    structure = new SupplyBoost();
+                    techBuilding = new SupplyBoost();
                     break;
                 case BuildingType.UPSIZE:
-                    structure = new Upsize();
+                    techBuilding = new Upsize();
                     break;
                 case BuildingType.ATTACKUPSIZE:
-                    structure = new AttackUpsize();
+                    techBuilding = new AttackUpsize();
                     break;
                 case BuildingType.COMBUSTION:
-                    structure = new Combustion();
+                    techBuilding = new Combustion();
                     break;
                 case BuildingType.SHIELDEDPIECES:
-                    structure = new ShieldedPieces();
+                    techBuilding = new ShieldedPieces();
                     break;
                 case BuildingType.ARMORY:
-                    structure = new Armory();
+                    techBuilding = new Armory();
                     break;
                 case BuildingType.FISSION:
-                    structure = new Fission();
+                    techBuilding = new Fission();
                     break;
                 case BuildingType.RECYCLING:
-                    structure = new Recycling();
+                    techBuilding = new Recycling();
                     break;
                 case BuildingType.CROSSSECTION:
-                    structure = new CrossSection();
+                    techBuilding = new CrossSection();
+                    break;
+                case BuildingType.AMEND:
+                    techBuilding = new Amend();
+                    break;
+                case BuildingType.BULLDOZE:
+                    techBuilding = new Bulldoze();
                     break;
                 default:
                     return null;
             }
-            structure.MakePhysicalPiece();
-            structure.PlaceAtLocation(structCoord);
-            return structure;
+            techBuilding.MakePhysicalPiece();
+            techBuilding.PlaceAtLocation(structCoord);
+            return techBuilding;
         }
         return null;
     }

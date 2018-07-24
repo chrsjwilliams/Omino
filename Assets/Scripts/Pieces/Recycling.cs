@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
 public class Recycling : TechBuilding
 {
     public Recycling() : base(1)

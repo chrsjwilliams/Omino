@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
 public class Armory : TechBuilding
 {
     private const float attackFactorModifier = 0.15f;

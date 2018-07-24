@@ -81,6 +81,8 @@ public class Player : MonoBehaviour
     protected bool biggerBombs;
     public bool crossSection { get; protected set; }
     public bool splashDamage { get; protected set; }
+    public bool amend { get; protected set; }
+    public bool bulldoze { get; protected set; }
     // 
 
     private bool blueprintsClearedCheck = false;
@@ -1004,6 +1006,16 @@ public class Player : MonoBehaviour
     public void ToggleCrossSection(bool status)
     {
         crossSection = status;
+    }
+
+    public void ToggleAmend(bool status)
+    {
+        amend = status;
+    }
+
+    public void ToggleBulldoze(bool status)
+    {
+        bulldoze = status;
     }
 
     public void ToggleCombustion(bool status)

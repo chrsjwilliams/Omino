@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
 public class Dynamo : TechBuilding
 {
     private const float resourceGainIncrementMultiplier = 0.15f;

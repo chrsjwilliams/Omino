@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
 public class Upsize : TechBuilding
 {
     public Upsize() : base(0)

@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CrossSection : TechBuilding
+public class Amend : TechBuilding
 {
-    public CrossSection() : base(0)
+    public Amend() : base(0)
     {
-        label = "Cross Section";
+        label = "Amend";
 
-        buildingType = BuildingType.CROSSSECTION;
+        buildingType = BuildingType.AMEND;
     }
 
     public override void OnClaimEffect(Player player)
     {
-        player.ToggleCrossSection(true);
+        player.ToggleAmend(true);
     }
 
     public override void OnLostEffect()
     {
-        owner.ToggleCrossSection(false);
+        owner.ToggleAmend(false);
     }
 
     public override void OnClaim(Player player)
@@ -35,11 +35,11 @@ public class CrossSection : TechBuilding
 
     protected override string GetName()
     {
-        return "Cross Section";
+        return "Amend";
     }
 
     public override string GetDescription()
     {
-        return "Pieces can overlap neutral and friendly pieces.";
+        return "Newly placed pieces claim opposing disconnected pieces that do not have Blueprints.";
     }
 }

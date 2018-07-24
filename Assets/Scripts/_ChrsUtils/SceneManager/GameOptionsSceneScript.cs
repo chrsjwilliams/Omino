@@ -330,6 +330,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
     private void StartCampaignMode()
     {
+
         TurnOnHandicapOptions(false);
 
         humanPlayers[0] = true;

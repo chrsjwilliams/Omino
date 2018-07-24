@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
 public class ShieldedPieces : TechBuilding
 {
     public const float ShieldDuration = 6f;

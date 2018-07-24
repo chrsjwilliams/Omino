@@ -7,7 +7,7 @@ public enum BuildingType
 {
     BASE = -4, FACTORY = -3, GENERATOR = -2, BARRACKS = -1, NONE = 0,
     DYNAMO, SUPPLYBOOST, UPSIZE, ATTACKUPSIZE, COMBUSTION, SHIELDEDPIECES,
-    ARMORY, FISSION, RECYCLING, CROSSSECTION
+    ARMORY, FISSION, RECYCLING, CROSSSECTION, AMEND, BULLDOZE
 }
 
 public class Polyomino : IVertex
@@ -521,8 +521,21 @@ public class Polyomino : IVertex
                 monominos.Add(monomino);            
         }
 
-        
-       
+        if (owner.amend)
+        {
+            monominos.AddRange(GetPiecesInRange());
+
+            foreach(Polyomino piece in monominos)
+            {
+                if(piece.owner != owner)
+                {
+                    piece.owner = owner;
+                    tiles.AddRange(piece.tiles);
+                }
+            }
+        }
+
+
         //ConstructionTask construct = new ConstructionTask(this, monominos);
         //Services.GameScene.tm.Do(construct);
         for (int i = 0; i < monominos.Count; i++)
@@ -946,6 +959,14 @@ public class Polyomino : IVertex
                 }
             }
         }
+
+        if(owner != null && owner.bulldoze)
+        {
+            piecesToRemove.AddRange(GetPiecesInRange());
+        }
+
+        
+
         if (piecesToRemove.Count > 0)
             Services.AudioManager.RegisterSoundEffect(Services.Clips.PieceDestroyed);
         for (int i = piecesToRemove.Count - 1; i >= 0; i--)
@@ -957,6 +978,26 @@ public class Polyomino : IVertex
             owner.OnDestructionOfOpposingPiece(positionOfDestruction);
             Services.GameManager.Players[owner.playerNum % 2].OnDestructionOfPiece();
         }
+    }
+
+    public List<Polyomino> GetPiecesInRange()
+    {
+        List<Polyomino> enemyPiecesInRange = new List<Polyomino>();
+        if (owner != null && (owner.amend || owner.bulldoze))
+        {
+            List<Polyomino> adjacentEnemyPieces =
+                GetAdjacentPolyominos(Services.GameManager.Players[owner.playerNum % 2]);
+            for (int i = 0; i < adjacentEnemyPieces.Count; i++)
+            {
+                Polyomino enemyPiece = adjacentEnemyPieces[i];
+                if (!enemyPiecesInRange.Contains(enemyPiece) && !(enemyPiece is TechBuilding) &&
+                    !enemyPiece.connected)
+                {
+                    enemyPiecesInRange.Add(enemyPiece);
+                }
+            }
+        }
+        return enemyPiecesInRange;
     }
 
     protected void MakeDustClouds()

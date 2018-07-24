@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
 public class SupplyBoost : TechBuilding
 {
     private const float drawRateMultiplier = 0.15f;

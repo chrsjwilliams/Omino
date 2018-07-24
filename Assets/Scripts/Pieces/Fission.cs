@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.Serializable]
 public class Fission : TechBuilding
 {
     public const float energyReward = 0.5f;
