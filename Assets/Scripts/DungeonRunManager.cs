@@ -6,12 +6,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class DungeonRunManager
 {
-    public const int MAX_DUNGEON_CHALLENGES = 3;
+    public const int MAX_DUNGEON_CHALLENGES = 4;
     public static DungeonRunData dungeonRunData { get; private set; }
 
     private const int MAX_TECH_CHOICES = 3;
     private const int MAX_TECH_INVENTORY = MAX_DUNGEON_CHALLENGES - 1;
-    private const float handicapIncrement = 0.1f;
+    private const float handicapIncrement = 0.15f;
     private const string fileName = "dungeonRunData";
     
 
@@ -19,7 +19,7 @@ public static class DungeonRunManager
     {
             BuildingType.DYNAMO,        BuildingType.SUPPLYBOOST,       BuildingType.UPSIZE,
             BuildingType.SHIELDEDPIECES,BuildingType.ARMORY,            BuildingType.FISSION,
-            BuildingType.RECYCLING
+            BuildingType.RECYCLING,     BuildingType.CROSSSECTION
     };
 
     public static void LoadData()

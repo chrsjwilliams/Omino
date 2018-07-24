@@ -812,10 +812,6 @@ public class Polyomino : IVertex
 
     public virtual bool IsPlacementLegal(List<Polyomino> adjacentPieces, Coord hypotheticalCoord, bool pretendAttackResource = false)
     {
-        //determine if the pieces current location is a legal placement
-        //CONDITIONS:
-        //is contiguous with a structure connected to either the base or a fortification
-        //doesn't overlap with any existing pieces or is a destructor\
         bool connectedToBase = false;
         for (int i = 0; i < adjacentPieces.Count; i++)
         {
@@ -842,7 +838,9 @@ public class Polyomino : IVertex
                 (mapTile.occupyingPiece.connected && (mapTile.occupyingPiece.owner == owner)) ||
                 mapTile.occupyingPiece is TechBuilding))
                 return false;
-            if (mapTile.IsOccupied() && mapTile.occupyingPiece.shieldDurationRemaining > 0 && !pretendAttackResource && !owner.crossSection)
+            if (mapTile.IsOccupied() && 
+                mapTile.occupyingPiece.shieldDurationRemaining > 0 && 
+                !pretendAttackResource)
                 return false;
         }
         return true;

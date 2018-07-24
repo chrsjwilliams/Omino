@@ -69,6 +69,12 @@ public class GameSceneScript : Scene<TransitionData>
                 techBuildingIcon.sprite = Services.TechDataLibrary.GetIcon(techBuilding);
                 techBuildingIcon.color = Services.GameManager.Player1ColorScheme[0];
             }
+
+            if(Services.GameManager.onIPhone)
+            {
+                Services.UIManager.techPowerUpIconArray[0].GetComponent<RectTransform>().localPosition = new Vector2(-600, 0);
+            }
+
         }
 
         if(Services.GameManager.mode == TitleSceneScript.GameMode.Campaign)
