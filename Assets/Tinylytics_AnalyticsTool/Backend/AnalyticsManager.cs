@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Tinylytics{
@@ -10,7 +11,7 @@ namespace Tinylytics{
 		public float logInterval = 10.0f; // Logging interval in seconds
 		public static AnalyticsData analyticsData { get; private set; }
 		
-		private const string _fileName = "SerializedAnalyticsData";
+		private const string _fileName = "AnalyticsData";
 
 		private float _playModeStartTime = 0.0f;
 		private float _totalPlaytime = 0.0f;
@@ -36,16 +37,30 @@ namespace Tinylytics{
 			if (File.Exists(filePath))
 			{
 				file = File.OpenRead(filePath);
-				analyticsData = (AnalyticsData)bf.Deserialize(file);
+				try
+				{
+					analyticsData = (AnalyticsData) bf.Deserialize(file);
+				}
+				catch (SerializationException e)
+				{
+					Debug.Log("Failed to deserialize, reason : " + e.Message);
+					file.Dispose();
+					_ResetData();
+					_SaveData();
+					// throw;
+				}
+				finally
+				{
+					file.Close();
+				}
 			}
 			else
 			{
 				file = File.Create(filePath);
 				analyticsData = new AnalyticsData();
 				bf.Serialize(file, analyticsData);
+				file.Close();
 			}
-
-			file.Close();
 		}
 
 		private static void _SaveData()
@@ -58,6 +73,21 @@ namespace Tinylytics{
 
 			file = File.OpenWrite(filePath);
 			bf.Serialize(file, analyticsData);
+			file.Close();
+		}
+
+		private static void _ResetData()
+		{
+			string filePath = Path.Combine(
+				Application.persistentDataPath,
+				_fileName);
+			FileStream file;
+			BinaryFormatter bf = new BinaryFormatter();
+			
+			file = File.Create(filePath);
+			analyticsData = new AnalyticsData();
+			bf.Serialize(file, analyticsData);
+			
 			file.Close();
 		}
 

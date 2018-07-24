@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public static class ELOManager
@@ -24,16 +25,31 @@ public static class ELOManager
         if (File.Exists(filePath))
         {
             file = File.OpenRead(filePath);
-            eloData = (EloData)bf.Deserialize(file);
+            try
+            {
+                eloData = (EloData) bf.Deserialize(file);
+            }
+            catch (SerializationException e)
+            {
+                Debug.Log("Failed to deserialize, reason: " + e.Message);
+                file.Dispose();
+                ResetData();
+                SaveData();
+                // throw;
+            }
+            finally
+            {
+                file.Close();
+            }
         }
         else
         {
             file = File.Create(filePath);
             eloData = new EloData();
             bf.Serialize(file, eloData);
+            
+            file.Close();
         }
-
-        file.Close();
     }
 
     private static void SaveData()
@@ -46,6 +62,21 @@ public static class ELOManager
 
         file = File.OpenWrite(filePath);
         bf.Serialize(file, eloData);
+        file.Close();
+    }
+    
+    private static void ResetData()
+    {
+        string filePath = Path.Combine(
+            Application.persistentDataPath,
+            fileName);
+        FileStream file;
+        BinaryFormatter bf = new BinaryFormatter();
+        
+        file = File.Create(filePath);
+        eloData = new EloData();
+        bf.Serialize(file, eloData);
+
         file.Close();
     }
 

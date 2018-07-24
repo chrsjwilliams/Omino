@@ -44,7 +44,7 @@ public static class DungeonRunManager
                 file.Dispose();
                 ResetDungeonRunData();
                 SaveData();
-                throw;
+                // throw;
             }
             finally
             {
