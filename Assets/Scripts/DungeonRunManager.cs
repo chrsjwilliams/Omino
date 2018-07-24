@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public static class DungeonRunManager
@@ -33,16 +34,32 @@ public static class DungeonRunManager
         if (File.Exists(filePath))
         {
             file = File.OpenRead(filePath);
-            dungeonRunData = (DungeonRunData)bf.Deserialize(file);
+            try
+            {
+                dungeonRunData = (DungeonRunData) bf.Deserialize(file);
+            }
+            catch (SerializationException e) 
+            {
+                Debug.Log("Failed to deserialize. Reason: " + e.Message);
+                file.Dispose();
+                ResetDungeonRunData();
+                SaveData();
+                throw;
+            }
+            finally
+            {
+                file.Close();
+            }
         }
         else
         {
             file = File.Create(filePath);
             dungeonRunData = new DungeonRunData();
             bf.Serialize(file, dungeonRunData);
+            
+            file.Close();
         }
 
-        file.Close();
     }
 
     private static void SaveData()
