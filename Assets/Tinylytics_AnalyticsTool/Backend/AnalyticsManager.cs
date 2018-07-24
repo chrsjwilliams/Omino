@@ -10,7 +10,7 @@ namespace Tinylytics{
 		public float logInterval = 10.0f; // Logging interval in seconds
 		public static AnalyticsData analyticsData { get; private set; }
 		
-		private const string fileName = "AnalyticsDataFile";
+		private const string _fileName = "SerializedAnalyticsData";
 
 		private float _playModeStartTime = 0.0f;
 		private float _totalPlaytime = 0.0f;
@@ -20,8 +20,7 @@ namespace Tinylytics{
 		private bool _pauseCallSent = false;
 		private TaskManager _taskManager;
 		private bool _recievedGameOver = true;
-
-		private TitleSceneScript.GameMode currentPlayMode;
+		private TitleSceneScript.GameMode _currentPlayMode;
 
 		private static AnalyticsManager _instance;
 		public static AnalyticsManager Instance { get { return _instance; } }
@@ -30,7 +29,7 @@ namespace Tinylytics{
 		{
 			string filePath = Path.Combine(
 				Application.persistentDataPath,
-				fileName);
+				_fileName);
 			FileStream file;
 			BinaryFormatter bf = new BinaryFormatter();
 
@@ -53,7 +52,7 @@ namespace Tinylytics{
 		{
 			string filePath = Path.Combine(
 				Application.persistentDataPath,
-				fileName);
+				_fileName);
 			FileStream file;
 			BinaryFormatter bf = new BinaryFormatter();
 
@@ -78,12 +77,12 @@ namespace Tinylytics{
 			_lastPlaytimeLog = Time.time;
 			
 			_LoadData();
-			_totalPlaytime = analyticsData.TOTAL_PLAYTIME;
-			_totalSessions = analyticsData.TOTAL_SESSIONS;
+			_totalPlaytime = analyticsData.totalPlaytime;
+			_totalSessions = analyticsData.totalSessions;
 			
-			if (analyticsData.VERSION_NUMBER != Application.version)
+			if (analyticsData.versionNumber != Application.version)
 			{
-				analyticsData.VERSION_NUMBER = Application.version;
+				analyticsData.versionNumber = Application.version;
 				_LogVersionNumber();
 			}
 			
@@ -119,7 +118,7 @@ namespace Tinylytics{
 
 		private void _LogVersionNumber()
 		{
-			BackendManager.SendData("Version Number", analyticsData.VERSION_NUMBER);
+			BackendManager.SendData("Version Number", analyticsData.versionNumber);
 		}
 
 		private void OnApplicationPause(bool pauseStatus)
@@ -129,7 +128,7 @@ namespace Tinylytics{
 				if (!_pauseCallSent)
 				{
 					BackendManager.SendData("Session Playtime", (Time.time - Instance._sessionStartTime).ToString());
-					analyticsData.TOTAL_SESSIONS = _totalSessions + 1;
+					analyticsData.totalSessions = _totalSessions + 1;
 					_SaveData();
 					_pauseCallSent = true;
 				}
@@ -137,7 +136,7 @@ namespace Tinylytics{
 			else if (_pauseCallSent)
 			{
 				_sessionStartTime = Time.time;
-				_totalSessions = analyticsData.TOTAL_SESSIONS;
+				_totalSessions = analyticsData.totalSessions;
 				_pauseCallSent = false;
 			}
 		}
@@ -146,7 +145,7 @@ namespace Tinylytics{
 		{
 			_totalPlaytime += (Time.time - Instance._lastPlaytimeLog);
 			_lastPlaytimeLog = Time.time;
-			analyticsData.TOTAL_PLAYTIME = _totalPlaytime;
+			analyticsData.totalPlaytime = _totalPlaytime;
 			_SaveData();
 		}
 
@@ -154,12 +153,12 @@ namespace Tinylytics{
 		{
 			_UpdateTotalPlaytime();
 			_LogTimeSinceFirstPlay();
-			BackendManager.SendData("Total Playtime", analyticsData.TOTAL_PLAYTIME.ToString());
+			BackendManager.SendData("Total Playtime", analyticsData.totalPlaytime.ToString());
 		}
 
 		private void _LogTimeSinceFirstPlay()
 		{
-			BackendManager.SendData("Time Since Initial Load", (_SecondsSinceEpoch() - analyticsData.FIRST_LOAD).ToString());
+			BackendManager.SendData("Time Since Initial Load", (_SecondsSinceEpoch() - analyticsData.firstLoadTime).ToString());
 		}
 	
 		public static void LogMetric(string metricName, string dataToSend){
@@ -188,24 +187,24 @@ namespace Tinylytics{
 
 		public void PlayedTutorial()
 		{
-			if (!analyticsData.PLAYED_TUTORIAL)
+			if (!analyticsData.playedTutorial)
 			{
 				_UpdateTotalPlaytime();
 				LogMetric("Total Time Until Tutorial Played", _totalPlaytime.ToString());
 				LogMetric("Number of Sessions Until Tutorial Played", _totalSessions.ToString());
-				analyticsData.PLAYED_TUTORIAL = true;
+				analyticsData.playedTutorial = true;
 				_SaveData();
 			}
 		}
 		
 		public void PlayedBlueprint()
 		{
-			if (!analyticsData.PLAYED_BLUEPRINT)
+			if (!analyticsData.playedBlueprint)
 			{
 				_UpdateTotalPlaytime();
 				LogMetric("Total Time Until Blueprint Played", _totalPlaytime.ToString());
 				LogMetric("Number of Sessions Until Blueprint Played", _totalSessions.ToString());
-				analyticsData.PLAYED_BLUEPRINT = true;
+				analyticsData.playedBlueprint = true;
 				_SaveData();
 			}
 		}
@@ -213,7 +212,7 @@ namespace Tinylytics{
 		public void MatchStarted(TitleSceneScript.GameMode modeIn)
 		{
 			_playModeStartTime = Time.time;
-			currentPlayMode = modeIn;
+			_currentPlayMode = modeIn;
 			_recievedGameOver = false;
 		}
 		
@@ -226,48 +225,48 @@ namespace Tinylytics{
 				float total_time_played = 0;
 				int total_matches = 0;
 
-				switch (currentPlayMode)
+				switch (_currentPlayMode)
 				{
 					case (TitleSceneScript.GameMode.Campaign):
-						analyticsData.TUTORIAL_PLAYTIME += time_played;
-						total_time_played = analyticsData.TUTORIAL_PLAYTIME;
-						analyticsData.TUTORIAL_TOTAL_MATCHES++;
-						total_matches = analyticsData.TUTORIAL_TOTAL_MATCHES;
+						analyticsData.tutorialPlaytime += time_played;
+						total_time_played = analyticsData.tutorialPlaytime;
+						analyticsData.tutorialTotalMatches++;
+						total_matches = analyticsData.tutorialTotalMatches;
 						matchTypeToIncreaseTime = "TUTORIAL";
 						break;
 					case (TitleSceneScript.GameMode.Demo):
-						analyticsData.DEMO_PLAYTIME += time_played;
-						total_time_played = analyticsData.DEMO_PLAYTIME;
-						analyticsData.DEMO_TOTAL_MATCHES++;
-						total_matches = analyticsData.DEMO_TOTAL_MATCHES;
+						analyticsData.demoPlaytime += time_played;
+						total_time_played = analyticsData.demoPlaytime;
+						analyticsData.demoTotalMatches++;
+						total_matches = analyticsData.demoTotalMatches;
 						matchTypeToIncreaseTime = "DEMO";
 						break;
 					case (TitleSceneScript.GameMode.DungeonRun):
-						analyticsData.DUNGEON_RUN_PLAYTIME += time_played;
-						total_time_played = analyticsData.DUNGEON_RUN_PLAYTIME;
-						analyticsData.DUNGEON_RUN_TOTAL_MATCHES++;
-						total_matches = analyticsData.DUNGEON_RUN_TOTAL_MATCHES;
+						analyticsData.dungeonRunPlaytime += time_played;
+						total_time_played = analyticsData.dungeonRunPlaytime;
+						analyticsData.dungeonRunTotalMatches++;
+						total_matches = analyticsData.dungeonRunTotalMatches;
 						matchTypeToIncreaseTime = "DUNGEON RUN";
 						break;
 					case (TitleSceneScript.GameMode.Elo):
-						analyticsData.ELO_PLAYTIME += time_played;
-						total_time_played = analyticsData.ELO_PLAYTIME;
-						analyticsData.ELO_TOTAL_MATCHES++;
-						total_matches = analyticsData.ELO_TOTAL_MATCHES;
+						analyticsData.eloPlaytime += time_played;
+						total_time_played = analyticsData.eloPlaytime;
+						analyticsData.eloTotalMatches++;
+						total_matches = analyticsData.eloTotalMatches;
 						matchTypeToIncreaseTime = "ELO";
 						break;
 					case (TitleSceneScript.GameMode.PlayerVsAI):
-						analyticsData.PVAI_PLAYTIME += time_played;
-						total_time_played = analyticsData.PVAI_PLAYTIME;
-						analyticsData.PVP_TOTAL_MATCHES++;
-						total_matches = analyticsData.PVP_TOTAL_MATCHES;
+						analyticsData.PvAIPlaytime += time_played;
+						total_time_played = analyticsData.PvAIPlaytime;
+						analyticsData.PvPTotalMatches++;
+						total_matches = analyticsData.PvAITotalMatches;
 						matchTypeToIncreaseTime = "PVAI";
 						break;
 					case (TitleSceneScript.GameMode.TwoPlayers):
-						analyticsData.PVP_PLAYTIME += time_played;
-						total_time_played = analyticsData.PVP_PLAYTIME;
-						analyticsData.PVP_TOTAL_MATCHES++;
-						total_matches = analyticsData.PVP_TOTAL_MATCHES;
+						analyticsData.pvpPlaytime += time_played;
+						total_time_played = analyticsData.pvpPlaytime;
+						analyticsData.PvPTotalMatches++;
+						total_matches = analyticsData.PvPTotalMatches;
 						matchTypeToIncreaseTime = "PVP";
 						break;
 				}
@@ -283,31 +282,31 @@ namespace Tinylytics{
 
 		public void PlayerWin(bool playerIsWinner = true)
 		{
-			if (currentPlayMode == TitleSceneScript.GameMode.PlayerVsAI)
+			if (_currentPlayMode == TitleSceneScript.GameMode.PlayerVsAI)
 			{
 				if (playerIsWinner)
 				{
-					analyticsData.PVAI_TOTAL_WINS++;
-					LogMetric("PVAI TOTAL WINS", analyticsData.PVAI_TOTAL_WINS.ToString());
+					analyticsData.PvAITotalWins++;
+					LogMetric("PVAI TOTAL WINS", analyticsData.PvAITotalWins.ToString());
 				}
 				else
 				{
-					analyticsData.PVAI_TOTAL_LOSSES++;
-					LogMetric("PVAI TOTAL LOSSES", analyticsData.PVAI_TOTAL_LOSSES.ToString());
+					analyticsData.PvAITotalLosses++;
+					LogMetric("PVAI TOTAL LOSSES", analyticsData.PvAITotalLosses.ToString());
 				}
 				
 			}
-			else if (currentPlayMode == TitleSceneScript.GameMode.Campaign)
+			else if (_currentPlayMode == TitleSceneScript.GameMode.Campaign)
 			{
 				if (playerIsWinner)
 				{
-					analyticsData.TUTORIAL_TOTAL_WINS++;
-					LogMetric("TUTORIAL TOTAL WINS", analyticsData.TUTORIAL_TOTAL_WINS.ToString());
+					analyticsData.tutorialTotalWins++;
+					LogMetric("TUTORIAL TOTAL WINS", analyticsData.tutorialTotalWins.ToString());
 				}
 				else
 				{
-					analyticsData.TUTORIAL_TOTAL_LOSSES++;
-					LogMetric("TUTORIAL TOTAL LOSSES", analyticsData.TUTORIAL_TOTAL_LOSSES.ToString());
+					analyticsData.tutorialTotalLosses++;
+					LogMetric("TUTORIAL TOTAL LOSSES", analyticsData.tutorialTotalLosses.ToString());
 				}
 			}
 			_SaveData();
@@ -344,52 +343,52 @@ namespace Tinylytics{
 	[System.Serializable]
 	public class AnalyticsData
 	{
-		public float TOTAL_PLAYTIME;
-		public bool PLAYED_TUTORIAL;
-		public int TOTAL_SESSIONS;
-		public bool PLAYED_BLUEPRINT;
-		public float ELO_PLAYTIME;
-		public int ELO_TOTAL_MATCHES;
-		public float PVP_PLAYTIME;
-		public int PVP_TOTAL_MATCHES;
-		public float PVAI_PLAYTIME;
-		public int PVAI_TOTAL_MATCHES;
-		public int PVAI_TOTAL_WINS;
-		public int PVAI_TOTAL_LOSSES;
-		public float DUNGEON_RUN_PLAYTIME;
-		public int DUNGEON_RUN_TOTAL_MATCHES;
-		public float DEMO_PLAYTIME;
-		public int DEMO_TOTAL_MATCHES;
-		public float TUTORIAL_PLAYTIME;
-		public int TUTORIAL_TOTAL_MATCHES;
-		public int TUTORIAL_TOTAL_WINS;
-		public int TUTORIAL_TOTAL_LOSSES;
-		public string VERSION_NUMBER;
-		public int FIRST_LOAD;
+		public float totalPlaytime;
+		public bool playedTutorial;
+		public int totalSessions;
+		public bool playedBlueprint;
+		public float eloPlaytime;
+		public int eloTotalMatches;
+		public float pvpPlaytime;
+		public int PvPTotalMatches;
+		public float PvAIPlaytime;
+		public int PvAITotalMatches;
+		public int PvAITotalWins;
+		public int PvAITotalLosses;
+		public float dungeonRunPlaytime;
+		public int dungeonRunTotalMatches;
+		public float demoPlaytime;
+		public int demoTotalMatches;
+		public float tutorialPlaytime;
+		public int tutorialTotalMatches;
+		public int tutorialTotalWins;
+		public int tutorialTotalLosses;
+		public string versionNumber;
+		public int firstLoadTime;
 
 		public AnalyticsData()
 		{
-			TOTAL_PLAYTIME = 0.0f;
-			PLAYED_TUTORIAL = false;
-			TOTAL_SESSIONS = 0;
-			PLAYED_BLUEPRINT = false;
-			ELO_PLAYTIME = 0.0f;
-			ELO_TOTAL_MATCHES = 0;
-			PVP_PLAYTIME = 0.0f;
-			PVP_TOTAL_MATCHES = 0;
-			PVAI_PLAYTIME = 0.0f;
-			PVAI_TOTAL_MATCHES = 0;
-			PVAI_TOTAL_WINS = 0;
-			PVAI_TOTAL_LOSSES = 0;
-			DUNGEON_RUN_PLAYTIME = 0.0f;
-			DUNGEON_RUN_TOTAL_MATCHES = 0;
-			DEMO_PLAYTIME = 0.0f;
-			DEMO_TOTAL_MATCHES = 0;
-			TUTORIAL_TOTAL_WINS = 0;
-			TUTORIAL_TOTAL_LOSSES = 0;
-			TUTORIAL_PLAYTIME = 0.0f;
-			VERSION_NUMBER = Application.version;
-			FIRST_LOAD = _SecondsSinceEpoch();
+			totalPlaytime = 0.0f;
+			playedTutorial = false;
+			totalSessions = 0;
+			playedBlueprint = false;
+			eloPlaytime = 0.0f;
+			eloTotalMatches = 0;
+			pvpPlaytime = 0.0f;
+			PvPTotalMatches = 0;
+			PvAIPlaytime = 0.0f;
+			PvAITotalMatches = 0;
+			PvAITotalWins = 0;
+			PvAITotalLosses = 0;
+			dungeonRunPlaytime = 0.0f;
+			dungeonRunTotalMatches = 0;
+			demoPlaytime = 0.0f;
+			demoTotalMatches = 0;
+			tutorialTotalWins = 0;
+			tutorialTotalLosses = 0;
+			tutorialPlaytime = 0.0f;
+			versionNumber = Application.version;
+			firstLoadTime = _SecondsSinceEpoch();
 		}
 		
 		private int _SecondsSinceEpoch()
