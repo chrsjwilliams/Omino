@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Amend : TechBuilding
+public class Annex : TechBuilding
 {
-    public Amend() : base(0)
+    public Annex() : base(0)
     {
-        label = "Amend";
+        label = "Annex";
 
-        buildingType = BuildingType.AMEND;
+        buildingType = BuildingType.ANNEX;
     }
 
     public override void OnClaimEffect(Player player)
     {
-        player.ToggleAmend(true);
+        player.ToggleAnnex(true);
     }
 
     public override void OnLostEffect()
     {
-        owner.ToggleAmend(false);
+        owner.ToggleAnnex(false);
     }
 
     public override void OnClaim(Player player)
@@ -35,7 +35,7 @@ public class Amend : TechBuilding
 
     protected override string GetName()
     {
-        return "Amend";
+        return "Annex";
     }
 
     public override string GetDescription()

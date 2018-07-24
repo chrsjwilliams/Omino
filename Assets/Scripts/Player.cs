@@ -81,7 +81,7 @@ public class Player : MonoBehaviour
     protected bool biggerBombs;
     public bool crossSection { get; protected set; }
     public bool splashDamage { get; protected set; }
-    public bool amend { get; protected set; }
+    public bool annex { get; protected set; }
     public bool bulldoze { get; protected set; }
     // 
 
@@ -1006,9 +1006,9 @@ public class Player : MonoBehaviour
         crossSection = status;
     }
 
-    public void ToggleAmend(bool status)
+    public void ToggleAnnex(bool status)
     {
-        amend = status;
+        annex = status;
     }
 
     public void ToggleBulldoze(bool status)

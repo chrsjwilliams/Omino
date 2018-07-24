@@ -41,6 +41,8 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private GameObject secondObjectiveLocation;
 
+    // hide skip button & move first animation up 75 units
+
     private void Awake()
     {
         if(Services.GameManager.mode != TitleSceneScript.GameMode.Campaign)
@@ -341,6 +343,7 @@ public class TutorialManager : MonoBehaviour
 
         if (currentIndex == tooltipInfos.Length - 1)
         {
+            skipTutorialButton.gameObject.SetActive(false);
             viewedTutorial[Services.GameManager.levelSelected.campaignLevelNum - 1] = true;
         }
     }

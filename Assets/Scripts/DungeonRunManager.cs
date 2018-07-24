@@ -19,7 +19,7 @@ public static class DungeonRunManager
     {
             BuildingType.DYNAMO,        BuildingType.SUPPLYBOOST,       BuildingType.UPSIZE,
             BuildingType.SHIELDEDPIECES,BuildingType.ARMORY,            BuildingType.FISSION,
-            BuildingType.RECYCLING,     BuildingType.CROSSSECTION
+            BuildingType.RECYCLING,     BuildingType.CROSSSECTION,      BuildingType.ANNEX
     };
 
     public static void LoadData()

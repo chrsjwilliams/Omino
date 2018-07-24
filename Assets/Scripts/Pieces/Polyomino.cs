@@ -7,7 +7,7 @@ public enum BuildingType
 {
     BASE = -4, FACTORY = -3, GENERATOR = -2, BARRACKS = -1, NONE = 0,
     DYNAMO, SUPPLYBOOST, UPSIZE, ATTACKUPSIZE, COMBUSTION, SHIELDEDPIECES,
-    ARMORY, FISSION, RECYCLING, CROSSSECTION, AMEND
+    ARMORY, FISSION, RECYCLING, CROSSSECTION, ANNEX
 }
 
 public class Polyomino : IVertex
@@ -521,14 +521,22 @@ public class Polyomino : IVertex
                 monominos.Add(monomino);            
         }
 
-        if (owner.amend)
+        if (owner.annex)
         {
             monominos.AddRange(GetPiecesInRange());
 
             foreach(Polyomino piece in monominos)
             {
-                if(piece.owner != owner)
+                if(piece.owner != owner && owner.annex)
                 {
+                    piece.owner.boardPieces.Remove(piece);
+                    foreach(Polyomino adjPiece in piece.GetAdjacentPolyominos())
+                    {
+                        if(adjPiece.owner != owner)
+                        {
+                            adjPiece.connected = false;
+                        }
+                    }
                     piece.owner = owner;
                     tiles.AddRange(piece.tiles);
                 }
@@ -842,11 +850,12 @@ public class Polyomino : IVertex
         {
             hypotheticalTileCoords.Add(hypotheticalCoord.Add(tile.relativeCoord));
         }
-
+        bool completelycovered = true;
         foreach (Coord coord in hypotheticalTileCoords)
         {
             if (!Services.MapManager.IsCoordContainedInMap(coord)) return false;
             Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
+            
             if ((mapTile.IsOccupied() && !owner.crossSection) &&
                 ((mapTile.occupyingPiece.connected && owner.attackResources < 1 && !pretendAttackResource) ||
                 (mapTile.occupyingPiece.connected && (mapTile.occupyingPiece.owner == owner)) ||
@@ -856,7 +865,15 @@ public class Polyomino : IVertex
                 mapTile.occupyingPiece.shieldDurationRemaining > 0 && 
                 !pretendAttackResource)
                 return false;
+            if(owner.crossSection && !mapTile.IsOccupied())
+            {
+                completelycovered = false;
+            }
+
         }
+
+        if (owner!= null && owner.crossSection &&completelycovered) return false;
+
         return true;
     }
 
@@ -984,7 +1001,7 @@ public class Polyomino : IVertex
     public List<Polyomino> GetPiecesInRange()
     {
         List<Polyomino> enemyPiecesInRange = new List<Polyomino>();
-        if (owner != null && (owner.amend || owner.bulldoze))
+        if (owner != null && owner.annex)
         {
             List<Polyomino> adjacentEnemyPieces =
                 GetAdjacentPolyominos(Services.GameManager.Players[owner.playerNum % 2]);
@@ -992,7 +1009,7 @@ public class Polyomino : IVertex
             {
                 Polyomino enemyPiece = adjacentEnemyPieces[i];
                 if (!enemyPiecesInRange.Contains(enemyPiece) && !(enemyPiece is TechBuilding) &&
-                    !enemyPiece.connected )
+                    !enemyPiece.connected)
                 {
                     enemyPiecesInRange.Add(enemyPiece);
                 }

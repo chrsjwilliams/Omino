@@ -88,7 +88,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
         if (lerps)
         {
-            image.rectTransform.localPosition = Vector3.Lerp(image.rectTransform.localPosition, imageSecondaryPosition, EasingEquations.Easing.QuadEaseOut(Time.deltaTime));
+            image.rectTransform.localPosition = Vector3.Lerp(image.rectTransform.localPosition, imageSecondaryPosition, EasingEquations.Easing.QuadEaseOutIn(Time.deltaTime * 1.5f));
 
             if (label == "Place Piece" && image.rectTransform.localPosition.x > imageSecondaryPosition.x - 1)
             {

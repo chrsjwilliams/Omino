@@ -180,8 +180,8 @@ public class MapManager : MonoBehaviour
                 case BuildingType.CROSSSECTION:
                     techBuilding = new CrossSection();
                     break;
-                case BuildingType.AMEND:
-                    techBuilding = new Amend();
+                case BuildingType.ANNEX:
+                    techBuilding = new Annex();
                     break;
                 default:
                     return null;
@@ -256,7 +256,7 @@ public class MapManager : MonoBehaviour
             BuildingType.FISSION,
             BuildingType.RECYCLING,
             BuildingType.CROSSSECTION,
-            BuildingType.AMEND
+            BuildingType.ANNEX
         };
     }
 
