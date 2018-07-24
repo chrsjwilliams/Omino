@@ -13,7 +13,6 @@ namespace Tinylytics{
 		private const string fileName = "AnalyticsDataFile";
 
 		private float _playModeStartTime = 0.0f;
-		private int _playedBlueprint = 0;
 		private float _totalPlaytime = 0.0f;
 		private int _totalSessions = 0;
 		private float _sessionStartTime = 0.0f;
@@ -79,6 +78,7 @@ namespace Tinylytics{
 			_lastPlaytimeLog = Time.time;
 			
 			_LoadData();
+			_totalPlaytime = analyticsData.TOTAL_PLAYTIME;
 			
 			if (analyticsData.VERSION_NUMBER != Application.version)
 			{
