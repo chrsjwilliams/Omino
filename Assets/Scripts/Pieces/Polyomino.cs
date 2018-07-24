@@ -622,9 +622,13 @@ public class Polyomino : IVertex
                 pathToHighlight.Add(pathPiece);
             }
         }
+        foreach(Polyomino piece in monominos)
+        {
+            if (!pathToHighlight.Contains(piece)) pathToHighlight.Add(piece);
+        }
         for (int i = 0; i < pathToHighlight.Count; i++)
         {
-            pathToHighlight[i].PathHighlight(i * Player.pathHighlightStagger);
+            pathToHighlight[i].PathHighlight(i * Player.pathHighlightTotalDuration/pathToHighlight.Count);
         }
 
     }

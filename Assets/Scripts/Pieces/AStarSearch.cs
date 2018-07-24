@@ -41,6 +41,7 @@ public class AStarSearch
             path.Add(pathNode);
             pathNode = cameFrom[pathNode];
         }
+        path.Add(start);
 
         return path;
     }

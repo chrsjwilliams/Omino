@@ -152,7 +152,7 @@ public class Player : MonoBehaviour
     public float allResourceHandicap = 1;
     public float allBlueprintHandicap = 1;
 
-    public const float pathHighlightStagger = 0.05f;
+    public const float pathHighlightTotalDuration = 0.5f;
 
     public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_, bool blueprintValueHandicap, float handicap)
     {
