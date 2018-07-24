@@ -180,9 +180,7 @@ public class Player : MonoBehaviour
         hand = new List<Polyomino>();
         blueprints = new List<Blueprint>();
         boardPieces = new List<Polyomino>();
-
         
-
         if (playerNum == 1) homeBasePos = new Coord(1, 1);
         else
         {

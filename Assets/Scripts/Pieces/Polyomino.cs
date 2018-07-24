@@ -535,9 +535,6 @@ public class Polyomino : IVertex
             }
         }
 
-
-        //ConstructionTask construct = new ConstructionTask(this, monominos);
-        //Services.GameScene.tm.Do(construct);
         for (int i = 0; i < monominos.Count; i++)
         {
             monominos[i].AssignLocation(tiles[i].coord);
