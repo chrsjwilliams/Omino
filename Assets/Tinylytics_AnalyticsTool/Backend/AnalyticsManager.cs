@@ -79,6 +79,7 @@ namespace Tinylytics{
 			
 			_LoadData();
 			_totalPlaytime = analyticsData.TOTAL_PLAYTIME;
+			_totalSessions = analyticsData.TOTAL_SESSIONS;
 			
 			if (analyticsData.VERSION_NUMBER != Application.version)
 			{
