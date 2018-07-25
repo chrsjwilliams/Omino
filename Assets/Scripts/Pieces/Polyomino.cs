@@ -529,15 +529,10 @@ public class Polyomino : IVertex
             {
                 if(piece.owner != owner && owner.annex)
                 {
+                    Player previousOwner = piece.owner;
                     piece.owner.boardPieces.Remove(piece);
-                    foreach(Polyomino adjPiece in piece.GetAdjacentPolyominos())
-                    {
-                        if(adjPiece.owner != owner)
-                        {
-                            adjPiece.connected = false;
-                        }
-                    }
                     piece.owner = owner;
+                    Services.MapManager.DetermineConnectedness(previousOwner);
                     tiles.AddRange(piece.tiles);
                 }
             }
@@ -951,7 +946,7 @@ public class Polyomino : IVertex
             Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if ( owner != null && 
                 !owner.crossSection && 
-                mapTile.occupyingPiece != null && // check occupying piece's owner
+                mapTile.occupyingPiece != null &&
                 !piecesToRemove.Contains(mapTile.occupyingPiece))
             {
                 piecesToRemove.Add(mapTile.occupyingPiece);
@@ -1009,7 +1004,7 @@ public class Polyomino : IVertex
             {
                 Polyomino enemyPiece = adjacentEnemyPieces[i];
                 if (!enemyPiecesInRange.Contains(enemyPiece) && !(enemyPiece is TechBuilding) &&
-                    !enemyPiece.connected)
+                    !enemyPiece.connected && enemyPiece.occupyingBlueprints.Count < 1)
                 {
                     enemyPiecesInRange.Add(enemyPiece);
                 }
