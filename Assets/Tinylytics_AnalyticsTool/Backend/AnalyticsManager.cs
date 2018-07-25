@@ -257,7 +257,7 @@ namespace Tinylytics{
 
 				switch (_currentPlayMode)
 				{
-					case (TitleSceneScript.GameMode.Campaign):
+					case (TitleSceneScript.GameMode.Tutorial):
 						analyticsData.tutorialPlaytime += time_played;
 						total_time_played = analyticsData.tutorialPlaytime;
 						analyticsData.tutorialTotalMatches++;
@@ -326,7 +326,7 @@ namespace Tinylytics{
 				}
 				
 			}
-			else if (_currentPlayMode == TitleSceneScript.GameMode.Campaign)
+			else if (_currentPlayMode == TitleSceneScript.GameMode.Tutorial)
 			{
 				if (playerIsWinner)
 				{

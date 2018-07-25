@@ -542,6 +542,7 @@ public class Polyomino : IVertex
         {
             monominos[i].AssignLocation(tiles[i].coord);
         }
+
         if (!(this is Destructor && owner.splashDamage))
         {
             foreach (Polyomino monomino in monominos)
@@ -630,7 +631,6 @@ public class Polyomino : IVertex
         {
             pathToHighlight[i].PathHighlight(i * Player.pathHighlightTotalDuration/pathToHighlight.Count);
         }
-
     }
 
     public List<Coord> GetAdjacentEmptyTiles()
@@ -811,9 +811,9 @@ public class Polyomino : IVertex
             else
             {
                 illegalTiles.Add(tile);
-            }
-                
+            }              
         }
+
         return illegalTiles;
     }
 
@@ -860,14 +860,17 @@ public class Polyomino : IVertex
                 mapTile.occupyingPiece.shieldDurationRemaining > 0 && 
                 !pretendAttackResource)
                 return false;
-            if(owner.crossSection && !mapTile.IsOccupied())
-            {
-                completelycovered = false;
-            }
-
+            if(owner.crossSection && (!mapTile.IsOccupied() || mapTile.occupyingPiece.owner != owner)) completelycovered = false;
+            if (owner.crossSection && mapTile.occupyingPiece != null &&
+                mapTile.occupyingPiece.owner != owner && mapTile.occupyingPiece is TechBuilding)
+                return false;
+            if (owner.crossSection && mapTile.occupyingPiece != null &&
+                mapTile.occupyingPiece.owner != owner && mapTile.occupyingPiece.connected &&
+                owner.attackResources < 1 && !pretendAttackResource)
+                return false;
         }
 
-        if (owner!= null && owner.crossSection &&completelycovered) return false;
+        if (owner!= null && owner.crossSection && completelycovered) return false;
 
         return true;
     }
@@ -978,8 +981,6 @@ public class Polyomino : IVertex
             piecesToRemove.AddRange(GetPiecesInRange());
         }
 
-        
-
         if (piecesToRemove.Count > 0)
             Services.AudioManager.RegisterSoundEffect(Services.Clips.PieceDestroyed);
         for (int i = piecesToRemove.Count - 1; i >= 0; i--)
@@ -995,22 +996,22 @@ public class Polyomino : IVertex
 
     public List<Polyomino> GetPiecesInRange()
     {
-        List<Polyomino> enemyPiecesInRange = new List<Polyomino>();
+        List<Polyomino> opposingPiecesInRange = new List<Polyomino>();
         if (owner != null && owner.annex)
         {
-            List<Polyomino> adjacentEnemyPieces =
+            List<Polyomino> adjacentOpposingPieces =
                 GetAdjacentPolyominos(Services.GameManager.Players[owner.playerNum % 2]);
-            for (int i = 0; i < adjacentEnemyPieces.Count; i++)
+            for (int i = 0; i < adjacentOpposingPieces.Count; i++)
             {
-                Polyomino enemyPiece = adjacentEnemyPieces[i];
-                if (!enemyPiecesInRange.Contains(enemyPiece) && !(enemyPiece is TechBuilding) &&
-                    !enemyPiece.connected && enemyPiece.occupyingBlueprints.Count < 1)
+                Polyomino opposingPiece = adjacentOpposingPieces[i];
+                if (!opposingPiecesInRange.Contains(opposingPiece) && !(opposingPiece is TechBuilding) &&
+                    !opposingPiece.connected && opposingPiece.occupyingBlueprints.Count < 1)
                 {
-                    enemyPiecesInRange.Add(enemyPiece);
+                    opposingPiecesInRange.Add(opposingPiece);
                 }
             }
         }
-        return enemyPiecesInRange;
+        return opposingPiecesInRange;
     }
 
     protected void MakeDustClouds()

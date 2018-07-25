@@ -157,11 +157,11 @@ public abstract class TechBuilding : Polyomino
     {
         if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID) &&
             ((!Services.UIManager.tooltipsDisabled 
-                && Services.GameManager.mode == TitleSceneScript.GameMode.Campaign) 
+                && Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial) 
                 || !Services.GameScene.gamePaused) &&
             !Services.GameManager.disableUI)
         {
-            if(Services.GameManager.mode == TitleSceneScript.GameMode.Campaign &&
+            if(Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial &&
                 Services.TutorialManager.currentIndex == Services.TutorialManager.tooltipInfos.Length - 1)
             {
                 Services.GameScene.PauseGame();
@@ -200,7 +200,7 @@ public abstract class TechBuilding : Polyomino
     {
         DestroyTooltips();
         touchID = -1;
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Campaign &&
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial &&
             Services.TutorialManager.currentIndex == Services.TutorialManager.tooltipInfos.Length - 1)
         {
             Services.GameScene.UnpauseGame();

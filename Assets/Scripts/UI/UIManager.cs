@@ -817,7 +817,7 @@ public class UIManager : MonoBehaviour {
         {
             Services.GameScene.ReturnToLevelSelect();
         }
-        else if(Services.GameManager.mode == TitleSceneScript.GameMode.Campaign)
+        else if(Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial)
         {
             if (campaignLevelCompleteMenu.inPosition)
             {

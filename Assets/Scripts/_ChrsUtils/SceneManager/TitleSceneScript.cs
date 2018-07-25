@@ -29,7 +29,7 @@ public class TitleSceneScript : Scene<TransitionData>
     [SerializeField]
     private Color[] uiColorScheme;
 
-    public enum GameMode { TwoPlayers, PlayerVsAI, Demo, Campaign, DungeonRun, Elo }
+    public enum GameMode { TwoPlayers, PlayerVsAI, Demo, Tutorial, DungeonRun, Elo }
 
     private const float SECONDS_TO_WAIT = 0.01f;
 
@@ -103,7 +103,7 @@ public class TitleSceneScript : Scene<TransitionData>
 
     public void PlayCampaignMode()
     {
-        StartGame(GameMode.Campaign);
+        StartGame(GameMode.Tutorial);
     }
 
     public void PlayDungeonRunMode()

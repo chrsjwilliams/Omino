@@ -163,7 +163,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             case TitleSceneScript.GameMode.Demo:
                 StartDemoMode();
                 break;
-            case TitleSceneScript.GameMode.Campaign:
+            case TitleSceneScript.GameMode.Tutorial:
                 StartCampaignMode();
                 break;
             case TitleSceneScript.GameMode.DungeonRun:
@@ -460,7 +460,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 
         switch (Services.GameManager.mode)
         {
-            case TitleSceneScript.GameMode.Campaign:
+            case TitleSceneScript.GameMode.Tutorial:
                 buttonParent = campaignLevelButtonParent;
                 buttons = campaignLevelButtons;
                 break;
@@ -616,7 +616,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             eloUI.gameObject.SetActive(!optionsMenuActive);
         }
-        if(Services.GameManager.mode == TitleSceneScript.GameMode.Campaign)
+        if(Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial)
         {
             campaignLevelButtonParent.SetActive(!optionsMenuActive);
         }

@@ -45,7 +45,7 @@ public class TutorialManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Services.GameManager.mode != TitleSceneScript.GameMode.Campaign)
+        if(Services.GameManager.mode != TitleSceneScript.GameMode.Tutorial)
         {
             ToggleObjectiveUI(false);
             gameObject.SetActive(false);
@@ -99,7 +99,7 @@ public class TutorialManager : MonoBehaviour
 
     public void DisplaySkipButton()
     {
-        if (Services.GameManager.mode != TitleSceneScript.GameMode.Campaign) return;
+        if (Services.GameManager.mode != TitleSceneScript.GameMode.Tutorial) return;
         if (viewedTutorial[Services.GameManager.levelSelected.campaignLevelNum - 1])
         {
             skipTutorialButton.gameObject.SetActive(true);
