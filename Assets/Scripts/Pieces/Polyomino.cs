@@ -492,6 +492,7 @@ public class Polyomino : IVertex
     public virtual void PlaceAtCurrentLocation(bool replace)
     {
         //place the piece on the board where it's being hovered now
+        List<Polyomino> annexedMonominos = GetPiecesInRange();
         OnPlace();
         DestroyThis();
         if (owner != null && owner.crossSection)
@@ -513,34 +514,51 @@ public class Polyomino : IVertex
                 tiles.Remove(tile);
             }
         }
-
+        List<Coord> monominoCoords = new List<Coord>();
         List<Polyomino> monominos = new List<Polyomino>();
         foreach (Tile tile in tiles)
         {
+                monominoCoords.Add(tile.coord);
                 Polyomino monomino = CreateSubPiece();
                 monominos.Add(monomino);            
         }
 
-        if (owner.annex)
+        if (owner != null && owner.annex)
         {
-            monominos.AddRange(GetPiecesInRange());
+            
 
-            foreach(Polyomino piece in monominos)
+            foreach (Polyomino annexedPiece in annexedMonominos)
             {
-                if(piece.owner != owner && owner.annex)
-                {
-                    Player previousOwner = piece.owner;
-                    piece.owner.boardPieces.Remove(piece);
-                    piece.owner = owner;
-                    Services.MapManager.DetermineConnectedness(previousOwner);
-                    tiles.AddRange(piece.tiles);
-                }
+                monominoCoords.Add(annexedPiece.tiles[0].coord);
+
+                annexedPiece.Remove(false, false);
+
+                Polyomino monomino = CreateSubPiece();
+                monominos.Add(monomino);
             }
+
         }
 
+        if (owner.annex)
+        {
+            //monominos.AddRange(annexedMonominos);
+            //foreach (Polyomino piece in monominos)
+            //{
+            //    if(piece.owner != owner && owner.annex)
+            //    {
+            //        previousOwner = piece.owner;
+            //        piece.owner.boardPieces.Remove(piece);
+            //        piece.owner = owner;
+                    
+            //        tiles.AddRange(piece.tiles);
+            //    }
+            //}
+            //Services.MapManager.DetermineConnectedness(previousOwner);
+
+        }
         for (int i = 0; i < monominos.Count; i++)
         {
-            monominos[i].AssignLocation(tiles[i].coord);
+            monominos[i].AssignLocation(monominoCoords[i]);
         }
 
         if (!(this is Destructor && owner.splashDamage))
@@ -556,6 +574,7 @@ public class Polyomino : IVertex
                 }
             }
         }
+
         List<List<Polyomino>> distanceLevels = new List<List<Polyomino>>();
         //find distance level 0
         List<Polyomino> distanceLevelZero = new List<Polyomino>();
@@ -977,11 +996,6 @@ public class Polyomino : IVertex
             }
         }
 
-        if(owner != null && owner.bulldoze)
-        {
-            piecesToRemove.AddRange(GetPiecesInRange());
-        }
-
         if (piecesToRemove.Count > 0)
             Services.AudioManager.RegisterSoundEffect(Services.Clips.PieceDestroyed);
         for (int i = piecesToRemove.Count - 1; i >= 0; i--)
@@ -998,7 +1012,7 @@ public class Polyomino : IVertex
     public virtual List<Polyomino> GetPiecesInRange()
     {
         List<Polyomino> opposingPiecesInRange = new List<Polyomino>();
-        if (owner != null && owner.annex)
+        if (owner != null)
         {
             List<Polyomino> adjacentOpposingPieces =
                 GetAdjacentPolyominos(Services.GameManager.Players[owner.playerNum % 2]);
@@ -1052,7 +1066,7 @@ public class Polyomino : IVertex
         Remove(false);
     }
 
-    public virtual void Remove(bool replace)
+    public virtual void Remove(bool replace, bool deathAnim = true)
     {
         Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
         Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
@@ -1063,10 +1077,18 @@ public class Polyomino : IVertex
                 occupyingBlueprints[i].Remove();
             }
 
-            DeathAnimation die = new DeathAnimation(this);
-            die.Then(new ActionTask(DestroyThis));
-            Services.GameScene.tm.Do(die);
+            if (deathAnim)
+            {
+                DeathAnimation die = new DeathAnimation(this);
+                die.Then(new ActionTask(DestroyThis));
+                Services.GameScene.tm.Do(die);
+            }
+            else
+            {
+                DestroyThis();
+            }
             Services.GameData.filledMapTiles[owner.playerNum - 1] -= tiles.Count;
+            
         }
         else
         {
