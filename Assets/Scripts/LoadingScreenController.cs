@@ -12,6 +12,7 @@ public class LoadingScreenController : MonoBehaviour
 	void Update () {
 		if ((!load_started) && (SplashScreen.isFinished))
 		{
+			Application.backgroundLoadingPriority = ThreadPriority.Low;
 			StartCoroutine(LoadGameAsync());
 			load_started = true;
 		}
@@ -31,7 +32,8 @@ public class LoadingScreenController : MonoBehaviour
 		while (!asyncLoad.isDone) {
 			yield return null;
 		}
-
+		
+		
 		SceneManager.UnloadSceneAsync (0);
 	}
 }
