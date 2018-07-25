@@ -63,8 +63,7 @@ public class GameSceneScript : Scene<TransitionData>
 
                 handicaps = new float[2];
                 handicaps[0] = 1;
-                handicaps[1] = DungeonRunManager.dungeonRunData.handicapLevel;
-
+                handicaps[1] = DungeonRunManager.SetHandicap();
                 Services.GameManager.SetHandicapValues(handicaps);
 
                 for (int i = 0; i < DungeonRunManager.dungeonRunData.currentTech.Count; i++)

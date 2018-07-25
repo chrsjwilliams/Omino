@@ -12,7 +12,8 @@ public static class DungeonRunManager
 
     private const int MAX_TECH_CHOICES = 3;
     private const int MAX_TECH_INVENTORY = MAX_DUNGEON_CHALLENGES - 1;
-    private const float handicapIncrement = 0.11f;
+    public const float MIN_HANDICAP_LEVEL = 0.85f;
+    private const float handicapIncrement = 0.2f;
     private const string fileName = "dungeonRunData";
     
 
@@ -105,7 +106,8 @@ public static class DungeonRunManager
         else
         {
             dungeonRunData.selectingNewTech = true;
-            SetHandicap(dungeonRunData.handicapLevel + handicapIncrement);
+            
+            SetHandicap();
         }
         
         SaveData();
@@ -246,9 +248,11 @@ public static class DungeonRunManager
         SaveData();
     }
 
-    private static void SetHandicap(float handicap)
+    public static float SetHandicap()
     {
-        dungeonRunData.handicapLevel = Mathf.Max(0.8f, handicap);
+        dungeonRunData.handicapLevel = MIN_HANDICAP_LEVEL + (handicapIncrement * (dungeonRunData.challenegeNum - 1));
+
+        return dungeonRunData.handicapLevel;
     }
 
     public static void ResetDungeonRun()
@@ -293,7 +297,7 @@ public class DungeonRunData
         currentTech = new List<BuildingType>();
         techChoices = new List<BuildingType>();
         challenegeNum = 1;
-        handicapLevel = 0.8f;
+        handicapLevel = DungeonRunManager.MIN_HANDICAP_LEVEL;
         selectingNewTech = false;
         completedRun = false;
     }
