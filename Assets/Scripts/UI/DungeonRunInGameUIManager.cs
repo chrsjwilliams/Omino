@@ -61,7 +61,15 @@ public class DungeonRunInGameUIManager : MonoBehaviour {
         if(victory)
         {
             victoryText.text = "Victory";
-            nextChallengeButtonText.text = "Next Challenge";
+            
+            if(DungeonRunManager.dungeonRunData.challenegeNum == DungeonRunManager.MAX_DUNGEON_CHALLENGES)
+            {
+                nextChallengeButtonText.text = "Complete";
+            }
+            else
+            {
+                nextChallengeButtonText.text = "Next Challenge";
+            }
         }
         else
         {

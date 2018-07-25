@@ -181,6 +181,12 @@ public static class DungeonRunManager
             case BuildingType.RECYCLING:
                 structure = new Recycling();
                 break;
+            case BuildingType.CROSSSECTION:
+                structure = new CrossSection();
+                break;
+            case BuildingType.ANNEX:
+                structure = new Annex();
+                break;
             default:
                 return null;
         }
