@@ -188,6 +188,11 @@ public class PieceHolder : MonoBehaviour {
 
     private void PathHighlight()
     {
+        if (!piece.connected)
+        {
+            highlightingPath = false;
+            return;
+        }
         pathHighlightTime += Time.deltaTime;
         Color color;
         if (pathHighlightTime < pathHighlightUpDuration)

@@ -217,6 +217,11 @@ public class Tile : MonoBehaviour, IVertex
 
     private void PathHighlight()
     {
+        if (!pieceParent.connected)
+        {
+            highlightingPath = false;
+            return;
+        }
         pathHighlightTime += Time.deltaTime;
         float alpha;
         if (pathHighlightTime < pathHighlightUpDuration)
