@@ -149,6 +149,7 @@ public class AIPlayer : Player
             thinkingCoroutine = GeneratePossibleMoves();
             StartCoroutine(thinkingCoroutine);
         }
+        //  Check if coroutine is running if not, start it
 
         if(Input.GetKeyDown(KeyCode.G)) Debug.Log("SECONDS PASSED: " + (resourceMeterFillAmt/(resourceGainRate * resourceGainFactor)));
 

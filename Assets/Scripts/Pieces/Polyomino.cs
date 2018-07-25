@@ -492,7 +492,7 @@ public class Polyomino : IVertex
     public virtual void PlaceAtCurrentLocation(bool replace)
     {
         //place the piece on the board where it's being hovered now
-        List<Polyomino> annexedMonominos = GetPiecesInRange();
+        List<Polyomino> annexedMonominos = GetPiecesInRange(false);
         OnPlace();
         DestroyThis();
         if (owner != null && owner.crossSection)
@@ -514,6 +514,7 @@ public class Polyomino : IVertex
                 tiles.Remove(tile);
             }
         }
+
         List<Coord> monominoCoords = new List<Coord>();
         List<Polyomino> monominos = new List<Polyomino>();
         foreach (Tile tile in tiles)
@@ -525,8 +526,6 @@ public class Polyomino : IVertex
 
         if (owner != null && owner.annex)
         {
-            
-
             foreach (Polyomino annexedPiece in annexedMonominos)
             {
                 monominoCoords.Add(annexedPiece.tiles[0].coord);
@@ -536,7 +535,6 @@ public class Polyomino : IVertex
                 Polyomino monomino = CreateSubPiece();
                 monominos.Add(monomino);
             }
-
         }
 
         if (owner.annex)
@@ -972,6 +970,8 @@ public class Polyomino : IVertex
                 mapTile.occupyingPiece != null &&
                 !piecesToRemove.Contains(mapTile.occupyingPiece))
             {
+                
+
                 piecesToRemove.Add(mapTile.occupyingPiece);
                 if (mapTile.occupyingPiece.owner != owner && mapTile.occupyingPiece.connected)
                 {
@@ -1002,6 +1002,7 @@ public class Polyomino : IVertex
         {
             piecesToRemove[i].Remove();
         }
+
         if (removedOpposingPiece)
         {
             owner.OnDestructionOfOpposingPiece(positionOfDestruction);
@@ -1009,9 +1010,15 @@ public class Polyomino : IVertex
         }
     }
 
-    public virtual List<Polyomino> GetPiecesInRange()
+    public virtual List<Polyomino> GetPiecesInRange(bool includeMyTiles = true)
     {
         List<Polyomino> opposingPiecesInRange = new List<Polyomino>();
+        List<Coord> myCoords = new List<Coord>();
+        foreach(Tile tile in tiles)
+        {
+            myCoords.Add(tile.coord);
+        }
+
         if (owner != null)
         {
             List<Polyomino> adjacentOpposingPieces =
@@ -1022,7 +1029,21 @@ public class Polyomino : IVertex
                 if (!opposingPiecesInRange.Contains(opposingPiece) && !(opposingPiece is TechBuilding) &&
                     !opposingPiece.connected && opposingPiece.occupyingBlueprints.Count < 1)
                 {
-                    opposingPiecesInRange.Add(opposingPiece);
+                    if (!includeMyTiles)
+                    {
+                        foreach (Tile tile in tiles)
+                        {
+                            if (!myCoords.Contains(opposingPiece.tiles[0].coord))
+                            {
+                                opposingPiecesInRange.Add(opposingPiece);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        opposingPiecesInRange.Add(opposingPiece);
+                    }
                 }
             }
         }
