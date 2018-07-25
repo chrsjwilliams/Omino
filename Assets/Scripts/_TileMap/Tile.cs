@@ -220,6 +220,7 @@ public class Tile : MonoBehaviour, IVertex
         if (!pieceParent.connected)
         {
             highlightingPath = false;
+            SetBpAssistAlpha(0);
             return;
         }
         pathHighlightTime += Time.deltaTime;
