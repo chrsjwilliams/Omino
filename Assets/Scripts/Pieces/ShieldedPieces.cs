@@ -7,7 +7,6 @@ public class ShieldedPieces : TechBuilding
 
     public ShieldedPieces() : base(0)
     {
-        label = "Shielded Pieces";
         buildingType = BuildingType.SHIELDEDPIECES;
     }
 
@@ -33,7 +32,7 @@ public class ShieldedPieces : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Shielded Pieces";
     }

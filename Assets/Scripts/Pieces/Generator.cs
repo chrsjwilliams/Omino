@@ -12,7 +12,7 @@ public class Generator : Blueprint
         onGainText = "+1 Energy Recharge Level";
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Generator";
     }

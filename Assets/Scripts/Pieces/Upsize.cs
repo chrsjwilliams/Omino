@@ -5,7 +5,6 @@ public class Upsize : TechBuilding
 {
     public Upsize() : base(0)
     {
-        label = "Upsize";
         buildingType = BuildingType.UPSIZE;
     }
 
@@ -31,7 +30,7 @@ public class Upsize : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Upsize";
     }

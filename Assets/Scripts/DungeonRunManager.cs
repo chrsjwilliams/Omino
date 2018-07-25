@@ -140,14 +140,14 @@ public static class DungeonRunManager
         return false;
     }
 
-    private static BuildingType GenerateTech()
+    public static BuildingType GenerateTech()
     {
-        int index = Random.Range(0, availableTech.Length - 1);
+        int index = Random.Range(0, availableTech.Length);
         BuildingType techCandidate = availableTech[index];
 
         while(PlayerHasTech(techCandidate))
         {
-            index = Random.Range(0, availableTech.Length - 1);
+            index = Random.Range(0, availableTech.Length);
             techCandidate = availableTech[index];
         }
 

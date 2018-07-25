@@ -5,8 +5,6 @@ public class Combustion : TechBuilding
 {
     public Combustion() : base(0)
     {
-        label = "Combustion";
-
         buildingType = BuildingType.COMBUSTION;
     }
 
@@ -33,7 +31,7 @@ public class Combustion : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Combustion";
     }

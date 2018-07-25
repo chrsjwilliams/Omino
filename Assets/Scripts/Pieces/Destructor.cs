@@ -176,7 +176,7 @@ public class Destructor : Polyomino
         }
     }
 
-    public List<Polyomino> GetPiecesInRange()
+    public override List<Polyomino> GetPiecesInRange()
     {
         List<Polyomino> enemyPiecesInRange = new List<Polyomino>();
         foreach (Tile tile in tiles)

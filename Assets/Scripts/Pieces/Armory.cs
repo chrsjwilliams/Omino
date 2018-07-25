@@ -7,8 +7,6 @@ public class Armory : TechBuilding
 
     public Armory() : base(1)
     {
-        label = "Armory";
-
         buildingType = BuildingType.ARMORY;
     }
 
@@ -34,7 +32,7 @@ public class Armory : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Armory";
     }

@@ -7,7 +7,6 @@ public class SupplyBoost : TechBuilding
 
     public SupplyBoost() : base(1)
     {
-        label = "Supply Boost";
         buildingType = BuildingType.SUPPLYBOOST;
     }
 
@@ -33,7 +32,7 @@ public class SupplyBoost : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Supply Boost";
     }

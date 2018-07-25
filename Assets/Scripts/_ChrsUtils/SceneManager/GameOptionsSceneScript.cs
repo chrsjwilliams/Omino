@@ -208,7 +208,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             TechBuilding tech = DungeonRunManager.GetBuildingFromType(selectedType);
             techSelect_currentTechIcons[0][i].GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
             techSelect_currentTechIcons[0][i].GetComponentsInChildren<Image>()[1].color = Color.white;
-            techSelect_currentTechIcons[0][i].GetComponentInChildren<TextMeshProUGUI>().text = tech.label;
+            techSelect_currentTechIcons[0][i].GetComponentInChildren<TextMeshProUGUI>().text = tech.GetName();
             techSelect_currentTechIcons[0][i].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(tech.buildingType);
         }
 
@@ -221,7 +221,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             
             techSelect_MenuButtons[0][j] = techSelectButtons[j];
 
-            techSelect_MenuButtons[0][j].GetComponentsInChildren<TextMeshProUGUI>()[0].text = DungeonRunManager.GetBuildingFromType(selectedType).label;
+            techSelect_MenuButtons[0][j].GetComponentsInChildren<TextMeshProUGUI>()[0].text = DungeonRunManager.GetBuildingFromType(selectedType).GetName();
             techSelect_MenuButtons[0][j].GetComponentsInChildren<TextMeshProUGUI>()[1].text = DungeonRunManager.GetBuildingFromType(selectedType).GetDescription();
 
             techSelect_MenuButtons[0][j].GetComponent<Image>().color = Services.GameManager.NeutralColor;
@@ -257,7 +257,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             dungeonRun_CurrentTechMenu[0][i].interactable = true;
             dungeonRun_CurrentTechMenu[0][i].GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
             dungeonRun_CurrentTechMenu[0][i].GetComponentsInChildren<Image>()[1].color = Color.white;
-            dungeonRun_CurrentTechMenu[0][i].GetComponentInChildren<TextMeshProUGUI>().text = tech.label;
+            dungeonRun_CurrentTechMenu[0][i].GetComponentInChildren<TextMeshProUGUI>().text = tech.GetName();
             dungeonRun_CurrentTechMenu[0][i].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(tech.buildingType);
         }
     }

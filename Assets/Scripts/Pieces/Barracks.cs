@@ -17,7 +17,7 @@ public class Barracks : Blueprint
         holder.spriteBottom.transform.localPosition = GetCenterpoint(true);
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Barracks";
     }

@@ -6,8 +6,6 @@ public class Annex : TechBuilding
 {
     public Annex() : base(0)
     {
-        label = "Annex";
-
         buildingType = BuildingType.ANNEX;
     }
 
@@ -33,7 +31,7 @@ public class Annex : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Annex";
     }

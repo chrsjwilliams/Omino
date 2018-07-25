@@ -11,7 +11,7 @@ public class Factory : Blueprint
         onGainText = "+1 Piece Production Level";
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Factory";
     }

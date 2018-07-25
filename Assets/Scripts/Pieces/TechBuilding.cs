@@ -5,7 +5,6 @@ using UnityEngine;
 public abstract class TechBuilding : Polyomino
 {
     private Color neutralColor;
-    public string label { get; protected set; }
     protected static int[,,] techBuilding = new int[3, 5, 5]
     {   
             //  These hashes represent what the piece will look like
@@ -52,7 +51,7 @@ public abstract class TechBuilding : Polyomino
         units = _units;
         placed = true;
 
-        holderName = label + " Holder";
+        holderName = GetName() + " Holder";
     }
 
     public TechBuilding(int _index) : base(4, _index, null)
@@ -60,7 +59,7 @@ public abstract class TechBuilding : Polyomino
         index = _index;
         placed = true;
 
-        holderName = label + " Holder";
+        holderName = GetName() + " Holder";
         piece = techBuilding;
     }
 

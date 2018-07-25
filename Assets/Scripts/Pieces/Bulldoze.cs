@@ -6,8 +6,6 @@ public class Bulldoze : TechBuilding
 {
     public Bulldoze() : base(0)
     {
-        label = "Bulldoze";
-
         //buildingType = BuildingType.BULLDOZE;
     }
 
@@ -33,7 +31,7 @@ public class Bulldoze : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Bulldoze";
     }

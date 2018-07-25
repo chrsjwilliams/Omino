@@ -7,8 +7,6 @@ public class Dynamo : TechBuilding
 
     public Dynamo() : base(0)
     {
-        label = "Dynamo";
-
         buildingType = BuildingType.DYNAMO;
     }
 
@@ -35,7 +33,7 @@ public class Dynamo : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Dynamo";
     }

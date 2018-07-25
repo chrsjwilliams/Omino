@@ -5,7 +5,6 @@ public class Recycling : TechBuilding
 {
     public Recycling() : base(1)
     {
-        label = "Recycling";
         buildingType = BuildingType.RECYCLING;
     }
 
@@ -31,7 +30,7 @@ public class Recycling : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Recycling";
     }

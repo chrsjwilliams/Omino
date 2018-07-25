@@ -7,8 +7,6 @@ public class Fission : TechBuilding
 
     public Fission() : base(1)
     {
-        label = "Fission";
-
         buildingType = BuildingType.FISSION;
     }
 
@@ -35,7 +33,7 @@ public class Fission : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Fission";
     }

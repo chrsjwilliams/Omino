@@ -54,7 +54,7 @@ public class Base : TechBuilding
         }
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         if (mainBase)
         {

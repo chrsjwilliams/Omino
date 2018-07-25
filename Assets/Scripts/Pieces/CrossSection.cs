@@ -6,8 +6,6 @@ public class CrossSection : TechBuilding
 {
     public CrossSection() : base(0)
     {
-        label = "Cross Section";
-
         buildingType = BuildingType.CROSSSECTION;
     }
 
@@ -33,7 +31,7 @@ public class CrossSection : TechBuilding
         base.OnClaimLost();
     }
 
-    protected override string GetName()
+    public override string GetName()
     {
         return "Cross Section";
     }

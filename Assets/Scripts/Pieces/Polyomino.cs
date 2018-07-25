@@ -995,7 +995,7 @@ public class Polyomino : IVertex
         }
     }
 
-    public List<Polyomino> GetPiecesInRange()
+    public virtual List<Polyomino> GetPiecesInRange()
     {
         List<Polyomino> opposingPiecesInRange = new List<Polyomino>();
         if (owner != null && owner.annex)
@@ -1742,7 +1742,7 @@ public class Polyomino : IVertex
         SetTileSprites();
     }
 
-    protected virtual string GetName()
+    public virtual string GetName()
     {
         return "";
     }
