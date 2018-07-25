@@ -14,8 +14,6 @@ namespace Tinylytics{
 		private const string _fileName = "AnalyticsData";
 
 		private float _playModeStartTime = 0.0f;
-		private float _totalPlaytime = 0.0f;
-		private int _totalSessions = 0;
 		private float _sessionStartTime = 0.0f;
 		private float _lastPlaytimeLog = 0.0f;
 		private bool _pauseCallSent = false;
@@ -91,7 +89,7 @@ namespace Tinylytics{
 			file.Close();
 		}
 
-		private void Awake() {
+		void Awake() {
 			if (_instance != null && _instance != this) {
 				Destroy(this.gameObject);
 			} else {
@@ -107,8 +105,6 @@ namespace Tinylytics{
 			_lastPlaytimeLog = Time.time;
 			
 			_LoadData();
-			_totalPlaytime = analyticsData.totalPlaytime;
-			_totalSessions = analyticsData.totalSessions;
 			
 			if (analyticsData.versionNumber != Application.version)
 			{
@@ -121,17 +117,46 @@ namespace Tinylytics{
 			_LoadIntermittentLoggingTask();
 
 		}
+		
+		void Update()
+		{
+			_UpdateTotalPlaytime();
+			_taskManager.Update();
+		}
+
+		void OnApplicationPause(bool pauseStatus)
+		{
+			if (pauseStatus)
+			{
+				if (!_pauseCallSent)
+				{
+					analyticsData.totalSessions++;
+					BackendManager.SendData("Session Playtime", (Time.time - Instance._sessionStartTime).ToString());
+					BackendManager.SendData("Total Sessions", analyticsData.totalSessions.ToString());
+					_SaveData();
+					_pauseCallSent = true;
+				}
+			}
+			else if (_pauseCallSent)
+			{
+				_sessionStartTime = Time.time;
+				_pauseCallSent = false;
+			}
+		}
+
+		void OnApplicationQuit()
+		{
+			if (!_pauseCallSent)
+			{
+				analyticsData.totalSessions++;
+				_SaveData();
+			}
+		}
 
 		private int _SecondsSinceEpoch()
 		{
 			System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
 			return (int)(System.DateTime.UtcNow - epochStart).TotalSeconds;
-		}
-
-		void Update()
-		{
-			_UpdateTotalPlaytime();
-			_taskManager.Update();
 		}
 
 		private void _LoadIntermittentLoggingTask()
@@ -151,31 +176,10 @@ namespace Tinylytics{
 			BackendManager.SendData("Version Number", analyticsData.versionNumber);
 		}
 
-		private void OnApplicationPause(bool pauseStatus)
-		{
-			if (pauseStatus)
-			{
-				if (!_pauseCallSent)
-				{
-					BackendManager.SendData("Session Playtime", (Time.time - Instance._sessionStartTime).ToString());
-					analyticsData.totalSessions = _totalSessions + 1;
-					_SaveData();
-					_pauseCallSent = true;
-				}
-			}
-			else if (_pauseCallSent)
-			{
-				_sessionStartTime = Time.time;
-				_totalSessions = analyticsData.totalSessions;
-				_pauseCallSent = false;
-			}
-		}
-
 		private void _UpdateTotalPlaytime()
 		{
-			_totalPlaytime += (Time.time - Instance._lastPlaytimeLog);
+			analyticsData.totalPlaytime += (Time.time - Instance._lastPlaytimeLog);
 			_lastPlaytimeLog = Time.time;
-			analyticsData.totalPlaytime = _totalPlaytime;
 			_SaveData();
 		}
 
@@ -220,8 +224,8 @@ namespace Tinylytics{
 			if (!analyticsData.playedTutorial)
 			{
 				_UpdateTotalPlaytime();
-				LogMetric("Total Time Until Tutorial Played", _totalPlaytime.ToString());
-				LogMetric("Number of Sessions Until Tutorial Played", _totalSessions.ToString());
+				LogMetric("Total Time Until Tutorial Played", analyticsData.totalPlaytime.ToString());
+				LogMetric("Number of Sessions Until Tutorial Played", analyticsData.totalSessions.ToString());
 				analyticsData.playedTutorial = true;
 				_SaveData();
 			}
@@ -232,8 +236,8 @@ namespace Tinylytics{
 			if (!analyticsData.playedBlueprint)
 			{
 				_UpdateTotalPlaytime();
-				LogMetric("Total Time Until Blueprint Played", _totalPlaytime.ToString());
-				LogMetric("Number of Sessions Until Blueprint Played", _totalSessions.ToString());
+				LogMetric("Total Time Until Blueprint Played", analyticsData.totalPlaytime.ToString());
+				LogMetric("Number of Sessions Until Blueprint Played", analyticsData.totalSessions.ToString());
 				analyticsData.playedBlueprint = true;
 				_SaveData();
 			}
@@ -302,8 +306,8 @@ namespace Tinylytics{
 				}
 
 				LogMetric(matchTypeToIncreaseTime + " CURRENT MATCH", time_played.ToString());
-				LogMetric(matchTypeToIncreaseTime + " TOTAL", total_time_played.ToString());
-				LogMetric(matchTypeToIncreaseTime + " MATCHES", total_matches.ToString());
+				LogMetric(matchTypeToIncreaseTime + " PLAYTIME TOTAL", total_time_played.ToString());
+				LogMetric(matchTypeToIncreaseTime + " TOTAL MATCHES", total_matches.ToString());
 			}
 
 			_SaveData();
