@@ -70,6 +70,7 @@ public class CampaignMenuManager : MonoBehaviour {
         if (Services.GameManager.levelSelected.campaignLevelNum == 4)
         {
             buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = "COMPLETE";
+            buttons[0].GetComponent<Image>().color = highlightedButtonColor;
         }
         float rot;
         Level nextLevel = Services.MapManager.GetNextLevel();
