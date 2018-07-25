@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class TechBuilding : Polyomino
 {
-    private Color neutralColor;
     protected static int[,,] techBuilding = new int[3, 5, 5]
     {   
             //  These hashes represent what the piece will look like
@@ -144,12 +143,17 @@ public abstract class TechBuilding : Polyomino
         holder.spriteBottom.sprite = Services.UIManager.structureOverlay;
         if (owner == null)
         {
-            holder.spriteBottom.color = new Color(0.6f, 0.6f, 0.6f);
+            SetNeutralVisualStatus();
         }
         else
         {
             holder.spriteBottom.color = owner.ColorScheme[0];
         }
+    }
+
+    public void SetNeutralVisualStatus()
+    {
+        holder.spriteBottom.color = new Color(0.6f, 0.6f, 0.6f);
     }
 
     public override void OnInputDown(bool fromPlayTask)

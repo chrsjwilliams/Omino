@@ -188,9 +188,15 @@ public class PieceHolder : MonoBehaviour {
 
     private void PathHighlight()
     {
-        if (!(piece.connected || (piece is TechBuilding && piece.owner != null)))
+        if ((!piece.connected && !(piece is TechBuilding)) ||
+            ((piece is TechBuilding) && piece.owner == null))
         {
             highlightingPath = false;
+            if (piece.owner == null)
+            {
+                TechBuilding techBuilding = piece as TechBuilding;
+                techBuilding.SetNeutralVisualStatus();
+            }
             return;
         }
         pathHighlightTime += Time.deltaTime;
