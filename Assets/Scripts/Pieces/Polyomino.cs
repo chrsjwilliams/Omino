@@ -862,7 +862,8 @@ public class Polyomino : IVertex
                 return false;
             if(owner.crossSection && (!mapTile.IsOccupied() || mapTile.occupyingPiece.owner != owner)) completelycovered = false;
             if (owner.crossSection && mapTile.occupyingPiece != null &&
-                mapTile.occupyingPiece.owner != owner && mapTile.occupyingPiece is TechBuilding)
+                mapTile.occupyingPiece.owner != null && mapTile.occupyingPiece.owner != owner && 
+                mapTile.occupyingPiece is TechBuilding)
                 return false;
             if (owner.crossSection && mapTile.occupyingPiece != null &&
                 mapTile.occupyingPiece.owner != owner && mapTile.occupyingPiece.connected &&
