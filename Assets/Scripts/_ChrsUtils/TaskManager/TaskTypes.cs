@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 ////////////////////////////////////////////////////////////////////////
 // GENERAL PURPOSE TASKS
@@ -165,6 +165,25 @@ public class LERP : TimedGOTask
     }
 }
 
+
+public class LERPProgressBar : TimedTask
+{
+    public Image progressBar { get; private set; }
+    public float endAmount { get; private set; }
+    public float duration { get; private set; }
+
+    public LERPProgressBar(Image _progressBar, float _endAmount, float _duration) : base(_duration)
+    {
+        progressBar = _progressBar;
+        endAmount = _endAmount;
+        duration = _duration;
+    }
+
+    protected override void OnTick(float t)
+    {
+        progressBar.fillAmount = Mathf.Lerp(progressBar.fillAmount, endAmount, t);
+    }
+}
 
 // A task to lerp a gameobject's scale
 public class Scale : TimedGOTask

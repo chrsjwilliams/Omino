@@ -35,6 +35,14 @@ public class CampaignMenuManager : MonoBehaviour {
     private Sprite lockImage;
     [SerializeField]
     private Color lockColor;
+    [SerializeField]
+    private Image[] progressNodes;
+    private float baseNodeProgressBarFill = 0;
+    private float progressNodeFill;
+    [SerializeField]
+    private Image progressBar;
+    private float basePorgressBarFill;
+    private float progressBarFill;
 
     // Use this for initialization
     void Start () {
@@ -43,7 +51,9 @@ public class CampaignMenuManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        //progressBar.fillAmount = Mathf.Lerp(progressBar.fillAmount, progressBarFill, Time.deltaTime);
+        //progressNodes[Services.GameManager.levelSelected.campaignLevelNum - 1].fillAmount = baseNodeProgressBarFill;
+
 	}
 
     public void MenuInPosition()
@@ -51,9 +61,42 @@ public class CampaignMenuManager : MonoBehaviour {
         inPosition = true;
     }
 
+    private void SetFilledProgressNodes(int tutorialLevel)
+    {
+        if (tutorialLevel == 1) return;
+        for(int i = 1; i < tutorialLevel; i++)
+        {
+            progressNodes[i - 1].fillAmount = 1;
+        }
+    }
+
     public void Show(Player winner)
     {
-        for(int i = 0; i < objectiveText.Length; i++)
+        
+
+        SetFilledProgressNodes(Services.GameManager.levelSelected.campaignLevelNum);
+        switch (Services.GameManager.levelSelected.campaignLevelNum)
+        {
+            case 1:
+                progressBar.fillAmount = 0;
+                break;
+            case 2:
+                progressBar.fillAmount = 0.25f;
+                break;
+            case 3:
+                progressBar.fillAmount = 0.5f;
+                break;
+            case 4:
+                progressBar.fillAmount = 0.75f;
+                buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = "COMPLETE";
+                if(Services.TutorialManager.CompletionCheck())
+                    buttons[0].GetComponent<Image>().color = highlightedButtonColor;
+                break;
+            default:
+                break;
+        }
+        progressBarFill = progressBar.fillAmount;
+        for (int i = 0; i < objectiveText.Length; i++)
         {
             objectiveText[i].text = Services.TutorialManager.objectiveText[i];
 
@@ -61,17 +104,14 @@ public class CampaignMenuManager : MonoBehaviour {
             {
                 objectiveCompletionSymbol[i].sprite = success;
                 objectiveCompletionSymbol[i].color = highlightedButtonColor;
+                progressBarFill = (progressBarFill + (0.25f / 2));
             }
             else
             {
                 objectiveCompletionSymbol[i].sprite = fail;
             }
         }
-        if (Services.GameManager.levelSelected.campaignLevelNum == 4)
-        {
-            buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = "COMPLETE";
-            buttons[0].GetComponent<Image>().color = highlightedButtonColor;
-        }
+
         float rot;
         Level nextLevel = Services.MapManager.GetNextLevel();
         Image resultImage;
@@ -134,8 +174,21 @@ public class CampaignMenuManager : MonoBehaviour {
 
         TaskTree moveCampaignMenuIntoPosition = new TaskTree(new EmptyTask(),
                 new TaskTree(new CampaignLevelMenuEntranceTask(transform,
-            resultImage, wreaths, buttons)));
-        moveCampaignMenuIntoPosition.Then(new ActionTask(MenuInPosition));
+            resultImage, wreaths, buttons)),
+                new TaskTree(new LERPProgressBar(progressBar, progressBarFill, 0.5f)));
+
+        if (progressBarFill % 0.25f == 0 && Services.TutorialManager.CompletionCheck())
+        {
+            moveCampaignMenuIntoPosition
+                .Then(new ActionTask(MenuInPosition))
+                .Then(new LERPProgressBar(progressNodes[Services.GameManager.levelSelected.campaignLevelNum - 1], 1, 0.5f));
+        }
+        else
+        {
+            moveCampaignMenuIntoPosition.Then(new ActionTask(MenuInPosition));
+        }
+
+
         Services.GameScene.tm.Do(moveCampaignMenuIntoPosition);
     }
 }
