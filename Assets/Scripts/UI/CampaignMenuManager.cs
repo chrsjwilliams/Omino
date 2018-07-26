@@ -37,11 +37,7 @@ public class CampaignMenuManager : MonoBehaviour {
     private Color lockColor;
     [SerializeField]
     private Image[] progressNodes;
-    private float baseNodeProgressBarFill = 0;
-    private float progressNodeFill;
     [SerializeField]
-    private Image progressBar;
-    private float basePorgressBarFill;
     private float progressBarFill;
 
     // Use this for initialization
@@ -78,16 +74,12 @@ public class CampaignMenuManager : MonoBehaviour {
         switch (Services.GameManager.levelSelected.campaignLevelNum)
         {
             case 1:
-                progressBar.fillAmount = 0;
                 break;
             case 2:
-                progressBar.fillAmount = 0.25f;
                 break;
             case 3:
-                progressBar.fillAmount = 0.5f;
                 break;
             case 4:
-                progressBar.fillAmount = 0.75f;
                 buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = "COMPLETE";
                 if(Services.TutorialManager.CompletionCheck())
                     buttons[0].GetComponent<Image>().color = highlightedButtonColor;
@@ -95,7 +87,6 @@ public class CampaignMenuManager : MonoBehaviour {
             default:
                 break;
         }
-        progressBarFill = progressBar.fillAmount;
         for (int i = 0; i < objectiveText.Length; i++)
         {
             objectiveText[i].text = Services.TutorialManager.objectiveText[i];
@@ -104,7 +95,7 @@ public class CampaignMenuManager : MonoBehaviour {
             {
                 objectiveCompletionSymbol[i].sprite = success;
                 objectiveCompletionSymbol[i].color = highlightedButtonColor;
-                progressBarFill = (progressBarFill + (0.25f / 2));
+                progressBarFill = (progressBarFill + 0.5f);
             }
             else
             {
@@ -175,13 +166,12 @@ public class CampaignMenuManager : MonoBehaviour {
         TaskTree moveCampaignMenuIntoPosition = new TaskTree(new EmptyTask(),
                 new TaskTree(new CampaignLevelMenuEntranceTask(transform,
             resultImage, wreaths, buttons)),
-                new TaskTree(new LERPProgressBar(progressBar, progressBarFill, 0.5f)));
+                new TaskTree(new LERPProgressBar(progressNodes[Services.GameManager.levelSelected.campaignLevelNum - 1], progressBarFill, 0.5f)));
 
         if (progressBarFill % 0.25f == 0 && Services.TutorialManager.CompletionCheck())
         {
             moveCampaignMenuIntoPosition
-                .Then(new ActionTask(MenuInPosition))
-                .Then(new LERPProgressBar(progressNodes[Services.GameManager.levelSelected.campaignLevelNum - 1], 1, 0.5f));
+                .Then(new ActionTask(MenuInPosition));
         }
         else
         {
