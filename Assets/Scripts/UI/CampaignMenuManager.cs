@@ -68,8 +68,6 @@ public class CampaignMenuManager : MonoBehaviour {
 
     public void Show(Player winner)
     {
-        
-
         SetFilledProgressNodes(Services.GameManager.levelSelected.campaignLevelNum);
         switch (Services.GameManager.levelSelected.campaignLevelNum)
         {
@@ -147,9 +145,7 @@ public class CampaignMenuManager : MonoBehaviour {
                 nextLevelButton.enabled = true;
                 nextLevelButton.onClick.RemoveListener(Services.GameScene.MoveToNextLevel);
                 nextLevelButton.onClick.AddListener(Services.GameScene.Reset);
-            }
-
-            
+            }           
         }
         else
         {
@@ -168,15 +164,9 @@ public class CampaignMenuManager : MonoBehaviour {
             resultImage, wreaths, buttons)),
                 new TaskTree(new LERPProgressBar(progressNodes[Services.GameManager.levelSelected.campaignLevelNum - 1], progressBarFill, 0.5f)));
 
-        if (progressBarFill % 0.25f == 0 && Services.TutorialManager.CompletionCheck())
-        {
-            moveCampaignMenuIntoPosition
-                .Then(new ActionTask(MenuInPosition));
-        }
-        else
-        {
-            moveCampaignMenuIntoPosition.Then(new ActionTask(MenuInPosition));
-        }
+
+        moveCampaignMenuIntoPosition.Then(new ActionTask(MenuInPosition));
+        
 
 
         Services.GameScene.tm.Do(moveCampaignMenuIntoPosition);
