@@ -37,7 +37,7 @@ public class TitleSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
-        foreach(Button button in modeButtons)
+        foreach (Button button in modeButtons)
         {
             button.gameObject.SetActive(false);
         }
@@ -70,6 +70,7 @@ public class TitleSceneScript : Scene<TransitionData>
         {
             modeButtons[0].GetComponent<Image>().color = uiColorScheme[1];
         }
+        Services.MenuManager = GetComponent<MenuManager>();
     }
 
     public void StartGame(GameMode mode)

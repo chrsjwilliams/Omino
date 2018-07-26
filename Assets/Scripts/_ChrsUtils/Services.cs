@@ -29,4 +29,7 @@ public class Services
     public static TechDataLibrary TechDataLibrary { get; set; }
     
     public static AnalyticsManager Analytics { get; set; }
+
+    //title scene
+    public static MenuManager MenuManager { get; set; }
 }
