@@ -12,12 +12,15 @@ public class HandicapSystem : MonoBehaviour
     public Slider p1HandicapSlider;
     public Slider p2HandicapSlider;
 
-    public static float[] tutorialHandicapLevels { get; private set; }
+    public static float[] tutorialHandicapLevels = new float[]
+    {
+        float.MinValue,
+        0.7f,
+        0.75f,
+        0.8f
+    };
 
-    [SerializeField]
-    private float lerpSpeed;
-
-    public float[] handicapValues;
+    public static float[] handicapValues = new float[]{ 1, 1 };
     public float p1HandicapValue;
     public float p2HandicapValue;
 
@@ -32,19 +35,16 @@ public class HandicapSystem : MonoBehaviour
     private TextMeshProUGUI p2PercentText;
 
 	// Use this for initialization
-	public void Init ()
+	public static void Init ()
     {
         handicapValues = new float[] { 1, 1 };
-        lerpSpeed = 18.0f;
         tutorialHandicapLevels = new float[] { float.MinValue, 0.7f, 0.75f, 0.8f };
-        singlePlayerMode = ((GameOptionsSceneScript)Services.Scenes.CurrentScene).humanPlayers[1] ? false : true;
-        UpdateHandicapText();
-
     }
 
     public void UpdateHandicapText()
     {
-        if(singlePlayerMode)
+        singlePlayerMode = Services.GameManager.mode == TitleSceneScript.GameMode.TwoPlayers ? true : false;
+        if (singlePlayerMode)
         {
             p1Text.text = "Player";
             p2Text.text = "AI";
@@ -54,20 +54,6 @@ public class HandicapSystem : MonoBehaviour
             p1Text.text = "Player 1";
             p2Text.text = "Player 2";
         }
-    }
-
-    public void UpdateTypeSlider()
-    {
-        //if (currentTypeValue == 0)
-        //{
-        //    useBlueprintHandicap = true;
-        //    currentTypeValue = 1;
-        //}
-        //else
-        //{
-        //    useBlueprintHandicap = false;
-        //    currentTypeValue = 0;
-        //}
     }
 
     public void UpdatePlayer1HandicapValueSlider()
@@ -83,11 +69,9 @@ public class HandicapSystem : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update () {
-
-        //typeSlider.value = Mathf.Lerp(typeSlider.value, currentTypeValue, Time.deltaTime * lerpSpeed);
+    void Update ()
+    {
         UpdatePlayer1HandicapValueSlider();
         UpdatePlayer2HandicapValueSlider();
-
     }
 }

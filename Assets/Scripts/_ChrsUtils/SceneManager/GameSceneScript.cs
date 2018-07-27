@@ -305,6 +305,22 @@ public class GameSceneScript : Scene<TransitionData>
     void LoadLevelSelect()
     {
         Services.AudioManager.FadeOutLevelMusic();
+        switch (Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.Tutorial:
+                Services.Scenes.Swap<TutorialLevelSceneScript>();
+                break;
+            case TitleSceneScript.GameMode.Elo:
+                Services.Scenes.Swap<EloSceneScript>();
+                break;
+            case TitleSceneScript.GameMode.DungeonRun:
+                Services.Scenes.Swap<DungeonRunSceneScript>();
+                break;
+            default:
+                Services.Scenes.Swap<GameOptionsSceneScript>();
+                break;
+        }
+
         Services.Scenes.Swap<GameOptionsSceneScript>();
     }
 

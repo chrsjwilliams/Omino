@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     private bool[] humanPlayers;
     public AILEVEL[] aiLevels;
-    public TitleSceneScript.GameMode mode;
+    public TitleSceneScript.GameMode mode = TitleSceneScript.GameMode.NONE;
     public bool destructorsEnabled = true;
 
     public double levelBPM;
@@ -118,6 +118,23 @@ public class GameManager : MonoBehaviour
     private float destructorForBlueprintWeight;
     private float dangerWeight;
 
+    [SerializeField]
+    private float defaultWinWeight;
+    [SerializeField]
+    private float defaultStructWeight;
+    [SerializeField]
+    private float defaultBlueprintWeight;
+    [SerializeField]
+    private float defaultAttackWeight;
+    [SerializeField]
+    private float defaultBlueprintDestructionWeight;
+    [SerializeField]
+    private float defaultDisconnectionWeight;
+    [SerializeField]
+    private float defaultDestructorForBlueprintWeight;
+    [SerializeField]
+    private float defaultDangerWeight;
+
     private readonly string SOUNDEFFECTSENABLED = "soundEffectsEnabledKey";
     private readonly string MUSICENABLED = "musicEnabledKey";
 
@@ -198,6 +215,17 @@ public class GameManager : MonoBehaviour
     public void Init()
     {
         //_mainCamera = Camera.main;
+        SetWinWeight(defaultWinWeight);
+        SetStructureWeight(defaultStructWeight);
+        SetBlueprintWeight(defaultBlueprintWeight);
+        SetAttackWeight(defaultAttackWeight);
+        SetBlueprintDestructionWeight(defaultBlueprintDestructionWeight);
+        SetDisconnectionWeight(defaultDisconnectionWeight);
+        SetDestructorForBlueprintWeight(defaultDestructorForBlueprintWeight);
+        SetDangerWeight(defaultDangerWeight);
+
+        HandicapSystem.Init();
+
     }
 
     public void SetNumPlayers(bool[] players)
@@ -289,7 +317,7 @@ public class GameManager : MonoBehaviour
                 //{
                 //    _players[i].Init(playerNum, resourceHandicap, handicapValue[i]);
                 //}
-
+                
                 _players[i].Init(playerNum, resourceHandicap, handicapValue[i]);
 
                 _players[i].name = PLAYER + " " + playerNum;

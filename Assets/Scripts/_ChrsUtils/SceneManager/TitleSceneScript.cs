@@ -29,7 +29,7 @@ public class TitleSceneScript : Scene<TransitionData>
     [SerializeField]
     private Color[] uiColorScheme;
 
-    public enum GameMode { TwoPlayers, PlayerVsAI, Demo, Tutorial, DungeonRun, Elo }
+    public enum GameMode { TwoPlayers, Practice, Demo, Tutorial, DungeonRun, Elo, NONE }
 
     private const float SECONDS_TO_WAIT = 0.01f;
 
@@ -41,15 +41,43 @@ public class TitleSceneScript : Scene<TransitionData>
         {
             button.gameObject.SetActive(false);
         }
-        foreach(Button button in optionButtons)
+        foreach (Button button in optionButtons)
         {
             button.gameObject.SetActive(false);
         }
-        foreach(Button button in playerCountButtons)
+        foreach (Button button in playerCountButtons)
         {
             button.gameObject.SetActive(false);
         }
         backButton.gameObject.SetActive(false);
+
+        switch (Services.GameManager.mode)
+        {
+            case GameMode.TwoPlayers:
+                foreach (Button button in playerCountButtons)
+                {
+                    button.gameObject.SetActive(true);
+                }
+                backButton.gameObject.SetActive(true);
+
+                break;
+            case GameMode.DungeonRun:
+            case GameMode.Elo:
+            case GameMode.Practice:
+            case GameMode.Tutorial:
+                foreach (Button button in modeButtons)
+                {
+                    button.gameObject.SetActive(true);
+                }
+                backButton.gameObject.SetActive(true);
+
+                break;
+            default:
+                break;
+        }
+        Services.GameManager.mode = GameMode.NONE;
+
+        
 
         SetOptionButtonStatus(optionsButton, true);
         SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
@@ -73,6 +101,11 @@ public class TitleSceneScript : Scene<TransitionData>
         Services.MenuManager = GetComponent<MenuManager>();
     }
 
+    internal override void OnExit()
+    {
+        
+    }
+
     public void StartGame(GameMode mode)
     {
         Services.GameManager.mode = mode;
@@ -91,24 +124,32 @@ public class TitleSceneScript : Scene<TransitionData>
         _tm.Do(start);
     }
 
-    public void PlayPlayerVsAI()
+    public void PlayPractice()
     {
-        StartGame(GameMode.PlayerVsAI);
-        
+        //Services.GameManager.mode = GameMode.Practice;
+        //Services.Scenes.PushScene<AIDifficultySceneScript>();
+        StartGame(GameMode.Practice);
+
     }
 
     public void Play2Players()
     {
+        //Services.GameManager.mode = GameMode.TwoPlayers;
+        //Services.Scenes.PushScene<MapSelectSceneScript>();
         StartGame(GameMode.TwoPlayers);
     }
 
-    public void PlayCampaignMode()
+    public void PlayTutorialMode()
     {
+        //Services.GameManager.mode = GameMode.Tutorial;
+        //Services.Scenes.PushScene<TutorialLevelSceneScript>();
         StartGame(GameMode.Tutorial);
     }
 
     public void PlayDungeonRunMode()
     {
+        //Services.GameManager.mode = GameMode.Tutorial;
+        //Services.Scenes.PushScene<DungeonRunSceneScript>();
         StartGame(GameMode.DungeonRun);
     }
 
@@ -119,6 +160,8 @@ public class TitleSceneScript : Scene<TransitionData>
 
     public void PlayChallengeMode()
     {
+        //Services.GameManager.mode = GameMode.Elo;
+        //Services.Scenes.PushScene<EloSceneScript>();
         StartGame(GameMode.Elo);
     }
 

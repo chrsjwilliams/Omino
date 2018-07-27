@@ -149,15 +149,12 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             aiLevelButtonZones[i].SetActive(false);
         }
 
-                
-        
-
         switch (Services.GameManager.mode)
         {
             case TitleSceneScript.GameMode.TwoPlayers:
                 StartTwoPlayerMode();
                 break;
-            case TitleSceneScript.GameMode.PlayerVsAI:
+            case TitleSceneScript.GameMode.Practice:
                 StartPlayerVsAIMode();
                 break;
             case TitleSceneScript.GameMode.Demo:
@@ -176,7 +173,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
                 break;
         }
 
-        handicapSystem.Init();
+        HandicapSystem.Init();
     }
 
     private void SetUpDungeonRunTechSelectMenu()
@@ -265,7 +262,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
     internal override void OnExit()
     {
         //Services.GameManager.SetHandicapType(handicapSystem.useBlueprintHandicap);
-        Services.GameManager.SetHandicapValues(handicapSystem.handicapValues);
+        Services.GameManager.SetHandicapValues(HandicapSystem.handicapValues);
 
      //   PlayerPrefs.Save();
     }
@@ -491,6 +488,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         GameObject levelSelectText = 
             buttonParent.GetComponentInChildren<TextMeshProUGUI>().gameObject;
         levelSelectText.SetActive(false);
+
         LevelSelectTextEntrance entrance = 
             new LevelSelectTextEntrance(levelSelectText);
         LevelSelectButtonEntranceTask buttonEntrance =
@@ -644,7 +642,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         {
             ToggleOptionMenu();
 			if (Services.GameManager.mode == TitleSceneScript.GameMode.TwoPlayers ||
-			            Services.GameManager.mode == TitleSceneScript.GameMode.PlayerVsAI ||
+			            Services.GameManager.mode == TitleSceneScript.GameMode.Practice ||
 			            Services.GameManager.mode == TitleSceneScript.GameMode.Demo) {
 				SlideInLevelButtons ();
 			} else {
@@ -657,6 +655,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         }
         else
         {
+            Services.GameManager.mode = TitleSceneScript.GameMode.NONE;
+
             Services.Scenes.Swap<TitleSceneScript>();
         }
     }

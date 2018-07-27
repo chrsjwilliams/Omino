@@ -140,7 +140,15 @@ public class ScrollRectSnap : MonoBehaviour
 
         levelSelected = true;
         LevelButton selectedLevel = images[selectedIndex].GetComponent<LevelButton>();
-        ((GameOptionsSceneScript)Services.Scenes.CurrentScene).SelectLevel(selectedLevel);
+        if (Services.Scenes.CurrentScene is MapSelectSceneScript)
+        {
+            ((MapSelectSceneScript)Services.Scenes.CurrentScene).SelectLevel(selectedLevel);
+        }
+        else
+        {
+            ((GameOptionsSceneScript)Services.Scenes.CurrentScene).SelectLevel(selectedLevel);
+
+        }
     }
 
     void LerpToImage(int position)

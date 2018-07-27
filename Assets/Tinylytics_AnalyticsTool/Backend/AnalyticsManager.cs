@@ -289,7 +289,7 @@ namespace Tinylytics{
 						total_matches = analyticsData.eloTotalMatches;
 						matchTypeToIncreaseTime = "ELO";
 						break;
-					case (TitleSceneScript.GameMode.PlayerVsAI):
+					case (TitleSceneScript.GameMode.Practice):
 						analyticsData.PvAIPlaytime += time_played;
 						total_time_played = analyticsData.PvAIPlaytime;
 						analyticsData.PvPTotalMatches++;
@@ -316,7 +316,7 @@ namespace Tinylytics{
 
 		public void PlayerWin(bool playerIsWinner = true)
 		{
-			if (_currentPlayMode == TitleSceneScript.GameMode.PlayerVsAI)
+			if (_currentPlayMode == TitleSceneScript.GameMode.Practice)
 			{
 				if (playerIsWinner)
 				{
