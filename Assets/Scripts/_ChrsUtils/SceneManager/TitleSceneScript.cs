@@ -27,8 +27,6 @@ public class TitleSceneScript : Scene<TransitionData>
     [SerializeField]
     private GameObject title;
     [SerializeField]
-    private Color[] uiColorScheme;
-    [SerializeField]
     private MenuManager menuManager;
 
     public enum GameMode { NONE, TwoPlayers, Practice, Demo, Tutorial, DungeonRun, Elo }
@@ -102,6 +100,12 @@ public class TitleSceneScript : Scene<TransitionData>
         //    modeButtons[0].GetComponent<Image>().color = uiColorScheme[1];
         //}
         menuManager.Init();
+    }
+
+    internal override void OnEnter(TransitionData data)
+    {
+
+
     }
 
     internal override void OnExit()
@@ -275,18 +279,18 @@ public class TitleSceneScript : Scene<TransitionData>
     public void ToggleMusic()
     {
         Services.AudioManager.ToggleMusic();
-        SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
+        //SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
     }
 
     public void ToggleSoundFX()
     {
         Services.AudioManager.ToggleSoundEffects();
-        SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
+        //SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
     }
 
     public void ToggleBlueprintAssist()
     {
         Services.GameManager.ToggleBlueprintAssist();
-        SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
+        //SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
     }
 }
