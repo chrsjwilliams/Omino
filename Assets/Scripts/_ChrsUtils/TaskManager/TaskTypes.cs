@@ -181,7 +181,7 @@ public class LERPProgressBar : TimedTask
 
     protected override void OnTick(float t)
     {
-        progressBar.fillAmount = Mathf.Lerp(progressBar.fillAmount, endAmount, t);
+        progressBar.fillAmount = Mathf.Lerp(progressBar.fillAmount, endAmount, EasingEquations.Easing.ExpoEaseIn(t));
     }
 }
 
