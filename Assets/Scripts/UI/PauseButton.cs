@@ -24,7 +24,7 @@ public class PauseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (pressed)
         {
-            timeHeld += Time.deltaTime;
+            timeHeld += Time.unscaledDeltaTime;
             filledImage.fillAmount = timeHeld / pauseTime;
             if(timeHeld >= pauseTime)
             {
@@ -35,18 +35,19 @@ public class PauseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (Services.GameScene.gamePaused)
-        {
-            Services.UIManager.TogglePauseMenu();
-        }
-        else
-        {
+        //if (Services.GameScene.gamePaused)
+        //{
+        //    Services.UIManager.TogglePauseMenu();
+        //    print("toggling pause menu");
+        //}
+        //else
+        //{
             Services.AudioManager.PlaySoundEffect(Services.Clips.UIButtonPressed, 1.0f);
             pressed = true;
             transform.localScale = holdScale * Vector3.one;
             timeHeld = 0;
             transform.localPosition = basePos + offset;
-        }
+        //}
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -57,7 +58,9 @@ public class PauseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private void Pause()
     {
         Services.AudioManager.PlaySoundEffect(Services.Clips.UIClick, 1.0f);
-        Services.UIManager.TogglePauseMenu();
+        //if (!Services.GameScene.gamePaused)
+            Services.UIManager.TogglePauseMenu();
+        //else Services.UIManager.TurnOnPauseMenu();
         ReturnToNeutral();
     }
 

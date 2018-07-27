@@ -40,6 +40,7 @@ public class TutorialManager : MonoBehaviour
     private Sprite notDone;
     [SerializeField]
     private GameObject secondObjectiveLocation;
+    public bool tooltipActive { get; private set; }
 
     // hide skip button & move first animation up 75 units
 
@@ -142,6 +143,7 @@ public class TutorialManager : MonoBehaviour
             backDim.SetActive(false);
         }
         Services.UIManager.tooltipsDisabled = false;
+        tooltipActive = false;
         if (currentIndex < tooltipInfos.Length - 1) MoveToNextStep();
     }
 
@@ -313,7 +315,7 @@ public class TutorialManager : MonoBehaviour
         TooltipInfo nextTooltipInfo = tooltipInfos[currentIndex];
 
         currentTooltip.Init(nextTooltipInfo);
-
+        tooltipActive = true;
         if(nextTooltipInfo.displayObjective)
         {
             DisplayObjective(nextTooltipInfo.objectiveIndex, true);

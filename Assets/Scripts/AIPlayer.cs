@@ -703,7 +703,7 @@ public class AIPlayer : Player
                        startTime - Time.time > thinkingOverride))
                     {
                         //  midthinking shortcut
-                        Debug.Log(playerColor + " Shortcut!");
+                        //Debug.Log(playerColor + " Shortcut!");
                         nextPlay = SelectMove(movesToConsider);
                     }
                     //  Then choose a new rotation

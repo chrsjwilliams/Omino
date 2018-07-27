@@ -679,6 +679,11 @@ public class UIManager : MonoBehaviour {
     }
 
 
+    public void TurnOnPauseMenu()
+    {
+        pauseMenu.SetActive(true);
+    }
+
 
     public void TogglePauseMenu()
     {

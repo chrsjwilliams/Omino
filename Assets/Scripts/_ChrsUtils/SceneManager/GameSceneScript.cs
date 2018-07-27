@@ -419,7 +419,7 @@ public class GameSceneScript : Scene<TransitionData>
         {
             foreach (Player player in Services.GameManager.Players)
             {
-                player.PauseProdutcion();
+                player.PauseProduction();
             }
         }
         else

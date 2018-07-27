@@ -268,7 +268,7 @@ public class Player : MonoBehaviour
         
     }
 
-    public void PauseProdutcion()
+    public void PauseProduction()
     {
         resourceGainFactor = 0;
         drawRateFactor = 0;
