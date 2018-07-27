@@ -28,77 +28,80 @@ public class TitleSceneScript : Scene<TransitionData>
     private GameObject title;
     [SerializeField]
     private Color[] uiColorScheme;
+    [SerializeField]
+    private MenuManager menuManager;
 
-    public enum GameMode { TwoPlayers, Practice, Demo, Tutorial, DungeonRun, Elo, NONE }
+    public enum GameMode { NONE, TwoPlayers, Practice, Demo, Tutorial, DungeonRun, Elo }
 
     private const float SECONDS_TO_WAIT = 0.01f;
 
     private TaskManager _tm = new TaskManager();
 
-    internal override void OnEnter(TransitionData data)
+    internal override void Init()
     {
-        foreach (Button button in modeButtons)
-        {
-            button.gameObject.SetActive(false);
-        }
-        foreach (Button button in optionButtons)
-        {
-            button.gameObject.SetActive(false);
-        }
-        foreach (Button button in playerCountButtons)
-        {
-            button.gameObject.SetActive(false);
-        }
-        backButton.gameObject.SetActive(false);
 
-        switch (Services.GameManager.mode)
-        {
-            case GameMode.TwoPlayers:
-                foreach (Button button in playerCountButtons)
-                {
-                    button.gameObject.SetActive(true);
-                }
-                backButton.gameObject.SetActive(true);
+        //foreach (Button button in modeButtons)
+        //{
+        //    button.gameObject.SetActive(false);
+        //}
+        //foreach (Button button in optionButtons)
+        //{
+        //    button.gameObject.SetActive(false);
+        //}
+        //foreach (Button button in playerCountButtons)
+        //{
+        //    button.gameObject.SetActive(false);
+        //}
+        //backButton.gameObject.SetActive(false);
 
-                break;
-            case GameMode.DungeonRun:
-            case GameMode.Elo:
-            case GameMode.Practice:
-            case GameMode.Tutorial:
-                foreach (Button button in modeButtons)
-                {
-                    button.gameObject.SetActive(true);
-                }
-                backButton.gameObject.SetActive(true);
+        //switch (Services.GameManager.mode)
+        //{
+        //    case GameMode.TwoPlayers:
+        //        foreach (Button button in playerCountButtons)
+        //        {
+        //            button.gameObject.SetActive(true);
+        //        }
+        //        backButton.gameObject.SetActive(true);
 
-                break;
-            default:
-                break;
-        }
-        Services.GameManager.mode = GameMode.NONE;
+        //        break;
+        //    case GameMode.DungeonRun:
+        //    case GameMode.Elo:
+        //    case GameMode.Practice:
+        //    case GameMode.Tutorial:
+        //        foreach (Button button in modeButtons)
+        //        {
+        //            button.gameObject.SetActive(true);
+        //        }
+        //        backButton.gameObject.SetActive(true);
 
-        
+        //        break;
+        //    default:
+        //        break;
+        //}
+        //Services.GameManager.mode = GameMode.NONE;
 
-        SetOptionButtonStatus(optionsButton, true);
-        SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
-        SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
-        SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
 
-        int progress = 0;
-        if (File.Exists(GameOptionsSceneScript.progressFileName))
-        {
-            string fileText = File.ReadAllText(GameOptionsSceneScript.progressFileName);
-            int.TryParse(fileText, out progress);
-        }
-        if(progress == 4)
-        {
-            modeButtons[0].GetComponent<Image>().color = uiColorScheme[0];
-        }
-        else
-        {
-            modeButtons[0].GetComponent<Image>().color = uiColorScheme[1];
-        }
-        Services.MenuManager = GetComponent<MenuManager>();
+
+        //SetOptionButtonStatus(optionsButton, true);
+        //SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
+        //SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
+        //SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
+
+        //int progress = 0;
+        //if (File.Exists(GameOptionsSceneScript.progressFileName))
+        //{
+        //    string fileText = File.ReadAllText(GameOptionsSceneScript.progressFileName);
+        //    int.TryParse(fileText, out progress);
+        //}
+        //if(progress == 4)
+        //{
+        //    modeButtons[0].GetComponent<Image>().color = uiColorScheme[0];
+        //}
+        //else
+        //{
+        //    modeButtons[0].GetComponent<Image>().color = uiColorScheme[1];
+        //}
+        menuManager.Init();
     }
 
     internal override void OnExit()
@@ -110,18 +113,42 @@ public class TitleSceneScript : Scene<TransitionData>
     {
         Services.GameManager.mode = mode;
         Services.Analytics.MatchStarted(mode);
-        Task start;
-        if (mode == GameMode.TwoPlayers)
+        //Task start;
+        switch (mode)
         {
-            start = new SlideOutTitleScreenButtons(playerCountButtons);
+            case GameMode.TwoPlayers:
+                Services.Scenes.PushScene<MapSelectSceneScript>();
+                break;
+            case GameMode.Practice:
+                Services.Scenes.PushScene<AIDifficultySceneScript>();
+                break;
+            case GameMode.Demo:
+                break;
+            case GameMode.Tutorial:
+                Services.Scenes.PushScene<TutorialLevelSceneScript>();
+                break;
+            case GameMode.DungeonRun:
+                Services.Scenes.PushScene<DungeonRunSceneScript>();
+                break;
+            case GameMode.Elo:
+                Services.Scenes.PushScene<EloSceneScript>();
+                break;
+            case GameMode.NONE:
+                break;
+            default:
+                break;
         }
-        else
-        {
-            start = new SlideOutTitleScreenButtons(modeButtons);
-        }
-        start.Then(new ActionTask(ChangeScene));
+        //if (mode == GameMode.TwoPlayers)
+        //{
+        //    start = new SlideOutTitleScreenButtons(playerCountButtons);
+        //}
+        //else
+        //{
+        //    start = new SlideOutTitleScreenButtons(modeButtons);
+        //}
+        //start.Then(new ActionTask(ChangeScene));
 
-        _tm.Do(start);
+        //_tm.Do(start);
     }
 
     public void PlayPractice()

@@ -24,14 +24,14 @@ public class BackButton : MonoBehaviour
 
     public void Back()
     {
-        if(Services.GameManager.mode == TitleSceneScript.GameMode.NONE ||
-            Services.Scenes.CurrentScene is GameOptionsSceneScript)
-        {
-            Services.GameManager.mode = TitleSceneScript.GameMode.NONE;
-            Services.Scenes.Swap<TitleSceneScript>();
-        }
-        else
-        {
+        //if(Services.GameManager.mode == TitleSceneScript.GameMode.NONE ||
+        //    Services.Scenes.CurrentScene is GameOptionsSceneScript)
+        //{
+        //    Services.GameManager.mode = TitleSceneScript.GameMode.NONE;
+        //    Services.Scenes.Swap<TitleSceneScript>();
+        //}
+        //else
+        //{
             List<Task> backButtonTasks = new List<Task>();
             backButtonTasks.Add(new ActionTask(PlayExitTransition));
             backButtonTasks.Add(new ActionTask(PopScene));
@@ -39,7 +39,7 @@ public class BackButton : MonoBehaviour
             TaskQueue backButtonTaskQueue = new TaskQueue(backButtonTasks);
 
             _tm.Do(backButtonTaskQueue);
-        }
+        //}
 
         // Pops scene off the stack
 

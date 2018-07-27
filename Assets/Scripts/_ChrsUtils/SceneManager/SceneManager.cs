@@ -94,10 +94,9 @@ using Object = UnityEngine.Object;
         var nextScene = GetScene<T>();
          _sceneStack.Push(nextScene);
          nextScene._OnEnter(data);
+    }
 
-     }
-
-     private T GetScene<T>() where T : Scene<TTransitionData>
+    private T GetScene<T>() where T : Scene<TTransitionData>
      {
          GameObject prefab;
          _scenes.TryGetValue(typeof(T), out prefab);
@@ -106,7 +105,9 @@ using Object = UnityEngine.Object;
          var sceneObject = Object.Instantiate(prefab);
          sceneObject.name = typeof(T).Name;
          sceneObject.transform.SetParent(SceneRoot.transform, false);
-         return sceneObject.GetComponent<T>();
+         T scene = sceneObject.GetComponent<T>();
+         scene.Init();
+         return scene;
      }
  }
 

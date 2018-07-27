@@ -30,7 +30,7 @@ public class Scene<TTransitionData> : MonoBehaviour
     internal virtual void OnEnter(TTransitionData data) { }
     internal virtual void OnExit() { }
     internal virtual void ExitTransition() { }
-    //	internal virtual void Init() { }
+    internal virtual void Init() { }
     //	internal virtual void Destroy() { }
     //	internal virtual void Update() { }
     //	internal virtual void Tick () { }
