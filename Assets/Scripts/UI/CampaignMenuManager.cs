@@ -60,7 +60,7 @@ public class CampaignMenuManager : MonoBehaviour {
     private void SetFilledProgressNodes(int tutorialLevel)
     {
         if (tutorialLevel == 1) return;
-        for(int i = 0; i < tutorialLevel; i++)
+        for(int i = 1; i < tutorialLevel; i++)
         {
             progressNodes[i - 1].fillAmount = 1;
         }
