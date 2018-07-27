@@ -280,8 +280,6 @@ public class TutorialManager : MonoBehaviour
                 break;
         }
 
-        Services.GameEventManager.Unregister<PiecePlaced>(OnPiecePlaced);
-
         dismissTask.Then(new ActionTask(currentTooltip.Dismiss));
         tm.Do(dismissTask);
     }
