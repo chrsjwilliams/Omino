@@ -66,8 +66,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public bool useBlueprintHandicapType { get; private set; }
-    public float[] handicapValue { get; private set; }
+    public PlayerHandicap[] handicapValue { get; private set; }
 
     [SerializeField] private Camera _mainCamera;
     public Camera MainCamera
@@ -282,17 +281,12 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetFloat("dangerMod", dangerWeight);
     }
 
-    public void SetHandicapType(bool handicapType)
-    {
-        useBlueprintHandicapType = handicapType;
-    }
-
-    public void SetHandicapValues(float[] handicapValue_)
+    public void SetHandicapValues(PlayerHandicap[] handicapValue_)
     {
         handicapValue = handicapValue_;
     }
 
-    public void InitPlayers(bool resourceHandicap, float[] handicapValue)
+    public void InitPlayers(PlayerHandicap[] handicapValue)
     {
         AIStrategy strategy = new AIStrategy(winWeight, structureWeight,
             blueprintWeight, destructionWeight, blueprintDestructionWeight,
@@ -317,8 +311,8 @@ public class GameManager : MonoBehaviour
                 //{
                 //    _players[i].Init(playerNum, resourceHandicap, handicapValue[i]);
                 //}
-                
-                _players[i].Init(playerNum, resourceHandicap, handicapValue[i]);
+
+                _players[i].Init(playerNum, handicapValue[i]);
 
                 _players[i].name = PLAYER + " " + playerNum;
             }
@@ -333,7 +327,7 @@ public class GameManager : MonoBehaviour
                 aiPlayerGameObject.AddComponent<AIPlayer>();
                 AIPlayer aiPlayer = aiPlayerGameObject.GetComponent<AIPlayer>();
                 _players[i] = aiPlayer;
-                _players[i].Init(playerNum, strategy, aiLevels[i], resourceHandicap, handicapValue[i]);
+                _players[i].Init(playerNum, strategy, aiLevels[i], handicapValue[i]);
                 _players[i].name = "AI " + PLAYER + playerNum;
 
             }

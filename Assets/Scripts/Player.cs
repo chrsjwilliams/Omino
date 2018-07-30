@@ -149,19 +149,21 @@ public class Player : MonoBehaviour
     private readonly Vector3 bpHighlightMinScale = Polyomino.unselectedScale * 0.95f;
     private readonly Vector3 bpHighlightMaxScale = Polyomino.unselectedScale * 1.2f;
 
-    public float allResourceHandicap = 1;
-    public float allBlueprintHandicap = 1;
+
+    public float energyHandicap = 1;
+    public float pieceHandicap = 1;
+    public float hammerHandicap = 1;
 
     public const float pathHighlightTotalDuration = 0.5f;
 
-    public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_, bool blueprintValueHandicap, float handicap)
+    public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_, PlayerHandicap handicap)
     {
         Init(playerNum_);
     }
 
-    public virtual void Init(int playerNum_, bool blueprintValueHandicap, float handicap)
+    public virtual void Init(int playerNum_, PlayerHandicap handicap)
     {
-        SetHandicap(blueprintValueHandicap, handicap);
+        SetHandicap(handicap);
         Init(playerNum_);
     }
 
@@ -282,18 +284,11 @@ public class Player : MonoBehaviour
         attackGainFactor = 1;
     }
 
-    protected void SetHandicap(bool blueprintValueHandicap, float handicap)
+    protected void SetHandicap(PlayerHandicap handicap)
     {
-        if (blueprintValueHandicap)
-        {
-            allResourceHandicap = 1;
-            allBlueprintHandicap = handicap;
-        }
-        else
-        {
-            allResourceHandicap = handicap;
-            allBlueprintHandicap = 1;
-        }
+            energyHandicap = handicap.enegryProduction;
+            pieceHandicap = handicap.pieceProduction;
+            hammerHandicap = handicap.hammerProduction;
     }
 
     // Update is called once per frame
@@ -1113,11 +1108,11 @@ public class Player : MonoBehaviour
         destProdLevel = activeBombFactories.Count + expansionCount + 1;
         resourceProdLevel = activeMines.Count + expansionCount + 1;
         normalDrawRate = (Base.normalDrawRate + 
-            ((normProdLevel - 1) * Factory.drawRateBonus * allBlueprintHandicap)) * allResourceHandicap;
+            ((normProdLevel - 1) * Factory.drawRateBonus)) * pieceHandicap;
         destructorDrawRate = (Base.destDrawRate +
-            ((destProdLevel - 1) * Barracks.drawRateBonus * allBlueprintHandicap)) * allResourceHandicap;
+            ((destProdLevel - 1) * Barracks.drawRateBonus)) * hammerHandicap;
         resourceGainRate = (Base.resourceGainRate +
-            ((resourceProdLevel - 1) * Generator.resourceRateBonus * allBlueprintHandicap)) * allResourceHandicap;
+            ((resourceProdLevel - 1) * Generator.resourceRateBonus)) * energyHandicap;
         Services.GameData.productionRates[playerNum - 1] = resourceGainRate * resourceGainFactor;
     }
 

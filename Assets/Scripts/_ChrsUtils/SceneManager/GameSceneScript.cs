@@ -48,9 +48,15 @@ public class GameSceneScript : Scene<TransitionData>
         {
             case TitleSceneScript.GameMode.Elo:
 
-                float[] handicaps = new float[2];
-                handicaps[0] = 1;
-                handicaps[1] = 1 + ELOManager.eloData.handicapLevel;
+                PlayerHandicap[] handicaps = new PlayerHandicap[2];
+                handicaps[0].SetEnergyHandicapLevel(1);
+                handicaps[0].SetHammerHandicapLevel(1);
+                handicaps[0].SetPieceHandicapLevel(1);
+
+                handicaps[1].SetEnergyHandicapLevel(1 + ELOManager.eloData.handicapLevel);
+                handicaps[1].SetHammerHandicapLevel(1 + ELOManager.eloData.handicapLevel);
+                handicaps[1].SetPieceHandicapLevel( 1 + ELOManager.eloData.handicapLevel);
+
                 Debug.Log("handicap level: " + ELOManager.eloData.handicapLevel);
                 Debug.Log("total wins: " + ELOManager.eloData.totalWins);
                 Debug.Log("win streak: " + ELOManager.eloData.winStreakCount);
@@ -61,8 +67,11 @@ public class GameSceneScript : Scene<TransitionData>
 
             case TitleSceneScript.GameMode.DungeonRun:
 
-                handicaps = new float[2];
-                handicaps[0] = 1;
+                handicaps = new PlayerHandicap[2];
+                handicaps[0].SetEnergyHandicapLevel(1);
+                handicaps[0].SetHammerHandicapLevel(1);
+                handicaps[0].SetPieceHandicapLevel(1);
+
                 handicaps[1] = DungeonRunManager.SetHandicap();
                 Services.GameManager.SetHandicapValues(handicaps);
 
@@ -84,8 +93,10 @@ public class GameSceneScript : Scene<TransitionData>
 
             case TitleSceneScript.GameMode.Tutorial:
 
-                handicaps = new float[2];
-                handicaps[0] = 1;
+                handicaps = new PlayerHandicap[2];
+                handicaps[0].SetEnergyHandicapLevel(1);
+                handicaps[0].SetHammerHandicapLevel(1);
+                handicaps[0].SetPieceHandicapLevel(1);
                 handicaps[1] = HandicapSystem.tutorialHandicapLevels[Services.MapManager.currentLevel.campaignLevelNum - 1];
                 Services.GameManager.SetHandicapValues(handicaps);
 
@@ -108,7 +119,7 @@ public class GameSceneScript : Scene<TransitionData>
         }
         else
         {
-            Services.GameManager.InitPlayers(Services.GameManager.useBlueprintHandicapType, Services.GameManager.handicapValue);
+            Services.GameManager.InitPlayers(Services.GameManager.handicapValue);
         }
 
         Services.AudioManager.SetMainTrack(Services.Clips.MenuSong, 0.3f);

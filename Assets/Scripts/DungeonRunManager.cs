@@ -13,6 +13,7 @@ public static class DungeonRunManager
     private const int MAX_TECH_CHOICES = 3;
     private const int MAX_TECH_INVENTORY = MAX_DUNGEON_CHALLENGES - 1;
     public const float MIN_HANDICAP_LEVEL = 0.85f;
+    public const float MAX_ENERGY_HANDICAP = 1.3f;
     private const float handicapIncrement = 0.2f;
     private const string fileName = "dungeonRunData";
     
@@ -248,9 +249,22 @@ public static class DungeonRunManager
         SaveData();
     }
 
-    public static float SetHandicap()
+    public static PlayerHandicap SetHandicap()
     {
-        dungeonRunData.handicapLevel = MIN_HANDICAP_LEVEL + (handicapIncrement * (dungeonRunData.challenegeNum - 1));
+        float hammerProductionHandicap = MIN_HANDICAP_LEVEL + (handicapIncrement * (dungeonRunData.challenegeNum - 1));
+        float pieceProductionHandicap = MIN_HANDICAP_LEVEL + (handicapIncrement * (dungeonRunData.challenegeNum - 1));
+        float energyProdictionHandicap = MIN_HANDICAP_LEVEL + (handicapIncrement * (dungeonRunData.challenegeNum - 1));
+
+        if(energyProdictionHandicap > MAX_ENERGY_HANDICAP)
+        {
+            energyProdictionHandicap = MAX_ENERGY_HANDICAP;
+        }
+
+        Debug.Log(energyProdictionHandicap);
+
+        dungeonRunData.handicapLevel = new PlayerHandicap(  energyProdictionHandicap, 
+                                                            pieceProductionHandicap, 
+                                                            hammerProductionHandicap);
 
         return dungeonRunData.handicapLevel;
     }
@@ -280,9 +294,9 @@ public class DungeonRunData
     public List<BuildingType> techChoices;
     public List<BuildingType> currentTech;
     public int challenegeNum;
-    public float handicapLevel;
+    public PlayerHandicap handicapLevel;
 
-    public DungeonRunData(List<BuildingType> ownedTech,  List<BuildingType> techSelection, int challenegeNumLevel, float handicap, bool selecting, bool selected)
+    public DungeonRunData(List<BuildingType> ownedTech,  List<BuildingType> techSelection, int challenegeNumLevel, PlayerHandicap handicap, bool selecting, bool selected)
     {
         currentTech = ownedTech;
         techChoices = techSelection;
@@ -297,7 +311,9 @@ public class DungeonRunData
         currentTech = new List<BuildingType>();
         techChoices = new List<BuildingType>();
         challenegeNum = 1;
-        handicapLevel = DungeonRunManager.MIN_HANDICAP_LEVEL;
+        handicapLevel = new PlayerHandicap( DungeonRunManager.MIN_HANDICAP_LEVEL,
+                                            DungeonRunManager.MIN_HANDICAP_LEVEL,
+                                            DungeonRunManager.MIN_HANDICAP_LEVEL);
         selectingNewTech = false;
         completedRun = false;
     }

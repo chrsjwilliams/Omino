@@ -43,9 +43,9 @@ public class AIPlayer : Player
     private IEnumerator thinkingCoroutine;
 
 
-    public override void Init(int playerNum_, AIStrategy strategy, AILEVEL level_, bool blueprintValueHandicap, float handicapValue)
+    public override void Init(int playerNum_, AIStrategy strategy, AILEVEL level_, PlayerHandicap handicapValue)
     {
-        SetHandicap(blueprintValueHandicap, handicapValue);
+        SetHandicap( handicapValue);
         Init(playerNum_, strategy, level_);
     }
 
