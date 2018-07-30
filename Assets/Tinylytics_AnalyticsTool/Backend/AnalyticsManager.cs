@@ -8,7 +8,7 @@ namespace Tinylytics{
 	[AddComponentMenu("")] 
 	public class AnalyticsManager : MonoBehaviour
 	{
-		public float logInterval = 10.0f; // Logging interval in seconds
+		public float logInterval = 100.0f; // Logging interval in seconds
 		public static AnalyticsData analyticsData { get; private set; }
 		
 		private const string _fileName = "AnalyticsData";
