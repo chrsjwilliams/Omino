@@ -125,6 +125,11 @@ public class CampaignMenuManager : MonoBehaviour {
         }
         
 
+        if(!Services.TutorialManager.CompletionCheck())
+        {
+            buttons[1].GetComponent<Image>().color = highlightedButtonColor;
+        }
+
         transform.localRotation = Quaternion.Euler(0, 0, rot);
         gameObject.SetActive(true);
         if ((nextLevel == null || winner is AIPlayer) || 
@@ -162,9 +167,9 @@ public class CampaignMenuManager : MonoBehaviour {
         TaskTree moveCampaignMenuIntoPosition = new TaskTree(new EmptyTask(),
                 new TaskTree(new CampaignLevelMenuEntranceTask(transform,
             resultImage, wreaths, buttons)),
-                new TaskTree(new LERPProgressBar(progressNodes[Services.GameManager.levelSelected.campaignLevelNum - 1], progressBarFill, 0.5f)));
+                new TaskTree(new LERPProgressBar(progressNodes[Services.GameManager.levelSelected.campaignLevelNum - 1], progressBarFill, 1.0f)));
 
-
+        //moveCampaignMenuIntoPosition.Then(new LERPProgressBar(progressNodes[Services.GameManager.levelSelected.campaignLevelNum - 1], progressBarFill, 1.0f));
         moveCampaignMenuIntoPosition.Then(new ActionTask(MenuInPosition));
         
 

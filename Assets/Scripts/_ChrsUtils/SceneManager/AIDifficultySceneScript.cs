@@ -73,6 +73,8 @@ public class AIDifficultySceneScript : Scene<TransitionData>
             new TaskTree(new LevelSelectTextEntrance(backButton, true, true)),
             new TaskTree(new LevelSelectTextEntrance(optionButton, false, true)),
             new TaskTree(new LevelSelectTextEntrance(handicapOptions, false, true))));
+
+        _tm.Do(aiLevelSelectExit);
     }
 
     public void GoToMapSelectScene()

@@ -356,6 +356,8 @@ public class UIManager : MonoBehaviour {
         normalDrawMeters[playerNum - 1].fillAmount = adjustedNormalProportion;
         destructorDrawMeters[playerNum - 1].fillAmount = adjustedDestructorProportion;
 
+        if (float.IsInfinity(normalTimeLeft)) normalTimeLeft = 0;
+
         normalPieceTimers[playerNum - 1].text = Mathf.CeilToInt(normalTimeLeft).ToString();
         destructorPieceTimers[playerNum - 1].text = Mathf.CeilToInt(destructorTimeLeft).ToString();
     }

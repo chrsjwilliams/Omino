@@ -427,9 +427,9 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GameScene.tm.Do(startSequence);
     }
 
-    public void PauseGame(bool tutorialToolTipActive)
+    public void PauseGame(bool tutorialToolTipActive, bool paused = true)
     {
-        gamePaused = true;
+        gamePaused = paused;
         TogglePlayerHandLock(true);
         if (tutorialToolTipActive)
         {

@@ -17,7 +17,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
     private TextMeshProUGUI textComponent;
     [SerializeField]
     private TextMeshProUGUI dismissText;
-    private bool dismissible;
+    public bool dismissible { get; private set; }
     [SerializeField]
     private Image arrow;
     
