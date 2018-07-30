@@ -66,7 +66,7 @@ namespace Tinylytics {
 
 
 		public static void SendData(string metricname, string data) {
-			if(_instance.Analytics_Enabled){
+			if ((_instance.Analytics_Enabled) && (!Application.isEditor)) {
 			DataPacket tosend = new DataPacket(metricname, data, Application.isEditor);
 
 			Instance.StartCoroutine(Instance.PostData(tosend));
