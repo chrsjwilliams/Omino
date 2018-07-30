@@ -5,6 +5,33 @@ using UnityEngine.UI;
 using TMPro;
 using System.IO;
 
+
+/*
+ *      Replace production level with production speed!
+ * 
+ *      TODO:
+ *      
+ *      Tutorial 1:
+ *                  Flash Ready Button
+ *                  Highlight the piece I want players to play.
+ *                      acknowledge when they use a different piece
+ *                  Game froze at start of tutorial 1??
+ *                  "Tap anywhere on the board to rotate"
+ *                  
+ *      Tutorial 2:
+ *                  Display now we'll give a real opponent to play for longer
+ *      
+ *      Tutorial 3:
+ *                  Find a better way to introduce 3 things
+ *                  Just call them buildings
+ *      
+ *      Tutorial 4:
+ *                  Upper left tech structure has no tooltip
+ *                  Have a window that says tutorial complete
+ *                  
+ *                  At the end have it say "Modes unclocked Quick Play"
+ *                  
+ */ 
 public class TutorialLevelSceneScript : Scene<TransitionData>
 {
     public bool[] humanPlayers { get; private set; }

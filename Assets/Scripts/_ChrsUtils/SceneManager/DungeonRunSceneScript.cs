@@ -5,6 +5,21 @@ using UnityEngine.UI;
 using TMPro;
 using System.IO;
 
+/*
+ *      TODO: 
+ *              Have a progress bar similar to tutorial
+ *              Have an area for the reward
+ *              Have tooltips for characters in dungeon run
+ *              Endow ai with their own tech power-up?
+ *              characters that taunt the play when the player loses/
+ *                  whine when player wins
+ *              
+ *              
+ *              Skins!?
+ * 
+ *          HYPER MODE!!!!!
+ */ 
+
 public class DungeonRunSceneScript : Scene<TransitionData>
 {
     public bool[] humanPlayers { get; private set; }
@@ -53,7 +68,9 @@ public class DungeonRunSceneScript : Scene<TransitionData>
             int.TryParse(fileText, out dungeonRunProgress);
             int.TryParse(fileText, out completedDungeonRuns);
         }
-
+        humanPlayers = new bool[2] { false, false };
+        humanPlayers[0] = true;
+        humanPlayers[1] = false;
         SetDungeonRunProgress(DungeonRunManager.dungeonRunData.challengeNum);
         SetUpDungeonRunChallengeMenu();
         TaskTree dungeonRunChallengeSelect = new TaskTree(new EmptyTask(),
@@ -141,7 +158,7 @@ public class DungeonRunSceneScript : Scene<TransitionData>
 
     private void ChangeScene()
     {
-        //Services.GameManager.SetNumPlayers(humanPlayers);
+        Services.GameManager.SetNumPlayers(humanPlayers);
         Services.Scenes.Swap<GameSceneScript>();
     }
 
