@@ -69,7 +69,7 @@ public abstract class TechBuilding : Polyomino
         ScaleHolder(Vector3.one);
         holder.spriteBottom.color = Color.white;
         TurnOffGlow();
-        ListenForInput(false);
+        ListenForInput(true);
         foreach(Tile tile in tiles)
         {
             tile.mainSr.enabled = false;
