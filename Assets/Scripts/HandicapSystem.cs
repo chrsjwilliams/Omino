@@ -43,7 +43,7 @@ public class HandicapSystem : MonoBehaviour
 
     public void UpdateHandicapText()
     {
-        singlePlayerMode = Services.GameManager.mode == TitleSceneScript.GameMode.TwoPlayers ? true : false;
+        singlePlayerMode = Services.GameManager.mode == TitleSceneScript.GameMode.TwoPlayers ? false : true;
         if (singlePlayerMode)
         {
             p1Text.text = "Player";

@@ -174,6 +174,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         }
 
         HandicapSystem.Init();
+        handicapSystem.UpdateHandicapText();
     }
 
     private void SetUpDungeonRunTechSelectMenu()
