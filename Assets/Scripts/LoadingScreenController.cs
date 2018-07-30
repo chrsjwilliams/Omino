@@ -7,15 +7,6 @@ using UnityEngine.Rendering;
 
 public class LoadingScreenController : MonoBehaviour
 {
-	IEnumerator Start() {
-		AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
-		while (!asyncLoad.isDone) {
-			yield return asyncLoad;
-		}
-		SceneManager.UnloadSceneAsync(0);
-	}
-	
-	/*
 	private bool load_started = false;
 
 	void Update () {
@@ -46,5 +37,4 @@ public class LoadingScreenController : MonoBehaviour
 		
 		SceneManager.UnloadSceneAsync (0);
 	}
-	*/
 }
