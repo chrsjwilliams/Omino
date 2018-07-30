@@ -54,7 +54,7 @@ public class DungeonRunSceneScript : Scene<TransitionData>
             int.TryParse(fileText, out completedDungeonRuns);
         }
 
-        SetDungeonRunProgress(DungeonRunManager.dungeonRunData.challenegeNum);
+        SetDungeonRunProgress(DungeonRunManager.dungeonRunData.challengeNum);
         SetUpDungeonRunChallengeMenu();
         TaskTree dungeonRunChallengeSelect = new TaskTree(new EmptyTask(),
             new TaskTree(new LevelSelectTextEntrance(dungeonRunMenu)),

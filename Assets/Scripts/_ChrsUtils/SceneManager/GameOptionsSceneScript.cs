@@ -380,7 +380,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         }
         else
         {
-            SetDungeonRunProgress(DungeonRunManager.dungeonRunData.challenegeNum);
+            SetDungeonRunProgress(DungeonRunManager.dungeonRunData.challengeNum);
             SetUpDungeonRunChallengeMenu();
             TaskTree dungeonRunChallengeSelect = new TaskTree(new EmptyTask(),
                 new TaskTree(new LevelSelectTextEntrance(dungeonRunMenu)),

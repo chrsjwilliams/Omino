@@ -62,7 +62,7 @@ public class DungeonRunInGameUIManager : MonoBehaviour {
         {
             victoryText.text = "Victory";
             
-            if(DungeonRunManager.dungeonRunData.challenegeNum == DungeonRunManager.MAX_DUNGEON_CHALLENGES)
+            if(DungeonRunManager.dungeonRunData.challengeNum == DungeonRunManager.MAX_DUNGEON_CHALLENGES)
             {
                 nextChallengeButtonText.text = "Complete";
             }
@@ -77,7 +77,7 @@ public class DungeonRunInGameUIManager : MonoBehaviour {
             nextChallengeButtonText.text = "Try Again";
         }
 
-        dungeonRunChangeText.text = "Challenge " + DungeonRunManager.dungeonRunData.challenegeNum +
+        dungeonRunChangeText.text = "Challenge " + DungeonRunManager.dungeonRunData.challengeNum +
                                 "/" + DungeonRunManager.MAX_DUNGEON_CHALLENGES;
     }
 }

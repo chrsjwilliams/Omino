@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -40,7 +41,7 @@ public static class DungeonRunManager
             {
                 dungeonRunData = (DungeonRunData) bf.Deserialize(file);
             }
-            catch (SerializationException e) 
+            catch (Exception e) 
             {
                 Debug.Log("Failed to deserialize. Reason: " + e.Message);
                 file.Dispose();
@@ -97,9 +98,9 @@ public static class DungeonRunManager
     {
         dungeonRunData.techChoices.Clear();
         Services.UIManager.dungeonRunUIManager.OnGameEnd(true);
-        dungeonRunData.challenegeNum += 1;
+        dungeonRunData.challengeNum += 1;
 
-        if (dungeonRunData.challenegeNum > MAX_DUNGEON_CHALLENGES)
+        if (dungeonRunData.challengeNum > MAX_DUNGEON_CHALLENGES)
         {
             Services.Analytics.DungeonRunWin(dungeonRunData.currentTech);
             OnCompleteDungeonRun();
@@ -118,7 +119,7 @@ public static class DungeonRunManager
     {
         Services.UIManager.dungeonRunUIManager.OnGameEnd(false);
 
-        Services.Analytics.DungeonRunLoss(dungeonRunData.challenegeNum);
+        Services.Analytics.DungeonRunLoss(dungeonRunData.challengeNum);
         
         ResetDungeonRunData();
     }
@@ -145,12 +146,12 @@ public static class DungeonRunManager
 
     public static BuildingType GenerateTech()
     {
-        int index = Random.Range(0, availableTech.Length);
+        int index = UnityEngine.Random.Range(0, availableTech.Length);
         BuildingType techCandidate = availableTech[index];
 
         while(PlayerHasTech(techCandidate))
         {
-            index = Random.Range(0, availableTech.Length);
+            index = UnityEngine.Random.Range(0, availableTech.Length);
             techCandidate = availableTech[index];
         }
 
@@ -251,9 +252,9 @@ public static class DungeonRunManager
 
     public static PlayerHandicap SetHandicap()
     {
-        float hammerProductionHandicap = MIN_HANDICAP_LEVEL + (handicapIncrement * (dungeonRunData.challenegeNum - 1));
-        float pieceProductionHandicap = MIN_HANDICAP_LEVEL + (handicapIncrement * (dungeonRunData.challenegeNum - 1));
-        float energyProdictionHandicap = MIN_HANDICAP_LEVEL + (handicapIncrement * (dungeonRunData.challenegeNum - 1));
+        float hammerProductionHandicap = MIN_HANDICAP_LEVEL + (handicapIncrement * (dungeonRunData.challengeNum - 1));
+        float pieceProductionHandicap = MIN_HANDICAP_LEVEL + (handicapIncrement * (dungeonRunData.challengeNum - 1));
+        float energyProdictionHandicap = MIN_HANDICAP_LEVEL + (handicapIncrement * (dungeonRunData.challengeNum - 1));
 
         if(energyProdictionHandicap > MAX_ENERGY_HANDICAP)
         {
@@ -293,14 +294,14 @@ public class DungeonRunData
     public bool completedRun;
     public List<BuildingType> techChoices;
     public List<BuildingType> currentTech;
-    public int challenegeNum;
+    public int challengeNum;
     public PlayerHandicap handicapLevel;
 
-    public DungeonRunData(List<BuildingType> ownedTech,  List<BuildingType> techSelection, int challenegeNumLevel, PlayerHandicap handicap, bool selecting, bool selected)
+    public DungeonRunData(List<BuildingType> ownedTech,  List<BuildingType> techSelection, int challengeNumLevel, PlayerHandicap handicap, bool selecting, bool selected)
     {
         currentTech = ownedTech;
         techChoices = techSelection;
-        challenegeNum = challenegeNumLevel;
+        challengeNum = challengeNumLevel;
         handicapLevel = handicap;
         selectingNewTech = selecting;
         completedRun = selected;
@@ -310,7 +311,7 @@ public class DungeonRunData
     {
         currentTech = new List<BuildingType>();
         techChoices = new List<BuildingType>();
-        challenegeNum = 1;
+        challengeNum = 1;
         handicapLevel = new PlayerHandicap( DungeonRunManager.MIN_HANDICAP_LEVEL,
                                             DungeonRunManager.MIN_HANDICAP_LEVEL,
                                             DungeonRunManager.MIN_HANDICAP_LEVEL);
