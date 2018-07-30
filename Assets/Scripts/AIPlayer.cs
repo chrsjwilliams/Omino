@@ -717,9 +717,12 @@ public class AIPlayer : Player
 
         // Choose a play by rolling
         nextPlay = SelectMove(movesToConsider);
-        
 
-        if (nextPlay != null && nextPlay.score > 0)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial &&
+            Services.TutorialManager.currentTooltip != null &&
+            Services.TutorialManager.currentTooltip.dismissible)
+            isThinking = false;
+        else if (nextPlay != null && nextPlay.score > 0)
         {
             MakePlay(nextPlay);
         }

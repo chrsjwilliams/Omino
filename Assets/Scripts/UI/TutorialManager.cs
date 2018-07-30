@@ -8,7 +8,7 @@ public class TutorialManager : MonoBehaviour
 {
 
     private static bool[] viewedTutorial = new bool[] { false, false, false, false };
-    private TutorialTooltip currentTooltip;
+    public TutorialTooltip currentTooltip { get; private set; }
     public GameObject tutorialTooltipPrefab;
     public int currentIndex { get; private set; }
     public GameObject backDim;
