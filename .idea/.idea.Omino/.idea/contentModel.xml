@@ -59,12 +59,20 @@
             </e>
             <e p="PrefabDB.cs" t="Include" />
             <e p="SceneManager" t="Include">
+              <e p="AIDifficultySceneScript.cs" t="Include" />
+              <e p="DungeonRunSceneScript.cs" t="Include" />
+              <e p="EloSceneScript.cs" t="Include" />
               <e p="GameOptionsSceneScript.cs" t="Include" />
               <e p="GameSceneScript.cs" t="Include" />
+              <e p="MapSelectSceneScript.cs" t="Include" />
+              <e p="OptionMenuSceneScript.cs" t="Include" />
               <e p="Scene.cs" t="Include" />
               <e p="SceneManager.cs" t="Include" />
+              <e p="TechSelectSceneScript.cs" t="Include" />
+              <e p="TechUnlockedSceneScript.cs" t="Include" />
               <e p="TitleSceneScript.cs" t="Include" />
               <e p="TransitionData.cs" t="Include" />
+              <e p="TutorialLevelSceneScript.cs" t="Include" />
             </e>
             <e p="Services.cs" t="Include" />
             <e p="TaskManager" t="Include">
@@ -147,6 +155,7 @@
           </e>
           <e p="UI" t="Include">
             <e p="AILevelSlideIn.cs" t="Include" />
+            <e p="BackButton.cs" t="Include" />
             <e p="CampaignLevelMenuEntranceTask.cs" t="Include" />
             <e p="CampaignMenuManager.cs" t="Include" />
             <e p="ColorShifter.cs" t="Include" />
@@ -155,6 +164,12 @@
             <e p="EloUIManager.cs" t="Include" />
             <e p="LevelButton.cs" t="Include" />
             <e p="LevelSelectButtonEntranceTask.cs" t="Include" />
+            <e p="Menu System" t="Include">
+              <e p="Menu.cs" t="Include" />
+              <e p="MenuManager.cs" t="Include" />
+              <e p="MenuOption.cs" t="Include" />
+            </e>
+            <e p="OptionButton.cs" t="Include" />
             <e p="ParticleSystemEnder.cs" t="Include" />
             <e p="PauseButton.cs" t="Include" />
             <e p="ProdLevelText.cs" t="Include" />
