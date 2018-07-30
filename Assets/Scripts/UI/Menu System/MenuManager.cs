@@ -14,6 +14,7 @@ public class MenuManager : MonoBehaviour
     public Button backButton;
     public TitleSceneScript titleScene;
     public Color[] uiColorScheme;
+    public GameObject title;
     // Use this for initialization
     void Start()
     {
@@ -34,7 +35,7 @@ public class MenuManager : MonoBehaviour
 
     public void PushMenu(Menu menuToPush)
     {
-        if(menuStack.Count > 0)
+        if (menuStack.Count > 0)
         {
             menuStack.Peek().Hide();
         }
@@ -47,7 +48,10 @@ public class MenuManager : MonoBehaviour
     {
         Menu topMenu = menuStack.Pop();
         topMenu.Unload();
-        if (menuStack.Count > 0) menuStack.Peek().Show();
+        if (menuStack.Count > 0)
+        {
+            menuStack.Peek().Show();
+        }
         if (menuStack.Count < 2) backButton.gameObject.SetActive(false);
     }
 

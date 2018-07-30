@@ -5,101 +5,45 @@ using UnityEngine.UI;
 using TMPro;
 using System.IO;
 
-public class MenuOption : MonoBehaviour
+public class MenuOption : MenuObject
 {
     public UnityEvent onLoadActions;
     public Menu menuToLoad;
     public UnityEvent actionToPerform;
     public TitleSceneScript.GameMode modeToLoad;
     public string buttonText;
-    private GameObject button;
     private TextMeshProUGUI uiText;
     private RectTransform buttonRect;
     [HideInInspector]
     public bool toggled;
 
-    private Vector2 target;
-    private Vector2 startPoint;
-    private float timeElapsed;
-    private const float movementTime = 0.3f;
-    private const float offset = 1000;
-    private float delayTimeRemaining;
-    private bool moving;
-    // Use this for initialization
-    void Start()
-    {
-    }
-
     // Update is called once per frame
     void Update()
     {
-        if (delayTimeRemaining > 0) DecayDelay();
-        if (moving) Move();
-    }
-
-    private void DecayDelay()
-    {
-        delayTimeRemaining -= Time.deltaTime;
-        if (delayTimeRemaining <= 0)
-        {
-            StartMovement();
-        }
 
     }
 
-    private void Move()
+    public override void Load()
     {
-        timeElapsed += Time.deltaTime;
-
-        buttonRect.anchoredPosition = Vector2.Lerp(startPoint, target,
-            EasingEquations.Easing.QuadEaseOut(timeElapsed / movementTime));
-        if(timeElapsed >= movementTime)
-        {
-            buttonRect.anchoredPosition = target;
-            moving = false;
-        }
-
-    }
-
-    private void StartMovement()
-    {
-        timeElapsed = 0;
-        moving = true;
-    }
-
-    public void Load()
-    {
-        button = Instantiate(Services.MenuManager.buttonPrefab, Services.MenuManager.menuHolder);
-        button.transform.localPosition = Vector3.zero;
-        uiText = button.GetComponentInChildren<TextMeshProUGUI>();
+        objectPrefabToSpawn = Services.MenuManager.buttonPrefab;
+        base.Load();
+        uiText = associatedObject.GetComponentInChildren<TextMeshProUGUI>();
         uiText.text = buttonText;
-        Button buttonComponent = button.GetComponent<Button>();
+        Button buttonComponent = associatedObject.GetComponent<Button>();
         buttonComponent.onClick.AddListener(OnPress);
-        buttonRect = button.GetComponent<RectTransform>();
         onLoadActions.Invoke();
     }
 
-    public void Unload()
+    public override void Show(Vector2 pos, float delay)
     {
-        Destroy(button);
+        associatedObject.GetComponent<Button>().enabled = true;
+        base.Show(pos, delay);
     }
 
-    public void Show(Vector2 pos, float delay)
+    public override void Hide(float delay)
     {
-        button.SetActive(true);
-        button.GetComponent<Button>().enabled = true;
-        target = pos;
-        startPoint = pos + (offset * Vector2.up);
-        buttonRect.anchoredPosition = startPoint;
-        delayTimeRemaining = delay + float.Epsilon;
-    }
-
-    public void Hide(float delay)
-    {
-        button.GetComponent<Button>().enabled = false;
-        startPoint = buttonRect.anchoredPosition;
-        target = startPoint + (offset * Vector2.down);
-        delayTimeRemaining = delay  +float.Epsilon;
+        associatedObject.GetComponent<Button>().enabled = false;
+        base.Hide(delay);
     }
 
     public void OnPress()
@@ -126,10 +70,10 @@ public class MenuOption : MonoBehaviour
     private void SetStrikethrough(bool status)
     {
         toggled = status;
-        button.GetComponent<Image>().color = status ?
+        associatedObject.GetComponent<Image>().color = status ?
             Services.GameManager.Player2ColorScheme[0] :
             Services.GameManager.Player2ColorScheme[1];
-        TextMeshProUGUI textMesh = button.GetComponentInChildren<TextMeshProUGUI>(true);
+        TextMeshProUGUI textMesh = associatedObject.GetComponentInChildren<TextMeshProUGUI>(true);
         string textContent = textMesh.text;
         string[] textSplit = textContent.Split('<', '>');
         if (textSplit.Length > 1)
@@ -153,7 +97,7 @@ public class MenuOption : MonoBehaviour
 
     private void SetColor(Color color)
     {
-        button.GetComponent<Image>().color = color;
+        associatedObject.GetComponent<Image>().color = color;
     }
 
     public void GetBlueprintAssistStatus()
