@@ -8,7 +8,6 @@ namespace Tinylytics{
 	[AddComponentMenu("")] 
 	public class AnalyticsManager : MonoBehaviour
 	{
-		public float logInterval = 100.0f; // Logging interval in seconds
 		public static AnalyticsData analyticsData { get; private set; }
 		
 		private const string _fileName = "AnalyticsData";
@@ -17,7 +16,6 @@ namespace Tinylytics{
 		private float _sessionStartTime = 0.0f;
 		private float _lastPlaytimeLog = 0.0f;
 		private bool _pauseCallSent = false;
-		private TaskManager _taskManager;
 		private bool _recievedGameOver = true;
 		private TitleSceneScript.GameMode _currentPlayMode;
 
@@ -113,15 +111,12 @@ namespace Tinylytics{
 			}
 			
 			_UpdateTotalPlaytime();
-			_taskManager = new TaskManager();
-			_LoadIntermittentLoggingTask();
 
 		}
 		
 		void Update()
 		{
 			_UpdateTotalPlaytime();
-			_taskManager.Update();
 		}
 
 		void OnApplicationPause(bool pauseStatus)
@@ -159,18 +154,6 @@ namespace Tinylytics{
 			return (int)(System.DateTime.UtcNow - epochStart).TotalSeconds;
 		}
 
-		private void _LoadIntermittentLoggingTask()
-		{
-			ActionTask log = new ActionTask(_LogTotalPlaytime);
-			Wait wait = new Wait(logInterval);
-			ActionTask reset = new ActionTask(_LoadIntermittentLoggingTask);
-
-			log.Then(wait);
-			wait.Then(reset);
-			
-			_taskManager.Do(log);
-		}
-
 		private void _LogVersionNumber()
 		{
 			BackendManager.SendData("Version Number", analyticsData.versionNumber);
@@ -183,7 +166,7 @@ namespace Tinylytics{
 			_SaveData();
 		}
 
-		private void _LogTotalPlaytime()
+		private void _LogPlaytime()
 		{
 			_UpdateTotalPlaytime();
 			_LogTimeSinceFirstPlay();
@@ -308,6 +291,8 @@ namespace Tinylytics{
 				LogMetric(matchTypeToIncreaseTime + " CURRENT MATCH", time_played.ToString());
 				LogMetric(matchTypeToIncreaseTime + " PLAYTIME TOTAL", total_time_played.ToString());
 				LogMetric(matchTypeToIncreaseTime + " TOTAL MATCHES", total_matches.ToString());
+
+				_LogPlaytime();
 			}
 
 			_SaveData();
@@ -343,6 +328,8 @@ namespace Tinylytics{
 					LogMetric("TUTORIAL TOTAL LOSSES", analyticsData.tutorialTotalLosses.ToString());
 				}
 			}
+
+			_LogPlaytime();
 			_SaveData();
 		}
 
