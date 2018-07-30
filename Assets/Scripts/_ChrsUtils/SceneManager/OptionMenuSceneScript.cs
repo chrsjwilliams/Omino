@@ -53,6 +53,7 @@ public class OptionMenuSceneScript : Scene<TransitionData>
 
         _tm.Do(optionMenuEntrance);
 
+        handicapSystem.UpdateHandicapText();
     }
 
     internal override void OnExit()

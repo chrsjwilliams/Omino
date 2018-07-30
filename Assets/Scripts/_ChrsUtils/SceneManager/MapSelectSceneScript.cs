@@ -77,6 +77,7 @@ public class MapSelectSceneScript : Scene<TransitionData>
             new TaskTree(new LevelSelectTextEntrance(optionButton)));
         _tm.Do(mapSelectEntrance);
 
+        
     }
 
     internal override void OnExit()
