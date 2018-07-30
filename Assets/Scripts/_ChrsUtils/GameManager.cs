@@ -294,6 +294,7 @@ public class GameManager : MonoBehaviour
         if (Services.MapManager.currentLevel != null &&
             Services.MapManager.currentLevel.overrideStrategy.overrideDefault)
             strategy = Services.MapManager.currentLevel.overrideStrategy;
+
         for (int i = 0; i < 2; i++)
         {
             int playerNum = i + 1;

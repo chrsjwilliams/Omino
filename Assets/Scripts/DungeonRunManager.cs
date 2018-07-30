@@ -261,8 +261,6 @@ public static class DungeonRunManager
             energyProdictionHandicap = MAX_ENERGY_HANDICAP;
         }
 
-        Debug.Log(energyProdictionHandicap);
-
         dungeonRunData.handicapLevel = new PlayerHandicap(  energyProdictionHandicap, 
                                                             pieceProductionHandicap, 
                                                             hammerProductionHandicap);

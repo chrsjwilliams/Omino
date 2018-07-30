@@ -7,6 +7,8 @@ using System.IO;
 
 
 /*
+ *      Replace production level with production speed!
+ * 
  *      TODO:
  *      
  *      Tutorial 1:
