@@ -331,7 +331,7 @@ public class TutorialManager : MonoBehaviour
 
         if (nextTooltipInfo.dismissable)
         {
-            Services.GameScene.PauseGame(true);
+            Services.GameScene.PauseGame(true, false);
             backDim.SetActive(true);
         }
         else if (!nextTooltipInfo.dismissable && currentIndex == 0)
