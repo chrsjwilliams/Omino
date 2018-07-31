@@ -327,12 +327,13 @@ public class GameSceneScript : Scene<TransitionData>
             case TitleSceneScript.GameMode.DungeonRun:
                 Services.Scenes.Swap<DungeonRunSceneScript>();
                 break;
+            case TitleSceneScript.GameMode.Practice:
+                Services.Scenes.Swap<AIDifficultySceneScript>();
+                break;
             default:
-                Services.Scenes.Swap<GameOptionsSceneScript>();
+                Services.Scenes.Swap<MapSelectSceneScript>();
                 break;
         }
-
-        Services.Scenes.Swap<GameOptionsSceneScript>();
     }
 
     public void MoveToNextLevel()
