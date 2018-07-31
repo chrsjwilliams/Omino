@@ -232,7 +232,13 @@ namespace Tinylytics{
 			_currentPlayMode = modeIn;
 			_recievedGameOver = false;
 		}
-		
+
+		public void TutorialLevelBeaten(int levelNumber)
+		{
+			LogMetric("Beat Tutorial Level", levelNumber.ToString());
+
+		}
+
 		public void MatchEnded()
 		{
 			if (!_recievedGameOver)
@@ -410,6 +416,7 @@ namespace Tinylytics{
 			tutorialPlaytime = 0.0f;
 			versionNumber = Application.version;
 			firstLoadTime = _SecondsSinceEpoch();
+			BackendManager.SendData("Game Installed", versionNumber);
 		}
 		
 		private int _SecondsSinceEpoch()
