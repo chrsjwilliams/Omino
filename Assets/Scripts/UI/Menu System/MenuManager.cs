@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class MenuManager : MonoBehaviour
 {
     private Stack<Menu> menuStack;
+    private Queue<Menu> menusToPop;
     public GameObject buttonPrefab;
     public Menu firstMenu;
     public float buttonSpacing;
@@ -23,12 +24,14 @@ public class MenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ProcessMenuPopQueue();
     }
 
     public void Init()
     {
         Services.MenuManager = this;
         menuStack = new Stack<Menu>();
+        menusToPop = new Queue<Menu>();
         backButton.gameObject.SetActive(false);
         PushMenu(firstMenu);
     }
@@ -47,16 +50,37 @@ public class MenuManager : MonoBehaviour
     public void PopMenu()
     {
         Menu topMenu = menuStack.Pop();
-        topMenu.Unload();
-        if (menuStack.Count > 0)
-        {
-            menuStack.Peek().Show();
-        }
-        if (menuStack.Count < 2) backButton.gameObject.SetActive(false);
+        menusToPop.Enqueue(topMenu);
+        topMenu.state = Menu.MenuState.QueuedToPop;
     }
 
     public void LoadScene(TitleSceneScript.GameMode mode)
     {
         titleScene.StartGame(mode);
+    }
+
+    private void ProcessMenuPopQueue()
+    {
+        if(menusToPop.Count > 0)
+        {
+            Menu firstInLine = menusToPop.Peek();
+            if (firstInLine.state == Menu.MenuState.QueuedToPop)
+            {
+                firstInLine.Hide();
+                if(menusToPop.Count == 1)
+                {
+                    if (menuStack.Count > 0)
+                    {
+                        menuStack.Peek().Show();
+                    }
+                    if (menuStack.Count < 2)
+                        backButton.gameObject.SetActive(false);
+                }
+            }
+            else if(firstInLine.state == Menu.MenuState.Hidden)
+            {
+                menusToPop.Dequeue();
+            }
+        }
     }
 }

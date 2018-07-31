@@ -5,18 +5,49 @@ using System.Collections.Generic;
 public class Menu : MonoBehaviour
 {
     private MenuObject[] menuObjects;
+    public enum MenuState {
+        NotLoaded, QueuedToPop, Popping, Active, Hidden, Pushing }
+    public MenuState state;
     
     private const float slideStaggerTime = 0.05f;
+    private float timeElapsed;
+    private float timeToWait;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
+        state = MenuState.NotLoaded;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if(timeToWait >= 0)
+        {
+            timeToWait -= Time.deltaTime;
+            if(timeToWait <= 0)
+            {
+                switch (state)
+                {
+                    case MenuState.NotLoaded:
+                        break;
+                    case MenuState.QueuedToPop:
+                        break;
+                    case MenuState.Popping:
+                        state = MenuState.Hidden;
+                        break;
+                    case MenuState.Active:
+                        break;
+                    case MenuState.Hidden:
+                        break;
+                    case MenuState.Pushing:
+                        state = MenuState.Active;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 
     public void Load()
@@ -36,6 +67,7 @@ public class Menu : MonoBehaviour
 
     public void Show()
     {
+        state = MenuState.Pushing;
         for (int i = 0; i < menuObjects.Length; i++)
         {
             MenuObject menuObj = menuObjects[i];
@@ -43,14 +75,19 @@ public class Menu : MonoBehaviour
                 * Services.MenuManager.buttonSpacing * Vector2.up,
                 (menuObjects.Length - 1 - i) * slideStaggerTime);
         }
+        timeToWait = slideStaggerTime * menuObjects.Length 
+            + MenuObject.movementTime;
     }
 
     public void Hide()
     {
+        state = MenuState.Popping;
         for (int i = 0; i < menuObjects.Length; i++)
         {
             MenuObject menuObj = menuObjects[i];
             menuObj.Hide((menuObjects.Length - 1 - i) * slideStaggerTime);
         }
+        timeToWait = slideStaggerTime * menuObjects.Length
+            + MenuObject.movementTime;
     }
 }
