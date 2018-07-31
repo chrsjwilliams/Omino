@@ -43,7 +43,7 @@ public class UIManager : MonoBehaviour {
     public Transform[] mineBlueprintLocations;
     public Transform[] factoryBlueprintLocations;
     public Transform[] bombFactoryBlueprintLocations;
-    public Button[] readyBanners;
+    public ReadyBanner[] readyBanners;
     [SerializeField]
     private GameObject pauseMenu;
     [SerializeField]
@@ -82,8 +82,6 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private float bannerScrollDuration;
     private List<int> touchIdsMakingTooltips;
-    [SerializeField]
-    private Color[] notReadyColors;
     [SerializeField]
     private Color readyColor;
     [SerializeField]
@@ -249,7 +247,6 @@ public class UIManager : MonoBehaviour {
         {
             victoryBanners[i].gameObject.SetActive(false);
             defeatBanners[i].gameObject.SetActive(false);
-            readyBanners[i].gameObject.SetActive(false);
         }
         touchIdsMakingTooltips = new List<int>();
         for (int i = 0; i < 2; i++)
@@ -267,13 +264,13 @@ public class UIManager : MonoBehaviour {
         pauseMenu.SetActive(false);
         campaignLevelCompleteMenu.gameObject.SetActive(false);
 
-        for (int i = 0; i < readyBanners.Length; i++)
-        {
-            if (Services.GameManager.Players[i] is AIPlayer)
-                readyBanners[i].enabled = false;
-            readyBanners[i].GetComponent<Image>().color = Services.GameManager.colorSchemes[i][0]; //notReadyColors[playerNum-1];
+        //for (int i = 0; i < readyBanners.Length; i++)
+        //{
+        //    if (Services.GameManager.Players[i] is AIPlayer)
+        //        readyBanners[i].enabled = false;
+        //    readyBanners[i].GetComponent<Image>().color = Services.GameManager.colorSchemes[i][0]; //notReadyColors[playerNum-1];
 
-        }
+        //}
         if (Services.GameManager.disableUI)
         {
             for (int i = 0; i < 2; i++)
@@ -643,42 +640,42 @@ public class UIManager : MonoBehaviour {
         }
     }
 
-    public void ToggleReady(int playerNum)
-    {
-        Player player = Services.GameManager.Players[playerNum - 1];
-        player.ToggleReady();
-        if (player.ready)
-        {
-            readyBanners[playerNum - 1].GetComponentInChildren<TextMeshProUGUI>().text =
-                "READY";
-            readyBanners[playerNum - 1].GetComponent<Image>().color = readyColor;
-            Services.AudioManager.PlaySoundEffect(Services.Clips.UIReadyOn, 1.0f);
-        }
-        else
-        {
-            readyBanners[playerNum - 1].GetComponentInChildren<TextMeshProUGUI>().text =
-                "READY?";
-            readyBanners[playerNum - 1].GetComponent<Image>().color = Services.GameManager.colorSchemes[playerNum - 1][0]; //notReadyColors[playerNum-1];
-            Services.AudioManager.PlaySoundEffect(Services.Clips.UIReadyOff, 1.0f);
-        }
-        bool allReady = true;
-        for (int i = 0; i < Services.GameManager.Players.Length; i++)
-        {
-            if (!Services.GameManager.Players[i].ready)
-            {
-                allReady = false;
-                break;
-            }
-        }
-        if (allReady)
-        {
-            for (int i = 0; i < readyBanners.Length; i++)
-            {
-                readyBanners[i].enabled = false;
-            }
-            Services.GameScene.StartGameSequence();
-        }
-    }
+    //public void ToggleReady(int playerNum)
+    //{
+    //    Player player = Services.GameManager.Players[playerNum - 1];
+    //    player.ToggleReady();
+    //    if (player.ready)
+    //    {
+    //        readyBanners[playerNum - 1].GetComponentInChildren<TextMeshProUGUI>().text =
+    //            "READY";
+    //        readyBanners[playerNum - 1].GetComponent<Image>().color = readyColor;
+    //        Services.AudioManager.PlaySoundEffect(Services.Clips.UIReadyOn, 1.0f);
+    //    }
+    //    else
+    //    {
+    //        readyBanners[playerNum - 1].GetComponentInChildren<TextMeshProUGUI>().text =
+    //            "READY?";
+    //        readyBanners[playerNum - 1].GetComponent<Image>().color = Services.GameManager.colorSchemes[playerNum - 1][0]; //notReadyColors[playerNum-1];
+    //        Services.AudioManager.PlaySoundEffect(Services.Clips.UIReadyOff, 1.0f);
+    //    }
+    //    bool allReady = true;
+    //    for (int i = 0; i < Services.GameManager.Players.Length; i++)
+    //    {
+    //        if (!Services.GameManager.Players[i].ready)
+    //        {
+    //            allReady = false;
+    //            break;
+    //        }
+    //    }
+    //    if (allReady)
+    //    {
+    //        for (int i = 0; i < readyBanners.Length; i++)
+    //        {
+    //            readyBanners[i].enabled = false;
+    //        }
+    //        Services.GameScene.StartGameSequence();
+    //    }
+    //}
 
 
     public void TurnOnPauseMenu()

@@ -2840,6 +2840,7 @@ GameObject:
   - component: {fileID: 222570360336881336}
   - component: {fileID: 114502993831031746}
   - component: {fileID: 114769585700011676}
+  - component: {fileID: 114398476056417092}
   m_Layer: 5
   m_Name: ReadyBanner_P2
   m_TagString: Untagged
@@ -3364,6 +3365,7 @@ GameObject:
   - component: {fileID: 222742049050992990}
   - component: {fileID: 114076672365638460}
   - component: {fileID: 114371681691704890}
+  - component: {fileID: 114645766425464292}
   m_Layer: 5
   m_Name: ReadyBanner_P1
   m_TagString: Untagged
@@ -7177,8 +7179,8 @@ MonoBehaviour:
   - {fileID: 224618429434883330}
   - {fileID: 224630615834046756}
   readyBanners:
-  - {fileID: 114371681691704890}
-  - {fileID: 114769585700011676}
+  - {fileID: 114645766425464292}
+  - {fileID: 114398476056417092}
   pauseMenu: {fileID: 1562518602810658}
   pauseButton: {fileID: 1614636548927632}
   replayButton: {fileID: 114888347824592882}
@@ -7235,9 +7237,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d3d2263d2a9ebd84d820e3df86e49ab2, type: 3}
   structureOverlay: {fileID: 21300000, guid: d7b77fda6751fd74181cb053f917422a, type: 3}
   bannerScrollDuration: 0.5
-  notReadyColors:
-  - {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.77254903}
-  - {r: 0.49019608, g: 0.49019608, b: 1, a: 0.77254903}
   readyColor: {r: 0.52156866, g: 0.9098039, b: 0.42745098, a: 0.77254903}
   radialMeterFillMin: 0.05
   radialMeterFillMax: 0.95
@@ -9101,9 +9100,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114252342320511668}
+      - m_Target: {fileID: 114645766425464292}
         m_MethodName: ToggleReady
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -9670,6 +9669,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114398476056417092
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1685980755731030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f62c29c927032a46b383dc8faf88203, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNum: 2
+  readyColor: {r: 0.52156866, g: 0.9098039, b: 0.42745098, a: 0.77254903}
 --- !u!114 &114406643295558410
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -12969,6 +12981,19 @@ MonoBehaviour:
   lockColor: {r: 0, g: 0, b: 0, a: 0}
   progressNodes: []
   progressBarFill: 0
+--- !u!114 &114645766425464292
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1800363867954196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f62c29c927032a46b383dc8faf88203, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNum: 1
+  readyColor: {r: 0.52156866, g: 0.9098039, b: 0.42745098, a: 0.77254903}
 --- !u!114 &114647812978966802
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -14449,9 +14474,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114252342320511668}
+      - m_Target: {fileID: 114398476056417092}
         m_MethodName: ToggleReady
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

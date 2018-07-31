@@ -333,13 +333,6 @@ public class GameManager : MonoBehaviour
 
             }
         }
-        for (int i = 0; i < 2; i++)
-        {
-            if (Players[i] is AIPlayer)
-            {
-                Services.UIManager.ToggleReady(i + 1);
-            }
-        }
     }
 
     public void InitPlayers()
@@ -378,13 +371,6 @@ public class GameManager : MonoBehaviour
 
             }
         }
-        for (int i = 0; i < 2; i++)
-        {
-            if (Players[i] is AIPlayer)
-            {
-                Services.UIManager.ToggleReady(i + 1);
-            }
-        }
     }
 
     public void InitPlayersEvoMode()
@@ -408,10 +394,6 @@ public class GameManager : MonoBehaviour
             AIStrategy strategy = currentStrategies[i];
 
             _players[i].Init(playerNum, strategy, AILEVEL.HARD);
-        }
-        for (int i = 0; i < 2; i++)
-        {
-            Services.UIManager.ToggleReady(i + 1);
         }
     }
 

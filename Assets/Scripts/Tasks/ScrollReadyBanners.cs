@@ -4,20 +4,16 @@ using UnityEngine.UI;
 
 public class ScrollReadyBanners : Task
 {
-    private Transform[] banners;
+    private ReadyBanner[] banners;
     private float timeElapsed;
     private const float duration = 0.3f;
     private Vector3[] targetPositions;
     private Vector3[] startPositions;
     private bool scrollOn;
 
-    public ScrollReadyBanners(Button[] banners_, bool scrollOn_)
+    public ScrollReadyBanners(ReadyBanner[] banners_, bool scrollOn_)
     {
-        banners = new Transform[2];
-        for (int i = 0; i < 2; i++)
-        {
-            banners[i] = banners_[i].transform;
-        }
+        banners = banners_;
         scrollOn = scrollOn_;
     }
 
@@ -28,7 +24,7 @@ public class ScrollReadyBanners : Task
         targetPositions = new Vector3[2];
         for (int i = 0; i < 2; i++)
         {
-            startPositions[i] = banners[i].localPosition;
+            startPositions[i] = banners[i].transform.localPosition;
             Vector3 offset = banners[i].gameObject.GetComponent<RectTransform>().sizeDelta.y * Vector3.down;
             if (i == 1) offset *= -1;
             targetPositions[i] = startPositions[i] + offset;
@@ -36,6 +32,7 @@ public class ScrollReadyBanners : Task
             {
                 banners[i].gameObject.SetActive(true);
                 banners[i].transform.localPosition = targetPositions[i];
+                banners[i].Init();
             }
         }
     }
