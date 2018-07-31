@@ -15,7 +15,7 @@ public class ReadyBanner : MonoBehaviour
     private TextMeshProUGUI uiText;
     private bool initialized;
     private ObjectPulser pulser;
-    private const float pulsePeriod = 0.3f;
+    private const float pulsePeriod = 0.4f;
     private readonly Vector3 minScale = 0.9f * Vector3.one;
     private readonly Vector3 maxScale = 1.1f * Vector3.one;
 

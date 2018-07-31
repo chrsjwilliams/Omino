@@ -10,12 +10,15 @@ public class EloUIManager : MonoBehaviour {
     private TextMeshProUGUI streakCount;
     [SerializeField]
     private TextMeshProUGUI rating;
+    [SerializeField]
+    private TextMeshProUGUI bestRating;
 
     public void SetUI(EloData data)
     {
         winCount.text = data.totalWins.ToString();
         streakCount.text = data.winStreakCount.ToString();
         rating.text = data.GetRating().ToString();
+        bestRating.text = data.GetHighestRating().ToString();
     }
 
     public void ResetRank()

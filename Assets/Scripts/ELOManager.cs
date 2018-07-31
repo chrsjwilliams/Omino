@@ -9,7 +9,7 @@ public static class ELOManager
     private const float handicapIncrement = 0.03f;
     private const int winStreakLength = 3;
     private const float winStreakHandicapIncrement = 0.05f;
-    private const float minHandicap = -0.5f;
+    public const float minHandicap = -0.5f;
     public const float baseHandicap = -0.2f;
     private const string fileName = "eloSaveData";
     public static EloData eloData { get; private set; }
@@ -87,11 +87,11 @@ public static class ELOManager
         eloData.winStreakCount += 1;
         if(eloData.winStreakCount >= winStreakLength)
         {
-            SetHandicap(eloData.handicapLevel + winStreakHandicapIncrement);
+            eloData.SetHandicap(eloData.handicapLevel + winStreakHandicapIncrement);
         }
         else
         {
-            SetHandicap(eloData.handicapLevel + handicapIncrement);
+            eloData.SetHandicap(eloData.handicapLevel + handicapIncrement);
         }
         int newElo = eloData.GetRating();
         Services.UIManager.eloUIManager.OnGameEnd(true, prevElo, newElo);
@@ -106,21 +106,16 @@ public static class ELOManager
     {
         int prevElo = eloData.GetRating();
         eloData.winStreakCount = 0;
-        SetHandicap(eloData.handicapLevel - handicapIncrement);
+        eloData.SetHandicap(eloData.handicapLevel - handicapIncrement);
         int newElo = eloData.GetRating();
         Services.UIManager.eloUIManager.OnGameEnd(false, prevElo, newElo);
         Services.Analytics.ELOWin(false);
         SaveData();
     }
 
-    private static void SetHandicap(float handicap)
-    {
-        eloData.handicapLevel = Mathf.Max(minHandicap, handicap);
-    }
-
     public static void ResetRank()
     {
-        SetHandicap(baseHandicap);
+        eloData.SetHandicap(baseHandicap);
         SaveData();
     }
 }
@@ -131,12 +126,14 @@ public class EloData
     public int winStreakCount;
     public float handicapLevel;
     public int totalWins;
+    public float highestHandicapAchieved;
 
-    public EloData(int winStreak, float handicap, int wins)
+    public EloData(int winStreak, float handicap, int wins, float highestAchieved)
     {
         winStreakCount = winStreak;
-        handicapLevel = handicap;
         totalWins = wins;
+        highestHandicapAchieved = highestAchieved;
+        SetHandicap(handicap);
     }
 
     public EloData()
@@ -144,11 +141,31 @@ public class EloData
         winStreakCount = 0;
         handicapLevel = ELOManager.baseHandicap;
         totalWins = 0;
+        highestHandicapAchieved = handicapLevel;
     }
 
     public int GetRating()
     {
-        return Mathf.RoundToInt(100 * (1 + handicapLevel));
+        return FormatRating(handicapLevel);
+    }
+
+    public int GetHighestRating()
+    {
+        return FormatRating(highestHandicapAchieved);
+    }
+
+    private int FormatRating(float handicap)
+    {
+        return Mathf.RoundToInt(100 * (1 + handicap));
+    }
+
+    public void SetHandicap(float handicap)
+    {
+        handicapLevel = Mathf.Max(ELOManager.minHandicap, handicap);
+        if (handicapLevel > highestHandicapAchieved)
+        {
+            highestHandicapAchieved = handicapLevel;
+        }
     }
 }
 
