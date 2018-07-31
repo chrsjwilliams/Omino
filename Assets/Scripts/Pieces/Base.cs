@@ -19,6 +19,7 @@ public class Base : TechBuilding
     {
         mainBase = _mainBase;
         owner = _player;
+
     }
 
     public override void Update()

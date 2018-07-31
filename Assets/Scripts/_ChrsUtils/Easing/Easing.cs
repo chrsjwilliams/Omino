@@ -151,6 +151,7 @@ namespace EasingEquations
         /// decelerating from zero velocity.
         public static float QuadEaseOut(float t)
         {
+            if (t >= 1) return 1;
             return -t * (t - 2);
         }
 
