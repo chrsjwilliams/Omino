@@ -410,6 +410,7 @@ namespace Tinylytics{
 			tutorialPlaytime = 0.0f;
 			versionNumber = Application.version;
 			firstLoadTime = _SecondsSinceEpoch();
+			BackendManager.SendData("Game Installed", versionNumber);
 		}
 		
 		private int _SecondsSinceEpoch()
