@@ -7,11 +7,12 @@ using TMPro;
 public class TutorialManager : MonoBehaviour
 {
 
-    private static bool[] viewedTutorial = new bool[] { false, false, false, false };
+    private static bool[] viewedTutorial = new bool[] { false, false, false, false, false };
     public TutorialTooltip currentTooltip { get; private set; }
     public GameObject tutorialTooltipPrefab;
     public int currentIndex { get; private set; }
     public GameObject backDim;
+    public GameObject secondWindow;
     private TaskManager tm;
     public float delayDur;
     public TooltipInfo[] tooltipInfos { get { return Services.MapManager.currentLevel.tooltips; } }
@@ -115,11 +116,6 @@ public class TutorialManager : MonoBehaviour
     void Update()
     {
         tm.Update();
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            SkipTutorial();
-        }
 
     }
 
@@ -264,18 +260,14 @@ public class TutorialManager : MonoBehaviour
                     return;
                 break;
             case 4:
-                if(!(e.piece.owner is AIPlayer))
+                if (e.piece is Blueprint &&
+                    !(e.piece is Generator) &&
+                     !(e.piece.owner is AIPlayer))
                 {
-                    foreach(Polyomino piece in e.piece.owner.boardPieces)
-                    {
-                        if(piece is TechBuilding)
-                        {
-                            objectiveComplete[1] = true;
-                            UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);
-                        }
-                    }
+                    objectiveComplete[1] = true;
+                    UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);
                 }
-                break;
+                    break;
             default:
                 break;
         }
@@ -312,6 +304,7 @@ public class TutorialManager : MonoBehaviour
             tooltipZone).GetComponent<TutorialTooltip>();
         TooltipInfo nextTooltipInfo = tooltipInfos[currentIndex];
 
+        secondWindow.SetActive(false);
         currentTooltip.Init(nextTooltipInfo);
         tooltipActive = true;
         if(nextTooltipInfo.displayObjective)
@@ -324,13 +317,24 @@ public class TutorialManager : MonoBehaviour
         {
             currentTooltip.textBox.rectTransform.sizeDelta = new Vector2(0, 0);
         }
-        else if (nextTooltipInfo.label == "Attack Piece" || nextTooltipInfo.label == "Make Building")
+        else if ( nextTooltipInfo.label == "Attack Piece" || nextTooltipInfo.label == "Make Building" ||
+                  nextTooltipInfo.label == "Another Building")
         {
             currentTooltip.textBox.rectTransform.sizeDelta = new Vector2(575, 575);
         }
 
+        if(nextTooltipInfo.label == "Place Piece")
+        {
+            Services.GameManager.Players[0].PauseProduction();
+            Services.GameManager.Players[0].LockAllPiecesExcept(0);
+            secondWindow.SetActive(true);
+            backDim.SetActive(true);
+        }
+
+
         if (nextTooltipInfo.dismissable)
         {
+
             Services.GameScene.PauseGame(true, false);
             backDim.SetActive(true);
         }
@@ -361,7 +365,7 @@ public class TutorialManager : MonoBehaviour
 
     public void OnClaimTech(ClaimedTechEvent e)
     {
-        if (Services.GameManager.levelSelected.campaignLevelNum == 4 && 
+        if (Services.GameManager.levelSelected.campaignLevelNum == 5 && 
             !(e.techBuilding.owner is AIPlayer))
         {
             objectiveComplete[1] = true;
@@ -432,9 +436,13 @@ public class TooltipInfo
     public bool dismissable = true;
     public bool enableTooltips;
     public Vector2 windowLocation;
+    public Vector2 secondWindowLocation;
     public Vector2 iPhoneWindowLocation;
+    public Vector2 iPhoneSecondWindowLocation;
     public Vector2 windowSize;
+    public Vector2 secondWindowSize;
     public Vector2 iPhoneWindowSize;
+    public Vector2 iPhoneSecondWindowSize;
     public bool haveImage;
     public bool imageLerps;
     public Vector2 imageLocation;

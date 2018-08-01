@@ -309,6 +309,7 @@ public class UIManager : MonoBehaviour {
 	void Update () {
         //if (Input.GetKeyDown(KeyCode.Y)) StartBannerScroll(Services.GameManager.Players[0]);
         if (scrollingInBanners) ScrollBanners();
+        if (!Services.GameScene.gameStarted) HighlightReadyBanners();
         HighlightResourceGained();
         HighlightResourcesMissing();
         HighlightResourceGained(true);
@@ -677,6 +678,23 @@ public class UIManager : MonoBehaviour {
     //    }
     //}
 
+
+    private void HighlightReadyBanners()
+    {
+        float pingPong = Mathf.PingPong(Time.time, 1);
+
+
+        for (int i = 0; i < readyBanners.Length; i++)
+        {
+            if(!Services.GameManager.Players[i].ready)
+            {
+                readyBanners[i].GetComponent<Image>().color =
+                    Color.Lerp(Services.GameManager.colorSchemes[i][0],
+                                Services.GameManager.colorSchemes[i][1],
+                                pingPong);
+            }
+        }
+    }
 
     public void TurnOnPauseMenu()
     {

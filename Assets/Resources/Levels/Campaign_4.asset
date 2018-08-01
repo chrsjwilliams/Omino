@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6e3d42f2220bb342a28180320c2b637, type: 3}
   m_Name: Campaign_4
   m_EditorClassIdentifier: 
-  campaignLevelNum: 4
+  campaignLevelNum: 5
   objectives:
   - Connect to Opponent's Base
   - Connect to a Tech Structure
@@ -26,6 +26,9 @@ MonoBehaviour:
   cornerBases: 0
   destructorsEnabled: 1
   blueprintsEnabled: 1
+  generatorEnabled: 1
+  factoryEnabled: 1
+  barracksEnabled: 1
   stackDestructorInOpeningHand: 0
   tooltips:
   - label: Last Thing
@@ -43,9 +46,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
@@ -83,9 +90,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 1
     windowLocation: {x: 275, y: -275}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 200, y: -200}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 200, y: 200}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 150, y: 150}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
@@ -122,9 +133,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
@@ -162,9 +177,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
@@ -202,9 +221,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 1
     windowLocation: {x: -275, y: 275}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: -210, y: 210}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 200, y: 200}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 150, y: 150}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
@@ -227,7 +250,7 @@ MonoBehaviour:
     subImage2Rotation: 0
     subImage2Color: {r: 0, g: 0, b: 0, a: 0}
   - label: Remember Blueprints
-    text: You decide what to prioritize! And don't forget about <color=#7D7DFF>Blueprints</color>!
+    text: You decide what to prioritize! And don't forget about <color=#6CAE75>Buildings</color>!
     displayObjective: 1
     objectiveIndex: 1
     iPhoneToolTipSize: {x: 700, y: 300}
@@ -241,9 +264,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
@@ -280,9 +307,13 @@ MonoBehaviour:
     dismissable: 0
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}

@@ -21,7 +21,7 @@ public class GameSceneScript : Scene<TransitionData>
     [SerializeField]
     private Color _backgroundColor;
 
-    private bool gameStarted;
+    public bool gameStarted { get; private set; }
     public bool gamePaused { get; private set; }
     public bool gameOver { get; private set; }
     public bool gameInProgress
@@ -377,7 +377,7 @@ public class GameSceneScript : Scene<TransitionData>
         }
     }
 
-    void TogglePlayerHandLock(bool locked)
+    public void TogglePlayerHandLock(bool locked)
     {
         for (int i = 0; i < Services.GameManager.Players.Length; i++)
         {

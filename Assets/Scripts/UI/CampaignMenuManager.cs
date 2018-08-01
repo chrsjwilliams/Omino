@@ -78,11 +78,12 @@ public class CampaignMenuManager : MonoBehaviour {
             case 3:
                 break;
             case 4:
-                buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = "COMPLETE";
-                if(Services.TutorialManager.CompletionCheck())
-                    buttons[0].GetComponent<Image>().color = highlightedButtonColor;
+                
                 break;
-            default:
+            case 5:
+                buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = "COMPLETE";
+                if (Services.TutorialManager.CompletionCheck())
+                    buttons[0].GetComponent<Image>().color = highlightedButtonColor;
                 break;
         }
         for (int i = 0; i < objectiveText.Length; i++)

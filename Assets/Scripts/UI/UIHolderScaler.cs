@@ -12,6 +12,7 @@ public class UIHolderScaler : MonoBehaviour {
         rectTform.sizeDelta =
             new Vector2(height * (float)Screen.width / (float)Screen.height,
             height);
+
 	}
 	
 	// Update is called once per frame

@@ -9,29 +9,28 @@ using System.IO;
 /*
  *      Replace production level with production speed!
  * 
- *      TODO:
- *      
- *      Tutorial 1:
- *                  Flash Ready Button
- *                  Highlight the piece I want players to play.
- *                      acknowledge when they use a different piece
- *                  Game froze at start of tutorial 1??
- *                  "Tap anywhere on the board to rotate"
- *                  
- *      Tutorial 2:
- *                  Display now we'll give a real opponent to play for longer
  *      
  *      Tutorial 3:
- *                  Find a better way to introduce 3 things
- *                  Just call them buildings
- *      
+ *                  the introduction of 3 buildings in a row is too much info
+ *                  
  *      Tutorial 4:
+ *                  introduce the other 2 buildings
+ *      
+ *      Tutorial 5:
  *                  Upper left tech structure has no tooltip
  *                  Have a window that says tutorial complete
  *                  
  *                  At the end have it say "Modes unclocked Quick Play"
  *                  
- */ 
+ *                  
+ *      Think of ways to gate the other modes...
+ *      
+ *              Finish Tutorial for "quick play"
+ *              Play quick play 4 times for challenge mode
+ *              Get Elo rating of 120 to unlock Dungeon Run
+ *              
+ *                  
+ */
 public class TutorialLevelSceneScript : Scene<TransitionData>
 {
     public bool[] humanPlayers { get; private set; }
@@ -48,6 +47,7 @@ public class TutorialLevelSceneScript : Scene<TransitionData>
     
     [SerializeField]
     private GameObject tutorialLevelButtonParent;
+    [SerializeField]
     private LevelButton[] tutorialLevelButtons;
     [SerializeField]
     private GameObject backButton;
@@ -64,9 +64,8 @@ public class TutorialLevelSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
-        tutorialLevelButtons = tutorialLevelButtonParent.GetComponentsInChildren<LevelButton>();
+        //tutorialLevelButtons = tutorialLevelButtonParent.GetComponentsInChildren<LevelButton>();
         tutorialLevelButtonParent.SetActive(false);
-
         humanPlayers = new bool[2];
         humanPlayers[0] = true;
         humanPlayers[1] = false;
@@ -138,10 +137,18 @@ public class TutorialLevelSceneScript : Scene<TransitionData>
 
     public void SelectLevel(LevelButton levelButton)
     {
-        //levelSelectionIndicator.gameObject.SetActive(true);
-        levelSelected = levelButton.level;
-        //levelSelectionIndicator.transform.position = levelButton.transform.position;
-        StartGame();
+        if (levelButton.unlocked)
+        {
+            //levelSelectionIndicator.gameObject.SetActive(true);
+            levelSelected = levelButton.level;
+            //levelSelectionIndicator.transform.position = levelButton.transform.position;
+            StartGame();
+        }
+        else
+        {
+            return;
+        }
+        
     }
 
     private void SetLevelProgress(int progress)
@@ -149,16 +156,16 @@ public class TutorialLevelSceneScript : Scene<TransitionData>
         for (int i = 0; i < tutorialLevelButtons.Length; i++)
         {
             LevelButton button = tutorialLevelButtons[i].GetComponent<LevelButton>();
+            int lockIndex = button.GetComponentsInChildren<Image>().Length - 1;
             if (i > progress)
             {
                 button.unlocked = false;
-                button.gameObject.SetActive(false);
+                button.GetComponentsInChildren<Image>()[lockIndex].enabled = true;
             }
             else if (i <= progress)
             {
                 button.unlocked = true;
-                button.gameObject.SetActive(true);
-                button.GetComponentsInChildren<Image>()[1].enabled = i < progress;
+                button.GetComponentsInChildren<Image>()[lockIndex].enabled = false;
             }
         }
     }
@@ -173,8 +180,8 @@ public class TutorialLevelSceneScript : Scene<TransitionData>
 
     public void UnlockAllLevels()
     {
-        SetLevelProgress(4);
-        File.WriteAllText(GameOptionsSceneScript.progressFileName, "4");
+        SetLevelProgress(5);
+        File.WriteAllText(GameOptionsSceneScript.progressFileName, "5");
     }
 
     public void LockAllLevels()

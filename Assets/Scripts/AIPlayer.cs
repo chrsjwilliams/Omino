@@ -116,6 +116,7 @@ public class AIPlayer : Player
                 new Coord(2,0)
             };
         }
+
     }
 
     public bool HasAttackPiece(List<Polyomino> currentHand)

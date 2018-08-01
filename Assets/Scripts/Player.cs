@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
     public Base mainBase { get; private set; }
     public bool gameOver { get; private set; }
     public List<Polyomino> boardPieces { get; protected set; }
-    
+    public List<Move> movesMade = new List<Move>();
     
     private double blueprintNextHalf = 0.0d;
      
@@ -245,14 +245,21 @@ public class Player : MonoBehaviour
 
         if (Services.GameManager.blueprintsEnabled)
         {
-            Factory factory = new Factory(this);
-            AddBluePrint(factory);
-
-            Generator mine = new Generator(this);
-            AddBluePrint(mine);
-
-            Barracks bombFactory = new Barracks(this);
-            AddBluePrint(bombFactory);
+            if (Services.GameManager.factoryEnabled)
+            {
+                Factory factory = new Factory(this);
+                AddBluePrint(factory);
+            }
+            if (Services.GameManager.generatorEnabled)
+            {
+                Generator mine = new Generator(this);
+                AddBluePrint(mine);
+            }
+            if (Services.GameManager.barracksEnabled)
+            {
+                Barracks bombFactory = new Barracks(this);
+                AddBluePrint(bombFactory);
+            }
         }
 
         foreach (Blueprint blueprint in blueprints)
@@ -267,6 +274,30 @@ public class Player : MonoBehaviour
         bpAssistFlashPeriod = Services.Clock.HalfLength();
         bpAssistDuration = Services.Clock.MeasureLength() * 3;
 
+        
+    }
+
+    public void LockAllPiecesExcept(int index)
+    {
+        if (index > hand.Count || index < 0) return;
+        for(int i = 0; i < hand.Count; i++)
+        {
+            if(i != index)
+            {
+                hand[i].Lock();
+            }
+        }
+    }
+
+    public void PauseProduction(float delay)
+    {
+        List<Task> pauseTaskList = new List<Task>();
+        Task pauseProduction = new ActionTask(PauseProduction);
+
+        pauseTaskList.Add(new Wait(delay));
+        pauseTaskList.Add(pauseProduction);
+
+        Services.GeneralTaskManager.Do(new TaskQueue(pauseTaskList));
         
     }
 
@@ -723,6 +754,9 @@ public class Player : MonoBehaviour
 
     public virtual void OnPiecePlaced(Polyomino piece, List<Polyomino> subpieces)
     {
+        Move move = new Move(piece, subpieces);
+        movesMade.Add(move);
+
         Services.GameEventManager.Fire(new PiecePlaced(piece));
         BuildingType blueprintType = piece.buildingType;
         if (!(piece is Blueprint))

@@ -39,9 +39,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: -340, y: -340}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: -255, y: -255}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 250, y: 250}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 200, y: 200}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
@@ -78,9 +82,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 340, y: 340}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 260, y: 260}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 260, y: 260}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 200, y: 200}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 1
     imageLerps: 0
     imageLocation: {x: 315, y: -450}
@@ -118,9 +126,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: -340, y: -900}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: -350, y: -900}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 800, y: 200}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 400, y: 200}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
@@ -157,9 +169,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: -340, y: -340}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: -255, y: -255}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 250, y: 250}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 200, y: 200}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
@@ -195,10 +211,14 @@ MonoBehaviour:
     iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 0
     enableTooltips: 0
-    windowLocation: {x: -340, y: -340}
+    windowLocation: {x: -270, y: -250}
+    secondWindowLocation: {x: -635, y: -900}
     iPhoneWindowLocation: {x: 0, y: 0}
-    windowSize: {x: 250, y: 250}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    windowSize: {x: 500, y: 500}
+    secondWindowSize: {x: 200, y: 200}
     iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 1
     imageLerps: 1
     imageLocation: {x: -980, y: -660}
@@ -236,9 +256,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 225, y: -775}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 25, y: -755}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 250, y: 180}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 225, y: 200}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
@@ -275,9 +299,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 420, y: -785}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 225, y: -785}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 130, y: 180}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 180, y: 200}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
@@ -314,9 +342,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
@@ -339,7 +371,7 @@ MonoBehaviour:
     subImage2Rotation: 0
     subImage2Color: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 1}
   - label: Rotate
-    text: Try using your index finger to drag and your middle finger to <color=#6CAE75>ROTATE</color>!
+    text: First, drag a piece to the board...
     displayObjective: 1
     objectiveIndex: 1
     iPhoneToolTipSize: {x: 750, y: 250}
@@ -353,9 +385,13 @@ MonoBehaviour:
     dismissable: 0
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 1
     imageLerps: 1
     imageLocation: {x: -260, y: -1640}
@@ -392,9 +428,13 @@ MonoBehaviour:
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 350, y: -200}
@@ -431,9 +471,13 @@ MonoBehaviour:
     dismissable: 0
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
     iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
