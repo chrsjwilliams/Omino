@@ -235,7 +235,7 @@ namespace Tinylytics{
 
 		public void TutorialLevelBeaten(int levelNumber)
 		{
-			LogMetric("Beat Tutorial Level", levelNumber.ToString());
+			LogMetric(levelNumber.ToString() + " Tutorial Level Beaten", analyticsData.versionNumber);
 
 		}
 
