@@ -193,9 +193,9 @@ public class GameSceneScript : Scene<TransitionData>
                     {
                         File.WriteAllText(GameOptionsSceneScript.progressFileName,
                             levelBeaten.ToString());
+                        
+                        Services.Analytics.TutorialLevelBeaten(levelBeaten);
                     }
-                    
-                    Services.Analytics.TutorialLevelBeaten(levelBeaten);
                 }
                 break;
             case TitleSceneScript.GameMode.TwoPlayers:
