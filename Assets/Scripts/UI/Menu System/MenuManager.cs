@@ -83,4 +83,9 @@ public class MenuManager : MonoBehaviour
             }
         }
     }
+
+    public void UIButtonPressedSound()
+    {
+        Services.AudioManager.PlaySoundEffect(Services.Clips.UIButtonPressed, 0.55f);
+    }
 }

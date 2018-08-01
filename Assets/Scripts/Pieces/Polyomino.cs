@@ -1640,6 +1640,7 @@ public class Polyomino : IVertex
     protected void CheckTouchForRotateInput(TouchDown e)
     {
         if (Services.GameManager.onIPhone ||
+            Services.GameManager.mode != TitleSceneScript.GameMode.TwoPlayers ||
             (Vector2.Distance(
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position),
             Services.GameManager.MainCamera.ScreenToWorldPoint(Input.GetTouch(touchID).position))

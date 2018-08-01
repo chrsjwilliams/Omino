@@ -60,6 +60,7 @@ public class MenuOption : MenuObject
         {
             actionToPerform.Invoke();
         }
+        Services.MenuManager.UIButtonPressedSound();
     }
 
     public void ToggleStrikethrough()
