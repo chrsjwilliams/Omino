@@ -55,7 +55,7 @@ public class UIManager : MonoBehaviour {
     private float pauseTimer;
     private const float pauseTimeWindow = 2f;
     [SerializeField]
-    private CampaignMenuManager campaignLevelCompleteMenu;
+    private CampaignMenuManager tutorialLevelCompleteMenu;
     [SerializeField]
     private DungeonRunInGameUIManager dungeonRunChallenegeCompleteMenu;
     [SerializeField]
@@ -263,7 +263,7 @@ public class UIManager : MonoBehaviour {
 
         optionsMenu.SetActive(false);
         pauseMenu.SetActive(false);
-        campaignLevelCompleteMenu.gameObject.SetActive(false);
+        tutorialLevelCompleteMenu.gameObject.SetActive(false);
 
         //for (int i = 0; i < readyBanners.Length; i++)
         //{
@@ -830,27 +830,37 @@ public class UIManager : MonoBehaviour {
 
     public void ShowCampaignLevelCompleteMenu(Player winner)
     {
-        campaignLevelCompleteMenu.Show(winner);
+        tutorialLevelCompleteMenu.Show(winner);
     }
 
-    private void ToggleCompleteionMenu()
+    private void ToggleCompleteionMenu(GameObject menu, bool inPosition)
     {
-        switch (Services.GameManager.mode)
+        if (!inPosition) return;
+        showCompleteionMenu = !showCompleteionMenu;
+        menu.SetActive(showCompleteionMenu);  
+    }
+
+    public void ToggleCompletionMenu(TitleSceneScript.GameMode mode)
+    {
+        switch (mode)
         {
+            case TitleSceneScript.GameMode.Elo:
+                ToggleCompleteionMenu(eloUIManager.menu,
+                                        true);
+                break;
             case TitleSceneScript.GameMode.Tutorial:
-                if (!campaignLevelCompleteMenu.inPosition) return;
-                showCompleteionMenu = !showCompleteionMenu;
-                campaignLevelCompleteMenu.gameObject.SetActive(showCompleteionMenu);
+                ToggleCompleteionMenu(tutorialLevelCompleteMenu.gameObject,
+                                        tutorialLevelCompleteMenu.inPosition);
                 break;
             case TitleSceneScript.GameMode.DungeonRun:
-                if (!dungeonRunChallenegeCompleteMenu.inPosition) return;
-                showCompleteionMenu = !showCompleteionMenu;
-                dungeonRunChallenegeCompleteMenu.menu.gameObject.SetActive(showCompleteionMenu);
+                ToggleCompleteionMenu(dungeonRunChallenegeCompleteMenu.menu,
+                                        dungeonRunChallenegeCompleteMenu.inPosition);
+
+                break;
+            default:
+                TogglePauseMenu();
                 break;
         }
-
-
-        
     }
 
     public void OnGameEndBannerTouch()
@@ -858,13 +868,16 @@ public class UIManager : MonoBehaviour {
         switch (Services.GameManager.mode)
         {
             case TitleSceneScript.GameMode.Elo:
-                Services.GameScene.ReturnToLevelSelect();
+                ToggleCompleteionMenu(  eloUIManager.menu,
+                                        true);
                 break;
             case TitleSceneScript.GameMode.Tutorial:
-                ToggleCompleteionMenu();
+                ToggleCompleteionMenu(  tutorialLevelCompleteMenu.gameObject,
+                                        tutorialLevelCompleteMenu.inPosition);
                 break;
             case TitleSceneScript.GameMode.DungeonRun:
-                ToggleCompleteionMenu();
+                ToggleCompleteionMenu(  dungeonRunChallenegeCompleteMenu.menu,
+                                        dungeonRunChallenegeCompleteMenu.inPosition);
 
                 break;
             default:
