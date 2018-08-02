@@ -1,0 +1,434 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6e3d42f2220bb342a28180320c2b637, type: 3}
+  m_Name: Test_Campaign_3
+  m_EditorClassIdentifier: 
+  campaignLevelNum: 3
+  objectives:
+  - Connect to Opponent's Base
+  - Build a Generator
+  availableStructures: 
+  structCoords: []
+  width: 16
+  height: 16
+  cornerBases: 0
+  destructorsEnabled: 1
+  blueprintsEnabled: 1
+  generatorEnabled: 1
+  factoryEnabled: 0
+  barracksEnabled: 0
+  stackDestructorInOpeningHand: 0
+  tooltips:
+  - label: Slow
+    text: Feeling slow? If you want to ramp up your economy, you can make <color=#6CAE75>Buildings</color>!
+    displayObjective: 1
+    objectiveIndex: 0
+    iPhoneToolTipSize: {x: 700, y: 300}
+    location: {x: 50, y: 50}
+    iPhoneLocation: {x: 50, y: 50}
+    arrowLocation: {x: 0, y: 0}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
+    dismissable: 1
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLerps: 0
+    imageLocation: {x: 0, y: 0}
+    iPhoneImageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    imageScale: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    imageRotation: 0
+    iPhoneImageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - label: Blueprints
+    text: There are 3 different shapes, each making a unique <color=#6CAE75>Building</color>,
+      but we're going to show you 1 for now.
+    displayObjective: 0
+    objectiveIndex: 0
+    iPhoneToolTipSize: {x: 700, y: 300}
+    location: {x: 50, y: 50}
+    iPhoneLocation: {x: 50, y: 50}
+    arrowLocation: {x: 0, y: 0}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
+    dismissable: 1
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLerps: 0
+    imageLocation: {x: 0, y: 0}
+    iPhoneImageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    imageScale: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    imageRotation: 0
+    iPhoneImageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - label: Generator
+    text: The <color=#6CAE75>Generator</color> increases your energy recharge rate,
+      letting you play pieces faster!
+    displayObjective: 0
+    objectiveIndex: 0
+    iPhoneToolTipSize: {x: 700, y: 300}
+    location: {x: 270, y: -440}
+    iPhoneLocation: {x: 210, y: -440}
+    arrowLocation: {x: 0, y: -250}
+    iPhoneArrowLocation: {x: 0, y: -250}
+    arrowRotation: -90
+    iPhoneArrowRotation: -90
+    iPhoneArrowScale: {x: 1, y: 1}
+    dismissable: 1
+    enableTooltips: 0
+    windowLocation: {x: 220, y: -930}
+    secondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 165, y: -940}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    windowSize: {x: 170, y: 170}
+    secondWindowSize: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 130, y: 130}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLerps: 0
+    imageLocation: {x: 0, y: 0}
+    iPhoneImageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    imageScale: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    imageRotation: 0
+    iPhoneImageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - label: Show Me
+    text: To create a <color=#6CAE75>Building</color>, you must first form the appropriate
+      shape on the board, then place the <color=#6CAE75>Building</color> on top.
+    displayObjective: 1
+    objectiveIndex: 1
+    iPhoneToolTipSize: {x: 700, y: 300}
+    location: {x: 50, y: 50}
+    iPhoneLocation: {x: 50, y: 50}
+    arrowLocation: {x: 0, y: 0}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
+    dismissable: 1
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLerps: 0
+    imageLocation: {x: 0, y: 0}
+    iPhoneImageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    imageScale: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    imageRotation: 0
+    iPhoneImageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - label: Make Building
+    text: 
+    displayObjective: 0
+    objectiveIndex: 0
+    iPhoneToolTipSize: {x: 700, y: 300}
+    location: {x: 50, y: 50}
+    iPhoneLocation: {x: 50, y: 50}
+    arrowLocation: {x: 0, y: 0}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
+    dismissable: 1
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    haveImage: 1
+    imageLerps: 0
+    imageLocation: {x: 0, y: 0}
+    iPhoneImageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    imageScale: {x: 1, y: 1}
+    iPhoneImageScale: {x: 1, y: 1}
+    imageRotation: 0
+    iPhoneImageRotation: 0
+    imageColor: {r: 1, g: 1, b: 1, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - label: Anytime
+    text: <color=#6CAE75>Buildings</color> can be played at any time and you can <color=#6CAE75>ROTATE</color>
+      them too!
+    displayObjective: 0
+    objectiveIndex: 0
+    iPhoneToolTipSize: {x: 700, y: 300}
+    location: {x: 50, y: 50}
+    iPhoneLocation: {x: 50, y: 50}
+    arrowLocation: {x: 0, y: 0}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
+    dismissable: 1
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLerps: 0
+    imageLocation: {x: 0, y: 0}
+    iPhoneImageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    imageScale: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    imageRotation: 0
+    iPhoneImageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - label: Do Not Display
+    text: 
+    displayObjective: 0
+    objectiveIndex: 0
+    iPhoneToolTipSize: {x: 0, y: 0}
+    location: {x: 0, y: 0}
+    iPhoneLocation: {x: 0, y: 0}
+    arrowLocation: {x: 0, y: 0}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
+    dismissable: 0
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLerps: 0
+    imageLocation: {x: 0, y: 0}
+    iPhoneImageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    imageScale: {x: 1, y: 1}
+    iPhoneImageScale: {x: 1, y: 1}
+    imageRotation: 0
+    iPhoneImageRotation: 0
+    imageColor: {r: 1, g: 1, b: 1, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - label: Watch Out
+    text: Watch out! Your opponent has built a <color=#6CAE75>Generator</color> and
+      you haven't yet. I hope you can keep up!
+    displayObjective: 1
+    objectiveIndex: 1
+    iPhoneToolTipSize: {x: 700, y: 300}
+    location: {x: 450, y: -600}
+    iPhoneLocation: {x: 250, y: -600}
+    arrowLocation: {x: 0, y: 0}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
+    dismissable: 1
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLerps: 0
+    imageLocation: {x: 0, y: 0}
+    iPhoneImageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    imageScale: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    imageRotation: 0
+    iPhoneImageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  - label: Do Not Display
+    text: 
+    displayObjective: 0
+    objectiveIndex: 0
+    iPhoneToolTipSize: {x: 0, y: 0}
+    location: {x: 0, y: 0}
+    iPhoneLocation: {x: 0, y: 0}
+    arrowLocation: {x: 0, y: 0}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    arrowRotation: 0
+    iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0, y: 0}
+    dismissable: 0
+    enableTooltips: 0
+    windowLocation: {x: 0, y: 0}
+    secondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    windowSize: {x: 0, y: 0}
+    secondWindowSize: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    haveImage: 0
+    imageLerps: 0
+    imageLocation: {x: 0, y: 0}
+    iPhoneImageLocation: {x: 0, y: 0}
+    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    imageScale: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    imageRotation: 0
+    iPhoneImageRotation: 0
+    imageColor: {r: 0, g: 0, b: 0, a: 1}
+    subImageLocation: {x: 0, y: 0}
+    secondarySubImageLocation: {x: 0, y: 0, z: 0}
+    subImageScale: {x: 0, y: 0}
+    subImageRotation: 0
+    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
+    subImage2Location: {x: 0, y: 0}
+    secondarySubImage2Location: {x: 0, y: 0, z: 0}
+    subImage2Scale: {x: 0, y: 0}
+    subImage2Rotation: 0
+    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+  overrideStrategy:
+    winWeight: 0
+    structWeight: 0
+    blueprintWeight: 0
+    destructionWeight: 0
+    blueprintDestructionWeight: 0
+    disconnectionWeight: 0
+    destructorForBlueprintWeight: 0
+    dangerMod: 0
+    overrideDefault: 0
+    resourceGainFactor: 0
+    drawRateFactor: 0
+    dangerDistance: 0

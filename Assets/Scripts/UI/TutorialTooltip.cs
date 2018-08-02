@@ -88,7 +88,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
         if (lerps)
         {
-            image.rectTransform.localPosition = Vector3.Lerp(image.rectTransform.localPosition, imageSecondaryPosition, EasingEquations.Easing.QuadEaseOutIn(Time.deltaTime * 1.5f));
+            image.rectTransform.localPosition = Vector3.Lerp(image.rectTransform.localPosition, imageSecondaryPosition, EasingEquations.Easing.QuadEaseOut(Time.deltaTime * 1f));
 
             if (label == "Place Piece" && image.rectTransform.localPosition.x > imageSecondaryPosition.x - 1)
             {
@@ -102,7 +102,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
     {
         if (Services.GameManager.Players[0].selectedPiece == null && !haveSelectedPiece)
         {
-            textComponent.text = "First, drag a piece to the board";
+            textComponent.text = "First, drag a piece to the board...";
             ToggleImageAnimation("Place Piece");
         }
         else
@@ -123,7 +123,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             }
 
             haveSelectedPiece = true;
-            textComponent.text = "While holding the piece, tap the screen with a second finger to rotate the piece";
+            textComponent.text = "Then tap on the screen with a different finger to <color=#6CAE75>ROTATE</color>.";
             ToggleImageAnimation("Rotate");
             
         }
@@ -134,7 +134,8 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         RectTransform tooltipTransform = GetComponent<RectTransform>();
         RectTransform windowRect =
             Services.TutorialManager.backDim.GetComponent<RectTransform>();
-
+        RectTransform secondWindow =
+            Services.TutorialManager.secondWindow.GetComponent<RectTransform>();
         touchID = -1;
         label = info.label;
 
@@ -142,6 +143,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         {
             dismissText.text = "Show Me";
         }
+
         if (Services.GameManager.onIPhone)
         {
             // TOOLTIP
@@ -160,6 +162,8 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             // WINDOW
             windowRect.anchoredPosition = info.iPhoneWindowLocation;
             windowRect.sizeDelta = info.iPhoneWindowSize;
+            secondWindow.anchoredPosition = info.iPhoneSecondWindowLocation;
+            secondWindow.sizeDelta = info.iPhoneSecondWindowSize;
 
             // IMAGE
             imagePrimaryPosition = info.iPhoneImageLocation;
@@ -184,6 +188,8 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             // WINDOW
             windowRect.sizeDelta = info.windowSize;
             windowRect.anchoredPosition = info.windowLocation;
+            secondWindow.anchoredPosition = info.secondWindowLocation;
+            secondWindow.sizeDelta = info.secondWindowSize;
 
             // IMAGE
             imagePrimaryPosition = info.imageLocation;
@@ -222,6 +228,8 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
         Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
         Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
+
+
         Services.TutorialManager.OnDismiss();
         
         scalingDown = true;
@@ -253,7 +261,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         subImage.enabled = false;
         subImage2.enabled = false;
 
-        foreach (AnimatorControllerParameter parameter in imageAnim.parameters)
+        foreach (AnimatorControllerParameter parameter in imageAnim.parameters) //  here
         {
             imageAnim.SetBool(parameter.name, false);
         }
@@ -316,7 +324,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public bool HasParameter(string paramName)
     {
-        foreach (AnimatorControllerParameter param in imageAnim.parameters)
+        foreach (AnimatorControllerParameter param in imageAnim.parameters) // here
         {
             if (param.name == paramName) return true;
         }

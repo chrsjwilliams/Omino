@@ -316,6 +316,9 @@ MonoBehaviour:
   destructorsEnabled: 1
   levelBPM: 110
   blueprintsEnabled: 1
+  generatorEnabled: 1
+  factoryEnabled: 1
+  barracksEnabled: 1
   _mainCamera: {fileID: 1142172635}
   clock: {fileID: 1067162022}
   _players: []
@@ -327,6 +330,7 @@ MonoBehaviour:
   - {r: 0.72794116, g: 0.84996766, b: 1, a: 1}
   _mapColorScheme:
   - {r: 0, g: 0, b: 0, a: 0.039215688}
+  - {r: 1, g: 1, b: 1, a: 1}
   neutralColor: {r: 0.49019608, g: 0.49019608, b: 0.49019608, a: 1}
   defaultWinWeight: 1
   defaultStructWeight: 0.2
@@ -363,7 +367,8 @@ MonoBehaviour:
   campaignLevels:
   - {fileID: 11400000, guid: 74a5a334a8f13ad43bd0a4ad8f6af761, type: 2}
   - {fileID: 11400000, guid: 29fac00e380e7914a9e8e727fca78006, type: 2}
-  - {fileID: 11400000, guid: 516da57c28974ca4baec61839716f227, type: 2}
+  - {fileID: 11400000, guid: d437743bd96cc8946a9eb8f83a416c12, type: 2}
+  - {fileID: 11400000, guid: 73e2756765cdd5a4ca941850506d3808, type: 2}
   - {fileID: 11400000, guid: 7a3dc13a037b55a4095d06e2f8944168, type: 2}
   eloLevelPool:
   - {fileID: 11400000, guid: b5b39854fc1356a45bed5c0471574a3a, type: 2}

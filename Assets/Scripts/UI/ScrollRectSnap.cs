@@ -38,6 +38,7 @@ public class ScrollRectSnap : MonoBehaviour
     private Vector3 maxSize = new Vector3(0.66f, 0.66f, 1.0f);
     private Vector3 minSize = new Vector3(0.33f, 0.33f, 1.0f);
     private int lastClickIndex = 0;
+    private int numOfLevels;
 
     public float t;
 
@@ -50,7 +51,7 @@ public class ScrollRectSnap : MonoBehaviour
         scrollPanelOffset = 90;
         panel = GameObject.Find("ScrollPanel").GetComponent<RectTransform>();
         center = GameObject.Find("SelectedLevel").GetComponent<RectTransform>();
-        int numOfLevels = panel.transform.childCount;
+        numOfLevels = panel.transform.childCount;
         images = new Image[numOfLevels];
         for (int i = 0; i < numOfLevels; i++)
         {
@@ -91,7 +92,6 @@ public class ScrollRectSnap : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-        
 
         for (int i = 0; i < images.Length; i++)
         {
@@ -138,16 +138,17 @@ public class ScrollRectSnap : MonoBehaviour
     {
         if (touchMoved) return;
 
-        levelSelected = true;
+        
         LevelButton selectedLevel = images[selectedIndex].GetComponent<LevelButton>();
-        if (Services.Scenes.CurrentScene is MapSelectSceneScript)
+        switch (Services.GameManager.mode)
         {
-            ((MapSelectSceneScript)Services.Scenes.CurrentScene).SelectLevel(selectedLevel);
-        }
-        else
-        {
-            ((GameOptionsSceneScript)Services.Scenes.CurrentScene).SelectLevel(selectedLevel);
-
+            case TitleSceneScript.GameMode.Tutorial:
+                ((TutorialLevelSceneScript)Services.Scenes.CurrentScene).SelectLevel(selectedLevel);
+                break;
+            default:
+                levelSelected = true;
+                ((MapSelectSceneScript)Services.Scenes.CurrentScene).SelectLevel(selectedLevel);
+                break;
         }
     }
 

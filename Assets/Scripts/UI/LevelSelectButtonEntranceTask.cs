@@ -49,9 +49,10 @@ public class LevelSelectButtonEntranceTask : Task
         {
             GameObject button = buttons[i];
             LevelButton levelButton = button.GetComponent<LevelButton>();
-            if (levelButton != null)
-                button.SetActive(levelButton.unlocked);
-            else button.SetActive(true);
+            button.SetActive(true);
+            //if (levelButton != null)
+            //    button.SetActive(levelButton.unlocked);
+            //else button.SetActive(true);
             Vector3 offset;
             if (moveDown)
             {

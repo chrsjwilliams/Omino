@@ -5,8 +5,7 @@ using TMPro;
 
 public class EloInGameUiManager : MonoBehaviour {
 
-    [SerializeField]
-    private GameObject menu;
+    public GameObject menu;
     [SerializeField]
     private GameObject defeatSymbol;
     [SerializeField]

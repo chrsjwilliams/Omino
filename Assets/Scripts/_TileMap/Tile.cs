@@ -87,7 +87,17 @@ public class Tile : MonoBehaviour, IVertex
 
         transform.position = new Vector3(coord.x, coord.y, 0);
 
-        mainSr.color = Services.GameManager.MapColorScheme[0];
+        switch (Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.HyperSOLO:
+            case TitleSceneScript.GameMode.HyperVS:
+                mainSr.color = Services.GameManager.MapColorScheme[1];
+                break;
+            default:
+                mainSr.color = Services.GameManager.MapColorScheme[0];
+                break;
+        }
+        
         baseColor = mainSr.color;
         bpAssistHighlightSr.gameObject.SetActive(false);
         if (pieceParent == null) IncrementSortingOrder(-5000);

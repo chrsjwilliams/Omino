@@ -55,9 +55,9 @@ public class UIManager : MonoBehaviour {
     private float pauseTimer;
     private const float pauseTimeWindow = 2f;
     [SerializeField]
-    private CampaignMenuManager campaignLevelCompleteMenu;
+    private CampaignMenuManager tutorialLevelCompleteMenu;
     [SerializeField]
-    private GameObject dungeonRunChallenegeCompleteMenu;
+    private DungeonRunInGameUIManager dungeonRunChallenegeCompleteMenu;
     [SerializeField]
     private GameObject optionsMenu;
     public Transform canvas;
@@ -122,7 +122,8 @@ public class UIManager : MonoBehaviour {
     private const float attackUIFillMin = 0.08f;
     private const float attackUIFillMax = 0.94f;
 
-    private bool showcampaignCompleteMenu = true;
+    private bool showCompleteionMenu;
+    
 
     public EloInGameUiManager eloUIManager;
     public DungeonRunInGameUIManager dungeonRunUIManager;
@@ -242,13 +243,21 @@ public class UIManager : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-
+        showCompleteionMenu = true;
         for (int i = 0; i < victoryBanners.Length; i++)
         {
             victoryBanners[i].gameObject.SetActive(false);
             defeatBanners[i].gameObject.SetActive(false);
         }
         touchIdsMakingTooltips = new List<int>();
+
+        Color textColor = Color.black;
+        if( Services.GameManager.mode == TitleSceneScript.GameMode.HyperSOLO ||
+            Services.GameManager.mode == TitleSceneScript.GameMode.HyperVS)
+        {
+            textColor = Color.white;
+        }
+
         for (int i = 0; i < 2; i++)
         {
             UpdateDrawMeters(i + 1, 0, 0, 0, 0);
@@ -260,9 +269,18 @@ public class UIManager : MonoBehaviour {
             }
         }
 
+        for( int i = 0;i < 2; i++)
+        {
+            normLevelTexts[i].color = textColor;
+            normalPieceTimers[i].color = textColor;
+            resourceLevelTexts[i].color = textColor;
+            destLevelTexts[i].color = textColor;
+            
+        }
+
         optionsMenu.SetActive(false);
         pauseMenu.SetActive(false);
-        campaignLevelCompleteMenu.gameObject.SetActive(false);
+        tutorialLevelCompleteMenu.gameObject.SetActive(false);
 
         //for (int i = 0; i < readyBanners.Length; i++)
         //{
@@ -309,6 +327,7 @@ public class UIManager : MonoBehaviour {
 	void Update () {
         //if (Input.GetKeyDown(KeyCode.Y)) StartBannerScroll(Services.GameManager.Players[0]);
         if (scrollingInBanners) ScrollBanners();
+        if (!Services.GameScene.gameStarted) HighlightReadyBanners();
         HighlightResourceGained();
         HighlightResourcesMissing();
         HighlightResourceGained(true);
@@ -678,6 +697,23 @@ public class UIManager : MonoBehaviour {
     //}
 
 
+    private void HighlightReadyBanners()
+    {
+        float pingPong = Mathf.PingPong(Time.time, 1);
+
+
+        for (int i = 0; i < readyBanners.Length; i++)
+        {
+            if(!Services.GameManager.Players[i].ready)
+            {
+                readyBanners[i].GetComponent<Image>().color =
+                    Color.Lerp(Services.GameManager.colorSchemes[i][0],
+                                Services.GameManager.colorSchemes[i][1],
+                                pingPong);
+            }
+        }
+    }
+
     public void TurnOnPauseMenu()
     {
         pauseMenu.SetActive(true);
@@ -811,27 +847,59 @@ public class UIManager : MonoBehaviour {
 
     public void ShowCampaignLevelCompleteMenu(Player winner)
     {
-        campaignLevelCompleteMenu.Show(winner);
+        tutorialLevelCompleteMenu.Show(winner);
+    }
+
+    private void ToggleCompleteionMenu(GameObject menu, bool inPosition)
+    {
+        if (!inPosition) return;
+        showCompleteionMenu = !showCompleteionMenu;
+        menu.SetActive(showCompleteionMenu);  
+    }
+
+    public void ToggleCompletionMenu(TitleSceneScript.GameMode mode)
+    {
+        switch (mode)
+        {
+            case TitleSceneScript.GameMode.Elo:
+                ToggleCompleteionMenu(eloUIManager.menu,
+                                        true);
+                break;
+            case TitleSceneScript.GameMode.Tutorial:
+                ToggleCompleteionMenu(tutorialLevelCompleteMenu.gameObject,
+                                        tutorialLevelCompleteMenu.inPosition);
+                break;
+            case TitleSceneScript.GameMode.DungeonRun:
+                ToggleCompleteionMenu(dungeonRunChallenegeCompleteMenu.menu,
+                                        dungeonRunChallenegeCompleteMenu.inPosition);
+
+                break;
+            default:
+                TogglePauseMenu();
+                break;
+        }
     }
 
     public void OnGameEndBannerTouch()
     {
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo ||
-            Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
+        switch (Services.GameManager.mode)
         {
-            Services.GameScene.ReturnToLevelSelect();
-        }
-        else if(Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial)
-        {
-            if (campaignLevelCompleteMenu.inPosition)
-            {
-                showcampaignCompleteMenu = !showcampaignCompleteMenu;
-                campaignLevelCompleteMenu.gameObject.SetActive(showcampaignCompleteMenu);
-            }
-        }
-        else
-        {
-            TogglePauseMenu();
+            case TitleSceneScript.GameMode.Elo:
+                ToggleCompleteionMenu(  eloUIManager.menu,
+                                        true);
+                break;
+            case TitleSceneScript.GameMode.Tutorial:
+                ToggleCompleteionMenu(  tutorialLevelCompleteMenu.gameObject,
+                                        tutorialLevelCompleteMenu.inPosition);
+                break;
+            case TitleSceneScript.GameMode.DungeonRun:
+                ToggleCompleteionMenu(  dungeonRunChallenegeCompleteMenu.menu,
+                                        dungeonRunChallenegeCompleteMenu.inPosition);
+
+                break;
+            default:
+                TogglePauseMenu();
+                break;
         }
     }
 }

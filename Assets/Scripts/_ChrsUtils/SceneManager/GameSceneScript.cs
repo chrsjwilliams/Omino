@@ -21,7 +21,7 @@ public class GameSceneScript : Scene<TransitionData>
     [SerializeField]
     private Color _backgroundColor;
 
-    private bool gameStarted;
+    public bool gameStarted { get; private set; }
     public bool gamePaused { get; private set; }
     public bool gameOver { get; private set; }
     public bool gameInProgress
@@ -103,11 +103,13 @@ public class GameSceneScript : Scene<TransitionData>
                 break;
 
             case TitleSceneScript.GameMode.TwoPlayers:
-
                 Services.UIManager.UIForSinglePlayer(false);
-
                 break;
-
+            case TitleSceneScript.GameMode.HyperVS:
+                Services.UIManager.UIForSinglePlayer(false);
+                break;
+            case TitleSceneScript.GameMode.HyperSOLO:
+                break;
             default:
 
                 break;
@@ -130,6 +132,7 @@ public class GameSceneScript : Scene<TransitionData>
 
     internal override void OnExit()
     {
+        Services.GameManager.MainCamera.backgroundColor = _backgroundColor;
         Time.timeScale = 1;
         Services.GameEventManager.Clear();
     }
@@ -138,7 +141,17 @@ public class GameSceneScript : Scene<TransitionData>
 	void Update ()
     {
         _colorChangeTime += Time.deltaTime;
-        Services.GameManager.MainCamera.backgroundColor = Color.Lerp(Color.black, _backgroundColor, _colorChangeTime);
+        switch (Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.HyperSOLO:
+            case TitleSceneScript.GameMode.HyperVS:
+                Services.GameManager.MainCamera.backgroundColor = Color.Lerp( _backgroundColor, Color.black, _colorChangeTime);
+                break;
+            default:
+                Services.GameManager.MainCamera.backgroundColor = Color.Lerp(Color.black, _backgroundColor, _colorChangeTime);
+                break;
+        }
+
         tm.Update();
         if (gameInProgress) Services.GameData.secondsSinceMatchStarted += Time.deltaTime;
     }
@@ -189,7 +202,7 @@ public class GameSceneScript : Scene<TransitionData>
                         int.TryParse(fileText, out progress);
                     }
                     int levelBeaten = Services.GameManager.levelSelected.campaignLevelNum;
-                    if (levelBeaten > progress)
+                    if (levelBeaten > progress && Services.TutorialManager.CompletionCheck())
                     {
                         File.WriteAllText(GameOptionsSceneScript.progressFileName,
                             levelBeaten.ToString());
@@ -327,7 +340,15 @@ public class GameSceneScript : Scene<TransitionData>
                 Services.Scenes.Swap<EloSceneScript>();
                 break;
             case TitleSceneScript.GameMode.DungeonRun:
-                Services.Scenes.Swap<DungeonRunSceneScript>();
+                if (DungeonRunManager.dungeonRunData.selectingNewTech)
+                {
+                    Services.Scenes.Swap<TechSelectSceneScript>();
+                }
+                else
+                {
+                    Services.Scenes.Swap<DungeonRunSceneScript>();
+                }
+
                 break;
             case TitleSceneScript.GameMode.Practice:
                 Services.Scenes.Swap<AIDifficultySceneScript>();
@@ -377,7 +398,7 @@ public class GameSceneScript : Scene<TransitionData>
         }
     }
 
-    void TogglePlayerHandLock(bool locked)
+    public void TogglePlayerHandLock(bool locked)
     {
         for (int i = 0; i < Services.GameManager.Players.Length; i++)
         {

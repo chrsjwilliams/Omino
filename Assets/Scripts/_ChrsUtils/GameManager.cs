@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviour
     public double levelBPM;
 
     public bool blueprintsEnabled = true;
+    public bool generatorEnabled = true;
+    public bool factoryEnabled = true;
+    public bool barracksEnabled = true;
     public bool BlueprintAssistEnabled
     {
         get { return blueprintAssistEnabled; }
@@ -207,6 +210,10 @@ public class GameManager : MonoBehaviour
         if (level != null)
         {
             blueprintsEnabled = level.blueprintsEnabled;
+            generatorEnabled = level.generatorEnabled;
+            factoryEnabled = level.factoryEnabled;
+            barracksEnabled = level.barracksEnabled;
+
             destructorsEnabled = level.destructorsEnabled;
         }
     }
@@ -304,14 +311,6 @@ public class GameManager : MonoBehaviour
                                             Services.MapManager.Map[0, 0].gameObject.transform.position,
                                             Quaternion.identity,
                                             Services.Scenes.CurrentScene.transform).GetComponent<Player>();
-                //if (playerNum == 2 || !humanPlayers[1])
-                //{
-                //    _players[i].Init(playerNum);
-                //}
-                //else
-                //{
-                //    _players[i].Init(playerNum, resourceHandicap, handicapValue[i]);
-                //}
 
                 _players[i].Init(playerNum, handicapValue[i]);
 

@@ -59,7 +59,14 @@ public class PauseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         Services.AudioManager.PlaySoundEffect(Services.Clips.UIClick, 1.0f);
         //if (!Services.GameScene.gamePaused)
+        if (!Services.GameScene.gameOver)
+        {
             Services.UIManager.TogglePauseMenu();
+        }
+        else
+        {
+            Services.UIManager.ToggleCompletionMenu(Services.GameManager.mode);
+        }
         //else Services.UIManager.TurnOnPauseMenu();
         ReturnToNeutral();
     }

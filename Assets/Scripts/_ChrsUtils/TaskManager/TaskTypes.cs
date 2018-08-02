@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 ////////////////////////////////////////////////////////////////////////
 // GENERAL PURPOSE TASKS
@@ -184,6 +185,75 @@ public class LERPProgressBar : TimedTask
         progressBar.fillAmount = Mathf.Lerp(progressBar.fillAmount, endAmount, EasingEquations.Easing.BackEaseIn(t));
     }
 }
+
+public class LERPColor : TimedTask
+{
+    public Color _Color;
+    public Color Start { get; private set; }
+    public Color End { get; private set; }
+    public SpriteRenderer Sprite { get; private set; }
+    public Text Text { get; private set; }
+    public TextMeshProUGUI[] TMP { get; private set; }
+    public Image Image { get; private set; }
+    public Camera Camera;
+
+    public LERPColor(Color color, Color start, Color end, float duration) : base(duration)
+    {
+        Start = start;
+        End = end;
+        _Color = color;
+    }
+
+    public LERPColor(SpriteRenderer sprite, Color start, Color end, float duration) : base(duration)
+    {
+        Start = start;
+        End = end;
+        Sprite = sprite;
+    }
+
+    public LERPColor(Text text, Color start, Color end, float duration) : base(duration)
+    {
+        Start = start;
+        End = end;
+        Text = text;
+    }
+
+    public LERPColor(Image image, Color start, Color end, float duration) : base(duration)
+    {
+        Start = start;
+        End = end;
+        Image = image;
+    }
+    
+    public LERPColor(TextMeshProUGUI[] text, Color start, Color end, float duration) : base(duration)
+    {
+        Start = start;
+        End = end;
+        TMP = text;
+    }
+    
+    public LERPColor(Camera camera,Color start, Color end, float duration) : base(duration)
+    {
+        Start = start;
+        End = end;
+        Camera = camera;
+    }
+
+    protected override void OnTick(float t)
+    {
+        if (Sprite) Sprite.color = Color.Lerp(Start, End, t);
+        else if (Text) Text.color = Color.Lerp(Start, End, t);
+        else if (Image) Image.color = Color.Lerp(Start, End, t);
+        else if (Camera) Camera.backgroundColor = Color.Lerp(Start, End, t);
+        else if (TMP.Length >= 0)
+        {
+            for (int i = 0; i < TMP.Length; i++)
+                TMP[i].color = Color.Lerp(Start, End, t);
+        }
+        else _Color = Color.Lerp(Start, End, t);
+    }
+}
+
 
 // A task to lerp a gameobject's scale
 public class Scale : TimedGOTask

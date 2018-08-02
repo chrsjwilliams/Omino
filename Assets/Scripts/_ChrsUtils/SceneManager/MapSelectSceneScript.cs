@@ -25,6 +25,9 @@ public class MapSelectSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+        levelButtonParent.SetActive(false);
+        backButton.SetActive(false);
+        optionButton.SetActive(false);
         levelButtons = levelButtonParent.GetComponentsInChildren<LevelButton>();
         levelButtonParent.SetActive(false);
         humanPlayers = new bool[2];
@@ -32,6 +35,7 @@ public class MapSelectSceneScript : Scene<TransitionData>
         switch (Services.GameManager.mode)
         {
             case TitleSceneScript.GameMode.TwoPlayers:
+            case TitleSceneScript.GameMode.HyperVS:
                 for (int i = 0; i < 2; i++)
                 {
                     humanPlayers[i] = true;
@@ -82,8 +86,16 @@ public class MapSelectSceneScript : Scene<TransitionData>
 
     internal override void OnExit()
     {
-        Services.GameManager.SetHandicapValues(HandicapSystem.handicapValues);
-
+        switch (Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.HyperSOLO:
+            case TitleSceneScript.GameMode.HyperVS:
+                Services.GameManager.SetHandicapValues(HandicapSystem.hyperModeValues);
+                break;
+            default:
+                Services.GameManager.SetHandicapValues(HandicapSystem.handicapValues);
+                break;
+        }
     }
 
     internal override void ExitTransition()

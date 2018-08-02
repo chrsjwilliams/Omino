@@ -20,6 +20,7 @@ public class Move
 
     private List<BlueprintMap> possibleBlueprintMoves;
     private List<CutCoordSet> possibleCutMoves;
+    public List<Polyomino> subPieces { get; private set; }
 
     float blueprintDestructionWeight = 0.2f;
     float disconnectionWeight = 0.4f;
@@ -32,6 +33,12 @@ public class Move
     bool predictiveSmith;
     bool predictiveBrickworks;
     bool predictiveBarracks;
+
+    public Move(Polyomino _piece, List<Polyomino> _subPieces)
+    {
+        piece = _piece;
+        subPieces = _subPieces;
+    }
 
     public Move(Polyomino _piece, Coord _targetCoord, int _rotations,
         List<BlueprintMap> _possibleBlueprintMoves,

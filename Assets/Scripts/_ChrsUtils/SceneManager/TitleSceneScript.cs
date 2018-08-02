@@ -29,7 +29,7 @@ public class TitleSceneScript : Scene<TransitionData>
     [SerializeField]
     private MenuManager menuManager;
 
-    public enum GameMode { NONE, TwoPlayers, Practice, Demo, Tutorial, DungeonRun, Elo }
+    public enum GameMode { NONE, TwoPlayers, Practice, Demo, Tutorial, DungeonRun, Elo, HyperSOLO, HyperVS }
 
     private const float SECONDS_TO_WAIT = 0.01f;
 
@@ -121,9 +121,11 @@ public class TitleSceneScript : Scene<TransitionData>
         switch (mode)
         {
             case GameMode.TwoPlayers:
+            case GameMode.HyperVS:
                 Services.Scenes.PushScene<MapSelectSceneScript>();
                 break;
             case GameMode.Practice:
+            case GameMode.HyperSOLO:
                 Services.Scenes.PushScene<AIDifficultySceneScript>();
                 break;
             case GameMode.Demo:
@@ -132,7 +134,14 @@ public class TitleSceneScript : Scene<TransitionData>
                 Services.Scenes.PushScene<TutorialLevelSceneScript>();
                 break;
             case GameMode.DungeonRun:
-                Services.Scenes.PushScene<DungeonRunSceneScript>();
+                if (DungeonRunManager.dungeonRunData.selectingNewTech)
+                {
+                    Services.Scenes.PushScene<TechSelectSceneScript>();
+                }
+                else
+                {
+                    Services.Scenes.PushScene<DungeonRunSceneScript>();
+                }
                 break;
             case GameMode.Elo:
                 Services.Scenes.PushScene<EloSceneScript>();
@@ -182,6 +191,16 @@ public class TitleSceneScript : Scene<TransitionData>
         //Services.GameManager.mode = GameMode.Tutorial;
         //Services.Scenes.PushScene<DungeonRunSceneScript>();
         StartGame(GameMode.DungeonRun);
+    }
+
+    public void PlayHyperModeSOLO()
+    {
+        StartGame(GameMode.HyperSOLO);
+    }
+
+    public void PlayHyperModeVS()
+    {
+        StartGame(GameMode.HyperVS);
     }
 
     public void DemoMode()

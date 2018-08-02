@@ -12,19 +12,19 @@ public class HandicapSystem : MonoBehaviour
     public Slider p1HandicapSlider;
     public Slider p2HandicapSlider;
 
-    public static PlayerHandicap[] tutorialHandicapLevels = new PlayerHandicap[]
-        {
-            new PlayerHandicap(float.MinValue, float.MinValue, float.MinValue),
-            new PlayerHandicap(0.7f, 0.7f, 0.7f),
-            new PlayerHandicap(0.7f, 0.75f, 0.75f),
-            new PlayerHandicap(0.8f, 0.8f, 0.8f)
-        };
+    public static PlayerHandicap[] tutorialHandicapLevels;
 
     public static PlayerHandicap[] handicapValues = new PlayerHandicap[]
         {
             new PlayerHandicap(1, 1, 1) ,
             new PlayerHandicap(1, 1, 1)
         };
+
+    public static PlayerHandicap[] hyperModeValues = new PlayerHandicap[]
+    {
+        new PlayerHandicap(2, 2, 2),
+        new PlayerHandicap(2, 2, 2)
+    };
     public float p1HandicapValue;
     public float p2HandicapValue;
 
@@ -47,10 +47,17 @@ public class HandicapSystem : MonoBehaviour
             new PlayerHandicap(1, 1, 1)
         };
 
+        hyperModeValues = new PlayerHandicap[]
+        {
+        new PlayerHandicap(2, 2, 2),
+        new PlayerHandicap(2, 2, 2)
+        };
+
         tutorialHandicapLevels = new PlayerHandicap[]
         {
             new PlayerHandicap(float.MinValue, float.MinValue, float.MinValue),
             new PlayerHandicap(0.7f, 0.7f, 0.7f),
+            new PlayerHandicap(0.7f, 0.75f, 0.75f),
             new PlayerHandicap(0.7f, 0.75f, 0.75f),
             new PlayerHandicap(0.8f, 0.8f, 0.8f)
         };
