@@ -202,7 +202,7 @@ public class GameSceneScript : Scene<TransitionData>
                         int.TryParse(fileText, out progress);
                     }
                     int levelBeaten = Services.GameManager.levelSelected.campaignLevelNum;
-                    if (levelBeaten > progress)
+                    if (levelBeaten > progress && Services.TutorialManager.CompletionCheck())
                     {
                         File.WriteAllText(GameOptionsSceneScript.progressFileName,
                             levelBeaten.ToString());
