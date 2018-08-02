@@ -250,6 +250,14 @@ public class UIManager : MonoBehaviour {
             defeatBanners[i].gameObject.SetActive(false);
         }
         touchIdsMakingTooltips = new List<int>();
+
+        Color textColor = Color.black;
+        if( Services.GameManager.mode == TitleSceneScript.GameMode.HyperSOLO ||
+            Services.GameManager.mode == TitleSceneScript.GameMode.HyperVS)
+        {
+            textColor = Color.white;
+        }
+
         for (int i = 0; i < 2; i++)
         {
             UpdateDrawMeters(i + 1, 0, 0, 0, 0);
@@ -259,6 +267,15 @@ public class UIManager : MonoBehaviour {
                 destructorPieceTimers[i].gameObject.SetActive(false);
                 destLevelTexts[i].gameObject.SetActive(false);
             }
+        }
+
+        for( int i = 0;i < 2; i++)
+        {
+            normLevelTexts[i].color = textColor;
+            normalPieceTimers[i].color = textColor;
+            resourceLevelTexts[i].color = textColor;
+            destLevelTexts[i].color = textColor;
+            
         }
 
         optionsMenu.SetActive(false);

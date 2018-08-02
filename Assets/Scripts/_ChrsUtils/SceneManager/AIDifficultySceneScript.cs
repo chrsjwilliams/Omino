@@ -48,12 +48,23 @@ public class AIDifficultySceneScript : Scene<TransitionData>
             aiLevelTexts[i] = aiLevelButtonZones[i].GetComponentInChildren<TextMeshProUGUI>();
             aiLevelButtonZones[i].SetActive(false);
         }
-
-        TaskTree aiLevelSelect = new TaskTree(new EmptyTask(),
-            new TaskTree(new AILevelSlideIn(aiLevelTexts[0], aiLevelButtons[0], true, false)),
-            new TaskTree(new LevelSelectTextEntrance(backButton, true)),
-            new TaskTree(new LevelSelectTextEntrance(optionButton)),
-            new TaskTree(new LevelSelectTextEntrance(handicapOptions)));
+        TaskTree aiLevelSelect;
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.HyperSOLO)
+        {
+            handicapOptions.SetActive(false);
+            aiLevelSelect = new TaskTree(new EmptyTask(),
+                new TaskTree(new AILevelSlideIn(aiLevelTexts[0], aiLevelButtons[0], true, false)),
+                new TaskTree(new LevelSelectTextEntrance(backButton, true)),
+                new TaskTree(new LevelSelectTextEntrance(optionButton)));
+        }
+        else
+        {
+            aiLevelSelect = new TaskTree(new EmptyTask(),
+                new TaskTree(new AILevelSlideIn(aiLevelTexts[0], aiLevelButtons[0], true, false)),
+                new TaskTree(new LevelSelectTextEntrance(backButton, true)),
+                new TaskTree(new LevelSelectTextEntrance(optionButton)),
+                new TaskTree(new LevelSelectTextEntrance(handicapOptions)));
+        }
         _tm.Do(aiLevelSelect);
 
         handicapSystem.UpdateHandicapText();

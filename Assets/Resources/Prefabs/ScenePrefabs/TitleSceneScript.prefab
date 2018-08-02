@@ -359,6 +359,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1373814603282360
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4212201858954040}
+  - component: {fileID: 114026608292988888}
+  m_Layer: 0
+  m_Name: DungeonRun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1392012884603888
 GameObject:
   m_ObjectHideFlags: 1
@@ -369,7 +385,7 @@ GameObject:
   - component: {fileID: 4496037332184578}
   - component: {fileID: 114926067389149126}
   m_Layer: 0
-  m_Name: DungeonRun
+  m_Name: Hyper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -393,6 +409,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1418982525010476
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4983716568654216}
+  - component: {fileID: 114558856504770714}
+  m_Layer: 0
+  m_Name: Solo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1424943856198272
 GameObject:
   m_ObjectHideFlags: 1
@@ -404,6 +436,22 @@ GameObject:
   - component: {fileID: 114442823681497812}
   m_Layer: 0
   m_Name: Play
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1425806322625908
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4569277371410358}
+  - component: {fileID: 114672538598287668}
+  m_Layer: 0
+  m_Name: Versus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -603,7 +651,7 @@ GameObject:
   - component: {fileID: 4272300424169624}
   - component: {fileID: 114587405086292860}
   m_Layer: 0
-  m_Name: Solo
+  m_Name: HyperVS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -636,7 +684,7 @@ GameObject:
   - component: {fileID: 4771405485361944}
   - component: {fileID: 114818255406653038}
   m_Layer: 0
-  m_Name: PlayerCountMenu
+  m_Name: VersusModesMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -701,7 +749,7 @@ GameObject:
   - component: {fileID: 4176714187677150}
   - component: {fileID: 114500324703482944}
   m_Layer: 0
-  m_Name: Versus
+  m_Name: Local
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -794,6 +842,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1964304215206744
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4980031899222326}
+  - component: {fileID: 114301318432797440}
+  m_Layer: 0
+  m_Name: PlayerCountMenu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1974254423673348
 GameObject:
   m_ObjectHideFlags: 1
@@ -874,8 +938,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4109239156237696}
-  - {fileID: 4771405485361944}
+  - {fileID: 4980031899222326}
   - {fileID: 4455864734185090}
+  - {fileID: 4771405485361944}
   - {fileID: 4185609960295240}
   m_Father: {fileID: 4547974140374762}
   m_RootOrder: 1
@@ -962,7 +1027,20 @@ Transform:
   - {fileID: 4161478639591070}
   - {fileID: 4697404476285662}
   m_Father: {fileID: 4080922031492906}
-  m_RootOrder: 3
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4212201858954040
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1373814603282360}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4455864734185090}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4272300424169624
 Transform:
@@ -1002,6 +1080,7 @@ Transform:
   m_Children:
   - {fileID: 4757264379978490}
   - {fileID: 4320847903366960}
+  - {fileID: 4212201858954040}
   - {fileID: 4496037332184578}
   - {fileID: 4704165238110888}
   m_Father: {fileID: 4080922031492906}
@@ -1018,7 +1097,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4455864734185090}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4547974140374762
 Transform:
@@ -1033,6 +1112,19 @@ Transform:
   - {fileID: 224329529269093032}
   - {fileID: 4080922031492906}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4569277371410358
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425806322625908}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4980031899222326}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4573550947514978
@@ -1072,7 +1164,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4455864734185090}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4757264379978490
 Transform:
@@ -1100,7 +1192,7 @@ Transform:
   - {fileID: 4176714187677150}
   - {fileID: 4272300424169624}
   m_Father: {fileID: 4080922031492906}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4813749566004006
 Transform:
@@ -1113,6 +1205,34 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4109239156237696}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4980031899222326
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1964304215206744}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4569277371410358}
+  - {fileID: 4983716568654216}
+  m_Father: {fileID: 4080922031492906}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4983716568654216
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1418982525010476}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4980031899222326}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114004294465345498
@@ -1402,6 +1522,43 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114026608292988888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1373814603282360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0b9000e353b2642b0b980b3aded016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectPrefabToSpawn: {fileID: 0}
+  onLoadActions:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  menuToLoad: {fileID: 0}
+  actionToPerform:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114132033372597222}
+        m_MethodName: PlayDungeonRunMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  modeToLoad: 5
+  buttonText: DUNGEON RUN
+  toggled: 0
 --- !u!114 &114027084460511192
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1639,6 +1796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a06aabb9319ad4f4293ac5af62249e91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
 --- !u!114 &114065544605917282
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2104,6 +2262,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114301318432797440
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1964304215206744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a06aabb9319ad4f4293ac5af62249e91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
 --- !u!114 &114301734703414476
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2292,6 +2462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a06aabb9319ad4f4293ac5af62249e91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
 --- !u!114 &114379776379621722
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2453,7 +2624,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  menuToLoad: {fileID: 114818255406653038}
+  menuToLoad: {fileID: 114301318432797440}
   actionToPerform:
     m_PersistentCalls:
       m_Calls: []
@@ -2721,7 +2892,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   modeToLoad: 1
-  buttonText: VERSUS
+  buttonText: LOCAL
   toggled: 0
 --- !u!114 &114515755032485324
 MonoBehaviour:
@@ -2813,12 +2984,12 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114587405086292860
+--- !u!114 &114558856504770714
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1676554434221874}
+  m_GameObject: {fileID: 1418982525010476}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a0b9000e353b2642b0b980b3aded016, type: 3}
@@ -2838,6 +3009,43 @@ MonoBehaviour:
       PublicKeyToken=null
   modeToLoad: 0
   buttonText: SOLO
+  toggled: 0
+--- !u!114 &114587405086292860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1676554434221874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0b9000e353b2642b0b980b3aded016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectPrefabToSpawn: {fileID: 0}
+  onLoadActions:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  menuToLoad: {fileID: 0}
+  actionToPerform:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114132033372597222}
+        m_MethodName: PlayHyperModeVS
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  modeToLoad: 8
+  buttonText: HYPER VS
   toggled: 0
 --- !u!114 &114627943368807772
 MonoBehaviour:
@@ -3166,6 +3374,32 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114672538598287668
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425806322625908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0b9000e353b2642b0b980b3aded016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectPrefabToSpawn: {fileID: 0}
+  onLoadActions:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  menuToLoad: {fileID: 114818255406653038}
+  actionToPerform:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  modeToLoad: 0
+  buttonText: VERSUS
+  toggled: 0
 --- !u!114 &114675516941889190
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3439,6 +3673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a06aabb9319ad4f4293ac5af62249e91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
 --- !u!114 &114761801785894472
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3766,6 +4001,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a06aabb9319ad4f4293ac5af62249e91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
 --- !u!114 &114845976692207056
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4090,7 +4326,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114132033372597222}
-        m_MethodName: PlayDungeonRunMode
+        m_MethodName: PlayHyperModeSOLO
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4102,8 +4338,8 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  modeToLoad: 5
-  buttonText: DUNGEON RUN
+  modeToLoad: 7
+  buttonText: HYPER SOLO
   toggled: 0
 --- !u!114 &114948225977172214
 MonoBehaviour:

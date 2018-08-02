@@ -103,11 +103,13 @@ public class GameSceneScript : Scene<TransitionData>
                 break;
 
             case TitleSceneScript.GameMode.TwoPlayers:
-
                 Services.UIManager.UIForSinglePlayer(false);
-
                 break;
-
+            case TitleSceneScript.GameMode.HyperVS:
+                Services.UIManager.UIForSinglePlayer(false);
+                break;
+            case TitleSceneScript.GameMode.HyperSOLO:
+                break;
             default:
 
                 break;
@@ -130,6 +132,7 @@ public class GameSceneScript : Scene<TransitionData>
 
     internal override void OnExit()
     {
+        Services.GameManager.MainCamera.backgroundColor = _backgroundColor;
         Time.timeScale = 1;
         Services.GameEventManager.Clear();
     }
@@ -138,7 +141,17 @@ public class GameSceneScript : Scene<TransitionData>
 	void Update ()
     {
         _colorChangeTime += Time.deltaTime;
-        Services.GameManager.MainCamera.backgroundColor = Color.Lerp(Color.black, _backgroundColor, _colorChangeTime);
+        switch (Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.HyperSOLO:
+            case TitleSceneScript.GameMode.HyperVS:
+                Services.GameManager.MainCamera.backgroundColor = Color.Lerp( _backgroundColor, Color.black, _colorChangeTime);
+                break;
+            default:
+                Services.GameManager.MainCamera.backgroundColor = Color.Lerp(Color.black, _backgroundColor, _colorChangeTime);
+                break;
+        }
+
         tm.Update();
         if (gameInProgress) Services.GameData.secondsSinceMatchStarted += Time.deltaTime;
     }

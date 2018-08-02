@@ -19,6 +19,12 @@ public class HandicapSystem : MonoBehaviour
             new PlayerHandicap(1, 1, 1) ,
             new PlayerHandicap(1, 1, 1)
         };
+
+    public static PlayerHandicap[] hyperModeValues = new PlayerHandicap[]
+    {
+        new PlayerHandicap(2, 2, 2),
+        new PlayerHandicap(2, 2, 2)
+    };
     public float p1HandicapValue;
     public float p2HandicapValue;
 
@@ -39,6 +45,12 @@ public class HandicapSystem : MonoBehaviour
         {
             new PlayerHandicap(1, 1, 1) ,
             new PlayerHandicap(1, 1, 1)
+        };
+
+        hyperModeValues = new PlayerHandicap[]
+        {
+        new PlayerHandicap(2, 2, 2),
+        new PlayerHandicap(2, 2, 2)
         };
 
         tutorialHandicapLevels = new PlayerHandicap[]
