@@ -123,7 +123,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             }
 
             haveSelectedPiece = true;
-            textComponent.text = "Then tap on the screen with a different finger.";
+            textComponent.text = "Then tap on the screen with a different finger to <color=#6CAE75>ROTATE</color>.";
             ToggleImageAnimation("Rotate");
             
         }
