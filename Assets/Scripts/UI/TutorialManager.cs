@@ -220,12 +220,6 @@ public class TutorialManager : MonoBehaviour
                 if (currentTooltip.label == "Rotate" && !completedRotation) return;
                 break;
             case 2:
-                if (e.piece.piecesToRemove.Count > 0)
-                {
-                    objectiveComplete[1] = true;
-                    UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);
-                }
-                if (e.piece.owner.playerNum == humanPlayerNum) return;
                 break;
             case 3:
                 int aiPlayerNumber = humanPlayerNum == 1 ? 2 : 1;
@@ -331,6 +325,18 @@ public class TutorialManager : MonoBehaviour
             backDim.SetActive(true);
         }
 
+
+        if(Services.MapManager.currentLevel.campaignLevelNum == 2)
+        {
+            if(currentIndex < 2)
+            {
+                Services.GameManager.Players[0].ToggleHandLock(true);
+            }
+            else
+            {
+                Services.GameManager.Players[0].ToggleHandLock(false);
+            }
+        }
 
         if (nextTooltipInfo.dismissable)
         {
