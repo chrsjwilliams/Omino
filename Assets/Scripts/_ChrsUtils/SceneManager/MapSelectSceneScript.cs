@@ -25,6 +25,9 @@ public class MapSelectSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+        levelButtonParent.SetActive(false);
+        backButton.SetActive(false);
+        optionButton.SetActive(false);
         levelButtons = levelButtonParent.GetComponentsInChildren<LevelButton>();
         levelButtonParent.SetActive(false);
         humanPlayers = new bool[2];

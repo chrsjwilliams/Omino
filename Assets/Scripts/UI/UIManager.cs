@@ -57,7 +57,7 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private CampaignMenuManager campaignLevelCompleteMenu;
     [SerializeField]
-    private GameObject dungeonRunChallenegeCompleteMenu;
+    private DungeonRunInGameUIManager dungeonRunChallenegeCompleteMenu;
     [SerializeField]
     private GameObject optionsMenu;
     public Transform canvas;
@@ -122,7 +122,8 @@ public class UIManager : MonoBehaviour {
     private const float attackUIFillMin = 0.08f;
     private const float attackUIFillMax = 0.94f;
 
-    private bool showcampaignCompleteMenu = true;
+    private bool showCompleteionMenu;
+    
 
     public EloInGameUiManager eloUIManager;
     public DungeonRunInGameUIManager dungeonRunUIManager;
@@ -242,7 +243,7 @@ public class UIManager : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-
+        showCompleteionMenu = true;
         for (int i = 0; i < victoryBanners.Length; i++)
         {
             victoryBanners[i].gameObject.SetActive(false);
@@ -832,24 +833,43 @@ public class UIManager : MonoBehaviour {
         campaignLevelCompleteMenu.Show(winner);
     }
 
+    private void ToggleCompleteionMenu()
+    {
+        switch (Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.Tutorial:
+                if (!campaignLevelCompleteMenu.inPosition) return;
+                showCompleteionMenu = !showCompleteionMenu;
+                campaignLevelCompleteMenu.gameObject.SetActive(showCompleteionMenu);
+                break;
+            case TitleSceneScript.GameMode.DungeonRun:
+                if (!dungeonRunChallenegeCompleteMenu.inPosition) return;
+                showCompleteionMenu = !showCompleteionMenu;
+                dungeonRunChallenegeCompleteMenu.menu.gameObject.SetActive(showCompleteionMenu);
+                break;
+        }
+
+
+        
+    }
+
     public void OnGameEndBannerTouch()
     {
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo ||
-            Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
+        switch (Services.GameManager.mode)
         {
-            Services.GameScene.ReturnToLevelSelect();
-        }
-        else if(Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial)
-        {
-            if (campaignLevelCompleteMenu.inPosition)
-            {
-                showcampaignCompleteMenu = !showcampaignCompleteMenu;
-                campaignLevelCompleteMenu.gameObject.SetActive(showcampaignCompleteMenu);
-            }
-        }
-        else
-        {
-            TogglePauseMenu();
+            case TitleSceneScript.GameMode.Elo:
+                Services.GameScene.ReturnToLevelSelect();
+                break;
+            case TitleSceneScript.GameMode.Tutorial:
+                ToggleCompleteionMenu();
+                break;
+            case TitleSceneScript.GameMode.DungeonRun:
+                ToggleCompleteionMenu();
+
+                break;
+            default:
+                TogglePauseMenu();
+                break;
         }
     }
 }

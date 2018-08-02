@@ -327,7 +327,15 @@ public class GameSceneScript : Scene<TransitionData>
                 Services.Scenes.Swap<EloSceneScript>();
                 break;
             case TitleSceneScript.GameMode.DungeonRun:
-                Services.Scenes.Swap<DungeonRunSceneScript>();
+                if (DungeonRunManager.dungeonRunData.selectingNewTech)
+                {
+                    Services.Scenes.Swap<TechSelectSceneScript>();
+                }
+                else
+                {
+                    Services.Scenes.Swap<DungeonRunSceneScript>();
+                }
+
                 break;
             case TitleSceneScript.GameMode.Practice:
                 Services.Scenes.Swap<AIDifficultySceneScript>();

@@ -933,6 +933,8 @@ public class Player : MonoBehaviour
             else CancelSelectedPiece();
         }
         gameOver = true;
+
+        ToggleHandLock(true);
     }
 
     public virtual int GainResources(int numResources)

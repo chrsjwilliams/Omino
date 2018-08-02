@@ -25,6 +25,9 @@ public class EloSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+        eloUI.gameObject.SetActive(false);
+        backButton.SetActive(false);
+        optionButton.SetActive(false);
         humanPlayers = new bool[2] { false, false };
         humanPlayers[0] = true;
         humanPlayers[1] = false;

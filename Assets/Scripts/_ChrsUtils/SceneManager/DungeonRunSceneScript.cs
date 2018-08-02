@@ -60,6 +60,10 @@ public class DungeonRunSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+        dungeonRunMenu.SetActive(false);
+        backButton.SetActive(false);
+        optionButton.SetActive(false);
+
         int dungeonRunProgress = 0;
         int completedDungeonRuns = 0;
         if (File.Exists(progressFileName))

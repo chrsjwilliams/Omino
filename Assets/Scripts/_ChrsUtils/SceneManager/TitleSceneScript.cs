@@ -132,7 +132,14 @@ public class TitleSceneScript : Scene<TransitionData>
                 Services.Scenes.PushScene<TutorialLevelSceneScript>();
                 break;
             case GameMode.DungeonRun:
-                Services.Scenes.PushScene<DungeonRunSceneScript>();
+                if (DungeonRunManager.dungeonRunData.selectingNewTech)
+                {
+                    Services.Scenes.PushScene<TechSelectSceneScript>();
+                }
+                else
+                {
+                    Services.Scenes.PushScene<DungeonRunSceneScript>();
+                }
                 break;
             case GameMode.Elo:
                 Services.Scenes.PushScene<EloSceneScript>();

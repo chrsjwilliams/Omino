@@ -34,6 +34,10 @@ public class TechSelectSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+        techSelectMenu.SetActive(false);
+        backButton.SetActive(false);
+        optionButton.SetActive(false);
+
         SetUpDungeonRunTechSelectMenu();
         TaskTree techSelectMenuTasks = new TaskTree(new EmptyTask(),
             new TaskTree(new LevelSelectTextEntrance(techSelectMenu)),
@@ -109,6 +113,11 @@ public class TechSelectSceneScript : Scene<TransitionData>
         selectTechText = techSelectZone.GetComponentInChildren<TextMeshProUGUI>();
     }
 
+    public void goToDungeonRunMenu()
+    {
+        Services.Scenes.Swap<DungeonRunSceneScript>();
+    }
+
     public void SelectTech(TextMeshProUGUI buildingType)
     {
         BuildingType selectedType = BuildingType.NONE;
@@ -124,9 +133,13 @@ public class TechSelectSceneScript : Scene<TransitionData>
         DungeonRunManager.AddSelectedTech(selectedType);
 
         TaskTree slideOutTechSelectMenuTasks = new TaskTree(new EmptyTask(),
-                new TaskTree(new LevelSelectTextEntrance(techSelectMenu, true)),
-                new TaskTree(new AILevelSlideIn(selectTechText, menuButtons[0], true, true)));
-        Services.GeneralTaskManager.Do(slideOutTechSelectMenuTasks);
+                new TaskTree(new ActionTask(ExitTransition)));
+
+        slideOutTechSelectMenuTasks
+            .Then(new Wait(0.33f))
+            .Then(new ActionTask(goToDungeonRunMenu));
+
+        _tm.Do(slideOutTechSelectMenuTasks);
         //Services.GeneralTaskManager.Do(new ActionTask(StartDungeonRunMode));
         
         //  Then transition to Dungeon Run Challenge Menu

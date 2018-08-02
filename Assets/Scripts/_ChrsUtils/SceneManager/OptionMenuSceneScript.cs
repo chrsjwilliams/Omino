@@ -33,6 +33,8 @@ public class OptionMenuSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+        optionMenu.SetActive(false);
+        backButton.SetActive(false);
 
         switch (Services.GameManager.mode)
         {

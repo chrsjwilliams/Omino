@@ -66,6 +66,8 @@ public class TutorialLevelSceneScript : Scene<TransitionData>
     {
         //tutorialLevelButtons = tutorialLevelButtonParent.GetComponentsInChildren<LevelButton>();
         tutorialLevelButtonParent.SetActive(false);
+        backButton.SetActive(false);
+        optionButton.SetActive(false);
         humanPlayers = new bool[2];
         humanPlayers[0] = true;
         humanPlayers[1] = false;
