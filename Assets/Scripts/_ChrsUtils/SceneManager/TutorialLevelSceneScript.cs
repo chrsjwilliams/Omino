@@ -159,15 +159,25 @@ public class TutorialLevelSceneScript : Scene<TransitionData>
         {
             LevelButton button = tutorialLevelButtons[i].GetComponent<LevelButton>();
             int lockIndex = button.GetComponentsInChildren<Image>().Length - 1;
+            int completionSymbolIndex = button.GetComponentsInChildren<Image>().Length - 2;
             if (i > progress)
             {
                 button.unlocked = false;
                 button.GetComponentsInChildren<Image>()[lockIndex].enabled = true;
+                button.GetComponentsInChildren<Image>()[completionSymbolIndex].enabled = false;
             }
-            else if (i <= progress)
+            else if (i < progress)
             {
                 button.unlocked = true;
+                button.GetComponentsInChildren<Image>()[completionSymbolIndex].enabled = true;
                 button.GetComponentsInChildren<Image>()[lockIndex].enabled = false;
+            }
+            else if(i == progress)
+            {
+                button.unlocked = true;
+                button.GetComponentsInChildren<Image>()[completionSymbolIndex].enabled = false;
+                button.GetComponentsInChildren<Image>()[lockIndex].enabled = false;
+
             }
         }
     }
