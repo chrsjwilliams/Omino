@@ -38,6 +38,6 @@ public class Annex : TechBuilding
 
     public override string GetDescription()
     {
-        return "Newly placed pieces claim opposing disconnected pieces that do not have Blueprints.";
+        return "Pieces steal adjacent opposing disconnected pieces";
     }
 }
