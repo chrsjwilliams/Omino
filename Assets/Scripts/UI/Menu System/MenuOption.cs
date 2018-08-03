@@ -16,15 +16,21 @@ public class MenuOption : MenuObject
     private RectTransform buttonRect;
     [HideInInspector]
     public bool toggled;
+    public bool unlocked;
 
     // Update is called once per frame
     void Update()
     {
-
+        if (unlocked)
+        {
+            associatedObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(false);
+            associatedObject.GetComponent<Button>().enabled = true;
+        }
     }
 
     public override void Load()
     {
+        
         objectPrefabToSpawn = Services.MenuManager.buttonPrefab;
         base.Load();
         uiText = associatedObject.GetComponentInChildren<TextMeshProUGUI>();
@@ -34,9 +40,19 @@ public class MenuOption : MenuObject
         onLoadActions.Invoke();
     }
 
-    public override void Show(Vector2 pos, float delay)
+    public override void Show(Vector2 pos, float delay, bool status = true)
     {
-        associatedObject.GetComponent<Button>().enabled = true;
+        unlocked = status;
+        if (unlocked)
+        {
+            associatedObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(false);
+            associatedObject.GetComponent<Button>().enabled = true;      
+        }
+        else
+        {
+            associatedObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(true);
+            associatedObject.GetComponent<Button>().enabled = false;
+        }
         base.Show(pos, delay);
     }
 
@@ -48,6 +64,7 @@ public class MenuOption : MenuObject
 
     public void OnPress()
     {
+        if (!unlocked) return;
         if (menuToLoad != null)
         {
             Services.MenuManager.PushMenu(menuToLoad);

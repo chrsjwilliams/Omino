@@ -23,6 +23,45 @@ public class GameManager : MonoBehaviour
     }
 
     private bool[] humanPlayers;
+
+    [SerializeField]
+    private bool challengeModeEnabled;
+    public bool ChallengeModeEnabled
+    {
+        get { return challengeModeEnabled; }
+        private set { }
+    }
+    [SerializeField]
+    private bool dungeonRunModeEnabled;
+    public bool DungeonRunModeEnabled
+    {
+        get { return dungeonRunModeEnabled; }
+        private set { }
+    }
+    [SerializeField]
+    private bool hyperModeEnabled;
+    public bool HyperModeEnabled
+    {
+        get { return hyperModeEnabled; }
+        private set { }
+    }
+    [SerializeField]
+    private bool practiceModeEnabled;
+    public bool PracticeModeEnabled
+    {
+        get { return practiceModeEnabled; }
+        private set { }
+    }
+    [SerializeField]
+    private bool versusModeEnabled;
+    public bool TwoPlayerModeEnabled
+    {
+        get { return versusModeEnabled; }
+        private set { }
+    }
+
+    private bool[] unlockedModes = new bool[5];
+
     public AILEVEL[] aiLevels;
     public TitleSceneScript.GameMode mode = TitleSceneScript.GameMode.NONE;
     public bool destructorsEnabled = true;
@@ -150,6 +189,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+
         Assert.raiseExceptions = true;
         InitializeServices();
 
@@ -172,6 +212,8 @@ public class GameManager : MonoBehaviour
         {
             Services.Scenes.PushScene<TitleSceneScript>();
         }
+
+        EnabledAllModes();
     }
 
     private void InitializeServices()
@@ -231,7 +273,24 @@ public class GameManager : MonoBehaviour
         SetDangerWeight(defaultDangerWeight);
 
         HandicapSystem.Init();
+    }
 
+    public void SetUnlockingData()
+    {
+        challengeModeEnabled = unlockedModes[0];
+        dungeonRunModeEnabled = unlockedModes[1];
+        hyperModeEnabled = unlockedModes[2];
+        practiceModeEnabled = unlockedModes[3];
+        versusModeEnabled = unlockedModes[4];
+    }
+
+    public void EnabledAllModes()
+    {
+        for(int i = 0; i < unlockedModes.Length; i++)
+        {
+            unlockedModes[i] = true;
+        }
+        SetUnlockingData();
     }
 
     public void SetNumPlayers(bool[] players)
@@ -291,6 +350,36 @@ public class GameManager : MonoBehaviour
     public void SetHandicapValues(PlayerHandicap[] handicapValue_)
     {
         handicapValue = handicapValue_;
+    }
+
+    public void UnlockGameMode(TitleSceneScript.GameMode mode, bool status)
+    {
+        switch (mode)
+        {
+            case TitleSceneScript.GameMode.Elo:
+                challengeModeEnabled = status;
+                unlockedModes[0] = challengeModeEnabled;
+                break;
+            case TitleSceneScript.GameMode.DungeonRun:
+                dungeonRunModeEnabled = status;
+                unlockedModes[1] = dungeonRunModeEnabled;
+                break;
+            case TitleSceneScript.GameMode.HyperSOLO:
+            case TitleSceneScript.GameMode.HyperVS:
+                hyperModeEnabled = status;
+                unlockedModes[2] = hyperModeEnabled;
+                break;
+            case TitleSceneScript.GameMode.Practice:
+                practiceModeEnabled = status;
+                unlockedModes[3] = practiceModeEnabled;
+                break;
+            case TitleSceneScript.GameMode.TwoPlayers:
+                versusModeEnabled = status;
+                unlockedModes[4] = versusModeEnabled;
+                break;
+            default:
+                break;
+        }
     }
 
     public void InitPlayers(PlayerHandicap[] handicapValue)
@@ -457,14 +546,14 @@ public class GameManager : MonoBehaviour
         float mutationRange = 0.02f;
         AIStrategy winningStrat = currentStrategies[winner.playerNum - 1];
 
-        float mutatedWinWeight = winningStrat.winWeight + Random.Range(-mutationRange, mutationRange);
-        float mutatedStructWeight = winningStrat.structWeight + Random.Range(-mutationRange, mutationRange);
-        float mutatedBlueprintWeight = winningStrat.blueprintWeight + Random.Range(-mutationRange, mutationRange);
-        float mutatedDestructionWeight = winningStrat.destructionWeight + Random.Range(-mutationRange, mutationRange);
-        float mutatedBlueprintDestructionWeight = winningStrat.blueprintDestructionWeight + Random.Range(-mutationRange, mutationRange);
-        float mutatedDisconnectionWeight = winningStrat.disconnectionWeight + Random.Range(-mutationRange, mutationRange);
-        float mutatedDestructorForBlueprintWeight = winningStrat.destructorForBlueprintWeight + Random.Range(-mutationRange, mutationRange);
-        float mutatedDangerMod = winningStrat.dangerMod + Random.Range(-mutationRange, mutationRange);
+        float mutatedWinWeight = winningStrat.winWeight + UnityEngine.Random.Range(-mutationRange, mutationRange);
+        float mutatedStructWeight = winningStrat.structWeight + UnityEngine.Random.Range(-mutationRange, mutationRange);
+        float mutatedBlueprintWeight = winningStrat.blueprintWeight + UnityEngine.Random.Range(-mutationRange, mutationRange);
+        float mutatedDestructionWeight = winningStrat.destructionWeight + UnityEngine.Random.Range(-mutationRange, mutationRange);
+        float mutatedBlueprintDestructionWeight = winningStrat.blueprintDestructionWeight + UnityEngine.Random.Range(-mutationRange, mutationRange);
+        float mutatedDisconnectionWeight = winningStrat.disconnectionWeight + UnityEngine.Random.Range(-mutationRange, mutationRange);
+        float mutatedDestructorForBlueprintWeight = winningStrat.destructorForBlueprintWeight + UnityEngine.Random.Range(-mutationRange, mutationRange);
+        float mutatedDangerMod = winningStrat.dangerMod + UnityEngine.Random.Range(-mutationRange, mutationRange);
 
         float highestWeight = Mathf.Max(mutatedWinWeight, mutatedStructWeight,
             mutatedBlueprintWeight,

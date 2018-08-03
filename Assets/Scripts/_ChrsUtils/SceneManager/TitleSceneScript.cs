@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.IO;
 
 public class TitleSceneScript : Scene<TransitionData>
 {
@@ -104,8 +103,7 @@ public class TitleSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
-
-
+        
     }
 
     internal override void OnExit()

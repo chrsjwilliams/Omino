@@ -17,7 +17,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     public static bool tutorialComplete = false;
-    private const int TUTORIAL_COMPLETE_NUMBER = 5;
+    public static readonly int TUTORIAL_COMPLETE_NUMBER = 5;
     private static bool[] viewedTutorial = new bool[] { false, false, false, false, false };
     public TutorialTooltip currentTooltip { get; private set; }
     public GameObject tutorialTooltipPrefab;

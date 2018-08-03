@@ -209,6 +209,13 @@ public class GameSceneScript : Scene<TransitionData>
                         string fileText = File.ReadAllText(GameOptionsSceneScript.progressFileName);
                         int.TryParse(fileText, out progress);
                     }
+
+                    if(progress == TutorialManager.TUTORIAL_COMPLETE_NUMBER)
+                    {
+                        Services.GameManager.UnlockGameMode(TitleSceneScript.GameMode.Practice, true);
+                        
+                    }
+
                     int levelBeaten = Services.GameManager.levelSelected.campaignLevelNum;
                     if (levelBeaten > progress && Services.TutorialManager.CompletionCheck())
                     {

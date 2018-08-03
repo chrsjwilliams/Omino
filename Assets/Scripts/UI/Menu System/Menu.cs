@@ -55,6 +55,7 @@ public class Menu : MonoBehaviour
         menuObjects = GetComponentsInChildren<MenuObject>();
         foreach (MenuObject menuObj in menuObjects)
         {
+
             menuObj.Load();
         }
         Show();
@@ -67,13 +68,62 @@ public class Menu : MonoBehaviour
 
     public void Show()
     {
+        Services.GameManager.SetUnlockingData();
         state = MenuState.Pushing;
         for (int i = 0; i < menuObjects.Length; i++)
         {
             MenuObject menuObj = menuObjects[i];
-            menuObj.Show((i - (menuObjects.Length / 2f) + 0.5f)
-                * Services.MenuManager.buttonSpacing * Vector2.up,
-                (menuObjects.Length - 1 - i) * slideStaggerTime);
+            if (menuObj is MenuOption)
+            {
+                TitleSceneScript.GameMode mode = ((MenuOption)menuObj).modeToLoad;
+                switch (mode)
+                {
+                    case TitleSceneScript.GameMode.Elo:
+                        menuObj.Show((i - (menuObjects.Length / 2f) + 0.5f)
+                                        * Services.MenuManager.buttonSpacing * Vector2.up,
+                                    (menuObjects.Length - 1 - i) * slideStaggerTime,
+                                    Services.GameManager.ChallengeModeEnabled);
+                        break;
+                    case TitleSceneScript.GameMode.DungeonRun:
+                        menuObj.Show((i - (menuObjects.Length / 2f) + 0.5f)
+                                        * Services.MenuManager.buttonSpacing * Vector2.up,
+                                    (menuObjects.Length - 1 - i) * slideStaggerTime,
+                                    Services.GameManager.DungeonRunModeEnabled);
+                        break;
+                    case TitleSceneScript.GameMode.HyperSOLO:
+                    case TitleSceneScript.GameMode.HyperVS:
+                        menuObj.Show((i - (menuObjects.Length / 2f) + 0.5f)
+                                        * Services.MenuManager.buttonSpacing * Vector2.up,
+                                    (menuObjects.Length - 1 - i) * slideStaggerTime,
+                                    Services.GameManager.HyperModeEnabled);
+                        break;
+                    case TitleSceneScript.GameMode.Practice:
+                        menuObj.Show((i - (menuObjects.Length / 2f) + 0.5f)
+                                        * Services.MenuManager.buttonSpacing * Vector2.up,
+                                    (menuObjects.Length - 1 - i) * slideStaggerTime,
+                                    Services.GameManager.PracticeModeEnabled);
+                        break;
+                    case TitleSceneScript.GameMode.TwoPlayers:
+                        menuObj.Show((i - (menuObjects.Length / 2f) + 0.5f)
+                                        * Services.MenuManager.buttonSpacing * Vector2.up,
+                                    (menuObjects.Length - 1 - i) * slideStaggerTime,
+                                    Services.GameManager.TwoPlayerModeEnabled);
+                        break;
+                    default:
+                        menuObj.Show((i - (menuObjects.Length / 2f) + 0.5f)
+                                        * Services.MenuManager.buttonSpacing * Vector2.up,
+                                    (menuObjects.Length - 1 - i) * slideStaggerTime);
+                        break;
+                }
+
+            }
+            else
+            {
+
+                menuObj.Show((i - (menuObjects.Length / 2f) + 0.5f)
+                    * Services.MenuManager.buttonSpacing * Vector2.up,
+                    (menuObjects.Length - 1 - i) * slideStaggerTime);
+            }
         }
         timeToWait = slideStaggerTime * menuObjects.Length 
             + MenuObject.movementTime;

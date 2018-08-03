@@ -36,7 +36,7 @@ public class MenuObject : MonoBehaviour
         Destroy(associatedObject);
     }
 
-    public virtual void Show(Vector2 pos, float delay)
+    public virtual void Show(Vector2 pos, float delay, bool status = true)
     {
         associatedObject.SetActive(true);
         lerper.LerpTo(pos + (offset * Vector2.up), pos, delay, movementTime);
