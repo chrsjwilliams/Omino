@@ -144,6 +144,11 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             dismissText.text = "Show Me";
         }
 
+        if(label.Contains("Complete"))
+        {
+            dismissText.text = "Tutorial Complete!";
+        }
+
         if (Services.GameManager.onIPhone)
         {
             // TOOLTIP
@@ -221,7 +226,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
     }
 
-    public void Dismiss()
+    public void Dismiss(bool displayNext = true)
     {
         Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
         Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
@@ -229,8 +234,8 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
         Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
 
-
-        Services.TutorialManager.OnDismiss();
+        Services.TutorialManager.OnDismiss(displayNext);
+        
         
         scalingDown = true;
         timeElapsed = 0;

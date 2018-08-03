@@ -189,10 +189,18 @@ public class GameSceneScript : Scene<TransitionData>
 
                 break;
             case TitleSceneScript.GameMode.Tutorial:
-                Task showCampaignMenu = new Wait(0.5f);
-                showCampaignMenu.Then(new ParameterizedActionTask<Player>(
-                    Services.UIManager.ShowCampaignLevelCompleteMenu, winner));
-                Services.GameScene.tm.Do(showCampaignMenu);
+                if (Services.MapManager.currentLevel.campaignLevelNum == 5 &&
+                    Services.TutorialManager.CompletionCheck() &&
+                    !TutorialManager.tutorialComplete)
+                {
+                }
+                else
+                { 
+                    Task showCampaignMenu = new Wait(0.5f);
+                    showCampaignMenu.Then(new ParameterizedActionTask<Player>(
+                        Services.UIManager.ShowCampaignLevelCompleteMenu, winner));
+                    Services.GameScene.tm.Do(showCampaignMenu);
+                }
                 if (Services.GameManager.levelSelected != null && !(winner is AIPlayer))
                 {
                     int progress = 0;
@@ -217,34 +225,6 @@ public class GameSceneScript : Scene<TransitionData>
                 break;
         }
 
-
-        //if (winner is AIPlayer)
-        //{
-        //    Services.Analytics.PlayerWin(false);
-        //    if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
-        //    {
-        //        ELOManager.OnGameLoss();
-        //    }
-        //    else if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
-        //    {
-        //        DungeonRunManager.OnGameLoss();
-        //    }
-        //    Services.AudioManager.RegisterSoundEffect(Services.Clips.Defeat, 0.6f);
-        //}
-        //else
-        //{
-        //    Services.Analytics.PlayerWin();
-        //    if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
-        //    {
-        //        ELOManager.OnGameWin();
-        //    }
-        //    else if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
-        //    {
-        //        DungeonRunManager.OnGameWin();
-        //    }
-        //    Services.AudioManager.RegisterSoundEffect(Services.Clips.Victory, 0.5f);
-        //}
-
         foreach (Player player in Services.GameManager.Players)
         {
             player.OnGameOver();
@@ -262,29 +242,6 @@ public class GameSceneScript : Scene<TransitionData>
             restartTask.Then(new ActionTask(Reload));
             Services.GeneralTaskManager.Do(restartTask);
         }
-
-        //if (Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial)
-        //{
-        //    Task showCampaignMenu = new Wait(0.5f);
-        //    showCampaignMenu.Then(new ParameterizedActionTask<Player>(
-        //        Services.UIManager.ShowCampaignLevelCompleteMenu, winner));
-        //    Services.GameScene.tm.Do(showCampaignMenu);
-        //    if (Services.GameManager.levelSelected != null && !(winner is AIPlayer))
-        //    {
-        //        int progress = 0;
-        //        if (File.Exists(GameOptionsSceneScript.progressFileName))
-        //        {
-        //            string fileText = File.ReadAllText(GameOptionsSceneScript.progressFileName);
-        //            int.TryParse(fileText, out progress);
-        //        }
-        //        int levelBeaten = Services.GameManager.levelSelected.campaignLevelNum;
-        //        if (levelBeaten > progress)
-        //        {
-        //            File.WriteAllText(GameOptionsSceneScript.progressFileName,
-        //                levelBeaten.ToString());
-        //        }
-        //    }
-        //}
     }
 
     public void Replay()

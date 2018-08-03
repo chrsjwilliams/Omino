@@ -19,8 +19,7 @@ public class Tooltip : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
+	void Update () {		
 	}
 
     public void Init(string name, string description, float rot, Vector2 basePos, 

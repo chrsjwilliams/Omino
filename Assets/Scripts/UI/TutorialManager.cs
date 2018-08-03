@@ -3,10 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.IO;
 
 public class TutorialManager : MonoBehaviour
 {
+    public static string progressFileName
+    {
+        get
+        {
+            return Application.persistentDataPath + Path.DirectorySeparatorChar +
+              "progress.txt";
+        }
+    }
 
+    public static bool tutorialComplete = false;
+    private const int TUTORIAL_COMPLETE_NUMBER = 5;
     private static bool[] viewedTutorial = new bool[] { false, false, false, false, false };
     public TutorialTooltip currentTooltip { get; private set; }
     public GameObject tutorialTooltipPrefab;
@@ -42,6 +53,8 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private GameObject secondObjectiveLocation;
     public bool tooltipActive { get; private set; }
+    public static bool celebratoryTextBoxDisplayed = false;
+    public static bool celebratoryTextBoxMade = false;
 
     // hide skip button & move first animation up 75 units
 
@@ -60,7 +73,19 @@ public class TutorialManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        
+
+        int progress = 0;
+        if (File.Exists(progressFileName))
+        {
+            string fileText = File.ReadAllText(progressFileName);
+            int.TryParse(fileText, out progress);
+        }
+
+        if(progress == TUTORIAL_COMPLETE_NUMBER)
+        {
+            tutorialComplete = true;
+        }
+
         if (Services.GameManager.levelSelected != null &&
             Services.GameManager.levelSelected.objectives.Length > 0)
         {
@@ -80,10 +105,7 @@ public class TutorialManager : MonoBehaviour
             }
             tm.Do(slideInObjectives);
         }
-
-
-        
-        
+  
         touchID = -1;
         Services.GameEventManager.Register<RotationEvent>(OnRotation);
         Services.GameEventManager.Register<PieceRemoved>(OnPieceRemoved);
@@ -131,24 +153,37 @@ public class TutorialManager : MonoBehaviour
     }
 
 
-    public void OnDismiss()
+    public void OnDismiss(bool displayNext = true)
     {
+        if (Services.MapManager.currentLevel.campaignLevelNum == 5 &&
+            celebratoryTextBoxMade && Services.GameScene.gameOver && !tutorialComplete)
+        {
+            Task showCampaignMenu = new Wait(0.5f);
+            showCampaignMenu.Then(new ParameterizedActionTask<Player>(
+                Services.UIManager.ShowCampaignLevelCompleteMenu, Services.GameManager.Players[0]));
+            Services.GameScene.tm.Do(showCampaignMenu);
+        }
+        if (Services.MapManager.currentLevel.campaignLevelNum == 5 && 
+            currentIndex == tooltipInfos.Length - 3)
+        {
+            celebratoryTextBoxMade = true;
+        }
+
         if (tooltipInfos[currentIndex].dismissable)
         {
             Services.GameScene.UnpauseGame(true);
             backDim.SetActive(false);
         }
+
         Services.UIManager.tooltipsDisabled = false;
         tooltipActive = false;
-        if (currentIndex < tooltipInfos.Length - 1) MoveToNextStep();
+        if (currentIndex < tooltipInfos.Length - 1 && displayNext) MoveToNextStep();
     }
 
     private void MoveToNextStep()
     {
         currentIndex += 1;
-        //Wait wait = new Wait(delayDur);
-        //wait.Then(new ActionTask(CreateTooltip));
-        //tm.Do(wait);
+
         CreateTooltip();
         if (!tooltipInfos[currentIndex].dismissable)
             Services.GameEventManager.Register<PiecePlaced>(OnPiecePlaced);
@@ -156,8 +191,6 @@ public class TutorialManager : MonoBehaviour
 
     private void MoveToStep(int index)
     {
-
-
         if (index > tooltipInfos.Length - 1 || index < 0)
         {
             Debug.Log("Out of Range");
@@ -165,9 +198,7 @@ public class TutorialManager : MonoBehaviour
         else
         {
             currentIndex = index;
-
             currentTooltip.Dismiss();
-            CreateTooltip();
             if (!tooltipInfos[currentIndex].dismissable)
                 Services.GameEventManager.Register<PiecePlaced>(OnPiecePlaced);
         }
@@ -176,7 +207,14 @@ public class TutorialManager : MonoBehaviour
     public void SkipTutorial()
     {
         backDim.SetActive(false);
-        MoveToStep(tooltipInfos.Length - 1);
+        if (Services.MapManager.currentLevel.campaignLevelNum == 5)
+        {
+            MoveToStep(tooltipInfos.Length - 4);
+        }
+        else
+        {
+            MoveToStep(tooltipInfos.Length - 1);
+        }
         Services.GameScene.UnpauseGame(true);
         skipTutorialButton.gameObject.SetActive(false);
 
@@ -235,7 +273,7 @@ public class TutorialManager : MonoBehaviour
                     {
                         Services.GameEventManager.Unregister<PiecePlaced>(OnPiecePlaced);
 
-                        dismissTask.Then(new ActionTask(currentTooltip.Dismiss));
+                        dismissTask.Then(new ParameterizedActionTask<bool>(currentTooltip.Dismiss, true));
                         tm.Do(dismissTask);
                     }
                     else
@@ -261,12 +299,18 @@ public class TutorialManager : MonoBehaviour
                     objectiveComplete[1] = true;
                     UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);
                 }
+                
                     break;
+            case 5:
+                if (currentTooltip.label == "Do Not Display" || currentTooltip.label == "Complete")
+                {
+                    return;
+                }
+                break;
             default:
                 break;
         }
-
-        dismissTask.Then(new ActionTask(currentTooltip.Dismiss));
+        dismissTask.Then(new ParameterizedActionTask<bool>(currentTooltip.Dismiss, true));
         tm.Do(dismissTask);
     }
 
@@ -305,7 +349,6 @@ public class TutorialManager : MonoBehaviour
         {
             DisplayObjective(nextTooltipInfo.objectiveIndex, true);
         }
-
 
         if (nextTooltipInfo.label == "Do Not Display")
         {
@@ -351,7 +394,9 @@ public class TutorialManager : MonoBehaviour
 
         Services.UIManager.tooltipsDisabled = !nextTooltipInfo.enableTooltips;
 
-        if (currentIndex == tooltipInfos.Length - 1)
+        if (currentIndex == tooltipInfos.Length - 1 || 
+            (Services.GameManager.levelSelected.campaignLevelNum == 5 &&
+            currentIndex == tooltipInfos.Length - 4))
         {
             skipTutorialButton.gameObject.SetActive(false);
             viewedTutorial[Services.GameManager.levelSelected.campaignLevelNum - 1] = true;
@@ -381,18 +426,26 @@ public class TutorialManager : MonoBehaviour
 
     protected void OnGameEnd(GameEndEvent e)
     {
-        MoveToStep(tooltipInfos.Length - 1);
         if (!(e.winner is AIPlayer))
         {
             objectiveComplete[0] = true;
             UpdateObjectiveUI(objectiveUI[0], objectiveComplete[0]);
         }
-
+        if(Services.MapManager.currentLevel.campaignLevelNum == 5 &&
+            !tutorialComplete && CompletionCheck())
+        {
+            
+            MoveToStep(tooltipInfos.Length - 3);
+        }
+        else
+        {
+            MoveToStep(tooltipInfos.Length - 1);
+        }
 
         TaskTree slideOutObjectives = new TaskTree(new EmptyTask(),
-                new TaskTree(new LevelSelectTextEntrance(objectivesPanel,true, true)));
+            new TaskTree(new LevelSelectTextEntrance(objectivesPanel, true, true)));
 
-        tm.Do(slideOutObjectives);
+        tm.Do(slideOutObjectives);    
     }
 
     public void ToggleObjectiveUI(bool show)

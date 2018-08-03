@@ -124,7 +124,7 @@ public class MenuOption : MenuObject
             string fileText = File.ReadAllText(GameOptionsSceneScript.progressFileName);
             int.TryParse(fileText, out progress);
         }
-        if (progress == 4)
+        if (progress == 5)
         {
             SetColor(Services.MenuManager.uiColorScheme[0]);
         }

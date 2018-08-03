@@ -7,20 +7,6 @@ using System.IO;
 
 
 /*
- *      Replace production level with production speed!
- * 
- *      
- *      Tutorial 3:
- *                  the introduction of 3 buildings in a row is too much info
- *                  
- *      Tutorial 4:
- *                  introduce the other 2 buildings
- *      
- *      Tutorial 5:
- *                  Upper left tech structure has no tooltip
- *                  Have a window that says tutorial complete
- *                  
- *                  At the end have it say "Modes unclocked Quick Play"
  *                  
  *                  
  *      Think of ways to gate the other modes...
