@@ -18,8 +18,7 @@ public class GameSceneScript : Scene<TransitionData>
     [SerializeField]
     private bool evolutionMode;
 
-    [SerializeField]
-    private Color _backgroundColor;
+    public Color backgroundColor;
 
     public bool gameStarted { get; private set; }
     public bool gamePaused { get; private set; }
@@ -106,9 +105,9 @@ public class GameSceneScript : Scene<TransitionData>
                 Services.UIManager.UIForSinglePlayer(false);
                 break;
             case TitleSceneScript.GameMode.HyperVS:
-                Services.UIManager.UIForSinglePlayer(false);
-                break;
             case TitleSceneScript.GameMode.HyperSOLO:
+                HyperModeManager.StartGame();
+                Services.UIManager.UIForSinglePlayer(false);
                 break;
             default:
 
@@ -132,7 +131,7 @@ public class GameSceneScript : Scene<TransitionData>
 
     internal override void OnExit()
     {
-        Services.GameManager.MainCamera.backgroundColor = _backgroundColor;
+        Services.GameManager.MainCamera.backgroundColor = backgroundColor;
         Time.timeScale = 1;
         Services.GameEventManager.Clear();
     }
@@ -145,10 +144,10 @@ public class GameSceneScript : Scene<TransitionData>
         {
             case TitleSceneScript.GameMode.HyperSOLO:
             case TitleSceneScript.GameMode.HyperVS:
-                Services.GameManager.MainCamera.backgroundColor = Color.Lerp( _backgroundColor, Color.black, _colorChangeTime);
+                HyperModeManager.Update();
                 break;
             default:
-                Services.GameManager.MainCamera.backgroundColor = Color.Lerp(Color.black, _backgroundColor, _colorChangeTime);
+                //Services.GameManager.MainCamera.backgroundColor = Color.Lerp(Color.black, backgroundColor, _colorChangeTime);
                 break;
         }
 
