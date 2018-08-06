@@ -137,6 +137,7 @@ public class AudioManager : MonoBehaviour {
 
     public void RegisterStartLevelMusic()
     {
+        _PopulateLevelMusic();
         Services.Clock.SyncFunction(_StartLevelMusic, Clock.BeatValue.Measure);
     }
 

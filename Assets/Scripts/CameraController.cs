@@ -41,13 +41,17 @@ public class CameraController : MonoBehaviour {
         if (shaking) Shake();	
 	}
 
-    public void StartShake(float dur, float speed, float magnitude)
+    public void StartShake(float dur, float speed, float magnitude, bool interrupt = false)
     {
-        currentSeed = Random.Range(0, 1000);
-        shaking = true;
-        shakeTime = dur;
-        shakeSpeed = speed;
-        shakeMag = magnitude;
+        if ((!shaking) || (interrupt))
+        {
+            transform.position = basePos;
+            currentSeed = Random.Range(0, 1000);
+            shaking = true;
+            shakeTime = dur;
+            shakeSpeed = speed;
+            shakeMag = magnitude;
+        }
     }
 
     void Shake()
@@ -64,6 +68,7 @@ public class CameraController : MonoBehaviour {
         {
             shaking = false;
             shakeTime = 0;
+            transform.position = basePos;
         }
     }
 
