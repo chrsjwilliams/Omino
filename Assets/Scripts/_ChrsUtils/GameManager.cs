@@ -226,7 +226,6 @@ public class GameManager : MonoBehaviour
             Services.Scenes.PushScene<TitleSceneScript>();
         }
 
-        //EnabledAllModes();
     }
 
     private void InitializeServices()
@@ -286,7 +285,6 @@ public class GameManager : MonoBehaviour
         SetDangerWeight(defaultDangerWeight);
 
         HandicapSystem.Init();
-        currentModeStatusData = defaultModeStatus;
         LoadModeStatusData();
     }
 
@@ -333,8 +331,7 @@ public class GameManager : MonoBehaviour
 
     public void SaveModeStatusData()
     {
-        bool[] temp = StringToBoolArray(currentModeStatusData);
-
+        Debug.Log("Saving");
         string filePath = Path.Combine(
             Application.persistentDataPath,
             modeStatusFileName);
@@ -416,7 +413,9 @@ public class GameManager : MonoBehaviour
         {
             unlockedModes[i] = true;
         }
+        currentModeStatusData = BoolArrayToString(unlockedModes);
         SetUnlockingData();
+        SaveModeStatusData();
     }
 
     public void SetNumPlayers(bool[] players)

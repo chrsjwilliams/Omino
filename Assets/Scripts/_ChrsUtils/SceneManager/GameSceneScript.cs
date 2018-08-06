@@ -152,11 +152,6 @@ public class GameSceneScript : Scene<TransitionData>
                 break;
         }
 
-        if(Input.GetKeyDown(KeyCode.Y))
-        {
-            Services.GameManager.UnlockMode(TitleSceneScript.GameMode.DungeonRun, true);
-        }
-
         tm.Update();
         if (gameInProgress) Services.GameData.secondsSinceMatchStarted += Time.deltaTime;
     }
