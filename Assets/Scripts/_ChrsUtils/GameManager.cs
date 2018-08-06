@@ -1,8 +1,11 @@
-﻿using UnityEngine.Assertions;
+﻿using System;
+using UnityEngine.Assertions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Beat;
 using Tinylytics;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class GameManager : MonoBehaviour
 {
@@ -24,6 +27,16 @@ public class GameManager : MonoBehaviour
 
     private bool[] humanPlayers;
 
+    public static string modeStatusFileName
+    {
+        get
+        {
+            return Application.persistentDataPath + Path.DirectorySeparatorChar +
+              "modestatus.txt";
+        }
+    }
+    private const string defaultModeStatus = "False, False, False, False, True";
+    private string currentModeStatusData;
     [SerializeField]
     private bool challengeModeEnabled;
     public bool ChallengeModeEnabled
@@ -213,7 +226,7 @@ public class GameManager : MonoBehaviour
             Services.Scenes.PushScene<TitleSceneScript>();
         }
 
-        EnabledAllModes();
+        //EnabledAllModes();
     }
 
     private void InitializeServices()
@@ -273,6 +286,119 @@ public class GameManager : MonoBehaviour
         SetDangerWeight(defaultDangerWeight);
 
         HandicapSystem.Init();
+        currentModeStatusData = defaultModeStatus;
+        LoadModeStatusData();
+    }
+
+    private void LoadModeStatusData()
+    {
+        string filePath = Path.Combine(
+            Application.persistentDataPath,
+            modeStatusFileName);
+        FileStream file;
+        BinaryFormatter bf = new BinaryFormatter();
+
+        if (File.Exists(filePath))
+        {
+            file = File.OpenRead(filePath);
+            try
+            {
+                string modeStatusDataString = (string)bf.Deserialize(file);
+                unlockedModes = StringToBoolArray(modeStatusDataString);
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Failed to deserialize. Reason: " + e.Message);
+                file.Dispose();
+                currentModeStatusData = defaultModeStatus;
+                SaveModeStatusData();
+                // throw;
+            }
+            finally
+            {
+                file.Close();
+            }
+        }
+        else
+        {
+            file = File.Create(filePath);
+            currentModeStatusData = defaultModeStatus;
+            unlockedModes = StringToBoolArray(currentModeStatusData);
+            SetUnlockingData();
+            bf.Serialize(file, currentModeStatusData);
+
+            file.Close();
+        }
+    }
+
+    public void SaveModeStatusData()
+    {
+        bool[] temp = StringToBoolArray(currentModeStatusData);
+
+        string filePath = Path.Combine(
+            Application.persistentDataPath,
+            modeStatusFileName);
+        FileStream file;
+        BinaryFormatter bf = new BinaryFormatter();
+
+        file = File.OpenWrite(filePath);
+        
+        bf.Serialize(file, currentModeStatusData);
+        file.Close();
+    }
+
+    public void UnlockMode(TitleSceneScript.GameMode mode, bool status)
+    {
+        switch (mode)
+        {
+            case TitleSceneScript.GameMode.Challenge:
+                unlockedModes[0] = status;
+                break;
+            case TitleSceneScript.GameMode.DungeonRun:
+                unlockedModes[1] = status;
+                break;
+            case TitleSceneScript.GameMode.HyperSOLO:
+            case TitleSceneScript.GameMode.HyperVS:
+                unlockedModes[2] = status;
+                break;
+            case TitleSceneScript.GameMode.Practice:
+                unlockedModes[3] = status;
+                break;
+            case TitleSceneScript.GameMode.TwoPlayers:
+                unlockedModes[4] = status;
+                break;
+            default:
+                break;
+        }
+
+        SetUnlockingData();
+
+        currentModeStatusData = BoolArrayToString(unlockedModes);
+        SaveModeStatusData();
+    }
+
+    private string BoolArrayToString(bool[] arr)
+    {
+        string value = "";
+        for(int i = 0; i < arr.Length; i++)
+        {
+            if (arr[i]) value += "True,";
+            else value += "False,";
+        }
+        return value.Remove(value.Length - 1);
+    }
+
+    private bool[] StringToBoolArray(string s)
+    {
+        string[] sArr = s.Split(',');
+        bool[] arr = new bool[sArr.Length];
+        for(int i = 0; i < arr.Length; i++)
+        {
+            if (sArr[i].Contains("True")) arr[i] = true;
+            else arr[i] = false;
+        }
+
+        return arr;
     }
 
     public void SetUnlockingData()
@@ -284,7 +410,7 @@ public class GameManager : MonoBehaviour
         versusModeEnabled = unlockedModes[4];
     }
 
-    public void EnabledAllModes()
+    public void UnlockAllModes()
     {
         for(int i = 0; i < unlockedModes.Length; i++)
         {
@@ -350,36 +476,6 @@ public class GameManager : MonoBehaviour
     public void SetHandicapValues(PlayerHandicap[] handicapValue_)
     {
         handicapValue = handicapValue_;
-    }
-
-    public void UnlockGameMode(TitleSceneScript.GameMode mode, bool status)
-    {
-        switch (mode)
-        {
-            case TitleSceneScript.GameMode.Elo:
-                challengeModeEnabled = status;
-                unlockedModes[0] = challengeModeEnabled;
-                break;
-            case TitleSceneScript.GameMode.DungeonRun:
-                dungeonRunModeEnabled = status;
-                unlockedModes[1] = dungeonRunModeEnabled;
-                break;
-            case TitleSceneScript.GameMode.HyperSOLO:
-            case TitleSceneScript.GameMode.HyperVS:
-                hyperModeEnabled = status;
-                unlockedModes[2] = hyperModeEnabled;
-                break;
-            case TitleSceneScript.GameMode.Practice:
-                practiceModeEnabled = status;
-                unlockedModes[3] = practiceModeEnabled;
-                break;
-            case TitleSceneScript.GameMode.TwoPlayers:
-                versusModeEnabled = status;
-                unlockedModes[4] = versusModeEnabled;
-                break;
-            default:
-                break;
-        }
     }
 
     public void InitPlayers(PlayerHandicap[] handicapValue)
@@ -663,6 +759,8 @@ public class GameManager : MonoBehaviour
         {
             InactivityCheck();
         }
+
+        if (Input.GetKeyDown(KeyCode.M)) UnlockAllModes();
     }
 
     public void Reset(Reset e)

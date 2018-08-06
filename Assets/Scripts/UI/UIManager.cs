@@ -305,7 +305,7 @@ public class UIManager : MonoBehaviour {
             pauseButton.SetActive(false);
         }
 
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo || 
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Challenge || 
             Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
         {
             
@@ -861,7 +861,7 @@ public class UIManager : MonoBehaviour {
     {
         switch (mode)
         {
-            case TitleSceneScript.GameMode.Elo:
+            case TitleSceneScript.GameMode.Challenge:
                 ToggleCompleteionMenu(eloUIManager.menu,
                                         true);
                 break;
@@ -884,7 +884,7 @@ public class UIManager : MonoBehaviour {
     {
         switch (Services.GameManager.mode)
         {
-            case TitleSceneScript.GameMode.Elo:
+            case TitleSceneScript.GameMode.Challenge:
                 ToggleCompleteionMenu(  eloUIManager.menu,
                                         true);
                 break;

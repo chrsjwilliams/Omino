@@ -46,7 +46,7 @@ public class GameSceneScript : Scene<TransitionData>
 
         switch (Services.GameManager.mode)
         {
-            case TitleSceneScript.GameMode.Elo:
+            case TitleSceneScript.GameMode.Challenge:
 
                 PlayerHandicap[] handicaps = new PlayerHandicap[2];
                 handicaps[0].SetEnergyHandicapLevel(1);
@@ -152,6 +152,11 @@ public class GameSceneScript : Scene<TransitionData>
                 break;
         }
 
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+            Services.GameManager.UnlockMode(TitleSceneScript.GameMode.DungeonRun, true);
+        }
+
         tm.Update();
         if (gameInProgress) Services.GameData.secondsSinceMatchStarted += Time.deltaTime;
     }
@@ -176,7 +181,7 @@ public class GameSceneScript : Scene<TransitionData>
 
         switch (Services.GameManager.mode)
         {
-            case TitleSceneScript.GameMode.Elo:
+            case TitleSceneScript.GameMode.Challenge:
 
                 if (winner is AIPlayer) ELOManager.OnGameLoss();
                 else ELOManager.OnGameWin();
@@ -210,13 +215,14 @@ public class GameSceneScript : Scene<TransitionData>
                         int.TryParse(fileText, out progress);
                     }
 
-                    if(progress == TutorialManager.TUTORIAL_COMPLETE_NUMBER)
-                    {
-                        Services.GameManager.UnlockGameMode(TitleSceneScript.GameMode.Practice, true);
-                        
-                    }
+                    
 
                     int levelBeaten = Services.GameManager.levelSelected.campaignLevelNum;
+                    if(levelBeaten == TutorialManager.TUTORIAL_COMPLETE_NUMBER && Services.TutorialManager.CompletionCheck())
+                    {
+                        Services.GameManager.UnlockMode(TitleSceneScript.GameMode.Practice, true);
+                        Services.GameManager.UnlockAllModes();
+                    }
                     if (levelBeaten > progress && Services.TutorialManager.CompletionCheck())
                     {
                         File.WriteAllText(GameOptionsSceneScript.progressFileName,
@@ -255,7 +261,7 @@ public class GameSceneScript : Scene<TransitionData>
     {
         Services.Analytics.MatchEnded();
 
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo &&
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Challenge &&
             !Services.GameScene.gameOver)
         {
             ELOManager.OnGameLoss();
@@ -300,7 +306,7 @@ public class GameSceneScript : Scene<TransitionData>
             case TitleSceneScript.GameMode.Tutorial:
                 Services.Scenes.Swap<TutorialLevelSceneScript>();
                 break;
-            case TitleSceneScript.GameMode.Elo:
+            case TitleSceneScript.GameMode.Challenge:
                 Services.Scenes.Swap<EloSceneScript>();
                 break;
             case TitleSceneScript.GameMode.DungeonRun:

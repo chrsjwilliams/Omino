@@ -271,7 +271,7 @@ namespace Tinylytics{
 						total_matches = analyticsData.dungeonRunTotalMatches;
 						matchTypeToIncreaseTime = "DUNGEON RUN";
 						break;
-					case (TitleSceneScript.GameMode.Elo):
+					case (TitleSceneScript.GameMode.Challenge):
 						analyticsData.eloPlaytime += time_played;
 						total_time_played = analyticsData.eloPlaytime;
 						analyticsData.eloTotalMatches++;

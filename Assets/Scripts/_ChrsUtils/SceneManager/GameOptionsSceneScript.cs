@@ -166,7 +166,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             case TitleSceneScript.GameMode.DungeonRun:
                 StartDungeonRunMode();
                 break;
-            case TitleSceneScript.GameMode.Elo:
+            case TitleSceneScript.GameMode.Challenge:
                 StartEloMode();
                 break;
             default:
@@ -611,7 +611,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
         optionsMenuActive = !optionsMenuActive;
        // optionButtonParent.SetActive(false);
         levelButtonParent.SetActive(false);
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Challenge)
         {
             eloUI.gameObject.SetActive(!optionsMenuActive);
         }
@@ -649,7 +649,7 @@ public class GameOptionsSceneScript : Scene<TransitionData>
 			} else {
 				SlideOutOptionsButton (false);
 			}
-			if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
+			if (Services.GameManager.mode == TitleSceneScript.GameMode.Challenge)
 			{
 				eloUI.gameObject.SetActive(true);
 			}

@@ -62,7 +62,7 @@ public class MapManager : MonoBehaviour
 
     public void GenerateMap()
     {
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Elo)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Challenge)
         {
             Level level = eloLevelPool[Random.Range(0, eloLevelPool.Length)];
             Services.GameManager.SetCurrentLevel(level);

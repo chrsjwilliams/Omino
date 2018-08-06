@@ -28,7 +28,7 @@ public class TitleSceneScript : Scene<TransitionData>
     [SerializeField]
     private MenuManager menuManager;
 
-    public enum GameMode { NONE, TwoPlayers, Practice, Demo, Tutorial, DungeonRun, Elo, HyperSOLO, HyperVS }
+    public enum GameMode { NONE, TwoPlayers, Practice, Demo, Tutorial, DungeonRun, Challenge, HyperSOLO, HyperVS }
 
     private const float SECONDS_TO_WAIT = 0.01f;
 
@@ -141,7 +141,7 @@ public class TitleSceneScript : Scene<TransitionData>
                     Services.Scenes.PushScene<DungeonRunSceneScript>();
                 }
                 break;
-            case GameMode.Elo:
+            case GameMode.Challenge:
                 Services.Scenes.PushScene<EloSceneScript>();
                 break;
             case GameMode.NONE:
@@ -210,7 +210,7 @@ public class TitleSceneScript : Scene<TransitionData>
     {
         //Services.GameManager.mode = GameMode.Elo;
         //Services.Scenes.PushScene<EloSceneScript>();
-        StartGame(GameMode.Elo);
+        StartGame(GameMode.Challenge);
     }
 
     private void ChangeScene()

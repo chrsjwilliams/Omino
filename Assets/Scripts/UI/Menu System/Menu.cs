@@ -78,7 +78,7 @@ public class Menu : MonoBehaviour
                 TitleSceneScript.GameMode mode = ((MenuOption)menuObj).modeToLoad;
                 switch (mode)
                 {
-                    case TitleSceneScript.GameMode.Elo:
+                    case TitleSceneScript.GameMode.Challenge:
                         menuObj.Show((i - (menuObjects.Length / 2f) + 0.5f)
                                         * Services.MenuManager.buttonSpacing * Vector2.up,
                                     (menuObjects.Length - 1 - i) * slideStaggerTime,
