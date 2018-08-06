@@ -27,6 +27,12 @@ public class MenuManager : MonoBehaviour
         ProcessMenuPopQueue();
     }
 
+    public void OnReload()
+    {
+        Menu menuLoaded = menuStack.Peek();
+        menuLoaded.Show();
+    }
+
     public void Init()
     {
         Services.MenuManager = this;

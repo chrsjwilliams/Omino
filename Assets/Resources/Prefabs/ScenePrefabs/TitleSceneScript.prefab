@@ -1294,7 +1294,7 @@ MonoBehaviour:
   modeToLoad: 0
   buttonText: SOUND FX
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114008274788771538
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1543,24 +1543,13 @@ MonoBehaviour:
   menuToLoad: {fileID: 0}
   actionToPerform:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114132033372597222}
-        m_MethodName: PlayDungeonRunMode
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   modeToLoad: 5
   buttonText: DUNGEON RUN
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114027084460511192
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2056,24 +2045,13 @@ MonoBehaviour:
   menuToLoad: {fileID: 0}
   actionToPerform:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114132033372597222}
-        m_MethodName: PlayPractice
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   modeToLoad: 2
   buttonText: PRACTICE
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114199473451421112
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2238,7 +2216,7 @@ MonoBehaviour:
   modeToLoad: 0
   buttonText: OPTIONS
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114300213383926080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2455,7 +2433,7 @@ MonoBehaviour:
   modeToLoad: 4
   buttonText: TUTORIAL
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114364957816343142
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2638,7 +2616,7 @@ MonoBehaviour:
   modeToLoad: 0
   buttonText: PLAY
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114448944845383464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2752,7 +2730,7 @@ MonoBehaviour:
   modeToLoad: 0
   buttonText: Blueprint Assist
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114469512395281096
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2875,7 +2853,7 @@ MonoBehaviour:
   modeToLoad: 0
   buttonText: MUSIC
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114500324703482944
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2902,7 +2880,7 @@ MonoBehaviour:
   modeToLoad: 1
   buttonText: LOCAL
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114515755032485324
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3019,7 +2997,7 @@ MonoBehaviour:
   modeToLoad: 0
   buttonText: SOLO
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114587405086292860
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3040,24 +3018,13 @@ MonoBehaviour:
   menuToLoad: {fileID: 0}
   actionToPerform:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114132033372597222}
-        m_MethodName: PlayHyperModeVS
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   modeToLoad: 8
   buttonText: HYPER LOCAL
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114627943368807772
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3411,7 +3378,7 @@ MonoBehaviour:
   modeToLoad: 0
   buttonText: VERSUS
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114675516941889190
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3544,24 +3511,13 @@ MonoBehaviour:
   menuToLoad: {fileID: 0}
   actionToPerform:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114132033372597222}
-        m_MethodName: PlayChallengeMode
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   modeToLoad: 6
   buttonText: CHALLENGE
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114733098595776802
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4337,24 +4293,13 @@ MonoBehaviour:
   menuToLoad: {fileID: 0}
   actionToPerform:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114132033372597222}
-        m_MethodName: PlayHyperModeSOLO
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   modeToLoad: 7
   buttonText: HYPER SOLO
   toggled: 0
-  isLocked: 0
+  unlocked: 0
 --- !u!114 &114948225977172214
 MonoBehaviour:
   m_ObjectHideFlags: 1

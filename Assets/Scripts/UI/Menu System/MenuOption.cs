@@ -17,52 +17,28 @@ public class MenuOption : MenuObject
     [HideInInspector]
     public bool toggled;
     public bool unlocked;
-    private bool loaded = false;
 
     // Update is called once per frame
     void Update()
     {
-        if (loaded)
-        {
-            if (unlocked)
-            {
-                associatedObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(false);
-                associatedObject.GetComponent<Button>().enabled = true;
-            }
-            else
-            {
-                associatedObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(true);
-                associatedObject.GetComponent<Button>().enabled = false;
-            }
-        }
+
     }
 
     public override void Load()
     {
-        loaded = true;
         objectPrefabToSpawn = Services.MenuManager.buttonPrefab;
         base.Load();
         uiText = associatedObject.GetComponentInChildren<TextMeshProUGUI>();
         uiText.text = buttonText;
         Button buttonComponent = associatedObject.GetComponent<Button>();
         buttonComponent.onClick.AddListener(OnPress);
-        onLoadActions.Invoke();
     }
 
     public override void Show(Vector2 pos, float delay, bool status = true)
     {
-        unlocked = status;
-        if (unlocked)
-        {
-            associatedObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(false);
-            associatedObject.GetComponent<Button>().enabled = true;      
-        }
-        else
-        {
-            associatedObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(true);
-            associatedObject.GetComponent<Button>().enabled = false;
-        }
-        base.Show(pos, delay);
+        base.Show(pos, delay, status);
+        SetLockStatus();
+        onLoadActions.Invoke();
     }
 
     public override void Hide(float delay)
@@ -157,6 +133,28 @@ public class MenuOption : MenuObject
         else
         {
             SetColor(Services.MenuManager.uiColorScheme[1]);
+        }
+    }
+
+    private void SetLockStatus()
+    {
+        unlocked = true;
+        if (modeToLoad != TitleSceneScript.GameMode.NONE)
+        {
+            if (!Services.GameManager.modeUnlockStatuses.TryGetValue(modeToLoad, out unlocked))
+            {
+                unlocked = true;
+            }
+        }
+        if (unlocked)
+        {
+            associatedObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(false);
+            associatedObject.GetComponent<Button>().enabled = true;
+        }
+        else
+        {
+            associatedObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(true);
+            associatedObject.GetComponent<Button>().enabled = false;
         }
     }
 }

@@ -6,6 +6,7 @@ using Beat;
 using Tinylytics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -35,6 +36,8 @@ public class GameManager : MonoBehaviour
               "modestatus.txt";
         }
     }
+
+    public Dictionary<TitleSceneScript.GameMode, bool> modeUnlockStatuses { get; private set; }
     private const string defaultModeStatus = "False, False, False, False, True";
     private string currentModeStatusData;
     [SerializeField]
@@ -302,13 +305,15 @@ public class GameManager : MonoBehaviour
             try
             {
                 string modeStatusDataString = (string)bf.Deserialize(file);
-                unlockedModes = StringToBoolArray(modeStatusDataString);
+                //unlockedModes = StringToBoolArray(modeStatusDataString);
+                modeUnlockStatuses = ParseModeDictString(modeStatusDataString);
             }
             catch (Exception e)
             {
                 Debug.Log("Failed to deserialize. Reason: " + e.Message);
                 file.Dispose();
-                currentModeStatusData = defaultModeStatus;
+                //currentModeStatusData = defaultModeStatus;
+                modeUnlockStatuses = DefaultUnlockStatus();
                 SaveModeStatusData();
                 // throw;
             }
@@ -320,10 +325,12 @@ public class GameManager : MonoBehaviour
         else
         {
             file = File.Create(filePath);
-            currentModeStatusData = defaultModeStatus;
-            unlockedModes = StringToBoolArray(currentModeStatusData);
-            SetUnlockingData();
-            bf.Serialize(file, currentModeStatusData);
+            //currentModeStatusData = defaultModeStatus;
+            //unlockedModes = StringToBoolArray(currentModeStatusData);
+            //SetUnlockingData();
+            modeUnlockStatuses = DefaultUnlockStatus();
+            //bf.Serialize(file, currentModeStatusData);
+            bf.Serialize(file, ModeDictToString(modeUnlockStatuses));
 
             file.Close();
         }
@@ -338,39 +345,72 @@ public class GameManager : MonoBehaviour
         BinaryFormatter bf = new BinaryFormatter();
 
         file = File.OpenWrite(filePath);
-        
-        bf.Serialize(file, currentModeStatusData);
+
+        //bf.Serialize(file, currentModeStatusData);
+        bf.Serialize(file, ModeDictToString(modeUnlockStatuses));
         file.Close();
     }
 
     public void UnlockMode(TitleSceneScript.GameMode mode, bool status)
     {
-        switch (mode)
-        {
-            case TitleSceneScript.GameMode.Challenge:
-                unlockedModes[0] = status;
-                break;
-            case TitleSceneScript.GameMode.DungeonRun:
-                unlockedModes[1] = status;
-                break;
-            case TitleSceneScript.GameMode.HyperSOLO:
-            case TitleSceneScript.GameMode.HyperVS:
-                unlockedModes[2] = status;
-                break;
-            case TitleSceneScript.GameMode.Practice:
-                unlockedModes[3] = status;
-                break;
-            case TitleSceneScript.GameMode.TwoPlayers:
-                unlockedModes[4] = status;
-                break;
-            default:
-                break;
-        }
+        //switch (mode)
+        //{
+        //    case TitleSceneScript.GameMode.Challenge:
+        //        unlockedModes[0] = status;
+        //        break;
+        //    case TitleSceneScript.GameMode.DungeonRun:
+        //        unlockedModes[1] = status;
+        //        break;
+        //    case TitleSceneScript.GameMode.HyperSOLO:
+        //    case TitleSceneScript.GameMode.HyperVS:
+        //        unlockedModes[2] = status;
+        //        break;
+        //    case TitleSceneScript.GameMode.Practice:
+        //        unlockedModes[3] = status;
+        //        break;
+        //    case TitleSceneScript.GameMode.TwoPlayers:
+        //        unlockedModes[4] = status;
+        //        break;
+        //    default:
+        //        break;
+        //}
 
-        SetUnlockingData();
+        //SetUnlockingData();
 
-        currentModeStatusData = BoolArrayToString(unlockedModes);
+        //currentModeStatusData = BoolArrayToString(unlockedModes);
+        modeUnlockStatuses[mode] = status;
         SaveModeStatusData();
+    }
+
+    private string ModeDictToString(Dictionary<TitleSceneScript.GameMode, bool> unlockStatusDict)
+    {
+        string stringVal = "";
+        foreach(KeyValuePair<TitleSceneScript.GameMode, bool> kvPair in unlockStatusDict)
+        {
+            stringVal += (int)kvPair.Key + ":" + Convert.ToInt32(kvPair.Value)+",";
+        }
+        return stringVal;
+    }
+
+    private Dictionary<TitleSceneScript.GameMode, bool> ParseModeDictString(string modeDictString)
+    {
+        Dictionary<TitleSceneScript.GameMode, bool> dict = new Dictionary<TitleSceneScript.GameMode, bool>();
+        string[] splitStr = modeDictString.Split(',');
+        foreach(string substr in splitStr)
+        {
+            string[] splitSubstr = substr.Split(':');
+            int modeVal = 0;
+            int unlockVal = 1;
+            if(int.TryParse(splitSubstr[0], out modeVal) && int.TryParse(splitSubstr[1], out unlockVal))
+            {
+                dict.Add((TitleSceneScript.GameMode)modeVal, unlockVal != 0);
+            }
+        }
+        foreach(TitleSceneScript.GameMode mode in TitleSceneScript.unlockableModes)
+        {
+            if (!dict.ContainsKey(mode)) dict.Add(mode, false);
+        }
+        return dict;
     }
 
     private string BoolArrayToString(bool[] arr)
@@ -406,24 +446,40 @@ public class GameManager : MonoBehaviour
         versusModeEnabled = unlockedModes[4];
     }
 
+    private Dictionary<TitleSceneScript.GameMode, bool> DefaultUnlockStatus()
+    {
+        Dictionary<TitleSceneScript.GameMode, bool> dict = new Dictionary<TitleSceneScript.GameMode, bool>();
+        foreach(TitleSceneScript.GameMode mode in TitleSceneScript.unlockableModes)
+        {
+            dict.Add(mode, false);
+        }
+        return dict;
+    }
+
     public void UnlockAllModes()
     {
-        for(int i = 0; i < unlockedModes.Length; i++)
+        //for(int i = 0; i < unlockedModes.Length; i++)
+        //{
+        //    unlockedModes[i] = true;
+        //}
+        //currentModeStatusData = BoolArrayToString(unlockedModes);
+        //SetUnlockingData();
+        List<TitleSceneScript.GameMode> modes = 
+            new List<TitleSceneScript.GameMode>(modeUnlockStatuses.Keys);
+        foreach(TitleSceneScript.GameMode mode in modes)
         {
-            unlockedModes[i] = true;
+            modeUnlockStatuses[mode] = true;
         }
-        currentModeStatusData = BoolArrayToString(unlockedModes);
-        SetUnlockingData();
         SaveModeStatusData();
     }
 
     public void ModeUnlockReset()
     {
-        UnlockMode(TitleSceneScript.GameMode.Challenge, false);
-        UnlockMode(TitleSceneScript.GameMode.DungeonRun, false);
-        UnlockMode(TitleSceneScript.GameMode.HyperSOLO, false);
-        UnlockMode(TitleSceneScript.GameMode.Practice, false);
-
+        //UnlockMode(TitleSceneScript.GameMode.Challenge, false);
+        //UnlockMode(TitleSceneScript.GameMode.DungeonRun, false);
+        //UnlockMode(TitleSceneScript.GameMode.HyperSOLO, false);
+        //UnlockMode(TitleSceneScript.GameMode.Practice, false);
+        modeUnlockStatuses = DefaultUnlockStatus();
     }
 
     public void SetNumPlayers(bool[] players)

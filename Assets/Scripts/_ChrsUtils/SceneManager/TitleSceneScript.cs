@@ -30,6 +30,10 @@ public class TitleSceneScript : Scene<TransitionData>
 
     public enum GameMode { NONE, TwoPlayers, Practice, Demo, Tutorial, DungeonRun, Challenge, HyperSOLO, HyperVS }
 
+    public static GameMode[] unlockableModes = new GameMode[] {
+        GameMode.Challenge, GameMode.DungeonRun, GameMode.HyperSOLO,
+        GameMode.HyperVS, GameMode.Practice };
+
     private const float SECONDS_TO_WAIT = 0.01f;
 
     private TaskManager _tm = new TaskManager();
@@ -103,6 +107,7 @@ public class TitleSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+        menuManager.OnReload();
     }
 
     internal override void OnExit()
