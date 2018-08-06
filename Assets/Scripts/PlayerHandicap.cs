@@ -29,4 +29,11 @@ public struct PlayerHandicap
     {
         hammerProduction = handicap;
     }
+
+    public override string ToString()
+    {
+        return "Energy Production: " + enegryProduction + " | " +
+                "Piece Producution: " + pieceProduction + " | " +
+                "Hammer Production: " + hammerProduction;
+    }
 }

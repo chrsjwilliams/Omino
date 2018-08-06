@@ -15,7 +15,7 @@ public static class DungeonRunManager
     private const int MAX_TECH_INVENTORY = MAX_DUNGEON_CHALLENGES - 1;
     public const float MIN_HANDICAP_LEVEL = 0.85f;
     public const float MAX_ENERGY_HANDICAP = 1.3f;
-    private const float handicapIncrement = 0.2f;
+    private const float handicapIncrement = 0.1f;
     private const string fileName = "dungeonRunData";
     
 
@@ -33,7 +33,6 @@ public static class DungeonRunManager
             fileName);
         FileStream file;
         BinaryFormatter bf = new BinaryFormatter();
-
         if (File.Exists(filePath))
         {
             file = File.OpenRead(filePath);
@@ -62,7 +61,6 @@ public static class DungeonRunManager
             
             file.Close();
         }
-
     }
 
     private static void SaveData()
@@ -310,9 +308,12 @@ public class DungeonRunData
         currentTech = new List<BuildingType>();
         techChoices = new List<BuildingType>();
         challengeNum = 1;
-        handicapLevel = new PlayerHandicap( DungeonRunManager.MIN_HANDICAP_LEVEL,
-                                            DungeonRunManager.MIN_HANDICAP_LEVEL,
-                                            DungeonRunManager.MIN_HANDICAP_LEVEL);
+
+        float minHandicapUsingEloData = (1 + ELOManager.eloData.handicapLevel) - 0.1f;
+        float dungeonRunMinHandicap = Mathf.Max(DungeonRunManager.MIN_HANDICAP_LEVEL, minHandicapUsingEloData);
+        handicapLevel = new PlayerHandicap( dungeonRunMinHandicap,
+                                            dungeonRunMinHandicap,
+                                            dungeonRunMinHandicap);
         selectingNewTech = false;
         completedRun = false;
     }
