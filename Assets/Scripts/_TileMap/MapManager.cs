@@ -371,6 +371,16 @@ public class MapManager : MonoBehaviour
         return _map[Random.Range(0, MapWidth), Random.Range(0, MapHeight)];
     }
 
+    public Tile GetTile(int i, int j)
+    {
+        if (((i < MapWidth) && (j < MapHeight)) && (i >= 0) && (j >= 0))
+        {
+            return _map[i, j];
+        }
+
+        return null;
+    }
+
     public Tile GetRandomEmptyTile()
     {
         Tile randomTile = GetRandomTile();

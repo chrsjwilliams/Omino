@@ -20,6 +20,15 @@ public class BlueprintPlacementTask : BuildingDropAnimation
     protected override void OnSuccess()
     {
         base.OnSuccess();
+        
+        switch (Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.HyperSOLO:
+            case TitleSceneScript.GameMode.HyperVS:
+                Services.CameraController.StartShake(Services.Clock.EighthLength(), 20f, 5.0f, true);
+                break;
+        }
+        
         foreach (Tile tile in building.tiles)
         {
             tile.mainSr.enabled = false;

@@ -383,6 +383,11 @@ public class Tile : MonoBehaviour, IVertex
         {
             bpAssistHighlightSr.gameObject.SetActive(true);
         }
-        bpAssistHighlightSr.color = new Color(bpAssistColor.r, bpAssistColor.g, bpAssistColor.b, alpha);
+        bpAssistHighlightSr.color = new Color(bpAssistHighlightSr.color.r, bpAssistHighlightSr.color.g, bpAssistHighlightSr.color.b, alpha);
+    }
+
+    public void SetBpAssistColor(Color color)
+    {
+        bpAssistHighlightSr.color = color;
     }
 }
