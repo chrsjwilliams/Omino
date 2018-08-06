@@ -180,12 +180,14 @@ public class TutorialLevelSceneScript : Scene<TransitionData>
     public void UnlockAllLevels()
     {
         SetLevelProgress(5);
+        Services.GameManager.UnlockAllModes();
         File.WriteAllText(GameOptionsSceneScript.progressFileName, "5");
     }
 
     public void LockAllLevels()
     {
         SetLevelProgress(0);
+        Services.GameManager.ModeUnlockReset();
         File.WriteAllText(GameOptionsSceneScript.progressFileName, "0");
     }
 

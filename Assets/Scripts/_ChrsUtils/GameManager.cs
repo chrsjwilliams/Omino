@@ -331,7 +331,6 @@ public class GameManager : MonoBehaviour
 
     public void SaveModeStatusData()
     {
-        Debug.Log("Saving");
         string filePath = Path.Combine(
             Application.persistentDataPath,
             modeStatusFileName);
@@ -416,6 +415,15 @@ public class GameManager : MonoBehaviour
         currentModeStatusData = BoolArrayToString(unlockedModes);
         SetUnlockingData();
         SaveModeStatusData();
+    }
+
+    public void ModeUnlockReset()
+    {
+        UnlockMode(TitleSceneScript.GameMode.Challenge, false);
+        UnlockMode(TitleSceneScript.GameMode.DungeonRun, false);
+        UnlockMode(TitleSceneScript.GameMode.HyperSOLO, false);
+        UnlockMode(TitleSceneScript.GameMode.Practice, false);
+
     }
 
     public void SetNumPlayers(bool[] players)

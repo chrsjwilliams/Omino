@@ -17,20 +17,29 @@ public class MenuOption : MenuObject
     [HideInInspector]
     public bool toggled;
     public bool unlocked;
+    private bool loaded = false;
 
     // Update is called once per frame
     void Update()
     {
-        if (unlocked)
+        if (loaded)
         {
-            associatedObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(false);
-            associatedObject.GetComponent<Button>().enabled = true;
+            if (unlocked)
+            {
+                associatedObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(false);
+                associatedObject.GetComponent<Button>().enabled = true;
+            }
+            else
+            {
+                associatedObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(true);
+                associatedObject.GetComponent<Button>().enabled = false;
+            }
         }
     }
 
     public override void Load()
     {
-        
+        loaded = true;
         objectPrefabToSpawn = Services.MenuManager.buttonPrefab;
         base.Load();
         uiText = associatedObject.GetComponentInChildren<TextMeshProUGUI>();
