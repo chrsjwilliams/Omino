@@ -253,9 +253,6 @@ public class GameManager : MonoBehaviour
         Services.Clock.Init(levelBPM);
 
         Services.Analytics = AnalyticsManager.Instance;
-
-        gameObject.AddComponent<ClipSwitcher>();
-
     }
 
     public void SetCurrentLevel(Level level)

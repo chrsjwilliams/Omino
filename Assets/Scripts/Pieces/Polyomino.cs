@@ -621,6 +621,15 @@ public class Polyomino : IVertex
         //    }
         //}
         owner.OnPiecePlaced(this, monominos);
+
+        switch (Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.HyperSOLO:
+            case TitleSceneScript.GameMode.HyperVS:
+                Services.CameraController.StartShake(Services.Clock.EighthLength(), 80f, 20.0f, true);
+                break;
+        }
+
         Services.AudioManager.RegisterSoundEffect(Services.Clips.PiecePlaced, 0.5f);
         List<Polyomino> shortestPath = AStarSearch.ShortestPath(
             owner.mainBase, distanceLevels[lastDistanceLevelIndex][0]);

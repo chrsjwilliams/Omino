@@ -106,6 +106,16 @@ public class GameSceneScript : Scene<TransitionData>
                 break;
             case TitleSceneScript.GameMode.HyperVS:
             case TitleSceneScript.GameMode.HyperSOLO:
+                handicaps = new PlayerHandicap[2];
+                handicaps[0].SetEnergyHandicapLevel(2.5f);
+                handicaps[0].SetHammerHandicapLevel(2.5f);
+                handicaps[0].SetPieceHandicapLevel(2.5f);
+                handicaps[1].SetEnergyHandicapLevel(2.5f);
+                handicaps[1].SetHammerHandicapLevel(2.5f);
+                handicaps[1].SetPieceHandicapLevel(2.5f);
+                
+                Services.GameManager.SetHandicapValues(handicaps);
+                
                 HyperModeManager.StartGame();
                 Services.UIManager.UIForSinglePlayer(false);
                 break;
@@ -134,6 +144,16 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GameManager.MainCamera.backgroundColor = backgroundColor;
         Time.timeScale = 1;
         Services.GameEventManager.Clear();
+        
+        switch (Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.HyperSOLO:
+            case TitleSceneScript.GameMode.HyperVS:
+                HyperModeManager.Exit();
+                break;
+            default:
+                break;
+        }
     }
 
 	// Update is called once per frame
@@ -147,7 +167,6 @@ public class GameSceneScript : Scene<TransitionData>
                 HyperModeManager.Update();
                 break;
             default:
-                //Services.GameManager.MainCamera.backgroundColor = Color.Lerp(Color.black, backgroundColor, _colorChangeTime);
                 break;
         }
 

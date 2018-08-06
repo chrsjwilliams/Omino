@@ -11,6 +11,10 @@ public static class HyperModeManager
 	// Use this for initialization
 	public static void StartGame()
 	{
+		Services.Clips = Resources.Load<ClipLibrary>("Audio/HyperLibrary");
+		Services.Clock.SetBPM(110);
+		Services.AudioManager.RegisterStartLevelMusic();
+		
 		_InitializeTasks();
 		Services.GameManager.MainCamera.backgroundColor =
 			Color.Lerp(Color.black, Services.GameScene.backgroundColor,
@@ -23,6 +27,13 @@ public static class HyperModeManager
 		_tm.Update();
 	}
 
+	public static void Exit()
+	{
+		Services.Clips = Resources.Load<ClipLibrary>("Audio/ClipLibrary");
+		Services.Clock.SetBPM(110);
+		Services.AudioManager.RegisterStartLevelMusic();
+	}
+
 	private static void _InitializeTasks()
 	{
 		_tm = new TaskManager();
@@ -33,12 +44,16 @@ public static class HyperModeManager
 	{
 		Services.Clock.SyncFunction(() =>
 		{
-			Pulse pulsar = new Pulse(Services.Clock.QuarterLength() / 2);
+			TaskTree beatTasks =
+				new TaskTree(new EmptyTask(),
+					new TaskTree(
+						new Pulse(Services.Clock.EighthLength())), new TaskTree(new Shake(Services.Clock.EighthLength())));
+			
 			ActionTask redo = new ActionTask(OngoingTasks);
 
-			pulsar.Then(redo);
+			beatTasks.Then(redo);
 			
-			_tm.Do(pulsar);
+			_tm.Do(beatTasks);
 		}, Clock.BeatValue.Quarter);
 	}
 }
@@ -46,7 +61,7 @@ public static class HyperModeManager
 public class Pulse : Task
 {
 	private Color pulse1 = new Color(0.28f, 0.28f, 0.28f);
-	private Color pulse2 = new Color(0.1f, 0.1f , 0.1f);
+	private Color pulse2 = new Color(0.15f, 0.15f , 0.15f);
 	private float timeElapsed = 0;
 	private float duration;
 
@@ -68,8 +83,23 @@ public class Pulse : Task
 
 		if (timeElapsed >= duration) SetStatus(TaskStatus.Success);
 	}
-
-
-
-
 }
+
+public class Shake : Task
+{
+	private float shakeDur, shakeMag, shakeSpeed;
+
+	public Shake(float duration, float magnitude = 0.2f, float speed = 40.0f)
+	{
+		shakeDur = duration;
+		shakeMag = magnitude;
+		shakeSpeed = speed;
+	}
+
+	protected override void Init()
+	{
+		Services.CameraController.StartShake(shakeDur, shakeSpeed, shakeMag);
+		SetStatus(TaskStatus.Success);
+	}
+}
+
