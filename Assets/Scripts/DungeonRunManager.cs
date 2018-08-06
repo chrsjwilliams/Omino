@@ -15,7 +15,7 @@ public static class DungeonRunManager
     private const int MAX_TECH_INVENTORY = MAX_DUNGEON_CHALLENGES - 1;
     public const float MIN_HANDICAP_LEVEL = 0.85f;
     public const float MAX_ENERGY_HANDICAP = 1.3f;
-    private const float handicapIncrement = 0.1f;
+    private const float handicapIncrement = 0.15f;
     private const string fileName = "dungeonRunData";
     
 
@@ -309,8 +309,8 @@ public class DungeonRunData
         techChoices = new List<BuildingType>();
         challengeNum = 1;
 
-        float minHandicapUsingEloData = (1 + ELOManager.eloData.handicapLevel) - 0.1f;
-        float dungeonRunMinHandicap = Mathf.Max(DungeonRunManager.MIN_HANDICAP_LEVEL, minHandicapUsingEloData);
+        //float minHandicapUsingEloData = (1 + ELOManager.eloData.handicapLevel) - 0.1f;
+        float dungeonRunMinHandicap = Mathf.Max(DungeonRunManager.MIN_HANDICAP_LEVEL, 0);
         handicapLevel = new PlayerHandicap( dungeonRunMinHandicap,
                                             dungeonRunMinHandicap,
                                             dungeonRunMinHandicap);
