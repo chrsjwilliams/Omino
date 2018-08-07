@@ -143,7 +143,8 @@ public static class HyperModeManager
 					disco = new DiscoRandom();
 					break;
 			}
-			
+
+			disco = new DiscoWindmill();
 			ActionTask continue_disco = new ActionTask(ContinueDisco);
 			disco.Then(continue_disco);
 			
@@ -298,8 +299,9 @@ public class DiscoCheckers : DiscoFloor
 	private int num_switches = 0;
 	private Color color1, color2;
 	private TaskManager _colorSwitcher;
+	private int[,] grid;
 	
-	private int[,] grid =
+	/*private int[,] grid =
 	{
 		{0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1},
 		{0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1},
@@ -321,10 +323,14 @@ public class DiscoCheckers : DiscoFloor
 		{0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1},
 		{1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0},
 		{1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0},
-	};
+	}; */
 
 	public DiscoCheckers()
 	{
+		bool double_wide = ((Services.MapManager.MapHeight % 2 == 0) && (Services.MapManager.MapWidth % 2 == 0));
+	
+		_EstablishGrid(double_wide);
+		
 		_colorSwitcher = new TaskManager();
 		
 		switch (UnityEngine.Random.Range(0, 4))
@@ -370,6 +376,35 @@ public class DiscoCheckers : DiscoFloor
 		if (num_switches >= 4) SetStatus(TaskStatus.Success);
 	}
 
+	private void _EstablishGrid(bool double_wide = true)
+	{
+		grid = new int[Services.MapManager.MapWidth, Services.MapManager.MapHeight];
+		
+		if (double_wide) {
+			for (int i = 0; i < Services.MapManager.MapWidth; i += 2)
+			{
+				for (int j = 0; j < Services.MapManager.MapHeight; j +=2)
+				{
+					int to_set = ((j / 2) + (i / 2) % 2) % 2;
+					grid[i, j] = to_set;
+					grid[i + 1, j] = to_set;
+					grid[i, j + 1] = to_set;
+					grid[i + 1, j + 1] = to_set;
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < Services.MapManager.MapWidth; i++)
+			{
+				for (int j = 0; j < Services.MapManager.MapHeight; j++)
+				{
+					grid[i, j] = (j + (i % 2)) % 2;
+				}
+			}
+		}
+	}
+	
 	private void _SetColors()
 	{
 		num_switches++;
@@ -398,8 +433,8 @@ public class DiscoStripes : DiscoFloor
 	private Color color1, color2, color3, color4;
 	private TaskManager _colorSwitcher;
 
-	private readonly int[,] grid;
-	private readonly int[,] gridLR =
+	private int[,] grid;
+	/*private readonly int[,] gridLR =
 	{
 		{0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3},
 		{3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2},
@@ -444,14 +479,13 @@ public class DiscoStripes : DiscoFloor
 		{1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0},
 		{2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1},
 		{3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2},
-	};
+	}; */
 
 	public DiscoStripes()
 	{
 		_colorSwitcher = new TaskManager();
 
-		grid = UnityEngine.Random.Range(0, 2) % 2 == 0 ? gridLR : gridRL;
-
+		_EstablishGrid();
 		
 		int offset = UnityEngine.Random.Range(0, 4);
 
@@ -508,6 +542,39 @@ public class DiscoStripes : DiscoFloor
 			}
 		}
 	}
+
+	private void _EstablishGrid()
+	{
+		bool pointing_left = (UnityEngine.Random.Range(0, 2) == 0);
+
+		int num_colors = 2;
+
+		if ((Services.MapManager.MapWidth % 4 == 0) && (Services.MapManager.MapHeight % 4 == 0))
+		{
+			num_colors = 4;
+		}
+		else if ((Services.MapManager.MapWidth % 3 == 0) && (Services.MapManager.MapHeight % 3 == 0))
+		{
+			num_colors = 3;
+		}
+		else
+		{
+			num_colors = 2;
+		}
+		
+		grid = new int[Services.MapManager.MapWidth,Services.MapManager.MapHeight];
+
+		for (int i = 0; i < Services.MapManager.MapWidth; i++)
+		{
+			for (int j = 0; j < Services.MapManager.MapHeight; j++)
+			{
+				if (pointing_left)
+					grid[i, j] = (i + (j % num_colors)) % num_colors;
+				else
+					grid[i, j] = (i - (j % num_colors)) % num_colors;
+			}
+		}
+	}
 }
 
 public class DiscoWave : DiscoFloor
@@ -516,7 +583,8 @@ public class DiscoWave : DiscoFloor
 	private Color color1, color2, color3, color4;
 	private TaskManager _colorSwitcher;
 
-	private readonly int[,] grid =
+	private int[,] grid;
+	private readonly int[,] full_grid =
 	{
 		{0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 1, 0, 3, 2, 1, 0, 3, 2, 1, 0},
 		{1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 2, 1, 0, 3, 2, 1, 0, 3, 2, 1},
@@ -543,6 +611,7 @@ public class DiscoWave : DiscoFloor
 	public DiscoWave()
 	{
 		_colorSwitcher = new TaskManager();
+		_EstablishGrid();
 
 		int offset = UnityEngine.Random.Range(0, 4);
 
@@ -599,6 +668,41 @@ public class DiscoWave : DiscoFloor
 			}
 		}
 	}
+
+	private void _EstablishGrid()
+	{
+		int x_offset = (20 - Services.MapManager.MapWidth) / 2;
+		int y_offset = (20 - Services.MapManager.MapHeight) / 2;
+
+		grid = new int[Services.MapManager.MapWidth, Services.MapManager.MapHeight];
+
+		for (int i = 0; i < Services.MapManager.MapWidth; i++)
+		{
+			for (int j = 0; j < Services.MapManager.MapHeight; j++)
+			{
+				grid[i, j] = full_grid[i + x_offset, j + y_offset];
+			}
+		}
+
+		/*bool even = (Services.MapManager.MapWidth % 2 == 0) && (Services.MapManager.MapHeight % 2 == 0);
+
+		grid = new int[Services.MapManager.MapWidth,Services.MapManager.MapHeight];
+		
+		for (int i = 0; i < Services.MapManager.MapWidth; i++)
+		{
+			for (int j = 0; j < Services.MapManager.MapHeight; j++)
+			{
+				if ((i < Services.MapManager.MapWidth / 2) && (j < Services.MapManager.MapHeight / 2))
+					grid[i, j] = ((i + (j % 4)) + 8) % 4;
+				else if ((i >= Services.MapManager.MapWidth / 2) && (j >= Services.MapManager.MapHeight / 2))
+					grid[i, j] = ((-i - (j - 2 % 4)) + 8) % 4;
+				else if ((i >= Services.MapManager.MapWidth/2 ) && (j < Services.MapManager.MapHeight / 2))
+					grid[i, j] = ((-i + (j - 1 % 4)) + 8) % 4;
+				else 
+					grid[i, j] = ((i - (j -3 % 4)) + 8) % 4;
+			}
+		} */
+	}
 }
 
 public class DiscoBlocks : DiscoFloor
@@ -607,33 +711,35 @@ public class DiscoBlocks : DiscoFloor
 	private Color color1, color2, color3, color4;
 	private TaskManager _colorSwitcher;
 
-	private int[,] grid =
+	private int[,] grid;
+	private readonly int[,] full_grid =
 	{
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-		{0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1},
-		{0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1},
 		{0, 0, 3, 3, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1},
 		{0, 0, 3, 3, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1},
-		{0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1},
-		{0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1},
+		{3, 3, 3, 3, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 1, 1, 2, 2, 2, 2},
+		{3, 3, 3, 3, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 1, 1, 2, 2, 2, 2},
+		{0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1},
+		{0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1},
+		{3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2},
+		{3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 		{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
 		{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
-		{2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 3, 3},
-		{2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 3, 3},
+		{1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0},
+		{1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0},
+		{2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 3, 3, 0, 0, 3, 3, 3, 3, 3, 3},
+		{2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 3, 3, 0, 0, 3, 3, 3, 3, 3, 3},
+		{1, 1, 1, 1, 2, 2, 1, 1, 2, 2, 3, 3, 0, 0, 3, 3, 0, 0, 0, 0},
+		{1, 1, 1, 1, 2, 2, 1, 1, 2, 2, 3, 3, 0, 0, 3, 3, 0, 0, 0, 0},
 		{2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 3, 3, 0, 0, 3, 3, 0, 0, 3, 3},
-		{2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 3, 3, 0, 0, 3, 3, 0, 0, 3, 3},
-		{2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 3, 3},
-		{2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 3, 3},
-		{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
-		{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}
+		{2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 3, 3, 0, 0, 3, 3, 0, 0, 3, 3}
 	};
 
 	public DiscoBlocks()
 	{
 		_colorSwitcher = new TaskManager();
+		_EstablishGrid();
 		
 		int offset = UnityEngine.Random.Range(0, 4);
 
@@ -687,6 +793,22 @@ public class DiscoBlocks : DiscoFloor
 				{
 					t.SetBpAssistColor(color4);
 				}
+			}
+		}
+	}
+
+	private void _EstablishGrid()
+	{
+		int x_offset = (20 - Services.MapManager.MapWidth) / 2;
+		int y_offset = (20 - Services.MapManager.MapHeight) / 2;
+
+		grid = new int[Services.MapManager.MapWidth, Services.MapManager.MapHeight];
+
+		for (int i = 0; i < Services.MapManager.MapWidth; i++)
+		{
+			for (int j = 0; j < Services.MapManager.MapHeight; j++)
+			{
+				grid[i, j] = full_grid[i + x_offset, j + y_offset];
 			}
 		}
 	}
@@ -698,7 +820,8 @@ public class DiscoWindmill : DiscoFloor
 	private Color color1, color2, color3, color4;
 	private TaskManager _colorSwitcher;
 
-	private int[,] grid =
+	private int[,] grid;
+	private readonly int[,] full_grid =
 	{
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
 		{1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2},
@@ -748,6 +871,7 @@ public class DiscoWindmill : DiscoFloor
 	public DiscoWindmill()
 	{
 		_colorSwitcher = new TaskManager();
+		_EstablishGrid();
 		
 		int offset = UnityEngine.Random.Range(0, 4);
 
@@ -801,6 +925,22 @@ public class DiscoWindmill : DiscoFloor
 				{
 					t.SetBpAssistColor(color4);
 				}
+			}
+		}
+	}
+	
+	private void _EstablishGrid()
+	{
+		int x_offset = (20 - Services.MapManager.MapWidth) / 2;
+		int y_offset = (20 - Services.MapManager.MapHeight) / 2;
+
+		grid = new int[Services.MapManager.MapWidth, Services.MapManager.MapHeight];
+
+		for (int i = 0; i < Services.MapManager.MapWidth; i++)
+		{
+			for (int j = 0; j < Services.MapManager.MapHeight; j++)
+			{
+				grid[i, j] = full_grid[i + x_offset, j + y_offset];
 			}
 		}
 	}
