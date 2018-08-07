@@ -133,6 +133,9 @@ public class GameSceneScript : Scene<TransitionData>
             Services.GameManager.InitPlayers(Services.GameManager.handicapValue);
         }
 
+        Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
+        Services.GameEventManager.Register<TouchDown>(OnTouchDown);
+
         Services.AudioManager.SetMainTrack(Services.Clips.MenuSong, 0.3f);
         Services.CameraController.SetScreenEdges();
         
@@ -141,6 +144,9 @@ public class GameSceneScript : Scene<TransitionData>
 
     internal override void OnExit()
     {
+        Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
+        Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
+
         Services.GameManager.MainCamera.backgroundColor = backgroundColor;
         Time.timeScale = 1;
         Services.GameEventManager.Clear();
@@ -156,8 +162,30 @@ public class GameSceneScript : Scene<TransitionData>
         }
     }
 
-	// Update is called once per frame
-	void Update ()
+    public void OnMouseDownEvent(MouseDown e)
+    {
+
+        Vector3 mouseWorldPos =
+            Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos);
+        OnInputDown(mouseWorldPos);
+    }
+
+    public void OnTouchDown(TouchDown e)
+    {
+        Vector3 touchWorldPos =
+            Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position);
+        OnInputDown(touchWorldPos);
+    }
+
+
+    public void OnInputDown(Vector3 position)
+    {
+        Vector3 effectPosition = new Vector3(position.x, position.y, 5);
+
+        Instantiate(Resources.Load("Prefabs/TouchEffect"), effectPosition, Quaternion.identity);
+    }
+        // Update is called once per frame
+        void Update ()
     {
         _colorChangeTime += Time.deltaTime;
         switch (Services.GameManager.mode)
