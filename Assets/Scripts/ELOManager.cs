@@ -82,7 +82,7 @@ public static class ELOManager
 
     public static void OnGameWin()
     {
-        int prevElo = eloData.GetRating();
+        EloData prevElo = new EloData(eloData);
         eloData.totalWins += 1;
         eloData.winStreakCount += 1;
         if(eloData.winStreakCount >= winStreakLength)
@@ -93,8 +93,7 @@ public static class ELOManager
         {
             eloData.SetHandicap(eloData.handicapLevel + handicapIncrement);
         }
-        int newElo = eloData.GetRating();
-        Services.UIManager.eloUIManager.OnGameEnd(true, prevElo, newElo);
+        Services.UIManager.eloUIManager.OnGameEnd(true, prevElo, eloData);
         Services.Analytics.ELOWin(true);
         Services.Analytics.ELOStreak(eloData.winStreakCount);
         Services.Analytics.ELOTotalWins(eloData.totalWins);
@@ -104,11 +103,10 @@ public static class ELOManager
 
     public static void OnGameLoss()
     {
-        int prevElo = eloData.GetRating();
+        EloData prevElo = new EloData(eloData);
         eloData.winStreakCount = 0;
         eloData.SetHandicap(eloData.handicapLevel - handicapIncrement);
-        int newElo = eloData.GetRating();
-        Services.UIManager.eloUIManager.OnGameEnd(false, prevElo, newElo);
+        Services.UIManager.eloUIManager.OnGameEnd(false, prevElo, eloData);
         Services.Analytics.ELOWin(false);
         SaveData();
     }
@@ -127,6 +125,12 @@ public class EloData
     public float handicapLevel;
     public int totalWins;
     public float highestHandicapAchieved;
+    public enum RankCategory { Bronze, Silver, Gold, Platinum, Diamond, Master }
+    public static RankCategory[] ranksInDescendingOrder = new RankCategory[]
+    {
+        RankCategory.Master, RankCategory.Diamond, RankCategory.Platinum,
+        RankCategory.Gold, RankCategory.Silver, RankCategory.Bronze
+    };
 
     public EloData(int winStreak, float handicap, int wins, float highestAchieved)
     {
@@ -134,6 +138,14 @@ public class EloData
         totalWins = wins;
         highestHandicapAchieved = highestAchieved;
         SetHandicap(handicap);
+    }
+
+    public EloData(EloData toCopy)
+    {
+        winStreakCount = toCopy.winStreakCount;
+        totalWins = toCopy.totalWins;
+        highestHandicapAchieved = toCopy.highestHandicapAchieved;
+        SetHandicap(toCopy.handicapLevel);
     }
 
     public EloData()
@@ -167,5 +179,84 @@ public class EloData
             highestHandicapAchieved = handicapLevel;
         }
     }
+
+    public RankCategory GetRank()
+    {
+        return GetRankCategory(handicapLevel);
+    }
+
+    public RankCategory GetHighestRank()
+    {
+        return GetRankCategory(highestHandicapAchieved);
+    }
+
+    public float GetProgressToNextRank()
+    {
+        return GetProgressToNextRank(handicapLevel);
+    }
+
+    public static RankCategory GetRankCategory(float handicap)
+    {
+        for (int i = 0; i < ranksInDescendingOrder.Length; i++)
+        {
+            RankCategory rank = ranksInDescendingOrder[i];
+            if (handicap >= GetRankMin(rank)) return rank;
+        }
+        return RankCategory.Bronze;
+    }
+
+    public static float GetRankMin(RankCategory category)
+    {
+        switch (category)
+        {
+            case RankCategory.Bronze:
+                return ELOManager.minHandicap;
+            case RankCategory.Silver:
+                return 0f;
+            case RankCategory.Gold:
+                return 0.1f;
+            case RankCategory.Platinum:
+                return 0.2f;
+            case RankCategory.Diamond:
+                return 0.3f;
+            case RankCategory.Master:
+                return 0.4f;
+            default:
+                return -0.5f;
+        }
+    }
+
+    public static float GetProgressToNextRank(float handicap)
+    {
+        RankCategory nextRank = RankCategory.Master;
+        for (int i = 0; i < ranksInDescendingOrder.Length; i++)
+        {
+            RankCategory rank = ranksInDescendingOrder[i];
+            if (handicap >= GetRankMin(rank))
+            {
+                if (rank == RankCategory.Master) return 0f;
+                return 1 -((GetRankMin(nextRank) - handicap)/
+                    (GetRankMin(nextRank) - GetRankMin(rank)));
+            }
+            nextRank = rank;
+        }
+        return 0f;
+    }
+
+    private static Sprite GetRankImageByCategory(RankCategory rank)
+    {
+        return Services.EloRankData.RankSprites[(int)rank];
+    }
+
+    public Sprite GetRankImage()
+    {
+        return GetRankImageByCategory(GetRank());
+    }
+
+    public Sprite GetHighestRankImage()
+    {
+        return GetRankImageByCategory(GetHighestRank());
+    }
+
 }
 

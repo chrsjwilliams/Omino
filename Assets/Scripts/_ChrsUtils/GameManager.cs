@@ -209,6 +209,7 @@ public class GameManager : MonoBehaviour
         Services.GeneralTaskManager = new TaskManager();
         Services.Prefabs = Resources.Load<PrefabDB>("Prefabs/PrefabDB");
         Services.TechDataLibrary = Resources.Load<TechDataLibrary>("ContentData/TechDataLibrary");
+        Services.EloRankData = Resources.Load<EloRankData>("ContentData/EloRankData");
 
         Services.InputManager = new InputManager();
         Services.Scenes = new GameSceneManager<TransitionData>(gameObject, Services.Prefabs.Scenes);
