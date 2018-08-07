@@ -50,7 +50,7 @@ public static class HyperModeManager
 		y = UnityEngine.Random.Range(0, _hyperModeColors.Length/2);
 		while (x == y)
 		{
-			y = UnityEngine.Random.Range(0, _hyperModeColors.Length);
+			y = UnityEngine.Random.Range(0, _hyperModeColors.Length/2);
 		}
 
 		colorScheme[0] = new Color[] { _hyperModeColors[x,0], _hyperModeColors[x,1] };
