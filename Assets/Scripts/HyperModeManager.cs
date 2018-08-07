@@ -99,6 +99,15 @@ public static class HyperModeManager
 			_pulseTM.Do(to_do);
 		});
 	}
+	
+	public static void ConfettiSplosion(Color color, Vector3 location)
+	{
+		GameObject particles = GameObject.Instantiate(Resources.Load("Prefabs/Confetti/Placementfetti")) as GameObject;
+		ParticleSystem ps = particles.GetComponent<ParticleSystem>();
+		var main = ps.main;
+		main.startColor = color;
+		particles.transform.position = location;
+	}
 }
 
 public class Pulse : Task

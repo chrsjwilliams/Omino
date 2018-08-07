@@ -540,4 +540,5 @@ public class GameSceneScript : Scene<TransitionData>
     {
         Services.AudioManager.PlaySoundEffect(Services.Clips.UIButtonPressed, 0.55f);
     }  
+    
 }

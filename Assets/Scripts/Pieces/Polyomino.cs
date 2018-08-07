@@ -627,6 +627,7 @@ public class Polyomino : IVertex
             case TitleSceneScript.GameMode.HyperSOLO:
             case TitleSceneScript.GameMode.HyperVS:
                 HyperModeManager.Placement();
+                HyperModeManager.ConfettiSplosion(owner.ColorScheme[0], holder.transform.position);
                 break;
         }
 
@@ -942,7 +943,6 @@ public class Polyomino : IVertex
         }
         if (!placed) holder.legalityOverlay.enabled = true;
     }
-
 
     public void SetTint(Color color, float tintProportion)
     {
@@ -1373,7 +1373,6 @@ public class Polyomino : IVertex
         }
     }
 
-
     protected void OnMouseMoveEvent(MouseMove e)
     {
         OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(e.mousePos));
@@ -1660,7 +1659,6 @@ public class Polyomino : IVertex
             Rotate();
         }
     }
-
 
     public virtual void Rotate() { Rotate(true, false); }
 
