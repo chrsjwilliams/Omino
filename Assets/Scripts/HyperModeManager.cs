@@ -78,7 +78,7 @@ public static class HyperModeManager
 			DiscoFloor beatTasks = new DiscoRandom();
 
 			
-			switch (UnityEngine.Random.Range(0, 4))
+			switch (UnityEngine.Random.Range(0, 3))
 			{
 				case (0) :
 					beatTasks = new DiscoStripes();

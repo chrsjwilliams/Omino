@@ -183,6 +183,15 @@ public class GameSceneScript : Scene<TransitionData>
         Vector3 effectPosition = new Vector3(position.x, position.y, 5);
 
         Instantiate(Resources.Load("Prefabs/TouchEffect"), effectPosition, Quaternion.identity);
+        
+        switch (Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.HyperVS:
+            case TitleSceneScript.GameMode.HyperSOLO:
+                Instantiate(Resources.Load("Prefabs/Confetti/Starsplosion"), effectPosition, Quaternion.identity);
+                break;
+        }
+
     }
         // Update is called once per frame
         void Update ()

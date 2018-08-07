@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Beat;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -327,7 +328,7 @@ public class UIManager : MonoBehaviour {
 	void Update () {
         //if (Input.GetKeyDown(KeyCode.Y)) StartBannerScroll(Services.GameManager.Players[0]);
         if (scrollingInBanners) ScrollBanners();
-        if (!Services.GameScene.gameStarted) HighlightReadyBanners();
+        if (!Services.GameScene.gameStarted) Services.Clock.SyncFunction(HighlightReadyBanners, Clock.BeatValue.Quarter);
         HighlightResourceGained();
         HighlightResourcesMissing();
         HighlightResourceGained(true);
@@ -699,7 +700,7 @@ public class UIManager : MonoBehaviour {
 
     private void HighlightReadyBanners()
     {
-        float pingPong = Mathf.PingPong(Time.time, 1);
+        float pingPong = Mathf.PingPong(Time.time, Services.Clock.BeatLength());
 
 
         for (int i = 0; i < readyBanners.Length; i++)

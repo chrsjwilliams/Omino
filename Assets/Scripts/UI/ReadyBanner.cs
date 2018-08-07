@@ -15,7 +15,7 @@ public class ReadyBanner : MonoBehaviour
     private TextMeshProUGUI uiText;
     private bool initialized;
     private ObjectPulser pulser;
-    private const float pulsePeriod = 0.4f;
+    private float pulsePeriod = 0.4f;
     private readonly Vector3 minScale = 0.9f * Vector3.one;
     private readonly Vector3 maxScale = 1.1f * Vector3.one;
 
@@ -30,7 +30,7 @@ public class ReadyBanner : MonoBehaviour
 
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -41,6 +41,8 @@ public class ReadyBanner : MonoBehaviour
 
     public void Init()
     {
+        pulsePeriod = Services.Clock.HalfLength();
+        
         player = Services.GameManager.Players[playerNum - 1];
         pulser = uiText.gameObject.AddComponent<ObjectPulser>();
         if (player is AIPlayer)
