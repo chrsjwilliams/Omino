@@ -181,9 +181,12 @@ public class GameSceneScript : Scene<TransitionData>
     public void OnInputDown(Vector3 position)
     {
         Vector3 effectPosition = new Vector3(position.x, position.y, 5);
+        RaycastHit2D hit = Physics2D.Raycast(effectPosition, -Vector2.up);
+        if (hit.collider != null && hit.transform.name != "Tile")
+        {
+            Instantiate(Resources.Load("Prefabs/TouchEffect"), effectPosition, Quaternion.identity);
+        }
 
-        Instantiate(Resources.Load("Prefabs/TouchEffect"), effectPosition, Quaternion.identity);
-        
         switch (Services.GameManager.mode)
         {
             case TitleSceneScript.GameMode.HyperVS:
