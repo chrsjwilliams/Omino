@@ -182,7 +182,7 @@ public class GameSceneScript : Scene<TransitionData>
         {
             case TitleSceneScript.GameMode.HyperVS:
             case TitleSceneScript.GameMode.HyperSOLO:
-                Instantiate(Resources.Load("Prefabs/Confetti/Starsplosion"), effectPosition, Quaternion.identity);
+                HyperModeManager.Touch(effectPosition);
                 break;
         }
 
