@@ -626,7 +626,7 @@ public class Polyomino : IVertex
         {
             case TitleSceneScript.GameMode.HyperSOLO:
             case TitleSceneScript.GameMode.HyperVS:
-                Services.CameraController.StartShake(Services.Clock.EighthLength(), 80f, 20.0f, true);
+                HyperModeManager.Placement();
                 break;
         }
 

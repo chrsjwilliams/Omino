@@ -17,9 +17,10 @@ namespace Beat
          BPM = bpm;
       }
 
-      public double BPM; //stable to pretty high BPMs, but when you past the low 200s things might break down
+      //stable to pretty high BPMs, but when you past the low 200s things might break down
+      public double BPM; 
 
-      public string MBT; //for display purposes in unity editor  
+      public string MBT;
       public double StartDelay;
       public double LatencyCompensation = 0;
       
@@ -216,8 +217,6 @@ namespace Beat
          //Debug.Log("Average Drift of Last 25 Notes: " + (rollav * 1000).ToString().Remove(5) + "ms");
       }
 
-      //CoRoutine to sync the execution of a particular callback to the next relevant beat of a particular value
-      //Usage: Clock.Instance.SyncFunction(FunctionToCallback, BeatValue.Quarter)
       public void SyncFunction(System.Action callback, BeatValue beatValue = BeatValue.Measure)
       {
          StartCoroutine(YieldForSync(callback, beatValue));
