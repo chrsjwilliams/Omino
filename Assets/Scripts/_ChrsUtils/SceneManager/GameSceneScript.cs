@@ -182,7 +182,8 @@ public class GameSceneScript : Scene<TransitionData>
     {
         Vector3 effectPosition = new Vector3(position.x, position.y, 5);
         RaycastHit2D hit = Physics2D.Raycast(effectPosition, -Vector2.up);
-        if (hit.collider != null && hit.transform.name != "Tile")
+        if (hit.collider != null && hit.transform.name != "Tile" && !hit.transform.name.Contains("Banner") &&
+            !gamePaused)
         {
             Instantiate(Resources.Load("Prefabs/TouchEffect"), effectPosition, Quaternion.identity);
         }
