@@ -93,9 +93,10 @@ public static class HyperModeManager
 		ContinueDisco();
 	}
 
-	public static void Placement()
+	public static void Placement(Color color, Vector3 location)
 	{
 		Services.CameraController.StartShake(Services.Clock.EighthLength(), 80f, 10.0f, true);
+		ConfettiSplosion(color, location);
 	}
 
 	private static void ContinuePulse()
@@ -117,37 +118,36 @@ public static class HyperModeManager
 	
 	private static void ContinueDisco()
 	{
-		Debug.Log("ContinueDisco");
 		Services.Clock.SyncFunction(() =>
 		{
-			DiscoFloor beatTasks = new DiscoRandom();
+			DiscoFloor disco = new DiscoRandom();
 
-			
 			switch (UnityEngine.Random.Range(0, 5))
 			{
 				case (0) :
-					beatTasks = new DiscoStripes();
+					disco = new DiscoStripes();
 					break;
 				case (1) :
-					beatTasks = new DiscoCheckers();
+					disco = new DiscoCheckers();
 					break;
 				case (2) :
-					beatTasks = new DiscoWave();
+					disco = new DiscoWave();
 					break;
 				case (3) : 
-					beatTasks = new DiscoBlocks();
+					disco = new DiscoBlocks();
 					break;
 				case (4) :
-					beatTasks = new DiscoWindmill();
+					disco = new DiscoWindmill();
 					break;
 				default :
-					beatTasks = new DiscoRandom();
+					disco = new DiscoRandom();
 					break;
 			}
 			
-			TaskQueue to_do = new TaskQueue(new List<Task>(new Task[] { beatTasks, new ActionTask(ContinueDisco) }));
+			ActionTask continue_disco = new ActionTask(ContinueDisco);
+			disco.Then(continue_disco);
 			
-			_pulseTM.Do(to_do);
+			_pulseTM.Do(disco);
 		});
 	}
 	

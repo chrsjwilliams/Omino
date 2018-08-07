@@ -626,8 +626,7 @@ public class Polyomino : IVertex
         {
             case TitleSceneScript.GameMode.HyperSOLO:
             case TitleSceneScript.GameMode.HyperVS:
-                HyperModeManager.Placement();
-                HyperModeManager.ConfettiSplosion(owner.ColorScheme[0], holder.transform.position);
+                HyperModeManager.Placement(owner.ColorScheme[0], holder.transform.position);
                 break;
         }
 
