@@ -263,14 +263,12 @@ public class GameManager : MonoBehaviour
             try
             {
                 string modeStatusDataString = (string)bf.Deserialize(file);
-                //unlockedModes = StringToBoolArray(modeStatusDataString);
                 modeUnlockStatuses = ParseModeDictString(modeStatusDataString);
             }
             catch (Exception e)
             {
                 Debug.Log("Failed to deserialize. Reason: " + e.Message);
                 file.Dispose();
-                //currentModeStatusData = defaultModeStatus;
                 modeUnlockStatuses = DefaultUnlockStatus();
                 SaveModeStatusData();
                 // throw;
@@ -283,11 +281,8 @@ public class GameManager : MonoBehaviour
         else
         {
             file = File.Create(filePath);
-            //currentModeStatusData = defaultModeStatus;
-            //unlockedModes = StringToBoolArray(currentModeStatusData);
-            //SetUnlockingData();
+
             modeUnlockStatuses = DefaultUnlockStatus();
-            //bf.Serialize(file, currentModeStatusData);
             bf.Serialize(file, ModeDictToString(modeUnlockStatuses));
 
             file.Close();
@@ -304,7 +299,6 @@ public class GameManager : MonoBehaviour
 
         file = File.OpenWrite(filePath);
 
-        //bf.Serialize(file, currentModeStatusData);
         bf.Serialize(file, ModeDictToString(modeUnlockStatuses));
         file.Close();
     }
@@ -714,6 +708,7 @@ public class GameManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.M)) UnlockAllModes();
+        if (Input.GetKeyDown(KeyCode.U)) Debug.Log(HexToColor("F7A907FF"));
     }
 
     public void Reset(Reset e)
@@ -755,5 +750,67 @@ public class GameManager : MonoBehaviour
     public void SetColorScheme(Color[][] colors)
     {
         colorSchemes = colors;
+    }
+
+    public Color HexToColor(string color)
+    {
+        int withAlpha = 8;
+        int noAlpha = 6;
+        float maxValue = 255;
+
+        if (color.Contains("#")) color = color.Remove('#');
+
+        string r, g, b, a = "";
+
+
+        if (color.Length == withAlpha)
+        {
+            r = color.Substring(0, 2);
+            g = color.Substring(2, 2);
+            b = color.Substring(4, 2);
+            a = color.Substring(6, 2);
+            return new Color((HexToInteger(r) / maxValue),
+                                (HexToInteger(g) / maxValue),
+                                (HexToInteger(b) / maxValue),
+                                (HexToInteger(a) / maxValue));
+
+        }
+        else if (color.Length == noAlpha)
+        {
+            r = color.Substring(0, 2);
+            g = color.Substring(2, 2);
+            b = color.Substring(4, 2);
+            return new Color((HexToInteger(r) / maxValue),
+                                (HexToInteger(g) / maxValue),
+                                (HexToInteger(b) / maxValue));
+        }
+        else
+        {
+            return Color.magenta;
+        }
+    }
+
+    private int HexToInteger(string hex)
+    {
+        int power = 1;
+        int result = 0;
+        char[] hexCharArray = hex.ToCharArray();
+        
+        for (int i = hex.Length - 1; i >= 0; i--)
+        {
+            result += GetRawInt(hexCharArray[i]) * power;
+            power *= 16;
+        }
+
+        return result;
+    }
+
+    private int GetRawInt(char c)
+    {
+        if (Char.IsLetter(c))
+        {
+            return Char.ToUpper(c) - 'A' + 10;
+        }
+        return (int)Char.GetNumericValue(c);
     }
 }
