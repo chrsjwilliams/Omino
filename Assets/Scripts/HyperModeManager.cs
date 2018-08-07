@@ -37,7 +37,7 @@ public static class HyperModeManager
 			{new Color(.2f, 0.8f, 1f, 1f), new Color(.1f, 0.4f, 0.6f, 1f)},
 			{new Color(0f, 0f, 0f, 1f), new Color(.3f, 0.3f, 0.3f, 1f)},
 			{new Color(1, 0.92f, 0.016f, 1f), new Color(0.7f, 0.62f, 0f, 1f)},
-			{new Color(0.8f, 0.2f, 0.7f, 1f), new Color(0.5f, 0.1f, 0.4f, 1f)},
+			{new Color(1f, 0.2f, 0.7f, 1f), new Color(0.7f, 0.1f, 0.4f, 1f)},
 			{new Color(1f, 0.5f, 0.0f, 1f), new Color(.6f, 0.2f, 0.0f, 1f)},
 		};
 		
@@ -50,7 +50,7 @@ public static class HyperModeManager
 		y = UnityEngine.Random.Range(0, _hyperModeColors.Length/2);
 		while (x == y)
 		{
-			UnityEngine.Random.Range(0, _hyperModeColors.Length);
+			y = UnityEngine.Random.Range(0, _hyperModeColors.Length);
 		}
 
 		colorScheme[0] = new Color[] { _hyperModeColors[x,0], _hyperModeColors[x,1] };
