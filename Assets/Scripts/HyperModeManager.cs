@@ -74,6 +74,7 @@ public static class HyperModeManager
 
 	public static void Exit()
 	{
+		Services.AudioManager.FadeOutLevelMusic();
 		Services.Clips = Resources.Load<ClipLibrary>("Audio/ClipLibrary");
 		Services.Clock.SetBPM(110);
 		Services.AudioManager.RegisterStartLevelMusic();
@@ -157,6 +158,13 @@ public static class HyperModeManager
 		var main = ps.main;
 		main.startColor = color;
 		particles.transform.position = location;
+		GameObject.Destroy(particles, 5f);
+	}
+
+	public static void Touch(Vector3 location)
+	{
+		GameObject particles = GameObject.Instantiate(Resources.Load("Prefabs/Confetti/Starsplosion"), location, Quaternion.identity) as GameObject;
+		GameObject.Destroy(particles, 5f);
 	}
 }
 
