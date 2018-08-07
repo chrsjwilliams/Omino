@@ -38,46 +38,7 @@ public class GameManager : MonoBehaviour
     }
 
     public Dictionary<TitleSceneScript.GameMode, bool> modeUnlockStatuses { get; private set; }
-    private const string defaultModeStatus = "False, False, False, False, True";
-    private string currentModeStatusData;
-    [SerializeField]
-    private bool challengeModeEnabled;
-    public bool ChallengeModeEnabled
-    {
-        get { return challengeModeEnabled; }
-        private set { }
-    }
-    [SerializeField]
-    private bool dungeonRunModeEnabled;
-    public bool DungeonRunModeEnabled
-    {
-        get { return dungeonRunModeEnabled; }
-        private set { }
-    }
-    [SerializeField]
-    private bool hyperModeEnabled;
-    public bool HyperModeEnabled
-    {
-        get { return hyperModeEnabled; }
-        private set { }
-    }
-    [SerializeField]
-    private bool practiceModeEnabled;
-    public bool PracticeModeEnabled
-    {
-        get { return practiceModeEnabled; }
-        private set { }
-    }
-    [SerializeField]
-    private bool versusModeEnabled;
-    public bool TwoPlayerModeEnabled
-    {
-        get { return versusModeEnabled; }
-        private set { }
-    }
-
-    private bool[] unlockedModes = new bool[5];
-
+    
     public AILEVEL[] aiLevels;
     public TitleSceneScript.GameMode mode = TitleSceneScript.GameMode.NONE;
     public bool destructorsEnabled = true;
@@ -350,31 +311,6 @@ public class GameManager : MonoBehaviour
 
     public void UnlockMode(TitleSceneScript.GameMode mode, bool status)
     {
-        //switch (mode)
-        //{
-        //    case TitleSceneScript.GameMode.Challenge:
-        //        unlockedModes[0] = status;
-        //        break;
-        //    case TitleSceneScript.GameMode.DungeonRun:
-        //        unlockedModes[1] = status;
-        //        break;
-        //    case TitleSceneScript.GameMode.HyperSOLO:
-        //    case TitleSceneScript.GameMode.HyperVS:
-        //        unlockedModes[2] = status;
-        //        break;
-        //    case TitleSceneScript.GameMode.Practice:
-        //        unlockedModes[3] = status;
-        //        break;
-        //    case TitleSceneScript.GameMode.TwoPlayers:
-        //        unlockedModes[4] = status;
-        //        break;
-        //    default:
-        //        break;
-        //}
-
-        //SetUnlockingData();
-
-        //currentModeStatusData = BoolArrayToString(unlockedModes);
         modeUnlockStatuses[mode] = status;
         SaveModeStatusData();
     }
@@ -410,39 +346,6 @@ public class GameManager : MonoBehaviour
         return dict;
     }
 
-    private string BoolArrayToString(bool[] arr)
-    {
-        string value = "";
-        for(int i = 0; i < arr.Length; i++)
-        {
-            if (arr[i]) value += "True,";
-            else value += "False,";
-        }
-        return value.Remove(value.Length - 1);
-    }
-
-    private bool[] StringToBoolArray(string s)
-    {
-        string[] sArr = s.Split(',');
-        bool[] arr = new bool[sArr.Length];
-        for(int i = 0; i < arr.Length; i++)
-        {
-            if (sArr[i].Contains("True")) arr[i] = true;
-            else arr[i] = false;
-        }
-
-        return arr;
-    }
-
-    public void SetUnlockingData()
-    {
-        challengeModeEnabled = unlockedModes[0];
-        dungeonRunModeEnabled = unlockedModes[1];
-        hyperModeEnabled = unlockedModes[2];
-        practiceModeEnabled = unlockedModes[3];
-        versusModeEnabled = unlockedModes[4];
-    }
-
     private Dictionary<TitleSceneScript.GameMode, bool> DefaultUnlockStatus()
     {
         Dictionary<TitleSceneScript.GameMode, bool> dict = new Dictionary<TitleSceneScript.GameMode, bool>();
@@ -455,12 +358,6 @@ public class GameManager : MonoBehaviour
 
     public void UnlockAllModes()
     {
-        //for(int i = 0; i < unlockedModes.Length; i++)
-        //{
-        //    unlockedModes[i] = true;
-        //}
-        //currentModeStatusData = BoolArrayToString(unlockedModes);
-        //SetUnlockingData();
         List<TitleSceneScript.GameMode> modes = 
             new List<TitleSceneScript.GameMode>(modeUnlockStatuses.Keys);
         foreach(TitleSceneScript.GameMode mode in modes)
@@ -472,10 +369,6 @@ public class GameManager : MonoBehaviour
 
     public void ModeUnlockReset()
     {
-        //UnlockMode(TitleSceneScript.GameMode.Challenge, false);
-        //UnlockMode(TitleSceneScript.GameMode.DungeonRun, false);
-        //UnlockMode(TitleSceneScript.GameMode.HyperSOLO, false);
-        //UnlockMode(TitleSceneScript.GameMode.Practice, false);
         modeUnlockStatuses = DefaultUnlockStatus();
     }
 
