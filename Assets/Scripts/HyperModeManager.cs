@@ -7,6 +7,8 @@ using UnityEngine;
 public static class HyperModeManager
 {
 	private static TaskManager _pulseTM, _discoTM;
+	private static Color[][] _previousScheme;
+	private static Color[,] _hyperModeColors;
 	
 	// Use this for initialization
 	public static void StartGame()
@@ -14,6 +16,47 @@ public static class HyperModeManager
 		Services.Clips = Resources.Load<ClipLibrary>("Audio/HyperLibrary");
 		Services.Clock.SetBPM(110);
 		Services.AudioManager.RegisterStartLevelMusic();
+		
+		PlayerHandicap[] handicaps = new PlayerHandicap[2];
+		handicaps[0].SetEnergyHandicapLevel(2.5f);
+		handicaps[0].SetHammerHandicapLevel(4f);
+		handicaps[0].SetPieceHandicapLevel(2.5f);
+		handicaps[1].SetEnergyHandicapLevel(2.5f);
+		handicaps[1].SetHammerHandicapLevel(4f);
+		handicaps[1].SetPieceHandicapLevel(2.5f);
+                
+		Services.GameManager.SetHandicapValues(handicaps);
+		
+		_previousScheme = Services.GameManager.GetColorScheme();
+
+		_hyperModeColors = new Color[,]
+		{
+			{new Color(0.5f, 1, 0.5f, 1f), new Color(0.4f, 0.6f, 0.4f, 1f)},
+			{new Color(1f, 0.2f, 0.5f, 1f), new Color(0.6f, 0.1f, 0.4f, 1f)},
+			{new Color(0.5f, 0.5f, 1f, 1f), new Color(0.4f, 0.4f, 0.6f, 1f)},
+			{new Color(.2f, 0.8f, 1f, 1f), new Color(.1f, 0.4f, 0.6f, 1f)},
+			{new Color(0f, 0f, 0f, 1f), new Color(.3f, 0.3f, 0.3f, 1f)},
+			{new Color(1, 0.92f, 0.016f, 1f), new Color(0.7f, 0.62f, 0f, 1f)},
+			{new Color(0.8f, 0.2f, 0.7f, 1f), new Color(0.5f, 0.1f, 0.4f, 1f)},
+			{new Color(1f, 0.5f, 0.0f, 1f), new Color(.6f, 0.2f, 0.0f, 1f)},
+		};
+		
+		Color[][] colorScheme = new Color[2][];
+
+		int x = 0;
+		int y = 0;
+
+		x = UnityEngine.Random.Range(0, _hyperModeColors.Length/2);
+		y = UnityEngine.Random.Range(0, _hyperModeColors.Length/2);
+		while (x == y)
+		{
+			UnityEngine.Random.Range(0, _hyperModeColors.Length);
+		}
+
+		colorScheme[0] = new Color[] { _hyperModeColors[x,0], _hyperModeColors[x,1] };
+		colorScheme[1] = new Color[] { _hyperModeColors[y,0], _hyperModeColors[y,1] };
+		 
+		Services.GameManager.SetColorScheme(colorScheme); 
 		
 		_InitializePulse();
 		_InitializeDisco();
@@ -34,6 +77,7 @@ public static class HyperModeManager
 		Services.Clips = Resources.Load<ClipLibrary>("Audio/ClipLibrary");
 		Services.Clock.SetBPM(110);
 		Services.AudioManager.RegisterStartLevelMusic();
+		Services.GameManager.SetColorScheme(_previousScheme);
 	}
 
 	private static void _InitializePulse()
@@ -78,7 +122,7 @@ public static class HyperModeManager
 			DiscoFloor beatTasks = new DiscoRandom();
 
 			
-			switch (UnityEngine.Random.Range(0, 3))
+			switch (UnityEngine.Random.Range(0, 5))
 			{
 				case (0) :
 					beatTasks = new DiscoStripes();
@@ -88,6 +132,12 @@ public static class HyperModeManager
 					break;
 				case (2) :
 					beatTasks = new DiscoWave();
+					break;
+				case (3) : 
+					beatTasks = new DiscoBlocks();
+					break;
+				case (4) :
+					beatTasks = new DiscoWindmill();
 					break;
 				default :
 					beatTasks = new DiscoRandom();
@@ -166,6 +216,9 @@ public class Shake : Task
 
 public class DiscoFloor : Task
 {
+	public Color[] colors =
+		{new Color(1, 0.92f, 0.016f, 1f), new Color(0f, 1f, 1f, 1f), new Color(1, 0, 1, 1f), new Color(1, 1f, 1f, 1f)};
+
 	public DiscoFloor()
 	{
 		SetStatus(TaskStatus.Success);
@@ -391,9 +444,7 @@ public class DiscoStripes : DiscoFloor
 
 		grid = UnityEngine.Random.Range(0, 2) % 2 == 0 ? gridLR : gridRL;
 
-		Color[] colors =
-			{new Color(1, 0.92f, 0.016f, 1f), new Color(0f, 1f, 1f, 1f), new Color(1, 0, 1, 1f), new Color(1, 1f, 1f, 1f)};
-
+		
 		int offset = UnityEngine.Random.Range(0, 4);
 
 		color1 = colors[offset % colors.Length];
@@ -485,9 +536,211 @@ public class DiscoWave : DiscoFloor
 	{
 		_colorSwitcher = new TaskManager();
 
-		Color[] colors =
-			{new Color(1, 0.92f, 0.016f, 1f), new Color(0f, 1f, 1f, 1f), new Color(1, 0, 1, 1f), new Color(1, 1f, 1f, 1f)};
+		int offset = UnityEngine.Random.Range(0, 4);
 
+		color1 = colors[offset % colors.Length];
+		color2 = colors[(offset + 1) % colors.Length];
+		color3 = colors[(offset + 2) % colors.Length];
+		color4 = colors[(offset + 3) % colors.Length];
+
+		TaskQueue switchColors = new TaskQueue(new List<Task>(new Task[] {
+			new ActionTask(_SetColors),
+			new Wait(Services.Clock.BeatLength() / 2),
+			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
+			new Wait(Services.Clock.BeatLength()),
+			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
+			new Wait(Services.Clock.BeatLength()),
+			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); })
+			}));
+		
+		_colorSwitcher.Do(switchColors);
+	}
+
+	internal override void Update()
+	{
+		_colorSwitcher.Update();
+		
+		if (num_switches >= 4) SetStatus(TaskStatus.Success);
+	}
+
+	private void _SetColors()
+	{
+		num_switches++;
+		
+		for (int i = 0; i < Services.MapManager.MapWidth; i++)
+		{
+			for (int j = 0; j < Services.MapManager.MapHeight; j++)
+			{
+				Tile t = Services.MapManager.GetTile(i, j);
+				if ((grid[i, j] + num_switches) % 4 == 0)
+				{
+					t.SetBpAssistColor(color1);
+				}
+				else if ((grid[i, j] + num_switches) % 4 == 1)
+				{
+					t.SetBpAssistColor(color2);
+				}
+				else if ((grid[i, j] + num_switches) % 4 == 2)
+				{
+					t.SetBpAssistColor(color3);
+				}
+				else 
+				{
+					t.SetBpAssistColor(color4);
+				}
+			}
+		}
+	}
+}
+
+public class DiscoBlocks : DiscoFloor
+{
+	private int num_switches = 0;
+	private Color color1, color2, color3, color4;
+	private TaskManager _colorSwitcher;
+
+	private int[,] grid =
+	{
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1},
+		{0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1},
+		{0, 0, 3, 3, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1},
+		{0, 0, 3, 3, 0, 0, 3, 3, 0, 0, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1},
+		{0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1},
+		{0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+		{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+		{2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 3, 3},
+		{2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 3, 3},
+		{2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 3, 3, 0, 0, 3, 3, 0, 0, 3, 3},
+		{2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 3, 3, 0, 0, 3, 3, 0, 0, 3, 3},
+		{2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 3, 3},
+		{2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 0, 0, 0, 0, 0, 0, 3, 3},
+		{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+		{2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3}
+	};
+
+	public DiscoBlocks()
+	{
+		_colorSwitcher = new TaskManager();
+		
+		int offset = UnityEngine.Random.Range(0, 4);
+
+		color1 = colors[offset % colors.Length];
+		color2 = colors[(offset + 1) % colors.Length];
+		color3 = colors[(offset + 2) % colors.Length];
+		color4 = colors[(offset + 3) % colors.Length];
+
+		TaskQueue switchColors = new TaskQueue(new List<Task>(new Task[] {
+			new ActionTask(_SetColors),
+			new Wait(Services.Clock.BeatLength() / 2),
+			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
+			new Wait(Services.Clock.BeatLength()),
+			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
+			new Wait(Services.Clock.BeatLength()),
+			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); })
+			}));
+		
+		_colorSwitcher.Do(switchColors);
+	}
+
+	internal override void Update()
+	{
+		_colorSwitcher.Update();
+		
+		if (num_switches >= 4) SetStatus(TaskStatus.Success);
+	}
+
+	private void _SetColors()
+	{
+		num_switches++;
+		
+		for (int i = 0; i < Services.MapManager.MapWidth; i++)
+		{
+			for (int j = 0; j < Services.MapManager.MapHeight; j++)
+			{
+				Tile t = Services.MapManager.GetTile(i, j);
+				if ((grid[i, j] + num_switches) % 4 == 0)
+				{
+					t.SetBpAssistColor(color1);
+				}
+				else if ((grid[i, j] + num_switches) % 4 == 1)
+				{
+					t.SetBpAssistColor(color2);
+				}
+				else if ((grid[i, j] + num_switches) % 4 == 2)
+				{
+					t.SetBpAssistColor(color3);
+				}
+				else 
+				{
+					t.SetBpAssistColor(color4);
+				}
+			}
+		}
+	}
+}
+
+public class DiscoWindmill : DiscoFloor
+{
+	private int num_switches = 0;
+	private Color color1, color2, color3, color4;
+	private TaskManager _colorSwitcher;
+
+	private int[,] grid =
+	{
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+		{1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2},
+		{1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2},
+		{1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2},
+		{1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2},
+		{1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2},
+		{1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2},
+		{1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2},
+		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2},
+		{2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+		{2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1},
+		{2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1},
+		{2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1},
+		{2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1},
+		{2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1},
+		{2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1},
+		{2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
+		{3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}
+	}; 
+
+	/* private int[,] grid = {
+		{1, 0, 0, 0, 0, 3, 3, 3, 3, 3, 1, 0, 0, 0, 0, 3, 3, 3, 3, 3},
+		{1, 1, 0, 0, 0, 3, 3, 3, 3, 2, 1, 1, 0, 0, 0, 3, 3, 3, 3, 2},
+		{1, 1, 1, 0, 0, 3, 3, 3, 2, 2, 1, 1, 1, 0, 0, 3, 3, 3, 2, 2},
+		{1, 1, 1, 1, 0, 3, 3, 2, 2, 2, 1, 1, 1, 1, 0, 3, 3, 2, 2, 2},
+		{1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2},
+		{2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1},
+		{2, 2, 2, 3, 3, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 0, 1, 1, 1, 1},
+		{2, 2, 3, 3, 3, 0, 0, 1, 1, 1, 2, 2, 3, 3, 3, 0, 0, 1, 1, 1},
+		{2, 3, 3, 3, 3, 0, 0, 0, 1, 1, 2, 3, 3, 3, 3, 0, 0, 0, 1, 1},
+		{3, 3, 3, 3, 3, 0, 0, 0, 0, 1, 3, 3, 3, 3, 3, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 3, 3, 3, 3, 3, 1, 0, 0, 0, 0, 3, 3, 3, 3, 3},
+		{1, 1, 0, 0, 0, 3, 3, 3, 3, 2, 1, 1, 0, 0, 0, 3, 3, 3, 3, 2},
+		{1, 1, 1, 0, 0, 3, 3, 3, 2, 2, 1, 1, 1, 0, 0, 3, 3, 3, 2, 2},
+		{1, 1, 1, 1, 0, 3, 3, 2, 2, 2, 1, 1, 1, 1, 0, 3, 3, 2, 2, 2},
+		{1, 1, 1, 1, 1, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 3, 2, 2, 2, 2},
+		{2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1},
+		{2, 2, 2, 3, 3, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 0, 1, 1, 1, 1},
+		{2, 2, 3, 3, 3, 0, 0, 1, 1, 1, 2, 2, 3, 3, 3, 0, 0, 1, 1, 1},
+		{2, 3, 3, 3, 3, 0, 0, 0, 1, 1, 2, 3, 3, 3, 3, 0, 0, 0, 1, 1},
+		{3, 3, 3, 3, 3, 0, 0, 0, 0, 1, 3, 3, 3, 3, 3, 0, 0, 0, 0, 1}
+	}; */
+
+	public DiscoWindmill()
+	{
+		_colorSwitcher = new TaskManager();
+		
 		int offset = UnityEngine.Random.Range(0, 4);
 
 		color1 = colors[offset % colors.Length];

@@ -853,4 +853,14 @@ public class GameManager : MonoBehaviour
     {
         inactivityTimer = 0;
     }
+
+    public Color[][] GetColorScheme()
+    {
+        return colorSchemes;
+    }
+    
+    public void SetColorScheme(Color[][] colors)
+    {
+        colorSchemes = colors;
+    }
 }

@@ -106,16 +106,6 @@ public class GameSceneScript : Scene<TransitionData>
                 break;
             case TitleSceneScript.GameMode.HyperVS:
             case TitleSceneScript.GameMode.HyperSOLO:
-                handicaps = new PlayerHandicap[2];
-                handicaps[0].SetEnergyHandicapLevel(2.5f);
-                handicaps[0].SetHammerHandicapLevel(2.5f);
-                handicaps[0].SetPieceHandicapLevel(2.5f);
-                handicaps[1].SetEnergyHandicapLevel(2.5f);
-                handicaps[1].SetHammerHandicapLevel(2.5f);
-                handicaps[1].SetPieceHandicapLevel(2.5f);
-                
-                Services.GameManager.SetHandicapValues(handicaps);
-                
                 HyperModeManager.StartGame();
                 Services.UIManager.UIForSinglePlayer(false);
                 break;
