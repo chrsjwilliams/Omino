@@ -6,14 +6,15 @@ using UnityEngine;
 
 public static class HyperModeManager
 {
-	private static TaskManager _pulseTM, _discoTM;
+	private static TaskManager _pulseTM, _discoTM, _slowmoTM;
 	private static Color[][] _previousScheme;
 	private static Color[,] _hyperModeColors;
-	private static GameObject _background;
+	private static ShuffleBag<DiscoFloor> _discoTiles;
 	
 	// Use this for initialization
 	public static void StartGame()
 	{
+		_slowmoTM = new TaskManager();
 		Services.Clips = Resources.Load<ClipLibrary>("Audio/HyperLibrary");
 		Services.Clock.SetBPM(110);
 		Services.AudioManager.RegisterStartLevelMusic();
@@ -58,26 +59,14 @@ public static class HyperModeManager
 		 
 		Services.GameManager.SetColorScheme(colorScheme); 
 		
+		_discoTiles = new ShuffleBag<DiscoFloor>(new DiscoFloor[] { 
+			new DiscoStripes(), new DiscoCheckers(), new DiscoWave(), new DiscoBlocks(), new DiscoWindmill() } );
+		
 		_InitializePulse();
 		_InitializeDisco();
 		Services.GameManager.MainCamera.backgroundColor =
 			Color.Lerp(Color.black, Services.GameScene.backgroundColor,
 				Services.Clock.BeatLength() - (float) Services.Clock.AtNextBeat() / Services.Clock.BeatLength());
-
-		/*_background = new GameObject("Background");
-
-		for (float i = -1.25f; i < 100; i++)
-		{
-			for (int j = -5; j < 100; j++)
-			{
-				if (((i < -1) || (i > Services.MapManager.MapWidth-1)) || ((j < 0) || (j > Services.MapManager.MapHeight)))
-				{
-					GameObject background_tile = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/background_tile"),
-						new Vector3(i, j, 800), Quaternion.identity);
-					background_tile.transform.SetParent(_background.transform);
-				}
-			}
-		} */
 	}
 
 	// Update is called once per frame
@@ -85,6 +74,7 @@ public static class HyperModeManager
 	{
 		_pulseTM.Update();
 		_discoTM.Update();
+		_slowmoTM.Update();
 	}
 
 	public static void Exit()
@@ -94,7 +84,6 @@ public static class HyperModeManager
 		Services.Clock.SetBPM(110);
 		Services.AudioManager.RegisterStartLevelMusic();
 		Services.GameManager.SetColorScheme(_previousScheme);
-		//GameObject.Destroy(_background);
 	}
 
 	private static void _InitializePulse()
@@ -136,30 +125,7 @@ public static class HyperModeManager
 	{
 		Services.Clock.SyncFunction(() =>
 		{
-			DiscoFloor disco = new DiscoRandom();
-
-			switch (UnityEngine.Random.Range(0, 5))
-			{
-				case (0) :
-					disco = new DiscoStripes();
-					break;
-				case (1) :
-					disco = new DiscoCheckers();
-					break;
-				case (2) :
-					disco = new DiscoWave();
-					break;
-				case (3) : 
-					disco = new DiscoBlocks();
-					break;
-				case (4) :
-					disco = new DiscoWindmill();
-					break;
-				default :
-					disco = new DiscoRandom();
-					break;
-			}
-
+			DiscoFloor disco = _discoTiles.Next();
 			ActionTask continue_disco = new ActionTask(ContinueDisco);
 			disco.Then(continue_disco);
 			
@@ -169,7 +135,7 @@ public static class HyperModeManager
 	
 	public static void ConfettiSplosion(Color color, Vector3 location)
 	{
-		GameObject particles = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Confetti/Placementfetti"));
+		GameObject particles = GameObject.Instantiate(Services.Prefabs.Placementfetti);
 		ParticleSystem ps = particles.GetComponent<ParticleSystem>();
 		var main = ps.main;
 		main.startColor = color;
@@ -179,8 +145,43 @@ public static class HyperModeManager
 
 	public static void Touch(Vector3 location)
 	{
-		GameObject particles = GameObject.Instantiate(Resources.Load("Prefabs/Confetti/Starsplosion"), location, Quaternion.identity) as GameObject;
+		GameObject particles = GameObject.Instantiate(Services.Prefabs.Starsplosion, location, Quaternion.identity) as GameObject;
 		GameObject.Destroy(particles, 5f);
+	}
+
+	public static void SlowMo(float duration, Vector3 location)
+	{
+		TaskTree to_do = new TaskTree(new EmptyTask(),
+			Services.AudioManager.SlowMo(duration), Services.CameraController.SlowMo(duration, location), Services.CameraController.SlowTimeScale(duration));
+		
+		_slowmoTM.Do(to_do);
+	}
+
+	public static void StructureClaimed(Color color, Vector3 location)
+	{
+		AudioClip airhornclip = Resources.Load<AudioClip>("Audio/HyperFX/airhorn");
+		ParticleSystem confetti1 = StructureConfetti(color, location, Quaternion.Euler(45f, -90, -90));
+		ParticleSystem confetti2 = StructureConfetti(color, location, Quaternion.Euler(135f, -90, -90));
+		ParticleSystem confetti3 = StructureConfetti(color, location, Quaternion.Euler(225f, -90, -90));
+		ParticleSystem confetti4 = StructureConfetti(color, location, Quaternion.Euler(315f, -90, -90));
+		
+		ActionTask airhorn1 = new ActionTask(() => { Services.AudioManager.RegisterSoundEffect(airhornclip, 1f, Clock.BeatValue.Sixteenth); Services.Clock.SyncFunction(() => { confetti1.Play(); }, Clock.BeatValue.Sixteenth); });
+		Wait wait1 = new Wait(Services.Clock.SixteenthLength());
+		ActionTask airhorn2 = new ActionTask(() => { Services.AudioManager.RegisterSoundEffect(airhornclip, 1f, Clock.BeatValue.Sixteenth); Services.Clock.SyncFunction(() => { confetti2.Play(); }, Clock.BeatValue.Sixteenth); });
+		Wait wait2 = new Wait(Services.Clock.SixteenthLength());
+		ActionTask airhorn3 = new ActionTask(() => { Services.AudioManager.RegisterSoundEffect(airhornclip, 1f, Clock.BeatValue.Sixteenth); Services.Clock.SyncFunction(() => { confetti3.Play(); }, Clock.BeatValue.Sixteenth); });
+		Wait wait3 = new Wait(Services.Clock.SixteenthLength());
+		ActionTask airhorn4 = new ActionTask(() => { Services.AudioManager.RegisterSoundEffect(airhornclip, 1f, Clock.BeatValue.Sixteenth); Services.Clock.SyncFunction(() => { confetti4.Play(); }, Clock.BeatValue.Sixteenth); });
+
+		TaskTree to_do = new TaskTree(airhorn1, new TaskTree(wait1, new TaskTree(airhorn2, new TaskTree(wait2, new TaskTree(airhorn3, new TaskTree(wait3, new TaskTree(airhorn4)))))));
+		_slowmoTM.Do(to_do);
+	}
+
+	public static ParticleSystem StructureConfetti(Color color, Vector3 location, Quaternion rotation)
+	{
+		ParticleSystem to_return = GameObject.Instantiate(Services.Prefabs.Structfetti, location, rotation).GetComponent<ParticleSystem>();
+		to_return.startColor = color;
+		return to_return;
 	}
 }
 
@@ -240,13 +241,17 @@ public class Shake : Task
 
 public class DiscoFloor : Task
 {
+	public int num_switches;
 	public Color[] colors =
 		{new Color(1, 0.92f, 0.016f, 1f), new Color(0f, 1f, 1f, 1f), new Color(1, 0, 1, 1f), new Color(1, 1f, 1f, 1f)};
-	public float timeElapsed = 0;
+	public float timeElapsed;
+	public Color color1, color2, color3, color4;
 
 	public DiscoFloor()
 	{
-		
+		timeElapsed = 0;
+		num_switches = 0;
+		_RandomizeColors();
 	}
 
 	internal override void Update()
@@ -254,15 +259,34 @@ public class DiscoFloor : Task
 		timeElapsed += Time.deltaTime;
 		if (timeElapsed > Services.Clock.BeatLength() * 3 + Services.Clock.SixteenthLength())
 		{
+			num_switches = 0;
 			SetStatus(TaskStatus.Success);
 		}
+
+		if (num_switches >= 4)
+		{
+			timeElapsed = 0;
+			num_switches = 0;
+			_RandomizeColors();
+			SetStatus(TaskStatus.Success);
+		}
+	}
+	
+	private void _SetColors() { }
+	
+	private void _RandomizeColors()
+	{
+		int offset = UnityEngine.Random.Range(0, 4);
+
+		color1 = colors[offset % colors.Length];
+		color2 = colors[(offset + 1) % colors.Length];
+		color3 = colors[(offset + 2) % colors.Length];
+		color4 = colors[(offset + 3) % colors.Length];
 	}
 }
 
 public class DiscoRandom : DiscoFloor
 {
-	private int num_switches = 0;
-
 	public DiscoRandom()
 	{
 		
@@ -274,8 +298,6 @@ public class DiscoRandom : DiscoFloor
 		
 		if (timeElapsed > num_switches * Services.Clock.BeatLength())
 			_SetColors();
-		
-		if (num_switches >= 4) SetStatus(TaskStatus.Success);
 	}
 
 	private void _SetColors()
@@ -313,8 +335,6 @@ public class DiscoRandom : DiscoFloor
 
 public class DiscoCheckers : DiscoFloor
 {
-	private int num_switches = 0;
-	private Color color1, color2;
 	private TaskManager _colorSwitcher;
 	private int[,] grid;
 	
@@ -347,30 +367,6 @@ public class DiscoCheckers : DiscoFloor
 		bool double_wide = ((Services.MapManager.MapHeight % 2 == 0) && (Services.MapManager.MapWidth % 2 == 0));
 	
 		_EstablishGrid(double_wide);
-		
-		switch (UnityEngine.Random.Range(0, 4))
-		{
-			case 0 :
-				color1 = new Color(1, 0, 1, 1f);
-				color2 = new Color(0f, 1f, 1f, 1f);
-				break;
-			case 1 :
-				color1 = new Color(1, 0.92f, 0.016f, 1f);
-				color2 = new Color(1, 0, 1, 1f);
-				break;
-			case 2 :
-				color1 = new Color(1, 1f, 1f, 1f);
-				color2 = new Color(1, 0, 1, 1f);
-				break;
-			case 3 :
-				color1 = new Color(0f, 1f, 1f, 1f);
-				color2 = new Color(1, 0.92f, 0.016f, 1f);
-				break;
-			default :
-				color1 = Color.white;
-				color2 = Color.black;
-				break;
-		}
 	}
 
 	internal override void Update()
@@ -379,8 +375,6 @@ public class DiscoCheckers : DiscoFloor
 		
 		if (timeElapsed > num_switches * Services.Clock.BeatLength())
 			_SetColors();
-		
-		if (num_switches >= 4) SetStatus(TaskStatus.Success);
 	}
 
 	private void _EstablishGrid(bool double_wide = true)
@@ -436,9 +430,6 @@ public class DiscoCheckers : DiscoFloor
 
 public class DiscoStripes : DiscoFloor
 {
-	private int num_switches = 0;
-	private Color color1, color2, color3, color4;
-
 	private int[,] grid;
 	/*private readonly int[,] gridLR =
 	{
@@ -490,13 +481,6 @@ public class DiscoStripes : DiscoFloor
 	public DiscoStripes()
 	{
 		_EstablishGrid();
-
-		int offset = UnityEngine.Random.Range(0, 4);
-
-		color1 = colors[offset % colors.Length];
-		color2 = colors[(offset + 1) % colors.Length];
-		color3 = colors[(offset + 2) % colors.Length];
-		color4 = colors[(offset + 3) % colors.Length];
 	}
 
 	internal override void Update()
@@ -505,8 +489,6 @@ public class DiscoStripes : DiscoFloor
 		
 		if (timeElapsed > num_switches * Services.Clock.BeatLength())
 			_SetColors();
-		
-		if (num_switches >= 4) SetStatus(TaskStatus.Success);
 	}
 
 	private void _SetColors()
@@ -574,9 +556,6 @@ public class DiscoStripes : DiscoFloor
 
 public class DiscoWave : DiscoFloor
 {
-	private int num_switches = 0;
-	private Color color1, color2, color3, color4;
-
 	private int[,] grid;
 	private readonly int[,] full_grid =
 	{
@@ -605,13 +584,6 @@ public class DiscoWave : DiscoFloor
 	public DiscoWave()
 	{
 		_EstablishGrid();
-
-		int offset = UnityEngine.Random.Range(0, 4);
-
-		color1 = colors[offset % colors.Length];
-		color2 = colors[(offset + 1) % colors.Length];
-		color3 = colors[(offset + 2) % colors.Length];
-		color4 = colors[(offset + 3) % colors.Length];
 	}
 
 	internal override void Update()
@@ -620,8 +592,6 @@ public class DiscoWave : DiscoFloor
 		
 		if (timeElapsed > num_switches * Services.Clock.BeatLength())
 			_SetColors();
-		
-		if (num_switches >= 4) SetStatus(TaskStatus.Success);
 	}
 
 	private void _SetColors()
@@ -691,9 +661,6 @@ public class DiscoWave : DiscoFloor
 
 public class DiscoBlocks : DiscoFloor
 {
-	private int num_switches = 0;
-	private Color color1, color2, color3, color4;
-
 	private int[,] grid;
 	private readonly int[,] full_grid =
 	{
@@ -722,13 +689,6 @@ public class DiscoBlocks : DiscoFloor
 	public DiscoBlocks()
 	{
 		_EstablishGrid();
-		
-		int offset = UnityEngine.Random.Range(0, 4);
-
-		color1 = colors[offset % colors.Length];
-		color2 = colors[(offset + 1) % colors.Length];
-		color3 = colors[(offset + 2) % colors.Length];
-		color4 = colors[(offset + 3) % colors.Length];
 	}
 
 	internal override void Update()
@@ -737,8 +697,6 @@ public class DiscoBlocks : DiscoFloor
 		
 		if (timeElapsed > num_switches * Services.Clock.BeatLength())
 			_SetColors();
-		
-		if (num_switches >= 4) SetStatus(TaskStatus.Success);
 	}
 
 	private void _SetColors()
@@ -789,9 +747,6 @@ public class DiscoBlocks : DiscoFloor
 
 public class DiscoWindmill : DiscoFloor
 {
-	private int num_switches = 0;
-	private Color color1, color2, color3, color4;
-
 	private int[,] grid;
 	private readonly int[,] full_grid =
 	{
@@ -843,14 +798,6 @@ public class DiscoWindmill : DiscoFloor
 	public DiscoWindmill()
 	{
 		_EstablishGrid();
-		
-		int offset = UnityEngine.Random.Range(0, 4);
-
-		color1 = colors[offset % colors.Length];
-		color2 = colors[(offset + 1) % colors.Length];
-		color3 = colors[(offset + 2) % colors.Length];
-		color4 = colors[(offset + 3) % colors.Length];
-
 	}
 
 	internal override void Update()
@@ -859,8 +806,6 @@ public class DiscoWindmill : DiscoFloor
 		
 		if (timeElapsed > num_switches * Services.Clock.BeatLength())
 			_SetColors();
-		
-		if (num_switches >= 4) SetStatus(TaskStatus.Success);
 	}
 
 	private void _SetColors()
