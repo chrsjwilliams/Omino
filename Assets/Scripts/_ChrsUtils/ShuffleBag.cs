@@ -23,7 +23,7 @@ public class ShuffleBag<T> : IList<T>
         data[cursor] = temp;
         cursor--;
         if (Compare<T>(temp, last))
-            return Next();
+            temp = Next();
         last = temp;
         return temp;
     }
