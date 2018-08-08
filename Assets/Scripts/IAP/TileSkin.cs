@@ -11,11 +11,11 @@ public class TileSkin : ScriptableObject
     public string desctiption;
 
     public Color[] Player1ColorScheme;
-    public Color[] Player2ColorScheme;
+    public Color[] Player2ColorScheme;  // use only 1
 
 
-    public Color[] MapColorScheme;
-    public Color neutralColor;
+    public Color[] MapColorScheme;  //  not in skins
+    public Color neutralColor;      //  not in skins
     public Sprite destructorIcon;
     public Sprite splashIcon;
     public Sprite[] factoryBottoms;

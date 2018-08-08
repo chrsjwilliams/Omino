@@ -7,7 +7,6 @@ using System.IO;
 
 /*
  *      TODO: 
- *              Have a progress bar similar to tutorial
  *              Have an area for the reward
  *              Have tooltips for characters in dungeon run
  *              Endow ai with their own tech power-up?
@@ -17,7 +16,6 @@ using System.IO;
  *              
  *              Skins!?
  * 
- *          HYPER MODE!!!!!
  */ 
 
 public class DungeonRunSceneScript : Scene<TransitionData>

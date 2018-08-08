@@ -70,9 +70,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.destructorIcon;
+                return Services.GameManager.currentTileSkins[0].destructorIcon;
             }
             else
                 return _destructorIcon;
@@ -85,9 +85,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.splashIcon;
+                return Services.GameManager.currentTileSkins[0].splashIcon;
             }
             else
                 return _splashIcon;
@@ -100,9 +100,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.factoryBottoms;
+                return Services.GameManager.currentTileSkins[0].factoryBottoms;
             }
             else
                 return _factoryBottoms;
@@ -115,9 +115,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.factoryTops;
+                return Services.GameManager.currentTileSkins[0].factoryTops;
             }
             else
                 return _factoryTops;
@@ -130,9 +130,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.factoryIcons;
+                return Services.GameManager.currentTileSkins[0].factoryIcons;
             }
             else
                 return _factoryIcons;
@@ -145,9 +145,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.mineBottoms;
+                return Services.GameManager.currentTileSkins[0].mineBottoms;
             }
             else
                 return _mineBottoms;
@@ -160,9 +160,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.mineTops;
+                return Services.GameManager.currentTileSkins[0].mineTops;
             }
             else
                 return _mineTops;
@@ -175,9 +175,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.mineIcons;
+                return Services.GameManager.currentTileSkins[0].mineIcons;
             }
             else
                 return _mineIcons;
@@ -190,9 +190,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.baseBottom;
+                return Services.GameManager.currentTileSkins[0].baseBottom;
             }
             else
                 return _baseBottom;
@@ -204,9 +204,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.baseOverlay;
+                return Services.GameManager.currentTileSkins[0].baseOverlay;
             }
             else
                 return _baseOverlay;
@@ -219,9 +219,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.sideBaseOverlay;
+                return Services.GameManager.currentTileSkins[0].sideBaseOverlay;
             }
             else
                 return _sideBaseOverlay;
@@ -234,9 +234,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.bombFactoryBottoms;
+                return Services.GameManager.currentTileSkins[0].bombFactoryBottoms;
             }
             else
                 return _bombFactoryBottoms;
@@ -249,9 +249,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.bombFactoryTops;
+                return Services.GameManager.currentTileSkins[0].bombFactoryTops;
             }
             else
                 return _bombFactoryTops;
@@ -264,9 +264,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.bombFactoryIcons;
+                return Services.GameManager.currentTileSkins[0].bombFactoryIcons;
             }
             else
                 return _bombFactoryIcons;
@@ -279,9 +279,9 @@ public class UIManager : MonoBehaviour {
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.structureOverlay;
+                return Services.GameManager.currentTileSkins[0].structureOverlay;
             }
             else
                 return _structureOverlay;

@@ -14,9 +14,9 @@ public class Tile : MonoBehaviour, IVertex
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.tileSprites;
+                return Services.GameManager.currentTileSkins[0].tileSprites;
             }
             else
                 return sprites;
@@ -29,9 +29,9 @@ public class Tile : MonoBehaviour, IVertex
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.destructorSprites;
+                return Services.GameManager.currentTileSkins[0].destructorSprites;
             }
             else
                 return destructorSprites;
@@ -44,9 +44,9 @@ public class Tile : MonoBehaviour, IVertex
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.shieldSprites;
+                return Services.GameManager.currentTileSkins[0].shieldSprites;
             }
             else
                 return shieldSprites;
@@ -59,15 +59,16 @@ public class Tile : MonoBehaviour, IVertex
     {
         get
         {
-            if (Services.GameManager.currentTileSkin != null)
+            if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkin.disconnectedSprite;
+                return Services.GameManager.currentTileSkins[0].disconnectedSprite;
             }
             else
                 return disconnectedSprite;
         }
     }
     #endregion
+
     public Coord coord { get; private set; }
     public Coord relativeCoord;
     public BoxCollider2D boxCol { get; private set; }

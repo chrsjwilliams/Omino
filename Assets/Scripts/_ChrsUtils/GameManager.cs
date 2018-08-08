@@ -104,16 +104,16 @@ public class GameManager : MonoBehaviour
 
     #region TileSkin Items
     public Dictionary<TileSkin, bool> ownedTileSkins = new Dictionary<TileSkin, bool>();
-    public TileSkin currentTileSkin;
+    public TileSkin[] currentTileSkins;
 
     [SerializeField] private Color[] _player1ColorScheme;
     public Color[] Player1ColorScheme
     {
         get
         {
-            if (currentTileSkin != null)
+            if (currentTileSkins[0] != null)
             {
-                return currentTileSkin.Player1ColorScheme;
+                return currentTileSkins[0].Player1ColorScheme;
             }
             else
             {
@@ -127,9 +127,9 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            if (currentTileSkin != null)
+            if (currentTileSkins[1] != null)
             {
-                return currentTileSkin.Player2ColorScheme;
+                return currentTileSkins[1].Player2ColorScheme;
             }
             else
             {
@@ -145,9 +145,9 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            if (currentTileSkin != null)
+            if (currentTileSkins[0] != null)
             {
-                return currentTileSkin.MapColorScheme;
+                return currentTileSkins[0].MapColorScheme;
             }
             else
             {
@@ -161,9 +161,9 @@ public class GameManager : MonoBehaviour
     public Color NeutralColor {
         get
         {
-            if (currentTileSkin != null)
+            if (currentTileSkins[0] != null)
             {
-                return currentTileSkin.neutralColor;
+                return currentTileSkins[0].neutralColor;
             }
             else
             {
