@@ -28,7 +28,10 @@ public class TitleSceneScript : Scene<TransitionData>
     [SerializeField]
     private MenuManager menuManager;
 
-    public enum GameMode { NONE, TwoPlayers, Practice, Demo, Tutorial, DungeonRun, Challenge, HyperSOLO, HyperVS }
+    public enum GameMode {  NONE, TwoPlayers, Practice,
+                            Demo, Tutorial, DungeonRun,
+                            Challenge, HyperSOLO, HyperVS,
+                            Shop}
 
     public static GameMode[] unlockableModes = new GameMode[] {
         GameMode.Challenge, GameMode.DungeonRun, GameMode.HyperSOLO,
@@ -147,6 +150,9 @@ public class TitleSceneScript : Scene<TransitionData>
                 break;
             case GameMode.Challenge:
                 Services.Scenes.PushScene<EloSceneScript>();
+                break;
+            case GameMode.Shop:
+                Services.Scenes.PushScene<InGameShopSceneScript>();
                 break;
             case GameMode.NONE:
                 break;
