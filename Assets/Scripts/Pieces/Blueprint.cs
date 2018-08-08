@@ -274,6 +274,15 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         }
         ListenForInput(true);
         Services.GameScene.tm.Do(new BlueprintPlacementTask(this));
+        
+        switch (Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.HyperSOLO:
+            case TitleSceneScript.GameMode.HyperVS:
+                HyperModeManager.ConfettiSplosion(owner.ColorScheme[0], holder.transform.position);
+                break;
+        }
+        
         //MakeDustClouds();
         //spriteOverlay.color = spriteOverlay.color = new Color(spriteOverlay.color.r, spriteOverlay.color.g,
         //spriteOverlay.color.b, 1);

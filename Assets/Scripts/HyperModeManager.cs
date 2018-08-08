@@ -9,6 +9,7 @@ public static class HyperModeManager
 	private static TaskManager _pulseTM, _discoTM;
 	private static Color[][] _previousScheme;
 	private static Color[,] _hyperModeColors;
+	private static GameObject _background;
 	
 	// Use this for initialization
 	public static void StartGame()
@@ -63,6 +64,21 @@ public static class HyperModeManager
 		Services.GameManager.MainCamera.backgroundColor =
 			Color.Lerp(Color.black, Services.GameScene.backgroundColor,
 				Services.Clock.BeatLength() - (float) Services.Clock.AtNextBeat() / Services.Clock.BeatLength());
+
+		/*_background = new GameObject("Background");
+
+		for (float i = -1.25f; i < 100; i++)
+		{
+			for (int j = -5; j < 100; j++)
+			{
+				if (((i < -1) || (i > Services.MapManager.MapWidth-1)) || ((j < 0) || (j > Services.MapManager.MapHeight)))
+				{
+					GameObject background_tile = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/background_tile"),
+						new Vector3(i, j, 800), Quaternion.identity);
+					background_tile.transform.SetParent(_background.transform);
+				}
+			}
+		} */
 	}
 
 	// Update is called once per frame
@@ -79,6 +95,7 @@ public static class HyperModeManager
 		Services.Clock.SetBPM(110);
 		Services.AudioManager.RegisterStartLevelMusic();
 		Services.GameManager.SetColorScheme(_previousScheme);
+		//GameObject.Destroy(_background);
 	}
 
 	private static void _InitializePulse()
@@ -144,7 +161,6 @@ public static class HyperModeManager
 					break;
 			}
 
-			disco = new DiscoWindmill();
 			ActionTask continue_disco = new ActionTask(ContinueDisco);
 			disco.Then(continue_disco);
 			
@@ -154,7 +170,7 @@ public static class HyperModeManager
 	
 	public static void ConfettiSplosion(Color color, Vector3 location)
 	{
-		GameObject particles = GameObject.Instantiate(Resources.Load("Prefabs/Confetti/Placementfetti")) as GameObject;
+		GameObject particles = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Confetti/Placementfetti"));
 		ParticleSystem ps = particles.GetComponent<ParticleSystem>();
 		var main = ps.main;
 		main.startColor = color;
