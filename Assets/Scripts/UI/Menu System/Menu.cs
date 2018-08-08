@@ -6,7 +6,7 @@ public class Menu : MonoBehaviour
 {
     private MenuObject[] menuObjects;
     public enum MenuState {
-        NotLoaded, QueuedToPop, Popping, Active, Hidden, Pushing }
+        NotLoaded, Popping, Active, Hidden, Pushing }
     public MenuState state;
     
     private const float slideStaggerTime = 0.05f;
@@ -30,8 +30,6 @@ public class Menu : MonoBehaviour
                 switch (state)
                 {
                     case MenuState.NotLoaded:
-                        break;
-                    case MenuState.QueuedToPop:
                         break;
                     case MenuState.Popping:
                         state = MenuState.Hidden;
@@ -63,7 +61,10 @@ public class Menu : MonoBehaviour
 
     public void Unload()
     {
-        Hide();
+        for (int i = 0; i < menuObjects.Length; i++)
+        {
+            menuObjects[i].Unload();
+        }
     }
 
     public void Show()

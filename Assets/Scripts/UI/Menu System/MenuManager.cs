@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class MenuManager : MonoBehaviour
 {
     private Stack<Menu> menuStack;
-    private Queue<Menu> menusToPop;
+    private int menusToPop;
     public GameObject buttonPrefab;
     public Menu firstMenu;
     public float buttonSpacing;
@@ -25,6 +25,7 @@ public class MenuManager : MonoBehaviour
     void Update()
     {
         ProcessMenuPopQueue();
+        if (Input.GetKeyDown(KeyCode.B)) PopMenu();
     }
 
     public void OnReload()
@@ -37,7 +38,7 @@ public class MenuManager : MonoBehaviour
     {
         Services.MenuManager = this;
         menuStack = new Stack<Menu>();
-        menusToPop = new Queue<Menu>();
+        menusToPop = 0;
         backButton.gameObject.SetActive(false);
         PushMenu(firstMenu);
     }
@@ -49,15 +50,18 @@ public class MenuManager : MonoBehaviour
             menuStack.Peek().Hide();
         }
         menuStack.Push(menuToPush);
-        menuToPush.Load();
+        if (menuToPush.state == Menu.MenuState.NotLoaded)
+            menuToPush.Load();
+        else menuToPush.Show();
         if (menuStack.Count > 1) backButton.gameObject.SetActive(true);
     }
 
     public void PopMenu()
     {
-        Menu topMenu = menuStack.Pop();
-        menusToPop.Enqueue(topMenu);
-        topMenu.state = Menu.MenuState.QueuedToPop;
+        if (menuStack.Count > 1 + menusToPop)
+        {
+            menusToPop += 1;
+        }
     }
 
     public void LoadScene(TitleSceneScript.GameMode mode)
@@ -67,25 +71,22 @@ public class MenuManager : MonoBehaviour
 
     private void ProcessMenuPopQueue()
     {
-        if(menusToPop.Count > 0)
+        Debug.Log("menus to pop: " + menusToPop);
+        Debug.Log("menus in stack: " + menuStack.Count);
+        if (menusToPop > 0)
         {
-            Menu firstInLine = menusToPop.Peek();
-            if (firstInLine.state == Menu.MenuState.QueuedToPop)
+            Menu firstInLine = menuStack.Peek();
+            if (firstInLine.state == Menu.MenuState.Active)
             {
                 firstInLine.Hide();
-                if(menusToPop.Count == 1)
+                menuStack.Pop();
+                menusToPop -= 1;
+                if (menuStack.Count > 0)
                 {
-                    if (menuStack.Count > 0)
-                    {
-                        menuStack.Peek().Show();
-                    }
-                    if (menuStack.Count < 2)
-                        backButton.gameObject.SetActive(false);
+                    menuStack.Peek().Show();
                 }
-            }
-            else if(firstInLine.state == Menu.MenuState.Hidden)
-            {
-                menusToPop.Dequeue();
+                if (menuStack.Count < 2)
+                    backButton.gameObject.SetActive(false);
             }
         }
     }

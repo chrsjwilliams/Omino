@@ -49,11 +49,11 @@ public class EloUIManager : MonoBehaviour {
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            EloData fakeElo = new EloData(0, 0.39f, 50, 0.41f);
-            SetUI(fakeElo);
-        }
+        //if (Input.GetKeyDown(KeyCode.W))
+        //{
+        //    EloData fakeElo = new EloData(0, 0.39f, 50, 0.41f);
+        //    SetUI(fakeElo);
+        //}
     }
 
 }

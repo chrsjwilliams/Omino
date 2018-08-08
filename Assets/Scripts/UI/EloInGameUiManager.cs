@@ -29,6 +29,7 @@ public class EloInGameUiManager : MonoBehaviour {
     private float progressTimeElapsed;
     private Sprite rankImageTarget;
     private bool win;
+    private bool rankChangeEffectPlayed;
 
 	// Use this for initialization
 	void Start () {
@@ -40,6 +41,9 @@ public class EloInGameUiManager : MonoBehaviour {
 	void Update () {
         if (dropping) Drop();
         else if (progressFilling) SetProgress();
+        if (Input.GetKeyDown(KeyCode.W)) OnGameEnd(true, 
+            new EloData(0, 0.08f, 0, 0),
+             new EloData(0, 0.12f, 0, 0));
 	}
 
     private void Drop()
@@ -72,7 +76,8 @@ public class EloInGameUiManager : MonoBehaviour {
         else
         {
             float interimTarget;
-            if (progressTarget < progressStart) interimTarget = 1;
+            if (progressTarget < progressStart) 
+                    interimTarget = 1;
             else interimTarget = 0;
             float oppositeInterim = 1 - interimTarget;
             float interimTime = Mathf.Abs(progressStart - interimTarget) 
@@ -86,20 +91,26 @@ public class EloInGameUiManager : MonoBehaviour {
             }
             else
             {
-                rankImage.sprite = rankImageTarget;
                 rankProgressBar.fillAmount = Mathf.Lerp(
                     oppositeInterim, progressTarget,
                     EasingEquations.Easing.QuadEaseOut(
                         (progressTimeElapsed-interimTime) 
                     / (progressBarFillDur - interimTime)));
+                if (!rankChangeEffectPlayed) RankChangeEffect();
             }
 
         }
        if(progressTimeElapsed >= progressBarFillDur)
         {
             progressFilling = false;
-            rankImage.sprite = rankImageTarget;
         }
+    }
+
+    private void RankChangeEffect()
+    {
+        rankChangeEffectPlayed = true;
+        rankImage.sprite = rankImageTarget;
+        OverlayParticles.ShowParticles(Services.Prefabs.RankUp, rankImage.transform.position + (50 * Vector3.down));
     }
 
     public void OnGameEnd(bool victory, EloData prevElo, EloData newElo)
@@ -116,5 +127,6 @@ public class EloInGameUiManager : MonoBehaviour {
         progressStart = prevElo.GetProgressToNextRank();
         progressTarget = newElo.GetProgressToNextRank();
         progressTimeElapsed = 0;
+        rankChangeEffectPlayed = false;
     }
 }
