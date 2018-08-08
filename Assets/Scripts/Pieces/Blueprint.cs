@@ -279,6 +279,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         {
             case TitleSceneScript.GameMode.HyperSOLO:
             case TitleSceneScript.GameMode.HyperVS:
+                HyperModeManager.SlowMo(Services.Clock.BeatLength(), holder.transform.position);
                 HyperModeManager.ConfettiSplosion(owner.ColorScheme[0], holder.transform.position);
                 break;
         }

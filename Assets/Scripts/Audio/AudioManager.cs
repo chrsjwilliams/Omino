@@ -20,6 +20,7 @@ public class AudioManager : MonoBehaviour {
     private Dictionary<string, AudioClip> reversedClips;
     private Dictionary<string, AudioClip> reverbClips;
     private Dictionary<string, AudioClip> materialClips;
+    private bool silent = false;
     
     public void Awake()
     {
@@ -56,16 +57,22 @@ public class AudioManager : MonoBehaviour {
     public void RegisterSoundEffect(AudioClip clip, float volume = 1.0f, Clock.BeatValue timing = Clock.BeatValue.Eighth)
     {
         // Services.AudioManager.ConnectQuantizedClipReverse(clip, Services.Clock.ReturnAtNext(timing) - AudioSettings.dspTime);
-        Services.AudioManager.PlaySoundEffectMaterial(clip, 0.5f);
-        
-        Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, timing);
+        if (!silent)
+        {
+            Services.AudioManager.PlaySoundEffectMaterial(clip, 0.5f);
+
+            Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, timing);
+        }
     }
 
     public void RegisterSoundEffectReverb(AudioClip clip, float volume = 1.0f,
         Clock.BeatValue timing = Clock.BeatValue.Eighth)
     {
-        Services.AudioManager.PlaySoundEffectReverb(clip, 0.5f);
-        Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, timing);
+        if (!silent)
+        {
+            Services.AudioManager.PlaySoundEffectReverb(clip, 0.5f);
+            Services.Clock.SyncFunction(_ParameterizeAction(PlaySoundEffect, clip, volume).Invoke, timing);
+        }
     }
     
     private System.Action _ParameterizeAction(System.Action<AudioClip, float> function, AudioClip clip, float volume)
@@ -301,27 +308,30 @@ public class AudioManager : MonoBehaviour {
 
     public void PlaySoundEffect(AudioClip clip, float volume = 1.0f)
     {
-        AudioSource to_play = effectChannels[effectChannelIndex];
-        effectChannelIndex = (effectChannelIndex + 1) % effectChannelSize;
-
-        if (to_play.isPlaying)
+        if (!silent)
         {
-            GameObject channel = new GameObject("Effect Channel");
-            channel.transform.parent = effectsHolder.transform;
-            effectChannels.Insert(effectChannelIndex, channel.AddComponent<AudioSource>());
-            effectChannels[effectChannelIndex].loop = false;
-            
-            to_play = effectChannels[effectChannelIndex];
+            AudioSource to_play = effectChannels[effectChannelIndex];
             effectChannelIndex = (effectChannelIndex + 1) % effectChannelSize;
-        }
 
-        if (Services.GameManager.SoundEffectsEnabled)
-            to_play.clip = clip;
-        else
-            to_play.clip = Services.Clips.Silence;
-        
-        to_play.volume = volume;
-        to_play.Play();
+            if (to_play.isPlaying)
+            {
+                GameObject channel = new GameObject("Effect Channel");
+                channel.transform.parent = effectsHolder.transform;
+                effectChannels.Insert(effectChannelIndex, channel.AddComponent<AudioSource>());
+                effectChannels[effectChannelIndex].loop = false;
+
+                to_play = effectChannels[effectChannelIndex];
+                effectChannelIndex = (effectChannelIndex + 1) % effectChannelSize;
+            }
+
+            if (Services.GameManager.SoundEffectsEnabled)
+                to_play.clip = clip;
+            else
+                to_play.clip = Services.Clips.Silence;
+
+            to_play.volume = volume;
+            to_play.Play();
+        }
     }
 
     public void FadeOutLevelMusic()
@@ -404,5 +414,45 @@ public class AudioManager : MonoBehaviour {
         {
             source.mute = !Services.GameManager.MusicEnabled;
         }
+    }
+
+    public void SetPitch(float pitch)
+    {
+        foreach (AudioSource source in levelMusicSources)
+        {
+            source.pitch = pitch;
+        }
+    }
+
+    public TaskTree SlowMo(float duration)
+    {
+        silent = true;
+        ActionTask slow_down = new ActionTask(() =>
+        {
+            StartCoroutine(Coroutines.DoOverEasedTime(duration/2, Easing.Linear,
+                t =>
+                {
+                    Services.AudioManager.SetPitch(Mathf.Lerp(1, 0.1f, t));
+                }));
+        });
+        
+        Wait wait = new Wait(duration/2);
+        
+        ActionTask speed_up = new ActionTask(() =>
+        {
+            StartCoroutine(Coroutines.DoOverEasedTime(duration/2, Easing.Linear,
+                t =>
+                {
+                    Services.AudioManager.SetPitch(Mathf.Lerp(0.1f, 1, t));
+                }));
+        });
+        
+        Wait wait2 = new Wait(duration/2);
+        
+        ActionTask reset = new ActionTask(() => { Services.AudioManager.SetPitch(1f); silent = false; });
+
+        TaskTree to_return = new TaskTree(slow_down, new TaskTree(wait, new TaskTree(speed_up, new TaskTree(wait2, new TaskTree(reset)))));
+
+        return to_return;
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public static class HyperModeManager
 {
-	private static TaskManager _pulseTM, _discoTM;
+	private static TaskManager _pulseTM, _discoTM, _slowmoTM;
 	private static Color[][] _previousScheme;
 	private static Color[,] _hyperModeColors;
 	private static ShuffleBag<DiscoFloor> _discoTiles;
@@ -14,6 +14,7 @@ public static class HyperModeManager
 	// Use this for initialization
 	public static void StartGame()
 	{
+		_slowmoTM = new TaskManager();
 		Services.Clips = Resources.Load<ClipLibrary>("Audio/HyperLibrary");
 		Services.Clock.SetBPM(110);
 		Services.AudioManager.RegisterStartLevelMusic();
@@ -73,6 +74,7 @@ public static class HyperModeManager
 	{
 		_pulseTM.Update();
 		_discoTM.Update();
+		_slowmoTM.Update();
 	}
 
 	public static void Exit()
@@ -145,6 +147,14 @@ public static class HyperModeManager
 	{
 		GameObject particles = GameObject.Instantiate(Services.Prefabs.Starsplosion, location, Quaternion.identity) as GameObject;
 		GameObject.Destroy(particles, 5f);
+	}
+
+	public static void SlowMo(float duration, Vector3 location)
+	{
+		TaskTree to_do = new TaskTree(new EmptyTask(),
+			Services.AudioManager.SlowMo(duration), Services.CameraController.SlowMo(duration, location), Services.CameraController.SlowTimeScale(duration));
+		
+		_slowmoTM.Do(to_do);
 	}
 }
 
