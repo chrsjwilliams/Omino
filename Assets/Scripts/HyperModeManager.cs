@@ -156,6 +156,33 @@ public static class HyperModeManager
 		
 		_slowmoTM.Do(to_do);
 	}
+
+	public static void StructureClaimed(Color color, Vector3 location)
+	{
+		AudioClip airhornclip = Resources.Load<AudioClip>("Audio/HyperFX/airhorn");
+		ParticleSystem confetti1 = StructureConfetti(color, location, Quaternion.Euler(45f, -90, -90));
+		ParticleSystem confetti2 = StructureConfetti(color, location, Quaternion.Euler(135f, -90, -90));
+		ParticleSystem confetti3 = StructureConfetti(color, location, Quaternion.Euler(225f, -90, -90));
+		ParticleSystem confetti4 = StructureConfetti(color, location, Quaternion.Euler(315f, -90, -90));
+		
+		ActionTask airhorn1 = new ActionTask(() => { Services.AudioManager.RegisterSoundEffect(airhornclip, 1f, Clock.BeatValue.Sixteenth); Services.Clock.SyncFunction(() => { confetti1.Play(); }, Clock.BeatValue.Sixteenth); });
+		Wait wait1 = new Wait(Services.Clock.SixteenthLength());
+		ActionTask airhorn2 = new ActionTask(() => { Services.AudioManager.RegisterSoundEffect(airhornclip, 1f, Clock.BeatValue.Sixteenth); Services.Clock.SyncFunction(() => { confetti2.Play(); }, Clock.BeatValue.Sixteenth); });
+		Wait wait2 = new Wait(Services.Clock.SixteenthLength());
+		ActionTask airhorn3 = new ActionTask(() => { Services.AudioManager.RegisterSoundEffect(airhornclip, 1f, Clock.BeatValue.Sixteenth); Services.Clock.SyncFunction(() => { confetti3.Play(); }, Clock.BeatValue.Sixteenth); });
+		Wait wait3 = new Wait(Services.Clock.SixteenthLength());
+		ActionTask airhorn4 = new ActionTask(() => { Services.AudioManager.RegisterSoundEffect(airhornclip, 1f, Clock.BeatValue.Sixteenth); Services.Clock.SyncFunction(() => { confetti4.Play(); }, Clock.BeatValue.Sixteenth); });
+
+		TaskTree to_do = new TaskTree(airhorn1, new TaskTree(wait1, new TaskTree(airhorn2, new TaskTree(wait2, new TaskTree(airhorn3, new TaskTree(wait3, new TaskTree(airhorn4)))))));
+		_slowmoTM.Do(to_do);
+	}
+
+	public static ParticleSystem StructureConfetti(Color color, Vector3 location, Quaternion rotation)
+	{
+		ParticleSystem to_return = GameObject.Instantiate(Services.Prefabs.Structfetti, location, rotation).GetComponent<ParticleSystem>();
+		to_return.startColor = color;
+		return to_return;
+	}
 }
 
 public class Pulse : Task

@@ -58,4 +58,7 @@ public class PrefabDB : ScriptableObject
     
     [SerializeField] private GameObject placementfetti;
     public GameObject Placementfetti { get { return placementfetti; } }
+    
+    [SerializeField] private GameObject structfetti;
+    public GameObject Structfetti { get { return structfetti; } }
 }

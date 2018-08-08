@@ -105,11 +105,20 @@ public abstract class TechBuilding : Polyomino
         owner.GainOwnership(this);
         StructClaimAura effect = GameObject.Instantiate(Services.Prefabs.StructClaimEffect, 
             holder.transform.position + GetCenterpoint(), Quaternion.identity).GetComponent<StructClaimAura>();
+        
         effect.Init(owner);
         adjacentPieces = GetAdjacentPolyominos(owner);
         foreach(Polyomino piece in adjacentPieces)
         {
             if (!piece.adjacentPieces.Contains(this)) piece.adjacentPieces.Add(this);
+        }
+        
+        switch (Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.HyperSOLO:
+            case TitleSceneScript.GameMode.HyperVS:
+                HyperModeManager.StructureClaimed(owner.ColorScheme[0], holder.transform.position + GetCenterpoint());
+                break;
         }
     }
 
