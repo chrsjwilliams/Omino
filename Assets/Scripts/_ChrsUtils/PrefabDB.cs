@@ -52,4 +52,10 @@ public class PrefabDB : ScriptableObject
 
     [SerializeField] private GameObject rippleEffect;
     public GameObject RippleEffect { get { return rippleEffect; } }
+    
+    [SerializeField] private GameObject starsplosion;
+    public GameObject Starsplosion { get { return starsplosion; } }
+    
+    [SerializeField] private GameObject placementfetti;
+    public GameObject Placementfetti { get { return placementfetti; } }
 }
