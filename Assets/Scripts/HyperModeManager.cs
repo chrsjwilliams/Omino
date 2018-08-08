@@ -246,7 +246,7 @@ public class DiscoFloor : Task
 
 	public DiscoFloor()
 	{
-		SetStatus(TaskStatus.Success);
+		
 	}
 }
 
