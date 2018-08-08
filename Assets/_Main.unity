@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731196, g: 0.38074002, b: 0.35872707, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -322,6 +322,7 @@ MonoBehaviour:
   _mainCamera: {fileID: 1142172635}
   clock: {fileID: 1067162022}
   _players: []
+  currentTileSkin: {fileID: 11400000, guid: e3a72b93119477149986de29d3aef4a0, type: 2}
   _player1ColorScheme:
   - {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 1}
   - {r: 0.99264705, g: 0.8479468, b: 0.5474156, a: 1}

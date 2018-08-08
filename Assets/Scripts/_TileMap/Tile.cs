@@ -7,14 +7,67 @@ using UnityEngine.Rendering;
 
 public class Tile : MonoBehaviour, IVertex
 {
+    #region TileSkin Items
     [SerializeField]
     private Sprite[] sprites;
+    public Sprite[] Sprites
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.tileSprites;
+            }
+            else
+                return sprites;
+        }
+    }
+
     [SerializeField]
     private Sprite[] destructorSprites;
+    public Sprite[] DestructorSprites
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.destructorSprites;
+            }
+            else
+                return destructorSprites;
+        }
+    }
+
     [SerializeField]
     private Sprite[] shieldSprites;
+    public Sprite[] SheildSprites
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.shieldSprites;
+            }
+            else
+                return shieldSprites;
+        }
+    }
+
     [SerializeField]
     private Sprite disconnectedSprite;
+    public Sprite DisconnectedSprite
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.disconnectedSprite;
+            }
+            else
+                return disconnectedSprite;
+        }
+    }
+    #endregion
     public Coord coord { get; private set; }
     public Coord relativeCoord;
     public BoxCollider2D boxCol { get; private set; }
@@ -305,8 +358,8 @@ public class Tile : MonoBehaviour, IVertex
 
     public void SetSprite(int spriteIndex)
     {
-        mainSr.sprite = sprites[spriteIndex];
-        shieldSr.sprite = shieldSprites[spriteIndex];
+        mainSr.sprite = Sprites[spriteIndex];
+        shieldSr.sprite = SheildSprites[spriteIndex];
         //fillOverlay.sprite = mainSr.sprite;
         //fillOverlayTop.sprite = topSr.sprite;
     }
@@ -369,8 +422,8 @@ public class Tile : MonoBehaviour, IVertex
 
     public void ToggleConnectedness(bool connected)
     {
-        if (connected) mainSr.sprite = sprites[0];
-        else mainSr.sprite = disconnectedSprite;
+        if (connected) mainSr.sprite = Sprites[0];
+        else mainSr.sprite = DisconnectedSprite;
     }
 
     public void SetBpAssistAlpha(float alpha)

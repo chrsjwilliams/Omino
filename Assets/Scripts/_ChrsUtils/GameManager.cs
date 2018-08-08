@@ -102,16 +102,40 @@ public class GameManager : MonoBehaviour
         get { return _players; }
     }
 
+    #region TileSkin Items
+    public Dictionary<TileSkin, bool> ownedTileSkins = new Dictionary<TileSkin, bool>();
+    public TileSkin currentTileSkin;
+
     [SerializeField] private Color[] _player1ColorScheme;
     public Color[] Player1ColorScheme
     {
-        get { return _player1ColorScheme; }
+        get
+        {
+            if (currentTileSkin != null)
+            {
+                return currentTileSkin.Player1ColorScheme;
+            }
+            else
+            {
+                return _player1ColorScheme;
+            }
+        }
     }
 
     [SerializeField] private Color[] _player2ColorScheme;
     public Color[] Player2ColorScheme
     {
-        get { return _player2ColorScheme; }
+        get
+        {
+            if (currentTileSkin != null)
+            {
+                return currentTileSkin.Player2ColorScheme;
+            }
+            else
+            {
+                return _player2ColorScheme;
+            }
+        }
     }
 
     public Color[][] colorSchemes { get; private set; }
@@ -119,12 +143,35 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Color[] _mapColorScheme;
     public Color[] MapColorScheme
     {
-        get { return _mapColorScheme; }
+        get
+        {
+            if (currentTileSkin != null)
+            {
+                return currentTileSkin.MapColorScheme;
+            }
+            else
+            {
+                return _mapColorScheme;
+            }
+        }
     }
 
     [SerializeField]
     private Color neutralColor;
-    public Color NeutralColor { get { return neutralColor; } }
+    public Color NeutralColor {
+        get
+        {
+            if (currentTileSkin != null)
+            {
+                return currentTileSkin.neutralColor;
+            }
+            else
+            {
+                return neutralColor;
+            }
+        }
+    }
+    #endregion
 
     public Level levelSelected { get; private set; }
     private float winWeight;
@@ -162,11 +209,10 @@ public class GameManager : MonoBehaviour
 
     public bool eloTrackingMode;
 
-    
+   
 
     private void Awake()
     {
-
         Assert.raiseExceptions = true;
         InitializeServices();
 
@@ -176,8 +222,8 @@ public class GameManager : MonoBehaviour
         Input.simulateMouseWithTouches = false;
         colorSchemes = new Color[][]
         {
-            _player1ColorScheme,
-            _player2ColorScheme
+            Player1ColorScheme,
+            Player2ColorScheme
         };
 
         CheckPlayerPrefs();

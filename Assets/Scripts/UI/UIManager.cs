@@ -62,21 +62,233 @@ public class UIManager : MonoBehaviour {
     [SerializeField]
     private GameObject optionsMenu;
     public Transform canvas;
-    public Sprite destructorIcon;
-    public Sprite splashIcon;
-    public Sprite[] factoryBottoms;
-    public Sprite[] factoryTops;
-    public Sprite[] factoryIcons;
-    public Sprite[] mineBottoms;
-    public Sprite[] mineTops;
-    public Sprite[] mineIcons;
-    public Sprite baseBottom;
-    public Sprite baseOverlay;
-    public Sprite sideBaseOverlay;
-    public Sprite[] bombFactoryBottoms;
-    public Sprite[] bombFactoryTops;
-    public Sprite[] bombFactoryIcons;
-    public Sprite structureOverlay;
+
+    #region TileSkin Items
+    [SerializeField]
+    private Sprite _destructorIcon;
+    public Sprite destructorIcon
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.destructorIcon;
+            }
+            else
+                return _destructorIcon;
+        }
+    }
+
+    [SerializeField]
+    private Sprite _splashIcon;
+    public Sprite splashIcon
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.splashIcon;
+            }
+            else
+                return _splashIcon;
+        }
+    }
+
+    [SerializeField]
+    private Sprite[] _factoryBottoms;
+    public Sprite[] factoryBottoms
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.factoryBottoms;
+            }
+            else
+                return _factoryBottoms;
+        }
+    }
+
+    [SerializeField]
+    private Sprite[] _factoryTops;
+    public Sprite[] factoryTops
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.factoryTops;
+            }
+            else
+                return _factoryTops;
+        }
+    }
+
+    [SerializeField]
+    private Sprite[] _factoryIcons;
+    public Sprite[] factoryIcons
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.factoryIcons;
+            }
+            else
+                return _factoryIcons;
+        }
+    }
+
+    [SerializeField]
+    private Sprite[] _mineBottoms;
+    public Sprite[] mineBottoms
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.mineBottoms;
+            }
+            else
+                return _mineBottoms;
+        }
+    }
+
+    [SerializeField]
+    private Sprite[] _mineTops;
+    public Sprite[] mineTops
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.mineTops;
+            }
+            else
+                return _mineTops;
+        }
+    }
+
+    [SerializeField]
+    private Sprite[] _mineIcons;
+    public Sprite[] mineIcons
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.mineIcons;
+            }
+            else
+                return _mineIcons;
+        }
+    }
+
+    [SerializeField]
+    private Sprite _baseBottom;
+    public Sprite baseBottom
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.baseBottom;
+            }
+            else
+                return _baseBottom;
+        }
+    }
+    [SerializeField]
+    private Sprite _baseOverlay;
+    public Sprite baseOverlay
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.baseOverlay;
+            }
+            else
+                return _baseOverlay;
+        }
+    }
+
+    [SerializeField]
+    private Sprite _sideBaseOverlay;
+    public Sprite sideBaseOverlay
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.sideBaseOverlay;
+            }
+            else
+                return _sideBaseOverlay;
+        }
+    }
+
+    [SerializeField]
+    private Sprite[] _bombFactoryBottoms;
+    public Sprite[] bombFactoryBottoms
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.bombFactoryBottoms;
+            }
+            else
+                return _bombFactoryBottoms;
+        }
+    }
+
+    [SerializeField]
+    private Sprite[] _bombFactoryTops;
+    public Sprite[] bombFactoryTops
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.bombFactoryTops;
+            }
+            else
+                return _bombFactoryTops;
+        }
+    }
+
+    [SerializeField]
+    private Sprite[] _bombFactoryIcons;
+    public Sprite[] bombFactoryIcons
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.bombFactoryIcons;
+            }
+            else
+                return _bombFactoryIcons;
+        }
+    }
+
+    [SerializeField]
+    private Sprite _structureOverlay;
+    public Sprite structureOverlay
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkin != null)
+            {
+                return Services.GameManager.currentTileSkin.structureOverlay;
+            }
+            else
+                return _structureOverlay;
+        }
+    }
+    #endregion
+
     private bool scrollingInBanners;
     private Player winner;
     private float bannerScrollTimeElapsed;
