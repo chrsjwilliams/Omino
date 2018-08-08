@@ -247,22 +247,16 @@ namespace Beat
          {
             case (BeatValue.Measure) :
                return AtNextMeasure();
-               break;
             case (BeatValue.Half) :
                return AtNextHalf();
-               break;
             case (BeatValue.Quarter) :
                return AtNextQuarter();
-               break;
             case (BeatValue.Eighth) :
                return AtNextEighth();
-               break;
             case (BeatValue.Sixteenth) :
                return AtNextSixteenth();
-               break;
             case (BeatValue.ThirtySecond) :
                return AtNextThirtySecond();
-               break;
          }
 
          return 0.0d;
