@@ -266,15 +266,6 @@ public class DiscoRandom : DiscoFloor
 	public DiscoRandom()
 	{
 		
-		TaskQueue switchColors = new TaskQueue(new List<Task>(new Task[] {
-			new ActionTask(_SetColors),
-			new Wait(Services.Clock.BeatLength() / 2),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
-			new Wait(Services.Clock.BeatLength()),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
-			new Wait(Services.Clock.BeatLength()),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); })
-		}));
 	}
 
 	internal override void Update()
@@ -380,16 +371,6 @@ public class DiscoCheckers : DiscoFloor
 				color2 = Color.black;
 				break;
 		}
-
-		TaskQueue switchColors = new TaskQueue(new List<Task>(new Task[] {
-			new ActionTask(_SetColors),
-			new Wait(Services.Clock.BeatLength() / 2),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
-			new Wait(Services.Clock.BeatLength()),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
-			new Wait(Services.Clock.BeatLength()),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); })
-			}));
 	}
 
 	internal override void Update()
