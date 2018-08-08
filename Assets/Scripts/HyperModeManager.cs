@@ -243,21 +243,29 @@ public class DiscoFloor : Task
 {
 	public Color[] colors =
 		{new Color(1, 0.92f, 0.016f, 1f), new Color(0f, 1f, 1f, 1f), new Color(1, 0, 1, 1f), new Color(1, 1f, 1f, 1f)};
+	public float timeElapsed = 0;
 
 	public DiscoFloor()
 	{
 		
+	}
+
+	internal override void Update()
+	{
+		timeElapsed += Time.deltaTime;
+		if (timeElapsed > Services.Clock.BeatLength() * 3 + Services.Clock.SixteenthLength())
+		{
+			SetStatus(TaskStatus.Success);
+		}
 	}
 }
 
 public class DiscoRandom : DiscoFloor
 {
 	private int num_switches = 0;
-	private TaskManager _colorSwitcher;
 
 	public DiscoRandom()
 	{
-		_colorSwitcher = new TaskManager();
 		
 		TaskQueue switchColors = new TaskQueue(new List<Task>(new Task[] {
 			new ActionTask(_SetColors),
@@ -268,12 +276,15 @@ public class DiscoRandom : DiscoFloor
 			new Wait(Services.Clock.BeatLength()),
 			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); })
 		}));
-		
-		_colorSwitcher.Do(switchColors);
 	}
 
 	internal override void Update()
 	{
+		base.Update();
+		
+		if (timeElapsed > num_switches * Services.Clock.BeatLength())
+			_SetColors();
+		
 		if (num_switches >= 4) SetStatus(TaskStatus.Success);
 	}
 
@@ -347,8 +358,6 @@ public class DiscoCheckers : DiscoFloor
 	
 		_EstablishGrid(double_wide);
 		
-		_colorSwitcher = new TaskManager();
-		
 		switch (UnityEngine.Random.Range(0, 4))
 		{
 			case 0 :
@@ -382,13 +391,15 @@ public class DiscoCheckers : DiscoFloor
 			new Wait(Services.Clock.BeatLength()),
 			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); })
 			}));
-		
-		_colorSwitcher.Do(switchColors);
 	}
 
 	internal override void Update()
 	{
-		_colorSwitcher.Update();
+		base.Update();
+		
+		if (timeElapsed > num_switches * Services.Clock.BeatLength())
+			_SetColors();
+		
 		if (num_switches >= 4) SetStatus(TaskStatus.Success);
 	}
 
@@ -447,7 +458,6 @@ public class DiscoStripes : DiscoFloor
 {
 	private int num_switches = 0;
 	private Color color1, color2, color3, color4;
-	private TaskManager _colorSwitcher;
 
 	private int[,] grid;
 	/*private readonly int[,] gridLR =
@@ -499,33 +509,22 @@ public class DiscoStripes : DiscoFloor
 
 	public DiscoStripes()
 	{
-		_colorSwitcher = new TaskManager();
-
 		_EstablishGrid();
-		
+
 		int offset = UnityEngine.Random.Range(0, 4);
 
 		color1 = colors[offset % colors.Length];
 		color2 = colors[(offset + 1) % colors.Length];
 		color3 = colors[(offset + 2) % colors.Length];
 		color4 = colors[(offset + 3) % colors.Length];
-
-		TaskQueue switchColors = new TaskQueue(new List<Task>(new Task[] {
-			new ActionTask(_SetColors),
-			new Wait(Services.Clock.BeatLength() / 2),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
-			new Wait(Services.Clock.BeatLength()),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
-			new Wait(Services.Clock.BeatLength()),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); })
-			}));
-		
-		_colorSwitcher.Do(switchColors);
 	}
 
 	internal override void Update()
 	{
-		_colorSwitcher.Update();
+		base.Update();
+		
+		if (timeElapsed > num_switches * Services.Clock.BeatLength())
+			_SetColors();
 		
 		if (num_switches >= 4) SetStatus(TaskStatus.Success);
 	}
@@ -597,7 +596,6 @@ public class DiscoWave : DiscoFloor
 {
 	private int num_switches = 0;
 	private Color color1, color2, color3, color4;
-	private TaskManager _colorSwitcher;
 
 	private int[,] grid;
 	private readonly int[,] full_grid =
@@ -626,7 +624,6 @@ public class DiscoWave : DiscoFloor
 
 	public DiscoWave()
 	{
-		_colorSwitcher = new TaskManager();
 		_EstablishGrid();
 
 		int offset = UnityEngine.Random.Range(0, 4);
@@ -635,23 +632,14 @@ public class DiscoWave : DiscoFloor
 		color2 = colors[(offset + 1) % colors.Length];
 		color3 = colors[(offset + 2) % colors.Length];
 		color4 = colors[(offset + 3) % colors.Length];
-
-		TaskQueue switchColors = new TaskQueue(new List<Task>(new Task[] {
-			new ActionTask(_SetColors),
-			new Wait(Services.Clock.BeatLength() / 2),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
-			new Wait(Services.Clock.BeatLength()),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
-			new Wait(Services.Clock.BeatLength()),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); })
-			}));
-		
-		_colorSwitcher.Do(switchColors);
 	}
 
 	internal override void Update()
 	{
-		_colorSwitcher.Update();
+		base.Update();
+		
+		if (timeElapsed > num_switches * Services.Clock.BeatLength())
+			_SetColors();
 		
 		if (num_switches >= 4) SetStatus(TaskStatus.Success);
 	}
@@ -725,7 +713,6 @@ public class DiscoBlocks : DiscoFloor
 {
 	private int num_switches = 0;
 	private Color color1, color2, color3, color4;
-	private TaskManager _colorSwitcher;
 
 	private int[,] grid;
 	private readonly int[,] full_grid =
@@ -754,7 +741,6 @@ public class DiscoBlocks : DiscoFloor
 
 	public DiscoBlocks()
 	{
-		_colorSwitcher = new TaskManager();
 		_EstablishGrid();
 		
 		int offset = UnityEngine.Random.Range(0, 4);
@@ -763,23 +749,14 @@ public class DiscoBlocks : DiscoFloor
 		color2 = colors[(offset + 1) % colors.Length];
 		color3 = colors[(offset + 2) % colors.Length];
 		color4 = colors[(offset + 3) % colors.Length];
-
-		TaskQueue switchColors = new TaskQueue(new List<Task>(new Task[] {
-			new ActionTask(_SetColors),
-			new Wait(Services.Clock.BeatLength() / 2),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
-			new Wait(Services.Clock.BeatLength()),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
-			new Wait(Services.Clock.BeatLength()),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); })
-			}));
-		
-		_colorSwitcher.Do(switchColors);
 	}
 
 	internal override void Update()
 	{
-		_colorSwitcher.Update();
+		base.Update();
+		
+		if (timeElapsed > num_switches * Services.Clock.BeatLength())
+			_SetColors();
 		
 		if (num_switches >= 4) SetStatus(TaskStatus.Success);
 	}
@@ -834,7 +811,6 @@ public class DiscoWindmill : DiscoFloor
 {
 	private int num_switches = 0;
 	private Color color1, color2, color3, color4;
-	private TaskManager _colorSwitcher;
 
 	private int[,] grid;
 	private readonly int[,] full_grid =
@@ -886,7 +862,6 @@ public class DiscoWindmill : DiscoFloor
 
 	public DiscoWindmill()
 	{
-		_colorSwitcher = new TaskManager();
 		_EstablishGrid();
 		
 		int offset = UnityEngine.Random.Range(0, 4);
@@ -896,22 +871,14 @@ public class DiscoWindmill : DiscoFloor
 		color3 = colors[(offset + 2) % colors.Length];
 		color4 = colors[(offset + 3) % colors.Length];
 
-		TaskQueue switchColors = new TaskQueue(new List<Task>(new Task[] {
-			new ActionTask(_SetColors),
-			new Wait(Services.Clock.BeatLength() / 2),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
-			new Wait(Services.Clock.BeatLength()),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); }),
-			new Wait(Services.Clock.BeatLength()),
-			new ActionTask(() => { Services.Clock.SyncFunction(_SetColors, Clock.BeatValue.Quarter); })
-			}));
-		
-		_colorSwitcher.Do(switchColors);
 	}
 
 	internal override void Update()
 	{
-		_colorSwitcher.Update();
+		base.Update();
+		
+		if (timeElapsed > num_switches * Services.Clock.BeatLength())
+			_SetColors();
 		
 		if (num_switches >= 4) SetStatus(TaskStatus.Success);
 	}
