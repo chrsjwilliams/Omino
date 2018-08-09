@@ -313,7 +313,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                 else
                 {
                     tooltipLocation = 
-                        Services.UIManager.blueprintUIZones[0].transform.position;
+                        Services.UIManager.UIMeters[0].blueprintUIZone.transform.position;
                 }
                 tooltipLeft.Init(GetName(), GetDescription(), 0, tooltipLocation, !placed);
                 tooltips.Add(tooltipLeft);
@@ -330,7 +330,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
                 else
                 {
                     tooltipLocation =
-                        Services.UIManager.blueprintUIZones[1].transform.position;
+                        Services.UIManager.UIMeters[1].blueprintUIZone.transform.position;
                 }
                 tooltipRight.Init(GetName(), GetDescription(), 180, tooltipLocation, !placed);
                 tooltips.Add(tooltipRight);

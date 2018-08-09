@@ -95,7 +95,7 @@ public static class DungeonRunManager
     public static void OnGameWin()
     {
         dungeonRunData.techChoices.Clear();
-        Services.UIManager.dungeonRunUIManager.OnGameEnd(true);
+        Services.UIManager.UIMenu.dungeonRunChallenegeCompleteMenu.OnGameEnd(true);
         dungeonRunData.challengeNum += 1;
 
         if (dungeonRunData.challengeNum > MAX_DUNGEON_CHALLENGES)
@@ -115,7 +115,7 @@ public static class DungeonRunManager
 
     public static void OnGameLoss()
     {
-        Services.UIManager.dungeonRunUIManager.OnGameEnd(false);
+        Services.UIManager.UIMenu.dungeonRunChallenegeCompleteMenu.OnGameEnd(false);
 
         Services.Analytics.DungeonRunLoss(dungeonRunData.challengeNum);
         

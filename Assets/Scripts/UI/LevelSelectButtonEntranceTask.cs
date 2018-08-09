@@ -48,7 +48,6 @@ public class LevelSelectButtonEntranceTask : Task
         for (int i = 0; i < buttons.Length; i++)
         {
             GameObject button = buttons[i];
-            LevelButton levelButton = button.GetComponent<LevelButton>();
             button.SetActive(true);
             //if (levelButton != null)
             //    button.SetActive(levelButton.unlocked);

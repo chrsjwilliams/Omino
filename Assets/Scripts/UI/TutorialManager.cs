@@ -32,10 +32,8 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private Button skipTutorialButton;
     private int humanPlayerNum = 1;
-    private int placementToolTipIndex = 5;
     [SerializeField]
     private bool completedRotation;
-    private int touchID = -1;
     private const float rotationInputRadius = 8f;
     private const float rotationDeadZone = 50f;
     public string[] objectiveText { get; private set; }
@@ -106,7 +104,6 @@ public class TutorialManager : MonoBehaviour
             tm.Do(slideInObjectives);
         }
   
-        touchID = -1;
         Services.GameEventManager.Register<RotationEvent>(OnRotation);
         Services.GameEventManager.Register<PieceRemoved>(OnPieceRemoved);
         Services.GameEventManager.Register<ClaimedTechEvent>(OnClaimTech);
@@ -262,7 +259,6 @@ public class TutorialManager : MonoBehaviour
             case 3:
                 int aiPlayerNumber = humanPlayerNum == 1 ? 2 : 1;
                 Player humanPlayer = Services.GameManager.Players[humanPlayerNum - 1];
-                Player aiPlayer = Services.GameManager.Players[aiPlayerNumber - 1];
                 if (e.piece is Blueprint &&
                     !(e.piece.owner is AIPlayer))
                 {

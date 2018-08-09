@@ -13,7 +13,7 @@ public class BoardEntryAnimation : Task
     private int mapHeight;
     private int currentIndex;
     private bool[,] tilesOn;
-    private float targetAlpha;
+
     private static Vector3 offset = new Vector3(1f, 1f, 0);
     private Vector3[,] basePositions;
 
@@ -25,7 +25,6 @@ public class BoardEntryAnimation : Task
         mapHeight = map.GetUpperBound(1)+1;
         totalDuration = animDuration + (staggerTime * (mapHeight + mapWidth));
         tilesOn = new bool[mapWidth, mapHeight];
-        targetAlpha = map[0, 0].GetColor().a;
         basePositions = new Vector3[mapWidth, mapHeight];
         for (int i = 0; i < mapWidth; i++)
         {

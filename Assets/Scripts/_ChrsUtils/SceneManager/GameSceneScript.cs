@@ -76,7 +76,7 @@ public class GameSceneScript : Scene<TransitionData>
 
                 for (int i = 0; i < DungeonRunManager.dungeonRunData.currentTech.Count; i++)
                 {
-                    Image techBuildingIcon = Services.UIManager.techPowerUpIconArray[0].GetComponentsInChildren<Image>()[i];
+                    Image techBuildingIcon = Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponentsInChildren<Image>()[i];
                     BuildingType techBuilding = DungeonRunManager.dungeonRunData.currentTech[i];
                     techBuildingIcon.sprite = Services.TechDataLibrary.GetIcon(techBuilding);
                     techBuildingIcon.color = Services.GameManager.Player1ColorScheme[0];
@@ -84,8 +84,8 @@ public class GameSceneScript : Scene<TransitionData>
 
                 if (Services.GameManager.onIPhone)
                 {
-                    Services.UIManager.techPowerUpIconArray[0].GetComponent<RectTransform>().localPosition = new Vector2(-600, 0);
-                    Services.UIManager.techPowerUpIconArray[0].GetComponent<RectTransform>().localScale = new Vector2(0.75f, 0.75f);
+                    Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localPosition = new Vector2(-600, 0);
+                    Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localScale = new Vector2(0.75f, 0.75f);
                 }
 
                 break;
@@ -210,7 +210,7 @@ public class GameSceneScript : Scene<TransitionData>
         Services.Analytics.MatchEnded();
         gameOver = true;
         Services.GameEventManager.Fire(new GameEndEvent(winner));
-        Services.UIManager.StartBannerScroll(winner);
+        Services.UIManager.UIBannerManager.StartBannerScroll(winner);
 
         if (winner is AIPlayer)
         {
@@ -422,7 +422,7 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void StartGameSequence()
     {
-        TaskTree startSequence = new TaskTree(new ScrollReadyBanners(Services.UIManager.readyBanners, false));
+        TaskTree startSequence = new TaskTree(new ScrollReadyBanners(Services.UIManager.UIBannerManager.readyBanners, false));
         TaskTree uiEntry;
         TaskTree handEntry;
         if (Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial &&
@@ -432,7 +432,7 @@ public class GameSceneScript : Scene<TransitionData>
             uiEntry =
                 new TaskTree(new EmptyTask(),
                     new TaskTree(
-                        new UIEntryAnimation(Services.UIManager.meters[0], Services.GameManager.Players[0].blueprints, showDestructors)));
+                        new UIEntryAnimation(Services.UIManager.UIMeters[0].meters, Services.GameManager.Players[0].blueprints, showDestructors)));
 
            handEntry =
            new TaskTree(new EmptyTask(),
@@ -445,9 +445,9 @@ public class GameSceneScript : Scene<TransitionData>
             uiEntry =
                 new TaskTree(new EmptyTask(),
                     new TaskTree(
-                        new UIEntryAnimation(Services.UIManager.meters[0], Services.GameManager.Players[0].blueprints, showDestructors)),
+                        new UIEntryAnimation(Services.UIManager.UIMeters[0].meters, Services.GameManager.Players[0].blueprints, showDestructors)),
                     new TaskTree(
-                        new UIEntryAnimation(Services.UIManager.meters[1], Services.GameManager.Players[1].blueprints, showDestructors)));
+                        new UIEntryAnimation(Services.UIManager.UIMeters[1].meters, Services.GameManager.Players[1].blueprints, showDestructors)));
 
             handEntry =
             new TaskTree(new EmptyTask(),

@@ -10,11 +10,11 @@ public class DangerEffect : MonoBehaviour {
     private const float timeAtMax = 0.3f;
     private float timeElapsed;
     private bool particleStarted;
-    private ParticleSystem ps;
+    //private ParticleSystem ps;
 
 	// Use this for initialization
 	void Start () {
-        ps = GetComponentInChildren<ParticleSystem>();
+        //ps = GetComponentInChildren<ParticleSystem>();
         timeElapsed = 0;
         transform.localScale = Vector3.zero;
         Services.AudioManager.RegisterSoundEffect(Services.Clips.Warning);

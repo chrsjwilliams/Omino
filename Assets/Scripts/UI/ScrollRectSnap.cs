@@ -29,7 +29,6 @@ public class ScrollRectSnap : MonoBehaviour
 
     private bool levelSelected;
     private float[] distance;
-    private float scrollPanelOffset;
     private int minImageIndex;
     private float travelDistance;
     private Vector3 screenInputPos;
@@ -48,7 +47,6 @@ public class ScrollRectSnap : MonoBehaviour
         sensitivityThreshold = 0.0001f;
         levelSelected = false;
         moveBuffer = 150;
-        scrollPanelOffset = 90;
         panel = GameObject.Find("ScrollPanel").GetComponent<RectTransform>();
         center = GameObject.Find("SelectedLevel").GetComponent<RectTransform>();
         numOfLevels = panel.transform.childCount;

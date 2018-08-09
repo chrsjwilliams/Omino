@@ -145,14 +145,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            if (currentTileSkins[0] != null)
-            {
-                return currentTileSkins[0].MapColorScheme;
-            }
-            else
-            {
-                return _mapColorScheme;
-            }
+            return _mapColorScheme;          
         }
     }
 
@@ -161,14 +154,7 @@ public class GameManager : MonoBehaviour
     public Color NeutralColor {
         get
         {
-            if (currentTileSkins[0] != null)
-            {
-                return currentTileSkins[0].neutralColor;
-            }
-            else
-            {
-                return neutralColor;
-            }
+            return neutralColor;          
         }
     }
     #endregion
@@ -294,6 +280,7 @@ public class GameManager : MonoBehaviour
 
         HandicapSystem.Init();
         LoadModeStatusData();
+        UnlockMode(TitleSceneScript.GameMode.Shop, false);
     }
 
     private void LoadModeStatusData()
@@ -405,6 +392,7 @@ public class GameManager : MonoBehaviour
         {
             modeUnlockStatuses[mode] = true;
         }
+        UnlockMode(TitleSceneScript.GameMode.Shop, false);
         SaveModeStatusData();
     }
 

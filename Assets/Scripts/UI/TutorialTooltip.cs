@@ -7,7 +7,6 @@ using TMPro;
 
 public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 {
-    private bool canView = true;
     [SerializeField]
     private int touchID;
 
@@ -30,11 +29,8 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
     [SerializeField]
     private Image subImage;
     private Vector3 subImagePrimaryPosition;
-    private Vector3 subImageSecondaryPosition = Vector3.back;
     [SerializeField]
     private Image subImage2;
-    private Vector3 subImage2PrimaryPosition;
-    private Vector3 subImage2SecondaryPosition = Vector3.back;
     [SerializeField]
     private float scaleDuration;
     [SerializeField]

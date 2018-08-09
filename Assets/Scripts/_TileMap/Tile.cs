@@ -109,7 +109,7 @@ public class Tile : MonoBehaviour, IVertex
     private SpriteRenderer legalitySr;
     [SerializeField]
     private SpriteRenderer bpAssistHighlightSr;
-    private readonly Color bpAssistColor = new Color(1, 1, 1);
+    //private readonly Color bpAssistColor = new Color(1, 1, 1);
     private bool bombSettling;
     private float bombSettleTimeElapsed;
     private const float bombSettleDuration = 0.4f;

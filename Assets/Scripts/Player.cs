@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
         private set
         {
             resources_ = value;
-            Services.UIManager.UpdateResourceCount(resources_, maxResources, this);
+            Services.UIManager.UIMeters[playerNum - 1].UpdateResourceCount(resources_, maxResources);
         }
     }
 
@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
         set
         {
             attackResources_ = value;
-            Services.UIManager.UpdateResourceCount(attackResources_, maxAttackResources, this, true);
+            Services.UIManager.UIMeters[playerNum - 1].UpdateResourceCount(attackResources_, maxAttackResources, true);
         }
     }
 
@@ -85,7 +85,6 @@ public class Player : MonoBehaviour
     public bool bulldoze { get; protected set; }
     // 
 
-    private bool blueprintsClearedCheck = false;
     
     protected float resourceGainRate;
     protected float normalDrawRate;
@@ -431,14 +430,14 @@ public class Player : MonoBehaviour
             (normalDrawRate * drawRateFactor));
         float destructorTimeLeft = ((1 - destructorDrawMeterFillAmt) /
             (destructorDrawRate * attackGainFactor));
-        Services.UIManager.UpdateDrawMeters(playerNum, normalDrawMeterFillAmt, 
+        Services.UIManager.UIMeters[playerNum - 1].UpdateDrawMeters(normalDrawMeterFillAmt, 
             destructorDrawMeterFillAmt, normalTimeLeft, destructorTimeLeft);
-        Services.UIManager.UpdateResourceMeter(playerNum, resourceMeterFillAmt);
-        Services.UIManager.UpdateResourceMeter(playerNum, destructorDrawMeterFillAmt, true);
+        Services.UIManager.UIMeters[playerNum - 1].UpdateResourceMeter(resourceMeterFillAmt);
+        Services.UIManager.UIMeters[playerNum - 1].UpdateResourceMeter(destructorDrawMeterFillAmt, true);
         if (normalDrawMeterFillAmt >= 1)
         {
             Vector3 rawDrawPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
-                Services.UIManager.factoryBlueprintLocations[playerNum - 1].position);
+                Services.UIManager.UIMeters[playerNum - 1].factoryBlueprintLocation.position);
             DrawPieces(1, new Vector3(rawDrawPos.x,rawDrawPos.y, 0));
             normalDrawMeterFillAmt -= 1;
         }
@@ -609,7 +608,7 @@ public class Player : MonoBehaviour
         nextPiece.MakePhysicalPiece();
         Vector3 position;
         position = Services.GameManager.MainCamera.ScreenToWorldPoint(
-            Services.UIManager.GetBarPosition(playerNum, destructor));
+            Services.UIManager.UIMeters[playerNum - 1].GetBarPosition(destructor));
         nextPiece.Reposition(new Vector3(position.x, position.y, 0));
         nextPiece.QueueUp();
         if (destructor)
@@ -656,13 +655,13 @@ public class Player : MonoBehaviour
         switch (blueprint.buildingType)
         {
             case BuildingType.FACTORY:
-                screenPos = Services.UIManager.factoryBlueprintLocations[playerNum - 1].position;
+                screenPos = Services.UIManager.UIMeters[playerNum - 1].factoryBlueprintLocation.position;
                 break;
             case BuildingType.GENERATOR:
-                screenPos = Services.UIManager.mineBlueprintLocations[playerNum - 1].position;
+                screenPos = Services.UIManager.UIMeters[playerNum - 1].mineBlueprintLocation.position;
                 break;
             case BuildingType.BARRACKS:
-                screenPos = Services.UIManager.bombFactoryBlueprintLocations[playerNum - 1].position;
+                screenPos = Services.UIManager.UIMeters[playerNum - 1].bombFactoryBlueprintLocation.position;
                 break;
             default:
                 break;
@@ -898,7 +897,7 @@ public class Player : MonoBehaviour
     {
         if (selectedPiece == null) return;
         if (selectedPiece.cost > resources)
-            Services.UIManager.FailedPlayFromLackOfResources(this, 
+            Services.UIManager.UIMeters[playerNum - 1].FailedPlayFromLackOfResources(
                 selectedPiece.cost - resources);
         if (selectedPiece is Destructor && (selectedPiece as Destructor).StoppedByShield())
         {

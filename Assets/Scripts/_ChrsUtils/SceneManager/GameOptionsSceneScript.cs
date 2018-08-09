@@ -494,8 +494,8 @@ public class GameOptionsSceneScript : Scene<TransitionData>
             new LevelSelectTextEntrance(levelSelectText);
         LevelSelectButtonEntranceTask buttonEntrance =
             new LevelSelectButtonEntranceTask(buttons, playButton);
-        LevelSelectButtonEntranceTask backButtonEntrance =
-                new LevelSelectButtonEntranceTask(backButton);
+        //LevelSelectButtonEntranceTask backButtonEntrance =
+        //        new LevelSelectButtonEntranceTask(backButton);
 
         _tm.Do(entrance);        
         _tm.Do(buttonEntrance);

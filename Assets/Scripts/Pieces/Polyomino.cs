@@ -58,7 +58,6 @@ public class Polyomino : IVertex
     public bool dead { get; private set; }
     public float shieldDurationRemaining { get; private set; }
     protected List<Tooltip> tooltips;
-    private int baseSortingOrder;
     protected int numRotations;
     private Queue<Coord> lastPositions;
     private const int framesBeforeLockIn = 10;
@@ -1641,7 +1640,7 @@ public class Polyomino : IVertex
 
     private void SetRelativeSortingOrder(Tile tile)
     {
-        tile.SetSortingOrder(baseSortingOrder - tile.coord.x - (100 * tile.coord.y));
+        //tile.SetSortingOrder(baseSortingOrder - tile.coord.x - (100 * tile.coord.y));
     }
 
     protected void CheckTouchForRotateInput(TouchDown e)

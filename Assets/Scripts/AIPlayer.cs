@@ -363,7 +363,7 @@ public class AIPlayer : Player
     protected IEnumerator GeneratePossibleMoves()
     {
         //Debug.Log("starting to think at time " + Time.time);
-        string playerColor = playerNum == 1 ? "Orange" : "Blue";
+        //string playerColor = playerNum == 1 ? "Orange" : "Blue";
         isThinking = true;
         float thinkingOverride = (1 - resourceMeterFillAmt) / (resourceGainRate * resourceGainFactor) * 0.95f;
         float startTime = Time.time;

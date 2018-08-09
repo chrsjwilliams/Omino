@@ -22,7 +22,7 @@ public class HandPieceEntry : Task
         piecesOn = new bool[hand.Count];
         pieceTargetPositions = new Vector3[hand.Count];
         startPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
-            Services.UIManager.GetBarPosition(hand[0].owner.playerNum, false));
+            Services.UIManager.UIMeters[hand[0].owner.playerNum - 1].GetBarPosition(false));
         startPos = new Vector3(startPos.x, startPos.y, 0);
         for (int i = 0; i < hand.Count; i++)
         {

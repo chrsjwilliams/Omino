@@ -29,7 +29,6 @@ public class DungeonRunSceneScript : Scene<TransitionData>
               "progress.txt";
         }
     }
-    private Level levelSelected;
 
     [SerializeField]
     private GameObject dungeonRunMenu;
@@ -151,7 +150,7 @@ public class DungeonRunSceneScript : Scene<TransitionData>
             DungeonRunManager.ResetDungeonRun();
         }
 
-        Services.GameManager.SetCurrentLevel(levelSelected);
+        Services.GameManager.SetCurrentLevel(null);
         Task changeScene = new WaitUnscaled(0.01f);
         changeScene.Then(new ActionTask(ChangeScene));
 

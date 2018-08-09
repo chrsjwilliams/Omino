@@ -129,7 +129,7 @@ public class MapManager : MonoBehaviour
             new Wait(0.3f),
             new BoardEntryAnimation(),
             new InitialBuildingEntryAnimation(),
-            new ScrollReadyBanners(Services.UIManager.readyBanners, true)
+            new ScrollReadyBanners(Services.UIManager.UIBannerManager.readyBanners, true)
             });
 
         Services.GameScene.tm.Do(boardAnimationTasks);

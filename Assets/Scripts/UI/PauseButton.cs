@@ -14,8 +14,13 @@ public class PauseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     private readonly Vector3 offset = 50 * Vector3.left;
     private Vector3 basePos;
 
+    private bool showCompleteionMenu;
+
+   
+
     private void Start()
     {
+        
         filledImage.fillAmount = 0;
         basePos = transform.localPosition;
     }
@@ -35,19 +40,11 @@ public class PauseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        //if (Services.GameScene.gamePaused)
-        //{
-        //    Services.UIManager.TogglePauseMenu();
-        //    print("toggling pause menu");
-        //}
-        //else
-        //{
-            Services.AudioManager.PlaySoundEffect(Services.Clips.UIButtonPressed, 1.0f);
-            pressed = true;
-            transform.localScale = holdScale * Vector3.one;
-            timeHeld = 0;
-            transform.localPosition = basePos + offset;
-        //}
+        Services.AudioManager.PlaySoundEffect(Services.Clips.UIButtonPressed, 1.0f);
+        pressed = true;
+        transform.localScale = holdScale * Vector3.one;
+        timeHeld = 0;
+        transform.localPosition = basePos + offset;
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -55,20 +52,82 @@ public class PauseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         ReturnToNeutral();
     }
 
-    private void Pause()
+    public void TogglePauseMenu()
     {
-        Services.AudioManager.PlaySoundEffect(Services.Clips.UIClick, 1.0f);
-        //if (!Services.GameScene.gamePaused)
-        if (!Services.GameScene.gameOver)
+        if (Services.GameScene.gamePaused)
         {
-            Services.UIManager.TogglePauseMenu();
+            AudioListener.volume = 1.0f;
+            Services.UIManager.UIMenu.pauseMenu.SetActive(false);
+            Services.GameScene.UnpauseGame();
         }
         else
         {
-            Services.UIManager.ToggleCompletionMenu(Services.GameManager.mode);
+            AudioListener.volume = 0.55f;
+            Services.UIManager.UIMenu.pauseMenu.SetActive(true);
+            Services.GameScene.PauseGame();
         }
-        //else Services.UIManager.TurnOnPauseMenu();
+    }
+
+    public void ToggleOptionsMenu(bool state)
+    {
+        if (state)
+        {
+            Services.UIManager.UIMenu.optionsMenu.SetActive(true);
+            Services.UIManager.UIMenu.pauseMenu.SetActive(false);
+            if (!Services.GameManager.MusicEnabled)
+            {
+                GameObject.Find("ToggleMusic").GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
+            }
+        }
+        else
+        {
+            Services.UIManager.UIMenu.optionsMenu.SetActive(false);
+            Services.UIManager.UIMenu.pauseMenu.SetActive(true);
+        }
+    }
+
+    private void Pause()
+    {
+        Services.AudioManager.PlaySoundEffect(Services.Clips.UIClick, 1.0f);
+        if (!Services.GameScene.gameOver)
+        {
+            TogglePauseMenu();
+        }
+        else
+        {
+            ToggleCompletionMenu(Services.GameManager.mode);
+        }
         ReturnToNeutral();
+    }
+
+    public void ToggleCompletionMenu(TitleSceneScript.GameMode mode)
+    {
+        switch (mode)
+        {
+            case TitleSceneScript.GameMode.Challenge:
+                ToggleCompleteionMenu(Services.UIManager.UIMenu.eloUIManager.menu,
+                                        true);
+                break;
+            case TitleSceneScript.GameMode.Tutorial:
+                ToggleCompleteionMenu(Services.UIManager.UIMenu.tutorialLevelCompleteMenu.gameObject,
+                                        Services.UIManager.UIMenu.tutorialLevelCompleteMenu.inPosition);
+                break;
+            case TitleSceneScript.GameMode.DungeonRun:
+                ToggleCompleteionMenu(Services.UIManager.UIMenu.dungeonRunChallenegeCompleteMenu.menu,
+                                        Services.UIManager.UIMenu.dungeonRunChallenegeCompleteMenu.inPosition);
+
+                break;
+            default:
+                TogglePauseMenu();
+                break;
+        }
+    }
+
+    private void ToggleCompleteionMenu(GameObject menu, bool inPosition)
+    {
+        if (!inPosition) return;
+        showCompleteionMenu = !showCompleteionMenu;
+        menu.SetActive(showCompleteionMenu);
     }
 
     private void ReturnToNeutral()

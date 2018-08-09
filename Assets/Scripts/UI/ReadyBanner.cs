@@ -86,9 +86,9 @@ public class ReadyBanner : MonoBehaviour
         }
         if (allReady)
         {
-            for (int i = 0; i < Services.UIManager.readyBanners.Length; i++)
+            for (int i = 0; i < Services.UIManager.UIBannerManager.readyBanners.Length; i++)
             {
-                Services.UIManager.readyBanners[i].button.enabled = false;
+                Services.UIManager.UIBannerManager.readyBanners[i].button.enabled = false;
             }
             Services.GameScene.StartGameSequence();
         }

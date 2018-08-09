@@ -227,7 +227,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4981010335453446}
   - component: {fileID: 114607474978766554}
-  - component: {fileID: 114117203776722182}
   m_Layer: 0
   m_Name: InGameShopSceneScript
   m_TagString: Untagged
@@ -748,17 +747,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114117203776722182
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1471521736895472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71aa1a91e5bc9c643bcb047d13307714, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114126461266625006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1834,7 +1822,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backButton: {fileID: 1356347930957028}
   optionButton: {fileID: 1829375557092892}
-  purcahser: {fileID: 114117203776722182}
 --- !u!114 &114641378603349444
 MonoBehaviour:
   m_ObjectHideFlags: 1

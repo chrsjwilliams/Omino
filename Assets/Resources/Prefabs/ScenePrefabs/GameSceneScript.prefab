@@ -207,6 +207,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224676924963488870}
   - component: {fileID: 114506153348883820}
+  - component: {fileID: 114504483113794988}
   m_Layer: 5
   m_Name: Banners
   m_TagString: Untagged
@@ -223,6 +224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224746016476694046}
   - component: {fileID: 114637197131500904}
+  - component: {fileID: 114857934123289524}
   m_Layer: 5
   m_Name: UI_Container_P1
   m_TagString: Untagged
@@ -239,6 +241,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224545188813992538}
   - component: {fileID: 114711116307310280}
+  - component: {fileID: 114145086440691440}
   m_Layer: 5
   m_Name: UI_Holder
   m_TagString: Untagged
@@ -448,6 +451,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224051136206674898}
+  - component: {fileID: 114308219730986454}
   m_Layer: 5
   m_Name: ChallengeLevelComplete
   m_TagString: Untagged
@@ -599,7 +603,7 @@ GameObject:
   - component: {fileID: 222309789759918574}
   - component: {fileID: 114781432966946024}
   m_Layer: 5
-  m_Name: MissingResourceIndicator3
+  m_Name: MissingAttackResourceIndicator3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -616,7 +620,7 @@ GameObject:
   - component: {fileID: 222713506161444596}
   - component: {fileID: 114231468159258780}
   m_Layer: 5
-  m_Name: MissingResourceIndicator3
+  m_Name: MissingAttackResourceIndicator3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1021,7 +1025,7 @@ GameObject:
   - component: {fileID: 222068136132755362}
   - component: {fileID: 114270875494349704}
   m_Layer: 5
-  m_Name: MissingResourceIndicator1
+  m_Name: MissingAttackResourceIndicator1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1733,6 +1737,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224402469258124964}
   - component: {fileID: 114350118638272836}
+  - component: {fileID: 114987092983937828}
   m_Layer: 5
   m_Name: UI_Container_P2
   m_TagString: Untagged
@@ -1798,6 +1803,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224635918449137490}
+  - component: {fileID: 114309043743638620}
   m_Layer: 5
   m_Name: DungeonRunChallengeLevelComplete
   m_TagString: Untagged
@@ -2019,7 +2025,7 @@ GameObject:
   - component: {fileID: 114695016435852176}
   - component: {fileID: 114763615310302304}
   m_Layer: 5
-  m_Name: PauseMenuV2
+  m_Name: PauseMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2855,7 +2861,7 @@ GameObject:
   - component: {fileID: 222178025109081488}
   - component: {fileID: 114858189710593532}
   m_Layer: 5
-  m_Name: MissingResourceIndicator2
+  m_Name: MissingAttackResourceIndicator2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3089,7 +3095,7 @@ GameObject:
   - component: {fileID: 222916009208701156}
   - component: {fileID: 114585401825567350}
   m_Layer: 5
-  m_Name: MissingResourceIndicator1
+  m_Name: MissingAttackResourceIndicator1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3159,7 +3165,7 @@ GameObject:
   - component: {fileID: 222888397397603816}
   - component: {fileID: 114209948496632634}
   m_Layer: 5
-  m_Name: MissingResourceIndicator2
+  m_Name: MissingAttackResourceIndicator2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4338,7 +4344,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114252342320511668}
+      - m_Target: {fileID: 114504483113794988}
         m_MethodName: OnGameEndBannerTouch
         m_Mode: 1
         m_Arguments:
@@ -4831,7 +4837,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1256893560922484}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b8ee6ddca3626dd4f96ec90c42a547ef, type: 3}
   m_Name: 
@@ -5478,6 +5484,22 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114145086440691440
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1082460874907148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fce3c41b93e5a8e4896af5e793ecb388, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseMenu: {fileID: 1562518602810658}
+  tutorialLevelCompleteMenu: {fileID: 114018644588169220}
+  dungeonRunChallenegeCompleteMenu: {fileID: 114309043743638620}
+  optionsMenu: {fileID: 1621185940428570}
+  eloUIManager: {fileID: 114308219730986454}
 --- !u!114 &114148114257907264
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6577,68 +6599,20 @@ MonoBehaviour:
   - {fileID: 1878206196937206}
   - {fileID: 1295789764141990}
   - {fileID: 1194457559573752}
-  resourceCounters:
-  - {fileID: 114112504811170874}
-  - {fileID: 114316155712960060}
-  resourceSlotZones:
-  - {fileID: 1996666497465608}
-  - {fileID: 1219293086740188}
-  attackResourceSlotZones:
-  - {fileID: 1641569992328028}
-  - {fileID: 1771068869046686}
-  blueprintUIZones:
-  - {fileID: 224794731102932362}
-  - {fileID: 224392237637947172}
-  techPowerUpIconArray:
-  - {fileID: 1018603292806698}
-  - {fileID: 1100086019959348}
-  normalDrawMeters:
-  - {fileID: 114065363214106492}
-  - {fileID: 114319912571520074}
-  normalPieceTimers:
-  - {fileID: 114306417745913742}
-  - {fileID: 114745647514687770}
-  destructorDrawMeters:
-  - {fileID: 114036386360712650}
-  - {fileID: 114448612923275494}
-  destructorPieceTimers:
-  - {fileID: 114258563104708436}
-  - {fileID: 114260784092898522}
-  resourceLevelTexts:
-  - {fileID: 114578726292229768}
-  - {fileID: 114376992368181162}
-  normLevelTexts:
-  - {fileID: 114455832012266936}
-  - {fileID: 114919166707297582}
-  destLevelTexts:
-  - {fileID: 114915558135422928}
-  - {fileID: 114170977761235418}
-  victoryBanners:
-  - {fileID: 224614743233593588}
-  - {fileID: 224604068134328034}
-  defeatBanners:
-  - {fileID: 224661717830743850}
-  - {fileID: 224992348201340544}
-  mineBlueprintLocations:
-  - {fileID: 224248847641534168}
-  - {fileID: 224489495953573796}
-  factoryBlueprintLocations:
-  - {fileID: 224825688931591332}
-  - {fileID: 224045397136942758}
-  bombFactoryBlueprintLocations:
-  - {fileID: 224618429434883330}
-  - {fileID: 224630615834046756}
-  readyBanners:
-  - {fileID: 114645766425464292}
-  - {fileID: 114398476056417092}
-  pauseMenu: {fileID: 1562518602810658}
-  pauseButton: {fileID: 1614636548927632}
+  canvas: {fileID: 224712141627911468}
+  tooltipsDisabled: 0
+  legalGlowColor: {r: 0.52156866, g: 0.9098039, b: 0.42745098, a: 1}
+  notLegalGlowColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 1}
+  UIMeters:
+  - {fileID: 114857934123289524}
+  - {fileID: 114987092983937828}
+  radialMeterFillMin: 0.05
+  radialMeterFillMax: 0.95
+  UIBannerManager: {fileID: 114504483113794988}
+  UIMenu: {fileID: 114145086440691440}
+  pauseButton: {fileID: 114392025528106436}
   replayButton: {fileID: 114888347824592882}
   levelSelectButton: {fileID: 114431717545953924}
-  tutorialLevelCompleteMenu: {fileID: 114018644588169220}
-  dungeonRunChallenegeCompleteMenu: {fileID: 114625684429550290}
-  optionsMenu: {fileID: 1621185940428570}
-  canvas: {fileID: 224712141627911468}
   _destructorIcon: {fileID: 21300000, guid: 7d0996cc5e00d484ea2b830119ea3b94, type: 3}
   _splashIcon: {fileID: 21300000, guid: f4a173ba054a8374ca5fdcc9635119be, type: 3}
   _factoryBottoms:
@@ -6686,19 +6660,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 266cb842c7ba72247a700abb89558885, type: 3}
   - {fileID: 21300000, guid: d3d2263d2a9ebd84d820e3df86e49ab2, type: 3}
   _structureOverlay: {fileID: 21300000, guid: d7b77fda6751fd74181cb053f917422a, type: 3}
-  bannerScrollDuration: 0.5
-  readyColor: {r: 0.52156866, g: 0.9098039, b: 0.42745098, a: 0.77254903}
-  radialMeterFillMin: 0.05
-  radialMeterFillMax: 0.95
-  resourceGainHighlightScale: 2
-  resourceGainHighlightDuration: 0.3
-  resourceMissingAnimDuration: 0.2
-  resourceMissingAnimScale: 1.25
-  tooltipsDisabled: 0
-  legalGlowColor: {r: 0.52156866, g: 0.9098039, b: 0.42745098, a: 1}
-  notLegalGlowColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 1}
-  eloUIManager: {fileID: 114059904508805642}
-  dungeonRunUIManager: {fileID: 114625684429550290}
 --- !u!114 &114253962448442366
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7351,7 +7312,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 114252342320511668}
+      - m_Target: {fileID: 114392025528106436}
         m_MethodName: ToggleOptionsMenu
         m_Mode: 6
         m_Arguments:
@@ -7590,6 +7551,45 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114308219730986454
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1165852999209520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8ee6ddca3626dd4f96ec90c42a547ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menu: {fileID: 1165852999209520}
+  defeatSymbol: {fileID: 1860996724518430}
+  victorySymbol: {fileID: 1721515172806226}
+  rankImage: {fileID: 114790803831085882}
+  rankProgressBar: {fileID: 114057135201315954}
+--- !u!114 &114309043743638620
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1517244744537282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afdc7c3b591dde14da298563a8142bfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menu: {fileID: 1517244744537282}
+  defeatSymbol: {fileID: 1197633562733634}
+  victorySymbol: {fileID: 1353944792626136}
+  victoryText: {fileID: 114130749625042876}
+  dungeonRunChangeText: {fileID: 114196828797686878}
+  nextChallengeButtonText: {fileID: 114662149501480520}
+  progressNodes:
+  - {fileID: 114591134628894104}
+  - {fileID: 114822117483411534}
+  - {fileID: 114980081190186164}
+  - {fileID: 114379218124834722}
+  - {fileID: 114381571147646548}
 --- !u!114 &114312030532401604
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -10205,6 +10205,28 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114504483113794988
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1074755693939068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169e34e27be95654cafd3d0dbc98e4a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  victoryBanners:
+  - {fileID: 224614743233593588}
+  - {fileID: 224604068134328034}
+  defeatBanners:
+  - {fileID: 224661717830743850}
+  - {fileID: 224992348201340544}
+  readyBanners:
+  - {fileID: 114645766425464292}
+  - {fileID: 114398476056417092}
+  readyColor: {r: 0.52156866, g: 0.9098039, b: 0.42745098, a: 0.77254903}
+  bannerScrollDuration: 0.5
 --- !u!114 &114506003242628116
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -10683,7 +10705,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114252342320511668}
+      - m_Target: {fileID: 114392025528106436}
         m_MethodName: ToggleOptionsMenu
         m_Mode: 6
         m_Arguments:
@@ -11166,7 +11188,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1256893560922484}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afdc7c3b591dde14da298563a8142bfb, type: 3}
   m_Name: 
@@ -11287,7 +11309,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114252342320511668}
+      - m_Target: {fileID: 114504483113794988}
         m_MethodName: OnGameEndBannerTouch
         m_Mode: 1
         m_Arguments:
@@ -11339,9 +11361,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114252342320511668}
-        m_MethodName: TogglePauseMenu
-        m_Mode: 1
+      - m_Target: {fileID: 114392025528106436}
+        m_MethodName: ToggleOptionsMenu
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -13086,6 +13108,63 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &114857934123289524
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1080155605843406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e265653b1e5888945b452e35dfe92188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNum: 1
+  resourceCounter: {fileID: 114112504811170874}
+  resourceSlotZone: {fileID: 1996666497465608}
+  resourceSlot:
+  - {fileID: 114927379881603456}
+  - {fileID: 114956142221271186}
+  - {fileID: 114593121075302530}
+  resourceSlotBack:
+  - {fileID: 114490404754164326}
+  - {fileID: 114650957535204418}
+  - {fileID: 114500944468506244}
+  resourceMissingIndicator:
+  - {fileID: 114357491829552286}
+  - {fileID: 114958181869274740}
+  - {fileID: 114717996690021742}
+  attackResourceMissingIndicator:
+  - {fileID: 114585401825567350}
+  - {fileID: 114209948496632634}
+  - {fileID: 114781432966946024}
+  attackResourceSlotZone: {fileID: 1641569992328028}
+  attackResourceSlot:
+  - {fileID: 114120385751520870}
+  - {fileID: 114920906631823906}
+  - {fileID: 114658989961042064}
+  attackResourceSlotBack:
+  - {fileID: 114319705989110228}
+  - {fileID: 114612237674729424}
+  - {fileID: 114195160475925360}
+  blueprintUIZone: {fileID: 224794731102932362}
+  techPowerUpIconArray: {fileID: 1018603292806698}
+  normalDrawMeter: {fileID: 114065363214106492}
+  normalPieceTimer: {fileID: 114306417745913742}
+  destructorDrawMeter: {fileID: 114036386360712650}
+  destructorPieceTimer: {fileID: 114258563104708436}
+  resourceLevelText: {fileID: 114578726292229768}
+  normLevelText: {fileID: 114455832012266936}
+  destLevelText: {fileID: 114915558135422928}
+  mineBlueprintLocation: {fileID: 224248847641534168}
+  factoryBlueprintLocation: {fileID: 224825688931591332}
+  bombFactoryBlueprintLocation: {fileID: 224618429434883330}
+  resourceGainHighlightDuration: 0.3
+  resourceMissingAnimDuration: 0.2
+  resourceMissingAnimScale: 1.25
+  radialMeterFillMin: 0.05
+  radialMeterFillMax: 0.95
+  resourceGainHighlightScale: 2
 --- !u!114 &114858189710593532
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -13231,7 +13310,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114252342320511668}
+      - m_Target: {fileID: 114504483113794988}
         m_MethodName: OnGameEndBannerTouch
         m_Mode: 1
         m_Arguments:
@@ -13310,7 +13389,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114252342320511668}
+      - m_Target: {fileID: 114504483113794988}
         m_MethodName: OnGameEndBannerTouch
         m_Mode: 1
         m_Arguments:
@@ -13722,7 +13801,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 114252342320511668}
+      - m_Target: {fileID: 114392025528106436}
         m_MethodName: TogglePauseMenu
         m_Mode: 1
         m_Arguments:
@@ -14359,6 +14438,63 @@ MonoBehaviour:
   m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114987092983937828
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1508467035091660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e265653b1e5888945b452e35dfe92188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNum: 2
+  resourceCounter: {fileID: 114316155712960060}
+  resourceSlotZone: {fileID: 1219293086740188}
+  resourceSlot:
+  - {fileID: 114054287929978180}
+  - {fileID: 114763214743263486}
+  - {fileID: 114060488264963696}
+  resourceSlotBack:
+  - {fileID: 114517495646326284}
+  - {fileID: 114475354718713354}
+  - {fileID: 114775865239566882}
+  resourceMissingIndicator:
+  - {fileID: 114906508472961896}
+  - {fileID: 114368250209568820}
+  - {fileID: 114589166403911590}
+  attackResourceMissingIndicator:
+  - {fileID: 114270875494349704}
+  - {fileID: 114858189710593532}
+  - {fileID: 114231468159258780}
+  attackResourceSlotZone: {fileID: 1771068869046686}
+  attackResourceSlot:
+  - {fileID: 114444629101491696}
+  - {fileID: 114196551527053800}
+  - {fileID: 114931677271220176}
+  attackResourceSlotBack:
+  - {fileID: 114842396588491106}
+  - {fileID: 114664876186751456}
+  - {fileID: 114648131546854732}
+  blueprintUIZone: {fileID: 224392237637947172}
+  techPowerUpIconArray: {fileID: 1100086019959348}
+  normalDrawMeter: {fileID: 114319912571520074}
+  normalPieceTimer: {fileID: 114745647514687770}
+  destructorDrawMeter: {fileID: 114448612923275494}
+  destructorPieceTimer: {fileID: 114260784092898522}
+  resourceLevelText: {fileID: 114376992368181162}
+  normLevelText: {fileID: 114919166707297582}
+  destLevelText: {fileID: 114170977761235418}
+  mineBlueprintLocation: {fileID: 224489495953573796}
+  factoryBlueprintLocation: {fileID: 224045397136942758}
+  bombFactoryBlueprintLocation: {fileID: 224630615834046756}
+  resourceGainHighlightDuration: 0.3
+  resourceMissingAnimDuration: 0.2
+  resourceMissingAnimScale: 1.25
+  radialMeterFillMin: 0.05
+  radialMeterFillMax: 0.95
+  resourceGainHighlightScale: 2
 --- !u!114 &114993085494964012
 MonoBehaviour:
   m_ObjectHideFlags: 1

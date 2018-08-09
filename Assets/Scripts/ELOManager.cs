@@ -93,7 +93,7 @@ public static class ELOManager
         {
             eloData.SetHandicap(eloData.handicapLevel + handicapIncrement);
         }
-        Services.UIManager.eloUIManager.OnGameEnd(true, prevElo, eloData);
+        Services.UIManager.UIMenu.eloUIManager.OnGameEnd(true, prevElo, eloData);
         Services.Analytics.ELOWin(true);
         Services.Analytics.ELOStreak(eloData.winStreakCount);
         Services.Analytics.ELOTotalWins(eloData.totalWins);
@@ -106,7 +106,7 @@ public static class ELOManager
         EloData prevElo = new EloData(eloData);
         eloData.winStreakCount = 0;
         eloData.SetHandicap(eloData.handicapLevel - handicapIncrement);
-        Services.UIManager.eloUIManager.OnGameEnd(false, prevElo, eloData);
+        Services.UIManager.UIMenu.eloUIManager.OnGameEnd(false, prevElo, eloData);
         Services.Analytics.ELOWin(false);
         SaveData();
     }
