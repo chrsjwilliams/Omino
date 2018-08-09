@@ -411,6 +411,7 @@ public class GameManager : MonoBehaviour
     public void ModeUnlockReset()
     {
         modeUnlockStatuses = DefaultUnlockStatus();
+        SaveModeStatusData();
     }
 
     public void SetNumPlayers(bool[] players)

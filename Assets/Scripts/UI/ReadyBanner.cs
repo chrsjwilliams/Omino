@@ -41,7 +41,7 @@ public class ReadyBanner : MonoBehaviour
 
     public void Init()
     {
-        pulsePeriod = Services.Clock.HalfLength();
+        pulsePeriod = Services.Clock.QuarterLength();
         
         player = Services.GameManager.Players[playerNum - 1];
         pulser = uiText.gameObject.AddComponent<ObjectPulser>();

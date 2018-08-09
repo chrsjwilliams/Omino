@@ -71,8 +71,6 @@ public class MenuManager : MonoBehaviour
 
     private void ProcessMenuPopQueue()
     {
-        Debug.Log("menus to pop: " + menusToPop);
-        Debug.Log("menus in stack: " + menuStack.Count);
         if (menusToPop > 0)
         {
             Menu firstInLine = menuStack.Peek();

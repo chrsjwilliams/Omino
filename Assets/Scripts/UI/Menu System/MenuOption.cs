@@ -17,6 +17,7 @@ public class MenuOption : MenuObject
     [HideInInspector]
     public bool toggled;
     public bool unlocked;
+    public bool forceLock;
 
     // Update is called once per frame
     void Update()
@@ -146,6 +147,7 @@ public class MenuOption : MenuObject
                 unlocked = true;
             }
         }
+        if (forceLock) unlocked = false;
         if (unlocked)
         {
             associatedObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(false);

@@ -540,7 +540,7 @@ public class UIManager : MonoBehaviour {
 	void Update () {
         //if (Input.GetKeyDown(KeyCode.Y)) StartBannerScroll(Services.GameManager.Players[0]);
         if (scrollingInBanners) ScrollBanners();
-        if (!Services.GameScene.gameStarted) HighlightReadyBanners();
+        //if (!Services.GameScene.gameStarted) HighlightReadyBanners();
         HighlightResourceGained();
         HighlightResourcesMissing();
         HighlightResourceGained(true);
