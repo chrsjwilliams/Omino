@@ -31,6 +31,7 @@ public class TutorialManager : MonoBehaviour
     private Transform tooltipZone;
     [SerializeField]
     private Button skipTutorialButton;
+    private Color dimTutorialButtonColor = new Color(1, 1, 1, 0.5f);
     private int humanPlayerNum = 1;
     [SerializeField]
     private bool completedRotation;
@@ -135,7 +136,8 @@ public class TutorialManager : MonoBehaviour
     void Update()
     {
         tm.Update();
-
+        skipTutorialButton.GetComponent<Image>().color = Color.Lerp(Color.white, dimTutorialButtonColor, Mathf.PingPong(Time.time, 0.5f));
+        
     }
 
     public void Init()

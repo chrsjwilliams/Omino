@@ -68,6 +68,10 @@ public class CampaignMenuManager : MonoBehaviour {
 
     public void Show(Player winner)
     {
+        if(winner is AIPlayer)
+        {
+        }
+
         SetFilledProgressNodes(Services.GameManager.levelSelected.campaignLevelNum);
         switch (Services.GameManager.levelSelected.campaignLevelNum)
         {
@@ -111,7 +115,6 @@ public class CampaignMenuManager : MonoBehaviour {
             wreathHolder.SetActive(false);
             defeatSymbol.gameObject.SetActive(true);
             resultImage = defeatSymbol;
-            buttons[1].GetComponent<Image>().color = highlightedButtonColor;
         }
         else
         {
@@ -126,38 +129,33 @@ public class CampaignMenuManager : MonoBehaviour {
         }
         
 
-        if(!Services.TutorialManager.CompletionCheck())
-        {
-            buttons[1].GetComponent<Image>().color = highlightedButtonColor;
-        }
+
 
         transform.localRotation = Quaternion.Euler(0, 0, rot);
         gameObject.SetActive(true);
-        if ((nextLevel == null || winner is AIPlayer) || 
-            !Services.TutorialManager.CompletionCheck())
-        {
 
-            if(!Services.TutorialManager.CompletionCheck())
-            {
-                nextLevelButton.enabled = false;
-                nextLevelDisabled.sprite = lockImage;
-                nextLevelDisabled.color = lockColor;
-                nextLevelDisabled.enabled = true;
-            }
-            else
-            {
-                nextLevelDisabled.enabled = false;
-                
-                nextLevelButton.enabled = true;
-                nextLevelButton.onClick.RemoveListener(Services.GameScene.MoveToNextLevel);
-                nextLevelButton.onClick.AddListener(Services.GameScene.Reset);
-            }           
-        }
-        else
-        {
+
             nextLevelDisabled.enabled = false;
-            buttons[0].GetComponent<Image>().color = highlightedButtonColor;
-        }
+
+            nextLevelButton.enabled = true;
+            if (Services.TutorialManager.CompletionCheck() &&
+            Services.GameManager.levelSelected.campaignLevelNum == 5)
+            {
+                nextLevelButton.onClick.AddListener(Services.GameScene.Reset);
+            }
+            else if(!Services.TutorialManager.CompletionCheck())
+            {
+                nextLevelButton.GetComponentInChildren<TextMeshProUGUI>().text = "Try Again";
+                nextLevelButton.onClick.AddListener(Services.GameScene.Replay);
+            }
+            else if (Services.TutorialManager.CompletionCheck())
+            { 
+                nextLevelButton.onClick.AddListener(Services.GameScene.MoveToNextLevel);
+            }
+        
+
+        buttons[0].GetComponent<Image>().color = highlightedButtonColor;
+        
         transform.localScale = Vector3.zero;
         for (int i = 0; i < buttons.Length; i++)
         {
