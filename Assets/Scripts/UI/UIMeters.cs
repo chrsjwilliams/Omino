@@ -16,6 +16,14 @@ public class UIMeters : MonoBehaviour
     public GameObject attackResourceSlotZone;
     public Image[] attackResourceSlot;
     public Image[] attackResourceSlotBack;
+
+    public Image[][] resourceSlots;
+    public Image[][] resourceSlotBacks;
+    public Image[][] resourceMissingIndicators;
+    public Image[][] attackResourceMissingIndicators;
+    public Image[][] attackResourceSlots;
+    public Image[][] attackResourceSlotBacks;
+
     public RectTransform blueprintUIZone;
     public GameObject techPowerUpIconArray;
     public GameObject[] meters { get; private set; }
@@ -123,12 +131,14 @@ public class UIMeters : MonoBehaviour
 
         }
 
-        //resourceSlot = slotTops;
-        //resourceSlotBack = slotBacks;
-        //attackResourceSlot = attackSlotTops;
-        //attackResourceSlotBack = attackSlotBacks;
-        //resourceMissingIndicator = missingIndicators;
-        //attackResourceMissingIndicator = attackMissingIndicators;
+        resourceSlots = new Image[][] { slotTops };
+        resourceSlotBacks = new Image[][] { slotBacks};
+        attackResourceSlots = new Image[][] { attackSlotTops};
+        attackResourceSlotBacks = new Image[][] { attackSlotBacks};
+        resourceMissingIndicators = new Image[][] { missingIndicators };
+        Debug.Log(resourceMissingIndicators[0][0].name);
+
+        attackResourceMissingIndicators = new Image[][] { attackMissingIndicators};
         resourceGainHighlightIndices = new int[] { 0 };
         attackResourceGainHighlightIndices = new int[] { 0 };
         resourceGainHighlightTimeElapsed = new float[] {  0 };
@@ -146,7 +156,7 @@ public class UIMeters : MonoBehaviour
         resourceMissingTimeElapsed = new float[] { 0 };
         attackResourceMissingTimeElapsed = new float[] { 0 };
         numResourcesMissing = new int[] { 0 };
-        numAttackResourcesMissing = new int[] { 0 };
+        numAttackResourcesMissing = new int[] { 1 };
 
 
         meters = new GameObject[]
@@ -268,10 +278,6 @@ public class UIMeters : MonoBehaviour
         float[] timesElapsed = attack ? attackResourceMissingTimeElapsed : resourceMissingTimeElapsed;
         bool[] increasing = attack ? attackResourceMissingAnimIncreasing : resourceMissingAnimIncreasing;
 
-
-
-        //Debug.Log("Ene: " + timesElapsed[1]);
-        //Debug.Log("Att: " + timesElapsed[0]);
         Color indicatorColor = indicators[0].color;
         if (missingResourceAnimActive[0])
         {
@@ -367,10 +373,18 @@ public class UIMeters : MonoBehaviour
         }
     }
 
-    public void FailedPlayFromLackOfResources(int resourceDeficit)
+    public void FailedPlayFromLackOfResources(int resourceDeficit, bool attack = false)
     {
-        numResourcesMissing[0] = resourceDeficit;
-        resourceMissingAnimActive[0] = true;
+        if (attack)
+        {
+            numAttackResourcesMissing[0] = resourceDeficit;
+            attackResourceMissingAnimActive[0] = true;
+        }
+        else
+        {
+            numResourcesMissing[0] = resourceDeficit;
+            resourceMissingAnimActive[0] = true;
+        }
     }
 
     public void UpdateResourceMeter( float fillProportion, bool attack = false)

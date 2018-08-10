@@ -897,14 +897,34 @@ public class Player : MonoBehaviour
     {
         if (selectedPiece == null) return;
         if (selectedPiece.cost > resources)
+        {
             Services.UIManager.UIMeters[playerNum - 1].FailedPlayFromLackOfResources(
                 selectedPiece.cost - resources);
+           
+            
+        }
+
+        bool overlappingConnectedOpponentTile = false;
+        foreach(Tile tile in selectedPiece.tiles)
+        {
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner != null &&
+                mapTile.occupyingPiece.owner != this && mapTile.occupyingPiece.connected)
+                overlappingConnectedOpponentTile = true;
+        }
+
+        if (overlappingConnectedOpponentTile && selectedPiece.cost > attackResources)
+        {
+            Services.UIManager.UIMeters[playerNum - 1].FailedPlayFromLackOfResources(
+                selectedPiece.cost - attackResources, true);
+        }
         if (selectedPiece is Destructor && (selectedPiece as Destructor).StoppedByShield())
         {
             Services.AudioManager.RegisterSoundEffect(Services.Clips.ShieldHit);
         }
         else
         {
+            
             Services.AudioManager.RegisterSoundEffect(Services.Clips.IllegalPlay, 0.2f, Clock.BeatValue.Sixteenth);
         }
         int handPosToPlace = Mathf.Min(selectedPieceHandPos, hand.Count);
