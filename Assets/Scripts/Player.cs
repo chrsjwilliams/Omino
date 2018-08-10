@@ -316,9 +316,9 @@ public class Player : MonoBehaviour
 
     protected void SetHandicap(PlayerHandicap handicap)
     {
-            energyHandicap = handicap.enegryProduction;
-            pieceHandicap = handicap.pieceProduction;
-            hammerHandicap = handicap.hammerProduction;
+        energyHandicap = handicap.enegryProduction;
+        pieceHandicap = handicap.pieceProduction;
+        hammerHandicap = handicap.hammerProduction;
     }
 
     // Update is called once per frame
@@ -832,7 +832,7 @@ public class Player : MonoBehaviour
                 }
             }
         }
-        if (closeEnough && !(this is AIPlayer))
+        if (closeEnough)
         {
             GameObject dangerEffect = GameObject.Instantiate(Services.Prefabs.DangerEffect);
             //dangerEffect.transform.position = pos;
@@ -900,17 +900,18 @@ public class Player : MonoBehaviour
         {
             Services.UIManager.UIMeters[playerNum - 1].FailedPlayFromLackOfResources(
                 selectedPiece.cost - resources);
-           
-            
         }
 
         bool overlappingConnectedOpponentTile = false;
         foreach(Tile tile in selectedPiece.tiles)
         {
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-            if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner != null &&
-                mapTile.occupyingPiece.owner != this && mapTile.occupyingPiece.connected)
-                overlappingConnectedOpponentTile = true;
+            if (Services.MapManager.IsCoordContainedInMap(tile.coord))
+            {
+                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner != null &&
+                    mapTile.occupyingPiece.owner != this && mapTile.occupyingPiece.connected)
+                    overlappingConnectedOpponentTile = true;
+            }
         }
 
         if (overlappingConnectedOpponentTile && selectedPiece.cost > attackResources)
@@ -1175,7 +1176,7 @@ public class Player : MonoBehaviour
     {
         List<Blueprint> blueprintsInHand = new List<Blueprint>(blueprints);
 
-        ClearBlueprintAssistHighlight(true);
+        ClearBlueprintAssistHighlight(false);
         HashSet<Coord> possibleBlueprintCoords = new HashSet<Coord>();
         foreach(Tile tile in pieceJustPlaced.tiles)
         {
@@ -1282,9 +1283,9 @@ public class Player : MonoBehaviour
         return to_return;
     }
     
-    private void ClearBlueprintAssistHighlight(bool leaveCoroutine =false)
+    private void ClearBlueprintAssistHighlight(bool stopCoroutine = true)
     {
-        if (bpAssistCoroutine != null && !leaveCoroutine)
+        if (bpAssistCoroutine != null && stopCoroutine)
             StopCoroutine(bpAssistCoroutine);
         foreach (Tile tile in bpAssistHighlightedTiles)
         {
