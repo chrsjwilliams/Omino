@@ -22,6 +22,9 @@ MonoBehaviour:
   cornerBases: 0
   destructorsEnabled: 0
   blueprintsEnabled: 0
+  generatorEnabled: 1
+  factoryEnabled: 1
+  barracksEnabled: 1
   stackDestructorInOpeningHand: 0
   tooltips:
   - label: Your Base
@@ -414,7 +417,7 @@ MonoBehaviour:
     subImage2Rotation: 0
     subImage2Color: {r: 0.96862745, g: 0.6627451, b: 0.02745098, a: 1}
   - label: Go Win
-    text: Try connecting to the opposing base to win!
+    text: Connect to the opposing base to win!
     displayObjective: 0
     objectiveIndex: 0
     iPhoneToolTipSize: {x: 700, y: 300}

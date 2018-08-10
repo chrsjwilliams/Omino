@@ -93,10 +93,8 @@ public class GameSceneScript : Scene<TransitionData>
             case TitleSceneScript.GameMode.Tutorial:
 
                 handicaps = new PlayerHandicap[2];
-                handicaps[0].SetEnergyHandicapLevel(1);
-                handicaps[0].SetHammerHandicapLevel(1);
-                handicaps[0].SetPieceHandicapLevel(1);
-                handicaps[1] = HandicapSystem.tutorialHandicapLevels[Services.MapManager.currentLevel.campaignLevelNum - 1];
+                handicaps[0] = HandicapSystem.tutorialPlayerHandicapLevels[Services.MapManager.currentLevel.campaignLevelNum - 1];
+                handicaps[1] = HandicapSystem.tutorialAIHandicapLevels[Services.MapManager.currentLevel.campaignLevelNum - 1];
                 Services.GameManager.SetHandicapValues(handicaps);
 
                 break;

@@ -12,8 +12,8 @@ public class HandicapSystem : MonoBehaviour
     public Slider p1HandicapSlider;
     public Slider p2HandicapSlider;
 
-    public static PlayerHandicap[] tutorialHandicapLevels;
-
+    public static PlayerHandicap[] tutorialAIHandicapLevels;
+    public static PlayerHandicap[] tutorialPlayerHandicapLevels;
     public static PlayerHandicap[] handicapValues = new PlayerHandicap[]
         {
             new PlayerHandicap(1, 1, 1) ,
@@ -53,13 +53,22 @@ public class HandicapSystem : MonoBehaviour
         new PlayerHandicap(2, 2, 2)
         };
 
-        tutorialHandicapLevels = new PlayerHandicap[]
+        tutorialAIHandicapLevels = new PlayerHandicap[]
         {
             new PlayerHandicap(float.MinValue, float.MinValue, float.MinValue),
             new PlayerHandicap(0.7f, 0.7f, 0.7f),
             new PlayerHandicap(0.7f, 0.75f, 0.75f),
             new PlayerHandicap(0.7f, 0.75f, 0.75f),
             new PlayerHandicap(0.8f, 0.8f, 0.8f)
+        };
+
+        tutorialPlayerHandicapLevels = new PlayerHandicap[]
+        {
+            new PlayerHandicap(1.5f, 1.2f, 1.2f),
+            new PlayerHandicap(1f, 1f, 1f),
+            new PlayerHandicap(1f, 1f, 1f),
+            new PlayerHandicap(1f, 1f, 1f),
+            new PlayerHandicap(1f, 1f, 1f)
         };
     }
 
