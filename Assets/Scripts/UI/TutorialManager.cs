@@ -391,6 +391,8 @@ public class TutorialManager : MonoBehaviour
         Services.UIManager.tooltipsDisabled = !nextTooltipInfo.enableTooltips;
 
         if (currentIndex == tooltipInfos.Length - 1 || 
+            (Services.GameManager.levelSelected.campaignLevelNum == 3 &&
+            currentIndex == tooltipInfos.Length - 3)||
             (Services.GameManager.levelSelected.campaignLevelNum == 5 &&
             currentIndex == tooltipInfos.Length - 4))
         {

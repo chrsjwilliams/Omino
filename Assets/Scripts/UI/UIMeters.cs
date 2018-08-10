@@ -136,8 +136,6 @@ public class UIMeters : MonoBehaviour
         attackResourceSlots = new Image[][] { attackSlotTops};
         attackResourceSlotBacks = new Image[][] { attackSlotBacks};
         resourceMissingIndicators = new Image[][] { missingIndicators };
-        Debug.Log(resourceMissingIndicators[0][0].name);
-
         attackResourceMissingIndicators = new Image[][] { attackMissingIndicators};
         resourceGainHighlightIndices = new int[] { 0 };
         attackResourceGainHighlightIndices = new int[] { 0 };
