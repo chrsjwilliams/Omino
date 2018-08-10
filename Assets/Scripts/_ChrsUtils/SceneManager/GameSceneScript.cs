@@ -404,7 +404,7 @@ public class GameSceneScript : Scene<TransitionData>
         {
             foreach (BuildingType buildingType in DungeonRunManager.dungeonRunData.currentTech)
             {
-                TechBuilding techBuilding = DungeonRunManager.GetBuildingFromType(buildingType);
+                TechBuilding techBuilding = TechBuilding.GetBuildingFromType(buildingType);
                 techBuilding.OnClaimEffect(Services.GameManager.Players[0]);
             }
         }

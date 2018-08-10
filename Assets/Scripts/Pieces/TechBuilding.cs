@@ -4,6 +4,58 @@ using UnityEngine;
 
 public abstract class TechBuilding : Polyomino
 {
+    public static TechBuilding GetBuildingFromType(BuildingType type)
+    {
+        TechBuilding structure;
+        switch (type)
+        {
+            case BuildingType.DYNAMO:
+                structure = new Dynamo();
+                break;
+            case BuildingType.SUPPLYBOOST:
+                structure = new SupplyBoost();
+                break;
+            case BuildingType.UPSIZE:
+                structure = new Upsize();
+                break;
+            case BuildingType.SHIELDEDPIECES:
+                structure = new ShieldedPieces();
+                break;
+            case BuildingType.ARMORY:
+                structure = new Armory();
+                break;
+            case BuildingType.FISSION:
+                structure = new Fission();
+                break;
+            case BuildingType.RECYCLING:
+                structure = new Recycling();
+                break;
+            case BuildingType.CROSSSECTION:
+                structure = new CrossSection();
+                break;
+            case BuildingType.ANNEX:
+                structure = new Annex();
+                break;
+            default:
+                return null;
+        }
+
+        return structure;
+    }
+
+    public static BuildingType[] techTypes = new BuildingType[]
+    {
+            BuildingType.DYNAMO,
+            BuildingType.SUPPLYBOOST,
+            BuildingType.ARMORY,
+            BuildingType.FISSION,
+            BuildingType.RECYCLING,
+            BuildingType.CROSSSECTION,
+            BuildingType.ANNEX,
+            BuildingType.UPSIZE,
+            BuildingType.SHIELDEDPIECES
+    };
+
     protected static int[,,] techBuilding = new int[3, 5, 5]
     {   
             //  These hashes represent what the piece will look like

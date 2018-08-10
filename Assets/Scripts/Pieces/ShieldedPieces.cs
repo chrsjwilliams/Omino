@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ShieldedPieces : TechBuilding
 {
-    public const float ShieldDuration = 6f;
+    public const float ShieldDuration = 5f;
 
     public ShieldedPieces() : base(0)
     {
@@ -39,7 +39,7 @@ public class ShieldedPieces : TechBuilding
 
     public override string GetDescription()
     {
-        return "Pieces gain a temporary shield after they're placed. They can't be destroyed until " +
+        return "Pieces can't be destroyed for " +
             ShieldDuration + " seconds after placement.";
     }
 }

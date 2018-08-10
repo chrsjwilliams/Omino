@@ -134,12 +134,14 @@ public class DungeonRunSceneScript : Scene<TransitionData>
         for (int i = 0; i < DungeonRunManager.dungeonRunData.currentTech.Count; i++)
         {
             BuildingType selectedType = DungeonRunManager.dungeonRunData.currentTech[i];
-            TechBuilding tech = DungeonRunManager.GetBuildingFromType(selectedType);
-            currentTechMenu[0][i].interactable = true;
-            currentTechMenu[0][i].GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
-            currentTechMenu[0][i].GetComponentsInChildren<Image>()[1].color = Color.white;
-            currentTechMenu[0][i].GetComponentInChildren<TextMeshProUGUI>().text = tech.GetName();
-            currentTechMenu[0][i].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(tech.buildingType);
+            TechBuilding tech = TechBuilding.GetBuildingFromType(selectedType);
+            Button button = currentTechMenu[0][i];
+            button.interactable = true;
+            Image buttonSubImage = button.GetComponentsInChildren<Image>()[1];
+            button.GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
+            buttonSubImage.color = Color.white;
+            button.GetComponentInChildren<TextMeshProUGUI>().text = tech.GetName();
+            buttonSubImage.sprite = Services.TechDataLibrary.GetIcon(tech.buildingType);
         }
     }
 

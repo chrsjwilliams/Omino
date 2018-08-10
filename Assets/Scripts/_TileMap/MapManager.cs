@@ -244,20 +244,7 @@ public class MapManager : MonoBehaviour
 
     List<BuildingType> InitStructureTypeList()
     {
-        return new List<BuildingType>()
-        {
-            BuildingType.DYNAMO,
-            BuildingType.SUPPLYBOOST,
-            BuildingType.UPSIZE,
-            //BuildingType.BIGGERBOMBS,
-            //BuildingType.SPLASHDAMAGE,
-            BuildingType.SHIELDEDPIECES,
-            BuildingType.ARMORY,
-            BuildingType.FISSION,
-            BuildingType.RECYCLING,
-            BuildingType.CROSSSECTION,
-            BuildingType.ANNEX
-        };
+        return new List<BuildingType>(TechBuilding.techTypes);
     }
 
     void GenerateStructures(Level level)

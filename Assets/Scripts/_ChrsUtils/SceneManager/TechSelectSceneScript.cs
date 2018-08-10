@@ -87,7 +87,7 @@ public class TechSelectSceneScript : Scene<TransitionData>
         for (int i = 0; i < DungeonRunManager.dungeonRunData.currentTech.Count; i++)
         {
             BuildingType selectedType = DungeonRunManager.dungeonRunData.currentTech[i];
-            TechBuilding tech = DungeonRunManager.GetBuildingFromType(selectedType);
+            TechBuilding tech = TechBuilding.GetBuildingFromType(selectedType);
             this.currentTechIcons[0][i].GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
             this.currentTechIcons[0][i].GetComponentsInChildren<Image>()[1].color = Color.white;
             this.currentTechIcons[0][i].GetComponentInChildren<TextMeshProUGUI>().text = tech.GetName();
@@ -100,14 +100,18 @@ public class TechSelectSceneScript : Scene<TransitionData>
         {
 
             BuildingType selectedType = techToChooseFrom[j];
+            Button button = techSelectButtons[j];
 
-            menuButtons[0][j] = techSelectButtons[j];
+            menuButtons[0][j] = button;
+            TechBuilding tech = TechBuilding.GetBuildingFromType(selectedType);
+            TextMeshProUGUI[] buttonTexts = button.GetComponentsInChildren<TextMeshProUGUI>();
+            buttonTexts[0].text = tech.GetName();
+            buttonTexts[1].text = tech.GetDescription();
 
-            menuButtons[0][j].GetComponentsInChildren<TextMeshProUGUI>()[0].text = DungeonRunManager.GetBuildingFromType(selectedType).GetName();
-            menuButtons[0][j].GetComponentsInChildren<TextMeshProUGUI>()[1].text = DungeonRunManager.GetBuildingFromType(selectedType).GetDescription();
-
-            menuButtons[0][j].GetComponent<Image>().color = Services.GameManager.NeutralColor;
-            menuButtons[0][j].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(techToChooseFrom[j]);
+            button.GetComponent<Image>().color = 
+                Services.GameManager.NeutralColor;
+            button.GetComponentsInChildren<Image>()[1].sprite = 
+                Services.TechDataLibrary.GetIcon(selectedType);
         }
 
         selectTechText = techSelectZone.GetComponentInChildren<TextMeshProUGUI>();
