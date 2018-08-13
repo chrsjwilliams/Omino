@@ -235,7 +235,7 @@ public class UIMeters : MonoBehaviour
             for (int i = 0; i < highlightsTimeElapsed.Length; i++)
             {
                 highlightsTimeElapsed[i] += Time.deltaTime;
-                if (highlightsIncreasing[0])
+                if (highlightsIncreasing[i])
                 {
 
                     Vector3 scale = Vector3.Lerp(Vector3.one, resourceGainHighlightScale * Vector3.one,
