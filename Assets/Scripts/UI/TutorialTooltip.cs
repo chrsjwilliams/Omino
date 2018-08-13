@@ -41,6 +41,8 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
     private bool scalingDown;
     private string currentAnimation;
 
+    private float dismissTimer = 0.5f;
+
     private bool haveSelectedPiece = false;
 
     private const float MIN_TIME_ANIMATION_DISPLAYED = 1;
@@ -73,7 +75,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         }
         else
         {
-            //timeDisplayed += Time.unscaledDeltaTime;
+            dismissTimer -= Time.deltaTime;
         }
 
         if(label == "Rotate")
@@ -234,9 +236,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         
         
         scalingDown = true;
-        timeElapsed = 0;
-
-        
+        timeElapsed = 0;    
     }
 
     public void ToggleImageAnimation(string animationParam)
@@ -291,7 +291,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (dismissible)
+        if (dismissible && dismissTimer <= 0)
         {
             Dismiss();
         }
