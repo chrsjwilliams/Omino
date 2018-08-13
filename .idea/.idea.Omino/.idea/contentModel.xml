@@ -67,6 +67,7 @@
               <e p="InGameShopSceneScript.cs" t="Include" />
               <e p="MapSelectSceneScript.cs" t="Include" />
               <e p="OptionMenuSceneScript.cs" t="Include" />
+              <e p="ReferenceSceneScript.cs" t="Include" />
               <e p="Scene.cs" t="Include" />
               <e p="SceneManager.cs" t="Include" />
               <e p="TechSelectSceneScript.cs" t="Include" />
@@ -119,6 +120,11 @@
           <e p="LoadingScreenController.cs" t="Include" />
           <e p="MirrorFlipCamera.cs" t="Include" />
           <e p="Move.cs" t="Include" />
+          <e p="ParticlesOnRenderTextureScripts" t="Include">
+            <e p="OverlayParticles.cs" t="Include" />
+            <e p="ParticlesDisplayer.cs" t="Include" />
+            <e p="ParticlesPlayer.cs" t="Include" />
+          </e>
           <e p="Pieces" t="Include">
             <e p="Annex.cs" t="Include" />
             <e p="Armory.cs" t="Include" />
@@ -168,10 +174,12 @@
             <e p="BackButton.cs" t="Include" />
             <e p="CampaignLevelMenuEntranceTask.cs" t="Include" />
             <e p="CampaignMenuManager.cs" t="Include" />
+            <e p="CanvasScroller.cs" t="Include" />
             <e p="ColorShifter.cs" t="Include" />
             <e p="DungeonRunInGameUIManager.cs" t="Include" />
             <e p="EloInGameUiManager.cs" t="Include" />
             <e p="EloUIManager.cs" t="Include" />
+            <e p="GameEndBanner.cs" t="Include" />
             <e p="LevelButton.cs" t="Include" />
             <e p="LevelSelectButtonEntranceTask.cs" t="Include" />
             <e p="Menu System" t="Include">
@@ -185,6 +193,7 @@
             <e p="OptionButton.cs" t="Include" />
             <e p="ParticleSystemEnder.cs" t="Include" />
             <e p="PauseButton.cs" t="Include" />
+            <e p="PauseMenu.cs" t="Include" />
             <e p="ProdLevelText.cs" t="Include" />
             <e p="ReadyBanner.cs" t="Include" />
             <e p="ScrollRectSnap.cs" t="Include" />
@@ -195,11 +204,15 @@
             <e p="StructClaimAura.cs" t="Include" />
             <e p="StructClaimEffect.cs" t="Include" />
             <e p="StructureEffectAnimation.cs" t="Include" />
+            <e p="TechReference.cs" t="Include" />
             <e p="Tooltip.cs" t="Include" />
             <e p="TutorialManager.cs" t="Include" />
             <e p="TutorialTooltip.cs" t="Include" />
+            <e p="UIBannerManager.cs" t="Include" />
             <e p="UIHolderScaler.cs" t="Include" />
             <e p="UIManager.cs" t="Include" />
+            <e p="UIMenus.cs" t="Include" />
+            <e p="UIMeters.cs" t="Include" />
           </e>
         </e>
         <e p="Standard Assets" t="Include">

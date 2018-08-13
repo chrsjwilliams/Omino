@@ -209,6 +209,7 @@ namespace Tinylytics{
 				_UpdateTotalPlaytime();
 				LogMetric("Total Time Until Tutorial Played", analyticsData.totalPlaytime.ToString());
 				LogMetric("Number of Sessions Until Tutorial Played", analyticsData.totalSessions.ToString());
+				LogMetric("Tutorial First Played Version Number", analyticsData.versionNumber);
 				analyticsData.playedTutorial = true;
 				_SaveData();
 			}
@@ -353,6 +354,8 @@ namespace Tinylytics{
 		public void DungeonRunLoss(int challengeNumber)
 		{
 			LogMetric("Dungeon Run Lost - Number of Matches Won", (challengeNumber - 1).ToString());
+			analyticsData.dungeonRunTotalRuns++;
+			LogMetric("Dungeon Run Lost - Total Number of Runs", analyticsData.dungeonRunTotalRuns.ToString());
 		}
 
 		public void DungeonRunWin(List<BuildingType> techList)
@@ -364,6 +367,8 @@ namespace Tinylytics{
 			}
 			
 			LogMetric("Dungeon Run Won With Tech", toReturn);
+			analyticsData.dungeonRunTotalRuns++;
+			LogMetric("Dungeon Run Won - Total Number of Runs", analyticsData.dungeonRunTotalRuns.ToString());
 		}
 	}
 
@@ -384,6 +389,7 @@ namespace Tinylytics{
 		public int PvAITotalLosses;
 		public float dungeonRunPlaytime;
 		public int dungeonRunTotalMatches;
+		public int dungeonRunTotalRuns;
 		public float demoPlaytime;
 		public int demoTotalMatches;
 		public float tutorialPlaytime;
@@ -414,9 +420,11 @@ namespace Tinylytics{
 			tutorialTotalWins = 0;
 			tutorialTotalLosses = 0;
 			tutorialPlaytime = 0.0f;
+			dungeonRunTotalRuns = 0;
 			versionNumber = Application.version;
 			firstLoadTime = _SecondsSinceEpoch();
-			BackendManager.SendData("Game Installed", versionNumber);
+			
+			AnalyticsManager.LogMetric("Game Installed", versionNumber);
 		}
 		
 		private int _SecondsSinceEpoch()
