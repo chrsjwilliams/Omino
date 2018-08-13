@@ -111,6 +111,8 @@ public class Tile : MonoBehaviour, IVertex
     private SpriteRenderer bpAssistHighlightSr;
     [SerializeField]
     private SpriteRenderer crackSr;
+    [SerializeField]
+    private SpriteRenderer[] gridEdges;
     //private readonly Color bpAssistColor = new Color(1, 1, 1);
     private bool bombSettling;
     private float bombSettleTimeElapsed;
@@ -157,7 +159,20 @@ public class Tile : MonoBehaviour, IVertex
         
         baseColor = mainSr.color;
         bpAssistHighlightSr.gameObject.SetActive(false);
-        if (pieceParent == null) IncrementSortingOrder(-5000);
+        for (int i = 0; i < gridEdges.Length; i++)
+        {
+            SpriteRenderer edgeSr = gridEdges[i];
+
+            edgeSr.enabled = false;
+        }
+        if (pieceParent == null)
+        {
+            IncrementSortingOrder(-5000);
+            if (coord.x == 0) gridEdges[1].enabled = true;
+            if (coord.x == Services.MapManager.MapWidth - 1) gridEdges[2].enabled = true;
+            if (coord.y == 0) gridEdges[0].enabled = true;
+            if (coord.y == Services.MapManager.MapHeight - 1) gridEdges[3].enabled = true;
+        }
     }
 
     public void Init(Coord coord_, Polyomino pieceParent_)
