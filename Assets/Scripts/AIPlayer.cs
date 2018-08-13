@@ -41,6 +41,7 @@ public class AIPlayer : Player
     protected float destructorForBlueprintWeight;
     protected float dangerWeight;
     private IEnumerator thinkingCoroutine;
+    private Move nextMove;
 
 
     public override void Init(int playerNum_, AIStrategy strategy, AILEVEL level_, PlayerHandicap handicapValue)
@@ -58,7 +59,7 @@ public class AIPlayer : Player
         movesTriedBuffer = 50;
         coordCountBuffer = 200;
         tilesUntilBlueprint = 5;
-        totalRandomizations = 100;
+        totalRandomizations = 200;
         kargerAlgorithmBuffer = 10;
 
         aiLevel = level_;
@@ -136,6 +137,18 @@ public class AIPlayer : Player
     protected override void Update ()
     {
         base.Update();
+        string statusText = "";
+        if (isThinking)
+        {
+            statusText += "THINKING";
+        }
+        if (playingPiece)
+        {
+            statusText += "PLAYING";
+        }
+        if (statusText == "") statusText = "WAITING";
+        Services.UIManager.aiStatuses[playerNum - 1].text = statusText;
+
         canAffordAPiece = false;
         for (int i = 0; i < hand.Count; i++)
         {
@@ -145,12 +158,25 @@ public class AIPlayer : Player
                 break;
             }
         }
-        if (canAffordAPiece && !isThinking && !playingPiece && !drawingPiece && Services.GameScene.gameInProgress && !gameOver)
+        if(Services.GameScene.gameInProgress && !Services.GameScene.gameOver 
+            && !playingPiece)
         {
-            thinkingCoroutine = GeneratePossibleMoves();
-            StartCoroutine(thinkingCoroutine);
+            if (canAffordAPiece && nextMove != null)
+            {
+                MakePlay(nextMove);
+                nextMove = null;
+            }
+            else if (!isThinking && !drawingPiece)
+            {
+                thinkingCoroutine = GeneratePossibleMoves();
+                StartCoroutine(thinkingCoroutine);
+            }
+
         }
+
         //  Check if coroutine is running if not, start it
+
+
 
         if(Input.GetKeyDown(KeyCode.G)) Debug.Log("SECONDS PASSED: " + (resourceMeterFillAmt/(resourceGainRate * resourceGainFactor)));
 
@@ -568,7 +594,8 @@ public class AIPlayer : Player
         //Debug.Log("touchable coords: " + touchableCoords.Count());
         #region Blueprint Placement Logic
         int blueprintsTried = 0;
-        foreach (Blueprint blueprint in blueprints)
+        List<Blueprint> tempBlueprints = new List<Blueprint>(blueprints);
+        foreach (Blueprint blueprint in tempBlueprints)
         { 
             Coord roundedPos = new Coord((int)blueprint.holder.transform.position.x,
                                             (int)blueprint.holder.transform.position.y);
@@ -725,7 +752,9 @@ public class AIPlayer : Player
             isThinking = false;
         else if (nextPlay != null && nextPlay.score > 0)
         {
-            MakePlay(nextPlay);
+            //MakePlay(nextPlay);
+            if(nextMove == null || nextPlay.score > nextMove.score)
+                nextMove = nextPlay;
         }
 
         isThinking = false;

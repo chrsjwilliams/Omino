@@ -435,7 +435,7 @@ GameObject:
   - component: {fileID: 4983716568654216}
   - component: {fileID: 114558856504770714}
   m_Layer: 0
-  m_Name: Solo
+  m_Name: Demo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -668,6 +668,22 @@ GameObject:
   - component: {fileID: 114587405086292860}
   m_Layer: 0
   m_Name: HyperVS
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1697956230292682
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4300963352202130}
+  - component: {fileID: 114234746460497102}
+  m_Layer: 0
+  m_Name: Solo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1089,6 +1105,19 @@ Transform:
   m_Father: {fileID: 4771405485361944}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4300963352202130
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697956230292682}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4980031899222326}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4320847903366960
 Transform:
   m_ObjectHideFlags: 1
@@ -1278,6 +1307,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4569277371410358}
+  - {fileID: 4300963352202130}
   - {fileID: 4983716568654216}
   m_Father: {fileID: 4080922031492906}
   m_RootOrder: 1
@@ -1293,7 +1323,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4980031899222326}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114004294465345498
 MonoBehaviour:
@@ -2223,6 +2253,33 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114234746460497102
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1697956230292682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0b9000e353b2642b0b980b3aded016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectPrefabToSpawn: {fileID: 0}
+  onLoadActions:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  menuToLoad: {fileID: 114057878718670262}
+  actionToPerform:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  modeToLoad: 0
+  buttonText: SOLO
+  toggled: 0
+  forceLock: 0
 --- !u!114 &114240062302676814
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3075,14 +3132,14 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  menuToLoad: {fileID: 114057878718670262}
+  menuToLoad: {fileID: 0}
   actionToPerform:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  modeToLoad: 0
-  buttonText: SOLO
+  modeToLoad: 3
+  buttonText: DEMO
   toggled: 0
   forceLock: 0
 --- !u!114 &114587405086292860

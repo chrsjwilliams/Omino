@@ -332,6 +332,8 @@ public class UIManager : MonoBehaviour {
     }
     #endregion
 
+    public TextMeshProUGUI[] aiStatuses;
+
     private void Awake()
     {
     }
@@ -401,7 +403,7 @@ public class UIManager : MonoBehaviour {
 
             if (uiElemt.name.Contains("Banner"))
             {
-                uiElemt.transform.localRotation = Quaternion.Euler(0, 0, bannerRotation);
+                //uiElemt.transform.localRotation = Quaternion.Euler(0, 0, bannerRotation);
             }
             else
             {

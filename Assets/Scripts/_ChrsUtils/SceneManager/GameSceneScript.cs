@@ -276,6 +276,11 @@ public class GameSceneScript : Scene<TransitionData>
                 break;
             case TitleSceneScript.GameMode.TwoPlayers:
                 break;
+            case TitleSceneScript.GameMode.Demo:
+                Task restartTask = new Wait(5f);
+                restartTask.Then(new ActionTask(Reload));
+                Services.GeneralTaskManager.Do(restartTask);
+                break;
             default:
                 break;
         }
@@ -284,13 +289,14 @@ public class GameSceneScript : Scene<TransitionData>
         {
             player.OnGameOver();
         }
-        if (demoMode)
-        {
-            Task restartTask = new Wait(5f);
-            restartTask.Then(new ActionTask(Reload));
-            Services.GeneralTaskManager.Do(restartTask);
-        }
-        else if (evolutionMode)
+        //if (demoMode)
+        //{
+        //    Task restartTask = new Wait(5f);
+        //    restartTask.Then(new ActionTask(Reload));
+        //    Services.GeneralTaskManager.Do(restartTask);
+        //}
+        //else 
+        if (evolutionMode)
         {
             Services.GameManager.MutateAndSaveStrats(winner);
             Task restartTask = new Wait(1f);
@@ -423,8 +429,8 @@ public class GameSceneScript : Scene<TransitionData>
         TaskTree startSequence = new TaskTree(new ScrollReadyBanners(Services.UIManager.UIBannerManager.readyBanners, false));
         TaskTree uiEntry;
         TaskTree handEntry;
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial &&
-            Services.GameManager.levelSelected.campaignLevelNum == 1)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial 
+            && Services.GameManager.levelSelected.campaignLevelNum == 1)
         {
             showDestructors = false;          
             uiEntry =

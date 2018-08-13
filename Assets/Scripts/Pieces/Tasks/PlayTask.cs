@@ -26,6 +26,17 @@ public class PlayTask : Task
 
     protected override void Init()
     {
+        if(piece is Blueprint)
+        {
+            foreach(Blueprint bp in player.blueprints)
+            {
+                if(bp.buildingType == piece.buildingType)
+                {
+                    piece = bp;
+                    break;
+                }
+            }
+        }
         if (piece.burningFromHand)
         {
             SetStatus(TaskStatus.Aborted);

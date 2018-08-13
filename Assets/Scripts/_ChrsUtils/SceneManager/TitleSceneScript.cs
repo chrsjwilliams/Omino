@@ -134,6 +134,7 @@ public class TitleSceneScript : Scene<TransitionData>
                 Services.Scenes.PushScene<AIDifficultySceneScript>();
                 break;
             case GameMode.Demo:
+                Services.Scenes.PushScene<MapSelectSceneScript>();
                 break;
             case GameMode.Tutorial:
                 Services.Scenes.PushScene<TutorialLevelSceneScript>();
