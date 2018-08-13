@@ -85,6 +85,12 @@ public class TutorialManager : MonoBehaviour
             tutorialComplete = true;
         }
 
+        for(int i = 0; i < progress; i++)
+        {
+            if(progress < viewedTutorial.Length - 1)
+                viewedTutorial[i] = true;
+        }
+
         if (Services.GameManager.levelSelected != null &&
             Services.GameManager.levelSelected.objectives.Length > 0)
         {
@@ -117,6 +123,14 @@ public class TutorialManager : MonoBehaviour
         Services.GameEventManager.Unregister<PieceRemoved>(OnPieceRemoved);
         Services.GameEventManager.Unregister<ClaimedTechEvent>(OnClaimTech);
         Services.GameEventManager.Unregister<GameEndEvent>(OnGameEnd);
+    }
+
+    public void ViewedAllTutorial(bool status)
+    {
+        for(int i  = 0; i < viewedTutorial.Length; i++)
+        {
+            viewedTutorial[i] = status;
+        }
     }
 
     public void DisplaySkipButton()
