@@ -109,6 +109,8 @@ public class Tile : MonoBehaviour, IVertex
     private SpriteRenderer legalitySr;
     [SerializeField]
     private SpriteRenderer bpAssistHighlightSr;
+    [SerializeField]
+    private SpriteRenderer crackSr;
     //private readonly Color bpAssistColor = new Color(1, 1, 1);
     private bool bombSettling;
     private float bombSettleTimeElapsed;
@@ -138,6 +140,7 @@ public class Tile : MonoBehaviour, IVertex
         highlightSr.enabled = false;
         legalitySr.enabled = false;
         topSr.enabled = false;
+        crackSr.enabled = false;
 
         transform.position = new Vector3(coord.x, coord.y, 0);
 
@@ -423,8 +426,16 @@ public class Tile : MonoBehaviour, IVertex
 
     public void ToggleConnectedness(bool connected)
     {
-        if (connected) mainSr.sprite = Sprites[0];
-        else mainSr.sprite = DisconnectedSprite;
+        if (connected)
+        {
+            //mainSr.sprite = Sprites[0];
+            crackSr.enabled = false;
+        }
+        else
+        {
+            //mainSr.sprite = DisconnectedSprite;
+            crackSr.enabled = true;
+        }
     }
 
     public void SetBpAssistAlpha(float alpha)

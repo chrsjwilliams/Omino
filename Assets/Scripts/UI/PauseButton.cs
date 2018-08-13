@@ -57,13 +57,13 @@ public class PauseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (Services.GameScene.gamePaused)
         {
             AudioListener.volume = 1.0f;
-            Services.UIManager.UIMenu.pauseMenu.SetActive(false);
+            Services.UIManager.UIMenu.pauseMenu.SetPauseMenuStatus(false);
             Services.GameScene.UnpauseGame();
         }
         else
         {
             AudioListener.volume = 0.55f;
-            Services.UIManager.UIMenu.pauseMenu.SetActive(true);
+            Services.UIManager.UIMenu.pauseMenu.SetPauseMenuStatus(true);
             Services.GameScene.PauseGame();
         }
     }
@@ -73,7 +73,7 @@ public class PauseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (state)
         {
             Services.UIManager.UIMenu.optionsMenu.SetActive(true);
-            Services.UIManager.UIMenu.pauseMenu.SetActive(false);
+            Services.UIManager.UIMenu.pauseMenu.SetPauseMenuStatus(false);
             if (!Services.GameManager.MusicEnabled)
             {
                 GameObject.Find("ToggleMusic").GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
@@ -82,7 +82,7 @@ public class PauseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         else
         {
             Services.UIManager.UIMenu.optionsMenu.SetActive(false);
-            Services.UIManager.UIMenu.pauseMenu.SetActive(true);
+            Services.UIManager.UIMenu.pauseMenu.SetPauseMenuStatus(true);
         }
     }
 

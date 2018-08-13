@@ -262,7 +262,7 @@ public class GameSceneScript : Scene<TransitionData>
                     int levelBeaten = Services.GameManager.levelSelected.campaignLevelNum;
                     if(levelBeaten == TutorialManager.TUTORIAL_COMPLETE_NUMBER && Services.TutorialManager.CompletionCheck())
                     {
-                        Services.GameManager.UnlockMode(TitleSceneScript.GameMode.Practice, true);
+                        //Services.GameManager.UnlockMode(TitleSceneScript.GameMode.Practice, true);
                         Services.GameManager.UnlockAllModes();
                     }
                     if (levelBeaten > progress && Services.TutorialManager.CompletionCheck())

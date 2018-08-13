@@ -16,7 +16,7 @@ public class MenuOption : MenuObject
     private RectTransform buttonRect;
     [HideInInspector]
     public bool toggled;
-    public bool unlocked;
+    private bool unlocked;
     public bool forceLock;
 
     // Update is called once per frame

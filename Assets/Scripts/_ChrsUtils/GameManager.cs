@@ -280,7 +280,7 @@ public class GameManager : MonoBehaviour
 
         HandicapSystem.Init();
         LoadModeStatusData();
-        UnlockMode(TitleSceneScript.GameMode.Shop, false);
+        //UnlockMode(TitleSceneScript.GameMode.Shop, false);
     }
 
     private void LoadModeStatusData()
@@ -392,7 +392,7 @@ public class GameManager : MonoBehaviour
         {
             modeUnlockStatuses[mode] = true;
         }
-        UnlockMode(TitleSceneScript.GameMode.Shop, false);
+        //UnlockMode(TitleSceneScript.GameMode.Shop, false);
         SaveModeStatusData();
     }
 
