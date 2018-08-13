@@ -41,7 +41,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
     private bool scalingDown;
     private string currentAnimation;
 
-    private float dismissTimer = 0.5f;
+    private float dismissTimer;
 
     private bool haveSelectedPiece = false;
 
@@ -76,6 +76,10 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         else
         {
             dismissTimer -= Time.deltaTime;
+            if(dismissible && dismissTimer <= 0)
+            {
+                dismissText.color = Color.Lerp(dismissText.color, Color.red, Time.deltaTime * 10);
+            }
         }
 
         if(label == "Rotate")
@@ -244,15 +248,27 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         if (HasParameter(animationParam))
         {
             imageAnim.SetBool(animationParam, true);
-        }
-        else if (animationParam.Contains("Block Opponent Base"))
-        {
-            imageAnim.SetBool("Block Opponent Base", true);
+            if (dismissible)
+            {
+                int clipIndex = 0;
+                foreach (AnimationClip anim in imageAnim.runtimeAnimatorController.animationClips)
+                {
+                    if (anim.name == animationParam)
+                        break;
+                    clipIndex++;
+                }
+
+
+                dismissTimer = imageAnim.runtimeAnimatorController.animationClips[clipIndex].length + 0.33f;
+            }
         }
         else
         {
+            dismissTimer = 0.5f;
             TurnOffAnimation();
         }
+
+        
     }
 
     public void TurnOffAnimation()
