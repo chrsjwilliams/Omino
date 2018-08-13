@@ -41,6 +41,8 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
     private bool scalingDown;
     private string currentAnimation;
 
+    private float dismissTimer;
+
     private bool haveSelectedPiece = false;
 
     private const float MIN_TIME_ANIMATION_DISPLAYED = 1;
@@ -73,7 +75,11 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         }
         else
         {
-            //timeDisplayed += Time.unscaledDeltaTime;
+            dismissTimer -= Time.deltaTime;
+            if(dismissible && dismissTimer <= 0)
+            {
+                dismissText.color = Color.Lerp(dismissText.color, Color.red, Time.deltaTime * 10);
+            }
         }
 
         if(label == "Rotate")
@@ -234,9 +240,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         
         
         scalingDown = true;
-        timeElapsed = 0;
-
-        
+        timeElapsed = 0;    
     }
 
     public void ToggleImageAnimation(string animationParam)
@@ -244,15 +248,27 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         if (HasParameter(animationParam))
         {
             imageAnim.SetBool(animationParam, true);
-        }
-        else if (animationParam.Contains("Block Opponent Base"))
-        {
-            imageAnim.SetBool("Block Opponent Base", true);
+            if (dismissible)
+            {
+                int clipIndex = 0;
+                foreach (AnimationClip anim in imageAnim.runtimeAnimatorController.animationClips)
+                {
+                    if (anim.name == animationParam)
+                        break;
+                    clipIndex++;
+                }
+
+
+                dismissTimer = imageAnim.runtimeAnimatorController.animationClips[clipIndex].length + 0.33f;
+            }
         }
         else
         {
+            dismissTimer = 0.5f;
             TurnOffAnimation();
         }
+
+        
     }
 
     public void TurnOffAnimation()
@@ -291,7 +307,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (dismissible)
+        if (dismissible && dismissTimer <= 0)
         {
             Dismiss();
         }
