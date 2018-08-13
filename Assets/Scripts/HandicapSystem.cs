@@ -64,9 +64,9 @@ public class HandicapSystem : MonoBehaviour
 
         tutorialPlayerHandicapLevels = new PlayerHandicap[]
         {
-            new PlayerHandicap(1.5f, 1f, 1f),
-            new PlayerHandicap(1.25f, 1f, 1.5f),
-            new PlayerHandicap(1f, 1f, 1f),
+            new PlayerHandicap(1.5f, 1.5f, 1f),
+            new PlayerHandicap(1.25f, 1.25f, 1.5f),
+            new PlayerHandicap(1f, 1f, 1.25f),
             new PlayerHandicap(1f, 1f, 1f),
             new PlayerHandicap(1f, 1f, 1f)
         };

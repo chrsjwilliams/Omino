@@ -218,7 +218,7 @@ public class Player : MonoBehaviour
             else if (Services.GameManager.levelSelected.stackDestructorInOpeningHand)
             {
                 DrawPieces(startingHandSize - 1);
-                attackResources = this is AIPlayer ? 1 : 2;
+                attackResources = 1;
             }
             else
             {
