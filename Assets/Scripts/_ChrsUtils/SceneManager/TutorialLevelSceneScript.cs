@@ -181,7 +181,7 @@ public class TutorialLevelSceneScript : Scene<TransitionData>
     {
         SetLevelProgress(5);
         Services.GameManager.UnlockAllModes();
-        Services.TutorialManager.ViewedAllTutorial(true);
+        TutorialManager.ViewedAllTutorial(true);
         File.WriteAllText(GameOptionsSceneScript.progressFileName, "5");
     }
 
@@ -189,7 +189,7 @@ public class TutorialLevelSceneScript : Scene<TransitionData>
     {
         SetLevelProgress(0);
         Services.GameManager.ModeUnlockReset();
-        Services.TutorialManager.ViewedAllTutorial(false);
+        TutorialManager.ViewedAllTutorial(false);
         File.WriteAllText(GameOptionsSceneScript.progressFileName, "0");
     }
 

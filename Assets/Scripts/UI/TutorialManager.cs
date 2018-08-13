@@ -125,7 +125,7 @@ public class TutorialManager : MonoBehaviour
         Services.GameEventManager.Unregister<GameEndEvent>(OnGameEnd);
     }
 
-    public void ViewedAllTutorial(bool status)
+    public static void ViewedAllTutorial(bool status)
     {
         for(int i  = 0; i < viewedTutorial.Length; i++)
         {
