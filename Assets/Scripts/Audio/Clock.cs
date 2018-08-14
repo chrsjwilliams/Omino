@@ -132,14 +132,17 @@ namespace BeatManagement
       void SetLengths()
       {
          _measureLength = _secondsPerMeasure;
-         int beatVal = 32 / (int)_unitOfTempo;
+         float beatVal = 32 / (int)_unitOfTempo;
+         Debug.Log(beatVal);
          
          _thirtySecondLength = _measureLength / _beatsPerMeasure / (32 / beatVal);
          _sixteenthLength = _measureLength / _beatsPerMeasure / (16 / beatVal);
          _eighthLength = _measureLength / _beatsPerMeasure / (8 / beatVal);
          _quarterLength = _measureLength / _beatsPerMeasure / (4 / beatVal);
-         _halfLength = _measureLength / _beatsPerMeasure * (2 / beatVal);
-         _wholeLength = _measureLength / _beatsPerMeasure * (1 / beatVal);
+         _halfLength = _measureLength / _beatsPerMeasure / (2 / beatVal);
+         _wholeLength = _measureLength / _beatsPerMeasure / (1 / beatVal);
+         
+         Debug.Log("Quarter" + _quarterLength + " Half" + _halfLength);
       }
 
       void FirstBeat()
