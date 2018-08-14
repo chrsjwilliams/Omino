@@ -199,7 +199,7 @@ public class Pulse : Task
 	
 	protected override void Init()
 	{
-		
+		Handheld.Vibrate();	
 	}
 
 	internal override void Update()

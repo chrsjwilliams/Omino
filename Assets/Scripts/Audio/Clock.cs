@@ -18,8 +18,7 @@ namespace Beat
       }
 
       //stable to pretty high BPMs, but when you past the low 200s things might break down
-      public double BPM; 
-
+      public double BPM;
       public string MBT;
       public double StartDelay;
       public double LatencyCompensation = 0;
@@ -347,6 +346,8 @@ namespace Beat
              .ToList();
          return temp[temp.Count - 1];
       }
-
    }
+   
+   
+   
 }
