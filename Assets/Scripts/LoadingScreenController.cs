@@ -14,17 +14,17 @@ public class LoadingScreenController : MonoBehaviour
 	
 	#if UNITY_IOS
 
-	void OnEnable() {
+	void Start() {
 		DontDestroyOnLoad(this.gameObject);
 		Handheld.SetActivityIndicatorStyle(ActivityIndicatorStyle.WhiteLarge);
 		Handheld.StartActivityIndicator();
-		SceneManager.sceneLoaded += OnSceneLoaded;
+		SceneManager.sceneUnloaded += OnSceneUnloaded;
 	}
 	
-	void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+	void OnSceneUnloaded(Scene scene) {
 		Handheld.StopActivityIndicator();
 		Handheld.Vibrate();
-		SceneManager.sceneLoaded -= OnSceneLoaded;
+		SceneManager.sceneUnloaded -= OnSceneUnloaded;
 		Destroy(gameObject);
 	}
 	
