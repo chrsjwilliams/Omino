@@ -10,6 +10,8 @@ public class MenuObject : MonoBehaviour
     [SerializeField]
     protected GameObject objectPrefabToSpawn;
     protected GameObject associatedObject;
+    [SerializeField]
+    private Vector2 customOffset;
 
     // Use this for initialization
     void Start()
@@ -39,7 +41,7 @@ public class MenuObject : MonoBehaviour
     public virtual void Show(Vector2 pos, float delay, bool status = true)
     {
         associatedObject.SetActive(true);
-        lerper.LerpTo(pos + (offset * Vector2.up), pos, delay, movementTime);
+        lerper.LerpTo(pos + (offset * Vector2.up) + customOffset, pos + customOffset, delay, movementTime);
     }
 
     public virtual void Hide(float delay)

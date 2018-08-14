@@ -35,10 +35,12 @@ public class CameraController : MonoBehaviour {
         transform.position = pos;
         basePos = pos;
         SetScreenEdges();
+        //Debug.Log("map edge: " + GetMapEdgeScreenHeight());
+        //Debug.Log("screen height: " + Screen.height);
     }
 
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
         if (shaking) Shake();	
 	}
 
@@ -146,5 +148,10 @@ public class CameraController : MonoBehaviour {
         TaskTree to_return = new TaskTree(slow_down, new TaskTree(wait, new TaskTree(speed_up, new TaskTree(wait2, new TaskTree(reset)))));
 
         return to_return;
+    }
+
+    public float GetMapEdgeScreenHeight()
+    {
+        return theCamera.WorldToScreenPoint(new Vector3(0, 24, 0)).y;
     }
 }

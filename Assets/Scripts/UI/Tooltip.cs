@@ -22,8 +22,8 @@ public class Tooltip : MonoBehaviour {
 	void Update () {		
 	}
 
-    public void Init(string name, string description, float rot, Vector2 basePos, 
-        bool blueprintInHand)
+    public void Init(string name, string description, float rot, 
+        Vector2 basePos, bool blueprintInHand)
     {
         nameText.text = name;
         descriptionText.text = description;

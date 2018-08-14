@@ -1452,14 +1452,19 @@ public class Polyomino : IVertex
             Vector3 screenInputPos = 
                 Services.GameManager.MainCamera.WorldToScreenPoint(inputPos);
             Vector3 screenOffset;
+            float mapEdgeScreenHeight = Services.CameraController.GetMapEdgeScreenHeight();
             if (owner.playerNum == 1)
             {
-                screenOffset = baseDragOffset + ((1 - (2 * baseDragOffset.y / Screen.height))
+                screenOffset = baseDragOffset + 
+                    (((mapEdgeScreenHeight - (Screen.height / 2) 
+                        - baseDragOffset.y) / (Screen.height / 2))
                     * screenInputPos.y * Vector3.up);
             }
             else
             {
-                screenOffset = -baseDragOffset + ((1 - (2 * baseDragOffset.y / Screen.height)) 
+                screenOffset = -baseDragOffset + 
+                    (((mapEdgeScreenHeight - (Screen.height / 2)
+                        - baseDragOffset.y) / (Screen.height / 2))
                     * (Screen.height - screenInputPos.y) * Vector3.down);
             }
             Vector3 offsetInputPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
