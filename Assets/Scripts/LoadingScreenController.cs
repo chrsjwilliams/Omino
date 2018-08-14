@@ -8,6 +8,23 @@ using UnityEngine.Rendering;
 public class LoadingScreenController : MonoBehaviour
 {
 	private bool load_started = false;
+	
+	#pragma strict
+	
+	#if UNITY_IOS
+
+	void Start() {
+		DontDestroyOnLoad(this.gameObject);
+		Handheld.SetActivityIndicatorStyle(iOSActivityIndicatorStyle.WhiteLarge);
+		Handheld.StartActivityIndicator();
+	}
+	
+	void OnLevelWasLoaded() {
+		Handheld.StopActivityIndicator();
+		Destroy(gameObject);
+	}
+	
+	#endif
 
 	void Update () {
 		if ((!load_started) && (SplashScreen.isFinished))
@@ -35,6 +52,6 @@ public class LoadingScreenController : MonoBehaviour
 			yield return null;
 		}
 		
-		SceneManager.UnloadSceneAsync (0);
+		SceneManager.UnloadSceneAsync(0);
 	}
 }
