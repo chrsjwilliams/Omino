@@ -10,6 +10,7 @@ namespace BeatManagement
 {
    public class Clock : MonoBehaviour
    {
+      #region /// Public Variables ///
       public ClockEventManager eventManager;
       protected Clock() { }
 
@@ -18,7 +19,6 @@ namespace BeatManagement
          BPM = bpm;
       }
 
-      //stable to pretty high BPMs, but when you past the low 200s things might break down
       public double BPM;
       public string MBT;
       public double StartDelay;
@@ -30,37 +30,7 @@ namespace BeatManagement
       {
          get { return _beatsPerMeasure; }
       }
-      private int _beatsPerMeasure = 4;
-      private BeatValue _unitOfTempo = BeatValue.Quarter;
       
-      private bool[] _beatMask = new bool[(int)BeatValue.Max];
-      
-      private int _thirtySecondCount;
-      private int _sixteenthCount;
-      private int _eighthCount;
-      private int _quarterCount;
-      private int _halfCount;
-      private int _wholeCount;
-      private int _measureCount;
-      
-      private double _thirtySecondLength;
-      private double _sixteenthLength;
-      private double _eighthLength;
-      private double _quarterLength;
-      private double _halfLength;
-      private double _wholeLength;
-      private double _measureLength;
-      
-      private double _nextThirtySecond = System.Double.MaxValue;
-      private double _nextMeasure;
-      private double _nextSixteenth;
-      private double _nextEighth;
-      private double _nextQuarter;
-      private double _nextHalf;
-      private double _nextWhole;
-
-      private List<double> latency = new List<double>();
-
       public enum BeatValue
       {
          ThirtySecond = 1,
@@ -95,45 +65,131 @@ namespace BeatManagement
 
       public event BeatEvent Tick;
       public event BeatEvent Beat;
+      
+      #endregion
+      
+      #region /// Private Variables ///
+      private int _beatsPerMeasure = 4;
+      private BeatValue _unitOfTempo = BeatValue.Quarter;
+      
+      private bool[] _beatMask = new bool[(int)BeatValue.Max];
+      
+      private int _thirtySecondCount;
+      private int _sixteenthCount;
+      private int _eighthCount;
+      private int _quarterCount;
+      private int _halfCount;
+      private int _wholeCount;
+      private int _measureCount;
+      
+      private double _thirtySecondLength;
+      private double _sixteenthLength;
+      private double _eighthLength;
+      private double _quarterLength;
+      private double _halfLength;
+      private double _wholeLength;
+      private double _measureLength;
+      
+      private double _nextThirtySecond = System.Double.MaxValue;
+      private double _nextMeasure;
+      private double _nextSixteenth;
+      private double _nextEighth;
+      private double _nextQuarter;
+      private double _nextHalf;
+      private double _nextWhole;
 
+      private List<double> latency = new List<double>();
+      
+      #endregion
+      
+      #region /// Monobehavior Functions ///
+      void Start()
+      {
+         _beatMask = new bool[(int)BeatValue.Max];
+         _InitializeBPM(BPM);
+         eventManager = new ClockEventManager();
+      }
+
+      void Update()
+      {
+         if (AudioSettings.dspTime >= _nextThirtySecond - LatencyCompensation)
+         {
+            _UpdateBeats();
+         }
+         Array.Clear(_beatMask, 0, _beatMask.Length);
+
+         int beatCount = 0;
+         switch (_unitOfTempo)
+         {
+            case (BeatValue.Half) : beatCount = _halfCount;
+               break;
+            case (BeatValue.Quarter) : beatCount = _quarterCount;
+               break;
+            case (BeatValue.Eighth) : beatCount = _eighthCount;
+               break;
+            case (BeatValue.Sixteenth) : beatCount = _sixteenthCount;
+               break;
+            case (BeatValue.ThirtySecond) : beatCount = _thirtySecondCount;
+               break;
+         }
+         
+         int beats = 1 + ((beatCount - 1) % _beatsPerMeasure);
+         MBT = _measureCount.ToString() + ":" + beats.ToString() + ":" + ((_thirtySecondCount % 8)+1).ToString();
+
+         //double rollav = _RollingAverage(latency);
+         //if (rollav != 0.0)
+         //Debug.Log("Average Drift of Last 25 Notes: " + (rollav * 1000).ToString().Remove(5) + "ms");
+      }
+      
+      #endregion
+
+      #region /// Public Access Functions ///
       public void SetBPM(int newBPM)
       {
          double BPMdbl = (double)newBPM;
-         InitializeBPM(BPMdbl);
+         _InitializeBPM(BPMdbl);
       }
 
       public void SetBPM(float newBPM)
       {
          double BPMdbl = (double)newBPM;
-         InitializeBPM(BPMdbl);
+         _InitializeBPM(BPMdbl);
       }
 
       public void SetBPM(double NewBPM)
       {
-         InitializeBPM((NewBPM));
+         _InitializeBPM((NewBPM));
       }
 
       public void SetTimeSignature(int beatsPerMeasure, BeatValue unitOfTempo)
       {
          _beatsPerMeasure = beatsPerMeasure;
          _unitOfTempo = unitOfTempo;
-         InitializeBPM(BPM);
+         _InitializeBPM(BPM);
+      }
+      
+      public void ClearEvents()
+      {
+         eventManager = new ClockEventManager();
       }
 
-      void InitializeBPM(double NewBPM)
+      #endregion
+      
+      #region /// Private Functions ///
+
+      private void _InitializeBPM(double NewBPM)
       {
-         ResetBeatCounts();
+         _ResetBeatCounts();
          BPM = NewBPM;
          _secondsPerMeasure = 60 / BPM * _beatsPerMeasure;
-         SetLengths();
-         FirstBeat();
+         _SetLengths();
+         _FirstBeat();
       }
 
-      void SetLengths()
+      private void _SetLengths()
       {
          _measureLength = _secondsPerMeasure;
          float beatVal = 32 / (int)_unitOfTempo;
-         Debug.Log(beatVal);
          
          _thirtySecondLength = _measureLength / _beatsPerMeasure / (32 / beatVal);
          _sixteenthLength = _measureLength / _beatsPerMeasure / (16 / beatVal);
@@ -141,11 +197,9 @@ namespace BeatManagement
          _quarterLength = _measureLength / _beatsPerMeasure / (4 / beatVal);
          _halfLength = _measureLength / _beatsPerMeasure / (2 / beatVal);
          _wholeLength = _measureLength / _beatsPerMeasure / (1 / beatVal);
-         
-         Debug.Log("Quarter" + _quarterLength + " Half" + _halfLength);
       }
 
-      void FirstBeat()
+      private void _FirstBeat()
       {
          double time = AudioSettings.dspTime + StartDelay;
          _nextThirtySecond = time + _thirtySecondLength;
@@ -157,7 +211,7 @@ namespace BeatManagement
          _nextMeasure = time + _measureLength;
       }
 
-      void ResetBeatCounts()
+      private void _ResetBeatCounts()
       {
          _thirtySecondCount = 0;
          _sixteenthCount = 1;
@@ -167,23 +221,11 @@ namespace BeatManagement
          _wholeCount = 1;
          _measureCount = 1;
       }
-
-      void Start()
-      {
-         _beatMask = new bool[(int)BeatValue.Max];
-         InitializeBPM(BPM);
-         eventManager = new ClockEventManager();
-      }
-
-      public void ClearEvents()
-      {
-         eventManager = new ClockEventManager();
-      }
-
-      void UpdateBeats()
+      
+      private void _UpdateBeats()
       {
          _thirtySecondCount++;
-         BuildBeatMask();
+         _BuildBeatMask();
          if (Tick != null)
             Tick(new BeatArgs(BeatValue.ThirtySecond, _thirtySecondCount, _nextThirtySecond, _nextThirtySecond + _thirtySecondLength, _beatMask));
          
@@ -262,7 +304,7 @@ namespace BeatManagement
          }
       }
 
-      void BuildBeatMask()
+      private void _BuildBeatMask()
       {
          if (_thirtySecondCount % ((int) _unitOfTempo * _beatsPerMeasure) == 0)
             _beatMask[(int) BeatValue.Measure] = true;
@@ -279,38 +321,22 @@ namespace BeatManagement
          if (_thirtySecondCount % 32 != 0) return;
          _beatMask[(int)BeatValue.Whole] = true;
       }
-
-      void Update()
+      
+      private double _RollingAverage(List<double> values)
       {
-         if (AudioSettings.dspTime >= _nextThirtySecond - LatencyCompensation)
-         {
-            UpdateBeats();
-         }
-         Array.Clear(_beatMask, 0, _beatMask.Length);
-
-         int beatCount = 0;
-         switch (_unitOfTempo)
-         {
-            case (BeatValue.Half) : beatCount = _halfCount;
-               break;
-            case (BeatValue.Quarter) : beatCount = _quarterCount;
-               break;
-            case (BeatValue.Eighth) : beatCount = _eighthCount;
-               break;
-            case (BeatValue.Sixteenth) : beatCount = _sixteenthCount;
-               break;
-            case (BeatValue.ThirtySecond) : beatCount = _thirtySecondCount;
-               break;
-         }
-         
-         int beats = 1 + ((beatCount - 1) % _beatsPerMeasure);
-         MBT = _measureCount.ToString() + ":" + beats.ToString() + ":" + ((_thirtySecondCount % 8)+1).ToString();
-
-         //double rollav = RollingAverage(latency);
-         //if (rollav != 0.0)
-         //Debug.Log("Average Drift of Last 25 Notes: " + (rollav * 1000).ToString().Remove(5) + "ms");
+         int periodLength = 25;
+         if (values.Count - 1 < periodLength) return 0.0;
+         var temp = Enumerable
+            .Range(0, values.Count - periodLength)
+            .Select(n => values.Skip(n).Take(periodLength).Average())
+            .ToList();
+         return temp[temp.Count - 1];
       }
+      
+      #endregion
 
+      #region /// Public Helper Functions ///
+      
       public void SyncFunction(System.Action callback, BeatValue beatValue = BeatValue.Measure)
       {
          StartCoroutine(YieldForSync(callback, beatValue));
@@ -448,20 +474,11 @@ namespace BeatManagement
       {
          return (float) _measureLength;
       }
-
-      //benchmarking function for latency measurement
-      double RollingAverage(List<double> values)
-      {
-         int periodLength = 25;
-         if (values.Count - 1 < periodLength) return 0.0;
-         var temp = Enumerable
-             .Range(0, values.Count - periodLength)
-             .Select(n => values.Skip(n).Take(periodLength).Average())
-             .ToList();
-         return temp[temp.Count - 1];
-      }
+      
+      #endregion
    }
 
+   #region /// Event Manager For Repeated Actions on Beats ///
    public class ClockEventManager
    {
       private Dictionary<System.Type, BeatEvent.Handler> registered_handlers;
@@ -536,4 +553,6 @@ namespace BeatManagement
    public class Half : BeatEvent { public Half(int beatCount) : base(beatCount) { } }
    public class Whole : BeatEvent { public Whole(int beatCount) : base(beatCount) { } }
    public class Measure : BeatEvent { public Measure(int beatCount) : base(beatCount) { } } 
+   
+   #endregion
 }
