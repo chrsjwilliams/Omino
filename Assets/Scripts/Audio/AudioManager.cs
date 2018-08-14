@@ -8,7 +8,6 @@ using EasingEquations;
 public class AudioManager : MonoBehaviour {
 
     private AudioSource mainTrack;
-    private TaskManager levelMusicManager;
     private List<AudioSource> effectChannels;
     private GameObject effectsHolder;
     private GameObject levelMusicHolder;
@@ -43,14 +42,6 @@ public class AudioManager : MonoBehaviour {
             
             effectChannels.Add(channel.AddComponent<AudioSource>());
             effectChannels[i].loop = false;
-        }
-    }
-
-    public void Update()
-    {
-        if (levelMusicManager != null)
-        {
-            levelMusicManager.Update();
         }
     }
     
@@ -165,19 +156,11 @@ public class AudioManager : MonoBehaviour {
             levelMusicVolumes.Add(source.volume);
         }
         
-        levelMusicManager = new TaskManager();
-        
-        Task initialWait = new Wait(Services.Clock.MeasureLength() * 4);
-        Task changeVolumes = new ActionTask(DynamicLevelMusicVolumes);
-
-        initialWait.Then(changeVolumes);
-        
-        levelMusicManager.Do(initialWait);
-
+        Services.Clock.eventManager.Register<Measure>(DynamicLevelMusicVolumes);
         MuteMusicChannels();
     }
 
-    private void DynamicLevelMusicVolumes()
+    private void DynamicLevelMusicVolumes(BeatEvent e)
     {
         previousVolumes = new List<float>();
         
@@ -230,12 +213,6 @@ public class AudioManager : MonoBehaviour {
                     to_change.volume = new_volume;
                 }));
         }
-        
-        Task measureWait = new Wait(Services.Clock.MeasureLength());
-        Task changeVolumes = new ActionTask(DynamicLevelMusicVolumes);
-        
-        measureWait.Then(changeVolumes);
-        levelMusicManager.Do(measureWait);
     }
 
     private void ConnectQuantizedClipReverse(AudioClip clip, double amount_to_play)
@@ -356,15 +333,36 @@ public class AudioManager : MonoBehaviour {
                     to_change.volume = new_volume;
                 }));
         }
-
-        levelMusicManager = new TaskManager();
         
-        Task wait = new Wait(Services.Clock.MeasureLength() * 2);
-        wait.Then(new ActionTask(() => { levelMusicHolder = null; }));
+        Delay(() =>
+        {
+            levelMusicHolder = null;
+            Services.Clock.eventManager.Unregister<Measure>(DynamicLevelMusicVolumes);
+        }, Services.Clock.MeasureLength() * 2);
         
-        levelMusicManager.Do(wait);
     }
 
+    public void Delay(System.Action callback, float delayTime)
+    {
+        StartCoroutine(YieldForSync(callback, delayTime));
+    }
+
+    IEnumerator YieldForSync(System.Action callback, float delayTime)
+    {
+        float timeElapsed = 0.0f;
+        bool waiting = true;
+        while (waiting)
+        {
+            timeElapsed += Time.deltaTime;
+            
+            if (timeElapsed > delayTime)
+                waiting = false;
+            else
+                yield return false;
+        }
+        callback();
+    }
+    
     public void FadeOutLevelMusicMainMenuCall()
     {
         FadeOutLevelMusic();

@@ -66,8 +66,8 @@ public static class HyperModeManager
 		_discoTM = new TaskManager();
 		Pulse(new Quarter(0));
 		Disco(new Measure(0));
-		Services.Clock.clockEventManager.Register<Beat>(Pulse);
-		Services.Clock.clockEventManager.Register<Measure>(Disco);
+		Services.Clock.eventManager.Register<Beat>(Pulse);
+		Services.Clock.eventManager.Register<Measure>(Disco);
 		
 		Services.GameManager.MainCamera.backgroundColor =
 			Color.Lerp(Color.black, Services.GameScene.backgroundColor,
@@ -89,6 +89,7 @@ public static class HyperModeManager
 		Services.Clock.SetBPM(110);
 		Services.AudioManager.RegisterStartLevelMusic();
 		Services.GameManager.SetColorScheme(_previousScheme);
+		Services.Clock.ClearEvents();
 	}
 
 	public static void Placement(Color color, Vector3 location)
@@ -235,7 +236,7 @@ public abstract class DiscoFloor : Task
 		if (!_started)
 		{
 			SetColors(new Beat(0));
-			Services.Clock.clockEventManager.Register<Beat>(SetColors);
+			Services.Clock.eventManager.Register<Beat>(SetColors);
 			_started = true;
 		}
 		timeElapsed += Time.deltaTime;
@@ -248,7 +249,7 @@ public abstract class DiscoFloor : Task
 
 	private void _Reset()
 	{
-		Services.Clock.clockEventManager.Unregister<Beat>(SetColors);
+		Services.Clock.eventManager.Unregister<Beat>(SetColors);
 		timeElapsed = 0;
 		num_switches = 0;
 		_RandomizeColors();
@@ -339,7 +340,6 @@ public class DiscoCheckers : DiscoFloor
 	
 	protected override void SetColors(BeatEvent e)
 	{
-		Debug.Log("Called");
 		num_switches++;
 		
 		for (int i = 0; i < Services.MapManager.MapWidth; i++)

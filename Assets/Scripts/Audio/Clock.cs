@@ -10,7 +10,7 @@ namespace BeatManagement
 {
    public class Clock : MonoBehaviour
    {
-      public ClockEventManager clockEventManager;
+      public ClockEventManager eventManager;
       protected Clock() { }
 
       public void Init(double bpm)
@@ -169,12 +169,12 @@ namespace BeatManagement
       {
          _beatMask = new bool[(int)BeatValue.Max];
          InitializeBPM(BPM);
-         clockEventManager = new ClockEventManager();
+         eventManager = new ClockEventManager();
       }
 
       public void ClearEvents()
       {
-         clockEventManager = new ClockEventManager();
+         eventManager = new ClockEventManager();
       }
 
       void UpdateBeats()
@@ -184,13 +184,13 @@ namespace BeatManagement
          if (Tick != null)
             Tick(new BeatArgs(BeatValue.ThirtySecond, _thirtySecondCount, _nextThirtySecond, _nextThirtySecond + _thirtySecondLength, _beatMask));
          
-         clockEventManager.Fire(new ThirtySecond(_thirtySecondCount));
+         eventManager.Fire(new ThirtySecond(_thirtySecondCount));
          
          if (Beat != null)
             Beat(new BeatArgs(BeatValue.ThirtySecond, _thirtySecondCount, _nextThirtySecond, _nextThirtySecond + _thirtySecondLength, _beatMask));
             
          if (_unitOfTempo == BeatValue.ThirtySecond)
-            clockEventManager.Fire(new Beat(_thirtySecondCount));
+            eventManager.Fire(new Beat(_thirtySecondCount));
          
          //latency.Add(AudioSettings.dspTime - _nextThirtySecond); //benchmarking stuff
          _nextThirtySecond += _thirtySecondLength;
@@ -198,63 +198,63 @@ namespace BeatManagement
          if (_beatMask[(int)BeatValue.Sixteenth])
          {
             _sixteenthCount++;
-            clockEventManager.Fire(new Sixteenth(_sixteenthCount));
+            eventManager.Fire(new Sixteenth(_sixteenthCount));
             if (Beat != null) 
                Beat(new BeatArgs(BeatValue.Sixteenth, _sixteenthCount, _nextSixteenth, _nextSixteenth + _sixteenthLength, _beatMask));
                
             if (_unitOfTempo == BeatValue.Sixteenth)
-               clockEventManager.Fire(new Beat(_sixteenthCount));
+               eventManager.Fire(new Beat(_sixteenthCount));
             
             _nextSixteenth += _sixteenthLength;
          }
          if (_beatMask[(int)BeatValue.Eighth])
          {
             _eighthCount++;
-            clockEventManager.Fire(new Eighth(_eighthCount));
+            eventManager.Fire(new Eighth(_eighthCount));
             if (Beat != null)
                Beat(new BeatArgs(BeatValue.Eighth, _eighthCount, _nextEighth,  _nextEighth + _eighthLength, _beatMask));
                
             if (_unitOfTempo == BeatValue.Eighth)
-               clockEventManager.Fire(new Beat(_eighthCount));
+               eventManager.Fire(new Beat(_eighthCount));
             
             _nextEighth += _eighthLength;
          }
          if (_beatMask[(int)BeatValue.Quarter])
          {
             _quarterCount++;
-            clockEventManager.Fire(new Quarter(_quarterCount));
+            eventManager.Fire(new Quarter(_quarterCount));
             
             if (Beat != null)
                Beat(new BeatArgs(BeatValue.Quarter, _quarterCount, _nextQuarter, _nextQuarter + _quarterLength,
                   _beatMask));
                
             if (_unitOfTempo == BeatValue.Quarter)
-               clockEventManager.Fire(new Beat(_quarterCount));
+               eventManager.Fire(new Beat(_quarterCount));
             
             _nextQuarter += _quarterLength;
          }
          if (_beatMask[(int)BeatValue.Half])
          {
             _halfCount++;
-            clockEventManager.Fire(new Half(_halfCount));
+            eventManager.Fire(new Half(_halfCount));
             if (Beat != null) 
                Beat(new BeatArgs(BeatValue.Half, _halfCount, _nextHalf, _nextHalf + _halfLength, _beatMask));
             
             if (_unitOfTempo == BeatValue.Half)
-               clockEventManager.Fire(new Beat(_halfCount));
+               eventManager.Fire(new Beat(_halfCount));
             
             _nextHalf += _halfLength;
          }
          if (_beatMask[(int) BeatValue.Whole])
          {
             _wholeCount++;
-            clockEventManager.Fire(new Whole(_wholeCount));
+            eventManager.Fire(new Whole(_wholeCount));
             _nextWhole += _wholeLength;
          }
          if (_beatMask[(int)BeatValue.Measure])
          {
             _measureCount++;
-            clockEventManager.Fire(new Measure(_measureCount));
+            eventManager.Fire(new Measure(_measureCount));
             _nextMeasure += _measureLength;
          }
       }
