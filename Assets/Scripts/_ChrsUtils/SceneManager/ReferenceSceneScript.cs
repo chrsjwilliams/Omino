@@ -8,7 +8,7 @@ public class ReferenceSceneScript : Scene<TransitionData> {
     [SerializeField]
     private GameObject techRefPrefab;
     private const float referenceBaseX = -250;
-    private const float referenceBaseY = 300;
+    private const float referenceBaseY = -200;
     private const float referenceYSpacing = 250;
     [SerializeField]
     private GameObject referenceHolder;
