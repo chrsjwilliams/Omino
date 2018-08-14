@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Beat;
+using BeatManagement;
 using UnityEngine;
 
 public static class HyperModeManager
@@ -62,8 +62,13 @@ public static class HyperModeManager
 		_discoTiles = new ShuffleBag<DiscoFloor>(new DiscoFloor[] { 
 			new DiscoStripes(), new DiscoCheckers(), new DiscoWave(), new DiscoBlocks(), new DiscoWindmill() } );
 		
-		_InitializePulse();
-		_InitializeDisco();
+		_pulseTM = new TaskManager();
+		_discoTM = new TaskManager();
+		Pulse(new Quarter(0));
+		Disco(new Measure(0));
+		Services.Clock.eventManager.Register<Beat>(Pulse);
+		Services.Clock.eventManager.Register<Measure>(Disco);
+		
 		Services.GameManager.MainCamera.backgroundColor =
 			Color.Lerp(Color.black, Services.GameScene.backgroundColor,
 				Services.Clock.BeatLength() - (float) Services.Clock.AtNextBeat() / Services.Clock.BeatLength());
@@ -84,18 +89,7 @@ public static class HyperModeManager
 		Services.Clock.SetBPM(110);
 		Services.AudioManager.RegisterStartLevelMusic();
 		Services.GameManager.SetColorScheme(_previousScheme);
-	}
-
-	private static void _InitializePulse()
-	{
-		_pulseTM = new TaskManager();
-		ContinuePulse();
-	}
-
-	private static void _InitializeDisco()
-	{
-		_discoTM = new TaskManager();
-		ContinueDisco();
+		Services.Clock.ClearEvents();
 	}
 
 	public static void Placement(Color color, Vector3 location)
@@ -104,33 +98,15 @@ public static class HyperModeManager
 		ConfettiSplosion(color, location);
 	}
 
-	private static void ContinuePulse()
+	public static void Pulse(BeatEvent e)
 	{
-		Services.Clock.SyncFunction(() =>
-		{
-			TaskTree beatTasks =
-				new TaskTree(new EmptyTask(),
-					new TaskTree(
-						new Pulse(Services.Clock.EighthLength())), new TaskTree(new Shake(Services.Clock.SixteenthLength())));
-			
-			ActionTask redo = new ActionTask(ContinuePulse);
-
-			beatTasks.Then(redo);
-			
-			_pulseTM.Do(beatTasks);
-		}, Clock.BeatValue.Quarter);
+		_pulseTM.Do(new Pulse(Services.Clock.EighthLength()));
+		_pulseTM.Do(new Shake(Services.Clock.SixteenthLength()));
 	}
-	
-	private static void ContinueDisco()
+
+	public static void Disco(BeatEvent e)
 	{
-		Services.Clock.SyncFunction(() =>
-		{
-			DiscoFloor disco = _discoTiles.Next();
-			ActionTask continue_disco = new ActionTask(ContinueDisco);
-			disco.Then(continue_disco);
-			
-			_pulseTM.Do(disco);
-		});
+		_discoTM.Do(_discoTiles.Next());
 	}
 	
 	public static void ConfettiSplosion(Color color, Vector3 location)
@@ -239,13 +215,14 @@ public class Shake : Task
 	}
 }
 
-public class DiscoFloor : Task
+public abstract class DiscoFloor : Task
 {
-	public int num_switches;
+	public int num_switches = 0;
 	public Color[] colors =
 		{new Color(1, 0.92f, 0.016f, 1f), new Color(0f, 1f, 1f, 1f), new Color(1, 0, 1, 1f), new Color(1, 1f, 1f, 1f)};
 	public float timeElapsed;
 	public Color color1, color2, color3, color4;
+	public bool _started = false;
 
 	public DiscoFloor()
 	{
@@ -253,26 +230,34 @@ public class DiscoFloor : Task
 		num_switches = 0;
 		_RandomizeColors();
 	}
-
+	
 	internal override void Update()
 	{
+		if (!_started)
+		{
+			SetColors(new Beat(0));
+			Services.Clock.eventManager.Register<Beat>(SetColors);
+			_started = true;
+		}
 		timeElapsed += Time.deltaTime;
-		if (timeElapsed > Services.Clock.BeatLength() * 3 + Services.Clock.SixteenthLength())
-		{
-			num_switches = 0;
-			SetStatus(TaskStatus.Success);
-		}
+		if (timeElapsed > Services.Clock.BeatLength() * (Services.Clock.beatsPerMeasure - 1) + Services.Clock.BeatLength()/2)
+			_Reset();
 
-		if (num_switches >= 4)
-		{
-			timeElapsed = 0;
-			num_switches = 0;
-			_RandomizeColors();
-			SetStatus(TaskStatus.Success);
-		}
+		if (num_switches >= Services.Clock.beatsPerMeasure)
+		 	_Reset();
 	}
-	
-	private void _SetColors() { }
+
+	private void _Reset()
+	{
+		Services.Clock.eventManager.Unregister<Beat>(SetColors);
+		timeElapsed = 0;
+		num_switches = 0;
+		_RandomizeColors();
+		_started = false;
+		SetStatus(TaskStatus.Success);
+	}
+
+	abstract protected void SetColors(BeatEvent e);
 	
 	private void _RandomizeColors()
 	{
@@ -285,57 +270,8 @@ public class DiscoFloor : Task
 	}
 }
 
-public class DiscoRandom : DiscoFloor
-{
-	public DiscoRandom()
-	{
-		
-	}
-
-	internal override void Update()
-	{
-		base.Update();
-		
-		if (timeElapsed > num_switches * Services.Clock.BeatLength())
-			_SetColors();
-	}
-
-	private void _SetColors()
-	{
-		num_switches++;
-		
-		for (int i = 0; i < Services.MapManager.MapWidth; i++)
-		{
-			for (int j = 0; j < Services.MapManager.MapHeight; j++)
-			{
-				Tile t = Services.MapManager.GetTile(i, j);
-				switch (UnityEngine.Random.Range(0, 4))
-				{
-					case 0 :
-						t.SetBpAssistColor(new Color(1, 0, 1, 1f));
-						break;
-					case 1 :
-						t.SetBpAssistColor(new Color(1, 0.92f, 0.016f, 1f));
-						break;
-					case 2 :
-						t.SetBpAssistColor(new Color(1, 1f, 1f, 1f));
-						break;
-					case 3 :
-						t.SetBpAssistColor(new Color(0f, 1f, 1f, 1f));
-						break;
-					default :
-						t.SetColor(Color.grey);
-						t.SetBpAssistAlpha(0.0f);
-						break;
-				}
-			}
-		}
-	}
-}
-
 public class DiscoCheckers : DiscoFloor
 {
-	private TaskManager _colorSwitcher;
 	private int[,] grid;
 	
 	/*private int[,] grid =
@@ -365,16 +301,12 @@ public class DiscoCheckers : DiscoFloor
 	public DiscoCheckers()
 	{
 		bool double_wide = ((Services.MapManager.MapHeight % 2 == 0) && (Services.MapManager.MapWidth % 2 == 0));
-	
 		_EstablishGrid(double_wide);
 	}
 
 	internal override void Update()
 	{
 		base.Update();
-		
-		if (timeElapsed > num_switches * Services.Clock.BeatLength())
-			_SetColors();
 	}
 
 	private void _EstablishGrid(bool double_wide = true)
@@ -406,7 +338,7 @@ public class DiscoCheckers : DiscoFloor
 		}
 	}
 	
-	private void _SetColors()
+	protected override void SetColors(BeatEvent e)
 	{
 		num_switches++;
 		
@@ -486,12 +418,9 @@ public class DiscoStripes : DiscoFloor
 	internal override void Update()
 	{
 		base.Update();
-		
-		if (timeElapsed > num_switches * Services.Clock.BeatLength())
-			_SetColors();
 	}
 
-	private void _SetColors()
+	protected override void SetColors(BeatEvent e)
 	{
 		num_switches++;
 		
@@ -589,12 +518,9 @@ public class DiscoWave : DiscoFloor
 	internal override void Update()
 	{
 		base.Update();
-		
-		if (timeElapsed > num_switches * Services.Clock.BeatLength())
-			_SetColors();
 	}
 
-	private void _SetColors()
+	protected override void SetColors(BeatEvent e)
 	{
 		num_switches++;
 		
@@ -694,12 +620,9 @@ public class DiscoBlocks : DiscoFloor
 	internal override void Update()
 	{
 		base.Update();
-		
-		if (timeElapsed > num_switches * Services.Clock.BeatLength())
-			_SetColors();
 	}
 
-	private void _SetColors()
+	protected override void SetColors(BeatEvent e)
 	{
 		num_switches++;
 		
@@ -803,12 +726,9 @@ public class DiscoWindmill : DiscoFloor
 	internal override void Update()
 	{
 		base.Update();
-		
-		if (timeElapsed > num_switches * Services.Clock.BeatLength())
-			_SetColors();
 	}
 
-	private void _SetColors()
+	protected override void SetColors(BeatEvent e)
 	{
 		num_switches++;
 		

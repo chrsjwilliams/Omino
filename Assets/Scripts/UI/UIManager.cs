@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Beat;
+using BeatManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;

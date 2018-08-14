@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6e3d42f2220bb342a28180320c2b637, type: 3}
-  m_Name: Test_Campaign
+  m_Name: Tutorial_4
   m_EditorClassIdentifier: 
   campaignLevelNum: 4
   objectives:
@@ -53,23 +53,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 0}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0, g: 0, b: 0, a: 0}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: 0}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: -1000, y: -725}
+    skipButtonLocationiPhone: {x: -800, y: -725}
   - label: Factory
     text: The <color=#6CAE75>Factory</color> increases the production speed of pieces,
       giving you a bigger supply!
@@ -97,23 +89,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 0}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0, g: 0, b: 0, a: 0}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: 0}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: -600, y: -1200}
+    skipButtonLocationiPhone: {x: -600, y: -1200}
   - label: Barracks
     text: The <color=#6CAE75>Barracks</color> increases the production speed of <color=#E56575FF>Hammers</color>,
       to help you go on the offensive!
@@ -141,23 +125,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 0}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0, g: 0, b: 0, a: 0}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: 0}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: -600, y: -1200}
+    skipButtonLocationiPhone: {x: -600, y: -1200}
   - label: Show Me
     text: Remember, to create a <color=#6CAE75>Building</color>, you must first form
       the appropriate shape on the board, then place the <color=#6CAE75>Building</color>
@@ -186,23 +162,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 0}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0, g: 0, b: 0, a: 0}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: 0}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: -1000, y: -725}
+    skipButtonLocationiPhone: {x: -800, y: -725}
   - label: Another Building
     text: 
     displayObjective: 0
@@ -229,23 +197,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 1, y: 1}
     iPhoneImageScale: {x: 1, y: 1}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 1, g: 1, b: 1, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0, g: 0, b: 0, a: 0}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: 0}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: -933, y: -580}
+    skipButtonLocationiPhone: {x: -740, y: -585}
   - label: Balance
     text: Keep your economies in balance as you build towards victory.
     displayObjective: 0
@@ -272,23 +232,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: -1}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 1, y: 1}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 1, g: 1, b: 1, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0, g: 0, b: 0, a: 0}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: 0}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: -1000, y: -725}
+    skipButtonLocationiPhone: {x: -800, y: -725}
   - label: Do Not Display
     text: 
     displayObjective: 0
@@ -315,23 +267,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 1, g: 1, b: 1, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0, g: 0, b: 0, a: 0}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: 0}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: 500, y: 500}
+    skipButtonLocationiPhone: {x: 500, y: 500}
   overrideStrategy:
     winWeight: 0
     structWeight: 0

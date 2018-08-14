@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6e3d42f2220bb342a28180320c2b637, type: 3}
-  m_Name: Campaign_4
+  m_Name: Tutorial_5
   m_EditorClassIdentifier: 
   campaignLevelNum: 5
   objectives:
@@ -57,23 +57,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: 0}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: -1000, y: -725}
+    skipButtonLocationiPhone: {x: -800, y: -725}
   - label: Tech Structures
     text: To mix things up, there are special <color=#6CAE75>Tech Structures</color>
       spread across the map!
@@ -101,23 +93,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: -1}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: -1400, y: -1000}
+    skipButtonLocationiPhone: {x: -700, y: -500}
   - label: Claim
     text: To claim a <color=#6CAE75>Tech Structure</color>, simply connect to it.
     displayObjective: 0
@@ -144,23 +128,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: -1}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: -1000, y: -725}
+    skipButtonLocationiPhone: {x: -800, y: -725}
   - label: Not Destroyed
     text: <color=#6CAE75>Tech Structures</color> cannot be destroyed, but you can
       reclaim them from your opponent if you cut them off!
@@ -188,23 +164,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: -1}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: -1000, y: -725}
+    skipButtonLocationiPhone: {x: -800, y: -725}
   - label: Tap
     text: Each <color=#6CAE75>Tech Structure</color> grants a unique technology. Tap
       and hold on a structure to read about its effect.
@@ -232,23 +200,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: -1}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: -600, y: -475}
+    skipButtonLocationiPhone: {x: -400, y: -1000}
   - label: Remember Blueprints
     text: You decide what to prioritize! And don't forget about <color=#6CAE75>Buildings</color>!
     displayObjective: 1
@@ -262,7 +222,7 @@ MonoBehaviour:
     iPhoneArrowRotation: 0
     iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 1
-    enableTooltips: 0
+    enableTooltips: 1
     windowLocation: {x: 0, y: 0}
     secondWindowLocation: {x: 0, y: 0}
     iPhoneWindowLocation: {x: 0, y: 0}
@@ -275,23 +235,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: -1}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: -1000, y: -725}
+    skipButtonLocationiPhone: {x: -400, y: -725}
   - label: Do Not Display
     text: 
     displayObjective: 0
@@ -318,23 +270,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: 0}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: 500, y: 500}
+    skipButtonLocationiPhone: {x: 500, y: 500}
   - label: Complete
     text: Good  Job, you finished the Tutorial! Head over to <color=#7D7DFF>PRACTICE
       MODE</color> to improve your skills!
@@ -362,23 +306,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: 0}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: 500, y: 500}
+    skipButtonLocationiPhone: {x: 500, y: 500}
   - label: Do Not Display
     text: 
     displayObjective: 0
@@ -405,23 +341,15 @@ MonoBehaviour:
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
     iPhoneImageLocation: {x: 0, y: 0}
-    secondaryImageLocation: {x: 0, y: 0, z: 0}
+    secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
     iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
-    subImageLocation: {x: 0, y: 0}
-    secondarySubImageLocation: {x: 0, y: 0, z: 0}
-    subImageScale: {x: 0, y: 0}
-    subImageRotation: 0
-    subImageColor: {r: 0.8980392, g: 0.39607844, b: 0.45882353, a: 0.5}
-    subImage2Location: {x: 0, y: 0}
-    secondarySubImage2Location: {x: 0, y: 0, z: 0}
-    subImage2Scale: {x: 0, y: 0}
-    subImage2Rotation: 0
-    subImage2Color: {r: 0, g: 0, b: 0, a: 0}
+    skipButtonLocation: {x: 500, y: 500}
+    skipButtonLocationiPhone: {x: 500, y: 500}
   overrideStrategy:
     winWeight: 0
     structWeight: 0

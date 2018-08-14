@@ -2,7 +2,7 @@
 using UnityEngine.Assertions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Beat;
+using BeatManagement;
 using Tinylytics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;

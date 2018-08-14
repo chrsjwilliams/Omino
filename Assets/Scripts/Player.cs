@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections;
-using Beat;
+using BeatManagement;
 
 public class Player : MonoBehaviour
 {
@@ -1252,7 +1252,6 @@ public class Player : MonoBehaviour
             }
             if (moveToHighlight == null) moveToHighlight = possibleBlueprintMoves[0];
             
-            //Services.Clock.SyncFunction(_ParameterizeAction(RegisterHighlightedTiles, moveToHighlight.allCoords), Clock.BeatValue.Half);
             highlightedBlueprint = moveToHighlight.blueprint;
             blueprintNextHalf = Services.Clock.AtNextHalf();
             foreach(Coord coord in moveToHighlight.allCoords)
