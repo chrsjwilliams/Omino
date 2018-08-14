@@ -102,30 +102,27 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     void RotationSpecificToolTipUpdates()
     {
-        if (Services.GameManager.Players[0].selectedPiece == null && !haveSelectedPiece)
+        if (Services.GameManager.Players[0].selectedPiece == null )
         {
-            textComponent.text = "First, drag a piece to the board...";
+            TurnOffAnimation();
             ToggleImageAnimation("Place Piece");
         }
         else
         {
 
-            if (!haveSelectedPiece)
+
+                TurnOffAnimation();
+                imageSecondaryPosition = new Vector2(-200, -250);
+                image.rectTransform.localPosition = imageSecondaryPosition;
+            
+
+            if( Services.GameManager.onIPhone)
             {
                 TurnOffAnimation();
                 imageSecondaryPosition = new Vector2(-200, -250);
                 image.rectTransform.localPosition = imageSecondaryPosition;
             }
 
-            if(!haveSelectedPiece && Services.GameManager.onIPhone)
-            {
-                TurnOffAnimation();
-                imageSecondaryPosition = new Vector2(-200, -250);
-                image.rectTransform.localPosition = imageSecondaryPosition;
-            }
-
-            haveSelectedPiece = true;
-            textComponent.text = "Then tap on the screen with a different finger to <color=#6CAE75>ROTATE</color>.";
             ToggleImageAnimation("Rotate");
             
         }

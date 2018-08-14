@@ -171,14 +171,16 @@ public static class DungeonRunManager
             }
         }
 
+        dungeonRunData.techOptionsGenerated = true;
         return techChoices;
     }
 
     public static List<BuildingType> GetTechBuildingSelection()
     {
-        if (dungeonRunData.techChoices.Count < 1)
+        if (dungeonRunData.techChoices.Count < 1 && !dungeonRunData.techOptionsGenerated)
         {
             dungeonRunData.techChoices = GenerateTechToChooseFrom();
+            SaveData();
         }
 
         return dungeonRunData.techChoices;
@@ -206,6 +208,7 @@ public static class DungeonRunManager
             dungeonRunData.currentTech.Add(tech);
             Services.Analytics.TechSelected(tech, dungeonRunData.techChoices);
             dungeonRunData.selectingNewTech = false;
+            dungeonRunData.techOptionsGenerated = false;
         }
         SaveData();
     }
@@ -249,13 +252,14 @@ public static class DungeonRunManager
 public class DungeonRunData
 {
     public bool selectingNewTech;
+    public bool techOptionsGenerated;
     public bool completedRun;
     public List<BuildingType> techChoices;
     public List<BuildingType> currentTech;
     public int challengeNum;
     public PlayerHandicap handicapLevel;
 
-    public DungeonRunData(List<BuildingType> ownedTech,  List<BuildingType> techSelection, int challengeNumLevel, PlayerHandicap handicap, bool selecting, bool selected)
+    public DungeonRunData(List<BuildingType> ownedTech, List<BuildingType> techSelection, int challengeNumLevel, PlayerHandicap handicap, bool selecting, bool selected, bool generated)
     {
         currentTech = ownedTech;
         techChoices = techSelection;
@@ -263,6 +267,7 @@ public class DungeonRunData
         handicapLevel = handicap;
         selectingNewTech = selecting;
         completedRun = selected;
+        techOptionsGenerated = generated;
     }
 
     public DungeonRunData()
@@ -278,5 +283,6 @@ public class DungeonRunData
                                             dungeonRunMinHandicap);
         selectingNewTech = false;
         completedRun = false;
+        techOptionsGenerated = false;
     }
 }
