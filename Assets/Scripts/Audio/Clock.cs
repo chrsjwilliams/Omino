@@ -532,5 +532,5 @@ namespace BeatManagement
    public class Quarter : BeatEvent { public Quarter(int beatCount) : base(beatCount) { } }
    public class Half : BeatEvent { public Half(int beatCount) : base(beatCount) { } }
    public class Whole : BeatEvent { public Whole(int beatCount) : base(beatCount) { } }
-   public class Measure : BeatEvent { public Measure(int beatCount) : base(beatCount) { } }  
+   public class Measure : BeatEvent { public Measure(int beatCount) : base(beatCount) { } } 
 }
