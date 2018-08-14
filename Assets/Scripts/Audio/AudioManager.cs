@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Beat;
+using BeatManagement;
 using UnityEngine;
 using EasingEquations;
 

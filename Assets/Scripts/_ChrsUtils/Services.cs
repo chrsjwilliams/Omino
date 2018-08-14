@@ -1,5 +1,5 @@
 ﻿
-using Beat;
+using BeatManagement;
 using Tinylytics;
 
 public class Services

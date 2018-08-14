@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Beat;
+using BeatManagement;
 using UnityEngine;
 using UnityEngine.UI;
 

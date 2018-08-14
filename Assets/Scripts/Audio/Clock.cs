@@ -6,10 +6,11 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using EasingEquations;
 
-namespace Beat
+namespace BeatManagement
 {
    public class Clock : MonoBehaviour
    {
+      public ClockEventManager clockEventManager;
       protected Clock() { }
 
       public void Init(double bpm)
@@ -25,13 +26,21 @@ namespace Beat
       
       public double _secondsPerMeasure;
 
+      public int beatsPerMeasure
+      {
+         get { return _beatsPerMeasure; }
+      }
+      private int _beatsPerMeasure = 4;
+      private BeatValue _unitOfTempo = BeatValue.Quarter;
+      
       private bool[] _beatMask = new bool[(int)BeatValue.Max];
-
+      
       private int _thirtySecondCount;
       private int _sixteenthCount;
       private int _eighthCount;
       private int _quarterCount;
       private int _halfCount;
+      private int _wholeCount;
       private int _measureCount;
       
       private double _thirtySecondLength;
@@ -39,6 +48,7 @@ namespace Beat
       private double _eighthLength;
       private double _quarterLength;
       private double _halfLength;
+      private double _wholeLength;
       private double _measureLength;
       
       private double _nextThirtySecond = System.Double.MaxValue;
@@ -47,18 +57,20 @@ namespace Beat
       private double _nextEighth;
       private double _nextQuarter;
       private double _nextHalf;
+      private double _nextWhole;
 
       private List<double> latency = new List<double>();
 
       public enum BeatValue
       {
-         ThirtySecond,
+         ThirtySecond = 1,
          Sixteenth = 2,
          Eighth = 4,
          Quarter = 8,
          Half = 16,
-         Measure = 32,
-         Max = 33
+         Whole = 32,
+         Measure = 33,
+         Max = 34
       };
 
       public class BeatArgs
@@ -101,11 +113,18 @@ namespace Beat
          InitializeBPM((NewBPM));
       }
 
+      public void SetTimeSignature(int beatsPerMeasure, BeatValue unitOfTempo)
+      {
+         _beatsPerMeasure = beatsPerMeasure;
+         _unitOfTempo = unitOfTempo;
+         InitializeBPM(BPM);
+      }
+
       void InitializeBPM(double NewBPM)
       {
          ResetBeatCounts();
-         this.BPM = NewBPM;
-         _secondsPerMeasure = 60 / this.BPM * 4;
+         BPM = NewBPM;
+         _secondsPerMeasure = 60 / BPM * _beatsPerMeasure;
          SetLengths();
          FirstBeat();
       }
@@ -113,11 +132,14 @@ namespace Beat
       void SetLengths()
       {
          _measureLength = _secondsPerMeasure;
-         _thirtySecondLength = _measureLength / 32;
-         _sixteenthLength = _measureLength / 16;
-         _eighthLength = _measureLength / 8;
-         _quarterLength = _measureLength / 4;
-         _halfLength = _measureLength / 2;
+         int beatVal = 32 / (int)_unitOfTempo;
+         
+         _thirtySecondLength = _measureLength / _beatsPerMeasure / (32 / beatVal);
+         _sixteenthLength = _measureLength / _beatsPerMeasure / (16 / beatVal);
+         _eighthLength = _measureLength / _beatsPerMeasure / (8 / beatVal);
+         _quarterLength = _measureLength / _beatsPerMeasure / (4 / beatVal);
+         _halfLength = _measureLength / _beatsPerMeasure * (2 / beatVal);
+         _wholeLength = _measureLength / _beatsPerMeasure * (1 / beatVal);
       }
 
       void FirstBeat()
@@ -128,6 +150,7 @@ namespace Beat
          _nextEighth = time + _eighthLength;
          _nextQuarter = time + _quarterLength;
          _nextHalf = time + _halfLength;
+         _nextWhole = time + _wholeLength;
          _nextMeasure = time + _measureLength;
       }
 
@@ -138,6 +161,7 @@ namespace Beat
          _eighthCount = 1;
          _quarterCount = 1;
          _halfCount = 1;
+         _wholeCount = 1;
          _measureCount = 1;
       }
 
@@ -145,6 +169,12 @@ namespace Beat
       {
          _beatMask = new bool[(int)BeatValue.Max];
          InitializeBPM(BPM);
+         clockEventManager = new ClockEventManager();
+      }
+
+      public void ClearEvents()
+      {
+         clockEventManager = new ClockEventManager();
       }
 
       void UpdateBeats()
@@ -152,42 +182,82 @@ namespace Beat
          _thirtySecondCount++;
          BuildBeatMask();
          if (Tick != null)
-            Tick(new BeatArgs(BeatValue.ThirtySecond, _thirtySecondCount, _nextThirtySecond,
-                  _nextThirtySecond + _thirtySecondLength, _beatMask));
+            Tick(new BeatArgs(BeatValue.ThirtySecond, _thirtySecondCount, _nextThirtySecond, _nextThirtySecond + _thirtySecondLength, _beatMask));
+         
+         clockEventManager.Fire(new ThirtySecond(_thirtySecondCount));
+         
+         if ((Beat != null) && (_unitOfTempo == BeatValue.ThirtySecond))
+         {
+            Beat(new BeatArgs(BeatValue.ThirtySecond, _thirtySecondCount, _nextThirtySecond, _nextThirtySecond + _thirtySecondLength, _beatMask));
+            clockEventManager.Fire(new Beat(_thirtySecondCount));
+         }
          //latency.Add(AudioSettings.dspTime - _nextThirtySecond); //benchmarking stuff
          _nextThirtySecond += _thirtySecondLength;
          if (_beatMask[(int)BeatValue.Sixteenth])
          {
             _sixteenthCount++;
+            clockEventManager.Fire(new Sixteenth(_sixteenthCount));
+            if ((Beat != null) && (_unitOfTempo == BeatValue.Sixteenth))
+            {
+               Beat(new BeatArgs(BeatValue.Sixteenth, _sixteenthCount, _nextSixteenth, _nextSixteenth + _sixteenthLength, _beatMask));
+               clockEventManager.Fire(new Beat(_sixteenthCount));
+            }
             _nextSixteenth += _sixteenthLength;
          }
          if (_beatMask[(int)BeatValue.Eighth])
          {
             _eighthCount++;
+            clockEventManager.Fire(new Eighth(_eighthCount));
+            if ((Beat != null) && (_unitOfTempo == BeatValue.Eighth))
+            {
+               Beat(new BeatArgs(BeatValue.Eighth, _eighthCount, _nextEighth,  _nextEighth + _eighthLength, _beatMask));
+               clockEventManager.Fire(new Beat(_eighthCount));
+            }
             _nextEighth += _eighthLength;
          }
          if (_beatMask[(int)BeatValue.Quarter])
          {
             _quarterCount++;
-            if (Beat != null)
-               Beat(new BeatArgs(BeatValue.Quarter, _quarterCount, _nextQuarter,
-                  _nextQuarter + _quarterLength, _beatMask));
+            clockEventManager.Fire(new Quarter(_quarterCount));
+            
+            if ((Beat != null) && (_unitOfTempo == BeatValue.Quarter))
+            {
+               Beat(new BeatArgs(BeatValue.Quarter, _quarterCount, _nextQuarter, _nextQuarter + _quarterLength,
+                  _beatMask));
+               clockEventManager.Fire(new Beat(_quarterCount));
+            }
             _nextQuarter += _quarterLength;
          }
          if (_beatMask[(int)BeatValue.Half])
          {
             _halfCount++;
+            clockEventManager.Fire(new Half(_halfCount));
+            if ((Beat != null) && (_unitOfTempo == BeatValue.Half))
+            {
+               Beat(new BeatArgs(BeatValue.Half, _halfCount, _nextHalf, _nextHalf + _halfLength, _beatMask));
+               clockEventManager.Fire(new Beat(_halfCount));
+            }
             _nextHalf += _halfLength;
+         }
+         if (_beatMask[(int) BeatValue.Whole])
+         {
+            _wholeCount++;
+            clockEventManager.Fire(new Whole(_wholeCount));
+            _nextWhole += _wholeLength;
          }
          if (_beatMask[(int)BeatValue.Measure])
          {
             _measureCount++;
+            clockEventManager.Fire(new Measure(_measureCount));
             _nextMeasure += _measureLength;
          }
       }
 
       void BuildBeatMask()
       {
+         if (_thirtySecondCount % ((int) _unitOfTempo * _beatsPerMeasure) == 0)
+            _beatMask[(int) BeatValue.Measure] = true;
+         
          _beatMask[(int)BeatValue.ThirtySecond] = true;
          if (_thirtySecondCount % 2 != 0) return;
          _beatMask[(int)BeatValue.Sixteenth] = true;
@@ -198,7 +268,7 @@ namespace Beat
          if (_thirtySecondCount % 16 != 0) return;
          _beatMask[(int)BeatValue.Half] = true;
          if (_thirtySecondCount % 32 != 0) return;
-         _beatMask[(int)BeatValue.Measure] = true;
+         _beatMask[(int)BeatValue.Whole] = true;
       }
 
       void Update()
@@ -208,7 +278,23 @@ namespace Beat
             UpdateBeats();
          }
          Array.Clear(_beatMask, 0, _beatMask.Length);
-         int beats = 1 + ((_quarterCount - 1) % 4);
+
+         int beatCount = 0;
+         switch (_unitOfTempo)
+         {
+            case (BeatValue.Half) : beatCount = _halfCount;
+               break;
+            case (BeatValue.Quarter) : beatCount = _quarterCount;
+               break;
+            case (BeatValue.Eighth) : beatCount = _eighthCount;
+               break;
+            case (BeatValue.Sixteenth) : beatCount = _sixteenthCount;
+               break;
+            case (BeatValue.ThirtySecond) : beatCount = _thirtySecondCount;
+               break;
+         }
+         
+         int beats = 1 + ((beatCount - 1) % _beatsPerMeasure);
          MBT = _measureCount.ToString() + ":" + beats.ToString() + ":" + ((_thirtySecondCount % 8)+1).ToString();
 
          //double rollav = RollingAverage(latency);
@@ -246,6 +332,8 @@ namespace Beat
          {
             case (BeatValue.Measure) :
                return AtNextMeasure();
+            case (BeatValue.Whole) :
+               return AtNextWhole();
             case (BeatValue.Half) :
                return AtNextHalf();
             case (BeatValue.Quarter) :
@@ -285,12 +373,17 @@ namespace Beat
 
       public double AtNextBeat()
       {
-         return _nextQuarter;
+         return ReturnAtNext(_unitOfTempo);
       }
 
       public double AtNextHalf()
       {
          return _nextHalf;
+      }
+
+      public double AtNextWhole()
+      {
+         return _nextWhole;
       }
 
       public double AtNextMeasure()
@@ -302,37 +395,49 @@ namespace Beat
       //These are casted to floats as most animations, tweens, etc. take float values for time
       public float ThirtySecondLength()
       {
-         return (float)_thirtySecondLength;
+         return (float) _thirtySecondLength;
       }
 
       public float SixteenthLength()
       {
-         return (float)_sixteenthLength;
+         return (float) _sixteenthLength;
       }
 
       public float EighthLength()
       {
-         return (float)_eighthLength;
+         return (float) _eighthLength;
       }
 
       public float QuarterLength()
       {
-         return (float)_quarterLength;
+         return (float) _quarterLength;
       }
 
       public float BeatLength()
       {
-         return (float)_quarterLength;
+         switch (_unitOfTempo)
+         {
+            case (BeatValue.Half) : return (float) _halfLength;
+            case (BeatValue.Eighth) : return (float) _eighthLength;
+            case (BeatValue.Sixteenth) : return (float) _sixteenthLength;
+            case (BeatValue.ThirtySecond) : return (float) _thirtySecondLength;
+            default: return (float) _quarterLength;
+         }
       }
 
       public float HalfLength()
       {
-         return (float)_halfLength;
+         return (float) _halfLength;
+      }
+
+      public float WholeLength()
+      {
+         return (float) _wholeLength;
       }
     
       public float MeasureLength()
       {
-         return (float)_measureLength;
+         return (float) _measureLength;
       }
 
       //benchmarking function for latency measurement
@@ -347,7 +452,79 @@ namespace Beat
          return temp[temp.Count - 1];
       }
    }
-   
-   
-   
+
+   public class ClockEventManager
+   {
+      private Dictionary<System.Type, BeatEvent.Handler> registered_handlers;
+
+      public ClockEventManager() {
+         registered_handlers = new Dictionary<System.Type, BeatEvent.Handler>();
+      }
+
+      public void Register<T>(BeatEvent.Handler handler) where T : BeatEvent {
+         System.Type type = typeof(T);
+         if (registered_handlers.ContainsKey(type)) {
+            if (!IsEventHandlerRegistered(type, handler))
+               registered_handlers[type] += handler;         
+         } else {
+            registered_handlers.Add(type, handler);         
+         }     
+      } 
+
+      public void Unregister<T>(BeatEvent.Handler handler) where T : BeatEvent {         
+         System.Type type = typeof(T);         
+         BeatEvent.Handler handlers;         
+         if (registered_handlers.TryGetValue(type, out handlers)) {             
+            handlers -= handler;             
+            if (handlers == null) {                 
+               registered_handlers.Remove(type);             
+            } else {
+               registered_handlers[type] = handlers;             
+            }         
+         }     
+      }      
+		
+      public void Fire(BeatEvent e) 
+      {         
+         System.Type type = e.GetType();         
+         BeatEvent.Handler handlers;   
+		
+         if (registered_handlers.TryGetValue(type, out handlers)) {             
+            handlers(e);
+         }     
+      } 
+
+      public bool IsEventHandlerRegistered (System.Type type_in, System.Delegate prospective_handler)
+      {   
+         foreach (System.Delegate existingHandler in registered_handlers[type_in].GetInvocationList()) {
+            if (existingHandler == prospective_handler) {
+               return true;
+            }
+         }
+         return false;
+      }
+
+   }
+
+   public abstract class BeatEvent {
+      public readonly float creation_time;
+      public readonly int beatCount;
+	
+      public BeatEvent (int beatCount)
+      {
+         creation_time = Time.time;
+         this.beatCount = beatCount;
+      }
+
+      public delegate void Handler (BeatEvent e);
+   }
+
+   public class Beat : BeatEvent { public Beat(int beatCount) : base(beatCount) { } }
+   public class ThirtySecond : BeatEvent { public ThirtySecond(int beatCount) : base(beatCount) { } }
+   public class Sixteenth : BeatEvent { public Sixteenth(int beatCount) : base(beatCount) { } }
+   public class Eighth : BeatEvent { public Eighth(int beatCount) : base(beatCount) { } }
+   public class Quarter : BeatEvent { public Quarter(int beatCount) : base(beatCount) { } }
+   public class Half : BeatEvent { public Half(int beatCount) : base(beatCount) { } }
+   public class Whole : BeatEvent { public Whole(int beatCount) : base(beatCount) { } }
+   public class Measure : BeatEvent { public Measure(int beatCount) : base(beatCount) { } }  
 }

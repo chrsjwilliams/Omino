@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections;
-using Beat;
+using BeatManagement;
 
 public class Player : MonoBehaviour
 {

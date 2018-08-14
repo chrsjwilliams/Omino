@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Beat;
+using BeatManagement;
 using UnityEngine;
 
 public static class HyperModeManager
@@ -62,8 +62,13 @@ public static class HyperModeManager
 		_discoTiles = new ShuffleBag<DiscoFloor>(new DiscoFloor[] { 
 			new DiscoStripes(), new DiscoCheckers(), new DiscoWave(), new DiscoBlocks(), new DiscoWindmill() } );
 		
-		_InitializePulse();
-		_InitializeDisco();
+		_pulseTM = new TaskManager();
+		_discoTM = new TaskManager();
+		Pulse(new Quarter(0));
+		Disco(new Measure(0));
+		Services.Clock.clockEventManager.Register<Quarter>(Pulse);
+		Services.Clock.clockEventManager.Register<Measure>(Disco);
+		
 		Services.GameManager.MainCamera.backgroundColor =
 			Color.Lerp(Color.black, Services.GameScene.backgroundColor,
 				Services.Clock.BeatLength() - (float) Services.Clock.AtNextBeat() / Services.Clock.BeatLength());
@@ -86,25 +91,24 @@ public static class HyperModeManager
 		Services.GameManager.SetColorScheme(_previousScheme);
 	}
 
-	private static void _InitializePulse()
-	{
-		_pulseTM = new TaskManager();
-		ContinuePulse();
-	}
-
-	private static void _InitializeDisco()
-	{
-		_discoTM = new TaskManager();
-		ContinueDisco();
-	}
-
 	public static void Placement(Color color, Vector3 location)
 	{
 		Services.CameraController.StartShake(Services.Clock.EighthLength(), 80f, 10.0f, true);
 		ConfettiSplosion(color, location);
 	}
 
-	private static void ContinuePulse()
+	public static void Pulse(BeatEvent e)
+	{
+		_pulseTM.Do(new Pulse(Services.Clock.EighthLength()));
+		_pulseTM.Do(new Shake(Services.Clock.SixteenthLength()));
+	}
+
+	public static void Disco(BeatEvent e)
+	{
+		_discoTM.Do(_discoTiles.Next());
+	}
+	
+	/* private static void ContinuePulse()
 	{
 		Services.Clock.SyncFunction(() =>
 		{
@@ -119,9 +123,9 @@ public static class HyperModeManager
 			
 			_pulseTM.Do(beatTasks);
 		}, Clock.BeatValue.Quarter);
-	}
+	} */
 	
-	private static void ContinueDisco()
+	/* private static void ContinueDisco()
 	{
 		Services.Clock.SyncFunction(() =>
 		{
@@ -131,7 +135,7 @@ public static class HyperModeManager
 			
 			_pulseTM.Do(disco);
 		});
-	}
+	} */
 	
 	public static void ConfettiSplosion(Color color, Vector3 location)
 	{
@@ -241,7 +245,7 @@ public class Shake : Task
 
 public class DiscoFloor : Task
 {
-	public int num_switches;
+	public int num_switches = 0;
 	public Color[] colors =
 		{new Color(1, 0.92f, 0.016f, 1f), new Color(0f, 1f, 1f, 1f), new Color(1, 0, 1, 1f), new Color(1, 1f, 1f, 1f)};
 	public float timeElapsed;
@@ -253,17 +257,19 @@ public class DiscoFloor : Task
 		num_switches = 0;
 		_RandomizeColors();
 	}
-
+	
 	internal override void Update()
 	{
 		timeElapsed += Time.deltaTime;
-		if (timeElapsed > Services.Clock.BeatLength() * 3 + Services.Clock.SixteenthLength())
+		if (timeElapsed > Services.Clock.BeatLength() * (Services.Clock.beatsPerMeasure - 1) + Services.Clock.BeatLength()/2)
 		{
+			timeElapsed = 0;
 			num_switches = 0;
+			_RandomizeColors();
 			SetStatus(TaskStatus.Success);
 		}
 
-		if (num_switches >= 4)
+		if (num_switches >= Services.Clock.beatsPerMeasure)
 		{
 			timeElapsed = 0;
 			num_switches = 0;
@@ -271,8 +277,11 @@ public class DiscoFloor : Task
 			SetStatus(TaskStatus.Success);
 		}
 	}
-	
-	private void _SetColors() { }
+
+	private void _SetColors(BeatEvent e)
+	{
+		num_switches++; 
+	}
 	
 	private void _RandomizeColors()
 	{
