@@ -380,6 +380,15 @@ public class TutorialManager : MonoBehaviour
             backDim.SetActive(true);
         }
 
+        if(Services.GameManager.onIPhone)
+        {
+            skipTutorialButton.GetComponent<RectTransform>().anchoredPosition = nextTooltipInfo.skipButtonLocationiPhone;
+        }
+        else
+        {
+            skipTutorialButton.GetComponent<RectTransform>().anchoredPosition = nextTooltipInfo.skipButtonLocation;
+        }
+
 
         if(Services.MapManager.currentLevel.campaignLevelNum == 2)
         {
@@ -520,22 +529,13 @@ public class TooltipInfo
     public bool imageLerps;
     public Vector2 imageLocation;
     public Vector2 iPhoneImageLocation;
-    public Vector3 secondaryImageLocation = Vector3.back;
+    public Vector2 secondaryImageLocation;
     public Vector2 iPhoneSecondaryImageLocation;
     public Vector2 imageScale;
     public Vector2 iPhoneImageScale;
     public float imageRotation;
     public float iPhoneImageRotation;
     public Color imageColor;
-
-    public Vector2 subImageLocation;
-    public Vector3 secondarySubImageLocation = Vector3.back;
-    public Vector2 subImageScale;
-    public float subImageRotation;
-    public Color subImageColor;
-    public Vector2 subImage2Location;
-    public Vector3 secondarySubImage2Location = Vector3.back;
-    public Vector2 subImage2Scale;
-    public float subImage2Rotation;
-    public Color subImage2Color;
+    public Vector2 skipButtonLocation;
+    public Vector2 skipButtonLocationiPhone;
 }
