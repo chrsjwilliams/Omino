@@ -25,7 +25,8 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
     [SerializeField]
     private Image image;
     private Vector3 imagePrimaryPosition;
-    private Vector3 imageSecondaryPosition = Vector3.back;
+    private Vector3 imageSecondaryPosition;
+    private Vector3 imageSecondaryTempPosition;
     [SerializeField]
     private Image subImage;
     private Vector3 subImagePrimaryPosition;
@@ -106,6 +107,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         {
             TurnOffAnimation();
             ToggleImageAnimation("Place Piece");
+            imageSecondaryPosition = imageSecondaryTempPosition;
         }
         else
         {
@@ -119,7 +121,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             if( Services.GameManager.onIPhone)
             {
                 TurnOffAnimation();
-                imageSecondaryPosition = new Vector2(-200, -250);
+                imageSecondaryPosition = new Vector2(-200, -385);
                 image.rectTransform.localPosition = imageSecondaryPosition;
             }
 
@@ -150,6 +152,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
         if (Services.GameManager.onIPhone)
         {
+
             // TOOLTIP
             tooltipTransform.anchoredPosition = info.iPhoneLocation;
             tooltipTransform.sizeDelta = info.iPhoneToolTipSize;
@@ -173,8 +176,12 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             imagePrimaryPosition = info.iPhoneImageLocation;
             image.rectTransform.localPosition = imagePrimaryPosition;
             imageSecondaryPosition = info.iPhoneSecondaryImageLocation;
+            imageSecondaryTempPosition = info.iPhoneSecondaryImageLocation;
             image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.iPhoneImageRotation);
             image.rectTransform.localScale = info.iPhoneImageScale;
+
+            //  Font Size
+            textComponent.fontSize = 60;
         }
         else
         {
@@ -199,6 +206,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             imagePrimaryPosition = info.imageLocation;
             image.rectTransform.localPosition = imagePrimaryPosition;
             imageSecondaryPosition = info.secondaryImageLocation;
+            imageSecondaryTempPosition = info.secondaryImageLocation;
             image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.imageRotation);
             image.rectTransform.localScale = info.imageScale;
         }

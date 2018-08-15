@@ -54,6 +54,7 @@ public class TutorialManager : MonoBehaviour
     public bool tooltipActive { get; private set; }
     public static bool celebratoryTextBoxDisplayed = false;
     public static bool celebratoryTextBoxMade = false;
+    public TextMeshProUGUI tutorialProgresss;
 
     // hide skip button & move first animation up 75 units
 
@@ -91,6 +92,8 @@ public class TutorialManager : MonoBehaviour
                 viewedTutorial[i] = true;
         }
 
+        tutorialProgresss.text = "Tutorial " + Services.GameManager.levelSelected.campaignLevelNum  + "/5";
+
         if (Services.GameManager.levelSelected != null &&
             Services.GameManager.levelSelected.objectives.Length > 0)
         {
@@ -104,6 +107,10 @@ public class TutorialManager : MonoBehaviour
                 objectiveText[i] = Services.GameManager.levelSelected.objectives[i];
                 objectiveUI[i].GetComponentInChildren<TextMeshProUGUI>().text = objectiveText[i];
 
+                if (Services.GameManager.onIPhone)
+                {
+                    objectiveUI[i].GetComponentInChildren<TextMeshProUGUI>().fontSize = 40;
+                }
                 objectiveComplete[i] = false;
                 UpdateObjectiveUI(objectiveUI[i], objectiveComplete[i]);
                 DisplayObjective(i, false);
@@ -369,10 +376,10 @@ public class TutorialManager : MonoBehaviour
         else if ( nextTooltipInfo.label == "Attack Piece" || nextTooltipInfo.label == "Make Building" ||
                   nextTooltipInfo.label == "Another Building")
         {
-            currentTooltip.textBox.rectTransform.sizeDelta = new Vector2(575, 575);
+            currentTooltip.textBox.rectTransform.sizeDelta = new Vector2(650 , 650);
         }
 
-        if(nextTooltipInfo.label == "Place Piece")
+        if(nextTooltipInfo.label == "Place Piece" || nextTooltipInfo.label == "Tap")
         {
             Services.GameManager.Players[0].PauseProduction();
             Services.GameManager.Players[0].LockAllPiecesExcept(0);

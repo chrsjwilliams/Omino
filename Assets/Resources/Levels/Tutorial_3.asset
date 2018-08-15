@@ -31,7 +31,7 @@ MonoBehaviour:
     text: Feeling slow? If you want to ramp up your economy, you can make <color=#6CAE75>Buildings</color>!
     displayObjective: 1
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 450}
     location: {x: 50, y: 50}
     iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
@@ -61,17 +61,17 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -1000, y: -725}
-    skipButtonLocationiPhone: {x: -800, y: -725}
+    skipButtonLocationiPhone: {x: -1000, y: -990}
   - label: Generator
     text: The <color=#6CAE75>Generator</color> increases your energy recharge rate,
       letting you play pieces faster!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 450}
     location: {x: 270, y: -440}
-    iPhoneLocation: {x: 210, y: -440}
+    iPhoneLocation: {x: 210, y: -646}
     arrowLocation: {x: 0, y: -250}
-    iPhoneArrowLocation: {x: 0, y: -250}
+    iPhoneArrowLocation: {x: 71, y: -356}
     arrowRotation: -90
     iPhoneArrowRotation: -90
     iPhoneArrowScale: {x: 1, y: 1}
@@ -79,11 +79,11 @@ MonoBehaviour:
     enableTooltips: 0
     windowLocation: {x: 220, y: -930}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 165, y: -940}
+    iPhoneWindowLocation: {x: 224, y: -1281}
     iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 170, y: 170}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 130, y: 0}
+    iPhoneWindowSize: {x: 130, y: 140}
     iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
@@ -97,13 +97,13 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -785, y: -1200}
-    skipButtonLocationiPhone: {x: -640, y: -1200}
+    skipButtonLocationiPhone: {x: -834, y: -1659}
   - label: Show Me
     text: To create a <color=#6CAE75>Building</color>, you must first form the appropriate
       shape on the board, then place the <color=#6CAE75>Building</color> on top.
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 550}
     location: {x: 50, y: 50}
     iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
@@ -133,7 +133,7 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -1000, y: -700}
-    skipButtonLocationiPhone: {x: -800, y: -750}
+    skipButtonLocationiPhone: {x: -1000, y: -9000}
   - label: Make Building
     text: 
     displayObjective: 1
@@ -163,18 +163,18 @@ MonoBehaviour:
     secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 1, y: 1}
-    iPhoneImageScale: {x: 1, y: 1}
+    iPhoneImageScale: {x: 1.2, y: 1.2}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 1, g: 1, b: 1, a: 1}
     skipButtonLocation: {x: -933, y: -550}
-    skipButtonLocationiPhone: {x: -750, y: -600}
+    skipButtonLocationiPhone: {x: -1000, y: -900}
   - label: Anytime
-    text: <color=#6CAE75>Buildings</color> can be played at any time and you can <color=#6CAE75>ROTATE</color>
+    text: <color=#6CAE75>Buildings</color> can be placed at any time and you can <color=#6CAE75>ROTATE</color>
       them too!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 400}
     location: {x: 50, y: 50}
     iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
@@ -204,7 +204,7 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 1, g: 1, b: 1, a: 1}
     skipButtonLocation: {x: -1000, y: -700}
-    skipButtonLocationiPhone: {x: -800, y: -725}
+    skipButtonLocationiPhone: {x: -1000, y: -990}
   - label: Do Not Display
     text: 
     displayObjective: 0
@@ -245,7 +245,7 @@ MonoBehaviour:
       you haven't yet. I hope you can keep up!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 550}
     location: {x: 450, y: -600}
     iPhoneLocation: {x: 250, y: -600}
     arrowLocation: {x: 0, y: 0}

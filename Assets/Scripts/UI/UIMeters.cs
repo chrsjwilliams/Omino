@@ -227,13 +227,13 @@ public class UIMeters : MonoBehaviour
             attackResourceSlotBack : resourceSlotBack;
         int[] highlightIndices = attack ?
             attackResourceGainHighlightIndices : resourceGainHighlightIndices;
-        
 
-        if (highlightsActive[0])
+        for (int i = 0; i < highlightIndices.Length; i++)
         {
-
-            for (int i = 0; i < highlightsTimeElapsed.Length; i++)
+            if (highlightsActive[i])
             {
+
+
                 highlightsTimeElapsed[i] += Time.deltaTime;
                 if (highlightsIncreasing[i])
                 {
@@ -241,7 +241,7 @@ public class UIMeters : MonoBehaviour
                     Vector3 scale = Vector3.Lerp(Vector3.one, resourceGainHighlightScale * Vector3.one,
                         EasingEquations.Easing.QuadEaseOut(
                             highlightsTimeElapsed[i] / resourceGainHighlightDuration));
-                    slotBacks[highlightIndices[0]].transform.localScale = scale;
+                    slotBacks[highlightIndices[i]].transform.localScale = scale;
 
                     if (highlightsTimeElapsed[i] > resourceGainHighlightDuration)
                     {
@@ -251,7 +251,7 @@ public class UIMeters : MonoBehaviour
                 }
                 else
                 {
-                    slotBacks[highlightIndices[0]].transform.localScale =
+                    slotBacks[highlightIndices[i]].transform.localScale =
                         Vector3.Lerp(resourceGainHighlightScale * Vector3.one, Vector3.one,
                         EasingEquations.Easing.QuadEaseIn(
                             highlightsTimeElapsed[i] / resourceGainHighlightDuration));
@@ -277,30 +277,32 @@ public class UIMeters : MonoBehaviour
         bool[] increasing = attack ? attackResourceMissingAnimIncreasing : resourceMissingAnimIncreasing;
 
         Color indicatorColor = indicators[0].color;
-        if (missingResourceAnimActive[0])
+        for (int i = 0; i < timesElapsed.Length; i++)
         {
+            if (missingResourceAnimActive[i])
+            {
 
-            int resourcesMissingLeftToHighlight = resourcesMissing[0];
-            if (resourcesMissingLeftToHighlight == 0)
-            {
-                for (int j = 0; j < slotFronts.Length; j++)
+                int resourcesMissingLeftToHighlight = resourcesMissing[i];
+                if (resourcesMissingLeftToHighlight == 0)
                 {
-                    indicators[j].color = new Color(indicatorColor.r,
-                        indicatorColor.g, indicatorColor.b, 0);
-                }
-            }
-            else
-            {
-                timesElapsed[0] += Time.deltaTime;
-                for (int j = 0; j < slotFronts.Length; j++)
-                {
-                    if (slotFronts[j].fillAmount != 1)
+                    for (int j = 0; j < slotFronts.Length; j++)
                     {
-                        resourcesMissingLeftToHighlight -= 1;
-                        if (increasing[0])
+                        indicators[j].color = new Color(indicatorColor.r,
+                            indicatorColor.g, indicatorColor.b, 0);
+                    }
+                }
+                else
+                {
+
+                    timesElapsed[i] += Time.deltaTime;
+                    for (int j = 0; j < slotFronts.Length; j++)
+                    {
+                        if (slotFronts[j].fillAmount != 1)
                         {
-                            for (int i = 0; i < timesElapsed.Length; i++)
+                            resourcesMissingLeftToHighlight -= 1;
+                            if (increasing[i])
                             {
+
                                 indicators[j].color = Color.Lerp(
                                     new Color(indicatorColor.r, indicatorColor.g, indicatorColor.b, 0),
                                     new Color(indicatorColor.r, indicatorColor.g, indicatorColor.b, 1),
@@ -316,13 +318,12 @@ public class UIMeters : MonoBehaviour
                                     increasing[i] = false;
                                     timesElapsed[i] = 0;
                                 }
+
                             }
-                        }
-                        else
-                        {
-                            
-                            for (int i = 0; i < timesElapsed.Length; i++)
+                            else
                             {
+
+
                                 indicators[j].color = Color.Lerp(
                                 new Color(indicatorColor.r, indicatorColor.g, indicatorColor.b, 1),
                                 new Color(indicatorColor.r, indicatorColor.g, indicatorColor.b, 0),
@@ -345,6 +346,7 @@ public class UIMeters : MonoBehaviour
                         if (resourcesMissingLeftToHighlight == 0) break;
                     }
                 }
+
             }
         }
         for (int j = 0; j < indicators.Length; j++)

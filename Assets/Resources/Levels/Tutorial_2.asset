@@ -31,7 +31,7 @@ MonoBehaviour:
     text: Ok, this time, we'll give you an actual opponent to play against!
     displayObjective: 1
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 400}
     location: {x: 50, y: 50}
     iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
@@ -61,7 +61,7 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -1000, y: -700}
-    skipButtonLocationiPhone: {x: -800, y: -725}
+    skipButtonLocationiPhone: {x: -1000, y: -1000}
   - label: Do Not Display
     text: 
     displayObjective: 0
@@ -113,7 +113,7 @@ MonoBehaviour:
     enableTooltips: 0
     windowLocation: {x: 250, y: 250}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 166, y: 166}
+    iPhoneWindowLocation: {x: 230, y: 237}
     iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 600, y: 600}
     secondWindowSize: {x: 0, y: 0}
@@ -126,12 +126,12 @@ MonoBehaviour:
     secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 1, y: 1}
-    iPhoneImageScale: {x: 1, y: 1}
+    iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0.6901961, g: 0.6901961, b: 0.6901961, a: 0.54509807}
     skipButtonLocation: {x: -820, y: -300}
-    skipButtonLocationiPhone: {x: -675, y: -450}
+    skipButtonLocationiPhone: {x: -728, y: -697}
   - label: Attack Piece
     text: 
     displayObjective: 0
@@ -161,22 +161,22 @@ MonoBehaviour:
     secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 1, y: 1}
-    iPhoneImageScale: {x: 1, y: 1}
+    iPhoneImageScale: {x: 1.2, y: 1.2}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 1, g: 1, b: 1, a: 1}
     skipButtonLocation: {x: -930, y: -616}
-    skipButtonLocationiPhone: {x: -745, y: -600}
+    skipButtonLocationiPhone: {x: -974, y: -900}
   - label: Hammer
     text: If you have a full <color=#E56575FF>Hammer</color> and hover your piece
       over of your opponent's pieces, you will build over them.
     displayObjective: 1
     objectiveIndex: 1
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 550}
     location: {x: 450, y: -300}
-    iPhoneLocation: {x: 250, y: -300}
+    iPhoneLocation: {x: 444, y: -465}
     arrowLocation: {x: 240, y: -230}
-    iPhoneArrowLocation: {x: 240, y: -230}
+    iPhoneArrowLocation: {x: 240, y: -383}
     arrowRotation: -90
     iPhoneArrowRotation: -90
     iPhoneArrowScale: {x: 1, y: 1}
@@ -184,7 +184,7 @@ MonoBehaviour:
     enableTooltips: 0
     windowLocation: {x: 630, y: -785}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 440, y: -785}
+    iPhoneWindowLocation: {x: 630, y: -1126}
     iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 250, y: 170}
     secondWindowSize: {x: 0, y: 0}
@@ -202,14 +202,14 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -600, y: -1050}
-    skipButtonLocationiPhone: {x: -612, y: -1050}
+    skipButtonLocationiPhone: {x: -612, y: -1415}
   - label: Hammer Time
     text: You get <color=#E56575FF>Hammers</color> over time.
     displayObjective: 0
     objectiveIndex: 0
     iPhoneToolTipSize: {x: 700, y: 300}
     location: {x: 450, y: -300}
-    iPhoneLocation: {x: 250, y: -300}
+    iPhoneLocation: {x: 444, y: -630}
     arrowLocation: {x: 240, y: -230}
     iPhoneArrowLocation: {x: 240, y: -230}
     arrowRotation: -90
@@ -219,7 +219,7 @@ MonoBehaviour:
     enableTooltips: 0
     windowLocation: {x: 630, y: -785}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 440, y: -785}
+    iPhoneWindowLocation: {x: 630, y: -1126}
     iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 250, y: 170}
     secondWindowSize: {x: 0, y: 0}
@@ -237,12 +237,12 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -600, y: -1050}
-    skipButtonLocationiPhone: {x: -612, y: -1050}
+    skipButtonLocationiPhone: {x: -594, y: -1750}
   - label: No Waiting
     text: No need to wait your turn - you can play as soon as you have enough energy!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 450}
     location: {x: 50, y: 50}
     iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
@@ -272,13 +272,13 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -1000, y: -750}
-    skipButtonLocationiPhone: {x: -800, y: -750}
+    skipButtonLocationiPhone: {x: -1000, y: -1000}
   - label: Touch Base
     text: Remember, all your pieces must connect back to your base. Now, touch theirs
       before they touch yours!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 600}
     location: {x: 50, y: 50}
     iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
@@ -308,7 +308,7 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -1000, y: -750}
-    skipButtonLocationiPhone: {x: -800, y: -750}
+    skipButtonLocationiPhone: {x: -1000, y: -900}
   - label: Do Not Display
     text: 
     displayObjective: 0

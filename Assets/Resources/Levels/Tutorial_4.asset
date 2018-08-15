@@ -31,7 +31,7 @@ MonoBehaviour:
     text: There are 2 other <color=#6CAE75>Buildings</color> you can make!
     displayObjective: 1
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 350}
     location: {x: 50, y: 50}
     iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
@@ -61,17 +61,17 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 0}
     skipButtonLocation: {x: -1000, y: -725}
-    skipButtonLocationiPhone: {x: -800, y: -725}
+    skipButtonLocationiPhone: {x: -1000, y: -1050}
   - label: Factory
     text: The <color=#6CAE75>Factory</color> increases the production speed of pieces,
       giving you a bigger supply!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 550}
     location: {x: 450, y: -440}
-    iPhoneLocation: {x: 250, y: -440}
+    iPhoneLocation: {x: 426, y: -628}
     arrowLocation: {x: 60, y: -250}
-    iPhoneArrowLocation: {x: 120, y: -250}
+    iPhoneArrowLocation: {x: 44, y: -405}
     arrowRotation: -90
     iPhoneArrowRotation: -90
     iPhoneArrowScale: {x: 1, y: 1}
@@ -79,7 +79,7 @@ MonoBehaviour:
     enableTooltips: 0
     windowLocation: {x: 430, y: -920}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 320, y: -940}
+    iPhoneWindowLocation: {x: 430, y: -1287}
     iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 150, y: 150}
     secondWindowSize: {x: 0, y: 0}
@@ -97,17 +97,17 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 0}
     skipButtonLocation: {x: -600, y: -1200}
-    skipButtonLocationiPhone: {x: -600, y: -1200}
+    skipButtonLocationiPhone: {x: -625, y: -1588}
   - label: Barracks
     text: The <color=#6CAE75>Barracks</color> increases the production speed of <color=#E56575FF>Hammers</color>,
       to help you go on the offensive!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 550}
     location: {x: 450, y: -440}
-    iPhoneLocation: {x: 250, y: -440}
+    iPhoneLocation: {x: 426, y: -628}
     arrowLocation: {x: 260, y: -250}
-    iPhoneArrowLocation: {x: 285, y: -250}
+    iPhoneArrowLocation: {x: 250, y: -391}
     arrowRotation: -90
     iPhoneArrowRotation: -90
     iPhoneArrowScale: {x: 1, y: 1}
@@ -115,7 +115,7 @@ MonoBehaviour:
     enableTooltips: 0
     windowLocation: {x: 630, y: -920}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 480, y: -940}
+    iPhoneWindowLocation: {x: 630, y: -1287}
     iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 150, y: 150}
     secondWindowSize: {x: 0, y: 0}
@@ -133,14 +133,14 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 0}
     skipButtonLocation: {x: -600, y: -1200}
-    skipButtonLocationiPhone: {x: -600, y: -1200}
+    skipButtonLocationiPhone: {x: -625, y: -1588}
   - label: Show Me
     text: Remember, to create a <color=#6CAE75>Building</color>, you must first form
       the appropriate shape on the board, then place the <color=#6CAE75>Building</color>
       on top.
     displayObjective: 1
     objectiveIndex: 1
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 650}
     location: {x: 50, y: 50}
     iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
@@ -170,7 +170,7 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 0}
     skipButtonLocation: {x: -1000, y: -725}
-    skipButtonLocationiPhone: {x: -800, y: -725}
+    skipButtonLocationiPhone: {x: -988, y: -878}
   - label: Another Building
     text: 
     displayObjective: 0
@@ -200,17 +200,17 @@ MonoBehaviour:
     secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 1, y: 1}
-    iPhoneImageScale: {x: 1, y: 1}
+    iPhoneImageScale: {x: 1.2, y: 1.2}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 1, g: 1, b: 1, a: 1}
     skipButtonLocation: {x: -933, y: -580}
-    skipButtonLocationiPhone: {x: -740, y: -585}
+    skipButtonLocationiPhone: {x: -964, y: -875}
   - label: Balance
     text: Keep your economies in balance as you build towards victory.
     displayObjective: 0
     objectiveIndex: 1
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 500}
     location: {x: 50, y: 50}
     iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
@@ -240,7 +240,7 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 1, g: 1, b: 1, a: 1}
     skipButtonLocation: {x: -1000, y: -725}
-    skipButtonLocationiPhone: {x: -800, y: -725}
+    skipButtonLocationiPhone: {x: -1000, y: -954}
   - label: Do Not Display
     text: 
     displayObjective: 0

@@ -31,14 +31,14 @@ MonoBehaviour:
     text: Complete All the Objectives to advance to the next tutorial level.
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 500}
     location: {x: -330, y: 900}
-    iPhoneLocation: {x: -150, y: 350}
+    iPhoneLocation: {x: -300, y: 1070}
     arrowLocation: {x: 430, y: 5}
-    iPhoneArrowLocation: {x: 240, y: 300}
+    iPhoneArrowLocation: {x: 425, y: 0}
     arrowRotation: 0
-    iPhoneArrowRotation: 90
-    iPhoneArrowScale: {x: 1, y: 1}
+    iPhoneArrowRotation: 0
+    iPhoneArrowScale: {x: 0.75, y: 0.75}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
@@ -61,16 +61,16 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -1375, y: -430}
-    skipButtonLocationiPhone: {x: -450, y: -1050}
+    skipButtonLocationiPhone: {x: -1353, y: -760}
   - label: Your Base
     text: This is your base.
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 500, y: 200}
+    iPhoneToolTipSize: {x: 600, y: 200}
     location: {x: 400, y: -300}
-    iPhoneLocation: {x: 300, y: -210}
+    iPhoneLocation: {x: 375, y: -280}
     arrowLocation: {x: -450, y: 0}
-    iPhoneArrowLocation: {x: -320, y: 0}
+    iPhoneArrowLocation: {x: -420, y: 0}
     arrowRotation: 180
     iPhoneArrowRotation: 180
     iPhoneArrowScale: {x: 1, y: 1}
@@ -78,11 +78,11 @@ MonoBehaviour:
     enableTooltips: 0
     windowLocation: {x: -340, y: -340}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: -255, y: -255}
+    iPhoneWindowLocation: {x: -340, y: -340}
     iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 250, y: 250}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 200, y: 200}
+    iPhoneWindowSize: {x: 250, y: 250}
     iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
@@ -96,16 +96,16 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 1, g: 1, b: 1, a: 1}
     skipButtonLocation: {x: -645, y: -1075}
-    skipButtonLocationiPhone: {x: -450, y: -1050}
+    skipButtonLocationiPhone: {x: -626, y: -1450}
   - label: Win Condition
     text: Build a road to the opponent's base to win.
     displayObjective: 1
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 600, y: 200}
+    iPhoneToolTipSize: {x: 750, y: 350}
     location: {x: -300, y: 400}
-    iPhoneLocation: {x: 300, y: -80}
+    iPhoneLocation: {x: 300, y: -190}
     arrowLocation: {x: 450, y: 0}
-    iPhoneArrowLocation: {x: 0, y: 200}
+    iPhoneArrowLocation: {x: 100, y: 282}
     arrowRotation: 0
     iPhoneArrowRotation: 90
     iPhoneArrowScale: {x: 1, y: 1}
@@ -113,35 +113,35 @@ MonoBehaviour:
     enableTooltips: 0
     windowLocation: {x: 340, y: 340}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 260, y: 260}
+    iPhoneWindowLocation: {x: 340, y: 340}
     iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 260, y: 260}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 200, y: 200}
+    iPhoneWindowSize: {x: 250, y: 250}
     iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 315, y: -450}
-    iPhoneImageLocation: {x: -375, y: 330}
+    iPhoneImageLocation: {x: -434, y: 483}
     secondaryImageLocation: {x: 0, y: 0}
     iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 1.2, y: 1.2}
-    iPhoneImageScale: {x: 1, y: 1}
+    iPhoneImageScale: {x: 1.2, y: 1.2}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 1, g: 1, b: 1, a: 1}
     skipButtonLocation: {x: -1350, y: -380}
-    skipButtonLocationiPhone: {x: -300, y: -550}
+    skipButtonLocationiPhone: {x: -440, y: -760}
   - label: Hand
     text: This is your hand. You can play pieces from here by dragging them onto the
       board.
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 750, y: 300}
-    location: {x: -300, y: -400}
-    iPhoneLocation: {x: -100, y: -400}
+    iPhoneToolTipSize: {x: 750, y: 500}
+    location: {x: -300, y: -717}
+    iPhoneLocation: {x: -270, y: -600}
     arrowLocation: {x: 0, y: -250}
-    iPhoneArrowLocation: {x: -220, y: -250}
+    iPhoneArrowLocation: {x: -115, y: -350}
     arrowRotation: -90
     iPhoneArrowRotation: -90
     iPhoneArrowScale: {x: 1, y: 1}
@@ -149,11 +149,11 @@ MonoBehaviour:
     enableTooltips: 0
     windowLocation: {x: -340, y: -900}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: -350, y: -900}
+    iPhoneWindowLocation: {x: -432, y: -1233}
     iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 800, y: 200}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 400, y: 200}
+    iPhoneWindowSize: {x: 600, y: 200}
     iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
@@ -167,16 +167,16 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -1350, y: -1150}
-    skipButtonLocationiPhone: {x: -975, y: -1200}
+    skipButtonLocationiPhone: {x: -1339, y: -1664}
   - label: Connected
     text: All of your pieces must connect back to your base.
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 250}
+    iPhoneToolTipSize: {x: 700, y: 350}
     location: {x: 400, y: -300}
-    iPhoneLocation: {x: -20, y: 200}
+    iPhoneLocation: {x: -137, y: 200}
     arrowLocation: {x: -450, y: 0}
-    iPhoneArrowLocation: {x: -180, y: -220}
+    iPhoneArrowLocation: {x: -180, y: -267}
     arrowRotation: 180
     iPhoneArrowRotation: -90
     iPhoneArrowScale: {x: 1, y: 1}
@@ -184,11 +184,11 @@ MonoBehaviour:
     enableTooltips: 0
     windowLocation: {x: -340, y: -340}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: -255, y: -255}
+    iPhoneWindowLocation: {x: -340, y: -340}
     iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 250, y: 250}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 200, y: 200}
+    iPhoneWindowSize: {x: 250, y: 250}
     iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 1
@@ -202,12 +202,12 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -645, y: -1050}
-    skipButtonLocationiPhone: {x: -875, y: -600}
+    skipButtonLocationiPhone: {x: -1185, y: -861}
   - label: Place Piece
     text: Try placing a piece now!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 600, y: 200}
+    iPhoneToolTipSize: {x: 700, y: 200}
     location: {x: 400, y: -300}
     iPhoneLocation: {x: 50, y: 500}
     arrowLocation: {x: 0, y: 0}
@@ -219,33 +219,33 @@ MonoBehaviour:
     enableTooltips: 0
     windowLocation: {x: -270, y: -250}
     secondWindowLocation: {x: -635, y: -900}
-    iPhoneWindowLocation: {x: -155, y: -155}
-    iPhoneSecondWindowLocation: {x: -475, y: -930}
+    iPhoneWindowLocation: {x: -214, y: -225}
+    iPhoneSecondWindowLocation: {x: -634, y: -1247}
     windowSize: {x: 500, y: 500}
     secondWindowSize: {x: 200, y: 200}
-    iPhoneWindowSize: {x: 400, y: 400}
-    iPhoneSecondWindowSize: {x: 120, y: 150}
+    iPhoneWindowSize: {x: 500, y: 500}
+    iPhoneSecondWindowSize: {x: 140, y: 180}
     haveImage: 1
     imageLerps: 1
     imageLocation: {x: -980, y: -660}
-    iPhoneImageLocation: {x: -450, y: -1450}
+    iPhoneImageLocation: {x: -592, y: -1791}
     secondaryImageLocation: {x: -500, y: -460}
-    iPhoneSecondaryImageLocation: {x: -100, y: -1150}
+    iPhoneSecondaryImageLocation: {x: -68, y: -1326}
     imageScale: {x: 0.5, y: 0.5}
     iPhoneImageScale: {x: 0.5, y: 0.5}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -645, y: -1050}
-    skipButtonLocationiPhone: {x: -750, y: -350}
+    skipButtonLocationiPhone: {x: -997, y: -685}
   - label: Energy
     text: You need 1 <color=#F7A907FF>ENERGY</color> to place a piece. You get energy
       over time.
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 800, y: 350}
     location: {x: 270, y: -275}
-    iPhoneLocation: {x: 50, y: -250}
+    iPhoneLocation: {x: 250, y: -600}
     arrowLocation: {x: 0, y: -250}
     iPhoneArrowLocation: {x: 0, y: -250}
     arrowRotation: -90
@@ -255,7 +255,7 @@ MonoBehaviour:
     enableTooltips: 0
     windowLocation: {x: 225, y: -775}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 25, y: -755}
+    iPhoneWindowLocation: {x: 213, y: -1125}
     iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 250, y: 180}
     secondWindowSize: {x: 0, y: 0}
@@ -273,14 +273,14 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -770, y: -1050}
-    skipButtonLocationiPhone: {x: -800, y: -1050}
+    skipButtonLocationiPhone: {x: -841, y: -1690}
   - label: Draw
     text: You also draw new pieces into your hand over time.
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 650, y: 230}
+    iPhoneToolTipSize: {x: 700, y: 350}
     location: {x: 450, y: -300}
-    iPhoneLocation: {x: 225, y: -250}
+    iPhoneLocation: {x: 420, y: -585}
     arrowLocation: {x: 40, y: -250}
     iPhoneArrowLocation: {x: 50, y: -250}
     arrowRotation: -90
@@ -290,7 +290,7 @@ MonoBehaviour:
     enableTooltips: 0
     windowLocation: {x: 420, y: -785}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 225, y: -785}
+    iPhoneWindowLocation: {x: 430, y: -1100}
     iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 130, y: 180}
     secondWindowSize: {x: 0, y: 0}
@@ -308,12 +308,12 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -600, y: -1050}
-    skipButtonLocationiPhone: {x: -600, y: -1050}
+    skipButtonLocationiPhone: {x: -624, y: -1703}
   - label: Show Me
     text: 'You can <color=#6CAE75>ROTATE</color> a piece before placing it. '
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 250}
+    iPhoneToolTipSize: {x: 700, y: 300}
     location: {x: 450, y: -300}
     iPhoneLocation: {x: -150, y: 650}
     arrowLocation: {x: 0, y: 0}
@@ -343,15 +343,15 @@ MonoBehaviour:
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -1350, y: -100}
-    skipButtonLocationiPhone: {x: -1000, y: -200}
+    skipButtonLocationiPhone: {x: -1200, y: -506}
   - label: Rotate
     text: First, drag a piece to the board, Then tap on the screen with a different
       finger to <color=#6CAE75>ROTATE</color>.
     displayObjective: 1
     objectiveIndex: 1
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 400}
     location: {x: -300, y: 700}
-    iPhoneLocation: {x: -100, y: 600}
+    iPhoneLocation: {x: -280, y: 1110}
     arrowLocation: {x: 0, y: 0}
     iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
@@ -370,21 +370,21 @@ MonoBehaviour:
     haveImage: 1
     imageLerps: 1
     imageLocation: {x: -260, y: -1640}
-    iPhoneImageLocation: {x: -260, y: -1685}
+    iPhoneImageLocation: {x: -236, y: -2379}
     secondaryImageLocation: {x: -260, y: -1100}
-    iPhoneSecondaryImageLocation: {x: -260, y: -1000}
+    iPhoneSecondaryImageLocation: {x: -236, y: -1773}
     imageScale: {x: 0.5, y: 0.5}
     iPhoneImageScale: {x: 0.5, y: 0.5}
     imageRotation: 0
     iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -1350, y: -100}
-    skipButtonLocationiPhone: {x: -1000, y: -200}
+    skipButtonLocationiPhone: {x: -871, y: -588}
   - label: Go Win
     text: Connect to the opposing base to win!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneToolTipSize: {x: 700, y: 350}
     location: {x: 400, y: -500}
     iPhoneLocation: {x: 50, y: -450}
     arrowLocation: {x: 0, y: 0}
