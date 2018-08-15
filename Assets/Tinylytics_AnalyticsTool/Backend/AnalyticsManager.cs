@@ -232,6 +232,13 @@ namespace Tinylytics{
 			_playModeStartTime = Time.time;
 			_currentPlayMode = modeIn;
 			_recievedGameOver = false;
+			if (_currentPlayMode == TitleSceneScript.GameMode.DungeonRun)
+			{
+				if (DungeonRunManager.dungeonRunData.challengeNum == 1)
+				{
+					LogMetric("Dungeon Run Started", analyticsData.dungeonRunTotalRuns.ToString());
+				}
+			}
 		}
 
 		public void TutorialLevelBeaten(int levelNumber)
