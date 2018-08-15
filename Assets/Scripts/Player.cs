@@ -1166,7 +1166,7 @@ public class Player : MonoBehaviour
         normalDrawRate = (Base.normalDrawRate + 
             ((normProdLevel - 1) * Factory.drawRateBonus)) * pieceHandicap;
         destructorDrawRate = (Base.destDrawRate +
-            ((destProdLevel - 1) * Barracks.drawRateBonus)) * 0.25f;
+            ((destProdLevel - 1) * Barracks.drawRateBonus)) * hammerHandicap;
         resourceGainRate = (Base.resourceGainRate +
             ((resourceProdLevel - 1) * Generator.resourceRateBonus)) * energyHandicap;
         Services.GameData.productionRates[playerNum - 1] = resourceGainRate * resourceGainFactor;
