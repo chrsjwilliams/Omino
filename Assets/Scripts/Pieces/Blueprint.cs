@@ -207,7 +207,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     protected override void SetOverlaySprite()
     {
         base.SetOverlaySprite();
-        holder.spriteBottom.color = owner.ColorScheme[0];
+        holder.SetBaseColor(owner.ColorScheme[0]);
 
         if (!placed)
         {

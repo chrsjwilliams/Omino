@@ -15,6 +15,8 @@ public class EloInGameUiManager : MonoBehaviour {
     private Image rankImage;
     [SerializeField]
     private Image rankProgressBar;
+    [SerializeField]
+    private TextMeshProUGUI ratingNumberText;
 
     private const float offset = 1800;
     private float timeElapsed;
@@ -30,6 +32,9 @@ public class EloInGameUiManager : MonoBehaviour {
     private Sprite rankImageTarget;
     private bool win;
     private bool rankChangeEffectPlayed;
+    private EloData prevElo;
+    private EloData newElo;
+    private EloData.RankCategory displayedRank;
 
 	// Use this for initialization
 	void Start () {
@@ -64,57 +69,111 @@ public class EloInGameUiManager : MonoBehaviour {
     private void SetProgress()
     {
         progressTimeElapsed += Time.deltaTime;
-        if (win && progressTarget > progressStart || 
-            !win && progressStart > progressTarget)
+        float progress;
+        if (prevElo.GetRank() != newElo.GetRank())
         {
-            rankProgressBar.fillAmount = Mathf.Lerp(
-                progressStart, 
-                progressTarget,
-                EasingEquations.Easing.QuadEaseOut(
-                    progressTimeElapsed / progressBarFillDur));
-        }
-        else
-        {
-            float interimTarget;
-            if (progressTarget < progressStart) 
-                    interimTarget = 1;
-            else interimTarget = 0;
-            float oppositeInterim = 1 - interimTarget;
-            float interimTime = Mathf.Abs(progressStart - interimTarget) 
-                / progressBarFillDur;
-            if(timeElapsed <= interimTime)
+            if (progressTimeElapsed <= progressBarFillDur / 2)
             {
-                rankProgressBar.fillAmount = Mathf.Lerp(
-                    progressStart, interimTarget,
-                    EasingEquations.Easing.QuadEaseOut(
-                        progressTimeElapsed / interimTime));
+                progress = Easing.QuadEaseOut(
+                    progressTimeElapsed /
+                    (progressBarFillDur / 2));
+                DisplayInterimProgress(progress, true);
             }
             else
             {
-                rankProgressBar.fillAmount = Mathf.Lerp(
-                    oppositeInterim, progressTarget,
-                    EasingEquations.Easing.QuadEaseOut(
-                        (progressTimeElapsed-interimTime) 
-                    / (progressBarFillDur - interimTime)));
                 if (!rankChangeEffectPlayed) RankChangeEffect();
+                progress = Easing.QuadEaseOut(
+                    (progressTimeElapsed - (progressTimeElapsed / 2)) /
+                    (progressBarFillDur / 2));
+                DisplayInterimProgress(progress, false);
             }
-
         }
+        else
+        {
+            progress = progress = Easing.QuadEaseOut(
+                    progressTimeElapsed / progressBarFillDur);
+            if (displayedRank == EloData.RankCategory.Master)
+                DisplayProgress(prevElo.GetRating(), newElo.GetRating(), progress);
+            else
+                DisplayProgress(prevElo.GetProgressToNextRank(),
+                    newElo.GetProgressToNextRank(), progress);
+        }
+        
        if(progressTimeElapsed >= progressBarFillDur)
         {
             progressFilling = false;
         }
     }
 
+    private void DisplayProgress(float start, float target, float progress)
+    {
+        if(displayedRank == EloData.RankCategory.Master)
+        {
+            int lerpedRating = Mathf.RoundToInt(Mathf.Lerp(
+                start, target, progress));
+            ratingNumberText.text = lerpedRating.ToString();
+        }
+        else
+        {
+            rankProgressBar.fillAmount = 
+                Mathf.Lerp(start, target, progress);
+        }
+    }
+
+    private void DisplayInterimProgress(float progress, bool firstHalf)
+    {
+        float start;
+        float target;
+        if (displayedRank == EloData.RankCategory.Master)
+        {
+            if (firstHalf)
+            {
+                start = prevElo.GetRating();
+                target = EloData.FormatRating(EloData.GetRankMin(
+                    EloData.RankCategory.Master));
+            }
+            else
+            {
+                start = EloData.FormatRating(EloData.GetRankMin(
+                    EloData.RankCategory.Master));
+                target = newElo.GetRating();
+            }
+        }
+        else
+        {
+            if (firstHalf)
+            {
+                start = prevElo.GetProgressToNextRank();
+                target = 1;
+            }
+            else
+            {
+                start = 0;
+                target = newElo.GetProgressToNextRank();
+            }
+        }
+        DisplayProgress(start, target, progress);
+    }
+
     private void RankChangeEffect()
     {
         rankChangeEffectPlayed = true;
         rankImage.sprite = rankImageTarget;
-        OverlayParticles.ShowParticles(Services.Prefabs.RankUp, rankImage.transform.position + (50 * Vector3.down));
+        displayedRank = newElo.GetRank();
+        rankProgressBar.transform.parent.gameObject.SetActive(
+            newElo.GetRank() != EloData.RankCategory.Master);
+        ratingNumberText.gameObject.SetActive(
+            newElo.GetRank() == EloData.RankCategory.Master);
+        GameObject particlePrefab;
+        if (win) particlePrefab = Services.Prefabs.RankUp;
+        else particlePrefab = Services.Prefabs.RankDown;
+        OverlayParticles.ShowParticles(particlePrefab, rankImage.transform.position + (50 * Vector3.down));
     }
 
     public void OnGameEnd(bool victory, EloData prevElo, EloData newElo)
     {
+        this.prevElo = prevElo;
+        this.newElo = newElo;
         dropping = true;
         menu.transform.localPosition = basePos + (offset * Vector3.up);
         menu.SetActive(true);
@@ -123,10 +182,16 @@ public class EloInGameUiManager : MonoBehaviour {
         win = victory;
         rankImage.sprite = prevElo.GetRankImage();
         rankProgressBar.fillAmount = prevElo.GetProgressToNextRank();
+        rankProgressBar.transform.parent.gameObject.SetActive(
+            prevElo.GetRank() != EloData.RankCategory.Master);
+        ratingNumberText.gameObject.SetActive(
+            prevElo.GetRank() == EloData.RankCategory.Master);
+        ratingNumberText.text = prevElo.GetRating().ToString();
         rankImageTarget = newElo.GetRankImage();
         progressStart = prevElo.GetProgressToNextRank();
         progressTarget = newElo.GetProgressToNextRank();
         progressTimeElapsed = 0;
         rankChangeEffectPlayed = false;
+        displayedRank = prevElo.GetRank();
     }
 }

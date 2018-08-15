@@ -166,7 +166,7 @@ public class EloData
         return FormatRating(highestHandicapAchieved);
     }
 
-    private int FormatRating(float handicap)
+    public static int FormatRating(float handicap)
     {
         return Mathf.RoundToInt(100 * (1 + handicap));
     }

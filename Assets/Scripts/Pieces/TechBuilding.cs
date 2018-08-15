@@ -208,13 +208,13 @@ public abstract class TechBuilding : Polyomino
         }
         else
         {
-            holder.spriteBottom.color = owner.ColorScheme[0];
+            holder.SetBaseColor(owner.ColorScheme[0]);
         }
     }
 
     public void SetNeutralVisualStatus()
     {
-        holder.spriteBottom.color = new Color(0.6f, 0.6f, 0.6f);
+        holder.SetBaseColor(new Color(0.6f, 0.6f, 0.6f));
     }
 
     public override void OnInputDown(bool fromPlayTask)

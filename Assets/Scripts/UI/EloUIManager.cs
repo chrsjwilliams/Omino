@@ -26,18 +26,21 @@ public class EloUIManager : MonoBehaviour {
 
     public void SetUI(EloData data)
     {
+        EloData.RankCategory rank = data.GetRank();
+        EloData.RankCategory highestRank = data.GetHighestRank();
         winCount.text = data.totalWins.ToString();
         streakCount.text = data.winStreakCount.ToString();
         rating.text = data.GetRating().ToString();
-        rankText.text = data.GetRank().ToString();
+        rankText.text = rank.ToString();
         rankImage.sprite = data.GetRankImage();
         bestRating.text = data.GetHighestRating().ToString();
-        bestRankText.text = data.GetHighestRank().ToString();
+        bestRankText.text = highestRank.ToString();
         bestRankImage.sprite = data.GetHighestRankImage();
         rating.gameObject.SetActive(
-            data.GetRank() == EloData.RankCategory.Master);
+            rank == EloData.RankCategory.Master);
         bestRating.gameObject.SetActive(
-            data.GetHighestRank() == EloData.RankCategory.Master);
+            highestRank == EloData.RankCategory.Master);
+        progressBar.transform.parent.gameObject.SetActive(rank != EloData.RankCategory.Master);
         progressBar.fillAmount = data.GetProgressToNextRank();
     }
 

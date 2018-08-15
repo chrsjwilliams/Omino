@@ -52,11 +52,24 @@ public class PieceHolder : MonoBehaviour {
         if (changingColor) LerpToTargetColor();
         if (pathHighlightDelay > 0) TickDownHighlightDelay();
         if (highlightingPath) PathHighlight();
+        if (!changingColor && !highlightingPath && 
+            piece is TechBuilding &&
+            ((piece.owner == null && spriteBottom.color.r != 0.6f) ||
+            (piece.owner != null && spriteBottom.color != piece.owner.ColorScheme[0])))
+        {
+            Debug.Break();
+        }
     }
 
     public void ShiftColor(Color color)
     {
         targetColor = color;
+    }
+
+    public void SetBaseColor(Color color)
+    {
+        spriteBottom.color = color;
+        baseColor = color;
     }
 
     private void LerpToTargetColor()
@@ -177,7 +190,6 @@ public class PieceHolder : MonoBehaviour {
     {
         pathHighlightDelay = delay;
         pathHighlightTime = 0;
-        baseColor = spriteBottom.color;
     }
 
     private void TickDownHighlightDelay()
