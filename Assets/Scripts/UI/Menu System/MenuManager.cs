@@ -15,7 +15,6 @@ public class MenuManager : MonoBehaviour
     public Button backButton;
     public TitleSceneScript titleScene;
     public Color[] uiColorScheme;
-    public GameObject title;
     // Use this for initialization
     void Start()
     {
