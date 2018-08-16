@@ -83,6 +83,7 @@ public class Player : MonoBehaviour
     public bool splashDamage { get; protected set; }
     public bool annex { get; protected set; }
     public bool bulldoze { get; protected set; }
+    public bool retaliate { get; protected set; }
     // 
 
     
@@ -879,6 +880,12 @@ public class Player : MonoBehaviour
             normalDrawMeterFillAmt += 1;
             UpdateMeters();
         }
+
+        if(retaliate)
+        {
+            destructorDrawMeterFillAmt += Retaliate.hammerReward;
+            UpdateMeters();
+        }
     }
 
     public void OnPieceDisconnected(Polyomino piece)
@@ -1060,6 +1067,11 @@ public class Player : MonoBehaviour
     public void ToggleAnnex(bool status)
     {
         annex = status;
+    }
+
+    public void ToggleRetaliate(bool status)
+    {
+        retaliate = status;
     }
 
     public void ToggleBulldoze(bool status)

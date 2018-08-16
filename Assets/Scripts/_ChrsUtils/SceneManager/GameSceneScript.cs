@@ -289,13 +289,7 @@ public class GameSceneScript : Scene<TransitionData>
         {
             player.OnGameOver();
         }
-        //if (demoMode)
-        //{
-        //    Task restartTask = new Wait(5f);
-        //    restartTask.Then(new ActionTask(Reload));
-        //    Services.GeneralTaskManager.Do(restartTask);
-        //}
-        //else 
+
         if (evolutionMode)
         {
             Services.GameManager.MutateAndSaveStrats(winner);

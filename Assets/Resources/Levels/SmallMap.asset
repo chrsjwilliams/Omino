@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   campaignLevelNum: 0
   objectives: []
-  availableStructures: 010000000200000003000000060000000700000008000000090000000a0000000b000000
+  availableStructures: 010000000200000003000000060000000700000008000000090000000a0000000b0000000c000000
   structCoords:
   - x: 14
     y: 1
@@ -24,6 +24,9 @@ MonoBehaviour:
   cornerBases: 0
   destructorsEnabled: 1
   blueprintsEnabled: 1
+  generatorEnabled: 1
+  factoryEnabled: 1
+  barracksEnabled: 1
   stackDestructorInOpeningHand: 0
   tooltips: []
   overrideStrategy:

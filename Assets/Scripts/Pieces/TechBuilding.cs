@@ -36,6 +36,9 @@ public abstract class TechBuilding : Polyomino
             case BuildingType.ANNEX:
                 structure = new Annex();
                 break;
+            case BuildingType.RETALIATE:
+                structure = new Retaliate();
+                break;
             default:
                 return null;
         }
@@ -53,7 +56,8 @@ public abstract class TechBuilding : Polyomino
             BuildingType.CROSSSECTION,
             BuildingType.ANNEX,
             BuildingType.UPSIZE,
-            BuildingType.SHIELDEDPIECES
+            BuildingType.SHIELDEDPIECES,
+            BuildingType.RETALIATE
     };
 
     protected static int[,,] techBuilding = new int[3, 5, 5]

@@ -60,7 +60,7 @@ public class ReadyBanner : MonoBehaviour
 
     public void ToggleReady()
     {
-        Handheld.Vibrate();
+        if(!(player is AIPlayer)) Handheld.Vibrate();
         
         player.ToggleReady();
         if (player.ready)

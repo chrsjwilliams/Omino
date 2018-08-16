@@ -183,6 +183,9 @@ public class MapManager : MonoBehaviour
                 case BuildingType.ANNEX:
                     techBuilding = new Annex();
                     break;
+                case BuildingType.RETALIATE:
+                    techBuilding = new Retaliate();
+                    break;
                 default:
                     return null;
             }
