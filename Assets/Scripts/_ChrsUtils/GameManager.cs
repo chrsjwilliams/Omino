@@ -8,6 +8,8 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 
+public enum DEVICE { IPAD, IPHONE, IPHONE_X, IPHONE_SE}
+
 public class GameManager : MonoBehaviour
 {
     public string PLAYER = "Player";
@@ -17,12 +19,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool debug;
     [SerializeField] private bool timedRestart;
     public bool disableUI;
+
+    public DEVICE CurrentDevice;
+
     public bool pretendIphone;
     public bool onIPhone
     {
         get
         {
-            return SystemInfo.deviceModel.Contains("iPhone") || pretendIphone;
+            return CurrentDevice == DEVICE.IPHONE || pretendIphone;
         }
     }
 
@@ -200,6 +205,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Assert.raiseExceptions = true;
+        SetDevice();
         InitializeServices();
 
         Services.GlobalEventManager.Register<Reset>(Reset);
@@ -222,6 +228,34 @@ public class GameManager : MonoBehaviour
             Services.Scenes.PushScene<TitleSceneScript>();
         }
 
+    }
+
+    private void SetDevice()
+    {
+        switch (UnityEngine.iOS.Device.generation)
+        {
+            case UnityEngine.iOS.DeviceGeneration.iPhone5:
+            case UnityEngine.iOS.DeviceGeneration.iPhone5C:
+            case UnityEngine.iOS.DeviceGeneration.iPhone5S:
+            case UnityEngine.iOS.DeviceGeneration.iPhone6:
+            case UnityEngine.iOS.DeviceGeneration.iPhone6Plus:
+            case UnityEngine.iOS.DeviceGeneration.iPhone6S:
+            case UnityEngine.iOS.DeviceGeneration.iPhone6SPlus:
+            case UnityEngine.iOS.DeviceGeneration.iPhone7:
+            case UnityEngine.iOS.DeviceGeneration.iPhone7Plus:
+            case UnityEngine.iOS.DeviceGeneration.iPhone8:
+            case UnityEngine.iOS.DeviceGeneration.iPhone8Plus:           
+            case UnityEngine.iOS.DeviceGeneration.iPhoneUnknown:
+            case UnityEngine.iOS.DeviceGeneration.iPhoneSE1Gen:
+                CurrentDevice = DEVICE.IPHONE;
+                break;
+            case UnityEngine.iOS.DeviceGeneration.iPhoneX:
+                CurrentDevice = DEVICE.IPHONE_X;
+                break;
+            default:
+                CurrentDevice = DEVICE.IPAD;
+                break;
+        }
     }
 
     private void InitializeServices()

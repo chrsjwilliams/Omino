@@ -107,7 +107,8 @@ public class TutorialManager : MonoBehaviour
                 objectiveText[i] = Services.GameManager.levelSelected.objectives[i];
                 objectiveUI[i].GetComponentInChildren<TextMeshProUGUI>().text = objectiveText[i];
 
-                if (Services.GameManager.onIPhone)
+                if (Services.GameManager.CurrentDevice == DEVICE.IPHONE ||
+                    Services.GameManager.CurrentDevice == DEVICE.IPHONE_X)
                 {
                     objectiveUI[i].GetComponentInChildren<TextMeshProUGUI>().fontSize = 40;
                 }
@@ -387,9 +388,13 @@ public class TutorialManager : MonoBehaviour
             backDim.SetActive(true);
         }
 
-        if(Services.GameManager.onIPhone)
+        if(Services.GameManager.CurrentDevice == DEVICE.IPHONE)
         {
             skipTutorialButton.GetComponent<RectTransform>().anchoredPosition = nextTooltipInfo.skipButtonLocationiPhone;
+        }
+        else if(Services.GameManager.CurrentDevice == DEVICE.IPHONE_X)
+        {
+            skipTutorialButton.GetComponent<RectTransform>().anchoredPosition = nextTooltipInfo.skipButtonLocationiPhoneX;
         }
         else
         {
@@ -513,36 +518,52 @@ public class TooltipInfo
     [TextArea]
     public string text;
     public bool displayObjective;
-    public int objectiveIndex;
-    public Vector2 iPhoneToolTipSize;
-    public Vector2 location;
-    public Vector2 iPhoneLocation;
-    public Vector2 arrowLocation;
-    public Vector2 iPhoneArrowLocation;
-    public float arrowRotation;
-    public float iPhoneArrowRotation;
-    public Vector2 iPhoneArrowScale;
+    public int objectiveIndex; 
+    public Vector2 location;    
+    public Vector2 arrowLocation;  
+    public float arrowRotation; 
     public bool dismissable = true;
     public bool enableTooltips;
     public Vector2 windowLocation;
-    public Vector2 secondWindowLocation;
-    public Vector2 iPhoneWindowLocation;
-    public Vector2 iPhoneSecondWindowLocation;
+    public Vector2 secondWindowLocation; 
     public Vector2 windowSize;
-    public Vector2 secondWindowSize;
-    public Vector2 iPhoneWindowSize;
-    public Vector2 iPhoneSecondWindowSize;
+    public Vector2 secondWindowSize; 
     public bool haveImage;
     public bool imageLerps;
-    public Vector2 imageLocation;
-    public Vector2 iPhoneImageLocation;
+    public Vector2 imageLocation; 
     public Vector2 secondaryImageLocation;
-    public Vector2 iPhoneSecondaryImageLocation;
     public Vector2 imageScale;
-    public Vector2 iPhoneImageScale;
-    public float imageRotation;
-    public float iPhoneImageRotation;
+    public float imageRotation;   
     public Color imageColor;
-    public Vector2 skipButtonLocation;
+    public Vector2 skipButtonLocation;   
+
+    public Vector2 iPhoneToolTipSize;
+    public Vector2 iPhoneArrowScale;
+    public Vector2 iPhoneLocation;
+    public Vector2 iPhoneArrowLocation;
+    public Vector2 iPhoneWindowLocation;
+    public Vector2 iPhoneSecondWindowLocation;
+    public Vector2 iPhoneWindowSize;
+    public Vector2 iPhoneSecondWindowSize;
+    public float iPhoneArrowRotation;
+    public Vector2 iPhoneImageLocation;
+    public Vector2 iPhoneSecondaryImageLocation;
+    public Vector2 iPhoneImageScale;
+    public float iPhoneImageRotation;
     public Vector2 skipButtonLocationiPhone;
+
+    public Vector2 iPhoneXToolTipSize;
+    public Vector2 iPhoneXArrowScale;
+    public Vector2 iPhoneXLocation;
+    public Vector2 iPhoneXArrowLocation;
+    public Vector2 iPhoneXWindowLocation;
+    public Vector2 iPhoneXSecondWindowLocation;
+    public Vector2 iPhoneXWindowSize;
+    public Vector2 iPhoneXSecondWindowSize;
+    public float iPhoneXArrowRotation;
+    public Vector2 iPhoneXImageLocation;
+    public Vector2 iPhoneXSecondaryImageLocation;
+    public Vector2 iPhoneXImageScale;
+    public float iPhoneXImageRotation;
+    public Vector2 skipButtonLocationiPhoneX;
 }

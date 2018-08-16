@@ -82,7 +82,8 @@ public class GameSceneScript : Scene<TransitionData>
                     techBuildingIcon.color = Services.GameManager.Player1ColorScheme[0];
                 }
 
-                if (Services.GameManager.onIPhone)
+                if (Services.GameManager.CurrentDevice == DEVICE.IPHONE ||
+                    Services.GameManager.CurrentDevice == DEVICE.IPHONE_X)
                 {
                     Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localPosition = new Vector2(-600, 0);
                     Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localScale = new Vector2(0.75f, 0.75f);
