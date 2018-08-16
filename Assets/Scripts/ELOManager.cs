@@ -7,8 +7,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 public static class ELOManager
 {
     private const float handicapIncrement = 0.03f;
-    private const int winStreakLength = 3;
-    private const float winStreakHandicapIncrement = 0.05f;
+    private const int winStreakMinLength = 3;
+    private const float winStreakHandicapIncrement = 0.01f;
     public const float minHandicap = -0.5f;
     public const float baseHandicap = -0.2f;
     private const string fileName = "eloSaveData";
@@ -85,9 +85,11 @@ public static class ELOManager
         EloData prevElo = new EloData(eloData);
         eloData.totalWins += 1;
         eloData.winStreakCount += 1;
-        if(eloData.winStreakCount >= winStreakLength)
+        if(eloData.winStreakCount >= winStreakMinLength)
         {
-            eloData.SetHandicap(eloData.handicapLevel + winStreakHandicapIncrement);
+            eloData.SetHandicap(eloData.handicapLevel + handicapIncrement +
+                ((eloData.winStreakCount - winStreakMinLength + 1)
+                * winStreakHandicapIncrement));
         }
         else
         {
