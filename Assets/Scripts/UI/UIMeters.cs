@@ -232,17 +232,13 @@ public class UIMeters : MonoBehaviour
         {
             if (highlightsActive[i])
             {
-
-
                 highlightsTimeElapsed[i] += Time.deltaTime;
                 if (highlightsIncreasing[i])
                 {
-
                     Vector3 scale = Vector3.Lerp(Vector3.one, resourceGainHighlightScale * Vector3.one,
                         EasingEquations.Easing.QuadEaseOut(
                             highlightsTimeElapsed[i] / resourceGainHighlightDuration));
                     slotBacks[highlightIndices[i]].transform.localScale = scale;
-
                     if (highlightsTimeElapsed[i] > resourceGainHighlightDuration)
                     {
                         highlightsIncreasing[i] = false;
@@ -262,6 +258,14 @@ public class UIMeters : MonoBehaviour
                         highlightsTimeElapsed[i] = 0;
                     }
                 }
+            }
+
+            if(!highlightsActive[i] && slotBacks[highlightIndices[i]].transform.localScale.x > 1)
+            {
+                slotBacks[highlightIndices[i]].transform.localScale =
+                        Vector3.Lerp(resourceGainHighlightScale * Vector3.one, Vector3.one,
+                        EasingEquations.Easing.QuadEaseIn(
+                            highlightsTimeElapsed[i] / resourceGainHighlightDuration));
             }
         }
     }
@@ -434,6 +438,7 @@ public class UIMeters : MonoBehaviour
                 slotImage.fillAmount = 1;
                 slotImage.color = slotColor;
                 slotBack.color = slotColor;
+                slotBack.transform.localScale = Vector3.one;
                 if (resourceCount > lastCount && i == resourceCount - 1)
                 {
                     highlightIndices[0] = i;
@@ -443,6 +448,7 @@ public class UIMeters : MonoBehaviour
             else
             {
                 slotImage.fillAmount = 0;
+                slotBack.transform.localScale = Vector3.one;
                 //slotBack.color = new Color(slotColor.r, slotColor.g, slotColor.b, 0);
             }
         }
