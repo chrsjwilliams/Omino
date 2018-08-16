@@ -135,6 +135,7 @@ public class AudioManager : MonoBehaviour {
 
     public void RegisterStartLevelMusic()
     {
+        Destroy(levelMusicHolder);
         _PopulateLevelMusic();
         Services.Clock.SyncFunction(_StartLevelMusic, Clock.BeatValue.Measure);
     }
@@ -313,7 +314,9 @@ public class AudioManager : MonoBehaviour {
 
     public void FadeOutLevelMusic()
     {
+        Services.Clock.eventManager.Unregister<Measure>(DynamicLevelMusicVolumes);
         previousVolumes = new List<float>();
+        var to_destroy = levelMusicHolder;
 
         foreach (AudioSource source in levelMusicSources)
         {
@@ -335,9 +338,8 @@ public class AudioManager : MonoBehaviour {
         }
         
         Delay(() =>
-        {
-            levelMusicHolder = null;
-            Services.Clock.eventManager.Unregister<Measure>(DynamicLevelMusicVolumes);
+            {
+                Destroy(to_destroy);
         }, Services.Clock.MeasureLength() * 2);
         
     }

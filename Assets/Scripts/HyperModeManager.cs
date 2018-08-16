@@ -157,7 +157,8 @@ public static class HyperModeManager
 	public static ParticleSystem StructureConfetti(Color color, Vector3 location, Quaternion rotation)
 	{
 		ParticleSystem to_return = GameObject.Instantiate(Services.Prefabs.Structfetti, location, rotation).GetComponent<ParticleSystem>();
-		to_return.startColor = color;
+		var main = to_return.main;
+		main.startColor = color;
 		return to_return;
 	}
 }

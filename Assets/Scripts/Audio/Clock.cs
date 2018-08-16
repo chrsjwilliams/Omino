@@ -98,7 +98,7 @@ namespace BeatManagement
       private double _nextHalf;
       private double _nextWhole;
 
-      private List<double> latency = new List<double>();
+      // private List<double> latency = new List<double>();
       
       #endregion
       

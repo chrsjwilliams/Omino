@@ -302,7 +302,8 @@ public class GameSceneScript : Scene<TransitionData>
     public void Replay()
     {
         Services.Analytics.MatchEnded();
-
+        Services.AudioManager.ResetLevelMusic();
+        
         if (Services.GameManager.mode == TitleSceneScript.GameMode.Challenge &&
             !Services.GameScene.gameOver)
         {
@@ -317,7 +318,6 @@ public class GameSceneScript : Scene<TransitionData>
         else
         {
             Services.GameData.Reset();
-            Services.AudioManager.ResetLevelMusic();
             Task reload = new WaitUnscaled(0.01f);
             reload.Then(new ActionTask(Reload));
             Services.GeneralTaskManager.Do(reload);
@@ -337,7 +337,6 @@ public class GameSceneScript : Scene<TransitionData>
         Services.Analytics.MatchEnded();
         Task returnToLevelSelect = new WaitUnscaled(0.01f);
         returnToLevelSelect.Then(new ActionTask(LoadLevelSelect));
-        Services.AudioManager.ResetLevelMusic();
         Services.GeneralTaskManager.Do(returnToLevelSelect);
     }
 
