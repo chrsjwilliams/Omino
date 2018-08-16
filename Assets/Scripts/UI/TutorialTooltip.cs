@@ -118,7 +118,8 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
                 image.rectTransform.localPosition = imageSecondaryPosition;
             
 
-            if( Services.GameManager.onIPhone)
+            if(Services.GameManager.CurrentDevice == DEVICE.IPHONE ||
+                    Services.GameManager.CurrentDevice == DEVICE.IPHONE_X)
             {
                 TurnOffAnimation();
                 imageSecondaryPosition = new Vector2(-200, -385);
@@ -150,7 +151,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             dismissText.text = "Tutorial Complete!";
         }
 
-        if (Services.GameManager.onIPhone)
+        if (Services.GameManager.CurrentDevice == DEVICE.IPHONE)
         {
 
             // TOOLTIP
@@ -182,6 +183,35 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
             //  Font Size
             textComponent.fontSize = 60;
+        }
+        else if (Services.GameManager.CurrentDevice == DEVICE.IPHONE_X)
+        {
+            // TOOLTIP
+            tooltipTransform.anchoredPosition = info.iPhoneXLocation;
+            tooltipTransform.sizeDelta = info.iPhoneXToolTipSize;
+
+            // ARROW
+            if (info.arrowLocation == Vector2.zero) arrow.enabled = false;
+            else
+            {
+                arrow.GetComponent<RectTransform>().anchoredPosition = info.iPhoneXArrowLocation;
+                arrow.transform.localRotation = Quaternion.Euler(0, 0, info.iPhoneXArrowRotation);
+                arrow.transform.localScale = info.iPhoneXArrowScale;
+            }
+
+            // WINDOW
+            windowRect.anchoredPosition = info.iPhoneXWindowLocation;
+            windowRect.sizeDelta = info.iPhoneXWindowSize;
+            secondWindow.anchoredPosition = info.iPhoneXSecondWindowLocation;
+            secondWindow.sizeDelta = info.iPhoneXSecondWindowSize;
+
+            // IMAGE
+            imagePrimaryPosition = info.iPhoneXImageLocation;
+            image.rectTransform.localPosition = imagePrimaryPosition;
+            imageSecondaryPosition = info.iPhoneXSecondaryImageLocation;
+            imageSecondaryTempPosition = info.iPhoneXSecondaryImageLocation;
+            image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.iPhoneXImageRotation);
+            image.rectTransform.localScale = info.iPhoneXImageScale;
         }
         else
         {
