@@ -337,6 +337,7 @@ public class GameSceneScript : Scene<TransitionData>
         Services.Analytics.MatchEnded();
         Task returnToLevelSelect = new WaitUnscaled(0.01f);
         returnToLevelSelect.Then(new ActionTask(LoadLevelSelect));
+        Services.AudioManager.ResetLevelMusic();
         Services.GeneralTaskManager.Do(returnToLevelSelect);
     }
 
