@@ -83,15 +83,15 @@ public class CameraController : MonoBehaviour {
     public TaskTree SlowMo(float duration, Vector3 location)
     {
         shaking = false;
+        float startOrthographicSize = Camera.main.orthographicSize;
         
         ActionTask slow_down = new ActionTask(() =>
         {
             StartCoroutine(Coroutines.DoOverEasedTime(duration/2, Easing.QuadEaseOut,
                 t =>
                 {
-                    Vector3 new_position = new Vector3(Mathf.Lerp(9.5f, location.x, t), Mathf.Lerp(9.5f, location.y, t), -10f);
-                    SetPosition(new_position);
-                    Camera.main.orthographicSize = Mathf.Lerp(15, 4, t);
+                    transform.position = new Vector3(Mathf.Lerp(basePos.x, location.x, t), Mathf.Lerp(basePos.y, location.y, t), -10f);
+                    Camera.main.orthographicSize = Mathf.Lerp(startOrthographicSize, 4, t);
                 }));
         });
         
@@ -102,15 +102,14 @@ public class CameraController : MonoBehaviour {
             StartCoroutine(Coroutines.DoOverEasedTime(duration/2, Easing.QuintEaseIn,
                 t =>
                 {
-                    Vector3 new_position = new Vector3(Mathf.Lerp(location.x, 9.5f, t), Mathf.Lerp(location.y, 9.5f, t), -10f);
-                    SetPosition(new_position);
-                    Camera.main.orthographicSize = Mathf.Lerp(4, 15, t);
+                    transform.position = new Vector3(Mathf.Lerp(location.x, basePos.x, t), Mathf.Lerp(location.y, basePos.y, t), -10f);
+                    Camera.main.orthographicSize = Mathf.Lerp(4, startOrthographicSize, t);
                 }));
         });
         
         Wait wait2 = new Wait(duration/2);
         
-        ActionTask reset = new ActionTask(() => { Camera.main.orthographicSize = 15f; SetPosition(new Vector3(9.5f, 9.5f, -10f)); });
+        ActionTask reset = new ActionTask(() => { Camera.main.orthographicSize = startOrthographicSize; SetPosition(basePos); });
 
         TaskTree to_return = new TaskTree(slow_down, new TaskTree(wait, new TaskTree(speed_up, new TaskTree(wait2, new TaskTree(reset)))));
 

@@ -68,6 +68,7 @@ public static class HyperModeManager
 		Disco(new Measure(0));
 		Services.Clock.eventManager.Register<Beat>(Pulse);
 		Services.Clock.eventManager.Register<Measure>(Disco);
+		Services.Clock.eventManager.Register<Measure>((e) => { Handheld.Vibrate(); });
 		
 		Services.GameManager.MainCamera.backgroundColor =
 			Color.Lerp(Color.black, Services.GameScene.backgroundColor,
@@ -175,7 +176,7 @@ public class Pulse : Task
 	
 	protected override void Init()
 	{
-		Handheld.Vibrate();	
+		
 	}
 
 	internal override void Update()
