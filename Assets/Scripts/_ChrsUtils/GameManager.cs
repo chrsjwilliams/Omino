@@ -227,6 +227,8 @@ public class GameManager : MonoBehaviour
         {
             Services.Scenes.PushScene<TitleSceneScript>();
         }
+        // for testflight purposes so people don't have to play tutorial
+        UnlockAllModes();
 
     }
 

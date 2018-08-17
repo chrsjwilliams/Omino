@@ -23,7 +23,7 @@ public class LoadingScreenController : MonoBehaviour
 	
 	void OnSceneUnloaded(Scene scene) {
 		Handheld.StopActivityIndicator();
-		Handheld.Vibrate();
+		//Handheld.Vibrate();
 		SceneManager.sceneUnloaded -= OnSceneUnloaded;
 		Destroy(gameObject);
 	}
