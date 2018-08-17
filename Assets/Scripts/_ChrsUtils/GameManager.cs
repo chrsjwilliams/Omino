@@ -200,7 +200,8 @@ public class GameManager : MonoBehaviour
 
     public bool eloTrackingMode;
 
-   
+    private const string autoUnlockFileName = "autounlock.txt";
+    private const bool defaultAutoUnlockStatus = true;
 
     private void Awake()
     {
@@ -228,7 +229,7 @@ public class GameManager : MonoBehaviour
             Services.Scenes.PushScene<TitleSceneScript>();
         }
         // for testflight purposes so people don't have to play tutorial
-        UnlockAllModes();
+        CheckAutoUnlock();
 
     }
 
@@ -317,6 +318,59 @@ public class GameManager : MonoBehaviour
         HandicapSystem.Init();
         LoadModeStatusData();
         //UnlockMode(TitleSceneScript.GameMode.Shop, false);
+    }
+
+    private void CheckAutoUnlock()
+    {
+        string filePath = Path.Combine(
+            Application.persistentDataPath,
+            autoUnlockFileName);
+        FileStream file;
+        BinaryFormatter bf = new BinaryFormatter();
+        bool autoUnlock;
+        if (File.Exists(filePath))
+        {
+            file = File.OpenRead(filePath);
+            try
+            {
+                autoUnlock = (bool)bf.Deserialize(file);
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Failed to deserialize. Reason: " + e.Message);
+                file.Dispose();
+                SaveDefaultAutoUnlockStatus();
+                autoUnlock = defaultAutoUnlockStatus;
+            }
+            finally
+            {
+                file.Close();
+            }
+        }
+        else
+        {
+            file = File.Create(filePath);
+            
+            bf.Serialize(file, defaultAutoUnlockStatus);
+
+            file.Close();
+            autoUnlock = defaultAutoUnlockStatus;
+        }
+
+        if (autoUnlock) UnlockAllModes();
+    }
+
+    public void SaveDefaultAutoUnlockStatus()
+    {
+        string filePath = Path.Combine(
+            Application.persistentDataPath,
+            autoUnlockFileName);
+        FileStream file;
+        BinaryFormatter bf = new BinaryFormatter();
+
+        file = File.OpenWrite(filePath);
+        bf.Serialize(file, defaultAutoUnlockStatus);
+        file.Close();
     }
 
     private void LoadModeStatusData()
