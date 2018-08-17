@@ -40,7 +40,7 @@ public class Polyomino : IVertex
     protected int touchID;
     private readonly Vector3 baseDragOffset = 20f * Vector3.up;
     public static Vector3 unselectedScale = 0.5f * Vector3.one;
-    public static Vector3 queueScale = 0.2f * Vector3.one;
+    public static Vector3 queueScale = 0.25f * Vector3.one;
     public const float drawAnimDur = 0.5f;
     public const float deathAnimDur = 0.5f;
     public const float deathAnimScaleUp = 1.5f;

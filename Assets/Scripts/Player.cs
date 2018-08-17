@@ -51,7 +51,10 @@ public class Player : MonoBehaviour
         private set
         {
             resources_ = value;
-            Services.UIManager.UIMeters[playerNum - 1].UpdateResourceCount(resources_, maxResources);
+            //Services.UIManager.UIMeters[playerNum - 1].UpdateResourceCount(resources_, maxResources);
+            Services.UIManager.UIMeters[playerNum - 1]
+                .UpdateResourceCount(resources_, false);
+
         }
     }
 
@@ -66,7 +69,10 @@ public class Player : MonoBehaviour
         set
         {
             attackResources_ = value;
-            Services.UIManager.UIMeters[playerNum - 1].UpdateResourceCount(attackResources_, maxAttackResources, true);
+            //Services.UIManager.UIMeters[playerNum - 1].UpdateResourceCount(attackResources_, maxAttackResources, true);
+            Services.UIManager.UIMeters[playerNum - 1]
+                .UpdateResourceCount(attackResources_, true);
+
         }
     }
 
@@ -433,8 +439,10 @@ public class Player : MonoBehaviour
             (destructorDrawRate * attackGainFactor));
         Services.UIManager.UIMeters[playerNum - 1].UpdateDrawMeters(normalDrawMeterFillAmt, 
             destructorDrawMeterFillAmt, normalTimeLeft, destructorTimeLeft);
-        Services.UIManager.UIMeters[playerNum - 1].UpdateResourceMeter(resourceMeterFillAmt);
-        Services.UIManager.UIMeters[playerNum - 1].UpdateResourceMeter(destructorDrawMeterFillAmt, true);
+        //Services.UIManager.UIMeters[playerNum - 1].UpdateResourceMeter(resourceMeterFillAmt);
+        //Services.UIManager.UIMeters[playerNum - 1].UpdateResourceMeter(destructorDrawMeterFillAmt, true);
+        Services.UIManager.UIMeters[playerNum - 1].UpdateResourceMeter(resourceMeterFillAmt, false, resources);
+        Services.UIManager.UIMeters[playerNum - 1].UpdateResourceMeter(destructorDrawMeterFillAmt, true, attackResources);
         if (normalDrawMeterFillAmt >= 1)
         {
             Vector3 rawDrawPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
@@ -905,8 +913,10 @@ public class Player : MonoBehaviour
         if (selectedPiece == null) return;
         if (selectedPiece.cost > resources)
         {
-            Services.UIManager.UIMeters[playerNum - 1].FailedPlayFromLackOfResources(
-                selectedPiece.cost - resources);
+            //Services.UIManager.UIMeters[playerNum - 1].FailedPlayFromLackOfResources(
+            //    selectedPiece.cost - resources);
+            Services.UIManager.UIMeters[playerNum - 1]
+                .FailedPlayFromLackOfResources(false);
         }
 
         bool overlappingConnectedOpponentTile = false;
@@ -923,8 +933,10 @@ public class Player : MonoBehaviour
 
         if (overlappingConnectedOpponentTile && selectedPiece.cost > attackResources)
         {
-            Services.UIManager.UIMeters[playerNum - 1].FailedPlayFromLackOfResources(
-                selectedPiece.cost - attackResources, true);
+            //Services.UIManager.UIMeters[playerNum - 1].FailedPlayFromLackOfResources(
+            //    selectedPiece.cost - attackResources, true);
+            Services.UIManager.UIMeters[playerNum - 1]
+                .FailedPlayFromLackOfResources(true);
         }
         if (selectedPiece is Destructor && (selectedPiece as Destructor).StoppedByShield())
         {
