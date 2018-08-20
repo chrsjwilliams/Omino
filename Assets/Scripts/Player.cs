@@ -188,13 +188,27 @@ public class Player : MonoBehaviour
         hand = new List<Polyomino>();
         blueprints = new List<Blueprint>();
         boardPieces = new List<Polyomino>();
-        
-        if (playerNum == 1) homeBasePos = new Coord(1, 1);
+
+        if (Services.GameManager.loadedLevel)
+        {
+            if (playerNum == 1)
+            {
+                homeBasePos = Services.GameManager.levelSelected.p1HomeBasePos;
+            }
+            else
+            {
+                homeBasePos = Services.GameManager.levelSelected.p2HomeBasePos;
+            }
+        }
         else
         {
-            homeBasePos = new Coord(
-                Services.MapManager.MapWidth - 2,
-                Services.MapManager.MapHeight - 2);
+            if (playerNum == 1) homeBasePos = new Coord(1, 1);
+            else
+            {
+                homeBasePos = new Coord(
+                    Services.MapManager.MapWidth - 2,
+                    Services.MapManager.MapHeight - 2);
+            }
         }
         Services.MapManager.CreateMainBase(this, homeBasePos);
         maxResources = baseMaxResources;

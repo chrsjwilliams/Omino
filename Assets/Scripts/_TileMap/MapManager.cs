@@ -30,6 +30,7 @@ public class MapManager : MonoBehaviour
     }
 
     public List<TechBuilding> structuresOnMap { get; private set; }
+    public List<Polyomino> terrainOnMap { get; private set; }
     public List<Coord> structureCoords { get; private set; }
     [SerializeField]
     private int structDistMin;
@@ -67,9 +68,9 @@ public class MapManager : MonoBehaviour
             Level level = eloLevelPool[Random.Range(0, eloLevelPool.Length)];
             Services.GameManager.SetCurrentLevel(level);
         }
-        if(Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
         {
-            Level level = dungeonRunLevelPool[Random.Range(0, dungeonRunLevelPool.Length -1)];
+            Level level = dungeonRunLevelPool[Random.Range(0, dungeonRunLevelPool.Length - 1)];
             Services.GameManager.SetCurrentLevel(level);
         }
         if (Services.GameManager.levelSelected != null)
@@ -92,24 +93,31 @@ public class MapManager : MonoBehaviour
 
         Services.CameraController.SetPosition(
             new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, -10));
-        Services.GameScene.backgroundImage.transform.position = 
+        Services.GameScene.backgroundImage.transform.position =
             new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, 0);
 
         _map = new Tile[MapWidth, MapHeight];
+
         for (int i = 0; i < MapWidth; i++)
         {
             for (int j = 0; j < MapHeight; j++)
             {
-                Tile tile = Instantiate(Services.Prefabs.Tile, 
+                Tile tile = Instantiate(Services.Prefabs.Tile,
                     GameSceneScript.tileMapHolder).GetComponent<Tile>();
-                
-                tile.Init(new Coord(i, j));
+                Coord tileCoord = new Coord(i, j);
+
+                tile.Init(tileCoord);
+
                 _map[i, j] = tile;
                 tile.name = "Tile [X: " + i + ", Y: " + j + "]";
                 tile.SetHighlightStatus(false);
             }
         }
-        if(Services.GameManager.levelSelected == null)
+
+
+        TaskQueue boardAnimationTasks;
+
+        if (Services.GameManager.levelSelected == null)
         {
             GenerateStructures(null);
         }
@@ -121,18 +129,28 @@ public class MapManager : MonoBehaviour
         {
             mapTile.gameObject.SetActive(false);
         }
-        foreach(TechBuilding structure in structuresOnMap)
+        foreach (TechBuilding structure in structuresOnMap)
         {
             structure.holder.gameObject.SetActive(false);
         }
-        TaskQueue boardAnimationTasks = new TaskQueue(new List<Task>() {
+
+        foreach (Polyomino piece in terrainOnMap)
+        {
+            piece.ScaleHolder(Vector3.one);
+            piece.SetAlpha(1);
+            piece.holder.gameObject.SetActive(false);
+        }
+
+        boardAnimationTasks = new TaskQueue(new List<Task>() {
             new Wait(0.3f),
             new BoardEntryAnimation(),
             new InitialBuildingEntryAnimation(),
             new ScrollReadyBanners(Services.UIManager.UIBannerManager.readyBanners, true)
             });
-
         Services.GameScene.tm.Do(boardAnimationTasks);
+
+
+
     }
 
     TechBuilding GenerateStructure(BuildingType type)
@@ -194,6 +212,33 @@ public class MapManager : MonoBehaviour
             return techBuilding;
         }
         return null;
+    }
+
+    void GenerateTerrain()
+    {
+        terrainOnMap = new List<Polyomino>();
+        if (Services.GameManager.levelSelected == null ||
+            Services.GameManager.levelSelected.impassibleCoords.Length == 0)
+            return;
+        
+        foreach(Coord coord in Services.GameManager.levelSelected.impassibleCoords)
+        {
+            Polyomino impassiblePiece = new Polyomino(1, 0, null, false);
+            impassiblePiece.MakePhysicalPiece();
+            impassiblePiece.PlaceAtLocation(coord, false , true);
+            terrainOnMap.Add(impassiblePiece);
+        }
+
+        foreach (Coord coord in Services.GameManager.levelSelected.destructibleTerrainCoords)
+        {
+            Polyomino destructiblePiece = new Polyomino(1, 0, null);
+            destructiblePiece.MakePhysicalPiece();
+            destructiblePiece.PlaceAtLocation(coord, false, true);
+            terrainOnMap.Add(destructiblePiece);
+        }
+
+        
+
     }
 
     void GetStructureCoords()
@@ -290,6 +335,7 @@ public class MapManager : MonoBehaviour
                 }
                 structuresOnMap.Add(structure);
             }
+            GenerateTerrain();
         }
         else GenerateLevel(level);
 
@@ -334,6 +380,8 @@ public class MapManager : MonoBehaviour
             TechBuilding structure = GenerateStructure(type, level.structCoords[i]);
             structuresOnMap.Add(structure);
         }
+
+        GenerateTerrain();
     }
 
     Coord GenerateRandomCoord()

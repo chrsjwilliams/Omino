@@ -69,6 +69,7 @@ public class Tile : MonoBehaviour, IVertex
     }
     #endregion
 
+    public bool impassable { get; private set; }
     public Coord coord { get; private set; }
     public Coord relativeCoord;
     public BoxCollider2D boxCol { get; private set; }
@@ -133,10 +134,11 @@ public class Tile : MonoBehaviour, IVertex
     private const float pathHighlightDownDuration = 0.6f;
     private float pathHighlightDelay;
 
-    public void Init(Coord coord_)
+    public void Init(Coord coord_, bool impassable_ = false)
     {
         coord = coord_;
         boxCol = GetComponent<BoxCollider2D>();
+        impassable = impassable_;
         sortingGroup = GetComponentInChildren<SortingGroup>();
         shieldSr.enabled = false;
         highlightSr.enabled = false;
@@ -153,11 +155,12 @@ public class Tile : MonoBehaviour, IVertex
                 mainSr.color = Services.GameManager.MapColorScheme[1];
                 break;
             default:
-                mainSr.color = Services.GameManager.MapColorScheme[0];
+                mainSr.color = impassable ? Color.black: Services.GameManager.MapColorScheme[0];
                 break;
         }
-        
-        baseColor = mainSr.color;
+
+        if (impassable) Debug.Log(coord.ToString());
+
         bpAssistHighlightSr.gameObject.SetActive(false);
         for (int i = 0; i < gridEdges.Length; i++)
         {

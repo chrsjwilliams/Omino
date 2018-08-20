@@ -12,6 +12,7 @@ public enum BuildingType
 
 public class Polyomino : IVertex
 {
+    public bool destructible = true;
     public List<Tile> tiles = new List<Tile>();
     public List<Coord> pieceCoords = new List<Coord>();
     protected string holderName;
@@ -342,12 +343,12 @@ public class Polyomino : IVertex
                                                     tetromino.GetLength(0),
                                                     pentomino.GetLength(0) };
 
-    public Polyomino(int _units, int _index, Player _player)
+    public Polyomino(int _units, int _index, Player _player, bool _destructible = true)
     {
         index = _index;
         units = _units;
         owner = _player;
-
+        destructible = _destructible;
         occupyingBlueprints = new List<Blueprint>();
         cost = 1;
         if (owner != null) baseColor = owner.ColorScheme[0];
@@ -381,6 +382,7 @@ public class Polyomino : IVertex
                 else holderName = "Neutral Base";
                 buildingType = BuildingType.BASE;
                 piece = playerBase;
+                destructible = false;
                 break;
             default:
                 break;
@@ -478,7 +480,7 @@ public class Polyomino : IVertex
         tiles[0].OnPlace();
         SetTileSprites();
         ScaleHolder(Vector3.one);
-        if (owner.shieldedPieces) CreateShield();
+        if (owner != null && owner.shieldedPieces) CreateShield();
     }
 
     protected virtual Polyomino CreateSubPiece()
@@ -488,8 +490,41 @@ public class Polyomino : IVertex
         return monomino;
     }
 
-    public virtual void PlaceAtCurrentLocation(bool replace)
+    public virtual void PlaceTerrainAtCurrentLocation()
     {
+        placed = true;
+        OnPlace();
+
+        foreach (Tile tile in tiles)
+        {
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            mapTile.SetOccupyingPiece(this);
+            tile.OnPlace();
+        }
+        adjacentPieces = new List<Polyomino>();
+        SortOverlay();
+        SetOverlaySprite();
+    }
+
+    public virtual void PlaceAtCurrentLocation(bool replace, bool isTerrain = false)
+    {
+        if (isTerrain)
+        {
+            placed = true;
+            OnPlace();
+
+            foreach (Tile tile in tiles)
+            {
+                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                mapTile.SetOccupyingPiece(this);
+                tile.OnPlace();
+            }
+            adjacentPieces = new List<Polyomino>();
+            SortOverlay();
+            SetOverlaySprite();
+        }
+        else
+        { 
         //place the piece on the board where it's being hovered now
         List<Polyomino> annexedMonominos = GetPiecesInRange(false);
         OnPlace();
@@ -536,23 +571,6 @@ public class Polyomino : IVertex
             }
         }
 
-        if (owner.annex)
-        {
-            //monominos.AddRange(annexedMonominos);
-            //foreach (Polyomino piece in monominos)
-            //{
-            //    if(piece.owner != owner && owner.annex)
-            //    {
-            //        previousOwner = piece.owner;
-            //        piece.owner.boardPieces.Remove(piece);
-            //        piece.owner = owner;
-                    
-            //        tiles.AddRange(piece.tiles);
-            //    }
-            //}
-            //Services.MapManager.DetermineConnectedness(previousOwner);
-
-        }
         for (int i = 0; i < monominos.Count; i++)
         {
             monominos[i].AssignLocation(monominoCoords[i]);
@@ -619,42 +637,43 @@ public class Polyomino : IVertex
         //        monomino.tiles[0].StartScaling(Tile.scaleUpStaggerTime * i);
         //    }
         //}
-        owner.OnPiecePlaced(this, monominos);
+            owner.OnPiecePlaced(this, monominos);
 
-        switch (Services.GameManager.mode)
-        {
-            case TitleSceneScript.GameMode.HyperSOLO:
-            case TitleSceneScript.GameMode.HyperVS:
-                HyperModeManager.Placement(owner.ColorScheme[0], holder.transform.position);
-                break;
-        }
+            switch (Services.GameManager.mode)
+            {
+                case TitleSceneScript.GameMode.HyperSOLO:
+                case TitleSceneScript.GameMode.HyperVS:
+                    HyperModeManager.Placement(owner.ColorScheme[0], holder.transform.position);
+                    break;
+            }
 
-        Services.AudioManager.RegisterSoundEffect(Services.Clips.PiecePlaced, 0.5f);
-        List<Polyomino> shortestPath = AStarSearch.ShortestPath(
-            owner.mainBase, distanceLevels[lastDistanceLevelIndex][0]);
-        shortestPath.Reverse();
-        List<Polyomino> pathToHighlight = new List<Polyomino>();
-        for (int i = 0; i < shortestPath.Count; i++)
-        {
-            Polyomino pathPiece = shortestPath[i];
-            if (pathPiece.occupyingBlueprints.Count > 0)
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.PiecePlaced, 0.5f);
+            List<Polyomino> shortestPath = AStarSearch.ShortestPath(
+                owner.mainBase, distanceLevels[lastDistanceLevelIndex][0]);
+            shortestPath.Reverse();
+            List<Polyomino> pathToHighlight = new List<Polyomino>();
+            for (int i = 0; i < shortestPath.Count; i++)
             {
-                Blueprint pathBlueprint = shortestPath[i].occupyingBlueprints[0];
-                if (!pathToHighlight.Contains(pathBlueprint))
-                    pathToHighlight.Add(pathBlueprint);
+                Polyomino pathPiece = shortestPath[i];
+                if (pathPiece.occupyingBlueprints.Count > 0)
+                {
+                    Blueprint pathBlueprint = shortestPath[i].occupyingBlueprints[0];
+                    if (!pathToHighlight.Contains(pathBlueprint))
+                        pathToHighlight.Add(pathBlueprint);
+                }
+                else
+                {
+                    pathToHighlight.Add(pathPiece);
+                }
             }
-            else
+            foreach (Polyomino piece in monominos)
             {
-                pathToHighlight.Add(pathPiece);
+                if (!pathToHighlight.Contains(piece)) pathToHighlight.Add(piece);
             }
-        }
-        foreach(Polyomino piece in monominos)
-        {
-            if (!pathToHighlight.Contains(piece)) pathToHighlight.Add(piece);
-        }
-        for (int i = 0; i < pathToHighlight.Count; i++)
-        {
-            pathToHighlight[i].PathHighlight(i * Player.pathHighlightTotalDuration/pathToHighlight.Count);
+            for (int i = 0; i < pathToHighlight.Count; i++)
+            {
+                pathToHighlight[i].PathHighlight(i * Player.pathHighlightTotalDuration / pathToHighlight.Count);
+            }
         }
     }
 
@@ -875,7 +894,7 @@ public class Polyomino : IVertex
         {
             if (!Services.MapManager.IsCoordContainedInMap(coord)) return false;
             Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
-            
+            if (mapTile.IsOccupied() && !mapTile.occupyingPiece.destructible) return false;
             if ((mapTile.IsOccupied() && !owner.crossSection) &&
                 ((mapTile.occupyingPiece.connected && owner.attackResources < 1 && !pretendAttackResource) ||
                 (mapTile.occupyingPiece.connected && (mapTile.occupyingPiece.owner == owner)) ||
@@ -1713,16 +1732,33 @@ public class Polyomino : IVertex
         PlaceAtLocation(centerCoordLocation, false);
     }
 
-    public virtual void PlaceAtLocation(Coord centerCoordLocation, bool replace)
+    public virtual void PlaceAtLocation(Coord centerCoordLocation, bool replace, bool terrain = false)
     {
         SetTileCoords(centerCoordLocation);
         Reposition(new Vector3(
             centerCoordLocation.x,
             centerCoordLocation.y,
             holder.transform.position.z));
-        PlaceAtCurrentLocation(replace);
+        if (!terrain) PlaceAtCurrentLocation(replace);
+        else PlaceTerrainAtCurrentLocation();
     }
-    
+
+    public void PlaceTerrainAtCurrentLocation(bool replace)
+    {
+        placed = true;
+        OnPlace();
+
+        foreach (Tile tile in tiles)
+        {
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            mapTile.SetOccupyingPiece(this);
+            tile.OnPlace();
+        }
+        adjacentPieces = new List<Polyomino>();
+        SortOverlay();
+        SetOverlaySprite();
+    }
+
     public virtual void Update()
     {
         if (shieldDurationRemaining >= 0) DecayShield();

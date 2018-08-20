@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731196, g: 0.38074002, b: 0.35872707, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -275,6 +275,7 @@ GameObject:
   - component: {fileID: 1356268954}
   - component: {fileID: 1356268955}
   - component: {fileID: 1356268956}
+  - component: {fileID: 1356268953}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -295,6 +296,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1356268953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1356268951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6ab2cc6e41a0e4da3292e7d93c65ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelData: {fileID: 4900000, guid: 0377258f517001442a3af8a2eca06b64, type: 3}
+  map: {fileID: 2800000, guid: e57c99a113e6e394680f6bdea06481cf, type: 3}
 --- !u!114 &1356268954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,6 +350,8 @@ MonoBehaviour:
   - {r: 0, g: 0, b: 0, a: 0.039215688}
   - {r: 1, g: 1, b: 1, a: 1}
   neutralColor: {r: 0.49019608, g: 0.49019608, b: 0.49019608, a: 1}
+  proceduralDisplayImage: {fileID: 0}
+  customMapDisplayImage: {fileID: 0}
   defaultWinWeight: 1
   defaultStructWeight: 0.2
   defaultBlueprintWeight: 0.34
@@ -345,6 +361,11 @@ MonoBehaviour:
   defaultDestructorForBlueprintWeight: 0.52
   defaultDangerWeight: 0.25
   eloTrackingMode: 0
+  test_LevelGenerator: {fileID: 1356268953}
+  test_LevelGeneratorTextAsset: {fileID: 4900000, guid: 0377258f517001442a3af8a2eca06b64,
+    type: 3}
+  text_LevelGeneratorMapData: {fileID: 2800000, guid: e57c99a113e6e394680f6bdea06481cf,
+    type: 3}
 --- !u!114 &1356268955
 MonoBehaviour:
   m_ObjectHideFlags: 0

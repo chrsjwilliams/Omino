@@ -145,7 +145,7 @@ public class ScrollRectSnap : MonoBehaviour
                 break;
             default:
                 levelSelected = true;
-                ((MapSelectSceneScript)Services.Scenes.CurrentScene).SelectLevel(selectedLevel);
+                ((LevelSelectSceneScript)Services.Scenes.CurrentScene).SelectLevel(selectedLevel);
                 break;
         }
     }

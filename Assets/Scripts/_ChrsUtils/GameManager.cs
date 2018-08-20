@@ -164,6 +164,10 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+
+    public Sprite proceduralDisplayImage;
+    public Sprite customMapDisplayImage;
+    public bool loadedLevel { get; private set; }
     public Level levelSelected { get; private set; }
     private float winWeight;
     private float structureWeight;
@@ -194,7 +198,7 @@ public class GameManager : MonoBehaviour
     private readonly string SOUNDEFFECTSENABLED = "soundEffectsEnabledKey";
     private readonly string MUSICENABLED = "musicEnabledKey";
 
-    private AIStrategy[] currentStrategies;
+    public AIStrategy[] currentStrategies { get; private set; }
     private float inactivityTimer;
     private const float inactivityBeforeReset = 180f;
 
@@ -221,6 +225,7 @@ public class GameManager : MonoBehaviour
 
         CheckPlayerPrefs();
 
+        Services.LevelInformation.Load();
         ELOManager.LoadData();
         DungeonRunManager.LoadData();
 
@@ -272,12 +277,15 @@ public class GameManager : MonoBehaviour
         Services.MapManager = GetComponent<MapManager>();
         Services.MapManager.Init();
 
+        Services.LevelInformation = new LevelInformation();
+
         Services.Clips = Resources.Load<ClipLibrary>("Audio/ClipLibrary");
         Services.AudioManager = new GameObject("Audio Manager").AddComponent<AudioManager>();
 
         Services.GeneralTaskManager = new TaskManager();
         Services.Prefabs = Resources.Load<PrefabDB>("Prefabs/PrefabDB");
         Services.TechDataLibrary = Resources.Load<TechDataLibrary>("ContentData/TechDataLibrary");
+        Services.LevelDataLibrary  = Resources.Load<LevelDataLibary>("ContentData/LevelDataLibrary");
         Services.EloRankData = Resources.Load<EloRankData>("ContentData/EloRankData");
 
         Services.InputManager = new InputManager();
@@ -289,8 +297,11 @@ public class GameManager : MonoBehaviour
         Services.Analytics = AnalyticsManager.Instance;
     }
 
-    public void SetCurrentLevel(Level level)
+    public void SetCurrentLevel(Level level, bool loaded = false)
     {
+        if (loaded) loadedLevel = true;
+        else loadedLevel = false;
+
         levelSelected = level;
         if (level != null)
         {
@@ -654,14 +665,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetStrategies()
+    public void SetStrategies(bool fromLevelGenerator = false, string strategyFile = "")
     {
-        if (currentStrategies == null) currentStrategies = new AIStrategy[2];
-        for (int i = 0; i < 2; i++)
+        int numStrategies = fromLevelGenerator ? 1 : 2;
+        if (currentStrategies == null) currentStrategies = new AIStrategy[numStrategies];
+        
+        for (int i = 0; i < numStrategies; i++)
         {
-            if (PlayerPrefs.HasKey("strategy" + i))
+            if (PlayerPrefs.HasKey("strategy" + i) || fromLevelGenerator)
             {
                 string strategyString = PlayerPrefs.GetString("strategy" + i);
+                if(fromLevelGenerator)
+                {
+                    strategyString = strategyFile;
+                }
                 string[] weightArrays = strategyString.Split(',');
                 if (weightArrays.Length == 8)
                 {
@@ -822,7 +839,10 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetInt(MUSICENABLED, MusicEnabled ? 1 : 0);
         PlayerPrefs.Save();
     }
-    
+
+    public LevelGenerator test_LevelGenerator;
+    public TextAsset test_LevelGeneratorTextAsset;
+    public Texture2D text_LevelGeneratorMapData;
     // Update is called once per frame
     void Update ()
     {
@@ -834,7 +854,51 @@ public class GameManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.M)) UnlockAllModes();
-        if (Input.GetKeyDown(KeyCode.U)) Debug.Log(HexToColor("F7A907FF"));
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            test_LevelGenerator.Init(test_LevelGeneratorTextAsset, text_LevelGeneratorMapData);
+            //SetCurrentLevel(test_LevelGenerator.level, true);
+
+        }
+
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            Level[] allLevels = Resources.LoadAll<Level>("Levels");
+            foreach(Level level in allLevels)
+            {
+                if(!level.name.Contains("Tutorial"))
+                {
+                    level.SetLevelData();
+                    Services.LevelInformation.AddLevel(level.name, level.data);
+                }
+            }
+
+            Services.LevelInformation.PrintLevelNames();
+        }
+
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            Services.LevelInformation.PrintLevelNames();
+        }
+
+        if(Input.GetKeyDown(KeyCode.V))
+        {
+            Services.LevelInformation.RenameLevel("SmallMap", "Small Map");
+        }
+
+        if(Input.GetKeyDown(KeyCode.T))
+        {
+            Debug.Log(test_LevelGenerator);
+            test_LevelGenerator.level.SetLevelData();
+            Services.LevelInformation.AddLevel("Test", test_LevelGenerator.level.data);
+            Services.LevelInformation.Save();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            Services.LevelInformation.PrintLevelNames();
+        }
+
     }
 
     public void Reset(Reset e)

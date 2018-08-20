@@ -4,21 +4,27 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class MapSelectSceneScript : Scene<TransitionData>
+public class LevelSelectSceneScript : Scene<TransitionData>
 {
     public bool[] humanPlayers { get; private set; }
 
     private Level levelSelected;
     [SerializeField]
     private GameObject levelButtonParent;
+    public GameObject levelButtonPrefaB;
     private LevelButton[] levelButtons;
     [SerializeField]
     private GameObject playButton;
-
+    [SerializeField]
+    private GameObject scrollPanel;
     [SerializeField]
     private GameObject backButton;
     [SerializeField]
     private GameObject optionButton;
+
+    private int levelButtonSpacing = 300;
+    private Vector2 unselectedButtonScale = new Vector2(0.33f, 0.33f);
+    private Vector2 selectedButtonScale = new Vector2(0.66f, 0.66f);
 
     private TaskManager _tm = new TaskManager();
 
@@ -28,7 +34,38 @@ public class MapSelectSceneScript : Scene<TransitionData>
         levelButtonParent.SetActive(false);
         backButton.SetActive(false);
         optionButton.SetActive(false);
-        levelButtons = levelButtonParent.GetComponentsInChildren<LevelButton>();
+
+        levelButtons = new LevelButton[Services.LevelInformation.levelDictionary.Count + 1];
+
+
+        levelButtons[0] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
+        levelButtons[0].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+        levelButtons[0].GetComponent<RectTransform>().localScale = selectedButtonScale;
+        levelButtons[0].name = "Procedural";
+        levelButtons[0].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[0].name);
+        
+        foreach (TextMeshProUGUI text in levelButtons[0].GetComponentsInChildren<TextMeshProUGUI>())
+        {
+            text.text = levelButtons[0].name;
+        }
+        int levelButtonIndex = 1;
+        foreach(KeyValuePair<string, LevelData> entry in Services.LevelInformation.levelDictionary)
+        {
+            levelButtons[levelButtonIndex] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
+            levelButtons[levelButtonIndex].level = entry.Value.CreateLevel();
+            levelButtons[levelButtonIndex].GetComponent<RectTransform>().anchoredPosition = new Vector2(levelButtonSpacing * levelButtonIndex, 0);
+            levelButtons[levelButtonIndex].GetComponent<RectTransform>().localScale = unselectedButtonScale;
+            levelButtons[levelButtonIndex].name = entry.Key;
+            levelButtons[levelButtonIndex].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[levelButtonIndex].name);
+            foreach (TextMeshProUGUI text in levelButtons[levelButtonIndex].GetComponentsInChildren<TextMeshProUGUI>())
+            {
+                text.text = levelButtons[levelButtonIndex].name;
+            }
+
+            levelButtonIndex++;
+        }
+
+        //levelButtons = levelButtonParent.GetComponentsInChildren<LevelButton>();
         levelButtonParent.SetActive(false);
         humanPlayers = new bool[2];
 
@@ -166,5 +203,6 @@ public class MapSelectSceneScript : Scene<TransitionData>
     // Update is called once per frame
     void Update () {
         _tm.Update();
+        if (Input.GetKeyDown(KeyCode.I)) ChangeScene();
 	}
 }

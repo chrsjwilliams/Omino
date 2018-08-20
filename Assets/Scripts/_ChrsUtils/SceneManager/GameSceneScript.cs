@@ -367,7 +367,7 @@ public class GameSceneScript : Scene<TransitionData>
                 Services.Scenes.Swap<AIDifficultySceneScript>();
                 break;
             default:
-                Services.Scenes.Swap<MapSelectSceneScript>();
+                Services.Scenes.Swap<LevelSelectSceneScript>();
                 break;
         }
     }
