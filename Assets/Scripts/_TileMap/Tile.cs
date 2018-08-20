@@ -40,7 +40,7 @@ public class Tile : MonoBehaviour, IVertex
 
     [SerializeField]
     private Sprite[] shieldSprites;
-    public Sprite[] SheildSprites
+    public Sprite[] ShieldSprites
     {
         get
         {
@@ -180,7 +180,7 @@ public class Tile : MonoBehaviour, IVertex
         pieceParent = pieceParent_;
         Init(coord_);
         relativeCoord = coord_;
-        topSr.enabled = true;
+        topSr.enabled = false;
     }
 
     public void ToggleIllegalLocationIcon(bool status)
@@ -378,7 +378,7 @@ public class Tile : MonoBehaviour, IVertex
     public void SetSprite(int spriteIndex)
     {
         mainSr.sprite = Sprites[spriteIndex];
-        shieldSr.sprite = SheildSprites[spriteIndex];
+        shieldSr.sprite = ShieldSprites[spriteIndex];
         //fillOverlay.sprite = mainSr.sprite;
         //fillOverlayTop.sprite = topSr.sprite;
     }
