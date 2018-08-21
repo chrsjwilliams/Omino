@@ -67,7 +67,7 @@ public class Polyomino : IVertex
 
     public List<Polyomino> adjacentPieces;
 
-    private List<MapTile> previouslyHoveredMapTiles;
+    protected List<MapTile> previouslyHoveredMapTiles;
 
     protected static int[,,] monomino = new int[1, 5, 5]
     {   

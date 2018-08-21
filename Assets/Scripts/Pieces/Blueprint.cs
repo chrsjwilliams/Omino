@@ -151,7 +151,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         holder.SetEnergyDisplayStatus(false);
         holder.SetAttackDisplayStatus(false);
         tooltips = new List<Tooltip>();
-
+        previouslyHoveredMapTiles = new List<MapTile>();
         if (piece == null) return;
         //tileRelativeCoords = new Dictionary<Tile, Coord>();
 
