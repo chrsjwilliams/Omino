@@ -529,7 +529,7 @@ public class AIPlayer : Player
                                 yield return null;
                             }
                             bool containedInMap = Services.MapManager.IsCoordContainedInMap(candidateCoord);
-                            Tile mapTile = null;
+                            MapTile mapTile = null;
                             if (containedInMap) mapTile = Services.MapManager.Map[candidateCoord.x, candidateCoord.y];
                             if (Mathf.Abs(dx) <= 3 && Mathf.Abs(dy) <= 3)
                             {
@@ -617,7 +617,7 @@ public class AIPlayer : Player
                         foreach (Tile tile in blueprint.tiles)
                         {
                             bool containedInMap = Services.MapManager.IsCoordContainedInMap(tile.coord);
-                            Tile mapTile = null;
+                            MapTile mapTile = null;
                             if (containedInMap) mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                             if (!containedInMap ||
                                 (mapTile.occupyingPiece != null &&

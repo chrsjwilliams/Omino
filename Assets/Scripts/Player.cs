@@ -142,7 +142,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     public bool inDanger;
     [SerializeField]
-    protected Tile dangerTile;
+    protected MapTile dangerTile;
 
     private List<Tile> bpAssistHighlightedTiles = new List<Tile>();
     private float bpAssistDuration;
@@ -188,13 +188,27 @@ public class Player : MonoBehaviour
         hand = new List<Polyomino>();
         blueprints = new List<Blueprint>();
         boardPieces = new List<Polyomino>();
-        
-        if (playerNum == 1) homeBasePos = new Coord(1, 1);
+
+        if (Services.GameManager.loadedLevel)
+        {
+            if (playerNum == 1)
+            {
+                homeBasePos = Services.GameManager.levelSelected.p1HomeBasePos;
+            }
+            else
+            {
+                homeBasePos = Services.GameManager.levelSelected.p2HomeBasePos;
+            }
+        }
         else
         {
-            homeBasePos = new Coord(
-                Services.MapManager.MapWidth - 2,
-                Services.MapManager.MapHeight - 2);
+            if (playerNum == 1) homeBasePos = new Coord(1, 1);
+            else
+            {
+                homeBasePos = new Coord(
+                    Services.MapManager.MapWidth - 2,
+                    Services.MapManager.MapHeight - 2);
+            }
         }
         Services.MapManager.CreateMainBase(this, homeBasePos);
         maxResources = baseMaxResources;
@@ -836,7 +850,7 @@ public class Player : MonoBehaviour
                     minDist = dist;
                     pos = tile.transform.position;
                     closeEnough = true;
-                    Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                    MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                     dangerTile = mapTile;
                 }
             }
@@ -924,7 +938,7 @@ public class Player : MonoBehaviour
         {
             if (Services.MapManager.IsCoordContainedInMap(tile.coord))
             {
-                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                 if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner != null &&
                     mapTile.occupyingPiece.owner != this && mapTile.occupyingPiece.connected)
                     overlappingConnectedOpponentTile = true;
@@ -1210,7 +1224,7 @@ public class Player : MonoBehaviour
                 for (int y = -3; y <= 3; y++)
                 {
                     Coord coordCandidate = tileCoord.Add(new Coord(x, y));
-                    Tile mapTile = null;
+                    MapTile mapTile = null;
                     if (Services.MapManager.IsCoordContainedInMap(coordCandidate))
                     {
                         mapTile = Services.MapManager.Map[coordCandidate.x, coordCandidate.y];

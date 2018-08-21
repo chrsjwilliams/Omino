@@ -151,6 +151,11 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             dismissText.text = "Tutorial Complete!";
         }
 
+        if(label.Contains("Rotate"))
+        {
+            Services.GameEventManager.Register<RotationEvent>(OnRotation);
+        }
+
         if (Services.GameManager.CurrentDevice == DEVICE.IPHONE)
         {
 
@@ -265,6 +270,10 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     public void Dismiss(bool displayNext = true)
     {
+        if (label.Contains("Rotate"))
+        {
+            Services.GameEventManager.Unregister<RotationEvent>(OnRotation);
+        }
         Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
         Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
 
@@ -317,6 +326,11 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
         {
             imageAnim.SetBool(parameter.name, false);
         }
+    }
+
+    protected void OnRotation(RotationEvent e)
+    {
+        textComponent.text = "Well Done! Now place the piece on the board.";
     }
 
     protected void OnTouchDown(TouchDown e)

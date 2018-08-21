@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -44,6 +44,16 @@ public abstract class TechBuilding : Polyomino
         }
 
         return structure;
+    }
+
+    public static BuildingType GetBuildingFromString(string tech)
+    {
+        foreach (BuildingType type in Enum.GetValues(typeof(BuildingType)))
+        {
+            if (type.ToString() == tech.ToUpper()) return type;
+        }
+
+        return BuildingType.NONE;
     }
 
     public static BuildingType[] techTypes = new BuildingType[]
@@ -100,7 +110,7 @@ public abstract class TechBuilding : Polyomino
             }
     };
 
-    public TechBuilding(int _units, int _index, Player _player) : base(_units, _index, _player)
+    public TechBuilding(int _units, int _index, Player _player) : base(_units, _index, _player, false)
     {
         index = _index;
         units = _units;
@@ -109,8 +119,9 @@ public abstract class TechBuilding : Polyomino
         holderName = GetName() + " Holder";
     }
 
-    public TechBuilding(int _index) : base(4, _index, null)
+    public TechBuilding(int _index) : base(4, _index, null, false)
     {
+        destructible = false;
         index = _index;
         placed = true;
 
@@ -134,20 +145,33 @@ public abstract class TechBuilding : Polyomino
         }
     }
 
-    public override void PlaceAtCurrentLocation(bool replace)
+    public override void PlaceAtCurrentLocation(bool replace, bool isTerrain)
     {
-        placed = true;
-        OnPlace();
+        base.PlaceAtCurrentLocation(false, true);
+        //placed = true;
+        //OnPlace();
 
+<<<<<<< HEAD
         foreach (Tile tile in tiles)
         {
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             mapTile.SetOccupyingPiece(this);
             tile.OnPlace();
         }
         adjacentPieces = new List<Polyomino>();
         SortOverlay();
         SetOverlaySprite();
+=======
+        //foreach (Tile tile in tiles)
+        //{
+        //    Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+        //    mapTile.SetOccupyingPiece(this);
+        //    tile.OnPlace();
+        //}
+        //adjacentPieces = new List<Polyomino>();
+        //SortOverlay();
+        //SetOverlaySprite();
+>>>>>>> master
     }
 
     public virtual void OnClaimEffect(Player player){ }
@@ -188,6 +212,12 @@ public abstract class TechBuilding : Polyomino
             piece.adjacentPieces.Remove(this);
         }
         adjacentPieces.Clear();
+    }
+
+    protected override void SetSprites()
+    {
+        SetIconSprite();
+        SetOverlaySprite();
     }
 
     protected override void SetIconSprite()

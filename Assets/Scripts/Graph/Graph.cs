@@ -141,7 +141,7 @@ public class Graph
         return ApplyKarger(null);
     }
 
-    public virtual int ApplyKarger(Tile tile)
+    public virtual int ApplyKarger(MapTile tile)
     {
         var random = new System.Random();
         if (Edges.Count == 0)

@@ -17,6 +17,7 @@ public class Services
     public static GameSceneManager<TransitionData> Scenes { get; set; }
 
     public static MapManager MapManager { get; set; }
+    public static LevelInformation LevelInformation { get; set; }
 
     public static GameSceneScript GameScene { get; set; }
     public static UIManager UIManager { get; set; }
@@ -28,7 +29,8 @@ public class Services
     public static Clock Clock { get; set; }
 
     public static TechDataLibrary TechDataLibrary { get; set; }
-    
+    public static LevelDataLibary LevelDataLibrary { get; set; }
+
     public static AnalyticsManager Analytics { get; set; }
 
     //title scene

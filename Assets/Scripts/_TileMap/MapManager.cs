@@ -17,8 +17,8 @@ public class MapManager : MonoBehaviour
         get { return _mapHeight; }
     }
 
-	[SerializeField] private Tile[,] _map;
-    public Tile[,] Map
+	private MapTile[,] _map;
+    public MapTile[,] Map
     {
         get { return _map; }
     }
@@ -30,6 +30,7 @@ public class MapManager : MonoBehaviour
     }
 
     public List<TechBuilding> structuresOnMap { get; private set; }
+    public List<Polyomino> terrainOnMap { get; private set; }
     public List<Coord> structureCoords { get; private set; }
     [SerializeField]
     private int structDistMin;
@@ -67,9 +68,9 @@ public class MapManager : MonoBehaviour
             Level level = eloLevelPool[Random.Range(0, eloLevelPool.Length)];
             Services.GameManager.SetCurrentLevel(level);
         }
-        if(Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
         {
-            Level level = dungeonRunLevelPool[Random.Range(0, dungeonRunLevelPool.Length -1)];
+            Level level = dungeonRunLevelPool[Random.Range(0, dungeonRunLevelPool.Length - 1)];
             Services.GameManager.SetCurrentLevel(level);
         }
         if (Services.GameManager.levelSelected != null)
@@ -92,24 +93,41 @@ public class MapManager : MonoBehaviour
 
         Services.CameraController.SetPosition(
             new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, -10));
-        Services.GameScene.backgroundImage.transform.position = 
+        Services.GameScene.backgroundImage.transform.position =
             new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, 0);
 
+<<<<<<< HEAD
+        _map = new MapTile[MapWidth, MapHeight];
+=======
         _map = new Tile[MapWidth, MapHeight];
+
+>>>>>>> master
         for (int i = 0; i < MapWidth; i++)
         {
             for (int j = 0; j < MapHeight; j++)
             {
-                Tile tile = Instantiate(Services.Prefabs.Tile, 
-                    GameSceneScript.tileMapHolder).GetComponent<Tile>();
+<<<<<<< HEAD
+                MapTile tile = Instantiate(Services.Prefabs.MapTile, 
+                    GameSceneScript.tileMapHolder).GetComponent<MapTile>();
                 
                 tile.Init(new Coord(i, j));
+=======
+                Tile tile = Instantiate(Services.Prefabs.Tile,
+                    GameSceneScript.tileMapHolder).GetComponent<Tile>();
+                Coord tileCoord = new Coord(i, j);
+
+                tile.Init(tileCoord);
+
+>>>>>>> master
                 _map[i, j] = tile;
                 tile.name = "Tile [X: " + i + ", Y: " + j + "]";
-                tile.SetHighlightStatus(false);
             }
         }
-        if(Services.GameManager.levelSelected == null)
+
+
+        TaskQueue boardAnimationTasks;
+
+        if (Services.GameManager.levelSelected == null)
         {
             GenerateStructures(null);
         }
@@ -117,22 +135,32 @@ public class MapManager : MonoBehaviour
         {
             GenerateStructures(Services.GameManager.levelSelected);
         }
-        foreach (Tile mapTile in Map)
+        foreach (MapTile mapTile in Map)
         {
             mapTile.gameObject.SetActive(false);
         }
-        foreach(TechBuilding structure in structuresOnMap)
+        foreach (TechBuilding structure in structuresOnMap)
         {
             structure.holder.gameObject.SetActive(false);
         }
-        TaskQueue boardAnimationTasks = new TaskQueue(new List<Task>() {
+
+        foreach (Polyomino piece in terrainOnMap)
+        {
+            piece.ScaleHolder(Vector3.one);
+            piece.SetAlpha(1);
+            piece.holder.gameObject.SetActive(false);
+        }
+
+        boardAnimationTasks = new TaskQueue(new List<Task>() {
             new Wait(0.3f),
             new BoardEntryAnimation(),
             new InitialBuildingEntryAnimation(),
             new ScrollReadyBanners(Services.UIManager.UIBannerManager.readyBanners, true)
             });
-
         Services.GameScene.tm.Do(boardAnimationTasks);
+
+
+
     }
 
     TechBuilding GenerateStructure(BuildingType type)
@@ -194,6 +222,33 @@ public class MapManager : MonoBehaviour
             return techBuilding;
         }
         return null;
+    }
+
+    void GenerateTerrain()
+    {
+        terrainOnMap = new List<Polyomino>();
+        if (Services.GameManager.levelSelected == null ||
+            Services.GameManager.levelSelected.impassibleCoords.Length == 0)
+            return;
+        
+        foreach(Coord coord in Services.GameManager.levelSelected.impassibleCoords)
+        {
+            Polyomino impassiblePiece = new Polyomino(1, 0, null, false);
+            impassiblePiece.MakePhysicalPiece();
+            impassiblePiece.PlaceAtLocation(coord, false , true);
+            terrainOnMap.Add(impassiblePiece);
+        }
+
+        foreach (Coord coord in Services.GameManager.levelSelected.destructibleTerrainCoords)
+        {
+            Polyomino destructiblePiece = new Polyomino(1, 0, null);
+            destructiblePiece.MakePhysicalPiece();
+            destructiblePiece.PlaceAtLocation(coord, false, true);
+            terrainOnMap.Add(destructiblePiece);
+        }
+
+        
+
     }
 
     void GetStructureCoords()
@@ -290,6 +345,7 @@ public class MapManager : MonoBehaviour
                 }
                 structuresOnMap.Add(structure);
             }
+            GenerateTerrain();
         }
         else GenerateLevel(level);
 
@@ -334,6 +390,8 @@ public class MapManager : MonoBehaviour
             TechBuilding structure = GenerateStructure(type, level.structCoords[i]);
             structuresOnMap.Add(structure);
         }
+
+        GenerateTerrain();
     }
 
     Coord GenerateRandomCoord()
@@ -356,12 +414,12 @@ public class MapManager : MonoBehaviour
         player.AddBase(playerBase);
     }
 
-    public Tile GetRandomTile()
+    public MapTile GetRandomTile()
     {
         return _map[Random.Range(0, MapWidth), Random.Range(0, MapHeight)];
     }
 
-    public Tile GetTile(int i, int j)
+    public MapTile GetTile(int i, int j)
     {
         if (((i < MapWidth) && (j < MapHeight)) && (i >= 0) && (j >= 0))
         {
@@ -371,9 +429,9 @@ public class MapManager : MonoBehaviour
         return null;
     }
 
-    public Tile GetRandomEmptyTile()
+    public MapTile GetRandomEmptyTile()
     {
-        Tile randomTile = GetRandomTile();
+        MapTile randomTile = GetRandomTile();
 
         return randomTile;
     }
@@ -407,7 +465,7 @@ public class MapManager : MonoBehaviour
             Coord adjacentCoord = tile.coord.Add(direction);
             if(IsCoordContainedInMap(adjacentCoord))
             {
-                Tile adjacentTile = Map[adjacentCoord.x, adjacentCoord.y];
+                MapTile adjacentTile = Map[adjacentCoord.x, adjacentCoord.y];
                 if (adjacentTile.IsOccupied() &&
                     adjacentTile.occupyingPiece.buildingType != BuildingType.BASE &&
                     adjacentTile.occupyingPiece.owner == player)
@@ -513,7 +571,7 @@ public class MapManager : MonoBehaviour
                 Coord adjacentCoord = tile.coord.Add(direction);
                 if (IsCoordContainedInMap(adjacentCoord))
                 {
-                    Tile adjTile = Map[adjacentCoord.x, adjacentCoord.y];
+                    MapTile adjTile = Map[adjacentCoord.x, adjacentCoord.y];
                     if (adjTile.IsOccupied() &&
                         adjTile.occupyingPiece.owner == piece.owner &&
                         adjTile.occupyingPiece != piece &&
@@ -552,7 +610,7 @@ public class MapManager : MonoBehaviour
                 Coord adjacentCoord = tile.coord.Add(direction);
                 if (IsCoordContainedInMap(adjacentCoord))
                 {
-                    Tile adjTile = Map[adjacentCoord.x, adjacentCoord.y];
+                    MapTile adjTile = Map[adjacentCoord.x, adjacentCoord.y];
                     if (adjTile.IsOccupied() &&
                         adjTile.occupyingPiece.owner != null &&
                         adjTile.occupyingPiece.owner != piece.owner &&

@@ -7,7 +7,7 @@ public class BoardEntryAnimation : Task
     private const float animDuration = 0.2f;
     private const float staggerTime = 0.015f;
     private float totalDuration;
-    private Tile[,] map { get { return Services.MapManager.Map; } }
+    private MapTile[,] map { get { return Services.MapManager.Map; } }
     private int largerDimension;
     private int mapWidth;
     private int mapHeight;
@@ -43,7 +43,7 @@ public class BoardEntryAnimation : Task
         {
             for (int j = 0; j < mapHeight; j++)
             {
-                Tile mapTile = map[i, j];
+                MapTile mapTile = map[i, j];
                 if (i + j <= currentIndex)
                 {
                     if (!tilesOn[i, j])

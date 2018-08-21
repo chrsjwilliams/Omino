@@ -90,7 +90,7 @@ public class AIDifficultySceneScript : Scene<TransitionData>
 
     public void GoToMapSelectScene()
     {
-        Services.Scenes.Swap<MapSelectSceneScript>();
+        Services.Scenes.Swap<LevelSelectSceneScript>();
     }
 
     private void SetAILevel(int playerNum, int level)

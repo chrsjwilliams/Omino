@@ -190,8 +190,8 @@ public class Pulse : Task
 		{
 			for (int j = 0; j < Services.MapManager.MapHeight; j++)
 			{
-				Tile t = Services.MapManager.GetTile(i, j);
-				t.SetBpAssistAlpha(Mathf.Lerp(1.0f, 0.4f, (timeElapsed / duration)));
+				MapTile t = Services.MapManager.GetTile(i, j);
+				t.SetBackgroundAlpha(Mathf.Lerp(1.0f, 0.4f, (timeElapsed / duration)));
 			}
 		}
 		
@@ -348,14 +348,14 @@ public class DiscoCheckers : DiscoFloor
 		{
 			for (int j = 0; j < Services.MapManager.MapHeight; j++)
 			{
-				Tile t = Services.MapManager.GetTile(i, j);
+				MapTile t = Services.MapManager.GetTile(i, j);
 				if ((grid[i, j] + num_switches) % 2 == 0)
 				{
-					t.SetBpAssistColor(color1);
+					t.SetBackgroundColor(color1);
 				}
 				else
 				{
-					t.SetBpAssistColor(color2);
+					t.SetBackgroundColor(color2);
 				}
 			}
 		}
@@ -430,22 +430,22 @@ public class DiscoStripes : DiscoFloor
 		{
 			for (int j = 0; j < Services.MapManager.MapHeight; j++)
 			{
-				Tile t = Services.MapManager.GetTile(i, j);
+				MapTile t = Services.MapManager.GetTile(i, j);
 				if ((grid[i, j] + num_switches) % 4 == 0)
 				{
-					t.SetBpAssistColor(color1);
+					t.SetBackgroundColor(color1);
 				}
 				else if ((grid[i, j] + num_switches) % 4 == 1)
 				{
-					t.SetBpAssistColor(color2);
+					t.SetBackgroundColor(color2);
 				}
 				else if ((grid[i, j] + num_switches) % 4 == 2)
 				{
-					t.SetBpAssistColor(color3);
+					t.SetBackgroundColor(color3);
 				}
 				else 
 				{
-					t.SetBpAssistColor(color4);
+					t.SetBackgroundColor(color4);
 				}
 			}
 		}
@@ -530,22 +530,22 @@ public class DiscoWave : DiscoFloor
 		{
 			for (int j = 0; j < Services.MapManager.MapHeight; j++)
 			{
-				Tile t = Services.MapManager.GetTile(i, j);
+				MapTile t = Services.MapManager.GetTile(i, j);
 				if ((grid[i, j] + num_switches) % 4 == 0)
 				{
-					t.SetBpAssistColor(color1);
+					t.SetBackgroundColor(color1);
 				}
 				else if ((grid[i, j] + num_switches) % 4 == 1)
 				{
-					t.SetBpAssistColor(color2);
+					t.SetBackgroundColor(color2);
 				}
 				else if ((grid[i, j] + num_switches) % 4 == 2)
 				{
-					t.SetBpAssistColor(color3);
+					t.SetBackgroundColor(color3);
 				}
 				else 
 				{
-					t.SetBpAssistColor(color4);
+					t.SetBackgroundColor(color4);
 				}
 			}
 		}
@@ -632,22 +632,22 @@ public class DiscoBlocks : DiscoFloor
 		{
 			for (int j = 0; j < Services.MapManager.MapHeight; j++)
 			{
-				Tile t = Services.MapManager.GetTile(i, j);
+				MapTile t = Services.MapManager.GetTile(i, j);
 				if ((grid[i, j] + num_switches) % 4 == 0)
 				{
-					t.SetBpAssistColor(color1);
+					t.SetBackgroundColor(color1);
 				}
 				else if ((grid[i, j] + num_switches) % 4 == 1)
 				{
-					t.SetBpAssistColor(color2);
+					t.SetBackgroundColor(color2);
 				}
 				else if ((grid[i, j] + num_switches) % 4 == 2)
 				{
-					t.SetBpAssistColor(color3);
+					t.SetBackgroundColor(color3);
 				}
 				else 
 				{
-					t.SetBpAssistColor(color4);
+					t.SetBackgroundColor(color4);
 				}
 			}
 		}
@@ -738,22 +738,22 @@ public class DiscoWindmill : DiscoFloor
 		{
 			for (int j = 0; j < Services.MapManager.MapHeight; j++)
 			{
-				Tile t = Services.MapManager.GetTile(i, j);
+				MapTile t = Services.MapManager.GetTile(i, j);
 				if ((grid[i, j] + num_switches) % 4 == 0)
 				{
-					t.SetBpAssistColor(color1);
+					t.SetBackgroundColor(color1);
 				}
 				else if ((grid[i, j] + num_switches) % 4 == 1)
 				{
-					t.SetBpAssistColor(color2);
+					t.SetBackgroundColor(color2);
 				}
 				else if ((grid[i, j] + num_switches) % 4 == 2)
 				{
-					t.SetBpAssistColor(color3);
+					t.SetBackgroundColor(color3);
 				}
 				else 
 				{
-					t.SetBpAssistColor(color4);
+					t.SetBackgroundColor(color4);
 				}
 			}
 		}

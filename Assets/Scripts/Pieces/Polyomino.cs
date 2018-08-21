@@ -12,6 +12,7 @@ public enum BuildingType
 
 public class Polyomino : IVertex
 {
+    public bool destructible = true;
     public List<Tile> tiles = new List<Tile>();
     public List<Coord> pieceCoords = new List<Coord>();
     protected string holderName;
@@ -65,6 +66,8 @@ public class Polyomino : IVertex
     public bool burningFromHand { get; private set; }
 
     public List<Polyomino> adjacentPieces;
+
+    private List<MapTile> previouslyHoveredMapTiles;
 
     protected static int[,,] monomino = new int[1, 5, 5]
     {   
@@ -342,12 +345,12 @@ public class Polyomino : IVertex
                                                     tetromino.GetLength(0),
                                                     pentomino.GetLength(0) };
 
-    public Polyomino(int _units, int _index, Player _player)
+    public Polyomino(int _units, int _index, Player _player, bool _destructible = true)
     {
         index = _index;
         units = _units;
         owner = _player;
-
+        destructible = _destructible;
         occupyingBlueprints = new List<Blueprint>();
         cost = 1;
         if (owner != null) baseColor = owner.ColorScheme[0];
@@ -381,6 +384,7 @@ public class Polyomino : IVertex
                 else holderName = "Neutral Base";
                 buildingType = BuildingType.BASE;
                 piece = playerBase;
+                destructible = false;
                 break;
             default:
                 break;
@@ -478,7 +482,7 @@ public class Polyomino : IVertex
         tiles[0].OnPlace();
         SetTileSprites();
         ScaleHolder(Vector3.one);
-        if (owner.shieldedPieces) CreateShield();
+        if (owner != null && owner.shieldedPieces) CreateShield();
     }
 
     protected virtual Polyomino CreateSubPiece()
@@ -488,8 +492,41 @@ public class Polyomino : IVertex
         return monomino;
     }
 
-    public virtual void PlaceAtCurrentLocation(bool replace)
+    public virtual void PlaceTerrainAtCurrentLocation()
     {
+        placed = true;
+        OnPlace();
+
+        foreach (Tile tile in tiles)
+        {
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            mapTile.SetOccupyingPiece(this);
+            tile.OnPlace();
+        }
+        adjacentPieces = new List<Polyomino>();
+        SortOverlay();
+        SetOverlaySprite();
+    }
+
+    public virtual void PlaceAtCurrentLocation(bool replace, bool isTerrain = false)
+    {
+        if (isTerrain)
+        {
+            placed = true;
+            OnPlace();
+
+            foreach (Tile tile in tiles)
+            {
+                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                mapTile.SetOccupyingPiece(this);
+                tile.OnPlace();
+            }
+            adjacentPieces = new List<Polyomino>();
+            SortOverlay();
+            SetOverlaySprite();
+        }
+        else
+        { 
         //place the piece on the board where it's being hovered now
         List<Polyomino> annexedMonominos = GetPiecesInRange(false);
         OnPlace();
@@ -499,7 +536,7 @@ public class Polyomino : IVertex
             List<Tile> overlappingTilesToRemove = new List<Tile>();
             foreach (Tile tile in tiles)
             {
-                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                 if (mapTile.occupyingPiece != null &&
                     (mapTile.occupyingPiece.owner == owner || mapTile.occupyingPiece.owner == null) &&
                     !overlappingTilesToRemove.Contains(tile))
@@ -536,23 +573,6 @@ public class Polyomino : IVertex
             }
         }
 
-        if (owner.annex)
-        {
-            //monominos.AddRange(annexedMonominos);
-            //foreach (Polyomino piece in monominos)
-            //{
-            //    if(piece.owner != owner && owner.annex)
-            //    {
-            //        previousOwner = piece.owner;
-            //        piece.owner.boardPieces.Remove(piece);
-            //        piece.owner = owner;
-                    
-            //        tiles.AddRange(piece.tiles);
-            //    }
-            //}
-            //Services.MapManager.DetermineConnectedness(previousOwner);
-
-        }
         for (int i = 0; i < monominos.Count; i++)
         {
             monominos[i].AssignLocation(monominoCoords[i]);
@@ -619,42 +639,43 @@ public class Polyomino : IVertex
         //        monomino.tiles[0].StartScaling(Tile.scaleUpStaggerTime * i);
         //    }
         //}
-        owner.OnPiecePlaced(this, monominos);
+            owner.OnPiecePlaced(this, monominos);
 
-        switch (Services.GameManager.mode)
-        {
-            case TitleSceneScript.GameMode.HyperSOLO:
-            case TitleSceneScript.GameMode.HyperVS:
-                HyperModeManager.Placement(owner.ColorScheme[0], holder.transform.position);
-                break;
-        }
+            switch (Services.GameManager.mode)
+            {
+                case TitleSceneScript.GameMode.HyperSOLO:
+                case TitleSceneScript.GameMode.HyperVS:
+                    HyperModeManager.Placement(owner.ColorScheme[0], holder.transform.position);
+                    break;
+            }
 
-        Services.AudioManager.RegisterSoundEffect(Services.Clips.PiecePlaced, 0.5f);
-        List<Polyomino> shortestPath = AStarSearch.ShortestPath(
-            owner.mainBase, distanceLevels[lastDistanceLevelIndex][0]);
-        shortestPath.Reverse();
-        List<Polyomino> pathToHighlight = new List<Polyomino>();
-        for (int i = 0; i < shortestPath.Count; i++)
-        {
-            Polyomino pathPiece = shortestPath[i];
-            if (pathPiece.occupyingBlueprints.Count > 0)
+            Services.AudioManager.RegisterSoundEffect(Services.Clips.PiecePlaced, 0.5f);
+            List<Polyomino> shortestPath = AStarSearch.ShortestPath(
+                owner.mainBase, distanceLevels[lastDistanceLevelIndex][0]);
+            shortestPath.Reverse();
+            List<Polyomino> pathToHighlight = new List<Polyomino>();
+            for (int i = 0; i < shortestPath.Count; i++)
             {
-                Blueprint pathBlueprint = shortestPath[i].occupyingBlueprints[0];
-                if (!pathToHighlight.Contains(pathBlueprint))
-                    pathToHighlight.Add(pathBlueprint);
+                Polyomino pathPiece = shortestPath[i];
+                if (pathPiece.occupyingBlueprints.Count > 0)
+                {
+                    Blueprint pathBlueprint = shortestPath[i].occupyingBlueprints[0];
+                    if (!pathToHighlight.Contains(pathBlueprint))
+                        pathToHighlight.Add(pathBlueprint);
+                }
+                else
+                {
+                    pathToHighlight.Add(pathPiece);
+                }
             }
-            else
+            foreach (Polyomino piece in monominos)
             {
-                pathToHighlight.Add(pathPiece);
+                if (!pathToHighlight.Contains(piece)) pathToHighlight.Add(piece);
             }
-        }
-        foreach(Polyomino piece in monominos)
-        {
-            if (!pathToHighlight.Contains(piece)) pathToHighlight.Add(piece);
-        }
-        for (int i = 0; i < pathToHighlight.Count; i++)
-        {
-            pathToHighlight[i].PathHighlight(i * Player.pathHighlightTotalDuration/pathToHighlight.Count);
+            for (int i = 0; i < pathToHighlight.Count; i++)
+            {
+                pathToHighlight[i].PathHighlight(i * Player.pathHighlightTotalDuration / pathToHighlight.Count);
+            }
         }
     }
 
@@ -669,7 +690,7 @@ public class Polyomino : IVertex
                 Coord adjacentCoord = tile.coord.Add(direction);
                 if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
                 {
-                    Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                    MapTile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
                     if (adjTile.occupyingPiece == null)
                     {
                         adjacentEmptyTiles.Add(adjTile.coord);
@@ -692,7 +713,7 @@ public class Polyomino : IVertex
                 Coord adjacentCoord = tile.coord.Add(direction);
                 if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
                 {
-                    Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                    MapTile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
                     if (adjTile.IsOccupied() && adjTile.occupyingPiece is TechBuilding &&
                         !adjacentStructures.Contains((TechBuilding)adjTile.occupyingPiece))
                     {
@@ -729,7 +750,7 @@ public class Polyomino : IVertex
                     coordsChecked.Add(adjacentCoord);
                     if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
                     {
-                        Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                        MapTile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
                         if (adjTile.IsOccupied() && !adjacentPieces.Contains(adjTile.occupyingPiece) &&
                             adjTile.occupyingPiece != this && adjTile.occupyingPiece.owner == player)
                         {
@@ -752,7 +773,7 @@ public class Polyomino : IVertex
             Coord adjacentCoord = coord.Add(direction);
             if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
             {
-                Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                MapTile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
                 if (adjTile.IsOccupied() && !adjacentPieces.Contains(adjTile.occupyingPiece) 
                     && adjTile.occupyingPiece.owner == player)
                 {
@@ -772,7 +793,7 @@ public class Polyomino : IVertex
             Coord adjacentCoord = coord.Add(direction);
             if (Services.MapManager.IsCoordContainedInMap(adjacentCoord))
             {
-                Tile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
+                MapTile adjTile = Services.MapManager.Map[adjacentCoord.x, adjacentCoord.y];
                 if (adjTile.IsOccupied() && !adjacentPieces.Contains(adjTile.occupyingPiece) &&
                     adjTile.occupyingPiece != this)
                 {
@@ -827,7 +848,7 @@ public class Polyomino : IVertex
         {
             if (Services.MapManager.IsCoordContainedInMap(tile.coord))
             {
-                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                 if (mapTile.IsOccupied() &&  mapTile.occupyingPiece is TechBuilding)
                 {
                     illegalTiles.Add(tile);
@@ -874,8 +895,13 @@ public class Polyomino : IVertex
         foreach (Coord coord in hypotheticalTileCoords)
         {
             if (!Services.MapManager.IsCoordContainedInMap(coord)) return false;
-            Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
+<<<<<<< HEAD
+            MapTile mapTile = Services.MapManager.Map[coord.x, coord.y];
             
+=======
+            Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
+            if (mapTile.IsOccupied() && !mapTile.occupyingPiece.destructible) return false;
+>>>>>>> master
             if ((mapTile.IsOccupied() && !owner.crossSection) &&
                 ((mapTile.occupyingPiece.connected && owner.attackResources < 1 && !pretendAttackResource) ||
                 (mapTile.occupyingPiece.connected && (mapTile.occupyingPiece.owner == owner)) ||
@@ -971,14 +997,12 @@ public class Polyomino : IVertex
         Vector3 positionOfDestruction = Vector3.zero;
         foreach (Tile tile in tiles)
         {
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if ( owner != null && 
                 !owner.crossSection && 
                 mapTile.occupyingPiece != null &&
                 !piecesToRemove.Contains(mapTile.occupyingPiece))
             {
-                
-
                 piecesToRemove.Add(mapTile.occupyingPiece);
                 if (mapTile.occupyingPiece.owner != owner && mapTile.occupyingPiece.connected)
                 {
@@ -1204,6 +1228,7 @@ public class Polyomino : IVertex
         holder.SetAttackDisplayStatus(false);
         tooltips = new List<Tooltip>();
         adjacentPieces = new List<Polyomino>();
+        previouslyHoveredMapTiles = new List<MapTile>();
 
         if (piece == null) return;
 
@@ -1541,12 +1566,18 @@ public class Polyomino : IVertex
     {
         bool isLegal = IsPlacementLegal();
         bool overEnemyPiece = false;
+        foreach(MapTile mapTile in previouslyHoveredMapTiles)
+        {
+            mapTile.SetMapSprite();
+        }
+        List<MapTile> hoveredMapTiles = new List<MapTile>();
         foreach (Tile tile in tiles)
         {
             tile.ToggleIllegalLocationIcon(false);
             Coord coord = tile.coord;
             if (Services.MapManager.IsCoordContainedInMap(coord)) {
-                Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
+                MapTile mapTile = Services.MapManager.Map[coord.x, coord.y];
+                hoveredMapTiles.Add(mapTile);
                 if(mapTile.occupyingPiece != null && !(mapTile.occupyingPiece is TechBuilding) &&
                     mapTile.occupyingPiece.owner != owner &&
                     mapTile.occupyingPiece.connected)
@@ -1555,6 +1586,7 @@ public class Polyomino : IVertex
                 }
             }
         }
+        previouslyHoveredMapTiles = hoveredMapTiles;
         if (!(this is Blueprint))
         {
             SetAffordableStatus(owner, true);
@@ -1566,19 +1598,24 @@ public class Polyomino : IVertex
             else holder.SetAttackLevel(owner.destructorDrawMeterFillAmt);
         }
 
+        foreach (MapTile mapTile in hoveredMapTiles)
+        {
+            mapTile.SetMapSpriteHovered(isLegal);
+        }
+
         if (isLegal && (affordable || this is Blueprint))
         {
-            SetGlow(Services.UIManager.legalGlowColor);
+            //SetGlow(Services.UIManager.legalGlowColor);
             holder.legalityOverlay.enabled = false;
         }
         else if (isLegal && !affordable && !(this is Blueprint))
         {
-            SetGlow(Color.yellow);
+            //SetGlow(Color.yellow);
             holder.legalityOverlay.enabled = false;
         }
         else
         {
-            SetGlow(new Color(1, 0.2f, 0.2f));
+            //SetGlow(new Color(1, 0.2f, 0.2f));
             bool connected = IsConnected();
             if(!(this is Blueprint) && !connected)
             {
@@ -1628,17 +1665,17 @@ public class Polyomino : IVertex
 
         foreach (Tile tile in tiles)
         {
-            int spriteIndex = 15;
-            Coord[] directions = Coord.Directions();
-            for (int i = 0; i < directions.Length; i++)
-            {
-                Coord adjCoord = tile.relativeCoord.Add(directions[i]);
-                if (tileRelativeCoords.Contains(adjCoord))
-                {
-                    spriteIndex -= Mathf.RoundToInt(Mathf.Pow(2, i));
-                }
-            }
-            tile.SetSprite(spriteIndex);
+            //int spriteIndex = 15;
+            //Coord[] directions = Coord.Directions();
+            //for (int i = 0; i < directions.Length; i++)
+            //{
+            //    Coord adjCoord = tile.relativeCoord.Add(directions[i]);
+            //    if (tileRelativeCoords.Contains(adjCoord))
+            //    {
+            //        spriteIndex -= Mathf.RoundToInt(Mathf.Pow(2, i));
+            //    }
+            //}
+            tile.SetSprite();
             SetRelativeSortingOrder(tile);
         }
     }
@@ -1713,16 +1750,33 @@ public class Polyomino : IVertex
         PlaceAtLocation(centerCoordLocation, false);
     }
 
-    public virtual void PlaceAtLocation(Coord centerCoordLocation, bool replace)
+    public virtual void PlaceAtLocation(Coord centerCoordLocation, bool replace, bool terrain = false)
     {
         SetTileCoords(centerCoordLocation);
         Reposition(new Vector3(
             centerCoordLocation.x,
             centerCoordLocation.y,
             holder.transform.position.z));
-        PlaceAtCurrentLocation(replace);
+        if (!terrain) PlaceAtCurrentLocation(replace);
+        else PlaceTerrainAtCurrentLocation();
     }
-    
+
+    public void PlaceTerrainAtCurrentLocation(bool replace)
+    {
+        placed = true;
+        OnPlace();
+
+        foreach (Tile tile in tiles)
+        {
+            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            mapTile.SetOccupyingPiece(this);
+            tile.OnPlace();
+        }
+        adjacentPieces = new List<Polyomino>();
+        SortOverlay();
+        SetOverlaySprite();
+    }
+
     public virtual void Update()
     {
         if (shieldDurationRemaining >= 0) DecayShield();
@@ -1790,7 +1844,7 @@ public class Polyomino : IVertex
         holder.spriteBottom.transform.localPosition = GetCenterpoint();
     }
 
-    protected void SetSprites()
+    protected virtual void SetSprites()
     {
         SetIconSprite();
         SetOverlaySprite();

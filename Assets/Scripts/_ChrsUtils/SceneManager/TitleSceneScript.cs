@@ -45,14 +45,14 @@ public class TitleSceneScript : Scene<TransitionData>
         {
             case GameMode.TwoPlayers:
             case GameMode.HyperVS:
-                Services.Scenes.PushScene<MapSelectSceneScript>();
+                Services.Scenes.PushScene<LevelSelectSceneScript>();
                 break;
             case GameMode.Practice:
             case GameMode.HyperSOLO:
                 Services.Scenes.PushScene<AIDifficultySceneScript>();
                 break;
             case GameMode.Demo:
-                Services.Scenes.PushScene<MapSelectSceneScript>();
+                Services.Scenes.PushScene<LevelSelectSceneScript>();
                 break;
             case GameMode.Tutorial:
                 Services.Scenes.PushScene<TutorialLevelSceneScript>();

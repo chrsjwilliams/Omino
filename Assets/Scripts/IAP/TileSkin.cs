@@ -8,14 +8,11 @@ public class TileSkin : ScriptableObject
     public string tileSkinName = "Tile Skin Name Here";
     public int cost = 50;
     [TextArea]
-    public string desctiption;
+    public string description;
 
     public Color[] Player1ColorScheme;
     public Color[] Player2ColorScheme;
 
-
-    public Sprite destructorIcon;
-    public Sprite splashIcon;
     public Sprite[] factoryBottoms;
     public Sprite[] factoryTops;
     public Sprite[] factoryIcons;
@@ -29,9 +26,10 @@ public class TileSkin : ScriptableObject
     public Sprite[] bombFactoryTops;
     public Sprite[] bombFactoryIcons;
     public Sprite structureOverlay;
-    public Sprite[] tileSprites;
-    public Sprite[] destructorSprites;
+    public Sprite[] handSprites;
+    public Sprite[] placedSprites;
+    public Sprite[] placedSecondarySprites;
     public Sprite[] shieldSprites;
-    public Sprite disconnectedSprite;
+    public Sprite[] disconnectedSprites;
     
 }

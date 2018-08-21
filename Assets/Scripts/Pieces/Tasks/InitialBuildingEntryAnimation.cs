@@ -29,12 +29,19 @@ public class InitialBuildingEntryAnimation : Task
             dropTask.Then(new BuildingDropAnimation(Services.MapManager.structuresOnMap[i]));
             subtaskManager.Do(dropTask);
         }
-        
+
+        for (int i = 0; i < Services.MapManager.terrainOnMap.Count; i++)
+        {
+            Task dropTask = new Wait((structStaggerTime * i) + (baseStaggerTime * 2));
+            dropTask.Then(new BuildingDropAnimation(Services.MapManager.terrainOnMap[i]));
+            subtaskManager.Do(dropTask);
+        }
+
         // Task waitTask = new Wait((structStaggerTime * Services.MapManager.structuresOnMap.Count) + (baseStaggerTime * 2));
         // waitTask.Then(new ActionTask(() => { SetStatus(TaskStatus.Success); }));
-        
+
         //subtaskManager.Do(waitTask);
-        
+
         Services.Clock.SyncFunction(() => { run_tasks = true; }, Clock.BeatValue.Quarter);
     }
     

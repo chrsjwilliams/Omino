@@ -11,9 +11,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6e3d42f2220bb342a28180320c2b637, type: 3}
   m_Name: Small Cross
   m_EditorClassIdentifier: 
+  displayImage: {fileID: 21300000, guid: ffa0036ef87fb164ca06559d55e3ff89, type: 3}
   campaignLevelNum: 0
   objectives: []
   availableStructures: 060000000700000001000000090000000300000008000000020000000a0000000b0000000c000000
+  p1HomeBasePos:
+    x: 0
+    y: 0
+  p2HomeBasePos:
+    x: 0
+    y: 0
+  preplacedP1Tiles: []
+  preplacedP2Tiles: []
   structCoords:
   - x: 9
     y: 15
@@ -23,6 +32,8 @@ MonoBehaviour:
     y: 10
   - x: 14
     y: 10
+  impassibleCoords: []
+  destructibleTerrainCoords: []
   width: 20
   height: 20
   cornerBases: 1

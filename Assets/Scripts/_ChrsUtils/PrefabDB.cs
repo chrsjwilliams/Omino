@@ -23,6 +23,9 @@ public class PrefabDB : ScriptableObject
         get { return _tile; }
     }
 
+    [SerializeField] private GameObject mapTile;
+    public GameObject MapTile { get { return mapTile; } }
+
     [SerializeField] private GameObject pieceHolder;
     public GameObject PieceHolder
     {

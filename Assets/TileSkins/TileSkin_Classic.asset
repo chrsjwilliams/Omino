@@ -13,15 +13,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileSkinName: Classic
   cost: 0
-  desctiption: Classic Omino Skin for your viewing pleasure.
+  description: 
   Player1ColorScheme:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0.99215686, g: 0.84705883, b: 0.54901963, a: 1}
   Player2ColorScheme:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0.7294118, g: 0.8509804, b: 1, a: 1}
-  destructorIcon: {fileID: 21300000, guid: 7d0996cc5e00d484ea2b830119ea3b94, type: 3}
-  splashIcon: {fileID: 21300000, guid: f4a173ba054a8374ca5fdcc9635119be, type: 3}
   factoryBottoms:
   - {fileID: 21300000, guid: 30e7f033b5cf63246af1baa713065fa6, type: 3}
   - {fileID: 21300000, guid: 6dae32a24bb264d4faa23b23a6e332e7, type: 3}
@@ -67,55 +65,18 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a13ffd6db8a3af740ac0937e1feefdd7, type: 3}
   - {fileID: 21300000, guid: d3d2263d2a9ebd84d820e3df86e49ab2, type: 3}
   structureOverlay: {fileID: 21300000, guid: d7b77fda6751fd74181cb053f917422a, type: 3}
-  tileSprites:
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  - {fileID: 21300000, guid: 27f3c0efecb9ce546948ec0020b646b2, type: 3}
-  destructorSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  handSprites:
+  - {fileID: 21300000, guid: 9e1c2ee1c24e0a849be2bbcbe91c5ce0, type: 3}
+  - {fileID: 21300000, guid: 36fc7b36ab8f3f34d9cf12ece9a4c6ac, type: 3}
+  placedSprites:
+  - {fileID: 21300000, guid: e039323611932974e88f547ef66bcdc0, type: 3}
+  - {fileID: 21300000, guid: 4c22a574bd601a74daa17295b5c68902, type: 3}
+  placedSecondarySprites:
+  - {fileID: 21300000, guid: b4534d8c1bab01d42901ad593edef57b, type: 3}
+  - {fileID: 21300000, guid: e3cff1750ceb3cb418b485d5af690ad1, type: 3}
   shieldSprites:
   - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
   - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  - {fileID: 21300000, guid: 644db21e8b56c054cb05d76dcfd7fc09, type: 3}
-  disconnectedSprite: {fileID: 21300000, guid: e8907c424124a3648959f640896fc322, type: 3}
+  disconnectedSprites:
+  - {fileID: 0}
+  - {fileID: 0}

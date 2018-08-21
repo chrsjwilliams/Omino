@@ -268,13 +268,13 @@ public class Move
                         coordsToBeDestroyed.Add(coordToBeDestroyed);
                         if (Services.MapManager.IsCoordContainedInMap(coordToBeDestroyed))
                         {
-                            Tile mapTile = Services.MapManager.Map[coordToBeDestroyed.x, coordToBeDestroyed.y];
+                            MapTile mapTile = Services.MapManager.Map[coordToBeDestroyed.x, coordToBeDestroyed.y];
                             if( mapTile.occupyingPiece!= null &&
                                 mapTile.occupyingPiece.owner != null &&
                                 mapTile.occupyingPiece.owner != piece.owner &&
                                 mapTile.occupyingPiece.connected &&
                                 !(mapTile.occupyingPiece is TechBuilding) &&
-                                !mapTile.shielded)
+                                !mapTile.occupyingPiece.tiles[0].shielded)
                             {
                                 tilesIdestroy++;
                                 Blueprint blueprint = mapTile.occupyingBlueprint;

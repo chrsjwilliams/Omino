@@ -17,8 +17,8 @@ public class Destructor : Polyomino
         if (!placed)
         {
             holder.icon.enabled = true;
-            holder.icon.sprite = owner.splashDamage ?
-                    Services.UIManager.splashIcon : Services.UIManager.destructorIcon;
+            //holder.icon.sprite = owner.splashDamage ?
+            //        Services.UIManager.splashIcon : Services.UIManager.destructorIcon;
             holder.icon.color = Color.black;
             if (owner.splashDamage)
             {
@@ -63,7 +63,7 @@ public class Destructor : Polyomino
         foreach (Coord coord in hypotheticalTileCoords)
         {
             if (!Services.MapManager.IsCoordContainedInMap(coord)) return false;
-            Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
+            MapTile mapTile = Services.MapManager.Map[coord.x, coord.y];
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner && mapTile.occupyingPiece.connected)
                 return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece is TechBuilding) return false;
@@ -84,7 +84,7 @@ public class Destructor : Polyomino
             }
             else
             {
-                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                 bool occupied = mapTile.IsOccupied();
                 if ((occupied && mapTile.occupyingPiece.owner == owner && mapTile.occupyingPiece.connected) ||
                     (occupied && mapTile.occupyingPiece is TechBuilding) ||
@@ -103,7 +103,7 @@ public class Destructor : Polyomino
         {
             if (!Services.MapManager.IsCoordContainedInMap(tile.coord)) return false;
             if (!Services.MapManager.ConnectedToBase(this, new List<Polyomino>())) return false;
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner == owner && mapTile.occupyingPiece.connected)
                 return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece is TechBuilding) return false;
@@ -181,7 +181,7 @@ public class Destructor : Polyomino
         List<Polyomino> enemyPiecesInRange = new List<Polyomino>();
         foreach (Tile tile in tiles)
         {
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.occupyingPiece != null  && !enemyPiecesInRange.Contains(mapTile.occupyingPiece))
             {
                 enemyPiecesInRange.Add(mapTile.occupyingPiece);

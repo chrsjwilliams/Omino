@@ -9,32 +9,46 @@ public class Tile : MonoBehaviour, IVertex
 {
     #region TileSkin Items
     [SerializeField]
-    private Sprite[] sprites;
-    public Sprite[] Sprites
+    private Sprite[] handSprites;
+    public Sprite[] HandSprites
     {
         get
         {
             if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkins[0].tileSprites;
+                return Services.GameManager.currentTileSkins[0].handSprites;
             }
             else
-                return sprites;
+                return handSprites;
+        }
+    }
+    [SerializeField]
+    private Sprite[] placedSprites;
+    public Sprite[] PlacedSprites
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkins[0] != null)
+            {
+                return Services.GameManager.currentTileSkins[0].placedSprites;
+            }
+            else
+                return placedSprites;
         }
     }
 
     [SerializeField]
-    private Sprite[] destructorSprites;
-    public Sprite[] DestructorSprites
+    private Sprite[] placedSecondarySprites;
+    public Sprite[] PlacedSecondarySprites
     {
         get
         {
             if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkins[0].destructorSprites;
+                return Services.GameManager.currentTileSkins[0].placedSecondarySprites;
             }
             else
-                return destructorSprites;
+                return placedSecondarySprites;
         }
     }
 
@@ -54,21 +68,22 @@ public class Tile : MonoBehaviour, IVertex
     }
 
     [SerializeField]
-    private Sprite disconnectedSprite;
-    public Sprite DisconnectedSprite
+    private Sprite[] disconnectedSprites;
+    public Sprite[] DisconnectedSprites
     {
         get
         {
             if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkins[0].disconnectedSprite;
+                return Services.GameManager.currentTileSkins[0].disconnectedSprites;
             }
             else
-                return disconnectedSprite;
+                return disconnectedSprites;
         }
     }
     #endregion
 
+    public bool impassable { get; private set; }
     public Coord coord { get; private set; }
     public Coord relativeCoord;
     public BoxCollider2D boxCol { get; private set; }
@@ -79,9 +94,9 @@ public class Tile : MonoBehaviour, IVertex
     [SerializeField]
     private SpriteRenderer fillOverlayTop;
     public Material material { get; set; }
-    public Polyomino occupyingPiece { get; private set; }
+
     public Polyomino pieceParent { get; private set; }
-    public Blueprint occupyingBlueprint { get; private set; }
+    
     private Color prevColor;
     private Color targetColor_;
     private Color targetColor
@@ -133,10 +148,11 @@ public class Tile : MonoBehaviour, IVertex
     private const float pathHighlightDownDuration = 0.6f;
     private float pathHighlightDelay;
 
-    public void Init(Coord coord_)
+    public void Init(Coord coord_, bool impassable_ = false)
     {
         coord = coord_;
         boxCol = GetComponent<BoxCollider2D>();
+        impassable = impassable_;
         sortingGroup = GetComponentInChildren<SortingGroup>();
         shieldSr.enabled = false;
         highlightSr.enabled = false;
@@ -145,6 +161,10 @@ public class Tile : MonoBehaviour, IVertex
         crackSr.enabled = false;
 
         transform.position = new Vector3(coord.x, coord.y, 0);
+<<<<<<< HEAD
+        
+        baseColor = mainSr.color;
+=======
 
         switch (Services.GameManager.mode)
         {
@@ -153,26 +173,28 @@ public class Tile : MonoBehaviour, IVertex
                 mainSr.color = Services.GameManager.MapColorScheme[1];
                 break;
             default:
-                mainSr.color = Services.GameManager.MapColorScheme[0];
+                mainSr.color = impassable ? Color.black: Services.GameManager.MapColorScheme[0];
                 break;
         }
-        
-        baseColor = mainSr.color;
-        bpAssistHighlightSr.gameObject.SetActive(false);
-        for (int i = 0; i < gridEdges.Length; i++)
-        {
-            SpriteRenderer edgeSr = gridEdges[i];
 
-            edgeSr.enabled = false;
-        }
-        if (pieceParent == null)
-        {
-            IncrementSortingOrder(-5000);
-            if (coord.x == 0) gridEdges[1].enabled = true;
-            if (coord.x == Services.MapManager.MapWidth - 1) gridEdges[2].enabled = true;
-            if (coord.y == 0) gridEdges[0].enabled = true;
-            if (coord.y == Services.MapManager.MapHeight - 1) gridEdges[3].enabled = true;
-        }
+        if (impassable) Debug.Log(coord.ToString());
+
+>>>>>>> master
+        bpAssistHighlightSr.gameObject.SetActive(false);
+        //for (int i = 0; i < gridEdges.Length; i++)
+        //{
+        //    SpriteRenderer edgeSr = gridEdges[i];
+
+        //    edgeSr.enabled = false;
+        //}
+        //if (pieceParent == null)
+        //{
+        //    IncrementSortingOrder(-5000);
+        //    if (coord.x == 0) gridEdges[1].enabled = true;
+        //    if (coord.x == Services.MapManager.MapWidth - 1) gridEdges[2].enabled = true;
+        //    if (coord.y == 0) gridEdges[0].enabled = true;
+        //    if (coord.y == Services.MapManager.MapHeight - 1) gridEdges[3].enabled = true;
+        //}
     }
 
     public void Init(Coord coord_, Polyomino pieceParent_)
@@ -188,7 +210,9 @@ public class Tile : MonoBehaviour, IVertex
         legalitySr.enabled = status;
     }
 
-    public void OnRemove(){
+    public void OnRemove()
+    {
+        
     }
 
     public void OnPlace()
@@ -196,7 +220,10 @@ public class Tile : MonoBehaviour, IVertex
         ToggleIllegalLocationIcon(false);
         SetAlpha(0.1f);
         //SetFilledUIFillAmount(0);
+        topSr.enabled = true;
     }
+
+
 
     public void SetCoord(Coord newCoord)
     {
@@ -245,37 +272,7 @@ public class Tile : MonoBehaviour, IVertex
         else SetSrAndUIColor(player.ColorScheme[0]);
     }
 
-    public void SetOccupyingPiece(Polyomino piece)
-    {
-        occupyingPiece = piece;
-    }
-
-    public void SetOccupyingBlueprint(Blueprint blueprint)
-    {
-        occupyingBlueprint = blueprint;
-    }
-
-    public bool IsOccupied()
-    {
-        return occupyingPiece != null;
-    }
-
-    public bool PartOfExistingBlueprint()
-    {
-        return occupyingBlueprint != null;
-    }
-
-    public Polyomino OccupiedBy()
-    {
-        if(IsOccupied())
-        {
-            return occupyingPiece;
-        }
-        else
-        {
-            return null;
-        }
-    }
+   
 
     private void Update()
     {
@@ -375,10 +372,13 @@ public class Tile : MonoBehaviour, IVertex
         }
     }
 
-    public void SetSprite(int spriteIndex)
+    public void SetSprite()
     {
-        mainSr.sprite = Sprites[spriteIndex];
-        shieldSr.sprite = ShieldSprites[spriteIndex];
+        int ownerIndex = pieceParent.owner.playerNum - 1;
+        mainSr.sprite = pieceParent.placed ? 
+            PlacedSprites[ownerIndex] : HandSprites[ownerIndex];
+        shieldSr.sprite = ShieldSprites[ownerIndex];
+        topSr.sprite = PlacedSecondarySprites[ownerIndex];
         //fillOverlay.sprite = mainSr.sprite;
         //fillOverlayTop.sprite = topSr.sprite;
     }

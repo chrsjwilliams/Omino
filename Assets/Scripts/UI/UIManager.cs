@@ -107,35 +107,6 @@ public class UIManager : MonoBehaviour {
     private Button levelSelectButton;
 
     #region TileSkin Items
-    [SerializeField]
-    private Sprite _destructorIcon;
-    public Sprite destructorIcon
-    {
-        get
-        {
-            if (Services.GameManager.currentTileSkins[0] != null)
-            {
-                return Services.GameManager.currentTileSkins[0].destructorIcon;
-            }
-            else
-                return _destructorIcon;
-        }
-    }
-
-    [SerializeField]
-    private Sprite _splashIcon;
-    public Sprite splashIcon
-    {
-        get
-        {
-            if (Services.GameManager.currentTileSkins[0] != null)
-            {
-                return Services.GameManager.currentTileSkins[0].splashIcon;
-            }
-            else
-                return _splashIcon;
-        }
-    }
 
     [SerializeField]
     private Sprite[] _factoryBottoms;

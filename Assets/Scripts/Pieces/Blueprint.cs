@@ -79,7 +79,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
 
     }
 
-    protected bool PiecesShareOwner(Tile tile)
+    protected bool PiecesShareOwner(MapTile tile)
     {
         if (tile.occupyingPiece == null) return false;
         if (tile.occupyingPiece is TechBuilding) return false;
@@ -102,7 +102,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         foreach (Coord coord in hypotheticalTileCoords)
         {
             if (!Services.MapManager.IsCoordContainedInMap(coord)) return false;
-            Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
+            MapTile mapTile = Services.MapManager.Map[coord.x, coord.y];
             if (!PiecesShareOwner(mapTile)) return false;
             if (mapTile.PartOfExistingBlueprint()) return false;
             if (mapTile.IsOccupied() && mapTile.occupyingPiece.connected)
@@ -129,7 +129,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             }
             else
             {
-                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                 if ((!PiecesShareOwner(mapTile)) ||
                 (mapTile.PartOfExistingBlueprint()))
                 {
@@ -229,7 +229,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         OnPlace();
         foreach (Tile tile in tiles)
         {
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (mapTile.occupyingBlueprint == null)
             {
                 mapTile.occupyingPiece.AddOccupyingBlueprint(this);
@@ -246,7 +246,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         foreach (Tile tile in tiles)
         {
             tile.OnRemove();
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             if (!constituentPieces.Contains(mapTile.occupyingPiece))
                 constituentPieces.Add(mapTile.occupyingPiece);
             mapTile.SetOccupyingBlueprint(null);
