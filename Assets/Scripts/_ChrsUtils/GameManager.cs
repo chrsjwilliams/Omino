@@ -225,6 +225,18 @@ public class GameManager : MonoBehaviour
 
         CheckPlayerPrefs();
 
+        Level[] allLevels = Resources.LoadAll<Level>("Levels");
+        foreach (Level level in allLevels)
+        {
+            if (!level.name.Contains("Tutorial"))
+            {
+                level.SetLevelData();
+                Services.LevelInformation.AddLevel(level.name, level.data);
+            }
+        }
+
+        Services.LevelInformation.PrintLevelNames();
+
         Services.LevelInformation.Load();
         ELOManager.LoadData();
         DungeonRunManager.LoadData();
@@ -235,7 +247,8 @@ public class GameManager : MonoBehaviour
         }
         // for testflight purposes so people don't have to play tutorial
         CheckAutoUnlock();
-
+        //  Adds the levels in the resource folder that aren't Tutorial levels
+        
     }
 
     private void SetDevice()
@@ -854,14 +867,12 @@ public class GameManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.M)) UnlockAllModes();
-        if (Input.GetKeyDown(KeyCode.U))
+
+        if (Input.GetKeyDown(KeyCode.T))
         {
             test_LevelGenerator.Init(test_LevelGeneratorTextAsset, text_LevelGeneratorMapData);
-            //SetCurrentLevel(test_LevelGenerator.level, true);
-
         }
-
-        if(Input.GetKeyDown(KeyCode.L))
+        if(Input.GetKeyDown(KeyCode.Y))
         {
             Level[] allLevels = Resources.LoadAll<Level>("Levels");
             foreach(Level level in allLevels)
@@ -875,26 +886,18 @@ public class GameManager : MonoBehaviour
 
             Services.LevelInformation.PrintLevelNames();
         }
-
-        if(Input.GetKeyDown(KeyCode.O))
+        if(Input.GetKeyDown(KeyCode.U))
         {
             Services.LevelInformation.PrintLevelNames();
         }
-
-        if(Input.GetKeyDown(KeyCode.V))
-        {
-            Services.LevelInformation.RenameLevel("SmallMap", "Small Map");
-        }
-
-        if(Input.GetKeyDown(KeyCode.T))
+        if(Input.GetKeyDown(KeyCode.I))
         {
             Debug.Log(test_LevelGenerator);
             test_LevelGenerator.level.SetLevelData();
             Services.LevelInformation.AddLevel("Test", test_LevelGenerator.level.data);
             Services.LevelInformation.Save();
         }
-
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetKeyDown(KeyCode.O))
         {
             Services.LevelInformation.PrintLevelNames();
         }

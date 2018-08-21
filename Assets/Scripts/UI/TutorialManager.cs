@@ -159,7 +159,6 @@ public class TutorialManager : MonoBehaviour
     {
         tm.Update();
         skipTutorialButton.GetComponent<Image>().color = Color.Lerp(Color.white, dimTutorialButtonColor, Mathf.PingPong(Time.time, 0.5f));
-        
     }
 
     public void Init()
@@ -446,6 +445,9 @@ public class TutorialManager : MonoBehaviour
         {
             objectiveComplete[1] = true;
             UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);
+            Debug.Log(tooltipInfos[currentIndex].label);
+            
+
         }
     }
 
