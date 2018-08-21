@@ -29,7 +29,7 @@ public class Services
     public static Clock Clock { get; set; }
 
     public static TechDataLibrary TechDataLibrary { get; set; }
-    public static LevelDataLibary LevelDataLibrary { get; set; }
+    public static LevelDataLibrary LevelDataLibrary { get; set; }
 
     public static AnalyticsManager Analytics { get; set; }
 
