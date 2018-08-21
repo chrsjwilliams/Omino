@@ -150,8 +150,6 @@ public abstract class TechBuilding : Polyomino
         base.PlaceAtCurrentLocation(false, true);
         //placed = true;
         //OnPlace();
-
-<<<<<<< HEAD
         foreach (Tile tile in tiles)
         {
             MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
@@ -161,7 +159,6 @@ public abstract class TechBuilding : Polyomino
         adjacentPieces = new List<Polyomino>();
         SortOverlay();
         SetOverlaySprite();
-=======
         //foreach (Tile tile in tiles)
         //{
         //    Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
@@ -171,7 +168,6 @@ public abstract class TechBuilding : Polyomino
         //adjacentPieces = new List<Polyomino>();
         //SortOverlay();
         //SetOverlaySprite();
->>>>>>> master
     }
 
     public virtual void OnClaimEffect(Player player){ }

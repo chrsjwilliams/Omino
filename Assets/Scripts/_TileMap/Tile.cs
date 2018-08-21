@@ -161,10 +161,8 @@ public class Tile : MonoBehaviour, IVertex
         crackSr.enabled = false;
 
         transform.position = new Vector3(coord.x, coord.y, 0);
-<<<<<<< HEAD
         
         baseColor = mainSr.color;
-=======
 
         switch (Services.GameManager.mode)
         {
@@ -178,8 +176,6 @@ public class Tile : MonoBehaviour, IVertex
         }
 
         if (impassable) Debug.Log(coord.ToString());
-
->>>>>>> master
         bpAssistHighlightSr.gameObject.SetActive(false);
         //for (int i = 0; i < gridEdges.Length; i++)
         //{

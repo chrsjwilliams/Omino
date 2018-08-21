@@ -499,7 +499,7 @@ public class Polyomino : IVertex
 
         foreach (Tile tile in tiles)
         {
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             mapTile.SetOccupyingPiece(this);
             tile.OnPlace();
         }
@@ -517,7 +517,7 @@ public class Polyomino : IVertex
 
             foreach (Tile tile in tiles)
             {
-                Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                 mapTile.SetOccupyingPiece(this);
                 tile.OnPlace();
             }
@@ -895,13 +895,9 @@ public class Polyomino : IVertex
         foreach (Coord coord in hypotheticalTileCoords)
         {
             if (!Services.MapManager.IsCoordContainedInMap(coord)) return false;
-<<<<<<< HEAD
+
             MapTile mapTile = Services.MapManager.Map[coord.x, coord.y];
-            
-=======
-            Tile mapTile = Services.MapManager.Map[coord.x, coord.y];
             if (mapTile.IsOccupied() && !mapTile.occupyingPiece.destructible) return false;
->>>>>>> master
             if ((mapTile.IsOccupied() && !owner.crossSection) &&
                 ((mapTile.occupyingPiece.connected && owner.attackResources < 1 && !pretendAttackResource) ||
                 (mapTile.occupyingPiece.connected && (mapTile.occupyingPiece.owner == owner)) ||
@@ -1768,7 +1764,7 @@ public class Polyomino : IVertex
 
         foreach (Tile tile in tiles)
         {
-            Tile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+            MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
             mapTile.SetOccupyingPiece(this);
             tile.OnPlace();
         }

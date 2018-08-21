@@ -96,29 +96,16 @@ public class MapManager : MonoBehaviour
         Services.GameScene.backgroundImage.transform.position =
             new Vector3((MapWidth - 1) / 2f, (MapHeight - 1) / 2f, 0);
 
-<<<<<<< HEAD
-        _map = new MapTile[MapWidth, MapHeight];
-=======
-        _map = new Tile[MapWidth, MapHeight];
 
->>>>>>> master
+        _map = new MapTile[MapWidth, MapHeight];
         for (int i = 0; i < MapWidth; i++)
         {
             for (int j = 0; j < MapHeight; j++)
             {
-<<<<<<< HEAD
                 MapTile tile = Instantiate(Services.Prefabs.MapTile, 
                     GameSceneScript.tileMapHolder).GetComponent<MapTile>();
-                
-                tile.Init(new Coord(i, j));
-=======
-                Tile tile = Instantiate(Services.Prefabs.Tile,
-                    GameSceneScript.tileMapHolder).GetComponent<Tile>();
                 Coord tileCoord = new Coord(i, j);
-
                 tile.Init(tileCoord);
-
->>>>>>> master
                 _map[i, j] = tile;
                 tile.name = "Tile [X: " + i + ", Y: " + j + "]";
             }
