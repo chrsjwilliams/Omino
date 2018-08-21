@@ -47,7 +47,7 @@ public class Base : TechBuilding
         if (mainBase)
         {
             holder.icon.sprite = Services.UIManager.baseOverlay;
-            holder.spriteBottom.sprite = Services.UIManager.baseBottom;
+            holder.spriteBottom.sprite = Services.UIManager.homeBaseSprites[owner.playerNum-1];
         }
         else
         {

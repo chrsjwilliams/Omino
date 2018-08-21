@@ -19,7 +19,7 @@ public class TileSkin : ScriptableObject
     public Sprite[] mineBottoms;
     public Sprite[] mineTops;
     public Sprite[] mineIcons;
-    public Sprite baseBottom;
+    public Sprite[] homeBaseSprites;
     public Sprite baseOverlay;
     public Sprite sideBaseOverlay;
     public Sprite[] bombFactoryBottoms;

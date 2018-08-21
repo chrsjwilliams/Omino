@@ -199,17 +199,17 @@ public class UIManager : MonoBehaviour {
     }
 
     [SerializeField]
-    private Sprite _baseBottom;
-    public Sprite baseBottom
+    private Sprite[] _homeBaseSprites;
+    public Sprite[] homeBaseSprites
     {
         get
         {
             if (Services.GameManager.currentTileSkins[0] != null)
             {
-                return Services.GameManager.currentTileSkins[0].baseBottom;
+                return Services.GameManager.currentTileSkins[0].homeBaseSprites;
             }
             else
-                return _baseBottom;
+                return _homeBaseSprites;
         }
     }
     [SerializeField]
