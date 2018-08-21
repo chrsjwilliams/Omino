@@ -298,7 +298,7 @@ public class GameManager : MonoBehaviour
         Services.GeneralTaskManager = new TaskManager();
         Services.Prefabs = Resources.Load<PrefabDB>("Prefabs/PrefabDB");
         Services.TechDataLibrary = Resources.Load<TechDataLibrary>("ContentData/TechDataLibrary");
-        Services.LevelDataLibrary  = Resources.Load<LevelDataLibary>("ContentData/LevelDataLibrary");
+        Services.LevelDataLibrary  = Resources.Load<LevelDataLibrary>("ContentData/LevelDataLibrary");
         Services.EloRankData = Resources.Load<EloRankData>("ContentData/EloRankData");
 
         Services.InputManager = new InputManager();

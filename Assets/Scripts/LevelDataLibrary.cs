@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Level Data")]
-public class LevelDataLibary : ScriptableObject
+public class LevelDataLibrary : ScriptableObject
 {
     [System.Serializable]
     public class LevelDataEntry
