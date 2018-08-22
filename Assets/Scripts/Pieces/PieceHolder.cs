@@ -14,6 +14,7 @@ public class PieceHolder : MonoBehaviour {
     public SpriteRenderer energyLevelFront;
     public SpriteRenderer attackLevelBack;
     public SpriteRenderer attackLevelFront;
+    public SpriteRenderer glower;
     private Color prevColor;
     private Color targetColor_;
     private Color targetColor
