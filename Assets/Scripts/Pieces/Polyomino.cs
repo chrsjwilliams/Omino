@@ -1556,6 +1556,10 @@ public class Polyomino : IVertex
         UnhighlightPotentialStructureClaims();
         holder.SetEnergyDisplayStatus(false);
         holder.SetAttackDisplayStatus(false);
+        foreach(MapTile mapTile in previouslyHoveredMapTiles)
+        {
+            mapTile.SetMapSprite();
+        }
     }
 
     public virtual void SetLegalityGlowStatus()
