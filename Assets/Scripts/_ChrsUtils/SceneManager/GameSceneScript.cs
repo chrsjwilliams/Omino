@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class GameSceneScript : Scene<TransitionData>
 {
-    public const string TILE_MAP_HOLDER = "TileMapHolder";
-    public static Transform tileMapHolder;
+    public Transform tileMapHolder;
 
     private float _colorChangeTime;
     public Transform backgroundImage;
@@ -32,7 +31,6 @@ public class GameSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
-        tileMapHolder = GameObject.Find(TILE_MAP_HOLDER).transform;
         Time.timeScale = 1;
         Services.GameScene = this;
         tm = new TaskManager();

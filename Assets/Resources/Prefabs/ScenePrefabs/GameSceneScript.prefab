@@ -6920,8 +6920,6 @@ MonoBehaviour:
   pauseButton: {fileID: 114392025528106436}
   replayButton: {fileID: 114888347824592882}
   levelSelectButton: {fileID: 114431717545953924}
-  _destructorIcon: {fileID: 21300000, guid: 7d0996cc5e00d484ea2b830119ea3b94, type: 3}
-  _splashIcon: {fileID: 21300000, guid: f4a173ba054a8374ca5fdcc9635119be, type: 3}
   _factoryBottoms:
   - {fileID: 21300000, guid: 30e7f033b5cf63246af1baa713065fa6, type: 3}
   - {fileID: 21300000, guid: 6dae32a24bb264d4faa23b23a6e332e7, type: 3}
@@ -6944,7 +6942,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b70d593618c5c834b8dc1685260487b2, type: 3}
   - {fileID: 21300000, guid: b7ce5498360106441b86c3d2fde4c83e, type: 3}
   - {fileID: 21300000, guid: b70d593618c5c834b8dc1685260487b2, type: 3}
-  _baseBottom: {fileID: 21300000, guid: 53bf950c52a835d4e855c72b6d538eb9, type: 3}
+  _homeBaseSprites: []
   _baseOverlay: {fileID: 21300000, guid: ea02fb0ae45638c47bd8b402b7b15366, type: 3}
   _sideBaseOverlay: {fileID: 21300000, guid: 461f560e37344194390b7a0727d1f045, type: 3}
   _bombFactoryBottoms:
@@ -12627,10 +12625,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19f58c43a415a0c458c37b1fa3900f31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileMapHolder: {fileID: 4153143093252728}
   backgroundImage: {fileID: 4489865121243818}
   demoMode: 0
   evolutionMode: 0
-  backgroundColor: {r: 0.86666673, g: 0.86666673, b: 0.86666673, a: 1}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &114745647514687770
 MonoBehaviour:
   m_ObjectHideFlags: 1

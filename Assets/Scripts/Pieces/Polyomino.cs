@@ -918,7 +918,7 @@ public class Polyomino : IVertex
                 return false;
         }
 
-        if (owner!= null && owner.crossSection && completelycovered) return false;
+        if (owner != null && owner.crossSection && completelycovered) return false;
 
         return true;
     }

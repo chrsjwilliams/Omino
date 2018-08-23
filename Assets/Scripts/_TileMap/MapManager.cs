@@ -103,7 +103,7 @@ public class MapManager : MonoBehaviour
             for (int j = 0; j < MapHeight; j++)
             {
                 MapTile tile = Instantiate(Services.Prefabs.MapTile, 
-                    GameSceneScript.tileMapHolder).GetComponent<MapTile>();
+                    Services.GameScene.tileMapHolder).GetComponent<MapTile>();
                 Coord tileCoord = new Coord(i, j);
                 tile.Init(tileCoord);
                 _map[i, j] = tile;
