@@ -891,7 +891,7 @@ public class Polyomino : IVertex
         {
             hypotheticalTileCoords.Add(hypotheticalCoord.Add(tile.relativeCoord));
         }
-        bool completelycovered = true;
+        bool completelyCovered = true;
         foreach (Coord coord in hypotheticalTileCoords)
         {
             if (!Services.MapManager.IsCoordContainedInMap(coord)) return false;
@@ -905,9 +905,11 @@ public class Polyomino : IVertex
                 return false;
             if (mapTile.IsOccupied() && 
                 mapTile.occupyingPiece.shieldDurationRemaining > 0 && 
-                !pretendAttackResource)
+                !pretendAttackResource &&
+                (!owner.crossSection || mapTile.occupyingPiece.owner == null ||
+                mapTile.occupyingPiece.owner != owner))
                 return false;
-            if(owner.crossSection && (!mapTile.IsOccupied() || mapTile.occupyingPiece.owner != owner)) completelycovered = false;
+            if(owner.crossSection && (!mapTile.IsOccupied() || mapTile.occupyingPiece.owner != owner)) completelyCovered = false;
             if (owner.crossSection && mapTile.occupyingPiece != null &&
                 mapTile.occupyingPiece.owner != null && mapTile.occupyingPiece.owner != owner && 
                 mapTile.occupyingPiece is TechBuilding)
@@ -918,7 +920,7 @@ public class Polyomino : IVertex
                 return false;
         }
 
-        if (owner != null && owner.crossSection && completelycovered) return false;
+        if (owner != null && owner.crossSection && completelyCovered) return false;
 
         return true;
     }

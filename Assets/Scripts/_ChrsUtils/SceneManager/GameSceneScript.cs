@@ -8,7 +8,6 @@ public class GameSceneScript : Scene<TransitionData>
 {
     public Transform tileMapHolder;
 
-    private float _colorChangeTime;
     public Transform backgroundImage;
     public TaskManager tm;
 
@@ -37,7 +36,6 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GameEventManager = new GameEventsManager();
         Services.UIManager = GetComponentInChildren<UIManager>();
         Services.TutorialManager = GetComponentInChildren<TutorialManager>();
-        _colorChangeTime = 0f;
         Services.MapManager.GenerateMap();
         Services.UIManager.UIForSinglePlayer(true);
 
@@ -187,7 +185,6 @@ public class GameSceneScript : Scene<TransitionData>
         // Update is called once per frame
         void Update ()
     {
-        _colorChangeTime += Time.deltaTime;
         switch (Services.GameManager.mode)
         {
             case TitleSceneScript.GameMode.HyperSOLO:
