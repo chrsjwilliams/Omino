@@ -379,6 +379,9 @@ public class AudioManager : MonoBehaviour {
         }
         
         levelMusicSources[0].volume = BASEMUSICVOLUME;
+        
+        Services.Clock.ClearEvents();
+        StopAllCoroutines();
     }
 
     public void SetMainTrack(AudioClip clip, float volume)
