@@ -1,0 +1,78 @@
+
+There shouldn't be any magic numbers any longer in the game!
+
+Everytime you find yourself making a magic number, ESPECIALLY FOR ANIMAITONS:
+
+1) Make a global.
+
+float fadeInTime;
+
+2) In the start function, assign it's value from the clock.
+
+fadeInTime = Services.Clock.MeasureLength();
+
+========== The options are as follows ==========
+
+ThirtySecondLength() -> The shortest length of time.  For our game, ~ a sixteenth of a second.
+SixteenthLength() -> The second shortest length of time.  For our game, ~ an eighth of a second.
+EighthLength() -> the third shortest length of time.  For our game, ~ a quarter of a second.
+QuarterLength() -> the third longest amount of time.  For our game, ~ a half a second.
+HalfLength() -> the second longest amount of time.  For our game, ~ one second.
+WholeLength() -> the longest amount of time.  Usually the length of a measure.  For our game, ~ two seconds.
+MeasureLength(); -> will take an entire measure. For our game, ~ two seconds
+
+If you need something longer than these, multiply the whole length by something, or add another length to it.  However, it is much preferable to pick one time that is closest to what you want.
+
+fadeInTime = Services.Clock.WholeLength() + Services.CLock.HalfLength();
+fadeInTime = Services.Clock.WholeLength() * 2;
+
+
+---------------------------------------------------------------------------
+
+Visual animations should happen on the next beat, not immediately.  Here's how to do it!
+
+1) Make a function that contains the animation.
+
+private void _FadeInAnimation() {
+    // My awesome animation, that doesn't use magic numbers
+}
+
+2) When the animation would be called, instead call "SyncFunction" from the clock.
+
+Services.Clock.SyncFunction(_FadeInAnimation, BeatValue.Quarter);
+
+The options for syncing are an enum in Clock, however, for most uses, you want -
+
+BeatValue.Quarter
+
+-- or --
+
+BeatValue.Measure.
+
+If quarter is too slow, you can use BeatValue.Eighth.  THIS IS NOT PREFERRED, IT IS BETTER TO USE QUARTER.
+
+
+---------------------------------------------------------------------------
+
+Some things should happen every single beat, or every single measure.  The fade in and out of the glow is an example of this.  You can look at "Glower.cs" for an example of this.
+
+
+1) Make a function that contains the animation / event / etc.
+
+private void _FadeInAndOutOfGlow(BeatEvent e) {
+    // Glow Fade In for half a measure
+    // Glow Fade Out for half a measure
+}
+
+2) In the start function for the object, add it to the Clock's event manager.
+
+Services.Clock.eventManager.Register<Quarter>(_FadeInAndOutOfGlow);
+
+USE EITHER QUARTER, OR MEASURE ->  There are other options, but you probably won't want them.
+
+WARNING!!!!!  If you do this, you need to either a) unregister the event, or b) clear all events.
+
+Services.Clock.ClearEvents() ->  USE THIS WHILE LEAVING A SCENE
+
+In an "OnDestroy" function:
+Services.Clock.eventManager.Unregister<Quarter>(_FadeInAndOutOfGlow); -> USE THIS WHEN THE OBJECT IS DELETED, BUT THE SCENE CONTINUES.
