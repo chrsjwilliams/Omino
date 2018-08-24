@@ -129,11 +129,6 @@ public class Tile : MonoBehaviour, IVertex
     [SerializeField]
     private SpriteRenderer[] gridEdges;
     //private readonly Color bpAssistColor = new Color(1, 1, 1);
-    private bool bombSettling;
-    private float bombSettleTimeElapsed;
-    private const float bombSettleDuration = 0.4f;
-    private float currentBombAlpha;
-    private float currentNormalAlpha;
     private SortingGroup sortingGroup;
     private float scaleUpTimeElapsed;
     private float scaleUpDelayTime;
@@ -147,6 +142,19 @@ public class Tile : MonoBehaviour, IVertex
     private const float pathHighlightUpDuration = 0.1f;
     private const float pathHighlightDownDuration = 0.6f;
     private float pathHighlightDelay;
+
+    private float entranceTime;
+    private float entranceDelayTime;
+    private const float entranceTotalDuration = 0.7f;
+    private const float blackEntranceTotalDuration = 1f;
+    public const float entranceStaggerTime = 0.2f;
+    private const float entranceOuterDelay = 0f;
+    private const float entranceInnerDelay = 0.1f;
+    private bool entering;
+    private float blackEntranceTime;
+    private bool blackEntering;
+
+
 
     public void Init(Coord coord_, bool impassable_ = false)
     {
@@ -214,7 +222,6 @@ public class Tile : MonoBehaviour, IVertex
     public void OnPlace()
     {
         ToggleIllegalLocationIcon(false);
-        SetAlpha(0.1f);
         //SetFilledUIFillAmount(0);
         topSr.enabled = true;
     }
@@ -272,10 +279,69 @@ public class Tile : MonoBehaviour, IVertex
 
     private void Update()
     {
-        if (changingColor) LerpToTargetColor();
+        //if (changingColor) LerpToTargetColor();
         if (scaling) ScaleUp();
         if (pathHighlightDelay > 0) TickDownHighlightDelay();
         if (highlightingPath) PathHighlight();
+        if (entranceDelayTime > 0) TickDownEntranceDelay();
+        if (entering) EntranceAnimation();
+        if (blackEntering) BlackEntrance();
+    }
+
+    private void TickDownEntranceDelay()
+    {
+        entranceDelayTime -= Time.deltaTime;
+        if (entranceDelayTime <= 0) entering = true;
+    }
+
+    private void BlackEntrance()
+    {
+        blackEntranceTime += Time.deltaTime;
+        float rawDuration = Mathf.Min(1, blackEntranceTime / blackEntranceTotalDuration);
+        MapTile mapTile = Services.MapManager.Map[coord.x, coord.y];
+        mapTile.FadeToFull(Easing.SineEaseOut(rawDuration));
+        if (blackEntranceTime >= blackEntranceTotalDuration) blackEntering = false;
+    }
+
+    public void StartEntrance(float delay)
+    {
+        entranceDelayTime = delay;
+        entranceTime = 0;
+        Color zeroAlpha = new Color(baseColor.r, baseColor.g, baseColor.b, 0);
+        mainSr.color = zeroAlpha;
+        topSr.color = zeroAlpha;
+        Services.MapManager.Map[coord.x, coord.y].SetMapSprite(true);
+        blackEntranceTime = 0;
+        blackEntering = true;
+    }
+
+
+    private void EntranceAnimation()
+    {
+        entranceTime += Time.deltaTime;
+        float rawDuration = Mathf.Min(1, entranceTime / entranceTotalDuration);
+        float rawOuterDuration = Mathf.Min(1, (entranceTime-entranceOuterDelay) / 
+            (entranceTotalDuration-entranceOuterDelay));
+        float rawInnerDuration = Mathf.Min(1, (entranceTime - entranceInnerDelay - entranceOuterDelay) /
+            (entranceTotalDuration - entranceInnerDelay-entranceOuterDelay));
+        //MapTile mapTile = Services.MapManager.Map[coord.x, coord.y];
+        //mapTile.SetMapSprite();
+        //mapTile.FadeToFull(Easing.ExpoEaseOut(rawDuration));
+        Color zeroAlpha = new Color(baseColor.r, baseColor.g, baseColor.b, 0);
+        if (entranceTime >= entranceOuterDelay)
+        {
+            mainSr.color = Color.Lerp(zeroAlpha, baseColor,
+                Easing.SineEaseOut(rawOuterDuration));
+        }
+        if(entranceTime >= entranceInnerDelay)
+        {
+            topSr.color = Color.Lerp(zeroAlpha, baseColor,
+                Easing.SineEaseOut(rawInnerDuration));
+        }
+        if(entranceTime >= entranceTotalDuration)
+        {
+            entering = false;
+        }
     }
 
     public void StartPathHighlight(float delay)

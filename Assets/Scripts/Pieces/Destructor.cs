@@ -159,11 +159,11 @@ public class Destructor : Polyomino
         }
     }
 
-    protected override void CleanUpUI()
-    {
-        base.CleanUpUI();
-        UnhighlightTargetedPieces();
-    }
+    //protected override void CleanUpUI()
+    //{
+    //    base.CleanUpUI();
+    //    UnhighlightTargetedPieces();
+    //}
 
     void UnhighlightTargetedPieces()
     {

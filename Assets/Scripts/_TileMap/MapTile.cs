@@ -40,6 +40,7 @@ public class MapTile : MonoBehaviour {
     {
         if (status) sr.sprite = gridSpriteFilled;
         else sr.sprite = gridSpriteEmpty;
+        if (status) Debug.Log("turning on map at " + coord);
     }
 
     public void SetMapSpriteHovered(bool legal)
@@ -51,7 +52,7 @@ public class MapTile : MonoBehaviour {
     public void SetOccupyingPiece(Polyomino piece)
     {
         occupyingPiece = piece;
-        SetMapSprite();
+        if(piece is TechBuilding) SetMapSprite();
     }
 
     public void SetOccupyingBlueprint(Blueprint blueprint)
@@ -90,5 +91,10 @@ public class MapTile : MonoBehaviour {
     {
         Color color = bgSr.color;
         bgSr.color = new Color(color.r, color.g, color.b, alpha);
+    }
+
+    public void FadeToFull(float progress)
+    {
+        sr.color = Color.Lerp(new Color(1, 1, 1, 0), Color.white, progress);
     }
 }

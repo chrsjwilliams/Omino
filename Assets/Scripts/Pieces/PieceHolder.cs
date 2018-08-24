@@ -53,13 +53,6 @@ public class PieceHolder : MonoBehaviour {
         if (changingColor) LerpToTargetColor();
         if (pathHighlightDelay > 0) TickDownHighlightDelay();
         if (highlightingPath) PathHighlight();
-        if (!changingColor && !highlightingPath && 
-            piece is TechBuilding &&
-            ((piece.owner == null && spriteBottom.color.r != 0.6f) ||
-            (piece.owner != null && spriteBottom.color != piece.owner.ColorScheme[0])))
-        {
-            Debug.Break();
-        }
     }
 
     public void ShiftColor(Color color)
@@ -70,6 +63,7 @@ public class PieceHolder : MonoBehaviour {
     public void SetBaseColor(Color color)
     {
         spriteBottom.color = color;
+        icon.color = color;
         baseColor = color;
     }
 
@@ -233,5 +227,19 @@ public class PieceHolder : MonoBehaviour {
             highlightingPath = false;
         }
         spriteBottom.color = color;
+    }
+
+    public void SetTechStatus(Player owner)
+    {
+        if(owner == null)
+        {
+            spriteBottom.enabled = false;
+            icon.color = Services.GameManager.NeutralColor;
+        }
+        else
+        {
+            spriteBottom.enabled = true;
+            SetBaseColor(owner.ColorScheme[0]);
+        }
     }
 }

@@ -134,7 +134,6 @@ public abstract class TechBuilding : Polyomino
         base.MakePhysicalPiece();
         HideFromInput();
         ScaleHolder(Vector3.one);
-        holder.spriteBottom.color = Color.white;
         TurnOffGlow();
         ListenForInput(true);
         foreach(Tile tile in tiles)
@@ -232,19 +231,12 @@ public abstract class TechBuilding : Polyomino
     {
         base.SetOverlaySprite();
         holder.spriteBottom.sprite = Services.UIManager.structureOverlay;
-        if (owner == null)
-        {
-            SetNeutralVisualStatus();
-        }
-        else
-        {
-            holder.SetBaseColor(owner.ColorScheme[0]);
-        }
+        holder.SetTechStatus(owner);
     }
 
     public void SetNeutralVisualStatus()
     {
-        holder.SetBaseColor(new Color(0.6f, 0.6f, 0.6f));
+        //holder.SetBaseColor(Services.GameManager.NeutralColor);
     }
 
     public override void OnInputDown(bool fromPlayTask)

@@ -2,6 +2,7 @@
 using BeatManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public enum BuildingType
 {
@@ -674,7 +675,20 @@ public class Polyomino : IVertex
             }
             for (int i = 0; i < pathToHighlight.Count; i++)
             {
-                pathToHighlight[i].PathHighlight(i * Player.pathHighlightTotalDuration / pathToHighlight.Count);
+                //pathToHighlight[i].PathHighlight(i * Player.pathHighlightTotalDuration / pathToHighlight.Count);
+            }
+            int entranceIndex = 0;
+            for (int i = 0; i < distanceLevels.Count; i++)
+            {
+                distanceLevels[i].OrderBy(t => t.centerCoord.Distance(owner.mainBase.centerCoord));
+                for (int j = 0; j < distanceLevels[i].Count; j++)
+                {
+                    Tile tile = distanceLevels[i][j].tiles[0];
+                    tile.StartEntrance(Tile.entranceStaggerTime 
+                        * entranceIndex + float.Epsilon);
+                    entranceIndex++;
+
+                }
             }
         }
     }
@@ -1452,17 +1466,19 @@ public class Polyomino : IVertex
                 Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
                 Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
             }
-          
+            bool piecePlaced;
             if (IsPlacementLegal() && affordable && !owner.gameOver && !forceCancel)
             {
                 PlaceAtCurrentLocation();
+                piecePlaced = true;
             }
             else
             {
                 owner.CancelSelectedPiece();
                 EnterUnselectedState(false);
+                piecePlaced = false;
             }
-            CleanUpUI();
+            CleanUpUI(piecePlaced);
             SortOnSelection(false);
             holder.transform.localPosition = new Vector3(holder.transform.position.x, holder.transform.position.y, 0);
         }
@@ -1553,14 +1569,17 @@ public class Polyomino : IVertex
         OnInputUp(true);
     }
 
-    protected virtual void CleanUpUI()
+    protected virtual void CleanUpUI(bool piecePlaced)
     {
         UnhighlightPotentialStructureClaims();
         holder.SetEnergyDisplayStatus(false);
         holder.SetAttackDisplayStatus(false);
-        foreach(MapTile mapTile in previouslyHoveredMapTiles)
+        if (!piecePlaced)
         {
-            mapTile.SetMapSprite();
+            foreach (MapTile mapTile in previouslyHoveredMapTiles)
+            {
+                mapTile.SetMapSprite();
+            }
         }
     }
 
