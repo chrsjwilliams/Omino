@@ -23,6 +23,8 @@ MeasureLength(); -> will take an entire measure. For our game, ~ two seconds
 
 If you need something longer than these, multiply the whole length by something, or add another length to it.  However, it is much preferable to pick one time that is closest to what you want.
 
+You don't need visual animations faster than a sixteenth of a second.
+
 fadeInTime = Services.Clock.WholeLength() + Services.CLock.HalfLength();
 fadeInTime = Services.Clock.WholeLength() * 2;
 
