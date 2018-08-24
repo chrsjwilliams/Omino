@@ -381,18 +381,31 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
             //DestroyRotationUI();
             SortOnSelection(false);
+            bool piecePlaced;
             if (IsPlacementLegal() && !owner.gameOver && !forceCancel)
             {
                 PlaceAtCurrentLocation();
                 Services.Analytics.PlayedBlueprint();
                 //ListenForInput();
                 //IncrementSortingOrder(-20000);
+                piecePlaced = true;
             }
             else
             {
                 owner.CancelSelectedBlueprint();
                 EnterUnselectedState(false);
+                piecePlaced = false;
             }
+
+            CleanUpUI(piecePlaced);
+        }
+    }
+
+    protected override void CleanUpUI(bool piecePlaced)
+    {
+        foreach (MapTile mapTile in previouslyHoveredMapTiles)
+        {
+            mapTile.SetMapSprite();
         }
     }
 

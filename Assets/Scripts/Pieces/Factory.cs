@@ -29,7 +29,7 @@ public class Factory : Blueprint
         int spriteIndex = numRotations % 2;
         holder.spriteBottom.sprite =
             Services.UIManager.factoryBottoms[spriteIndex];
-        holder.dropShadow.sprite = Services.UIManager.factoryTops[spriteIndex];
+        //holder.dropShadow.sprite = Services.UIManager.factoryTops[spriteIndex];
         holder.icon.sprite = Services.UIManager.factoryIcons
             [(2 * (owner.playerNum - 1)) + spriteIndex];
     }

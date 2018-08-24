@@ -35,7 +35,7 @@ public class Barracks : Blueprint
         int spriteIndex = numRotations % 4;
         holder.spriteBottom.sprite =
             Services.UIManager.bombFactoryBottoms[spriteIndex];
-        holder.dropShadow.sprite = Services.UIManager.bombFactoryTops[spriteIndex];
+        //holder.dropShadow.sprite = Services.UIManager.bombFactoryTops[spriteIndex];
         holder.icon.sprite = Services.UIManager.bombFactoryIcons
             [(4 * (owner.playerNum - 1)) + spriteIndex];
     }

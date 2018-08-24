@@ -28,11 +28,11 @@ public class Generator : Blueprint
     {
         base.SetIconSprite();
         holder.icon.transform.localPosition = GetCenterpoint();
-        holder.dropShadow.transform.localPosition = GetCenterpoint();
+        //holder.dropShadow.transform.localPosition = GetCenterpoint();
         int spriteIndex = numRotations % 2;
         holder.spriteBottom.sprite =
             Services.UIManager.mineBottoms[spriteIndex];
-        holder.dropShadow.sprite = Services.UIManager.mineTops[spriteIndex];
+        //holder.dropShadow.sprite = Services.UIManager.mineTops[spriteIndex];
         holder.icon.sprite = Services.UIManager.mineIcons
             [(2 * (owner.playerNum - 1)) + spriteIndex];
     }
