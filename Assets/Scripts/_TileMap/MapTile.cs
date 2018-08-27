@@ -40,7 +40,6 @@ public class MapTile : MonoBehaviour {
     {
         if (status) sr.sprite = gridSpriteFilled;
         else sr.sprite = gridSpriteEmpty;
-        if (status) Debug.Log("turning on map at " + coord);
     }
 
     public void SetMapSpriteHovered(bool legal)

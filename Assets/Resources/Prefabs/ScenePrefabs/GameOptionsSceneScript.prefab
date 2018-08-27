@@ -2759,8 +2759,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   p1HandicapSlider: {fileID: 114130409037213520}
   p2HandicapSlider: {fileID: 114998009327188998}
-  lerpSpeed: 0
-  handicapValues: []
   p1HandicapValue: 0
   p2HandicapValue: 0
   p1Text: {fileID: 114662671855024680}
@@ -6210,7 +6208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f1acffddf52e8347a264f5e745d4c26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level: {fileID: 11400000, guid: 516da57c28974ca4baec61839716f227, type: 2}
+  level: {fileID: 0}
   unlocked: 0
 --- !u!114 &114318744767520640
 MonoBehaviour:
@@ -7064,6 +7062,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 662bd2fbb9f5da842b3947b038460ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  widthBased: 0
 --- !u!114 &114387534327552974
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9244,6 +9243,12 @@ MonoBehaviour:
   winCount: {fileID: 114791334967754766}
   streakCount: {fileID: 114373719598082078}
   rating: {fileID: 114234231122687926}
+  bestRating: {fileID: 0}
+  rankText: {fileID: 0}
+  bestRankText: {fileID: 0}
+  rankImage: {fileID: 0}
+  bestRankImage: {fileID: 0}
+  progressBar: {fileID: 0}
 --- !u!114 &114601487292244774
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -10153,6 +10158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 662bd2fbb9f5da842b3947b038460ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  widthBased: 0
 --- !u!114 &114697544043402768
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -10277,6 +10283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 662bd2fbb9f5da842b3947b038460ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  widthBased: 0
 --- !u!114 &114736239366825266
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11666,7 +11673,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
