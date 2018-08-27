@@ -145,11 +145,11 @@ public class Tile : MonoBehaviour, IVertex
 
     private float entranceTime;
     private float entranceDelayTime;
-    private const float entranceTotalDuration = 0.7f;
-    private const float blackEntranceTotalDuration = 1f;
-    public const float entranceStaggerTime = 0.2f;
+    private const float entranceTotalDuration = 0.4f;
+    private const float blackEntranceTotalDuration = 0.8f;
+    public const float entranceStaggerTime = 0.1f;
     private const float entranceOuterDelay = 0f;
-    private const float entranceInnerDelay = 0.1f;
+    private const float entranceInnerDelay = 0.075f;
     private bool entering;
     private float blackEntranceTime;
     private bool blackEntering;

@@ -42,6 +42,10 @@ public class PieceHolder : MonoBehaviour {
     private float pathHighlightDelay;
     private Color baseColor;
 
+    private bool beingClaimed;
+    private const float claimAnimDuration = 0.8f;
+    private float claimTimeElapsed;
+
 
     // Use this for initialization
     void Start () {
@@ -53,6 +57,15 @@ public class PieceHolder : MonoBehaviour {
         if (changingColor) LerpToTargetColor();
         if (pathHighlightDelay > 0) TickDownHighlightDelay();
         if (highlightingPath) PathHighlight();
+        if (beingClaimed) AnimateClaim();
+    }
+
+    private void AnimateClaim()
+    {
+        claimTimeElapsed += Time.deltaTime;
+        float progress = Easing.SineEaseIn(Mathf.Min(1,claimTimeElapsed / claimAnimDuration));
+        spriteBottom.material.SetFloat("_Cutoff", 1 - progress);
+        if (claimTimeElapsed >= claimAnimDuration) beingClaimed = false;
     }
 
     public void ShiftColor(Color color)
@@ -229,7 +242,7 @@ public class PieceHolder : MonoBehaviour {
         spriteBottom.color = color;
     }
 
-    public void SetTechStatus(Player owner)
+    public void SetTechStatus(Player owner, bool initialBase = false)
     {
         if(owner == null)
         {
@@ -238,6 +251,17 @@ public class PieceHolder : MonoBehaviour {
         }
         else
         {
+            if (!initialBase)
+            {
+                spriteBottom.material.SetFloat("_Cutoff", 1);
+                beingClaimed = true;
+                claimTimeElapsed = 0;
+            }
+            else
+            {
+                beingClaimed = false;
+                spriteBottom.material.SetFloat("_Cutoff", 0);
+            }
             spriteBottom.enabled = true;
             SetBaseColor(owner.ColorScheme[0]);
         }

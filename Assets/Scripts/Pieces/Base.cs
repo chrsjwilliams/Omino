@@ -48,6 +48,7 @@ public class Base : TechBuilding
         {
             holder.icon.sprite = Services.UIManager.baseOverlay;
             holder.spriteBottom.sprite = Services.UIManager.homeBaseSprites[owner.playerNum-1];
+            holder.SetTechStatus(owner, true);
         }
         else
         {
