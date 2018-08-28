@@ -14,7 +14,7 @@ Shader "Sprites/Outline"
         [PerRendererData] _EnableExternalAlpha("Enable External Alpha", Float) = 0
 
         [HideInInspector] _IsOutlineEnabled("Enable Outline", float) = 0
-        [HideInInspector] _OutlineColor("Outline Color", Color) = (1,1,1,1)
+        _OutlineColor("Outline Color", Color) = (1,1,1,1)
         [HideInInspector] _OutlineSize("Outline Size", float) = 1
         [HideInInspector] _AlphaThreshold("Alpha Threshold", Float) = 0.01
     }
