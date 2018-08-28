@@ -53,6 +53,7 @@ public class Base : TechBuilding
         else
         {
             holder.icon.sprite = Services.UIManager.sideBaseOverlay;
+            holder.SetTechStatus(owner);
         }
     }
 

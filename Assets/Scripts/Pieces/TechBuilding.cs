@@ -231,7 +231,7 @@ public abstract class TechBuilding : Polyomino
     {
         base.SetOverlaySprite();
         holder.spriteBottom.sprite = Services.UIManager.structureOverlay;
-        holder.SetTechStatus(owner);
+        if(!(this is Base)) holder.SetTechStatus(owner);
     }
 
     public void SetNeutralVisualStatus()

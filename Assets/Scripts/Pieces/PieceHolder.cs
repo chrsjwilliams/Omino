@@ -43,18 +43,21 @@ public class PieceHolder : MonoBehaviour {
     private Color baseColor;
 
     private bool beingClaimed;
-    private const float claimAnimDuration = 0.8f;
+    private float claimAnimDuration;
+    private float claimIconChangeDuration;
     private float claimTimeElapsed;
+    private Color iconPrevColor;
 
 
     // Use this for initialization
     void Start () {
-		
+        claimAnimDuration = Services.Clock.QuarterLength();
+        claimIconChangeDuration = Services.Clock.QuarterLength();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (changingColor) LerpToTargetColor();
+        if (changingColor) LerpToTargetColor(spriteBottom, prevColor, targetColor);
         if (pathHighlightDelay > 0) TickDownHighlightDelay();
         if (highlightingPath) PathHighlight();
         if (beingClaimed) AnimateClaim();
@@ -63,9 +66,21 @@ public class PieceHolder : MonoBehaviour {
     private void AnimateClaim()
     {
         claimTimeElapsed += Time.deltaTime;
-        float progress = Easing.SineEaseIn(Mathf.Min(1,claimTimeElapsed / claimAnimDuration));
-        spriteBottom.material.SetFloat("_Cutoff", 1 - progress);
-        if (claimTimeElapsed >= claimAnimDuration) beingClaimed = false;
+        if (claimTimeElapsed <= claimAnimDuration)
+        {
+            float progress = Easing.SineEaseIn(Mathf.Min(1, claimTimeElapsed / claimAnimDuration));
+            spriteBottom.material.SetFloat("_Cutoff", 1 - progress);
+        }
+        else
+        {
+            spriteBottom.material.SetFloat("_Cutoff", 0);
+            icon.color = Color.Lerp(iconPrevColor, piece.owner.ColorScheme[0],
+                Easing.QuadEaseOut(Mathf.Min(1, 
+                (claimTimeElapsed - claimAnimDuration) /
+                claimIconChangeDuration)));
+        }
+        if (claimTimeElapsed >= claimAnimDuration + claimIconChangeDuration)
+            beingClaimed = false;
     }
 
     public void ShiftColor(Color color)
@@ -80,10 +95,11 @@ public class PieceHolder : MonoBehaviour {
         baseColor = color;
     }
 
-    private void LerpToTargetColor()
+    private void LerpToTargetColor(SpriteRenderer sr, Color start, 
+        Color target)
     {
         colorChangeTimeElapsed += Time.deltaTime;
-        spriteBottom.color =  Color.Lerp(prevColor, targetColor,
+        sr.color =  Color.Lerp(start, target,
             colorChangeTimeElapsed / colorChangeDuration);
         if (colorChangeTimeElapsed >= colorChangeDuration)
         {
@@ -244,7 +260,7 @@ public class PieceHolder : MonoBehaviour {
 
     public void SetTechStatus(Player owner, bool initialBase = false)
     {
-        if(owner == null)
+        if (owner == null)
         {
             spriteBottom.enabled = false;
             icon.color = Services.GameManager.NeutralColor;
@@ -253,17 +269,25 @@ public class PieceHolder : MonoBehaviour {
         {
             if (!initialBase)
             {
-                spriteBottom.material.SetFloat("_Cutoff", 1);
-                beingClaimed = true;
-                claimTimeElapsed = 0;
+                Services.Clock.SyncFunction(StartClaimAnimation, BeatManagement.Clock.BeatValue.Eighth);
+                Debug.Log("not a base");
             }
             else
             {
                 beingClaimed = false;
                 spriteBottom.material.SetFloat("_Cutoff", 0);
+                spriteBottom.enabled = true;
             }
-            spriteBottom.enabled = true;
-            SetBaseColor(owner.ColorScheme[0]);
+            //SetBaseColor(owner.ColorScheme[0]);
         }
+        iconPrevColor = icon.color;
+    }
+
+    private void StartClaimAnimation()
+    {
+        spriteBottom.material.SetFloat("_Cutoff", 1);
+        spriteBottom.enabled = true;
+        beingClaimed = true;
+        claimTimeElapsed = 0;
     }
 }
