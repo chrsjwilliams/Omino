@@ -132,24 +132,24 @@ public class Tile : MonoBehaviour, IVertex
     private SortingGroup sortingGroup;
     private float scaleUpTimeElapsed;
     private float scaleUpDelayTime;
-    private const float scaleUpDuration = 0.3f;
-    public const float scaleUpStaggerTime = 0.1f;
+    private float scaleUpDuration = 0.3f;
+    public static float scaleUpStaggerTime = 0.1f;
     private bool scaling;
     private bool rippleEmitted;
 
     private float pathHighlightTime;
     private bool highlightingPath;
-    private const float pathHighlightUpDuration = 0.1f;
-    private const float pathHighlightDownDuration = 0.6f;
+    private float pathHighlightUpDuration = 0.1f;
+    private float pathHighlightDownDuration = 0.6f;
     private float pathHighlightDelay;
 
     private float entranceTime;
     private float entranceDelayTime;
-    private const float entranceTotalDuration = 0.4f;
-    private const float blackEntranceTotalDuration = 0.8f;
-    public const float entranceStaggerTime = 0.1f;
-    private const float entranceOuterDelay = 0f;
-    private const float entranceInnerDelay = 0.075f;
+    private float entranceTotalDuration = 0.4f;
+    private float blackEntranceTotalDuration = 0.8f;
+    public static float entranceStaggerTime = 0.1f;
+    private float entranceOuterDelay = 0f;
+    private float entranceInnerDelay = 0.075f;
     private bool entering;
     private float blackEntranceTime;
     private bool blackEntering;
@@ -158,6 +158,17 @@ public class Tile : MonoBehaviour, IVertex
 
     public void Init(Coord coord_, bool impassable_ = false)
     {
+        /// REMOVING MAGIC NUMBERS ///
+        scaleUpDuration = Services.Clock.EighthLength();
+        scaleUpStaggerTime = Services.Clock.SixteenthLength();
+        pathHighlightUpDuration = Services.Clock.SixteenthLength();
+        pathHighlightDownDuration = Services.Clock.QuarterLength();
+
+        entranceTotalDuration = Services.Clock.QuarterLength();
+        blackEntranceTotalDuration = Services.Clock.HalfLength();
+        entranceStaggerTime = Services.Clock.SixteenthLength();
+        entranceInnerDelay = Services.Clock.SixteenthLength();
+        
         coord = coord_;
         boxCol = GetComponent<BoxCollider2D>();
         impassable = impassable_;
