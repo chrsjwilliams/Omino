@@ -139,6 +139,7 @@ public abstract class TechBuilding : Polyomino
         foreach(Tile tile in tiles)
         {
             tile.mainSr.enabled = false;
+            tile.topSr.enabled = false;
             tile.SetFilledUIFillAmount(0);
             tile.highlightSr.sortingLayerName = "Underlay";
         }

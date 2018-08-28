@@ -1648,7 +1648,7 @@ public class Polyomino : IVertex
                 List<Tile> illegalTiles = GetIllegalTiles();
                 foreach(Tile tile in tiles)
                 {
-                    tile.ToggleIllegalLocationIcon(illegalTiles.Contains(tile));
+                    //tile.ToggleIllegalLocationIcon(illegalTiles.Contains(tile));
                 }
             }
         }

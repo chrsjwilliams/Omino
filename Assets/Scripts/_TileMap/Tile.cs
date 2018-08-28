@@ -223,7 +223,7 @@ public class Tile : MonoBehaviour, IVertex
     {
         ToggleIllegalLocationIcon(false);
         //SetFilledUIFillAmount(0);
-        topSr.enabled = true;
+        //topSr.enabled = true;
     }
 
 
@@ -306,6 +306,7 @@ public class Tile : MonoBehaviour, IVertex
     public void StartEntrance(float delay)
     {
         entranceDelayTime = delay;
+        topSr.enabled = true;
         entranceTime = 0;
         Color zeroAlpha = new Color(baseColor.r, baseColor.g, baseColor.b, 0);
         mainSr.color = zeroAlpha;
@@ -314,6 +315,8 @@ public class Tile : MonoBehaviour, IVertex
         blackEntranceTime = 0;
         blackEntering = true;
     }
+
+
 
 
     private void EntranceAnimation()
@@ -419,19 +422,6 @@ public class Tile : MonoBehaviour, IVertex
         scaleUpDelayTime = delay;
         scaleUpTimeElapsed = 0;
         transform.localScale = Vector3.zero;
-    }
-
-    void LerpToTargetColor()
-    {
-        colorChangeTimeElapsed += Time.deltaTime;
-        SetSrAndUIColor(Color.Lerp(prevColor, targetColor,
-            colorChangeTimeElapsed / colorChangeDuration));
-        baseColor = mainSr.color;
-        topSr.color = new Color(1, 1, 1, mainSr.color.a);
-        if(colorChangeTimeElapsed >= colorChangeDuration)
-        {
-            changingColor = false;
-        }
     }
 
     public void SetSprite()

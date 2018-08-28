@@ -1,6 +1,6 @@
 ﻿// Copyright 2016-2017 Elringus (Artyom Sovetnikov). All Rights Reserved.
 
-namespace SpriteGlow
+namespace SpriteGlowSystem
 {
     using System.Collections.Generic;
     using UnityEngine;
