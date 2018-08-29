@@ -208,6 +208,7 @@ Shader "Sprites/Outline"
 
                 int isOutlineEnabled = UNITY_ACCESS_INSTANCED_PROP(_IsOutlineEnabled);
                 fixed4 outlineColor = UNITY_ACCESS_INSTANCED_PROP(_OutlineColor);
+				//fixed4 outlineColor = _OutlineColor;
                 int outlineSize = UNITY_ACCESS_INSTANCED_PROP(_OutlineSize);
                 float alphaThreshold = UNITY_ACCESS_INSTANCED_PROP(_AlphaThreshold);
 
@@ -219,7 +220,7 @@ Shader "Sprites/Outline"
 
                 color = lerp(color, outlineColor * outlineColor.a, shouldDrawOutline);
 
-                return color;
+                return  color;
             }
 
             ENDCG
