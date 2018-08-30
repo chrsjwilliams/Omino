@@ -15,6 +15,8 @@ public class PieceHolder : MonoBehaviour {
     public SpriteRenderer attackLevelBack;
     public SpriteRenderer attackLevelFront;
     public SpriteRenderer glower;
+    public Color legalGlowColor;
+    public Color notLegalGlowColor;
     private Color prevColor;
     private Color targetColor_;
     private Color targetColor
@@ -136,13 +138,13 @@ public class PieceHolder : MonoBehaviour {
         SetEnergyFillAmount(Mathf.Min(1, prop));
         if (prop >= 1)
         {
-            energyLevelFront.color = Services.UIManager.legalGlowColor;
-            energyLevelBack.color = Services.UIManager.legalGlowColor;
+            energyLevelFront.color = legalGlowColor;
+            energyLevelBack.color = legalGlowColor;
         }
         else
         {
-            energyLevelFront.color = Services.UIManager.notLegalGlowColor;
-            energyLevelBack.color = Services.UIManager.notLegalGlowColor;
+            energyLevelFront.color = notLegalGlowColor;
+            energyLevelBack.color = notLegalGlowColor;
         }
     }
 
@@ -151,13 +153,13 @@ public class PieceHolder : MonoBehaviour {
         SetAttackFillAmount(Mathf.Min(1, prop));
         if (prop >= 1)
         {
-            attackLevelFront.color = Services.UIManager.legalGlowColor;
-            attackLevelBack.color = Services.UIManager.legalGlowColor;
+            attackLevelFront.color = legalGlowColor;
+            attackLevelBack.color = legalGlowColor;
         }
         else
         {
-            attackLevelFront.color = Services.UIManager.notLegalGlowColor;
-            attackLevelBack.color = Services.UIManager.notLegalGlowColor;
+            attackLevelFront.color = notLegalGlowColor;
+            attackLevelBack.color = notLegalGlowColor;
         }
     }
 

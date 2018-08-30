@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour {
     public Color legalGlowColor;
     public Color notLegalGlowColor;
 
-    private bool showCompleteionMenu;
+    private bool showCompletionMenu;
     public UIMeters[] UIMeters;
     #region UI Meters
     //public Text[] resourceCounters;
@@ -311,7 +311,7 @@ public class UIManager : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        showCompleteionMenu = true;
+        showCompletionMenu = true;
         
         touchIdsMakingTooltips = new List<int>();
 
