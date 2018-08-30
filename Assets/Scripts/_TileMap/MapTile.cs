@@ -38,8 +38,16 @@ public class MapTile : MonoBehaviour {
 
     public void SetMapSprite(bool status)
     {
-        if (status) sr.sprite = gridSpriteFilled;
-        else sr.sprite = gridSpriteEmpty;
+        if (status)
+        {
+            //sr.enabled = false;
+            sr.sprite = gridSpriteFilled;
+        }
+        else
+        {
+            //sr.enabled = true;
+            sr.sprite = gridSpriteEmpty;
+        }
     }
 
     public void SetMapSpriteHovered(bool legal)

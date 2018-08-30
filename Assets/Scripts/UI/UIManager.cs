@@ -14,8 +14,7 @@ public class UIManager : MonoBehaviour {
     private List<int> touchIdsMakingTooltips;
 
     public bool tooltipsDisabled;
-    public Color legalGlowColor;
-    public Color notLegalGlowColor;
+
 
     private bool showCompletionMenu;
     public UIMeters[] UIMeters;
