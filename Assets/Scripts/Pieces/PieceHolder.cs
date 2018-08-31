@@ -272,7 +272,6 @@ public class PieceHolder : MonoBehaviour {
             if (!initialBase)
             {
                 Services.Clock.SyncFunction(StartClaimAnimation, BeatManagement.Clock.BeatValue.Eighth);
-                Debug.Log("not a base");
             }
             else
             {

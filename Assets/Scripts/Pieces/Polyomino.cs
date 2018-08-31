@@ -1932,9 +1932,9 @@ public class Polyomino : IVertex
 
     protected void SortOverlay()
     {
-        holder.spriteBottom.sortingOrder = (-centerCoord.x * 10) - (centerCoord.y * 1000);
-        holder.dropShadow.sortingOrder = holder.spriteBottom.sortingOrder + 1;
-        holder.icon.sortingOrder = holder.spriteBottom.sortingOrder + 2;
+        //holder.spriteBottom.sortingOrder = (-centerCoord.x * 10) - (centerCoord.y * 1000);
+        //holder.dropShadow.sortingOrder = holder.spriteBottom.sortingOrder + 1;
+        //holder.icon.sortingOrder = holder.spriteBottom.sortingOrder + 2;
     }
 
     public virtual void PathHighlight(float delay)
