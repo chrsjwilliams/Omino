@@ -33,11 +33,11 @@ public class Annex : TechBuilding
 
     public override string GetName()
     {
-        return "Annex";
+        return "Repaint";
     }
 
     public override string GetDescription()
     {
-        return "Pieces steal adjacent opposing disconnected pieces";
+        return "Your pieces steal adjacent opposing disconnected pieces.";
     }
 }

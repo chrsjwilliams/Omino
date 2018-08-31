@@ -39,7 +39,7 @@ public class ShieldedPieces : TechBuilding
 
     public override string GetDescription()
     {
-        return "Pieces can't be destroyed for " +
+        return "Your pieces can't be destroyed for " +
             ShieldDuration + " seconds after placement.";
     }
 }

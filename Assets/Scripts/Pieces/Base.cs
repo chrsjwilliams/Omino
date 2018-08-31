@@ -85,7 +85,7 @@ public class Base : TechBuilding
         {
             return "+1 Piece Production Level\n" +
                 "+1 Energy Recharge Level\n" +
-                "+1 <color=red>Hammer</color> Production Level";
+                "+1 <color=red>Attack</color> Recharge Level";
 
         }
     }

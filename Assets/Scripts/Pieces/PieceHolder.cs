@@ -50,6 +50,22 @@ public class PieceHolder : MonoBehaviour {
     private float claimTimeElapsed;
     private Color iconPrevColor;
 
+    public void Init(Polyomino piece)
+    {
+        this.piece = piece;
+        legalityOverlay.enabled = false;
+        icon.enabled = false;
+        SetEnergyDisplayStatus(false);
+        SetAttackDisplayStatus(false);
+    }
+
+    public void Init(Blueprint piece)
+    {
+        Polyomino polyomino = piece;
+        Init(polyomino);
+        spriteBottom.sortingOrder = 0;
+    }
+
 
     // Use this for initialization
     void Start () {

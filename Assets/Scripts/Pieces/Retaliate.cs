@@ -40,6 +40,6 @@ public class Retaliate : TechBuilding
 
     public override string GetDescription()
     {
-        return "Whenever one of your pieces is destroyed by a hammer, gain " + hammerReward + "  hammer.";
+        return "Whenever one of your pieces is destroyed, gain " + hammerReward + "  attack.";
     }
 }

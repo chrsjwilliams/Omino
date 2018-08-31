@@ -26,7 +26,7 @@ public class Barracks : Blueprint
     {
         //return "+<color=green>" + Math.Round((double)destructorDrawRateBonus, 3) + 
         //    "</color> <color=red>DESTRUCTIVE</color> pieces per second";
-        return "+1 <color=red>Hammer</color> Production Level";
+        return "+1 <color=red>Attack</color> Recharge Level";
     }
 
     protected override void SetIconSprite()

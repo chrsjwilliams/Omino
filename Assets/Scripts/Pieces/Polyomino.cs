@@ -1232,12 +1232,8 @@ public class Polyomino : IVertex
     {
         holder = GameObject.Instantiate(Services.Prefabs.PieceHolder,
             Services.GameScene.transform).GetComponent<PieceHolder>();
-        holder.piece = this;
+        holder.Init(this);
         holder.gameObject.name = holderName;
-        holder.legalityOverlay.enabled = false;
-        holder.icon.enabled = false;
-        holder.SetEnergyDisplayStatus(false);
-        holder.SetAttackDisplayStatus(false);
         tooltips = new List<Tooltip>();
         adjacentPieces = new List<Polyomino>();
         previouslyHoveredMapTiles = new List<MapTile>();
