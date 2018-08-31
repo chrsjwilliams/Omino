@@ -152,6 +152,7 @@ public class Tile : MonoBehaviour, IVertex
     public static float entranceStaggerTime = 0.1f;
     private float entranceOuterDelay = 0f;
     private float entranceInnerDelay = 0.075f;
+    private float entranceDimDuration;
     private bool entering;
     private float blackEntranceTime;
     private bool blackEntering;
@@ -170,6 +171,7 @@ public class Tile : MonoBehaviour, IVertex
         blackEntranceTotalDuration = Services.Clock.HalfLength();
         entranceStaggerTime = Services.Clock.SixteenthLength();
         entranceInnerDelay = Services.Clock.SixteenthLength();
+        entranceDimDuration = Services.Clock.SixteenthLength();
         
         coord = coord_;
         boxCol = GetComponent<BoxCollider2D>();
@@ -335,24 +337,60 @@ public class Tile : MonoBehaviour, IVertex
     private void EntranceAnimation()
     {
         entranceTime += Time.deltaTime;
-        float rawDuration = Mathf.Min(1, entranceTime / entranceTotalDuration);
-        float rawOuterDuration = Mathf.Min(1, (entranceTime-entranceOuterDelay) / 
-            (entranceTotalDuration-entranceOuterDelay));
-        float rawInnerDuration = Mathf.Min(1, (entranceTime - entranceInnerDelay - entranceOuterDelay) /
-            (entranceTotalDuration - entranceInnerDelay-entranceOuterDelay));
+        //float rawDuration = Mathf.Min(1, entranceTime / entranceTotalDuration);
         //MapTile mapTile = Services.MapManager.Map[coord.x, coord.y];
         //mapTile.SetMapSprite();
         //mapTile.FadeToFull(Easing.ExpoEaseOut(rawDuration));
         Color zeroAlpha = new Color(baseColor.r, baseColor.g, baseColor.b, 0);
         if (entranceTime >= entranceOuterDelay)
         {
-            mainSr.color = Color.Lerp(zeroAlpha, baseColor,
-                Easing.SineEaseOut(rawOuterDuration));
+            Color start;
+            Color target;
+            float progress;
+            Easing.Function easingFunc;
+            if (entranceTime <= 
+                entranceTotalDuration - entranceOuterDelay - entranceDimDuration)
+            {
+                start = zeroAlpha;
+                target = (Color.white + baseColor) / 2;
+                progress = Mathf.Min(1, (entranceTime - entranceOuterDelay) /
+                    (entranceTotalDuration - entranceOuterDelay - entranceDimDuration));
+                easingFunc = Easing.GetFunctionWithTypeEnum(Easing.FunctionType.SineEaseOut);
+            }
+            else
+            {
+                start = (Color.white + baseColor) / 2;
+                target = baseColor;
+                progress = Mathf.Min(1, (entranceTime - entranceOuterDelay - entranceDimDuration) /
+                    entranceDimDuration);
+                easingFunc = Easing.GetFunctionWithTypeEnum(Easing.FunctionType.SineEaseIn);
+            }
+            mainSr.color = Color.Lerp(start, target, easingFunc(progress));
         }
         if(entranceTime >= entranceInnerDelay)
         {
-            topSr.color = Color.Lerp(zeroAlpha, baseColor,
-                Easing.SineEaseOut(rawInnerDuration));
+            Color start;
+            Color target;
+            float progress;
+            Easing.Function easingFunc;
+            if (entranceTime <=
+                entranceTotalDuration - entranceOuterDelay - entranceInnerDelay - entranceDimDuration)
+            {
+                start = zeroAlpha;
+                target = (Color.white + baseColor)/2;
+                progress = Mathf.Min(1, (entranceTime - entranceOuterDelay - entranceInnerDelay) /
+                    (entranceTotalDuration - entranceOuterDelay -entranceInnerDelay - entranceDimDuration));
+                easingFunc = Easing.GetFunctionWithTypeEnum(Easing.FunctionType.SineEaseOut);
+            }
+            else
+            {
+                start = (Color.white + baseColor)/2;
+                target = baseColor;
+                progress = Mathf.Min(1, (entranceTime - entranceOuterDelay - entranceInnerDelay- entranceDimDuration) /
+                    entranceDimDuration);
+                easingFunc = Easing.GetFunctionWithTypeEnum(Easing.FunctionType.SineEaseIn);
+            }
+            topSr.color = Color.Lerp(start, target, easingFunc(progress));
         }
         if(entranceTime >= entranceTotalDuration)
         {
