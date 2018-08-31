@@ -28,6 +28,7 @@ public class MapTile : MonoBehaviour {
                 sr.color = Services.GameManager.MapColorScheme[0];
                 break;
         }
+        bgSr.enabled = false;
         SetMapSprite();
     }
 
@@ -40,12 +41,12 @@ public class MapTile : MonoBehaviour {
     {
         if (status)
         {
-            //sr.enabled = false;
-            sr.sprite = gridSpriteFilled;
+            sr.enabled = false;
+            //sr.sprite = gridSpriteFilled;
         }
         else
         {
-            //sr.enabled = true;
+            sr.enabled = true;
             sr.sprite = gridSpriteEmpty;
         }
     }

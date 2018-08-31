@@ -23,6 +23,8 @@ public class Tile : MonoBehaviour, IVertex
         }
     }
     [SerializeField]
+    private Sprite fullyPlacedSprite;
+    [SerializeField]
     private Sprite[] placedSprites;
     public Sprite[] PlacedSprites
     {
@@ -355,6 +357,8 @@ public class Tile : MonoBehaviour, IVertex
         if(entranceTime >= entranceTotalDuration)
         {
             entering = false;
+            mainSr.sprite = fullyPlacedSprite;
+            topSr.enabled = false;
         }
     }
 
