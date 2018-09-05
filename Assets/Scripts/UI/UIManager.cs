@@ -345,7 +345,7 @@ public class UIManager : MonoBehaviour {
             
             replayButton.gameObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(false);
             replayButton.GetComponentInChildren<TextMeshProUGUI>(true).gameObject.SetActive(true);
-            replayButton.GetComponentInChildren<TextMeshProUGUI>(true).text = "FORFEIT";
+            replayButton.GetComponentInChildren<TextMeshProUGUI>(true).text = "forfeit";
             levelSelectButton.gameObject.SetActive(false);
 
         }

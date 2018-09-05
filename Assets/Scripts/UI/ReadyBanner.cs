@@ -65,14 +65,14 @@ public class ReadyBanner : MonoBehaviour
         player.ToggleReady();
         if (player.ready)
         {
-            uiText.text = "READY";
+            uiText.text = "ready.";
             image.color = readyColor;
             Services.AudioManager.PlaySoundEffect(Services.Clips.UIReadyOn, 1.0f);
             pulser.StopPulse();
         }
         else
         {
-            uiText.text = "READY?";
+            uiText.text = "ready?";
             image.color = player.ColorScheme[0]; //notReadyColors[playerNum-1];
             Services.AudioManager.PlaySoundEffect(Services.Clips.UIReadyOff, 1.0f);
             pulser.StartPulse(pulsePeriod,minScale,maxScale);

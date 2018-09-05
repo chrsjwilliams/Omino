@@ -25,8 +25,8 @@ public class Tooltip : MonoBehaviour {
     public void Init(string name, string description, float rot, 
         Vector2 basePos, bool blueprintInHand)
     {
-        nameText.text = name;
-        descriptionText.text = description;
+        nameText.text = name.ToLower();
+        descriptionText.text = description.ToLower();
         transform.localRotation = Quaternion.Euler(0, 0, rot);
         Reposition(basePos, rot, blueprintInHand);
     }

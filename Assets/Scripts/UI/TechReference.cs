@@ -18,8 +18,8 @@ public class TechReference : MonoBehaviour
     {
         icon.sprite = Services.TechDataLibrary.GetIcon(techType);
         TechBuilding tech = TechBuilding.GetBuildingFromType(techType);
-        nameText.text = tech.GetName();
-        description.text = tech.GetDescription();
+        nameText.text = tech.GetName().ToLower();
+        description.text = tech.GetDescription().ToLower();
         back.color = Services.GameManager.NeutralColor;
     }
 }

@@ -80,7 +80,7 @@ public class TechSelectSceneScript : Scene<TransitionData>
         for (int i = 0; i < currentTechIcons.Length; i++)
         {
             this.currentTechIcons[0][i] = currentTechIcons[i];
-            this.currentTechIcons[0][i].GetComponentsInChildren<TextMeshProUGUI>()[0].text = "None";
+            this.currentTechIcons[0][i].GetComponentsInChildren<TextMeshProUGUI>()[0].text = "none";
             this.currentTechIcons[0][i].GetComponentsInChildren<Image>()[1].color = Services.GameManager.NeutralColor;
         }
 
@@ -90,7 +90,7 @@ public class TechSelectSceneScript : Scene<TransitionData>
             TechBuilding tech = TechBuilding.GetBuildingFromType(selectedType);
             this.currentTechIcons[0][i].GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
             this.currentTechIcons[0][i].GetComponentsInChildren<Image>()[1].color = Color.white;
-            this.currentTechIcons[0][i].GetComponentInChildren<TextMeshProUGUI>().text = tech.GetName();
+            this.currentTechIcons[0][i].GetComponentInChildren<TextMeshProUGUI>().text = tech.GetName().ToLower();
             this.currentTechIcons[0][i].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(tech.buildingType);
         }
 
@@ -105,8 +105,8 @@ public class TechSelectSceneScript : Scene<TransitionData>
             menuButtons[0][j] = button;
             TechBuilding tech = TechBuilding.GetBuildingFromType(selectedType);
             TextMeshProUGUI[] buttonTexts = button.GetComponentsInChildren<TextMeshProUGUI>();
-            buttonTexts[0].text = tech.GetName();
-            buttonTexts[1].text = tech.GetDescription();
+            buttonTexts[0].text = tech.GetName().ToLower();
+            buttonTexts[1].text = tech.GetDescription().ToLower();
 
             button.GetComponent<Image>().color = 
                 Services.GameManager.NeutralColor;

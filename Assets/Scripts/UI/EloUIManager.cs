@@ -31,10 +31,10 @@ public class EloUIManager : MonoBehaviour {
         winCount.text = data.totalWins.ToString();
         streakCount.text = data.winStreakCount.ToString();
         rating.text = data.GetRating().ToString();
-        rankText.text = rank.ToString();
+        rankText.text = rank.ToString().ToLower();
         rankImage.sprite = data.GetRankImage();
         bestRating.text = data.GetHighestRating().ToString();
-        bestRankText.text = highestRank.ToString();
+        bestRankText.text = highestRank.ToString().ToLower();
         bestRankImage.sprite = data.GetHighestRankImage();
         rating.gameObject.SetActive(
             rank == EloData.RankCategory.Master);

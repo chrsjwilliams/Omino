@@ -41,7 +41,7 @@ public class LevelSelectSceneScript : Scene<TransitionData>
         levelButtons[0] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
         levelButtons[0].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
         levelButtons[0].GetComponent<RectTransform>().localScale = selectedButtonScale;
-        levelButtons[0].name = "Procedural";
+        levelButtons[0].name = "procedural";
         levelButtons[0].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[0].name);
         
         foreach (TextMeshProUGUI text in levelButtons[0].GetComponentsInChildren<TextMeshProUGUI>())
@@ -59,7 +59,7 @@ public class LevelSelectSceneScript : Scene<TransitionData>
             levelButtons[levelButtonIndex].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[levelButtonIndex].name);
             foreach (TextMeshProUGUI text in levelButtons[levelButtonIndex].GetComponentsInChildren<TextMeshProUGUI>())
             {
-                text.text = levelButtons[levelButtonIndex].name;
+                text.text = levelButtons[levelButtonIndex].name.ToLower();
             }
 
             levelButtonIndex++;

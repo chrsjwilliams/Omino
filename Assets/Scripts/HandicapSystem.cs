@@ -77,13 +77,13 @@ public class HandicapSystem : MonoBehaviour
         singlePlayerMode = Services.GameManager.mode == TitleSceneScript.GameMode.TwoPlayers ? false : true;
         if (singlePlayerMode)
         {
-            p1Text.text = "Player";
-            p2Text.text = "AI";
+            p1Text.text = "player";
+            p2Text.text = "cpu";
         }
         else
         {
-            p1Text.text = "Player 1";
-            p2Text.text = "Player 2";
+            p1Text.text = "player 1";
+            p2Text.text = "player 2";
         }
     }
 

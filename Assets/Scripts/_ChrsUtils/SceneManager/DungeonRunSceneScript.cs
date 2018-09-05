@@ -102,13 +102,13 @@ public class DungeonRunSceneScript : Scene<TransitionData>
     {
         if (DungeonRunManager.dungeonRunData.completedRun)
         {
-            challengeLevelText.text = "Run Complete";
-            startChallengeButton.GetComponentInChildren<TextMeshProUGUI>().text = "Try Again";
+            challengeLevelText.text = "run complete";
+            startChallengeButton.GetComponentInChildren<TextMeshProUGUI>().text = "try again";
         }
         else
         {
-            startChallengeButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start Challenge";
-            challengeLevelText.text = "Challenge " + progress + "/" + DungeonRunManager.MAX_DUNGEON_CHALLENGES;
+            startChallengeButton.GetComponentInChildren<TextMeshProUGUI>().text = "start challenge";
+            challengeLevelText.text = "challenge " + progress + "/" + DungeonRunManager.MAX_DUNGEON_CHALLENGES;
         }
     }
 
@@ -126,7 +126,7 @@ public class DungeonRunSceneScript : Scene<TransitionData>
 
             currentTechMenu[0][j].interactable = false;
             currentTechMenu[0][j].GetComponent<Image>().color = Services.GameManager.NeutralColor;
-            currentTechMenu[0][j].GetComponentInChildren<TextMeshProUGUI>().text = "None";
+            currentTechMenu[0][j].GetComponentInChildren<TextMeshProUGUI>().text = "none";
             currentTechMenu[0][j].GetComponentsInChildren<Image>()[1].color = Services.GameManager.NeutralColor;
             currentTechMenu[0][j].GetComponentsInChildren<Image>()[1].sprite = Services.TechDataLibrary.GetIcon(BuildingType.NONE);
         }
@@ -140,7 +140,7 @@ public class DungeonRunSceneScript : Scene<TransitionData>
             Image buttonSubImage = button.GetComponentsInChildren<Image>()[1];
             button.GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
             buttonSubImage.color = Color.white;
-            button.GetComponentInChildren<TextMeshProUGUI>().text = tech.GetName();
+            button.GetComponentInChildren<TextMeshProUGUI>().text = tech.GetName().ToLower();
             buttonSubImage.sprite = Services.TechDataLibrary.GetIcon(tech.buildingType);
         }
     }
