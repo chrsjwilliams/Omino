@@ -62,7 +62,7 @@ public class BuildingDropAnimation : Task
         {
             targetPositions[i] = transforms[i].position;
             startPositions[i] = targetPositions[i] + (dropHeight * Vector3.up);
-            transforms[i].position = startPositions[i];
+            //transforms[i].position = startPositions[i];
         }
         timeElapsed = 0;
     }
@@ -76,36 +76,36 @@ public class BuildingDropAnimation : Task
         }
         timeElapsed += Time.deltaTime;
 
-        for (int i = 0; i < transforms.Count; i++)
-        {
-            transforms[i].position = Vector3.Lerp(startPositions[i], targetPositions[i],
-                EasingEquations.Easing.BounceEaseOut(timeElapsed / duration));
-            transforms[i].localScale = Vector3.Lerp(Vector3.zero, Vector3.one,
-                EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
-        }
+        //for (int i = 0; i < transforms.Count; i++)
+        //{
+        //    transforms[i].position = Vector3.Lerp(startPositions[i], targetPositions[i],
+        //        EasingEquations.Easing.BounceEaseOut(timeElapsed / duration));
+        //    transforms[i].localScale = Vector3.Lerp(Vector3.zero, Vector3.one,
+        //        EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
+        //}
 
-        if (timeElapsed > dustTime && !dustDropped)
-        {
-            for (int i = 0; i < dustLocations.Length; i++)
-            {
-                GameObject.Instantiate(Services.Prefabs.DustCloud,
-                    dustLocations[i], Quaternion.identity);
-            }
-            dustDropped = true;
-        }
-        if (timeElapsed >= shakeStartTime && !shakeStarted)
-        {
-            Services.CameraController.StartShake(shakeDur, shakeSpeed, shakeMag, true);
-            shakeStarted = true;
-            if (buildingDropSound)
-                Services.AudioManager.RegisterSoundEffect(Services.Clips.BuildingFall, 1.0f, Clock.BeatValue.Sixteenth);
-            else
-                Services.AudioManager.RegisterSoundEffect(Services.Clips.BlueprintPlaced, 1.0f, Clock.BeatValue.Sixteenth);
-        }
+        //if (timeElapsed > dustTime && !dustDropped)
+        //{
+        //    for (int i = 0; i < dustLocations.Length; i++)
+        //    {
+        //        GameObject.Instantiate(Services.Prefabs.DustCloud,
+        //            dustLocations[i], Quaternion.identity);
+        //    }
+        //    dustDropped = true;
+        //}
+        //if (timeElapsed >= shakeStartTime && !shakeStarted)
+        //{
+        //    Services.CameraController.StartShake(shakeDur, shakeSpeed, shakeMag, true);
+        //    shakeStarted = true;
+        //    if (buildingDropSound)
+        //        Services.AudioManager.RegisterSoundEffect(Services.Clips.BuildingFall, 1.0f, Clock.BeatValue.Sixteenth);
+        //    else
+        //        Services.AudioManager.RegisterSoundEffect(Services.Clips.BlueprintPlaced, 1.0f, Clock.BeatValue.Sixteenth);
+        //}
         if (timeElapsed >= duration)
         {
-            foreach (Transform transform in transforms) 
-                transform.localScale = Vector3.one;
+            //foreach (Transform transform in transforms) 
+            //    transform.localScale = Vector3.one;
 
             SetStatus(TaskStatus.Success);
         }

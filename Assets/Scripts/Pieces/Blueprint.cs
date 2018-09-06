@@ -270,7 +270,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             }
         }
         ListenForInput(true);
-        Services.GameScene.tm.Do(new BlueprintPlacementTask(this));
+        //Services.GameScene.tm.Do(new BlueprintPlacementTask(this));
         
         switch (Services.GameManager.mode)
         {
