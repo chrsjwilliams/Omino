@@ -92,7 +92,7 @@ public class TutorialManager : MonoBehaviour
                 viewedTutorial[i] = true;
         }
 
-        tutorialProgresss.text = "Tutorial " + Services.GameManager.levelSelected.campaignLevelNum  + "/5";
+        tutorialProgresss.text = "tutorial " + Services.GameManager.levelSelected.campaignLevelNum  + "/5";
 
         if (Services.GameManager.levelSelected != null &&
             Services.GameManager.levelSelected.objectives.Length > 0)
@@ -105,7 +105,7 @@ public class TutorialManager : MonoBehaviour
             for (int i = 0; i < objectiveText.Length; i++)
             {
                 objectiveText[i] = Services.GameManager.levelSelected.objectives[i];
-                objectiveUI[i].GetComponentInChildren<TextMeshProUGUI>().text = objectiveText[i];
+                objectiveUI[i].GetComponentInChildren<TextMeshProUGUI>().text = objectiveText[i].ToLower();
 
                 if (Services.GameManager.CurrentDevice == DEVICE.IPHONE ||
                     Services.GameManager.CurrentDevice == DEVICE.IPHONE_X)
@@ -263,7 +263,7 @@ public class TutorialManager : MonoBehaviour
         else
         {
             objective.GetComponentInChildren<Image>().sprite = notDone;
-            objective.GetComponentInChildren<Image>().color = Color.black;
+            objective.GetComponentInChildren<Image>().color = Color.white;
         }
     }
 

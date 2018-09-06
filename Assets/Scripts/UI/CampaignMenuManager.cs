@@ -85,14 +85,15 @@ public class CampaignMenuManager : MonoBehaviour {
                 
                 break;
             case 5:
-                buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = "COMPLETE";
+                buttons[0].GetComponentInChildren<TextMeshProUGUI>().text = "complete";
+                buttons[0].GetComponentInChildren<TextMeshProUGUI>().color = highlightedButtonColor;
                 if (Services.TutorialManager.CompletionCheck())
                     buttons[0].GetComponent<Image>().color = highlightedButtonColor;
                 break;
         }
         for (int i = 0; i < objectiveText.Length; i++)
         {
-            objectiveText[i].text = Services.TutorialManager.objectiveText[i];
+            objectiveText[i].text = Services.TutorialManager.objectiveText[i].ToLower();
 
             if (Services.TutorialManager.objectiveComplete[i])
             {
@@ -155,6 +156,7 @@ public class CampaignMenuManager : MonoBehaviour {
         
 
         buttons[0].GetComponent<Image>().color = highlightedButtonColor;
+        buttons[0].GetComponentInChildren<TextMeshProUGUI>().color = highlightedButtonColor;
         
         transform.localScale = Vector3.zero;
         for (int i = 0; i < buttons.Length; i++)

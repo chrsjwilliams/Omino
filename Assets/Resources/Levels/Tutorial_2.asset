@@ -11,12 +11,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6e3d42f2220bb342a28180320c2b637, type: 3}
   m_Name: Tutorial_2
   m_EditorClassIdentifier: 
+  levelName: 
+  displayImage: {fileID: 0}
   campaignLevelNum: 2
   objectives:
   - Connect to Opponent's Base
   - Destroy Opponent's Piece
   availableStructures: 
+  p1HomeBasePos:
+    x: 0
+    y: 0
+  p2HomeBasePos:
+    x: 0
+    y: 0
+  preplacedP1Tiles: []
+  preplacedP2Tiles: []
   structCoords: []
+  impassibleCoords: []
+  destructibleTerrainCoords: []
   width: 15
   height: 15
   cornerBases: 0
@@ -31,319 +43,445 @@ MonoBehaviour:
     text: Ok, this time, we'll give you an actual opponent to play against!
     displayObjective: 1
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 400}
     location: {x: 50, y: 50}
-    iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
-    iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
-    iPhoneArrowRotation: 0
-    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 0, y: 0}
-    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 0, y: 0}
-    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
-    iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0}
-    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
-    iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -1000, y: -700}
+    iPhoneToolTipSize: {x: 700, y: 400}
+    iPhoneArrowScale: {x: 0, y: 0}
+    iPhoneLocation: {x: 50, y: 50}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    iPhoneArrowRotation: 0
+    iPhoneImageLocation: {x: 0, y: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -1000, y: -1000}
+    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXArrowScale: {x: 0, y: 0}
+    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXArrowLocation: {x: 0, y: 0}
+    iPhoneXWindowLocation: {x: 0, y: 0}
+    iPhoneXSecondWindowLocation: {x: 0, y: 0}
+    iPhoneXWindowSize: {x: 0, y: 0}
+    iPhoneXSecondWindowSize: {x: 0, y: 0}
+    iPhoneXArrowRotation: 0
+    iPhoneXImageLocation: {x: 0, y: 0}
+    iPhoneXSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneXImageScale: {x: 0, y: 0}
+    iPhoneXImageRotation: 0
+    skipButtonLocationiPhoneX: {x: 0, y: 0}
   - label: Do Not Display
     text: 
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 0, y: 0}
     location: {x: 0, y: 0}
-    iPhoneLocation: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
-    iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
-    iPhoneArrowRotation: 0
-    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 0
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 0, y: 0}
-    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 0, y: 0}
-    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
-    iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0}
-    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
-    iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: 0
     imageColor: {r: 0.6901961, g: 0.6901961, b: 0.6901961, a: 0.54509807}
     skipButtonLocation: {x: 500, y: 500}
+    iPhoneToolTipSize: {x: 0, y: 0}
+    iPhoneArrowScale: {x: 0, y: 0}
+    iPhoneLocation: {x: 0, y: 0}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    iPhoneArrowRotation: 0
+    iPhoneImageLocation: {x: 0, y: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: 500, y: 500}
+    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXArrowScale: {x: 0, y: 0}
+    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXArrowLocation: {x: 0, y: 0}
+    iPhoneXWindowLocation: {x: 0, y: 0}
+    iPhoneXSecondWindowLocation: {x: 0, y: 0}
+    iPhoneXWindowSize: {x: 0, y: 0}
+    iPhoneXSecondWindowSize: {x: 0, y: 0}
+    iPhoneXArrowRotation: 0
+    iPhoneXImageLocation: {x: 0, y: 0}
+    iPhoneXSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneXImageScale: {x: 0, y: 0}
+    iPhoneXImageRotation: 0
+    skipButtonLocationiPhoneX: {x: 0, y: 0}
   - label: Show Me
     text: You can destroy your opponents pieces.
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
     location: {x: 225, y: -190}
-    iPhoneLocation: {x: 166, y: -300}
     arrowLocation: {x: 0, y: 0}
-    iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
-    iPhoneArrowRotation: 0
-    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 250, y: 250}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 230, y: 237}
-    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 600, y: 600}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 600, y: 600}
-    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
-    iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0}
-    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 1, y: 1}
-    iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: 0
     imageColor: {r: 0.6901961, g: 0.6901961, b: 0.6901961, a: 0.54509807}
     skipButtonLocation: {x: -820, y: -300}
+    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneArrowScale: {x: 0, y: 0}
+    iPhoneLocation: {x: 166, y: -300}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 230, y: 237}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 600, y: 600}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    iPhoneArrowRotation: 0
+    iPhoneImageLocation: {x: 0, y: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -728, y: -697}
+    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXArrowScale: {x: 0, y: 0}
+    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXArrowLocation: {x: 0, y: 0}
+    iPhoneXWindowLocation: {x: 0, y: 0}
+    iPhoneXSecondWindowLocation: {x: 0, y: 0}
+    iPhoneXWindowSize: {x: 0, y: 0}
+    iPhoneXSecondWindowSize: {x: 0, y: 0}
+    iPhoneXArrowRotation: 0
+    iPhoneXImageLocation: {x: 0, y: 0}
+    iPhoneXSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneXImageScale: {x: 0, y: 0}
+    iPhoneXImageRotation: 0
+    skipButtonLocationiPhoneX: {x: 0, y: 0}
   - label: Attack Piece
     text: 
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
     location: {x: 50, y: 50}
-    iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
-    iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
-    iPhoneArrowRotation: 0
-    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 0, y: 0}
-    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 0, y: 0}
-    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 1
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
-    iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0}
-    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 1.2, y: 1.2}
-    iPhoneImageScale: {x: 1.2, y: 1.2}
     imageRotation: 0
-    iPhoneImageRotation: 0
     imageColor: {r: 1, g: 1, b: 1, a: 1}
     skipButtonLocation: {x: -930, y: -616}
+    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneArrowScale: {x: 0, y: 0}
+    iPhoneLocation: {x: 50, y: 50}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    iPhoneArrowRotation: 0
+    iPhoneImageLocation: {x: 0, y: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneImageScale: {x: 1.2, y: 1.2}
+    iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -974, y: -900}
+    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXArrowScale: {x: 0, y: 0}
+    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXArrowLocation: {x: 0, y: 0}
+    iPhoneXWindowLocation: {x: 0, y: 0}
+    iPhoneXSecondWindowLocation: {x: 0, y: 0}
+    iPhoneXWindowSize: {x: 0, y: 0}
+    iPhoneXSecondWindowSize: {x: 0, y: 0}
+    iPhoneXArrowRotation: 0
+    iPhoneXImageLocation: {x: 0, y: 0}
+    iPhoneXSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneXImageScale: {x: 0, y: 0}
+    iPhoneXImageRotation: 0
+    skipButtonLocationiPhoneX: {x: 0, y: 0}
   - label: Hammer
-    text: If you have a full <color=#E56575FF>Hammer</color> and hover your piece
-      over of your opponent's pieces, you will build over them.
+    text: If you have a full <color=#E56575FF>Sword</color> and hover your piece over
+      of your opponent's pieces, you will build over them.
     displayObjective: 1
     objectiveIndex: 1
-    iPhoneToolTipSize: {x: 700, y: 550}
     location: {x: 450, y: -300}
-    iPhoneLocation: {x: 444, y: -465}
     arrowLocation: {x: 240, y: -230}
-    iPhoneArrowLocation: {x: 240, y: -383}
     arrowRotation: -90
-    iPhoneArrowRotation: -90
-    iPhoneArrowScale: {x: 1, y: 1}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 630, y: -785}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 630, y: -1126}
-    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 250, y: 170}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 250, y: 170}
-    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
-    iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0}
-    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
-    iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -600, y: -1050}
+    iPhoneToolTipSize: {x: 700, y: 550}
+    iPhoneArrowScale: {x: 1, y: 1}
+    iPhoneLocation: {x: 444, y: -465}
+    iPhoneArrowLocation: {x: 240, y: -383}
+    iPhoneWindowLocation: {x: 630, y: -1126}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 250, y: 170}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    iPhoneArrowRotation: -90
+    iPhoneImageLocation: {x: 0, y: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -612, y: -1415}
+    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXArrowScale: {x: 0, y: 0}
+    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXArrowLocation: {x: 0, y: 0}
+    iPhoneXWindowLocation: {x: 0, y: 0}
+    iPhoneXSecondWindowLocation: {x: 0, y: 0}
+    iPhoneXWindowSize: {x: 0, y: 0}
+    iPhoneXSecondWindowSize: {x: 0, y: 0}
+    iPhoneXArrowRotation: 0
+    iPhoneXImageLocation: {x: 0, y: 0}
+    iPhoneXSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneXImageScale: {x: 0, y: 0}
+    iPhoneXImageRotation: 0
+    skipButtonLocationiPhoneX: {x: 0, y: 0}
   - label: Hammer Time
-    text: You get <color=#E56575FF>Hammers</color> over time.
+    text: You recharge <color=#E56575FF>swords</color> over time.
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 300}
     location: {x: 450, y: -300}
-    iPhoneLocation: {x: 444, y: -630}
     arrowLocation: {x: 240, y: -230}
-    iPhoneArrowLocation: {x: 240, y: -230}
     arrowRotation: -90
-    iPhoneArrowRotation: -90
-    iPhoneArrowScale: {x: 1, y: 1}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 630, y: -785}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 630, y: -1126}
-    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 250, y: 170}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 250, y: 170}
-    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
-    iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0}
-    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
-    iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -600, y: -1050}
+    iPhoneToolTipSize: {x: 700, y: 300}
+    iPhoneArrowScale: {x: 1, y: 1}
+    iPhoneLocation: {x: 444, y: -630}
+    iPhoneArrowLocation: {x: 240, y: -230}
+    iPhoneWindowLocation: {x: 630, y: -1126}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 250, y: 170}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    iPhoneArrowRotation: -90
+    iPhoneImageLocation: {x: 0, y: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -594, y: -1750}
+    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXArrowScale: {x: 0, y: 0}
+    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXArrowLocation: {x: 0, y: 0}
+    iPhoneXWindowLocation: {x: 0, y: 0}
+    iPhoneXSecondWindowLocation: {x: 0, y: 0}
+    iPhoneXWindowSize: {x: 0, y: 0}
+    iPhoneXSecondWindowSize: {x: 0, y: 0}
+    iPhoneXArrowRotation: 0
+    iPhoneXImageLocation: {x: 0, y: 0}
+    iPhoneXSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneXImageScale: {x: 0, y: 0}
+    iPhoneXImageRotation: 0
+    skipButtonLocationiPhoneX: {x: 0, y: 0}
   - label: No Waiting
     text: No need to wait your turn - you can play as soon as you have enough energy!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 450}
     location: {x: 50, y: 50}
-    iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
-    iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
-    iPhoneArrowRotation: 0
-    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 0, y: 0}
-    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 0, y: 0}
-    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
-    iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0}
-    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
-    iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -1000, y: -750}
+    iPhoneToolTipSize: {x: 700, y: 450}
+    iPhoneArrowScale: {x: 0, y: 0}
+    iPhoneLocation: {x: 50, y: 50}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    iPhoneArrowRotation: 0
+    iPhoneImageLocation: {x: 0, y: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -1000, y: -1000}
+    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXArrowScale: {x: 0, y: 0}
+    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXArrowLocation: {x: 0, y: 0}
+    iPhoneXWindowLocation: {x: 0, y: 0}
+    iPhoneXSecondWindowLocation: {x: 0, y: 0}
+    iPhoneXWindowSize: {x: 0, y: 0}
+    iPhoneXSecondWindowSize: {x: 0, y: 0}
+    iPhoneXArrowRotation: 0
+    iPhoneXImageLocation: {x: 0, y: 0}
+    iPhoneXSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneXImageScale: {x: 0, y: 0}
+    iPhoneXImageRotation: 0
+    skipButtonLocationiPhoneX: {x: 0, y: 0}
   - label: Touch Base
     text: Remember, all your pieces must connect back to your base. Now, touch theirs
       before they touch yours!
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 700, y: 600}
     location: {x: 50, y: 50}
-    iPhoneLocation: {x: 50, y: 50}
     arrowLocation: {x: 0, y: 0}
-    iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
-    iPhoneArrowRotation: 0
-    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 1
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 0, y: 0}
-    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 0, y: 0}
-    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
-    iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0}
-    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
-    iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: -1000, y: -750}
+    iPhoneToolTipSize: {x: 700, y: 600}
+    iPhoneArrowScale: {x: 0, y: 0}
+    iPhoneLocation: {x: 50, y: 50}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    iPhoneArrowRotation: 0
+    iPhoneImageLocation: {x: 0, y: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -1000, y: -900}
+    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXArrowScale: {x: 0, y: 0}
+    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXArrowLocation: {x: 0, y: 0}
+    iPhoneXWindowLocation: {x: 0, y: 0}
+    iPhoneXSecondWindowLocation: {x: 0, y: 0}
+    iPhoneXWindowSize: {x: 0, y: 0}
+    iPhoneXSecondWindowSize: {x: 0, y: 0}
+    iPhoneXArrowRotation: 0
+    iPhoneXImageLocation: {x: 0, y: 0}
+    iPhoneXSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneXImageScale: {x: 0, y: 0}
+    iPhoneXImageRotation: 0
+    skipButtonLocationiPhoneX: {x: 0, y: 0}
   - label: Do Not Display
     text: 
     displayObjective: 0
     objectiveIndex: 0
-    iPhoneToolTipSize: {x: 0, y: 0}
     location: {x: 0, y: 0}
-    iPhoneLocation: {x: 0, y: 0}
     arrowLocation: {x: 0, y: 0}
-    iPhoneArrowLocation: {x: 0, y: 0}
     arrowRotation: 0
-    iPhoneArrowRotation: 0
-    iPhoneArrowScale: {x: 0, y: 0}
     dismissable: 0
     enableTooltips: 0
     windowLocation: {x: 0, y: 0}
     secondWindowLocation: {x: 0, y: 0}
-    iPhoneWindowLocation: {x: 0, y: 0}
-    iPhoneSecondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 0, y: 0}
     secondWindowSize: {x: 0, y: 0}
-    iPhoneWindowSize: {x: 0, y: 0}
-    iPhoneSecondWindowSize: {x: 0, y: 0}
     haveImage: 0
     imageLerps: 0
     imageLocation: {x: 0, y: 0}
-    iPhoneImageLocation: {x: 0, y: 0}
     secondaryImageLocation: {x: 0, y: 0}
-    iPhoneSecondaryImageLocation: {x: 0, y: 0}
     imageScale: {x: 0, y: 0}
-    iPhoneImageScale: {x: 0, y: 0}
     imageRotation: 0
-    iPhoneImageRotation: 0
     imageColor: {r: 0, g: 0, b: 0, a: 1}
     skipButtonLocation: {x: 500, y: 500}
+    iPhoneToolTipSize: {x: 0, y: 0}
+    iPhoneArrowScale: {x: 0, y: 0}
+    iPhoneLocation: {x: 0, y: 0}
+    iPhoneArrowLocation: {x: 0, y: 0}
+    iPhoneWindowLocation: {x: 0, y: 0}
+    iPhoneSecondWindowLocation: {x: 0, y: 0}
+    iPhoneWindowSize: {x: 0, y: 0}
+    iPhoneSecondWindowSize: {x: 0, y: 0}
+    iPhoneArrowRotation: 0
+    iPhoneImageLocation: {x: 0, y: 0}
+    iPhoneSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneImageScale: {x: 0, y: 0}
+    iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: 500, y: 500}
+    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXArrowScale: {x: 0, y: 0}
+    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXArrowLocation: {x: 0, y: 0}
+    iPhoneXWindowLocation: {x: 0, y: 0}
+    iPhoneXSecondWindowLocation: {x: 0, y: 0}
+    iPhoneXWindowSize: {x: 0, y: 0}
+    iPhoneXSecondWindowSize: {x: 0, y: 0}
+    iPhoneXArrowRotation: 0
+    iPhoneXImageLocation: {x: 0, y: 0}
+    iPhoneXSecondaryImageLocation: {x: 0, y: 0}
+    iPhoneXImageScale: {x: 0, y: 0}
+    iPhoneXImageRotation: 0
+    skipButtonLocationiPhoneX: {x: 0, y: 0}
   overrideStrategy:
     winWeight: 1
     structWeight: 0
@@ -357,3 +495,42 @@ MonoBehaviour:
     resourceGainFactor: 0
     drawRateFactor: 0
     dangerDistance: 0
+  data:
+    levelName: 
+    campaignLevelNum: 0
+    objectives: []
+    availableStructures: 
+    p1HomeBasePos:
+      x: 0
+      y: 0
+    p2HomeBasePos:
+      x: 0
+      y: 0
+    preplacedP1Tiles: []
+    preplacedP2Tiles: []
+    structCoords: []
+    impassibleCoords: []
+    destructibleTerrainCoords: []
+    width: 0
+    height: 0
+    cornerBases: 0
+    destructorsEnabled: 0
+    blueprintsEnabled: 0
+    generatorEnabled: 0
+    factoryEnabled: 0
+    barracksEnabled: 0
+    stackDestructorInOpeningHand: 0
+    tooltips: []
+    overrideStrategy:
+      winWeight: 0
+      structWeight: 0
+      blueprintWeight: 0
+      destructionWeight: 0
+      blueprintDestructionWeight: 0
+      disconnectionWeight: 0
+      destructorForBlueprintWeight: 0
+      dangerMod: 0
+      overrideDefault: 0
+      resourceGainFactor: 0
+      drawRateFactor: 0
+      dangerDistance: 0
