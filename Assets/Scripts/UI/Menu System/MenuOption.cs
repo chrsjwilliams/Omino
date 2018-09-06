@@ -102,6 +102,7 @@ public class MenuOption : MenuObject
     private void SetColor(Color color)
     {
         associatedObject.GetComponent<Image>().color = color;
+        associatedObject.GetComponentInChildren<TextMeshProUGUI>(true).color = color;
     }
 
     public void GetBlueprintAssistStatus()

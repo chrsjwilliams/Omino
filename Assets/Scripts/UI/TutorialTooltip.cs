@@ -143,12 +143,12 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
         if(label.Contains("Show Me"))
         {
-            dismissText.text = "Show Me";
+            dismissText.text = "show me";
         }
 
         if(label.Contains("Complete"))
         {
-            dismissText.text = "Tutorial Complete!";
+            dismissText.text = "tutorial complete!";
         }
 
         if(label.Contains("Rotate"))
@@ -246,7 +246,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             image.rectTransform.localScale = info.imageScale;
         }
 
-        textComponent.text = info.text;
+        textComponent.text = info.text.ToLower();
 
         dismissText.enabled = info.dismissable;
 
@@ -330,7 +330,7 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
 
     protected void OnRotation(RotationEvent e)
     {
-        textComponent.text = "Well Done! Now place the piece on the board.";
+        textComponent.text = "well done! now place the piece on the board.";
     }
 
     protected void OnTouchDown(TouchDown e)
