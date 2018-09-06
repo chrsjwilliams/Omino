@@ -397,6 +397,7 @@ public class Tile : MonoBehaviour, IVertex
             entering = false;
             mainSr.sprite = fullyPlacedSprite;
             topSr.enabled = false;
+            topSr.sprite = placedSprites[0];
         }
     }
 
@@ -549,12 +550,16 @@ public class Tile : MonoBehaviour, IVertex
         if (connected)
         {
             //mainSr.sprite = Sprites[0];
-            crackSr.enabled = false;
+            //crackSr.enabled = false;
+            mainSr.enabled = true;
+            topSr.enabled = false;
         }
         else
         {
             //mainSr.sprite = DisconnectedSprite;
-            crackSr.enabled = true;
+            //crackSr.enabled = true;
+            mainSr.enabled = false;
+            topSr.enabled = true;
         }
     }
 
