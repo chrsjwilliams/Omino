@@ -14,6 +14,7 @@ public class BuildingDropAnimation : Task
     private Vector3[] targetPositions;
     protected Polyomino building;
     protected List<Transform> transforms;
+    protected List<SpriteRenderer> srs;
     private Vector3[] dustLocations;
     private float shakeDur = 0.3f;
     private const float shakeMag = 0.2f;
@@ -21,6 +22,7 @@ public class BuildingDropAnimation : Task
     private float shakeStartTime = 0.2f;
     private bool shakeStarted;
     private bool buildingDropSound = true;
+    private Color targetColor;
 
     public BuildingDropAnimation(Polyomino building_)
     {
@@ -40,7 +42,7 @@ public class BuildingDropAnimation : Task
 
     protected override void Init()
     {
-        duration = Services.Clock.SixteenthLength();
+        duration = Services.Clock.QuarterLength();
         shakeStartTime = duration / 2;
         shakeDur = 3 * duration / 4;
         
@@ -51,10 +53,13 @@ public class BuildingDropAnimation : Task
         }
 
         building.holder.gameObject.SetActive(true);
-
+        srs = new List<SpriteRenderer>();
         transforms.Add(building.holder.spriteBottom.transform);
         transforms.Add(building.holder.icon.transform);
         transforms.Add(building.holder.dropShadow.transform);
+
+        targetColor = building.holder.spriteBottom.color;
+        targetColor = new Color(targetColor.r, targetColor.g, targetColor.b, 1);
 
         startPositions = new Vector3[transforms.Count];
         targetPositions = new Vector3[transforms.Count];
@@ -62,6 +67,7 @@ public class BuildingDropAnimation : Task
         {
             targetPositions[i] = transforms[i].position;
             startPositions[i] = targetPositions[i] + (dropHeight * Vector3.up);
+            srs.Add(transforms[i].GetComponent<SpriteRenderer>());
             //transforms[i].position = startPositions[i];
         }
         timeElapsed = 0;
@@ -76,12 +82,29 @@ public class BuildingDropAnimation : Task
         }
         timeElapsed += Time.deltaTime;
 
+        for (int i = 0; i < srs.Count; i++)
+        {
+            if (timeElapsed <= duration * 0.75f)
+            {
+                srs[i].color = Color.Lerp(
+                    new Color(targetColor.r, targetColor.g, targetColor.b, 0),
+                    Color.white, Easing.QuadEaseOut(timeElapsed / (duration * 0.75f)));
+            }
+            else
+            {
+                srs[i].color = Color.Lerp(
+                    Color.white,
+                    targetColor, Easing.QuadEaseIn((timeElapsed-(duration* 0.75f))
+                    / (duration  *0.25f)));
+            }
+        }
+
         //for (int i = 0; i < transforms.Count; i++)
         //{
-        //    transforms[i].position = Vector3.Lerp(startPositions[i], targetPositions[i],
-        //        EasingEquations.Easing.BounceEaseOut(timeElapsed / duration));
-        //    transforms[i].localScale = Vector3.Lerp(Vector3.zero, Vector3.one,
-        //        EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
+            //transforms[i].position = Vector3.Lerp(startPositions[i], targetPositions[i],
+            //    EasingEquations.Easing.BounceEaseOut(timeElapsed / duration));
+            //transforms[i].localScale = Vector3.Lerp(Vector3.zero, Vector3.one,
+            //    EasingEquations.Easing.QuadEaseOut(timeElapsed / duration));
         //}
 
         //if (timeElapsed > dustTime && !dustDropped)

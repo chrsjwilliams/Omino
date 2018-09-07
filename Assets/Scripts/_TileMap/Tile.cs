@@ -398,6 +398,7 @@ public class Tile : MonoBehaviour, IVertex
             mainSr.sprite = fullyPlacedSprite;
             topSr.enabled = false;
             topSr.sprite = placedSprites[0];
+            topSr.color = new Color(baseColor.r, baseColor.g, baseColor.b, 0.5f);
         }
     }
 
