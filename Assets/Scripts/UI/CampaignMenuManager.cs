@@ -146,7 +146,7 @@ public class CampaignMenuManager : MonoBehaviour {
             }
             else if(!Services.TutorialManager.CompletionCheck())
             {
-                nextLevelButton.GetComponentInChildren<TextMeshProUGUI>().text = "Try Again";
+                nextLevelButton.GetComponentInChildren<TextMeshProUGUI>().text = "try again";
                 nextLevelButton.onClick.AddListener(Services.GameScene.Replay);
             }
             else if (Services.TutorialManager.CompletionCheck())
