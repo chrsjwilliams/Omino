@@ -112,6 +112,6 @@ public class UIBannerManager : MonoBehaviour {
     void Update ()
     {
         if (scrollingInBanners) ScrollBanners();
-        if (!Services.GameScene.gameStarted) HighlightReadyBanners();
+        //if (!Services.GameScene.gameStarted) HighlightReadyBanners();
     }
 }

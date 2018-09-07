@@ -11,6 +11,8 @@ public class ReadyBanner : MonoBehaviour
     private Player player;
     [SerializeField]
     private Color readyColor;
+    [SerializeField]
+    private Image colorBorder;
     private Image image;
     private TextMeshProUGUI uiText;
     private bool initialized;
@@ -18,6 +20,8 @@ public class ReadyBanner : MonoBehaviour
     private float pulsePeriod = 0.4f;
     private readonly Vector3 minScale = 0.9f * Vector3.one;
     private readonly Vector3 maxScale = 1.1f * Vector3.one;
+    private static bool gameSequenceReadyToStart;
+    private static bool[] filled = new bool[2];
 
     // Use this for initialization
     private void Awake()
@@ -36,7 +40,18 @@ public class ReadyBanner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (player.ready)
+        {
+            colorBorder.fillAmount += 0.035f;
 
+        }
+        filled[playerNum - 1] = colorBorder.fillAmount >= 1;
+        if (colorBorder.fillAmount >= 1 && gameSequenceReadyToStart
+            && filled[0] && filled[1])
+        {
+            gameSequenceReadyToStart = false;
+            Services.GameScene.StartGameSequence();
+        }
     }
 
     public void Init()
@@ -48,12 +63,17 @@ public class ReadyBanner : MonoBehaviour
         if (player is AIPlayer)
         {
             button.enabled = false;
-            image.color = readyColor;
+            //image.color = readyColor;
+            colorBorder.fillAmount = 1;
+            colorBorder.color = player.ColorScheme[0];
+            uiText.color = player.ColorScheme[0];
             ToggleReady();
         }
         else
         {
-            image.color = player.ColorScheme[0];
+            //image.color = player.ColorScheme[0];
+            colorBorder.fillAmount = 0;
+            uiText.color = Color.white;
             pulser.StartPulse(pulsePeriod, minScale, maxScale);
         }
     }
@@ -66,14 +86,17 @@ public class ReadyBanner : MonoBehaviour
         if (player.ready)
         {
             uiText.text = "ready.";
-            image.color = readyColor;
+            colorBorder.color = player.ColorScheme[0];
+            uiText.color = player.ColorScheme[0];
             Services.AudioManager.PlaySoundEffect(Services.Clips.UIReadyOn, 1.0f);
             pulser.StopPulse();
         }
         else
         {
             uiText.text = "ready?";
-            image.color = player.ColorScheme[0]; //notReadyColors[playerNum-1];
+            colorBorder.fillAmount = 0;
+            //image.color = player.ColorScheme[0]; //notReadyColors[playerNum-1];
+            uiText.color = Color.white;
             Services.AudioManager.PlaySoundEffect(Services.Clips.UIReadyOff, 1.0f);
             pulser.StartPulse(pulsePeriod,minScale,maxScale);
         }
@@ -92,7 +115,10 @@ public class ReadyBanner : MonoBehaviour
             {
                 Services.UIManager.UIBannerManager.readyBanners[i].button.enabled = false;
             }
-            Services.GameScene.StartGameSequence();
+            gameSequenceReadyToStart = true;
         }
+
     }
+
+
 }
