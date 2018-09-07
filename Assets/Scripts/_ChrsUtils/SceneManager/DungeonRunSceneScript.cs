@@ -140,8 +140,11 @@ public class DungeonRunSceneScript : Scene<TransitionData>
             Image buttonSubImage = button.GetComponentsInChildren<Image>()[1];
             button.GetComponent<Image>().color = Services.GameManager.Player1ColorScheme[0];
             buttonSubImage.color = Color.white;
-            button.GetComponentInChildren<TextMeshProUGUI>().text = tech.GetName().ToLower();
-            buttonSubImage.sprite = Services.TechDataLibrary.GetIcon(tech.buildingType);
+            Debug.Log(selectedType);
+            string techName = "";
+            if (tech != null) techName = tech.GetName().ToLower();
+            button.GetComponentInChildren<TextMeshProUGUI>().text = techName;
+            buttonSubImage.sprite = Services.TechDataLibrary.GetIcon(selectedType);
         }
     }
 

@@ -82,25 +82,25 @@ public class DungeonRunInGameUIManager : MonoBehaviour {
         SetFilledProgressNodes(DungeonRunManager.dungeonRunData.challengeNum + 1);
         if (victory)
         {
-            victoryText.text = "Victory";
+            victoryText.text = "victory";
             progressBarFill = 1;
             if(DungeonRunManager.dungeonRunData.challengeNum == DungeonRunManager.MAX_DUNGEON_CHALLENGES)
             {
-                nextChallengeButtonText.text = "Complete";
+                nextChallengeButtonText.text = "complete";
             }
             else
             {
-                nextChallengeButtonText.text = "Next Challenge";
+                nextChallengeButtonText.text = "next challenge";
             }
         }
         else
         {
             progressBarFill = 0;
-            victoryText.text = "Defeat";
-            nextChallengeButtonText.text = "Try Again";
+            victoryText.text = "defeat";
+            nextChallengeButtonText.text = "try again";
         }
 
-        dungeonRunChangeText.text = "Challenge " + DungeonRunManager.dungeonRunData.challengeNum +
+        dungeonRunChangeText.text = "challenge " + DungeonRunManager.dungeonRunData.challengeNum +
                                 "/" + DungeonRunManager.MAX_DUNGEON_CHALLENGES;
 
        

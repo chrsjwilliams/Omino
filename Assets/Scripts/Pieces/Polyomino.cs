@@ -48,8 +48,8 @@ public class Polyomino : IVertex
     public const float deathAnimScaleUp = 1.5f;
     private const float handPosApproachFactor = 0.25f;
     public const float burnPieceDuration = 0.5f;
-    private const float alphaWhileUnaffordable = 0.3f;
-    private const float alphaWhileAffordable = 0.8f;
+    private const float alphaWhileUnaffordable = 0.8f;
+    private const float alphaWhileAffordable = 1f;
     private List<TechBuilding> highlightedStructures;
     public List<Polyomino> piecesToRemove { get; private set; }
 

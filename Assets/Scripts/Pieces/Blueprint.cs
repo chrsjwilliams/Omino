@@ -433,7 +433,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
     {
         //Debug.Log("disconnecting blueprint from player " + owner.playerNum + " at time " + Time.time);
         owner.RemoveActiveBlueprint(this);
-        holder.ShiftColor(owner.ColorScheme[1]);
+        holder.SetBaseColor(owner.ColorScheme[1]);
     }
 
     public virtual void OnConnect()
@@ -446,7 +446,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         //    Services.GameScene.tm.Do(floatingTextSequence);
         //}
         owner.AddActiveBlueprint(this);
-        holder.ShiftColor(owner.ColorScheme[0]);
+        holder.SetBaseColor(owner.ColorScheme[0]);
     }
 
     public override void PathHighlight(float delay)
