@@ -6,7 +6,7 @@ public class Annex : TechBuilding
 {
     public Annex() : base(0)
     {
-        buildingType = BuildingType.ANNEX;
+        buildingType = BuildingType.REPAINT;
     }
 
     public override void OnClaimEffect(Player player)

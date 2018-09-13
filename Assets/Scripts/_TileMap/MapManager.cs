@@ -195,7 +195,7 @@ public class MapManager : MonoBehaviour
                 case BuildingType.CROSSSECTION:
                     techBuilding = new CrossSection();
                     break;
-                case BuildingType.ANNEX:
+                case BuildingType.REPAINT:
                     techBuilding = new Annex();
                     break;
                 case BuildingType.RETALIATE:

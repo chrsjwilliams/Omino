@@ -33,7 +33,7 @@ public abstract class TechBuilding : Polyomino
             case BuildingType.CROSSSECTION:
                 structure = new CrossSection();
                 break;
-            case BuildingType.ANNEX:
+            case BuildingType.REPAINT:
                 structure = new Annex();
                 break;
             case BuildingType.RETALIATE:
@@ -64,7 +64,7 @@ public abstract class TechBuilding : Polyomino
             BuildingType.FISSION,
             BuildingType.RECYCLING,
             BuildingType.CROSSSECTION,
-            BuildingType.ANNEX,
+            BuildingType.REPAINT,
             BuildingType.UPSIZE,
             BuildingType.SHIELDEDPIECES,
             BuildingType.RETALIATE
