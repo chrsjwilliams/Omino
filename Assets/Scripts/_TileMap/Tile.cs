@@ -396,6 +396,7 @@ public class Tile : MonoBehaviour, IVertex
         {
             entering = false;
             mainSr.sprite = fullyPlacedSprite;
+            mainSr.color = baseColor;
             topSr.enabled = false;
             topSr.sprite = disconnectedSprites[0];
             topSr.color = new Color(baseColor.r, baseColor.g, baseColor.b, 0.8f);
