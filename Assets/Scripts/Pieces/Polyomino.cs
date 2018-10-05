@@ -1451,6 +1451,10 @@ public class Polyomino : IVertex
                     SetTileCoords(coordToSnapbackTo);
                     Reposition(new Vector3(coordToSnapbackTo.x, coordToSnapbackTo.y,
                         holder.transform.position.z));
+                    foreach (MapTile mapTile in previouslyHoveredMapTiles)
+                    {
+                        mapTile.SetMapSprite();
+                    }
                 }
             }
             if (!(owner is AIPlayer))

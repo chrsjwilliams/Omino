@@ -42,7 +42,7 @@ public class ReadyBanner : MonoBehaviour
     {
         if (player.ready)
         {
-            colorBorder.fillAmount += 0.035f;
+            colorBorder.fillAmount += Time.deltaTime * 2 * Services.Clock.WholeLength();
 
         }
         filled[playerNum - 1] = colorBorder.fillAmount >= 1;
