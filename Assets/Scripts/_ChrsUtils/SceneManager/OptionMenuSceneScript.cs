@@ -54,6 +54,9 @@ public class OptionMenuSceneScript : Scene<TransitionData>
                 new TaskTree(new LevelSelectTextEntrance(backButton, true)));
 
         _tm.Do(optionMenuEntrance);
+        SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
+        SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
+        SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
 
         handicapSystem.UpdateHandicapText();
     }
