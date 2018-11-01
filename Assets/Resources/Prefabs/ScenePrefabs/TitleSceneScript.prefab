@@ -375,22 +375,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1392012884603888
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4496037332184578}
-  - component: {fileID: 114926067389149126}
-  m_Layer: 0
-  m_Name: Hyper
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1410814395974746
 GameObject:
   m_ObjectHideFlags: 1
@@ -690,22 +674,6 @@ GameObject:
   - component: {fileID: 114676602064942142}
   m_Layer: 0
   m_Name: MenuData
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1676554434221874
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4272300424169624}
-  - component: {fileID: 114587405086292860}
-  m_Layer: 0
-  m_Name: HyperVS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1129,19 +1097,6 @@ Transform:
   m_Father: {fileID: 4455864734185090}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4272300424169624
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1676554434221874}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4771405485361944}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4300963352202130
 Transform:
   m_ObjectHideFlags: 1
@@ -1181,23 +1136,9 @@ Transform:
   - {fileID: 4757264379978490}
   - {fileID: 4320847903366960}
   - {fileID: 4212201858954040}
-  - {fileID: 4496037332184578}
   - {fileID: 4704165238110888}
   m_Father: {fileID: 4080922031492906}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4496037332184578
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1392012884603888}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4455864734185090}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4547974140374762
 Transform:
@@ -1264,7 +1205,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4455864734185090}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4757264379978490
 Transform:
@@ -1290,7 +1231,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4176714187677150}
-  - {fileID: 4272300424169624}
   m_Father: {fileID: 4080922031492906}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3182,34 +3122,6 @@ MonoBehaviour:
   buttonText: demo
   toggled: 0
   forceLock: 0
---- !u!114 &114587405086292860
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1676554434221874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a0b9000e353b2642b0b980b3aded016, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectPrefabToSpawn: {fileID: 0}
-  customOffset: {x: 0, y: 0}
-  onLoadActions:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  menuToLoad: {fileID: 0}
-  actionToPerform:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  modeToLoad: 8
-  buttonText: hyper
-  toggled: 0
-  forceLock: 1
 --- !u!114 &114627935068814238
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4670,34 +4582,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114926067389149126
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1392012884603888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a0b9000e353b2642b0b980b3aded016, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectPrefabToSpawn: {fileID: 0}
-  customOffset: {x: 0, y: 0}
-  onLoadActions:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  menuToLoad: {fileID: 0}
-  actionToPerform:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  modeToLoad: 7
-  buttonText: hyper
-  toggled: 0
-  forceLock: 1
 --- !u!114 &114948225977172214
 MonoBehaviour:
   m_ObjectHideFlags: 1
