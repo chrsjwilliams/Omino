@@ -83,9 +83,39 @@ public class Tile : MonoBehaviour, IVertex
                 return disconnectedSprites;
         }
     }
+
+    [SerializeField]
+    private Sprite destructibleTerrain;
+    public Sprite DestructibleTerrain
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkins[0] != null)
+            {
+                return Services.GameManager.currentTileSkins[0].destructibleTerrain;
+            }
+            else
+                return destructibleTerrain;
+        }
+    }
+
+    [SerializeField]
+    private Sprite indestructibleTerrain;
+    public Sprite IndestructibleTerrain
+    {
+        get
+        {
+            if (Services.GameManager.currentTileSkins[0] != null)
+            {
+                return Services.GameManager.currentTileSkins[0].indestructibleTerrain;
+            }
+            else
+                return indestructibleTerrain;
+        }
+    }
     #endregion
 
-    public bool impassable { get; private set; }
+    public bool isTerrain { get; private set; }
     public Coord coord { get; private set; }
     public Coord relativeCoord;
     public BoxCollider2D boxCol { get; private set; }
@@ -159,7 +189,7 @@ public class Tile : MonoBehaviour, IVertex
 
 
 
-    public void Init(Coord coord_, bool impassable_ = false)
+    public void Init(Coord coord_)
     {
         /// REMOVING MAGIC NUMBERS ///
         scaleUpDuration = Services.Clock.EighthLength();
@@ -175,7 +205,6 @@ public class Tile : MonoBehaviour, IVertex
         
         coord = coord_;
         boxCol = GetComponent<BoxCollider2D>();
-        impassable = impassable_;
         sortingGroup = GetComponentInChildren<SortingGroup>();
         shieldSr.enabled = false;
         highlightSr.enabled = false;
@@ -194,11 +223,11 @@ public class Tile : MonoBehaviour, IVertex
                 mainSr.color = Services.GameManager.MapColorScheme[1];
                 break;
             default:
-                mainSr.color = impassable ? Color.black: Services.GameManager.MapColorScheme[0];
+                    mainSr.color = Services.GameManager.MapColorScheme[0]; 
                 break;
         }
 
-        if (impassable) Debug.Log(coord.ToString());
+
         bpAssistHighlightSr.gameObject.SetActive(false);
         //for (int i = 0; i < gridEdges.Length; i++)
         //{
@@ -482,13 +511,26 @@ public class Tile : MonoBehaviour, IVertex
 
     public void SetSprite()
     {
-        int ownerIndex = pieceParent.owner.playerNum - 1;
-        mainSr.sprite = pieceParent.placed ? 
-            PlacedSprites[ownerIndex] : HandSprites[ownerIndex];
-        shieldSr.sprite = ShieldSprites[ownerIndex];
-        topSr.sprite = PlacedSecondarySprites[ownerIndex];
-        //fillOverlay.sprite = mainSr.sprite;
-        //fillOverlayTop.sprite = topSr.sprite;
+        
+        if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit && pieceParent.owner != null)
+        {
+            
+            int ownerIndex = pieceParent.owner.playerNum - 1;
+            mainSr.sprite = pieceParent.placed ?
+                PlacedSprites[ownerIndex] : HandSprites[ownerIndex];
+            shieldSr.sprite = ShieldSprites[ownerIndex];
+            topSr.sprite = PlacedSecondarySprites[ownerIndex];
+            //fillOverlay.sprite = mainSr.sprite;
+            //fillOverlayTop.sprite = topSr.sprite;
+        }
+        else if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit && pieceParent.owner == null)
+        {
+            mainSr.sprite = pieceParent.destructible? destructibleTerrain : indestructibleTerrain;
+        }
+        else
+        {
+            mainSr.sprite = pieceParent.destructible ? destructibleTerrain : indestructibleTerrain;
+        }
     }
 
     public void ShiftAlpha(float alpha)

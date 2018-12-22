@@ -4,6 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+ * 
+ * TODO:    
+ *          FIX editting same map!
+ * 
+ */ 
+
 public class LevelSelectSceneScript : Scene<TransitionData>
 {
     public bool[] humanPlayers { get; private set; }
@@ -21,6 +28,10 @@ public class LevelSelectSceneScript : Scene<TransitionData>
     private GameObject backButton;
     [SerializeField]
     private GameObject optionButton;
+    [SerializeField]
+    private GameObject editDeleteMenu;
+    [SerializeField]
+    private PressAndHoldButton deleteButton;
 
     private int levelButtonSpacing = 300;
     private Vector2 unselectedButtonScale = new Vector2(0.33f, 0.33f);
@@ -31,38 +42,97 @@ public class LevelSelectSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+        Services.GameEventManager.Register<RefreshLevelSelectSceneEvent>(OnLevelSelectSceneRefresh);
         levelButtonParent.SetActive(false);
         backButton.SetActive(false);
         optionButton.SetActive(false);
+        editDeleteMenu.SetActive(false);
 
-        levelButtons = new LevelButton[Services.LevelInformation.levelDictionary.Count + 1];
-
-
-        levelButtons[0] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
-        levelButtons[0].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-        levelButtons[0].GetComponent<RectTransform>().localScale = selectedButtonScale;
-        levelButtons[0].name = "procedural";
-        levelButtons[0].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[0].name);
-        
-        foreach (TextMeshProUGUI text in levelButtons[0].GetComponentsInChildren<TextMeshProUGUI>())
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
         {
-            text.text = levelButtons[0].name;
-        }
-        int levelButtonIndex = 1;
-        foreach(KeyValuePair<string, LevelData> entry in Services.LevelInformation.levelDictionary)
-        {
-            levelButtons[levelButtonIndex] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
-            levelButtons[levelButtonIndex].level = entry.Value.CreateLevel();
-            levelButtons[levelButtonIndex].GetComponent<RectTransform>().anchoredPosition = new Vector2(levelButtonSpacing * levelButtonIndex, 0);
-            levelButtons[levelButtonIndex].GetComponent<RectTransform>().localScale = unselectedButtonScale;
-            levelButtons[levelButtonIndex].name = entry.Key;
-            levelButtons[levelButtonIndex].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[levelButtonIndex].name);
-            foreach (TextMeshProUGUI text in levelButtons[levelButtonIndex].GetComponentsInChildren<TextMeshProUGUI>())
+            levelButtons = new LevelButton[LevelManager.levelInfo.customLevels.Count + 1];
+            if (LevelManager.levelInfo.customLevels.Count < LevelManager.TOTAL_NUM_OF_CUSTOM_MAPS)
             {
-                text.text = levelButtons[levelButtonIndex].name.ToLower();
-            }
+                levelButtons[0] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
+                levelButtons[0].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+                levelButtons[0].GetComponent<RectTransform>().localScale = selectedButtonScale;
+                levelButtons[0].name = "create new";
+                levelButtons[0].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[0].name);
+                foreach (TextMeshProUGUI text in levelButtons[0].GetComponentsInChildren<TextMeshProUGUI>())
+                {
+                    text.text = levelButtons[0].name.ToLower();
+                }
 
-            levelButtonIndex++;
+                int levelButtonIndex = 1;
+                foreach (LevelData levelData in LevelManager.levelInfo.customLevels)
+                {
+                    levelButtons[levelButtonIndex] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
+                    levelButtons[levelButtonIndex].level = levelData.CreateLevel();
+                    levelButtons[levelButtonIndex].GetComponent<RectTransform>().anchoredPosition = new Vector2(levelButtonSpacing * levelButtonIndex, 0);
+                    levelButtons[levelButtonIndex].GetComponent<RectTransform>().localScale = unselectedButtonScale;
+                    levelButtons[levelButtonIndex].name = levelData.levelName;
+                    levelButtons[levelButtonIndex].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[levelButtonIndex].name);
+                    foreach (TextMeshProUGUI text in levelButtons[levelButtonIndex].GetComponentsInChildren<TextMeshProUGUI>())
+                    {
+                        text.text = levelButtons[levelButtonIndex].name.ToLower();
+                    }
+
+                    levelButtonIndex++;
+                }
+            }
+            else
+            {
+                int levelButtonIndex = 0;
+                foreach(LevelData levelData in LevelManager.levelInfo.customLevels)
+                {
+                    levelButtons[levelButtonIndex] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
+                    levelButtons[levelButtonIndex].level = levelData.CreateLevel();
+                    levelButtons[levelButtonIndex].GetComponent<RectTransform>().anchoredPosition = new Vector2(levelButtonSpacing * levelButtonIndex, 0);
+                    levelButtons[levelButtonIndex].GetComponent<RectTransform>().localScale = unselectedButtonScale;
+                    levelButtons[levelButtonIndex].name = levelData.levelName;
+                    levelButtons[levelButtonIndex].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[levelButtonIndex].name);
+                    foreach (TextMeshProUGUI text in levelButtons[levelButtonIndex].GetComponentsInChildren<TextMeshProUGUI>())
+                    {
+                        text.text = levelButtons[levelButtonIndex].name.ToLower();
+                        Debug.Log(text.text);
+                    }
+
+                    levelButtonIndex++;
+                }
+            }
+        }
+        else
+        {
+            levelButtons = new LevelButton[LevelManager.levelInfo.levelDictionary.Count + 1];
+
+
+            levelButtons[0] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
+            levelButtons[0].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+            levelButtons[0].GetComponent<RectTransform>().localScale = selectedButtonScale;
+            levelButtons[0].name = "procedural";
+            levelButtons[0].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[0].name);
+
+
+            foreach (TextMeshProUGUI text in levelButtons[0].GetComponentsInChildren<TextMeshProUGUI>())
+            {
+                text.text = levelButtons[0].name;
+            }
+            int levelButtonIndex = 1;
+            foreach (KeyValuePair<string, LevelData> entry in LevelManager.levelInfo.levelDictionary)
+            {
+                levelButtons[levelButtonIndex] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
+                levelButtons[levelButtonIndex].level = entry.Value.CreateLevel();
+                levelButtons[levelButtonIndex].GetComponent<RectTransform>().anchoredPosition = new Vector2(levelButtonSpacing * levelButtonIndex, 0);
+                levelButtons[levelButtonIndex].GetComponent<RectTransform>().localScale = unselectedButtonScale;
+                levelButtons[levelButtonIndex].name = entry.Key;
+                levelButtons[levelButtonIndex].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[levelButtonIndex].name);
+                foreach (TextMeshProUGUI text in levelButtons[levelButtonIndex].GetComponentsInChildren<TextMeshProUGUI>())
+                {
+                    text.text = levelButtons[levelButtonIndex].name.ToLower();
+                }
+
+                levelButtonIndex++;
+            }
         }
 
         //levelButtons = levelButtonParent.GetComponentsInChildren<LevelButton>();
@@ -137,6 +207,8 @@ public class LevelSelectSceneScript : Scene<TransitionData>
 
     internal override void ExitTransition()
     {
+        Debug.Log("Here!");
+        /*
         GameObject levelSelectText =
             levelButtonParent.GetComponentInChildren<TextMeshProUGUI>().gameObject;
         levelSelectText.SetActive(false);
@@ -148,14 +220,31 @@ public class LevelSelectSceneScript : Scene<TransitionData>
             new TaskTree(new LevelSelectTextEntrance(optionButton, false, true)));
 
         _tm.Do(mapSelectExit);
+        */
     }
 
     public void SelectLevel(LevelButton levelButton)
     {
+        
         //levelSelectionIndicator.gameObject.SetActive(true);
         levelSelected = levelButton.level;
         //levelSelectionIndicator.transform.position = levelButton.transform.position;
-        StartGame();
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit && levelSelected != null)
+        {
+
+            deleteButton.SetSelectedLevel(levelSelected);
+            ToggleEditDeleteMenu(true);
+        }
+        else
+        {
+            if(levelSelected != null) levelSelected.setOverwriteMode();
+            StartGame();
+        }
+    }
+
+    public void OnLevelSelectSceneRefresh(RefreshLevelSelectSceneEvent e)
+    {
+        Services.Scenes.Swap<LevelSelectSceneScript>();
     }
 
     public void StartGame()
@@ -171,14 +260,23 @@ public class LevelSelectSceneScript : Scene<TransitionData>
     private void ChangeScene()
     {
         Services.GameManager.SetNumPlayers(humanPlayers);
-        Services.Scenes.Swap<GameSceneScript>();
+        switch(Services.GameManager.mode)
+        {
+            case TitleSceneScript.GameMode.Edit:
+                if (levelSelected != null) Services.Scenes.Swap<EditSceneScript>();
+                else Services.Scenes.Swap<EditOptionsSceneScript>();
+                break;
+            default:
+                Services.Scenes.Swap<GameSceneScript>();
+                break;
+        }    
     }
 
     private void RemoveOpposingPlayerMenuText(LevelButton[] buttons)
     {
         for (int i = 0; i < buttons.Length; i++)
         {
-            TextMeshProUGUI[] buttonText = buttons[i].GetComponentsInChildren<TextMeshProUGUI>();
+            TextMeshProUGUI[] buttonText = buttons[i].GetComponentsInChildren<TextMeshProUGUI>(true);
             for (int k = 0; k < buttonText.Length; k++)
             {
                 if (buttonText[k].name.Contains("2") &&
@@ -188,6 +286,11 @@ public class LevelSelectSceneScript : Scene<TransitionData>
                 }
             }
         }
+    }
+
+    public void ToggleEditDeleteMenu(bool active)
+    {
+        editDeleteMenu.SetActive(active);
     }
 
     public void UIClick()

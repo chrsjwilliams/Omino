@@ -13,18 +13,25 @@ public class DrawTask : Task
     private float duration;
     public static bool[] pieceInTransit = new bool[2];
 
-    public DrawTask(Polyomino piece_, Vector3 startPos_)
+    public DrawTask(Polyomino piece_, Vector3 startPos_, Player player = null)
     {
         piece = piece_;
         startPos = startPos_;
-        pieceInTransit[piece.owner.playerNum - 1] = true;
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
+        {
+            pieceInTransit[player.playerNum] = true;
+        }
+        else
+        {
+            pieceInTransit[piece.owner.playerNum - 1] = true;
+        }
     }
 
     protected override void Init()
     {
         timeElapsed = 0;
-        //piece.MakePhysicalPiece();
-        //piece.Reposition(startPos);
+        piece.MakePhysicalPiece();
+        piece.Reposition(startPos);
         startPos = piece.holder.transform.position;
         duration = Polyomino.drawAnimDur;
         targetPos = piece.owner.GetHandPosition(piece.owner.handCount) 

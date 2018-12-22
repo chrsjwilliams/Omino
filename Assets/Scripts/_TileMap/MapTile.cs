@@ -59,6 +59,20 @@ public class MapTile : MonoBehaviour {
 
     public void SetOccupyingPiece(Polyomino piece)
     {
+        if(Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
+        {
+            if(occupyingPiece != null && piece is Base && !((Base)piece).mainBase &&
+                ((EditSceneScript)Services.GameScene).editting)
+            {
+                foreach(Tile tile in occupyingPiece.tiles)
+                {
+                    Services.MapManager.Map[tile.coord.x, tile.coord.y].SetMapSprite(false);
+                }
+
+                ((EditSceneScript)Services.GameScene).EraseTerrain(occupyingPiece);
+            }
+        }
+
         occupyingPiece = piece;
         if(piece is TechBuilding) SetMapSprite();
     }
@@ -67,6 +81,8 @@ public class MapTile : MonoBehaviour {
     {
         occupyingBlueprint = blueprint;
     }
+
+    
 
     public bool IsOccupied()
     {

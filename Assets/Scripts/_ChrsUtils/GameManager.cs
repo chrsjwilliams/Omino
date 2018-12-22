@@ -224,20 +224,21 @@ public class GameManager : MonoBehaviour
         };
 
         CheckPlayerPrefs();
-
+        LevelManager.LoadData();
         Level[] allLevels = Resources.LoadAll<Level>("Levels");
         foreach (Level level in allLevels)
         {
             if (!level.name.Contains("Tutorial"))
             {
                 level.SetLevelData();
-                Services.LevelInformation.AddLevel(level.name, level.data);
+                LevelManager.AddLevel(level.name, level.data);
             }
         }
 
-        Services.LevelInformation.PrintLevelNames();
+        LevelManager.PrintLevelNames();
 
-        Services.LevelInformation.Load();
+        
+       
         ELOManager.LoadData();
         DungeonRunManager.LoadData();
 
@@ -289,8 +290,6 @@ public class GameManager : MonoBehaviour
 
         Services.MapManager = GetComponent<MapManager>();
         Services.MapManager.Init();
-
-        Services.LevelInformation = new LevelInformation();
 
         Services.Clips = Resources.Load<ClipLibrary>("Audio/ClipLibrary");
         Services.AudioManager = new GameObject("Audio Manager").AddComponent<AudioManager>();
@@ -575,12 +574,13 @@ public class GameManager : MonoBehaviour
         handicapValue = handicapValue_;
     }
 
-    public void InitPlayers(PlayerHandicap[] handicapValue)
+    public void InitPlayers(PlayerHandicap[] handicapValue, bool editMode = false)
     {
         AIStrategy strategy = new AIStrategy(winWeight, structureWeight,
             blueprintWeight, destructionWeight, blueprintDestructionWeight,
             disconnectionWeight, destructorForBlueprintWeight, dangerWeight);
-        if (Services.MapManager.currentLevel != null &&
+        if (!editMode && Services.MapManager.currentLevel != null &&
+            Services.MapManager.currentLevel.overrideStrategy != null &&
             Services.MapManager.currentLevel.overrideStrategy.overrideDefault)
             strategy = Services.MapManager.currentLevel.overrideStrategy;
 
@@ -590,13 +590,24 @@ public class GameManager : MonoBehaviour
             if (humanPlayers[i])
             {
                 _players[i] = Instantiate(Services.Prefabs.Player,
-                                            Services.MapManager.Map[0, 0].gameObject.transform.position,
-                                            Quaternion.identity,
-                                            Services.Scenes.CurrentScene.transform).GetComponent<Player>();
+                                               Services.MapManager.Map[0, 0].gameObject.transform.position,
+                                               Quaternion.identity,
+                                               Services.Scenes.CurrentScene.transform).GetComponent<Player>();
+                if (editMode)
+                {
+                    GameObject playerGameObject = _players[i].gameObject;
+                    Destroy(playerGameObject.GetComponent<Player>());
+                    playerGameObject.AddComponent<EditModePlayer>();
+                    EditModePlayer editModePlayer = playerGameObject.GetComponent<EditModePlayer>();
+                    editModePlayer.Init(1);
+                    _players[i] = editModePlayer;
+                }
+                else
+                {
+                    _players[i].Init(playerNum, handicapValue[i]);
 
-                _players[i].Init(playerNum, handicapValue[i]);
-
-                _players[i].name = PLAYER + " " + playerNum;
+                    _players[i].name = PLAYER + " " + playerNum;
+                }
             }
             else
             {
@@ -880,26 +891,26 @@ public class GameManager : MonoBehaviour
                 if(!level.name.Contains("Tutorial"))
                 {
                     level.SetLevelData();
-                    Services.LevelInformation.AddLevel(level.name, level.data);
+                    LevelManager.AddLevel(level.name, level.data);
                 }
             }
 
-            Services.LevelInformation.PrintLevelNames();
+            LevelManager.PrintLevelNames();
         }
         if(Input.GetKeyDown(KeyCode.U))
         {
-            Services.LevelInformation.PrintLevelNames();
+            LevelManager.PrintLevelNames();
         }
         if(Input.GetKeyDown(KeyCode.I))
         {
             Debug.Log(test_LevelGenerator);
             test_LevelGenerator.level.SetLevelData();
-            Services.LevelInformation.AddLevel("Test", test_LevelGenerator.level.data);
-            Services.LevelInformation.Save();
+            LevelManager.AddLevel("Test", test_LevelGenerator.level.data);
+            LevelManager.SaveData();
         }
         if (Input.GetKeyDown(KeyCode.O))
         {
-            Services.LevelInformation.PrintLevelNames();
+            LevelManager.PrintLevelNames();
         }
 
     }

@@ -62,6 +62,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1050024673327580
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4386886925297196}
+  - component: {fileID: 114366507727703824}
+  m_Layer: 0
+  m_Name: Tile Skins
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1072562578529288
 GameObject:
   m_ObjectHideFlags: 1
@@ -353,7 +369,7 @@ GameObject:
   - component: {fileID: 4178660095749402}
   - component: {fileID: 114289723917139226}
   m_Layer: 0
-  m_Name: Tile Skins
+  m_Name: EditMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1012,6 +1028,7 @@ Transform:
   m_Children:
   - {fileID: 4153826101004280}
   - {fileID: 4832221152788230}
+  - {fileID: 4386886925297196}
   - {fileID: 4178660095749402}
   m_Father: {fileID: 4080922031492906}
   m_RootOrder: 0
@@ -1066,7 +1083,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4109239156237696}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4185609960295240
 Transform:
@@ -1122,6 +1139,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4455864734185090}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4386886925297196
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1050024673327580}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4109239156237696}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4455864734185090
 Transform:
@@ -2325,16 +2355,16 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  menuToLoad: {fileID: 114760155763499438}
+  menuToLoad: {fileID: 0}
   actionToPerform:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  modeToLoad: 9
-  buttonText: tile skins
+  modeToLoad: 11
+  buttonText: edit
   toggled: 0
-  forceLock: 1
+  forceLock: 0
 --- !u!114 &114300213383926080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2565,6 +2595,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+--- !u!114 &114366507727703824
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1050024673327580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0b9000e353b2642b0b980b3aded016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectPrefabToSpawn: {fileID: 0}
+  customOffset: {x: 0, y: 0}
+  onLoadActions:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  menuToLoad: {fileID: 114760155763499438}
+  actionToPerform:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  modeToLoad: 9
+  buttonText: tile skins
+  toggled: 0
+  forceLock: 1
 --- !u!114 &114379776379621722
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -31,5 +31,8 @@ public class TileSkin : ScriptableObject
     public Sprite[] placedSecondarySprites;
     public Sprite[] shieldSprites;
     public Sprite[] disconnectedSprites;
-    
+
+    public Sprite destructibleTerrain;
+    public Sprite indestructibleTerrain;
+
 }

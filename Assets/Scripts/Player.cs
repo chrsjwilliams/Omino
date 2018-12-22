@@ -6,31 +6,34 @@ using BeatManagement;
 
 public class Player : MonoBehaviour
 {
-    public int playerNum { get; private set; }
+    public int playerNum { get; protected set; }
 
-    [SerializeField] private Color[] colorScheme = new Color[2];
+    [SerializeField] protected Color[] colorScheme = new Color[2];
     public Color[] ColorScheme
     {
         get { return colorScheme; }
     }
 
+    
     protected readonly Vector3 handSpacing = new Vector3(2.35f, -2.35f, 0f);
     protected readonly Vector3 handOffset = new Vector3(-9.25f, 1.75f, 0f);
-    protected const int startingHandSize = 3;
+    protected Vector3 rawDrawPos;
     protected const int maxHandSize = 5;
     protected const int piecesPerHandRow = 5;
     protected const int baseMaxResources = 3;
     protected const int baseMaxAttackResources = 3;
+
+    protected int startingHandSize = 3;
     [SerializeField]
     protected float startingResources = 1.5f;
     [SerializeField]
     protected int dangerDistance = 11;
 
-    private List<Polyomino> normalDeck;
-    private List<Destructor> destructorDeck;
+    protected List<Polyomino> normalDeck;
+    protected List<Destructor> destructorDeck;
     public List<Polyomino> hand { get; protected set; }
     public int handCount { get { return hand.Count; } }
-    private List<Vector3> handTargetPositions;
+    protected List<Vector3> handTargetPositions;
     public List<Blueprint> blueprints { get; protected set; }
     public Polyomino selectedPiece { get; protected set; }
     private int selectedPieceHandPos;
@@ -38,8 +41,10 @@ public class Player : MonoBehaviour
     public bool gameOver { get; private set; }
     public List<Polyomino> boardPieces { get; protected set; }
     public List<Move> movesMade = new List<Move>();
-    
-    private double blueprintNextHalf = 0.0d;
+
+
+
+    protected double blueprintNextHalf = 0.0d;
      
     protected int maxResources;
     protected int resources_;
@@ -48,7 +53,7 @@ public class Player : MonoBehaviour
         {
             return resources_;
         }
-        private set
+        protected set
         {
             resources_ = value;
             //Services.UIManager.UIMeters[playerNum - 1].UpdateResourceCount(resources_, maxResources);
@@ -132,8 +137,8 @@ public class Player : MonoBehaviour
     public Polyomino queuedNormalPiece { get; private set; }
     public Polyomino queuedDestructor { get; private set; }
     public bool ready { get; private set; }
-    private bool handLocked;
-    private Coord homeBasePos;
+    protected bool handLocked;
+    protected Coord homeBasePos;
 
     private HashSet<Generator> activeMines;
     private HashSet<Factory> activeFactories;
@@ -161,6 +166,8 @@ public class Player : MonoBehaviour
     public float hammerHandicap = 1;
 
     public const float pathHighlightTotalDuration = 0.5f;
+
+    
 
     public virtual void Init(int playerNum_, AIStrategy strategy, AILEVEL level_, PlayerHandicap handicap)
     {
@@ -226,10 +233,11 @@ public class Player : MonoBehaviour
         SetProductionValues();
 
         InitializeNormalDeck();
-        //if(Services.GameManager.destructorsEnabled)
-            //InitializeDestructorDeck();
 
-        
+
+        //if(Services.GameManager.destructorsEnabled)
+        //InitializeDestructorDeck();
+
         if (Services.GameManager.levelSelected != null)
         {
             if (Services.GameManager.levelSelected.campaignLevelNum == 1)
@@ -250,11 +258,10 @@ public class Player : MonoBehaviour
         {
             DrawPieces(startingHandSize);
         }
-        OrganizeHand(hand, true);
-        foreach (Polyomino piece in hand)
-        {
-            piece.holder.gameObject.SetActive(false);
-        }
+
+
+
+
         if (Services.GameManager.destructorsEnabled)
         {
             //QueueUpNextPiece(true);
@@ -282,10 +289,19 @@ public class Player : MonoBehaviour
             }
         }
 
+
         foreach (Blueprint blueprint in blueprints)
         {
             blueprint.holder.gameObject.SetActive(false);
         }
+
+
+        foreach (Polyomino piece in hand)
+        {
+            piece.holder.gameObject.SetActive(false);
+        }
+        OrganizeHand(hand, true);
+        
 
         ToggleHandLock(true);
 
@@ -347,7 +363,10 @@ public class Player : MonoBehaviour
     {
         if (!gameOver && Services.GameScene.gameInProgress)
         {
-            UpdateMeters();
+            if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
+            {
+                UpdateMeters();
+            }
 
             if (((Input.GetKeyDown(KeyCode.Space) || (Input.GetMouseButtonDown(1))) && !(this is AIPlayer)) && selectedPiece != null)
             {
@@ -459,7 +478,7 @@ public class Player : MonoBehaviour
         Services.UIManager.UIMeters[playerNum - 1].UpdateResourceMeter(destructorDrawMeterFillAmt, true, attackResources);
         if (normalDrawMeterFillAmt >= 1)
         {
-            Vector3 rawDrawPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
+            rawDrawPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
                 Services.UIManager.UIMeters[playerNum - 1].factoryBlueprintLocation.position);
             DrawPieces(1, new Vector3(rawDrawPos.x,rawDrawPos.y, 0));
             normalDrawMeterFillAmt -= 1;
@@ -483,6 +502,7 @@ public class Player : MonoBehaviour
     #region DECK FUNCTIONS
     void InitializeNormalDeck()
     {
+
         normalDeck = new List<Polyomino>();
         for (int numBlocks = 4; numBlocks <= 4; numBlocks++)
         {
@@ -609,6 +629,7 @@ public class Player : MonoBehaviour
     public virtual void DrawPiece(Vector3 startPos, bool onlyDestructors)
     {
         Polyomino piece;
+
         if (onlyDestructors)
         {
             piece = queuedDestructor;
@@ -619,7 +640,8 @@ public class Player : MonoBehaviour
             piece = queuedNormalPiece;
             queuedNormalPiece = null;
         }
-        Task drawTask = new DrawTask(piece, startPos);
+        
+        Task drawTask = new DrawTask(piece, startPos, this);
         Services.GameScene.tm.Do(drawTask);
         QueueUpNextPiece(onlyDestructors);
         Services.AudioManager.RegisterSoundEffectReverb(Services.Clips.PieceDrawn, 1.0f, Clock.BeatValue.Sixteenth);
@@ -628,6 +650,7 @@ public class Player : MonoBehaviour
     void QueueUpNextPiece(bool destructor)
     {
         Polyomino nextPiece = GetRandomPieceFromDeck(destructor);
+        
         nextPiece.MakePhysicalPiece();
         Vector3 position;
         position = Services.GameManager.MainCamera.ScreenToWorldPoint(
@@ -672,10 +695,10 @@ public class Player : MonoBehaviour
         return piece;
     }
 
-    Vector3 GetBlueprintPosition(Blueprint blueprint)
+    public virtual Vector3 GetBlueprintPosition(Polyomino piece)
     {
         Vector3 screenPos = Vector3.zero;
-        switch (blueprint.buildingType)
+        switch (piece.buildingType)
         {
             case BuildingType.FACTORY:
                 screenPos = Services.UIManager.UIMeters[playerNum - 1].factoryBlueprintLocation.position;
@@ -690,7 +713,7 @@ public class Player : MonoBehaviour
                 break;
         }
         Vector3 rawWorldPos = Services.GameManager.MainCamera.ScreenToWorldPoint(screenPos);
-        Vector3 centerpoint = blueprint.GetCenterpoint() * Polyomino.unselectedScale.x;
+        Vector3 centerpoint = piece.GetCenterpoint() * Polyomino.unselectedScale.x;
         rawWorldPos -= centerpoint;
         return new Vector3(rawWorldPos.x, rawWorldPos.y, 0);
     }
@@ -755,7 +778,7 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    public void OnPieceSelected(Polyomino piece)
+    public virtual void OnPieceSelected(Polyomino piece)
     {
         if (selectedPiece != null) CancelSelectedPiece();
         selectedPiece = piece;
@@ -768,7 +791,7 @@ public class Player : MonoBehaviour
             }
         }
         if (piece.buildingType == BuildingType.NONE) hand.Remove(piece);
-        else blueprints.Remove((Blueprint)piece);
+        else if (piece is Blueprint) blueprints.Remove((Blueprint)piece);
 
         OrganizeHand(hand);
     }
@@ -803,13 +826,16 @@ public class Player : MonoBehaviour
                 piece.GetType(), new Object[] { this }) as Blueprint);
             ClearBlueprintAssistHighlight();
         }
+       
         selectedPiece = null;
         OrganizeHand(hand);
         piece.SetGlowState(false);
-        foreach(Polyomino subpiece in subpieces)
+
+        foreach (Polyomino subpiece in subpieces)
         {
             if (!subpiece.dead) boardPieces.Add(subpiece);
         }
+
         bool hadSplashDamage = splashDamage;
         Services.MapManager.DetermineConnectedness(this);
         if (!(piece is Blueprint) && !(this is AIPlayer) && Services.GameManager.BlueprintAssistEnabled)
@@ -818,11 +844,12 @@ public class Player : MonoBehaviour
             bpAssistCoroutine = BlueprintAssistCheck(piece);
             StartCoroutine(bpAssistCoroutine);
         }
-        if (!(piece is Destructor && hadSplashDamage) 
+        if (!(piece is Destructor && hadSplashDamage)
             && Services.MapManager.CheckForWin(piece))
             Services.GameScene.GameWin(this);
         else if (Services.GameManager.Players[playerNum % 2] != null)
             Services.GameManager.Players[playerNum % 2].OnOpposingPiecePlaced(piece);
+       
 
     }
 
@@ -961,8 +988,10 @@ public class Player : MonoBehaviour
             
             Services.AudioManager.RegisterSoundEffect(Services.Clips.IllegalPlay, 0.2f, Clock.BeatValue.Sixteenth);
         }
+
         int handPosToPlace = Mathf.Min(selectedPieceHandPos, hand.Count);
         hand.Insert(handPosToPlace, selectedPiece);
+        
         selectedPiece.SetGlowState(false);
         selectedPiece = null;
         OrganizeHand(hand);

@@ -37,7 +37,8 @@ public class PauseMenu : MonoBehaviour {
             else
             {
                 resumeButton.color = highlightedColor;
-                replayButton.color = defaultColor;
+                if(replayButton)
+                    replayButton.color = defaultColor;
             }
         }
     }

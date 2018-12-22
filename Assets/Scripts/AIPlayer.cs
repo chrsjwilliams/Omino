@@ -75,12 +75,24 @@ public class AIPlayer : Player
 
         boardPieces = new List<Polyomino>();
 
-        resourceGainFactor = strategy.resourceGainFactor;
-        drawRateFactor = strategy.drawRateFactor;
+        base.Init(playerNum_);
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
+        {
+            resourceGainFactor = 0;
+            drawRateFactor = 0;
+            startingResources = 0;
+            resources = 0;
+
+        }
+        else
+        {
+            resourceGainFactor = strategy.resourceGainFactor;
+            drawRateFactor = strategy.drawRateFactor;
+        }
 
         dangerDistance = strategy.dangerDistance;
 
-        base.Init(playerNum_);
+        
 
         //Debug.Log("player " + playerNum + "using " + "\nwin weight: " + winWeight);
         //Debug.Log("struct weight: " + structWeight + "\nblueprint weight: " + blueprintWeight);
@@ -159,7 +171,7 @@ public class AIPlayer : Player
             }
         }
         if(Services.GameScene.gameInProgress && !Services.GameScene.gameOver 
-            && !playingPiece)
+            && !playingPiece && Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
         {
             if (canAffordAPiece && nextMove != null)
             {

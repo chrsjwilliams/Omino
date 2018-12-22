@@ -237,7 +237,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
         SortOverlay();
     }
 
-    public override void Remove()
+    public override void Remove(bool replace = false, bool deathAnim = true)
     {
         List<Polyomino> constituentPieces = new List<Polyomino>();
         foreach (Tile tile in tiles)

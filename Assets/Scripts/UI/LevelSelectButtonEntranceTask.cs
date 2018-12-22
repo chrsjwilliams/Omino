@@ -139,7 +139,7 @@ public class LevelSelectTextEntrance: Task
 {
     private bool enterFromTop;
     private bool exit;
-    private const float duration = 0.25f;
+    private const float duration = 0.2f;
     private float timeElapsed;
     private GameObject levelSelectText;
     private Vector3 startPos;
@@ -174,7 +174,6 @@ public class LevelSelectTextEntrance: Task
     internal override void Update()
     {
         timeElapsed += Time.deltaTime;
-
         if (exit)
         {
             levelSelectText.transform.localPosition = Vector3.Lerp(

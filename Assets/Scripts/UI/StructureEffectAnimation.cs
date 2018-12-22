@@ -19,6 +19,7 @@ public class StructureEffectAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         timeElapsed += Time.deltaTime;
 
         if (timeElapsed < animDuration)

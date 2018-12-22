@@ -21,8 +21,16 @@ public class HandPieceEntry : Task
     {
         piecesOn = new bool[hand.Count];
         pieceTargetPositions = new Vector3[hand.Count];
-        startPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
-            Services.UIManager.UIMeters[hand[0].owner.playerNum - 1].GetBarPosition(false));
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
+        {
+            startPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
+               Services.UIManager.UIMeters[0].GetBarPosition(false));
+        }
+        else
+        {
+            startPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
+                Services.UIManager.UIMeters[hand[0].owner.playerNum - 1].GetBarPosition(false));
+        }
         startPos = new Vector3(startPos.x, startPos.y, 0);
         for (int i = 0; i < hand.Count; i++)
         {
@@ -35,7 +43,14 @@ public class HandPieceEntry : Task
         {
             //hand[0].owner.queuedDestructor.holder.gameObject.SetActive(true);
         }
-        hand[0].owner.queuedNormalPiece.holder.gameObject.SetActive(true);
+        if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
+        {
+            hand[0].owner.queuedNormalPiece.holder.gameObject.SetActive(true);
+        }
+        else
+        {
+            //((EditModeBuilding)hand[0]).editModePlayer.queuedNormalPiece.holder.gameObject.SetActive(true);
+        }
     }
 
     internal override void Update()

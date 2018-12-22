@@ -6,13 +6,14 @@ using System.Linq;
 
 public enum BuildingType
 {
-    BASE = -4, FACTORY = -3, GENERATOR = -2, BARRACKS = -1, NONE = 0,
+    BASE = -5, FACTORY = -4, GENERATOR = -3, BARRACKS = -2, EDITMODE = -1, NONE = 0,
     DYNAMO, SUPPLYBOOST, UPSIZE, ATTACKUPSIZE, COMBUSTION, SHIELDEDPIECES,
     ARMORY, FISSION, RECYCLING, CROSSSECTION, REPAINT, RETALIATE
 }
 
 public class Polyomino : IVertex
 {
+    public bool isTerrain { get; protected set; }
     public bool destructible = true;
     public List<Tile> tiles = new List<Tile>();
     public List<Coord> pieceCoords = new List<Coord>();
@@ -40,7 +41,7 @@ public class Polyomino : IVertex
     private const float rotationInputRadius = 8f;
     private const float rotationDeadZone = 50f;
     protected int touchID;
-    private readonly Vector3 baseDragOffset = 20f * Vector3.up;
+    protected readonly Vector3 baseDragOffset = 20f * Vector3.up;
     public static Vector3 unselectedScale = 0.5f * Vector3.one;
     public static Vector3 queueScale = 0.25f * Vector3.one;
     public const float drawAnimDur = 0.5f;
@@ -61,7 +62,7 @@ public class Polyomino : IVertex
     public float shieldDurationRemaining { get; private set; }
     protected List<Tooltip> tooltips;
     protected int numRotations;
-    private Queue<Coord> lastPositions;
+    protected Queue<Coord> lastPositions;
     private const int framesBeforeLockIn = 10;
     private const int leniencyFrames = 5;
     public bool burningFromHand { get; private set; }
@@ -346,11 +347,12 @@ public class Polyomino : IVertex
                                                     tetromino.GetLength(0),
                                                     pentomino.GetLength(0) };
 
-    public Polyomino(int _units, int _index, Player _player, bool _destructible = true)
+    public Polyomino(int _units, int _index, Player _player, bool _isTerrain = false, bool _destructible = true)
     {
         index = _index;
         units = _units;
         owner = _player;
+        isTerrain = _isTerrain;
         destructible = _destructible;
         occupyingBlueprints = new List<Blueprint>();
         cost = 1;
@@ -381,8 +383,7 @@ public class Polyomino : IVertex
                 piece = pentomino;
                 break;
             case 9:
-                if (owner != null) holderName = "Player " + owner.playerNum + " Base";
-                else holderName = "Neutral Base";
+                
                 buildingType = BuildingType.BASE;
                 piece = playerBase;
                 destructible = false;
@@ -509,7 +510,7 @@ public class Polyomino : IVertex
         SetOverlaySprite();
     }
 
-    public virtual void PlaceAtCurrentLocation(bool replace, bool isTerrain = false)
+    public virtual void PlaceAtCurrentLocation(bool replace)
     {
         if (isTerrain)
         {
@@ -520,6 +521,7 @@ public class Polyomino : IVertex
             {
                 MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                 mapTile.SetOccupyingPiece(this);
+                SetTileSprites();
                 tile.OnPlace();
             }
             adjacentPieces = new List<Polyomino>();
@@ -527,119 +529,119 @@ public class Polyomino : IVertex
             SetOverlaySprite();
         }
         else
-        { 
-        //place the piece on the board where it's being hovered now
-        List<Polyomino> annexedMonominos = GetPiecesInRange(false);
-        OnPlace();
-        DestroyThis();
-        if (owner != null && owner.crossSection)
         {
-            List<Tile> overlappingTilesToRemove = new List<Tile>();
-            foreach (Tile tile in tiles)
+            //place the piece on the board where it's being hovered now
+            List<Polyomino> annexedMonominos = GetPiecesInRange(false);
+            OnPlace();
+            DestroyThis();
+            if (owner != null && owner.crossSection)
             {
-                MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-                if (mapTile.occupyingPiece != null &&
-                    (mapTile.occupyingPiece.owner == owner || mapTile.occupyingPiece.owner == null) &&
-                    !overlappingTilesToRemove.Contains(tile))
+                List<Tile> overlappingTilesToRemove = new List<Tile>();
+                foreach (Tile tile in tiles)
                 {
-                    overlappingTilesToRemove.Add(tile);
+                    MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
+                    if (mapTile.occupyingPiece != null &&
+                        (mapTile.occupyingPiece.owner == owner || mapTile.occupyingPiece.owner == null) &&
+                        !overlappingTilesToRemove.Contains(tile))
+                    {
+                        overlappingTilesToRemove.Add(tile);
+                    }
+                }
+
+                foreach (Tile tile in overlappingTilesToRemove)
+                {
+                    tiles.Remove(tile);
                 }
             }
 
-            foreach (Tile tile in overlappingTilesToRemove)
+            List<Coord> monominoCoords = new List<Coord>();
+            List<Polyomino> monominos = new List<Polyomino>();
+            foreach (Tile tile in tiles)
             {
-                tiles.Remove(tile);
-            }
-        }
-
-        List<Coord> monominoCoords = new List<Coord>();
-        List<Polyomino> monominos = new List<Polyomino>();
-        foreach (Tile tile in tiles)
-        {
                 monominoCoords.Add(tile.coord);
-                Polyomino monomino = CreateSubPiece();
-                monominos.Add(monomino);            
-        }
-
-        if (owner != null && owner.annex)
-        {
-            foreach (Polyomino annexedPiece in annexedMonominos)
-            {
-                monominoCoords.Add(annexedPiece.tiles[0].coord);
-
-                annexedPiece.Remove(false, false);
-
                 Polyomino monomino = CreateSubPiece();
                 monominos.Add(monomino);
             }
-        }
 
-        for (int i = 0; i < monominos.Count; i++)
-        {
-            monominos[i].AssignLocation(monominoCoords[i]);
-        }
+            if (owner != null && owner.annex)
+            {
+                foreach (Polyomino annexedPiece in annexedMonominos)
+                {
+                    monominoCoords.Add(annexedPiece.tiles[0].coord);
 
-        if (!(this is Destructor && owner.splashDamage))
-        {
+                    annexedPiece.Remove(false, false);
+
+                    Polyomino monomino = CreateSubPiece();
+                    monominos.Add(monomino);
+                }
+            }
+
+            for (int i = 0; i < monominos.Count; i++)
+            {
+                monominos[i].AssignLocation(monominoCoords[i]);
+            }
+
+            if (!(this is Destructor && owner.splashDamage))
+            {
+                foreach (Polyomino monomino in monominos)
+                {
+                    monomino.adjacentPieces =
+                        monomino.GetAdjacentPolyominos(monomino.owner);
+                    foreach (Polyomino adjPiece in monomino.adjacentPieces)
+                    {
+                        if (!adjPiece.adjacentPieces.Contains(monomino))
+                            adjPiece.adjacentPieces.Add(monomino);
+                    }
+                }
+            }
+
+            List<List<Polyomino>> distanceLevels = new List<List<Polyomino>>();
+            //find distance level 0
+            List<Polyomino> distanceLevelZero = new List<Polyomino>();
+            List<Polyomino> tempMonominos = new List<Polyomino>(monominos);
             foreach (Polyomino monomino in monominos)
             {
-                monomino.adjacentPieces =
-                    monomino.GetAdjacentPolyominos(monomino.owner);
-                foreach (Polyomino adjPiece in monomino.adjacentPieces)
+                foreach (Polyomino neighbor in monomino.adjacentPieces)
                 {
-                    if (!adjPiece.adjacentPieces.Contains(monomino))
-                        adjPiece.adjacentPieces.Add(monomino);
-                }
-            }
-        }
-
-        List<List<Polyomino>> distanceLevels = new List<List<Polyomino>>();
-        //find distance level 0
-        List<Polyomino> distanceLevelZero = new List<Polyomino>();
-        List<Polyomino> tempMonominos = new List<Polyomino>(monominos);
-        foreach (Polyomino monomino in monominos)
-        {
-            foreach (Polyomino neighbor in monomino.adjacentPieces)
-            {
-                if (!monominos.Contains(neighbor))
-                {
-                    distanceLevelZero.Add(monomino);
-                    tempMonominos.Remove(monomino);
-                    break;
-                }
-            }
-        }
-        distanceLevels.Add(distanceLevelZero);
-        int lastDistanceLevelIndex = 0;
-        for (int i = 0; i < 5; i++)
-        {
-            if (distanceLevels[i].Count == 0) break;
-            List<Polyomino> nextDistanceLevel = new List<Polyomino>();
-            foreach(Polyomino monomino in tempMonominos)
-            {
-                foreach(Polyomino neighbor in monomino.adjacentPieces)
-                {
-                    if (distanceLevels[i].Contains(neighbor))
+                    if (!monominos.Contains(neighbor))
                     {
-                        nextDistanceLevel.Add(monomino);
+                        distanceLevelZero.Add(monomino);
+                        tempMonominos.Remove(monomino);
                         break;
                     }
                 }
             }
-            foreach(Polyomino monomino in nextDistanceLevel)
+            distanceLevels.Add(distanceLevelZero);
+            int lastDistanceLevelIndex = 0;
+            for (int i = 0; i < 5; i++)
             {
-                tempMonominos.Remove(monomino);
+                if (distanceLevels[i].Count == 0) break;
+                List<Polyomino> nextDistanceLevel = new List<Polyomino>();
+                foreach (Polyomino monomino in tempMonominos)
+                {
+                    foreach (Polyomino neighbor in monomino.adjacentPieces)
+                    {
+                        if (distanceLevels[i].Contains(neighbor))
+                        {
+                            nextDistanceLevel.Add(monomino);
+                            break;
+                        }
+                    }
+                }
+                foreach (Polyomino monomino in nextDistanceLevel)
+                {
+                    tempMonominos.Remove(monomino);
+                }
+                distanceLevels.Add(nextDistanceLevel);
+                lastDistanceLevelIndex = i;
             }
-            distanceLevels.Add(nextDistanceLevel);
-            lastDistanceLevelIndex = i;
-        }
-        //for (int i = 0; i < distanceLevels.Count; i++)
-        //{
-        //    foreach(Polyomino monomino in distanceLevels[i])
-        //    {
-        //        monomino.tiles[0].StartScaling(Tile.scaleUpStaggerTime * i);
-        //    }
-        //}
+            //for (int i = 0; i < distanceLevels.Count; i++)
+            //{
+            //    foreach(Polyomino monomino in distanceLevels[i])
+            //    {
+            //        monomino.tiles[0].StartScaling(Tile.scaleUpStaggerTime * i);
+            //    }
+            //}
             owner.OnPiecePlaced(this, monominos);
 
             switch (Services.GameManager.mode)
@@ -684,7 +686,7 @@ public class Polyomino : IVertex
                 for (int j = 0; j < distanceLevels[i].Count; j++)
                 {
                     Tile tile = distanceLevels[i][j].tiles[0];
-                    tile.StartEntrance(Tile.entranceStaggerTime 
+                    tile.StartEntrance(Tile.entranceStaggerTime
                         * entranceIndex + float.Epsilon);
                     entranceIndex++;
 
@@ -1125,12 +1127,7 @@ public class Polyomino : IVertex
         }
     }
 
-    public virtual void Remove()
-    {
-        Remove(false);
-    }
-
-    public virtual void Remove(bool replace, bool deathAnim = true)
+    public virtual void Remove(bool replace = false, bool deathAnim = true)
     {
         Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
         Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
@@ -1151,7 +1148,8 @@ public class Polyomino : IVertex
             {
                 DestroyThis();
             }
-            Services.GameData.filledMapTiles[owner.playerNum - 1] -= tiles.Count;
+            if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
+                Services.GameData.filledMapTiles[owner.playerNum - 1] -= tiles.Count;
             
         }
         else
@@ -1164,13 +1162,15 @@ public class Polyomino : IVertex
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(null);
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingBlueprint(null);
             tile.OnRemove();
+            
         }
         foreach(Polyomino piece in adjacentPieces)
         {
             piece.adjacentPieces.Remove(this);
         }
 
-        owner.OnPieceRemoved(this);
+        if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
+            owner.OnPieceRemoved(this);
         dead = true;
     }
 
@@ -1254,8 +1254,8 @@ public class Polyomino : IVertex
                     string pieceName = newTile.name.Replace("(Clone)", "");
                     newTile.name = pieceName;
                     newTile.SetBaseTileColor(owner, buildingType);
-
                     tiles.Add(newTile);
+
                 }
             }
         }
@@ -1561,7 +1561,7 @@ public class Polyomino : IVertex
 
     public void CheckTouchStatus()
     {
-        if (Input.GetMouseButton(0)) return;
+        if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) return;
         for (int i = 0; i < Input.touches.Length; i++)
         {
             if (Input.touches[i].fingerId == touchID) return;
@@ -1796,6 +1796,7 @@ public class Polyomino : IVertex
         adjacentPieces = new List<Polyomino>();
         SortOverlay();
         SetOverlaySprite();
+        SetTileSprites();
     }
 
     public virtual void Update()
@@ -1921,7 +1922,7 @@ public class Polyomino : IVertex
         ListenForInput(false);
     }
 
-    void QueuePosition(Coord pos)
+    protected void QueuePosition(Coord pos)
     {
         if(lastPositions.Count >= (framesBeforeLockIn + leniencyFrames))
         {

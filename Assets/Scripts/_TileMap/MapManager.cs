@@ -61,7 +61,7 @@ public class MapManager : MonoBehaviour
         _center = Services.MapManager.CenterIndexOfGrid();
     }
 
-    public void GenerateMap()
+    public void GenerateMap(bool newEditLevel = false)
     {
         if (Services.GameManager.mode == TitleSceneScript.GameMode.Challenge)
         {
@@ -85,6 +85,7 @@ public class MapManager : MonoBehaviour
             _mapHeight = 20;
         }
         Services.GameData.totalMapTiles = MapWidth * MapHeight;
+
         for (int i = 0; i < 2; i++)
         {
             Services.GameData.filledMapTiles[i] = 0;
@@ -110,11 +111,13 @@ public class MapManager : MonoBehaviour
                 tile.name = "Tile [X: " + i + ", Y: " + j + "]";
             }
         }
+        structuresOnMap = new List<TechBuilding>();
+        structureCoords = new List<Coord>();
+        terrainOnMap = new List<Polyomino>();
 
+        
 
-        TaskQueue boardAnimationTasks;
-
-        if (Services.GameManager.levelSelected == null)
+        if (Services.GameManager.levelSelected == null || newEditLevel)
         {
             GenerateStructures(null);
         }
@@ -122,6 +125,8 @@ public class MapManager : MonoBehaviour
         {
             GenerateStructures(Services.GameManager.levelSelected);
         }
+
+        
         foreach (MapTile mapTile in Map)
         {
             mapTile.gameObject.SetActive(false);
@@ -131,12 +136,15 @@ public class MapManager : MonoBehaviour
             structure.holder.gameObject.SetActive(false);
         }
 
+
         foreach (Polyomino piece in terrainOnMap)
         {
             piece.ScaleHolder(Vector3.one);
             piece.SetAlpha(1);
             piece.holder.gameObject.SetActive(false);
         }
+
+        TaskQueue boardAnimationTasks;
 
         boardAnimationTasks = new TaskQueue(new List<Task>() {
             new Wait(0.3f),
@@ -145,6 +153,7 @@ public class MapManager : MonoBehaviour
             new ScrollReadyBanners(Services.UIManager.UIBannerManager.readyBanners, true)
             });
         Services.GameScene.tm.Do(boardAnimationTasks);
+
 
 
 
@@ -201,6 +210,9 @@ public class MapManager : MonoBehaviour
                 case BuildingType.RETALIATE:
                     techBuilding = new Retaliate();
                     break;
+                case BuildingType.EDITMODE:
+                    techBuilding = new EditModeBuilding(Services.GameManager.Players[0]);
+                    break;
                 default:
                     return null;
             }
@@ -213,14 +225,13 @@ public class MapManager : MonoBehaviour
 
     void GenerateTerrain()
     {
-        terrainOnMap = new List<Polyomino>();
         if (Services.GameManager.levelSelected == null ||
-            Services.GameManager.levelSelected.impassibleCoords.Length == 0)
+            Services.GameManager.levelSelected.impassibleCoords == null)
             return;
         
         foreach(Coord coord in Services.GameManager.levelSelected.impassibleCoords)
         {
-            Polyomino impassiblePiece = new Polyomino(1, 0, null, false);
+            Polyomino impassiblePiece = new Polyomino(1, 0, null, true, false);
             impassiblePiece.MakePhysicalPiece();
             impassiblePiece.PlaceAtLocation(coord, false , true);
             terrainOnMap.Add(impassiblePiece);
@@ -228,19 +239,15 @@ public class MapManager : MonoBehaviour
 
         foreach (Coord coord in Services.GameManager.levelSelected.destructibleTerrainCoords)
         {
-            Polyomino destructiblePiece = new Polyomino(1, 0, null);
+            Polyomino destructiblePiece = new Polyomino(1, 0, null, true);
             destructiblePiece.MakePhysicalPiece();
             destructiblePiece.PlaceAtLocation(coord, false, true);
             terrainOnMap.Add(destructiblePiece);
         }
-
-        
-
     }
 
     void GetStructureCoords()
     {
-        structureCoords = new List<Coord>();
         foreach (TechBuilding structure in Services.MapManager.structuresOnMap)
         {
             foreach (Tile tile in structure.tiles)
@@ -250,6 +257,30 @@ public class MapManager : MonoBehaviour
                     structureCoords.Add(tile.coord);
                 }
             }
+        }
+    }
+
+    public void RemoveStructure(TechBuilding tech)
+    {
+        List<Coord> structCoordsToRemove = new List<Coord>();
+        foreach (Tile tile in tech.tiles)
+        {
+            Map[tile.coord.x, tile.coord.y].SetMapSprite(false);
+            Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(null);
+            if (structureCoords.Contains(tile.coord) && !structCoordsToRemove.Contains(tile.coord))
+            {
+                structCoordsToRemove.Add(tile.coord);
+            }
+        }
+
+        foreach (Coord coord in structCoordsToRemove)
+        {
+            structureCoords.Remove(coord);
+        }
+
+        if (structuresOnMap.Contains(tech))
+        {
+            structuresOnMap.Remove(tech);
         }
     }
 
@@ -292,29 +323,38 @@ public class MapManager : MonoBehaviour
         return new List<BuildingType>(TechBuilding.techTypes);
     }
 
+
+    public void MakeExpansions()
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            Base cornerBase = new Base();
+            cornerBase.MakePhysicalPiece();
+            Coord location;
+            if (j == 0)
+            {
+                location = new Coord(MapWidth - 2, 1);
+            }
+            else
+            {
+                location = new Coord(0, MapHeight - 1);
+            }
+            cornerBase.PlaceAtLocation(location);
+            structuresOnMap.Add(cornerBase);
+
+        }
+    }
+
     void GenerateStructures(Level level)
     {
-        structuresOnMap = new List<TechBuilding>();
+
         List<BuildingType> structureTypes = InitStructureTypeList();
+        GenerateTerrain();
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit && level == null) return;
 
         if (level == null || level.cornerBases)
         {
-            for (int j = 0; j < 2; j++)
-            {
-                Base cornerBase = new Base();
-                cornerBase.MakePhysicalPiece();
-                Coord location;
-                if (j == 0)
-                {
-                    location = new Coord(MapWidth - 2, 1);
-                }
-                else
-                {
-                    location = new Coord(0, MapHeight - 1);
-                }
-                cornerBase.PlaceAtLocation(location);
-                structuresOnMap.Add(cornerBase);
-            }
+            MakeExpansions();   
         }
 
         if (level == null) // use procedural generation if no supplied level
@@ -332,7 +372,7 @@ public class MapManager : MonoBehaviour
                 }
                 structuresOnMap.Add(structure);
             }
-            GenerateTerrain();
+            
         }
         else GenerateLevel(level);
 
@@ -362,7 +402,7 @@ public class MapManager : MonoBehaviour
             structureTypes = RemoveBuildingTypesFromTechPool(level.availableStructures,
                                                                      DungeonRunManager.dungeonRunData.currentTech);
         }
-        else
+        else 
         {
             structureTypes = new List<BuildingType>(level.availableStructures);
         }
@@ -372,9 +412,18 @@ public class MapManager : MonoBehaviour
             BuildingType type;
             if (structureTypes.Count == 0)
                 structureTypes = new List<BuildingType>(level.availableStructures);
-            type = structureTypes[Random.Range(0, structureTypes.Count)];
-            structureTypes.Remove(type);
+
+            if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
+            {
+                type = structureTypes[Random.Range(0, structureTypes.Count)];
+                structureTypes.Remove(type);
+            }
+            else
+            {
+                type = BuildingType.EDITMODE;
+            }
             TechBuilding structure = GenerateStructure(type, level.structCoords[i]);
+            
             structuresOnMap.Add(structure);
         }
 

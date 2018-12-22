@@ -1,18 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class UIEntryAnimation : Task
 {
+    private bool editMode;
     private const float animDuration = 0.3f;
     private const float staggerTime = 0.05f;
     private float timeElapsed;
     private GameObject[] meters;
     private List<Blueprint> blueprints;
+    
     private Vector3[] meterStartPositions;
     private Vector3[] meterTargetPositions;
     private Vector3[] blueprintStartPositions;
     private Vector3[] blueprintTargetPositions;
+    
     private const float meterOffset = 200f;
     private const float blueprintOffset = 10f;
     private bool[] metersOn;
@@ -20,8 +24,11 @@ public class UIEntryAnimation : Task
     private bool showDestructors;
     private int meterLength;
 
+    
+
     public UIEntryAnimation(GameObject[] meters_, List<Blueprint> blueprints_, bool showDestructors_)
     {
+        editMode = false;
         meters = meters_;
         blueprints = blueprints_;
         showDestructors = showDestructors_;
@@ -40,7 +47,7 @@ public class UIEntryAnimation : Task
         blueprintTargetPositions = new Vector3[blueprints.Count];
 
         if (!showDestructors) meters[meters.Length - 1].SetActive(false);
-        
+
 
         meterLength = showDestructors ? meters.Length : meters.Length - 1;
 
@@ -66,7 +73,7 @@ public class UIEntryAnimation : Task
             }
             blueprintStartPositions[i] = blueprint.holder.transform.localPosition;
         }
-
+        
     }
 
     internal override void Update()
@@ -89,7 +96,7 @@ public class UIEntryAnimation : Task
                     meterStartPositions[i],
                     meterTargetPositions[i],
                     EasingEquations.Easing.QuadEaseOut(
-                        Mathf.Min(1,(timeElapsed - (i * staggerTime)) / animDuration)));
+                        Mathf.Min(1, (timeElapsed - (i * staggerTime)) / animDuration)));
             }
         }
 
@@ -107,8 +114,9 @@ public class UIEntryAnimation : Task
                 blueprintStartPositions[i],
                 blueprintTargetPositions[i],
                 EasingEquations.Easing.QuadEaseOut(
-                    Mathf.Min(1,(timeElapsed - (i * staggerTime)) / animDuration)));
+                    Mathf.Min(1, (timeElapsed - (i * staggerTime)) / animDuration)));
         }
+        
 
         if (timeElapsed >= animDuration + meters.Length * staggerTime) SetStatus(TaskStatus.Success);
     }

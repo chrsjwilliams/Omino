@@ -19,6 +19,11 @@ public class RotationEvent : GameEvent
     }
 }
 
+public class RefreshLevelSelectSceneEvent : GameEvent
+{
+    public RefreshLevelSelectSceneEvent() { }
+}
+
 public class GameEndEvent : GameEvent
 {
     public readonly Player winner;

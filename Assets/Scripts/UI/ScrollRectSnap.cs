@@ -59,9 +59,11 @@ public class ScrollRectSnap : MonoBehaviour
 
         touchID = -1;
         distance = new float[numOfLevels];
-
-        imageDistance = (int)Mathf.Abs(images[2].GetComponent<RectTransform>().anchoredPosition.x - 
+        if (numOfLevels > 3)
+            imageDistance = (int)Mathf.Abs(images[2].GetComponent<RectTransform>().anchoredPosition.x -
                                         images[1].GetComponent<RectTransform>().anchoredPosition.x);
+        else
+            imageDistance = 300;
 
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
@@ -111,8 +113,8 @@ public class ScrollRectSnap : MonoBehaviour
             {
                 currentIndex = i;
                 
-                if (currentIndex > 5)
-                    currentIndex = 5;
+                if (currentIndex > images.Length - 1)
+                    currentIndex = images.Length - 1;
                 
                 if (currentIndex != lastClickIndex)
                 {

@@ -10,11 +10,13 @@ public class ScrollReadyBanners : Task
     private Vector3[] targetPositions;
     private Vector3[] startPositions;
     private bool scrollOn;
+    private bool editMode;
 
-    public ScrollReadyBanners(ReadyBanner[] banners_, bool scrollOn_)
+    public ScrollReadyBanners(ReadyBanner[] banners_, bool scrollOn_, bool editMode_ = false)
     {
         banners = banners_;
         scrollOn = scrollOn_;
+        editMode = editMode_;
     }
 
     protected override void Init()
@@ -35,14 +37,23 @@ public class ScrollReadyBanners : Task
                 banners[i].Init();
             }
         }
+
+        if(editMode)
+        {
+            startPositions[1] = targetPositions[1];
+            banners[1].transform.localPosition = startPositions[1];
+        }
     }
 
     internal override void Update()
     {
         timeElapsed += Time.deltaTime;
 
+        
+
         for (int i = 0; i < banners.Length; i++)
         {
+
             Vector3 start;
             Vector3 target;
             EasingEquations.Easing.Function easingFunction;

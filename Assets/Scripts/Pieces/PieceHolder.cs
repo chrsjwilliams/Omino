@@ -72,9 +72,15 @@ public class PieceHolder : MonoBehaviour {
         claimAnimDuration = Services.Clock.QuarterLength();
         claimIconChangeDuration = Services.Clock.QuarterLength();
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    private void OnDestroy()
+    {
+
+        piece.DestroyThis();
+    }
+
+    // Update is called once per frame
+    void Update () {
         if (changingColor) LerpToTargetColor(spriteBottom, prevColor, targetColor);
         if (pathHighlightDelay > 0) TickDownHighlightDelay();
         if (highlightingPath) PathHighlight();

@@ -17,6 +17,8 @@ public class Base : TechBuilding
 
     public Base(Player _player, bool _mainBase) : base(9, 0, _player)
     {
+        if (owner != null) holderName = "Player " + owner.playerNum + " Base";
+        else holderName = "Neutral Base";
         mainBase = _mainBase;
         owner = _player;
 

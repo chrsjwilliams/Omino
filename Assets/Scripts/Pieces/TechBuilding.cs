@@ -6,6 +6,7 @@ public abstract class TechBuilding : Polyomino
 {
     public static TechBuilding GetBuildingFromType(BuildingType type)
     {
+        
         TechBuilding structure;
         switch (type)
         {
@@ -115,7 +116,7 @@ public abstract class TechBuilding : Polyomino
         index = _index;
         units = _units;
         placed = true;
-
+        isTerrain = true;
         holderName = GetName() + " Holder";
     }
 
@@ -124,7 +125,7 @@ public abstract class TechBuilding : Polyomino
         destructible = false;
         index = _index;
         placed = true;
-
+        isTerrain = true;
         holderName = GetName() + " Holder";
         piece = techBuilding;
     }
@@ -145,9 +146,9 @@ public abstract class TechBuilding : Polyomino
         }
     }
 
-    public override void PlaceAtCurrentLocation(bool replace, bool isTerrain)
+    public override void PlaceAtCurrentLocation(bool replace)
     {
-        base.PlaceAtCurrentLocation(false, true);
+        base.PlaceAtCurrentLocation(false);
         //placed = true;
         //OnPlace();
         foreach (Tile tile in tiles)

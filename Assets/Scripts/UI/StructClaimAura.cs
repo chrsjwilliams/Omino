@@ -28,6 +28,7 @@ public class StructClaimAura : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
         timeElapsed += Time.deltaTime;
         transform.localScale = Vector3.Lerp(baseScale, targetScale,
             EasingEquations.Easing.QuadEaseOut(timeElapsed / timeToMaxScale));

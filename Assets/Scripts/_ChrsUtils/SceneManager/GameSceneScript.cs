@@ -36,7 +36,15 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GameEventManager = new GameEventsManager();
         Services.UIManager = GetComponentInChildren<UIManager>();
         Services.TutorialManager = GetComponentInChildren<TutorialManager>();
-        Services.MapManager.GenerateMap();
+
+        if (Services.GameManager.levelSelected == null)
+        {
+            Services.MapManager.GenerateMap();
+        }
+        else
+        {
+            Services.MapManager.GenerateMap(Services.GameManager.levelSelected.isNewEditLevel());
+        }
         Services.UIManager.UIForSinglePlayer(true);
 
         switch (Services.GameManager.mode)
@@ -113,7 +121,7 @@ public class GameSceneScript : Scene<TransitionData>
         {
             Services.GameManager.InitPlayersEvoMode();
         }
-        else
+        else if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
         {
             Services.GameManager.InitPlayers(Services.GameManager.handicapValue);
         }
@@ -147,7 +155,7 @@ public class GameSceneScript : Scene<TransitionData>
         }
     }
 
-    public void OnMouseDownEvent(MouseDown e)
+    public virtual void OnMouseDownEvent(MouseDown e)
     {
 
         Vector3 mouseWorldPos =
@@ -155,7 +163,7 @@ public class GameSceneScript : Scene<TransitionData>
         OnInputDown(mouseWorldPos);
     }
 
-    public void OnTouchDown(TouchDown e)
+    public virtual void OnTouchDown(TouchDown e)
     {
         Vector3 touchWorldPos =
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position);
@@ -163,7 +171,7 @@ public class GameSceneScript : Scene<TransitionData>
     }
 
 
-    public void OnInputDown(Vector3 position)
+    public virtual void OnInputDown(Vector3 position)
     {
         Vector3 effectPosition = new Vector3(position.x, position.y, 5);
         RaycastHit2D hit = Physics2D.Raycast(effectPosition, -Vector2.up);
@@ -328,7 +336,7 @@ public class GameSceneScript : Scene<TransitionData>
         Services.Scenes.Swap<GameSceneScript>();
     }
 
-    public void ReturnToLevelSelect()
+    public virtual void ReturnToLevelSelect()
     {
         Services.Analytics.MatchEnded();
         Task returnToLevelSelect = new WaitUnscaled(0.01f);
@@ -336,7 +344,7 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GeneralTaskManager.Do(returnToLevelSelect);
     }
 
-    void LoadLevelSelect()
+    public virtual void LoadLevelSelect()
     {
         Services.AudioManager.FadeOutLevelMusic();
         switch (Services.GameManager.mode)
@@ -378,7 +386,7 @@ public class GameSceneScript : Scene<TransitionData>
         }
     }
 
-    public void Reset()
+    public virtual void Reset()
     {
         Services.Analytics.MatchEnded();
         Services.AudioManager.FadeOutLevelMusicMainMenuCall();
@@ -390,6 +398,7 @@ public class GameSceneScript : Scene<TransitionData>
         gameStarted = true;
         TogglePlayerHandLock(false);
         if (Services.MapManager.currentLevel != null &&
+            Services.MapManager.currentLevel.tooltips != null &&
             Services.MapManager.currentLevel.tooltips.Length > 0)
         {
             Services.TutorialManager.Init();
@@ -414,27 +423,28 @@ public class GameSceneScript : Scene<TransitionData>
         }
     }
 
-    public void StartGameSequence()
+    public virtual void StartGameSequence()
     {
         TaskTree startSequence = new TaskTree(new ScrollReadyBanners(Services.UIManager.UIBannerManager.readyBanners, false));
         TaskTree uiEntry;
         TaskTree handEntry;
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial 
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial
             && Services.GameManager.levelSelected.campaignLevelNum == 1)
         {
-            showDestructors = false;          
+            showDestructors = false;
             uiEntry =
                 new TaskTree(new EmptyTask(),
                     new TaskTree(
                         new UIEntryAnimation(Services.UIManager.UIMeters[0].meters, Services.GameManager.Players[0].blueprints, showDestructors)));
 
-           handEntry =
-           new TaskTree(new EmptyTask(),
-               new TaskTree(
-               new HandPieceEntry(Services.GameManager.Players[0].hand)));
+            handEntry =
+            new TaskTree(new EmptyTask(),
+                new TaskTree(
+                new HandPieceEntry(Services.GameManager.Players[0].hand)));
         }
         else
         {
+
             showDestructors = true;
             uiEntry =
                 new TaskTree(new EmptyTask(),
@@ -449,7 +459,9 @@ public class GameSceneScript : Scene<TransitionData>
                 new HandPieceEntry(Services.GameManager.Players[0].hand)),
                 new TaskTree(
                     new HandPieceEntry(Services.GameManager.Players[1].hand)));
+
         }
+
         if (Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial)
         {
             startSequence

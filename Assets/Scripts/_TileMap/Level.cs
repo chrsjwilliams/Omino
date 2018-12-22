@@ -31,6 +31,8 @@ public class Level : ScriptableObject
     public AIStrategy overrideStrategy;
     public LevelData data;
 
+    private bool newEditLevel = false;
+
     public void SetLevelData()
     {
         data = new LevelData(   levelName, campaignLevelNum, objectives, availableStructures,
@@ -41,6 +43,21 @@ public class Level : ScriptableObject
                                 barracksEnabled, stackDestructorInOpeningHand,
                                 tooltips, overrideStrategy);
     }
+
+    public void SetLevelData(int _width, int _height)
+    {
+        width = _width;
+        height = _height;
+        newEditLevel = true;
+        p1HomeBasePos = new Coord(1, 1);
+        p2HomeBasePos = new Coord( width - 2, height - 2);
+        availableStructures = new BuildingType[0];
+        structCoords = new Coord[0];
+        cornerBases = true;
+    }
+
+    public bool isNewEditLevel() { return newEditLevel; }
+    public void setOverwriteMode() { newEditLevel = false; }
 }
 
 [Serializable]
@@ -101,6 +118,47 @@ public class LevelData
         stackDestructorInOpeningHand = _stackDestrcutor;
         tooltips = _tooltips;
         overrideStrategy = aiStrategy;
+    }
+
+    public void PrintMap()
+    {
+        Debug.Log("P1 Base: " + p1HomeBasePos.ToString());
+        Debug.Log("P2 Base: " + p2HomeBasePos.ToString());
+
+        Debug.Log("-------------------------------------------------------");
+
+        Debug.Log("Preplaced P1 Tiles");
+        for(int i = 0; i < preplacedP1Tiles.Length; i++)
+        {
+            Debug.Log(preplacedP1Tiles[i].ToString());
+        }
+
+        Debug.Log("-------------------------------------------------------");
+
+        Debug.Log("Preplaced P2 Tiles");
+        for (int i = 0; i < preplacedP2Tiles.Length; i++)
+        {
+            Debug.Log(preplacedP2Tiles[i].ToString());
+        }
+
+        Debug.Log("-------------------------------------------------------");
+
+        Debug.Log("Indestructible Tiles");
+        for (int i = 0; i < impassibleCoords.Length; i++)
+        {
+            Debug.Log(impassibleCoords[i].ToString());
+        }
+
+        Debug.Log("-------------------------------------------------------");
+
+        Debug.Log("Destructible Tiles");
+        for (int i = 0; i < destructibleTerrainCoords.Length; i++)
+        {
+            Debug.Log(destructibleTerrainCoords[i].ToString());
+        }
+
+        Debug.Log("-------------------------------------------------------");
+
     }
 
     public Level CreateLevel()

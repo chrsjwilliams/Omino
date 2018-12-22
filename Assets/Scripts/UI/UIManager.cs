@@ -321,7 +321,8 @@ public class UIManager : MonoBehaviour {
             textColor = Color.white;
         }
 
-        UIMenu.tutorialLevelCompleteMenu.gameObject.SetActive(false);
+        if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
+            UIMenu.tutorialLevelCompleteMenu.gameObject.SetActive(false);
 
         if (Services.GameManager.disableUI)
         {
@@ -349,7 +350,7 @@ public class UIManager : MonoBehaviour {
             levelSelectButton.gameObject.SetActive(false);
 
         }
-        else
+        else if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
         {
             levelSelectButton.gameObject.SetActive(true);
             replayButton.gameObject.GetComponentsInChildren<Image>(true)[1].gameObject.SetActive(true);
