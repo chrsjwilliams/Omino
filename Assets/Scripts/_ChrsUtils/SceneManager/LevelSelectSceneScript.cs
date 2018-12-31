@@ -4,13 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/*
- * 
- * TODO:    
- *          FIX editting same map!
- * 
- */ 
-
 public class LevelSelectSceneScript : Scene<TransitionData>
 {
     public bool[] humanPlayers { get; private set; }
@@ -94,7 +87,6 @@ public class LevelSelectSceneScript : Scene<TransitionData>
                     foreach (TextMeshProUGUI text in levelButtons[levelButtonIndex].GetComponentsInChildren<TextMeshProUGUI>())
                     {
                         text.text = levelButtons[levelButtonIndex].name.ToLower();
-                        Debug.Log(text.text);
                     }
 
                     levelButtonIndex++;
@@ -130,7 +122,6 @@ public class LevelSelectSceneScript : Scene<TransitionData>
                 {
                     text.text = levelButtons[levelButtonIndex].name.ToLower();
                 }
-
                 levelButtonIndex++;
             }
         }

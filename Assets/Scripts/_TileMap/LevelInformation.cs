@@ -127,10 +127,11 @@ public static class LevelManager
             if(levelInfo.customLevels[i].levelName == levelData.levelName)
             {
                 levelInfo.customLevels[i] = levelData;
+                levelInfo.levelDictionary[levelData.levelName] = levelData;
                 break;
             }
         }
-
+        Debug.Log("Overwrite");
         SaveData();
     }
 

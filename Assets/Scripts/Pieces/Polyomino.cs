@@ -1148,7 +1148,7 @@ public class Polyomino : IVertex
             {
                 DestroyThis();
             }
-            if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
+            if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit && !isTerrain)
                 Services.GameData.filledMapTiles[owner.playerNum - 1] -= tiles.Count;
             
         }
@@ -1169,7 +1169,7 @@ public class Polyomino : IVertex
             piece.adjacentPieces.Remove(this);
         }
 
-        if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
+        if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit && !isTerrain)
             owner.OnPieceRemoved(this);
         dead = true;
     }
@@ -1260,7 +1260,7 @@ public class Polyomino : IVertex
             }
         }
         SetSprites();
-        if (buildingType != BuildingType.BASE)
+        if (buildingType != BuildingType.BASE && buildingType != BuildingType.EDITMODE)
         {
             EnterUnselectedState(false);
         }
@@ -1466,13 +1466,13 @@ public class Polyomino : IVertex
                 Services.GameEventManager.Unregister<MouseMove>(OnMouseMoveEvent);
                 Services.GameEventManager.Unregister<MouseUp>(OnMouseUpEvent);
             }
-            bool piecePlaced;
+            bool piecePlaced = false;
             if (IsPlacementLegal() && affordable && !owner.gameOver && !forceCancel)
             {
                 PlaceAtCurrentLocation();
                 piecePlaced = true;
             }
-            else
+            else if(buildingType != BuildingType.EDITMODE)
             {
                 owner.CancelSelectedPiece();
                 EnterUnselectedState(false);

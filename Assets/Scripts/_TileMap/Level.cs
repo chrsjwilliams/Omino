@@ -159,6 +159,14 @@ public class LevelData
 
         Debug.Log("-------------------------------------------------------");
 
+        Debug.Log("Struct Coords");
+        for (int i = 0; i < structCoords.Length; i++)
+        {
+            Debug.Log(structCoords[i].ToString());
+        }
+
+        Debug.Log("-------------------------------------------------------");
+
     }
 
     public Level CreateLevel()

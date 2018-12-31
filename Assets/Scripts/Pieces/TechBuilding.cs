@@ -222,6 +222,7 @@ public abstract class TechBuilding : Polyomino
         base.SetIconSprite();
         holder.icon.enabled = true;
         holder.icon.sprite = Services.TechDataLibrary.GetIcon(buildingType);
+        holder.icon.transform.localScale = buildingType == BuildingType.EDITMODE ? new Vector3(1.3f, 1.3f, 1) : Vector3.one;
         if (buildingType != BuildingType.BASE)
         {
             holder.dropShadow.sprite = Services.TechDataLibrary.techDropShadow;
