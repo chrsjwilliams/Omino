@@ -30,8 +30,11 @@ public class DrawTask : Task
     protected override void Init()
     {
         timeElapsed = 0;
-        piece.MakePhysicalPiece();
-        piece.Reposition(startPos);
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
+        {
+            piece.MakePhysicalPiece();
+            piece.Reposition(startPos);
+        }
         startPos = piece.holder.transform.position;
         duration = Polyomino.drawAnimDur;
         targetPos = piece.owner.GetHandPosition(piece.owner.handCount) 
