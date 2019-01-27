@@ -478,8 +478,10 @@ public class Player : MonoBehaviour
         Services.UIManager.UIMeters[playerNum - 1].UpdateResourceMeter(destructorDrawMeterFillAmt, true, attackResources);
         if (normalDrawMeterFillAmt >= 1)
         {
-            rawDrawPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
-                Services.UIManager.UIMeters[playerNum - 1].factoryBlueprintLocation.position);
+            rawDrawPos = Services.UIManager.UIMeters[playerNum - 1].factoryBlueprintLocation.position;
+
+            //Services.GameManager.MainCamera.ScreenToWorldPoint(
+            //Services.UIManager.UIMeters[playerNum - 1].factoryBlueprintLocation.position);
             DrawPieces(1, new Vector3(rawDrawPos.x,rawDrawPos.y, 0));
             normalDrawMeterFillAmt -= 1;
         }
@@ -653,8 +655,9 @@ public class Player : MonoBehaviour
         
         nextPiece.MakePhysicalPiece();
         Vector3 position;
-        position = Services.GameManager.MainCamera.ScreenToWorldPoint(
-            Services.UIManager.UIMeters[playerNum - 1].GetBarPosition(destructor));
+        position = Services.UIManager.UIMeters[playerNum - 1].GetBarPosition(false);
+            //Services.GameManager.MainCamera.ScreenToWorldPoint(
+            //Services.UIManager.UIMeters[playerNum - 1].GetBarPosition(destructor));
         nextPiece.Reposition(new Vector3(position.x, position.y, 0));
         nextPiece.QueueUp();
         if (destructor)
@@ -701,18 +704,18 @@ public class Player : MonoBehaviour
         switch (piece.buildingType)
         {
             case BuildingType.FACTORY:
-                screenPos = Services.UIManager.UIMeters[playerNum - 1].factoryBlueprintLocation.position;
+                screenPos = Services.UIManager.UIMeters[playerNum - 1].factoryBlueprintLocation.TransformPoint(screenPos);
                 break;
             case BuildingType.GENERATOR:
-                screenPos = Services.UIManager.UIMeters[playerNum - 1].mineBlueprintLocation.position;
+                screenPos = Services.UIManager.UIMeters[playerNum - 1].mineBlueprintLocation.TransformPoint(screenPos);
                 break;
             case BuildingType.BARRACKS:
-                screenPos = Services.UIManager.UIMeters[playerNum - 1].bombFactoryBlueprintLocation.position;
+                screenPos = Services.UIManager.UIMeters[playerNum - 1].bombFactoryBlueprintLocation.TransformPoint(screenPos);
                 break;
             default:
                 break;
         }
-        Vector3 rawWorldPos = Services.GameManager.MainCamera.ScreenToWorldPoint(screenPos);
+        Vector3 rawWorldPos = screenPos;// Services.GameManager.MainCamera.ScreenToWorldPoint(screenPos);
         Vector3 centerpoint = piece.GetCenterpoint() * Polyomino.unselectedScale.x;
         rawWorldPos -= centerpoint;
         return new Vector3(rawWorldPos.x, rawWorldPos.y, 0);

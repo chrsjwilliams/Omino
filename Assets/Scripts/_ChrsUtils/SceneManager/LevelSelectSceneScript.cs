@@ -103,6 +103,7 @@ public class LevelSelectSceneScript : Scene<TransitionData>
             levelButtons[0].GetComponent<RectTransform>().localScale = selectedButtonScale;
             levelButtons[0].name = "procedural";
             levelButtons[0].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[0].name);
+            levelButtons[0].GetComponent<Image>().color = new Color(160f / 256f, 160f / 256f, 160f / 256f);
 
 
             foreach (TextMeshProUGUI text in levelButtons[0].GetComponentsInChildren<TextMeshProUGUI>())
@@ -118,6 +119,7 @@ public class LevelSelectSceneScript : Scene<TransitionData>
                 levelButtons[levelButtonIndex].GetComponent<RectTransform>().localScale = unselectedButtonScale;
                 levelButtons[levelButtonIndex].name = entry.Key;
                 levelButtons[levelButtonIndex].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[levelButtonIndex].name);
+                levelButtons[levelButtonIndex].GetComponent<Image>().color = new Color(160f / 256f, 160f / 256f, 160f / 256f);
                 foreach (TextMeshProUGUI text in levelButtons[levelButtonIndex].GetComponentsInChildren<TextMeshProUGUI>())
                 {
                     text.text = levelButtons[levelButtonIndex].name.ToLower();
@@ -198,7 +200,6 @@ public class LevelSelectSceneScript : Scene<TransitionData>
 
     internal override void ExitTransition()
     {
-        Debug.Log("Here!");
         /*
         GameObject levelSelectText =
             levelButtonParent.GetComponentInChildren<TextMeshProUGUI>().gameObject;

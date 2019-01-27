@@ -24,7 +24,7 @@ public class UIMeters : MonoBehaviour
     //public Image[][] attackResourceSlots;
     //public Image[][] attackResourceSlotBacks;
 
-    public RectTransform blueprintUIZone;
+    public Transform blueprintUIZone;
     public GameObject techPowerUpIconArray;
     public GameObject[] meters { get; private set; }
     [SerializeField]
@@ -43,9 +43,9 @@ public class UIMeters : MonoBehaviour
     private TextMeshProUGUI destLevelText;
 
 
-    public Transform mineBlueprintLocation;
-    public Transform factoryBlueprintLocation;
-    public Transform bombFactoryBlueprintLocation;
+    public RectTransform mineBlueprintLocation;
+    public RectTransform factoryBlueprintLocation;
+    public RectTransform bombFactoryBlueprintLocation;
 
     [SerializeField]
     private float resourceGainHighlightDuration;
@@ -376,11 +376,11 @@ public class UIMeters : MonoBehaviour
     {
         if (destructor)
         {
-            return destructorDrawMeter.transform.position;
+            return destructorDrawMeter.transform.TransformPoint(Vector3.zero);
         }
         else
         {
-            return normalDrawMeter.transform.position;
+            return normalDrawMeter.transform.TransformPoint(Vector3.zero);
         }
     }
 

@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: FilledSquareParticle
-  m_Shader: {fileID: 200, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: 0fc06dbae827e7646bd0850ff121daa5, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -38,6 +38,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MKGlowTex:
+        m_Texture: {fileID: 2800000, guid: 91cf4a9af60431041837902ed35bf39a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 59c14e0cdbc64ea48a2e2e84e6c096e2, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -63,6 +67,8 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _InvFade: 1
+    - _MKGlowPower: 1.285
+    - _MKGlowTexStrength: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -75,4 +81,6 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _MKGlowColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MKGlowTexColor: {r: 1, g: 1, b: 1, a: 1}
     - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}

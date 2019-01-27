@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class HandPieceEntry : Task
 {
     private float timeElapsed;
-    private const float animDuration = 0.3f;
+    private const float animDuration = 0.5f;
     private const float staggerTime = 0.1f;
     private List<Polyomino> hand;
     private bool[] piecesOn;
@@ -23,13 +23,16 @@ public class HandPieceEntry : Task
         pieceTargetPositions = new Vector3[hand.Count];
         if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
         {
-            startPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
-               Services.UIManager.UIMeters[0].GetBarPosition(false));
+            startPos = Services.UIManager.UIMeters[0].GetBarPosition(false);
+                //Services.GameManager.MainCamera.ScreenToWorldPoint(
+                //Services.UIManager.UIMeters[0].GetBarPosition(false));
         }
         else
         {
-            startPos = Services.GameManager.MainCamera.ScreenToWorldPoint(
-                Services.UIManager.UIMeters[hand[0].owner.playerNum - 1].GetBarPosition(false));
+            startPos = Services.UIManager.UIMeters[hand[0].owner.playerNum - 1].GetBarPosition(false);
+            // Services.GameManager.MainCamera.ScreenToWorldPoint(  
+            //    Services.UIManager.UIMeters[hand[0].owner.playerNum - 1].GetBarPosition(false));
+
         }
         startPos = new Vector3(startPos.x, startPos.y, 0);
         for (int i = 0; i < hand.Count; i++)

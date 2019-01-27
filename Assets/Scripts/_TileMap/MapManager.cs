@@ -109,6 +109,7 @@ public class MapManager : MonoBehaviour
                 tile.Init(tileCoord);
                 _map[i, j] = tile;
                 tile.name = "Tile [X: " + i + ", Y: " + j + "]";
+                tile.sr.color = new Color(125f / 256f, 125f / 256f, 125f / 256f);
             }
         }
         structuresOnMap = new List<TechBuilding>();
