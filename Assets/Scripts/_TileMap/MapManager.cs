@@ -408,8 +408,6 @@ public class MapManager : MonoBehaviour
             structureTypes = new List<BuildingType>(level.availableStructures);
         }
 
-        Debug.Log("Generate Level: " + level.structCoords.Length);
-
         for (int i = 0; i < level.structCoords.Length; i++)
         {
             BuildingType type;

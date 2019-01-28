@@ -65,6 +65,8 @@ public class LevelSelectSceneScript : Scene<TransitionData>
                     levelButtons[levelButtonIndex].GetComponent<RectTransform>().localScale = unselectedButtonScale;
                     levelButtons[levelButtonIndex].name = levelData.levelName;
                     levelButtons[levelButtonIndex].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[levelButtonIndex].name);
+                    levelButtons[levelButtonIndex].GetComponent<Image>().color = new Color(160f / 256f, 160f / 256f, 160f / 256f);
+
                     foreach (TextMeshProUGUI text in levelButtons[levelButtonIndex].GetComponentsInChildren<TextMeshProUGUI>())
                     {
                         text.text = levelButtons[levelButtonIndex].name.ToLower();
@@ -173,6 +175,8 @@ public class LevelSelectSceneScript : Scene<TransitionData>
             levelButtonParent.GetComponentInChildren<TextMeshProUGUI>().gameObject;
         levelSelectText.SetActive(false);
         playButton.SetActive(false);
+
+        Services.CameraController.SetPosition(new Vector3(9.5f, 9.5f, -10));
 
         TaskTree mapSelectEntrance = new TaskTree(new EmptyTask(),
             new TaskTree(new LevelSelectTextEntrance(levelSelectText, true)),
