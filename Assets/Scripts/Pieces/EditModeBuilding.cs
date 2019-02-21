@@ -11,6 +11,7 @@ public class EditModeBuilding : TechBuilding
         buildingType = BuildingType.EDITMODE;
         placed = false;
         cost = 0;
+		ListenForInput (false);
     }
 
     public override void OnClaimEffect(Player player){  }

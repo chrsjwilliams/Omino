@@ -432,13 +432,13 @@ public class UIManager : MonoBehaviour {
         if (Services.GameManager.SoundEffectsEnabled)
         {
             button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
-            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Sound FX";
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "sound fx";
 
         }
         else
         {
             button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
-            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<s>Sound FX</s>";
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<s>sound fx</s>";
         }
     }
 
@@ -449,13 +449,13 @@ public class UIManager : MonoBehaviour {
         if (Services.GameManager.MusicEnabled)
         {
             button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[0];
-            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Music";
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "music";
 
         }
         else
         {
             button.GetComponent<Image>().color = Services.GameManager.Player2ColorScheme[1];
-            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<s>Music</s>";
+            button.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<s>music</s>";
         }
     }
 

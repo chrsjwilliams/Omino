@@ -33,7 +33,6 @@ public class EditSceneScript : GameSceneScript {
     {
         hideSavedWord();
         Services.GameEventManager.Register<RefreshLevelSelectSceneEvent>(OnLevelSelectSceneRefresh);
-        touchID = -1;
         Time.timeScale = 1;
         Services.GameScene = this;
         tm = new TaskManager();
@@ -67,10 +66,13 @@ public class EditSceneScript : GameSceneScript {
 
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
+		touchID = -1;
     }
 
     internal override void OnExit()
     {
+		Services.GameEventManager.Unregister<MouseDown>(OnMouseDownEvent);
+		Services.GameEventManager.Unregister<TouchDown>(OnTouchDown);
         Services.GameEventManager.Unregister<RefreshLevelSelectSceneEvent>(OnLevelSelectSceneRefresh);
     }
 
@@ -401,6 +403,7 @@ public class EditSceneScript : GameSceneScript {
     {
         Vector3 touchWorldPos =
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position);
+		//touchID = e.touch.fingerId;
         OnInputDown(touchWorldPos);
     }
 
@@ -441,10 +444,10 @@ public class EditSceneScript : GameSceneScript {
 
     public void OnTouchMove(TouchMove e)
     {
-        if (e.touch.fingerId == touchID)
-        {
+        //if (e.touch.fingerId == touchID)
+        //{
             OnInputDrag(Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position));
-        }
+        //}
     }
 
 
@@ -471,10 +474,10 @@ public class EditSceneScript : GameSceneScript {
 
     public void OnTouchUp(TouchUp e)
     {
-        if (e.touch.fingerId == touchID)
-        {
+        //if (e.touch.fingerId == touchID)
+        //{
             OnInputUp();            
-        }
+        //}
     }
 
     public void OnMouseUpEvent(MouseUp e)
@@ -484,7 +487,7 @@ public class EditSceneScript : GameSceneScript {
 
     public void OnInputUp()
     {
-        touchID = -1;
+        //touchID = -1;
 
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
