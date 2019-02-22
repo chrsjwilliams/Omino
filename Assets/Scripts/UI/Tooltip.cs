@@ -35,8 +35,9 @@ public class Tooltip : MonoBehaviour {
     {
         Vector2 offset = blueprintInHand ? inHandOffset : tooltipOffset;
         offset *= Screen.height / 2048f;
-
-        if (basePos.x > Screen.width / 2)
+        Debug.Log(Screen.width);
+        Debug.Log(basePos.x);
+        if (basePos.x < 5)
         {
             offset = new Vector2(-offset.x, offset.y);
         }

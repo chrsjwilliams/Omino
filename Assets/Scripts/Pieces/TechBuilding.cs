@@ -244,6 +244,11 @@ public abstract class TechBuilding : Polyomino
 
     public override void OnInputDown(bool fromPlayTask)
     {
+        Debug.Log("Making already: " + !Services.UIManager.IsTouchMakingTooltipAlready(touchID));
+        Debug.Log("Tip displayed: " + Services.UIManager.tooltipsDisabled);
+        Debug.Log("IS tutorial: " + (Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial));
+        Debug.Log("Paused: " + !Services.GameScene.gamePaused);
+        Debug.Log("Disabled UI: " + !Services.GameManager.disableUI);
         if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID) &&
             ((!Services.UIManager.tooltipsDisabled 
                 && Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial) 
@@ -260,18 +265,22 @@ public abstract class TechBuilding : Polyomino
             {
                 Tooltip tooltipLeft = GameObject.Instantiate(Services.Prefabs.Tooltip,
                     Services.UIManager.canvas).GetComponent<Tooltip>();
+                //tooltipLeft.Init(GetName(), GetDescription(), 0,
+                //    Services.GameManager.MainCamera.WorldToScreenPoint(
+                //    holder.transform.position + GetCenterpoint()));
                 tooltipLeft.Init(GetName(), GetDescription(), 0,
-                    Services.GameManager.MainCamera.WorldToScreenPoint(
-                    holder.transform.position + GetCenterpoint()));
+                    holder.transform.localPosition + GetCenterpoint());
                 tooltips.Add(tooltipLeft);
             }
             if (!(Services.GameManager.Players[1] is AIPlayer) && !Services.GameManager.pretendIphone)
             {
                 Tooltip tooltipRight = GameObject.Instantiate(Services.Prefabs.Tooltip,
                     Services.UIManager.canvas).GetComponent<Tooltip>();
+                //tooltipRight.Init(GetName(), GetDescription(), 180,
+                //    Services.GameManager.MainCamera.WorldToScreenPoint(
+                //    holder.transform.position + GetCenterpoint()));
                 tooltipRight.Init(GetName(), GetDescription(), 180,
-                    Services.GameManager.MainCamera.WorldToScreenPoint(
-                    holder.transform.position + GetCenterpoint()));
+                    holder.transform.localPosition + GetCenterpoint());
                 tooltips.Add(tooltipRight);
             }
 

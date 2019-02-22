@@ -131,7 +131,10 @@ public class GameSceneScript : Scene<TransitionData>
 
         Services.AudioManager.SetMainTrack(Services.Clips.MenuSong, 0.3f);
         Services.CameraController.SetScreenEdges();
-        
+        GameObject.Find("Canvas").transform.position = new Vector3( Services.GameManager.MainCamera.transform.position.x,
+                                                                    Services.GameManager.MainCamera.transform.position.y,
+                                                                    0);
+
         Services.AudioManager.RegisterStartLevelMusic();
     }
 
