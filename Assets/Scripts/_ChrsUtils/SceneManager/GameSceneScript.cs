@@ -36,7 +36,7 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GameEventManager = new GameEventsManager();
         Services.UIManager = GetComponentInChildren<UIManager>();
         Services.TutorialManager = GetComponentInChildren<TutorialManager>();
-
+       
         if (Services.GameManager.levelSelected == null)
         {
             Services.MapManager.GenerateMap();
@@ -45,6 +45,10 @@ public class GameSceneScript : Scene<TransitionData>
         {
             Services.MapManager.GenerateMap(Services.GameManager.levelSelected.isNewEditLevel());
         }
+        Services.CameraController.SetScreenEdges();
+        GameObject.Find("Canvas").transform.position = new Vector3(Services.GameManager.MainCamera.transform.position.x,
+                                                                    Services.GameManager.MainCamera.transform.position.y,
+                                                                    0);
         Services.UIManager.UIForSinglePlayer(true);
 
         switch (Services.GameManager.mode)
@@ -130,10 +134,7 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
 
         Services.AudioManager.SetMainTrack(Services.Clips.MenuSong, 0.3f);
-        Services.CameraController.SetScreenEdges();
-        GameObject.Find("Canvas").transform.position = new Vector3( Services.GameManager.MainCamera.transform.position.x,
-                                                                    Services.GameManager.MainCamera.transform.position.y,
-                                                                    0);
+
 
         Services.AudioManager.RegisterStartLevelMusic();
     }
