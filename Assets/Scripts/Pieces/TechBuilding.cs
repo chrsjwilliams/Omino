@@ -244,11 +244,6 @@ public abstract class TechBuilding : Polyomino
 
     public override void OnInputDown(bool fromPlayTask)
     {
-        Debug.Log("Making already: " + !Services.UIManager.IsTouchMakingTooltipAlready(touchID));
-        Debug.Log("Tip displayed: " + Services.UIManager.tooltipsDisabled);
-        Debug.Log("IS tutorial: " + (Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial));
-        Debug.Log("Paused: " + !Services.GameScene.gamePaused);
-        Debug.Log("Disabled UI: " + !Services.GameManager.disableUI);
         if (!Services.UIManager.IsTouchMakingTooltipAlready(touchID) &&
             ((!Services.UIManager.tooltipsDisabled 
                 && Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial) 

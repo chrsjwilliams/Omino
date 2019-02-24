@@ -360,9 +360,6 @@ public class Tile : MonoBehaviour, IVertex
         blackEntering = true;
     }
 
-
-
-
     private void EntranceAnimation()
     {
         entranceTime += Time.deltaTime;
@@ -591,12 +588,17 @@ public class Tile : MonoBehaviour, IVertex
 
     public void ToggleConnectedness(bool connected)
     {
+
         if (connected)
         {
             //mainSr.sprite = Sprites[0];
             //crackSr.enabled = false;
             mainSr.enabled = true;
             topSr.enabled = false;
+            if(entering)
+            {
+                mainSr.color = baseColor;
+            }
         }
         else
         {
@@ -617,7 +619,7 @@ public class Tile : MonoBehaviour, IVertex
         {
             bpAssistHighlightSr.gameObject.SetActive(true);
         }
-        bpAssistHighlightSr.color = new Color(bpAssistHighlightSr.color.r, bpAssistHighlightSr.color.g, bpAssistHighlightSr.color.b, alpha);
+        bpAssistHighlightSr.color = new Color(bpAssistHighlightSr.color.r, bpAssistHighlightSr.color.g , bpAssistHighlightSr.color.b, alpha);
     }
 
     public void SetBpAssistColor(Color color)

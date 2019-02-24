@@ -181,7 +181,7 @@ public class UIMeters : MonoBehaviour
 
     private void Start()
     {
-        Color textColor = Color.black;
+        Color textColor = Color.white;
         if (Services.GameManager.mode == TitleSceneScript.GameMode.HyperSOLO ||
             Services.GameManager.mode == TitleSceneScript.GameMode.HyperVS)
         {
@@ -553,7 +553,7 @@ public class UIMeters : MonoBehaviour
         int.TryParse(uiText.text.Split(' ')[1], out prevLevel);
         if (level > prevLevel)
             uiText.GetComponent<ProdLevelText>().StartHighlight();
-        uiText.text = "LV " + level;
+        uiText.text = "lvl " + level;
     }
 
     // Update is called once per frame

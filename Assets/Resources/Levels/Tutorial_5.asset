@@ -11,16 +11,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6e3d42f2220bb342a28180320c2b637, type: 3}
   m_Name: Tutorial_5
   m_EditorClassIdentifier: 
+  levelName: 
+  displayImage: {fileID: 0}
   campaignLevelNum: 5
   objectives:
   - Connect to Opponent's Base
   - Connect to a Tech Structure
   availableStructures: 010000000900000003000000
+  p1HomeBasePos:
+    x: 0
+    y: 0
+  p2HomeBasePos:
+    x: 0
+    y: 0
+  preplacedP1Tiles: []
+  preplacedP2Tiles: []
   structCoords:
   - x: 11
     y: 4
   - x: 3
     y: 12
+  impassibleCoords: []
+  destructibleTerrainCoords: []
   width: 16
   height: 16
   cornerBases: 0
@@ -90,7 +102,7 @@ MonoBehaviour:
     arrowRotation: 0
     dismissable: 1
     enableTooltips: 1
-    windowLocation: {x: 275, y: -275}
+    windowLocation: {x: 255, y: -255}
     secondWindowLocation: {x: 0, y: 0}
     windowSize: {x: 200, y: 200}
     secondWindowSize: {x: 0, y: 0}
@@ -239,8 +251,8 @@ MonoBehaviour:
     arrowRotation: 180
     dismissable: 1
     enableTooltips: 1
-    windowLocation: {x: -275, y: 275}
-    secondWindowLocation: {x: 275, y: -275}
+    windowLocation: {x: -255, y: 255}
+    secondWindowLocation: {x: 255, y: -255}
     windowSize: {x: 200, y: 200}
     secondWindowSize: {x: 200, y: 200}
     haveImage: 0
@@ -489,3 +501,42 @@ MonoBehaviour:
     resourceGainFactor: 0
     drawRateFactor: 0
     dangerDistance: 0
+  data:
+    levelName: 
+    campaignLevelNum: 0
+    objectives: []
+    availableStructures: 
+    p1HomeBasePos:
+      x: 0
+      y: 0
+    p2HomeBasePos:
+      x: 0
+      y: 0
+    preplacedP1Tiles: []
+    preplacedP2Tiles: []
+    structCoords: []
+    impassibleCoords: []
+    destructibleTerrainCoords: []
+    width: 0
+    height: 0
+    cornerBases: 0
+    destructorsEnabled: 0
+    blueprintsEnabled: 0
+    generatorEnabled: 0
+    factoryEnabled: 0
+    barracksEnabled: 0
+    stackDestructorInOpeningHand: 0
+    tooltips: []
+    overrideStrategy:
+      winWeight: 0
+      structWeight: 0
+      blueprintWeight: 0
+      destructionWeight: 0
+      blueprintDestructionWeight: 0
+      disconnectionWeight: 0
+      destructorForBlueprintWeight: 0
+      dangerMod: 0
+      overrideDefault: 0
+      resourceGainFactor: 0
+      drawRateFactor: 0
+      dangerDistance: 0

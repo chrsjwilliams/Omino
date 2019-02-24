@@ -106,8 +106,8 @@ public class ResourceIcon : MonoBehaviour
             startScale = Vector3.one;
             targetScale = missingHighlightScale * Vector3.one;
             easeType = Easing.FunctionType.QuadEaseOut;
-            startColor = new Color(baseColor.r, baseColor.g, baseColor.b, 0);
-            targetColor = new Color(baseColor.r, baseColor.g, baseColor.b, 1);
+            startColor = new Color(baseColor.r * 0.75f, baseColor.g * 0.75f, baseColor.b * 0.75f, 0);
+            targetColor = new Color(baseColor.r * 0.75f, baseColor.g * 0.75f, baseColor.b * 0.75f, 1);
             if (missingIndicatorTimeElapsed > highlightDuration)
             {
                 missingIndicatorIncreasing = false;
