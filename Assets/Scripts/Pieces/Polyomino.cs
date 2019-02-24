@@ -1344,8 +1344,7 @@ public class Polyomino : IVertex
 
     protected void OnTouchDown(TouchDown e)
     {
-        Vector3 touchWorldPos = e.touch.position;
-           // Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position);
+        Vector3 touchWorldPos = Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position);
         if (IsPointContainedWithinHolderArea(touchWorldPos) && touchID == -1
             && (owner == null || owner.selectedPiece == null))
         {

@@ -595,7 +595,7 @@ public class Tile : MonoBehaviour, IVertex
             //crackSr.enabled = false;
             mainSr.enabled = true;
             topSr.enabled = false;
-            if(entering)
+            //if(entering)
             {
                 mainSr.color = baseColor;
             }

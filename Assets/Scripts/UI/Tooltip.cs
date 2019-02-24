@@ -34,9 +34,12 @@ public class Tooltip : MonoBehaviour {
     public void Reposition(Vector2 basePos, float rot, bool blueprintInHand)
     {
         Vector2 offset = blueprintInHand ? inHandOffset : tooltipOffset;
+
+        offset = new Vector2(-offset.x, offset.y);
+
         offset *= Screen.height / 2048f;
-        Debug.Log(Screen.width);
-        Debug.Log(basePos.x);
+        //Debug.Log(Screen.width);
+        //ebug.Log(basePos.x);
         if (basePos.x < 5)
         {
             offset = new Vector2(-offset.x, offset.y);
