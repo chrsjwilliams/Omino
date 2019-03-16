@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool timedRestart;
     public bool disableUI;
 
-    public DEVICE CurrentDevice;
+    public DEVICE CurrentDevice = DEVICE.IPAD;
 
     public bool pretendIphone;
     public bool onIPhone
@@ -75,6 +75,17 @@ public class GameManager : MonoBehaviour
         set { 
             soundEffectsEnabled = value;    
             UpdateSoundEffectPlayerPrefs();
+        }
+    }
+
+    private bool neonEnabled = true;
+    public bool NeonEnabled
+    {
+        get { return neonEnabled; }
+        set
+        {
+            neonEnabled = value;
+            UpdateNeonEnabledPlayerPrefs();
         }
     }
 
@@ -197,6 +208,7 @@ public class GameManager : MonoBehaviour
 
     private readonly string SOUNDEFFECTSENABLED = "soundEffectsEnabledKey";
     private readonly string MUSICENABLED = "musicEnabledKey";
+    private readonly string NEONENABLED = "neonEnableKey";
 
     public AIStrategy[] currentStrategies { get; private set; }
     private float inactivityTimer;
@@ -858,6 +870,12 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    private void UpdateNeonEnabledPlayerPrefs()
+    {
+        PlayerPrefs.SetInt(NEONENABLED, NeonEnabled? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
     private void UpdateMusicPlayerPrefs()
     {
         PlayerPrefs.SetInt(MUSICENABLED, MusicEnabled ? 1 : 0);
@@ -919,6 +937,20 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ToggleNeon()
+    {
+        MK.Glow.MKGlowFree glow = MainCamera.GetComponent<MK.Glow.MKGlowFree>();
+        NeonEnabled = !NeonEnabled;
+        if (NeonEnabled)
+        {
+            glow.GlowIntensityInner = 0.2f;
+        }
+        else
+        {
+            glow.GlowIntensityInner = 0;
+        }
     }
 
     public void ToggleBlueprintAssist()

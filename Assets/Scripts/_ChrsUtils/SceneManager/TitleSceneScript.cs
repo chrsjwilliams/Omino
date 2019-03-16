@@ -130,4 +130,10 @@ public class TitleSceneScript : Scene<TransitionData>
         Services.GameManager.ToggleBlueprintAssist();
         //SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
     }
+
+    public void ToggleNeon()
+    {
+        Services.GameManager.ToggleNeon();
+        //SetOptionButtonStatus(neonButton, Services.GameManager.NeonEnabled);
+    }
 }

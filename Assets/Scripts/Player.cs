@@ -14,9 +14,10 @@ public class Player : MonoBehaviour
         get { return colorScheme; }
     }
 
-    
-    protected readonly Vector3 handSpacing = new Vector3(2.35f, -2.35f, 0f);
-    protected readonly Vector3 handOffset = new Vector3(-9.25f, 1.75f, 0f);
+    [SerializeField]
+    protected  Vector3 handSpacing = new Vector3(2.35f, -2.35f, 0f);
+    [SerializeField]
+    protected  Vector3 handOffset = new Vector3(-9.25f, 1.75f, 0f);
     protected Vector3 rawDrawPos;
     protected const int maxHandSize = 5;
     protected const int piecesPerHandRow = 5;
@@ -157,8 +158,8 @@ public class Player : MonoBehaviour
     private const int bpAssistChecksPerFrame = 10;
     private IEnumerator bpAssistCoroutine;
     private Blueprint highlightedBlueprint;
-    private readonly Vector3 bpHighlightMinScale = Polyomino.unselectedScale * 0.95f;
-    private readonly Vector3 bpHighlightMaxScale = Polyomino.unselectedScale * 1.2f;
+    private readonly Vector3 bpHighlightMinScale = Polyomino.UnselectedScale * 0.95f;
+    private readonly Vector3 bpHighlightMaxScale = Polyomino.UnselectedScale * 1.2f;
 
 
     public float energyHandicap = 1;
@@ -188,6 +189,11 @@ public class Player : MonoBehaviour
     // Use this for initialization
     public virtual void Init(int playerNum_)
     {
+        if(Services.GameManager.onIPhone)
+        {
+            handSpacing = new Vector3(2.5f, -2.35f, 0);
+            handOffset = new Vector3(-9.25f, 7, 0);
+        }
         playerNum = playerNum_;
 
         colorScheme = Services.GameManager.colorSchemes[playerNum - 1];
@@ -716,7 +722,7 @@ public class Player : MonoBehaviour
                 break;
         }
         Vector3 rawWorldPos = screenPos;// Services.GameManager.MainCamera.ScreenToWorldPoint(screenPos);
-        Vector3 centerpoint = piece.GetCenterpoint() * Polyomino.unselectedScale.x;
+        Vector3 centerpoint = piece.GetCenterpoint() * Polyomino.UnselectedScale.x;
         rawWorldPos -= centerpoint;
         return new Vector3(rawWorldPos.x, rawWorldPos.y, 0);
     }
@@ -1364,7 +1370,7 @@ public class Player : MonoBehaviour
         bpAssistTimeElapsed = 0;
         if (highlightedBlueprint != null && blueprints.Contains(highlightedBlueprint))
         {
-            highlightedBlueprint.ScaleHolder(Polyomino.unselectedScale);
+            highlightedBlueprint.ScaleHolder(Polyomino.UnselectedScale);
             highlightedBlueprint.SetOverlayAlpha(Blueprint.overlayAlphaPrePlacement);
         }   
     }

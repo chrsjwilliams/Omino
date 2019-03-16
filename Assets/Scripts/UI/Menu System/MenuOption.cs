@@ -105,6 +105,11 @@ public class MenuOption : MenuObject
         associatedObject.GetComponentInChildren<TextMeshProUGUI>(true).color = color;
     }
 
+    public void GetNeonStatus()
+    {
+        SetStrikethrough(Services.GameManager.NeonEnabled);
+    }
+
     public void GetBlueprintAssistStatus()
     {
         SetStrikethrough(Services.GameManager.BlueprintAssistEnabled);

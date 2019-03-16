@@ -42,8 +42,35 @@ public class Polyomino : IVertex
     private const float rotationDeadZone = 50f;
     protected int touchID;
     protected readonly Vector3 baseDragOffset = 20f * Vector3.up;
-    public static Vector3 unselectedScale = 0.5f * Vector3.one;
-    public static Vector3 queueScale = 0.25f * Vector3.one;
+    private static Vector3 unselectedScale = 0.5f * Vector3.one;
+    public static Vector3 UnselectedScale {
+        get
+        {
+            if (Services.GameManager != null && Services.GameManager.onIPhone)
+            {
+                return 0.6f * Vector3.one;
+            }
+            else
+            {
+                return 0.5f * Vector3.one;
+            }
+        }
+    }
+    public static Vector3 QueueScale
+    {
+        get
+        {
+            if (Services.GameManager.onIPhone)
+            {
+                return 0.3f * Vector3.one;
+            }
+            else
+            {
+                return 0.25f * Vector3.one;
+            }
+        
+        }
+    }
     public const float drawAnimDur = 0.5f;
     public const float deathAnimDur = 0.5f;
     public const float deathAnimScaleUp = 1.5f;
@@ -207,11 +234,11 @@ public class Polyomino : IVertex
             //  #
             //  #
             {
-                {0,0,1,0,0 },
-                {0,0,1,0,0 },
-                {0,0,1,0,0 },
-                {0,0,1,0,0 },
-                {0,0,1,0,0 }
+                {0,0,0,0,0 },
+                {0,0,0,0,0 },
+                {1,1,1,1,1 },
+                {0,0,0,0,0 },
+                {0,0,0,0,0 }
             },
             //  L Shape
             //  #
@@ -441,8 +468,8 @@ public class Polyomino : IVertex
             tile.SetHighlightColor(new Color(0, 0, 0, 0));
         }
         SetTint(new Color(baseColor.r, baseColor.g, baseColor.b, 0.75f), 1);
-        ScaleHolder(queueScale);
-        Vector3 centerpoint = GetCenterpoint() * queueScale.x;
+        ScaleHolder(QueueScale);
+        Vector3 centerpoint = GetCenterpoint() * QueueScale.x;
         Reposition(holder.transform.position - centerpoint);
     }
 
@@ -1189,13 +1216,13 @@ public class Polyomino : IVertex
 
     public void Reposition(Vector3 pos, bool centered = false)
     {
-        if (centered) pos -= (GetCenterpoint() * unselectedScale.x);
+        if (centered) pos -= (GetCenterpoint() * UnselectedScale.x);
         holder.transform.position = pos;
     }
 
     public void ApproachHandPosition(Vector3 targetPos)
     {
-        targetPos -= (GetCenterpoint() * unselectedScale.x);
+        targetPos -= (GetCenterpoint() * UnselectedScale.x);
         holder.transform.position += (targetPos - holder.transform.position) * handPosApproachFactor;
     }
 
@@ -1304,7 +1331,7 @@ public class Polyomino : IVertex
     protected void EnterUnselectedState(bool allowAIPlayers)
     {
         ListenForInput(allowAIPlayers);
-        ScaleHolder(unselectedScale);
+        ScaleHolder(UnselectedScale);
     }
 
     protected void ListenForInput(bool allowAIPlayers)

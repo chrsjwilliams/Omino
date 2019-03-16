@@ -6,7 +6,8 @@ using TMPro;
 
 public class OptionMenuSceneScript : Scene<TransitionData>
 {
-
+    [SerializeField]
+    private Button neonButton;
     [SerializeField]
     private Button musicButton;
     [SerializeField]
@@ -54,6 +55,7 @@ public class OptionMenuSceneScript : Scene<TransitionData>
                 new TaskTree(new LevelSelectTextEntrance(backButton, true)));
 
         _tm.Do(optionMenuEntrance);
+        SetOptionButtonStatus(neonButton, Services.GameManager.NeonEnabled);
         SetOptionButtonStatus(blueprintAssistButton, Services.GameManager.BlueprintAssistEnabled);
         SetOptionButtonStatus(musicButton, Services.GameManager.MusicEnabled);
         SetOptionButtonStatus(soundFXButton, Services.GameManager.SoundEffectsEnabled);
@@ -114,6 +116,12 @@ public class OptionMenuSceneScript : Scene<TransitionData>
 
         textMesh.text = textContent;
 
+    }
+
+    public void ToggleNeon()
+    {
+        Services.GameManager.ToggleNeon();
+        SetOptionButtonStatus(neonButton, Services.GameManager.NeonEnabled);
     }
 
     public void ToggleBlueprintAssist()

@@ -162,7 +162,7 @@ public class EditModePlayer : Player {
         screenPos = Services.UIManager.UIMeters[playerNum - 1].mineBlueprintLocation.position;
 
         Vector3 rawWorldPos = screenPos;// Services.GameManager.MainCamera.ScreenToWorldPoint(screenPos);
-        Vector3 centerpoint = piece.GetCenterpoint() * Polyomino.unselectedScale.x;
+        Vector3 centerpoint = piece.GetCenterpoint() * Polyomino.UnselectedScale.x;
         rawWorldPos -= centerpoint;
         return new Vector3(rawWorldPos.x, rawWorldPos.y, 0);
     }

@@ -38,10 +38,10 @@ public class DrawTask : Task
         startPos = piece.holder.transform.position;
         duration = Polyomino.drawAnimDur;
         targetPos = piece.owner.GetHandPosition(piece.owner.handCount) 
-            - (piece.GetCenterpoint() * Polyomino.unselectedScale.x);
+            - (piece.GetCenterpoint() * Polyomino.UnselectedScale.x);
         piece.SetAffordableStatus(piece.owner);
         startScale = piece.holder.transform.localScale;
-        targetScale = Polyomino.unselectedScale;
+        targetScale = Polyomino.UnselectedScale;
     }
 
     internal override void Update()

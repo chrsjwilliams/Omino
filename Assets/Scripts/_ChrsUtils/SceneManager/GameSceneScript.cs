@@ -30,13 +30,19 @@ public class GameSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+
+        
         Time.timeScale = 1;
         Services.GameScene = this;
         tm = new TaskManager();
         Services.GameEventManager = new GameEventsManager();
         Services.UIManager = GetComponentInChildren<UIManager>();
         Services.TutorialManager = GetComponentInChildren<TutorialManager>();
-       
+        if (Services.GameManager.onIPhone)
+        {
+            Services.UIManager.UIMeters[0].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 350, 0);
+            Services.UIManager.UIMeters[1].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -350, 0);
+        }
         if (Services.GameManager.levelSelected == null)
         {
             Services.MapManager.GenerateMap();

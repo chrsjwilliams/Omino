@@ -6,6 +6,7 @@ using TMPro;
 
 public class LevelSelectSceneScript : Scene<TransitionData>
 {
+    private bool levelsLoaded = false;
     public bool[] humanPlayers { get; private set; }
 
     private Level levelSelected;
@@ -35,6 +36,8 @@ public class LevelSelectSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+        if (levelsLoaded) return;
+        levelsLoaded = true;
         Services.GameEventManager.Register<RefreshLevelSelectSceneEvent>(OnLevelSelectSceneRefresh);
         levelButtonParent.SetActive(false);
         backButton.SetActive(false);
