@@ -41,10 +41,8 @@ public class ReferenceSceneScript : Scene<TransitionData> {
     internal override void OnEnter(TransitionData data)
     {
                                                                                      
-        Debug.Log(Services.GameManager.MainCamera.pixelHeight);
-        base.OnEnter(data);
-       // GameObject.Find("Canvas").GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
 
+        base.OnEnter(data);
 
     }
 

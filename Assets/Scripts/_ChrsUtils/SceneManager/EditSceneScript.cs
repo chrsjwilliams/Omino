@@ -63,7 +63,7 @@ public class EditSceneScript : GameSceneScript {
                 ((EditModeBuilding)techBuilding).editModePlayer = Services.GameManager.Players[0];
             }
         }
-
+        Services.MapManager.UpdateMapTileBrightness();
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
 		touchID = -1;

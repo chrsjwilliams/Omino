@@ -416,6 +416,7 @@ public class UIManager : MonoBehaviour {
     public void ToggleNeon()
     {
         Services.GameManager.ToggleNeon();
+        Services.MapManager.UpdateMapTileBrightness();
         _NeonButtonAppearanceToggle();
     }
 

@@ -9,6 +9,7 @@ public class MenuManager : MonoBehaviour
     private Stack<Menu> menuStack;
     private int menusToPop;
     public GameObject buttonPrefab;
+    public GameObject sliderPrefab;
     public Menu firstMenu;
     public float buttonSpacing;
     public Transform menuHolder;

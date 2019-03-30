@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
             UpdateSoundEffectPlayerPrefs();
         }
     }
-
+    
     private bool neonEnabled = true;
     public bool NeonEnabled
     {

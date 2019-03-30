@@ -126,6 +126,7 @@ public class GameSceneScript : Scene<TransitionData>
 
                 break;
         }
+        Services.MapManager.UpdateMapTileBrightness();
 
         if (evolutionMode)
         {

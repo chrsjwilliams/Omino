@@ -71,11 +71,26 @@ public class PieceHolder : MonoBehaviour {
     void Start () {
         claimAnimDuration = Services.Clock.QuarterLength();
         claimIconChangeDuration = Services.Clock.QuarterLength();
+        
 	}
+
+    public void UpdateLegalityColors(bool lowGlow)
+    {
+        if (lowGlow)
+        {
+            legalGlowColor = new Color(23 / 255f, 109 / 255f, 54 / 255f);
+            notLegalGlowColor = new Color(156 / 255f, 71 / 255f, 71 / 255f);
+              
+        }
+        else
+        {
+            legalGlowColor = new Color(46 / 255f, 239 / 255f, 115 / 255f);
+            notLegalGlowColor = new Color(239 / 255f, 46 / 255f, 73 / 255f);
+        }
+    }
 
     private void OnDestroy()
     {
-
         piece.DestroyThis();
     }
 
@@ -85,6 +100,7 @@ public class PieceHolder : MonoBehaviour {
         if (pathHighlightDelay > 0) TickDownHighlightDelay();
         if (highlightingPath) PathHighlight();
         if (beingClaimed) AnimateClaim();
+        UpdateLegalityColors(Services.GameManager.NeonEnabled);
     }
 
     private void AnimateClaim()

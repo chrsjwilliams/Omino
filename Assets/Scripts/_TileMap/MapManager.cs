@@ -677,4 +677,19 @@ public class MapManager : MonoBehaviour
         }
         return nextLevel;
     }
+
+    public void UpdateMapTileBrightness()
+    {
+        foreach(MapTile tile in Map)
+        {
+            if (Services.GameManager.NeonEnabled)
+            {
+                tile.sr.color = new Color(125 / 255f, 125 / 255f, 125 / 255f);
+            }
+            else
+            {
+                tile.sr.color = Color.white;
+            }
+        }
+    }
 }
