@@ -179,6 +179,7 @@ public class EloData
         if (handicapLevel > highestHandicapAchieved)
         {
             highestHandicapAchieved = handicapLevel;
+            Services.LeaderBoard.ReportScore((long)highestHandicapAchieved, "1");
         }
     }
 

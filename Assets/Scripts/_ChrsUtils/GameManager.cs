@@ -224,7 +224,7 @@ public class GameManager : MonoBehaviour
         Assert.raiseExceptions = true;
         SetDevice();
         InitializeServices();
-
+        Services.LeaderBoard.ShowLeaderBoardUI();
         Services.GlobalEventManager.Register<Reset>(Reset);
         Services.GlobalEventManager.Register<TouchDown>(ResetInactivity);
         Services.GlobalEventManager.Register<MouseDown>(ResetInactivity);
@@ -317,6 +317,7 @@ public class GameManager : MonoBehaviour
 		Services.CameraController = MainCamera.GetComponent<CameraController>();
 		Services.Clock = clock;
         Services.Clock.Init(levelBPM);
+        Services.LeaderBoard = new GameCenterLeaderBoard();
 
         Services.Analytics = AnalyticsManager.Instance;
     }

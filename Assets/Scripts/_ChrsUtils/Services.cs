@@ -32,6 +32,6 @@ public class Services
 
     public static AnalyticsManager Analytics { get; set; }
 
-    //title scene
     public static MenuManager MenuManager { get; set; }
+    public static GameCenterLeaderBoard LeaderBoard { get; set; }
 }
