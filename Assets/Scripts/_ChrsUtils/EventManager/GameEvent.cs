@@ -42,13 +42,19 @@ public class SplashDamageStatusChange : GameEvent
     }
 }
 
-
 public class PiecePlaced : GameEvent
 {
     public Polyomino piece;
     public PiecePlaced(Polyomino piece_)
     {
         piece = piece_;
+    }
+}
+
+public class EditModeBuildingRemoved : GameEvent
+{
+    public EditModeBuildingRemoved()
+    {
     }
 }
 

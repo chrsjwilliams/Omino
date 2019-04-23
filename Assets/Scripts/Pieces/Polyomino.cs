@@ -940,7 +940,9 @@ public class Polyomino : IVertex
             if (!Services.MapManager.IsCoordContainedInMap(coord)) return false;
 
             MapTile mapTile = Services.MapManager.Map[coord.x, coord.y];
-            if (mapTile.IsOccupied() && !mapTile.occupyingPiece.destructible) return false;
+            if (mapTile.IsOccupied() && !mapTile.occupyingPiece.destructible && !owner.crossSection) return false;
+            if (mapTile.IsOccupied() && mapTile.occupyingPiece.destructible && mapTile.occupyingPiece.isTerrain &&
+                owner.attackResources < 1 && !pretendAttackResource) return false;
             if ((mapTile.IsOccupied() && !owner.crossSection) &&
                 ((mapTile.occupyingPiece.connected && owner.attackResources < 1 && !pretendAttackResource) ||
                 (mapTile.occupyingPiece.connected && (mapTile.occupyingPiece.owner == owner)) ||
@@ -1196,6 +1198,8 @@ public class Polyomino : IVertex
             piece.adjacentPieces.Remove(this);
         }
 
+        
+
         if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit && !isTerrain)
             owner.OnPieceRemoved(this);
         dead = true;
@@ -1210,6 +1214,7 @@ public class Polyomino : IVertex
         Services.GameEventManager.Unregister<TouchUp>(OnTouchUp);
         Services.GameEventManager.Unregister<TouchMove>(OnTouchMove);
         Services.GameEventManager.Unregister<TouchDown>(CheckTouchForRotateInput);
+        
         foreach (Tile tile in tiles) tile.OnRemove();
         GameObject.Destroy(holder.gameObject);
     }
@@ -1612,7 +1617,7 @@ public class Polyomino : IVertex
     public virtual void SetLegalityGlowStatus()
     {
         bool isLegal = IsPlacementLegal();
-        bool overEnemyPiece = false;
+        bool overDestructiblePiece = false;
         foreach(MapTile mapTile in previouslyHoveredMapTiles)
         {
             mapTile.SetMapSprite();
@@ -1627,9 +1632,9 @@ public class Polyomino : IVertex
                 hoveredMapTiles.Add(mapTile);
                 if(mapTile.occupyingPiece != null && !(mapTile.occupyingPiece is TechBuilding) &&
                     mapTile.occupyingPiece.owner != owner &&
-                    mapTile.occupyingPiece.connected)
+                    (mapTile.occupyingPiece.connected || (mapTile.occupyingPiece.isTerrain && mapTile.occupyingPiece.destructible)))
                 {
-                    overEnemyPiece = true;
+                    overDestructiblePiece = true;
                 }
             }
         }
@@ -1637,9 +1642,9 @@ public class Polyomino : IVertex
         if (!(this is Blueprint))
         {
             SetAffordableStatus(owner, true);
-            holder.SetAttackDisplayStatus(overEnemyPiece);
+            holder.SetAttackDisplayStatus(overDestructiblePiece);
         }
-        if (overEnemyPiece)
+        if (overDestructiblePiece)
         {
             if (owner.attackResources > 0) holder.SetAttackLevel(1);
             else holder.SetAttackLevel(owner.destructorDrawMeterFillAmt);

@@ -91,6 +91,10 @@ public class PieceHolder : MonoBehaviour {
 
     private void OnDestroy()
     {
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit && piece is EditModeBuilding)
+        {
+            Services.GameEventManager.Fire(new EditModeBuildingRemoved());
+        }
         piece.DestroyThis();
     }
 

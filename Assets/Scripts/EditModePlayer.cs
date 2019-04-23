@@ -5,14 +5,32 @@ using UnityEngine;
 public class EditModePlayer : Player {
 
     public EditModeBuilding editModeBuilding;
-    
-    // Use this for initialization
-    void Start () {
-		
-	}
+    public readonly int TOTAL_NUM_EDIT_BUILDINGS = Services.TechDataLibrary.dataArray.Length - 2;
+    private int numUsedEditBuildings;
+    public int numPlacedEditBuildings
+    {
+        get { return numUsedEditBuildings; }
+        set
+        {
+            
+            numUsedEditBuildings = value;
+            if(numUsedEditBuildings > TOTAL_NUM_EDIT_BUILDINGS)
+            {
+                numUsedEditBuildings = TOTAL_NUM_EDIT_BUILDINGS;
+            }
+            else if(numUsedEditBuildings < 0)
+            {
+                numUsedEditBuildings = 0;
+            }
+            ((EditSceneScript)Services.GameScene).usedTechCounter.text = numUsedEditBuildings + " / " + TOTAL_NUM_EDIT_BUILDINGS;
+        }
+    }
+
 
     public override void Init(int playerNum_)
     {
+        numPlacedEditBuildings = ((EditSceneScript)Services.GameScene).hasExpansions ?
+                                    Services.MapManager.structuresOnMap.Count - 2 : Services.MapManager.structuresOnMap.Count;
         boardPieces = new List<Polyomino>();
         hand = new List<Polyomino>();
         blueprints = new List<Blueprint>();
@@ -50,17 +68,25 @@ public class EditModePlayer : Player {
         startingResources = 0;
         destructorDrawRate = 0;
 
+        Services.GameEventManager.Register<EditModeBuildingRemoved>(OnEditModeBuildingRemoved);
+
         editModeBuilding = new EditModeBuilding(this);
+
         AddEditModeBuilding(editModeBuilding);
         editModeBuilding.holder.gameObject.SetActive(false);
+        
         ((EditSceneScript)Services.GameScene).editModeBuilding = editModeBuilding;
 
-        //  Erase Function
-        //  Destructible Function
-        //  Indestructible Function
+        Generator mine = new Generator(this);
+        AddBluePrint(mine);
+        mine.Lock();
+        mine.holder.gameObject.SetActive(false);
+    }
 
-        //  How do I save?
-        //  How do I bring up the keyboard?
+    public void HideEditModeBuilding()
+    {
+        editModeBuilding.holder.gameObject.SetActive(false);
+
     }
 
     public override void DrawPiece(bool onlyDestructors)
@@ -72,28 +98,37 @@ public class EditModePlayer : Player {
 
     }
 
+    //  TODO: Hold to delete
+
+    public void OnEditModeBuildingRemoved(EditModeBuildingRemoved e)
+    {
+        numPlacedEditBuildings--;
+        UpdateEditModeBuildingUI(editModeBuilding);
+    }
+
     public override void OnPiecePlaced(Polyomino piece, List<Polyomino> subpieces)
     {
-        
         Services.GameEventManager.Fire(new PiecePlaced(piece));
         BuildingType blueprintType = piece.buildingType;
 
         if (piece is EditModeBuilding)
         {
-            AddEditModeBuilding(System.Activator.CreateInstance(
-                piece.GetType(), new Object[] { this }) as EditModeBuilding);
-        }
-        else if (piece is Blueprint)
-        {
-            AddBluePrint(System.Activator.CreateInstance(
-                piece.GetType(), new Object[] { this }) as Blueprint);
+            numPlacedEditBuildings++;
+            UpdateEditModeBuildingUI(piece);
         }
 
         selectedPiece = null;
         OrganizeHand(hand);
         piece.SetGlowState(false);
+    }
 
-
+    public void UpdateEditModeBuildingUI(Polyomino piece)
+    {
+        if (numPlacedEditBuildings < TOTAL_NUM_EDIT_BUILDINGS)
+        {
+            AddEditModeBuilding(System.Activator.CreateInstance(
+                piece.GetType(), new Object[] { this }) as EditModeBuilding);
+        }
     }
 
     public override void OnPieceSelected(Polyomino piece)
@@ -112,48 +147,25 @@ public class EditModePlayer : Player {
     public override void CancelSelectedPiece()
     {
         if (selectedPiece == null) return;
-        if (selectedPiece.cost > resources)
+        if (selectedPiece is EditModeBuilding && !((EditModeBuilding)selectedPiece).wasPlaced)
         {
-            //Services.UIManager.UIMeters[playerNum - 1].FailedPlayFromLackOfResources(
-            //    selectedPiece.cost - resources);
-            Services.UIManager.UIMeters[playerNum - 1]
-                .FailedPlayFromLackOfResources(false);
+            selectedPiece.Reposition(GetBlueprintPosition(blueprints[0]));
+            selectedPiece.SetGlowState(false);
         }
-
-        bool overlappingConnectedOpponentTile = false;
-        foreach (Tile tile in selectedPiece.tiles)
+        else if(selectedPiece is EditModeBuilding && ((EditModeBuilding)selectedPiece).wasPlaced)
         {
-            if (Services.MapManager.IsCoordContainedInMap(tile.coord))
-            {
-                MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
-                if (mapTile.IsOccupied() && mapTile.occupyingPiece.owner != null &&
-                    mapTile.occupyingPiece.owner != this && mapTile.occupyingPiece.connected)
-                    overlappingConnectedOpponentTile = true;
-            }
+            numPlacedEditBuildings--;
         }
-
-        if (overlappingConnectedOpponentTile && selectedPiece.cost > attackResources)
-        {
-            //Services.UIManager.UIMeters[playerNum - 1].FailedPlayFromLackOfResources(
-            //    selectedPiece.cost - attackResources, true);
-            Services.UIManager.UIMeters[playerNum - 1]
-                .FailedPlayFromLackOfResources(true);
-        }
-
-        if (selectedPiece is EditModeBuilding)
-        {
-            selectedPiece.Reposition(GetBlueprintPosition(selectedPiece));
-        }
-        
-        selectedPiece.SetGlowState(false);
         selectedPiece = null;
         OrganizeHand(hand);
     }
 
     public void AddEditModeBuilding(EditModeBuilding techBuilding)
     {
+
         techBuilding.MakePhysicalPiece();
         techBuilding.Reposition(GetBlueprintPosition(techBuilding));
+        
     }
 
     public override Vector3 GetBlueprintPosition(Polyomino piece)
@@ -161,14 +173,9 @@ public class EditModePlayer : Player {
         Vector3 screenPos = Vector3.zero;
         screenPos = Services.UIManager.UIMeters[playerNum - 1].mineBlueprintLocation.position;
 
-        Vector3 rawWorldPos = screenPos;// Services.GameManager.MainCamera.ScreenToWorldPoint(screenPos);
+        Vector3 rawWorldPos = screenPos;
         Vector3 centerpoint = piece.GetCenterpoint() * Polyomino.UnselectedScale.x;
         rawWorldPos -= centerpoint;
         return new Vector3(rawWorldPos.x, rawWorldPos.y, 0);
     }
-
-    // Update is called once per frame
-    void Update () {
-		
-	}
 }

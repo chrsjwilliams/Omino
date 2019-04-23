@@ -5,11 +5,13 @@ using UnityEngine;
 public class EditModeBuilding : TechBuilding
 {
     public Player editModePlayer = Services.GameManager.Players[0];
+    public bool wasPlaced;
     public EditModeBuilding(Player player) : base(1)
     {
         editModePlayer = player;
         buildingType = BuildingType.EDITMODE;
         placed = false;
+        wasPlaced = false;
         cost = 0;
 		ListenForInput (false);
     }
@@ -131,7 +133,25 @@ public class EditModeBuilding : TechBuilding
         DestroyTooltips();
         touchID = -1;
         bool piecePlaced;
-        if (!placed)
+        if (!placed && !wasPlaced)
+        {
+            if (IsPlacementLegal())
+            {
+                PlaceAtCurrentLocation();
+                editModePlayer.OnPiecePlaced(this, null);
+                piecePlaced = true;
+                placed = true;
+                wasPlaced = true;
+            }
+            else
+            {
+                editModePlayer.CancelSelectedPiece();
+                //EnterUnselectedState(false);
+                piecePlaced = false;
+            }
+            CleanUpUI(piecePlaced);
+        }
+        else
         {
             if (IsPlacementLegal())
             {
@@ -142,11 +162,8 @@ public class EditModeBuilding : TechBuilding
             }
             else
             {
-                editModePlayer.CancelSelectedPiece();
-                //EnterUnselectedState(false);
-                piecePlaced = false;
+                GameObject.Destroy(holder.gameObject);
             }
-            CleanUpUI(piecePlaced);
         }
         
         SortOnSelection(false);

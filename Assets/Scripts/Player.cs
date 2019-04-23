@@ -265,14 +265,6 @@ public class Player : MonoBehaviour
             DrawPieces(startingHandSize);
         }
 
-
-
-
-        if (Services.GameManager.destructorsEnabled)
-        {
-            //QueueUpNextPiece(true);
-            //queuedDestructor.holder.gameObject.SetActive(false);
-        }
         QueueUpNextPiece(false);
         queuedNormalPiece.holder.gameObject.SetActive(false);
 

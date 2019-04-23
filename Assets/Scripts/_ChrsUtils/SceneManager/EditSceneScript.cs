@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 public class EditSceneScript : GameSceneScript {
 
     public enum TerrainMode { NONE = -1, ERASE, INDESTRUCTIBLE, DESTRUCTIBLE};
@@ -11,13 +12,13 @@ public class EditSceneScript : GameSceneScript {
     public List<Button> terrainButtons;
     public EditModeBuilding editModeBuilding;
     public ToggleButton toggleExpansions;
-
+    public TextMeshProUGUI usedTechCounter;
     public bool overwriteMenuActive = false;
     public GameObject overwriteMenu;
     public GameObject savedText;
 
     protected bool overwrite = false;
-    protected bool hasExpansions;
+    public bool hasExpansions { get; private set; }
     protected bool toLevelSelect;
 
     protected int touchID;
@@ -266,31 +267,7 @@ public class EditSceneScript : GameSceneScript {
         }
     }
 
-    public void UseExpansions(bool useExpansions)
-    {
-        if(useExpansions)
-        {
-            Services.MapManager.MakeExpansions();
-        }
-        else
-        {
-            List<TechBuilding> expansionsToRemove = new List<TechBuilding>();
-            foreach (TechBuilding tech in Services.MapManager.structuresOnMap)
-            {
-                if (tech is Base && !((Base)tech).mainBase)
-                {
-                    expansionsToRemove.Add(tech);
-                    EraseTerrain(tech);
-                }
-            }
-
-            foreach (TechBuilding tech in expansionsToRemove)
-            {
-
-                Services.MapManager.RemoveStructure(tech);
-            }
-        }
-    }
+   
 
     public void ToggleOverwriteMenu(bool selectNo)
     {
@@ -306,8 +283,6 @@ public class EditSceneScript : GameSceneScript {
         {
             base.Reset();
         }
-        
-
     }
 
     public void ToggleExpansions()
@@ -315,22 +290,21 @@ public class EditSceneScript : GameSceneScript {
         hasExpansions = !hasExpansions;
         if(hasExpansions)
         {
-            
             Services.MapManager.MakeExpansions();
         }
         else
         {
-            List<TechBuilding> expansionsToRemvoe = new List<TechBuilding>();
+            List<TechBuilding> expansionsToRemove = new List<TechBuilding>();
             foreach(TechBuilding tech in Services.MapManager.structuresOnMap)
             {
                 if(tech is Base && !((Base)tech).mainBase)
                 {
-                    expansionsToRemvoe.Add(tech);
+                    expansionsToRemove.Add(tech);
                     EraseTerrain(tech);
                 }
             }
 
-            foreach(TechBuilding tech in expansionsToRemvoe)
+            foreach(TechBuilding tech in expansionsToRemove)
             {
 
                 Services.MapManager.RemoveStructure(tech);
@@ -389,7 +363,7 @@ public class EditSceneScript : GameSceneScript {
     {
         if (!Services.MapManager.IsCoordContainedInMap(piece.centerCoord)) return;
         if (!(piece is Base) || (piece is Base && !((Base)piece).mainBase && !hasExpansions))
-            piece.Remove(true);
+            piece.Remove(true);    
     }
 
     public override void OnMouseDownEvent(MouseDown e)
@@ -488,6 +462,10 @@ public class EditSceneScript : GameSceneScript {
     public void OnInputUp()
     {
         //touchID = -1;
+        if(Services.GameManager.Players[0].selectedPiece is EditModeBuilding)
+        {
+            EraseTerrain(Services.GameManager.Players[0].selectedPiece);
+        }
 
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
@@ -529,6 +507,6 @@ public class EditSceneScript : GameSceneScript {
     // Update is called once per frame
     void Update () {
         tm.Update();
-
+        
 	}
 }

@@ -23,8 +23,10 @@ public class EditModeUIEntryAnimation : Task
 
     public EditModeUIEntryAnimation(EditModeBuilding editModeBuilding_, List<Button> terrainButtons_, GameObject expansionToggle_)
     {
-       
-        editModeBuilding = editModeBuilding_;
+        if (editModeBuilding != null)
+        {
+            editModeBuilding = editModeBuilding_;
+        }
         terrainButtons = terrainButtons_;
         expansionToggle = expansionToggle_;
     }
@@ -35,11 +37,12 @@ public class EditModeUIEntryAnimation : Task
 
         buttonStartPositions = new Vector3[terrainButtons.Count];
         buttonTargetPositions = new Vector3[terrainButtons.Count];
-
-        editModeBuildingTargetPosition = editModeBuilding.holder.transform.localPosition;
-        editModeBuilding.holder.transform.localPosition += buttonOffset * Vector3.down;
-        editModeBuildingStartPosition = editModeBuilding.holder.transform.localPosition;
-
+        if (editModeBuilding != null)
+        {
+            editModeBuildingTargetPosition = editModeBuilding.holder.transform.localPosition;
+            editModeBuilding.holder.transform.localPosition += buttonOffset * Vector3.down;
+            editModeBuildingStartPosition = editModeBuilding.holder.transform.localPosition;
+        }
         expansionToggleTargetPosition = expansionToggle.transform.localPosition;
         expansionToggle.transform.localPosition += 300 * Vector3.up;
         expansionToggleStartPosition = expansionToggle.transform.localPosition;
@@ -65,14 +68,16 @@ public class EditModeUIEntryAnimation : Task
     internal override void Update ()
     {
         timeElapsed += Time.deltaTime;
-        editModeBuilding.holder.gameObject.SetActive(true);
+        if (editModeBuilding != null)
+        {
+            editModeBuilding.holder.gameObject.SetActive(true);
 
-        editModeBuilding.holder.transform.localPosition = Vector3.Lerp(
-              editModeBuildingStartPosition,
-              editModeBuildingTargetPosition,
-              EasingEquations.Easing.QuadEaseOut(
-                Mathf.Min(1, (timeElapsed - (staggerTime)) / animDuration)));
-
+            editModeBuilding.holder.transform.localPosition = Vector3.Lerp(
+                  editModeBuildingStartPosition,
+                  editModeBuildingTargetPosition,
+                  EasingEquations.Easing.QuadEaseOut(
+                    Mathf.Min(1, (timeElapsed - (staggerTime)) / animDuration)));
+        }
         expansionToggle.SetActive(true);
         expansionToggle.transform.localPosition = Vector3.Lerp(
               expansionToggleStartPosition,
@@ -99,6 +104,7 @@ public class EditModeUIEntryAnimation : Task
                 terrainButtons[i].transform.localPosition = buttonTargetPositions[i];
             }
                 SetStatus(TaskStatus.Success);
+            Services.UIManager.UIMeters[0].gameObject.SetActive(true);
         }
     }
 }

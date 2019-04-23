@@ -101,13 +101,13 @@ public static class LevelManager
                 }
                 else
                 {
-                    Debug.Log("A Level with the name " + levelName + " has already been added");
+                    //Debug.Log("A Level with the name " + levelName + " has already been added");
                 }
                 break;
             case false:
                 if (levelInfo.levelDictionary.ContainsKey(levelName))
                 {
-                    Debug.Log("A Level with the name " + levelName + " has already been added");
+                    //Debug.Log("A Level with the name " + levelName + " has already been added");
                 }
                 else
                 {
@@ -222,7 +222,7 @@ public static class LevelManager
         }
 
         levelNames.Remove(levelNames.Length - 2);
-        Debug.Log(levelNames);
+        //Debug.Log(levelNames);
     }
 }
 

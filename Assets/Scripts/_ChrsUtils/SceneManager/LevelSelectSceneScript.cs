@@ -80,6 +80,7 @@ public class LevelSelectSceneScript : Scene<TransitionData>
             }
             else
             {
+                levelButtons = new LevelButton[LevelManager.levelInfo.customLevels.Count];
                 int levelButtonIndex = 0;
                 foreach(LevelData levelData in LevelManager.levelInfo.customLevels)
                 {
@@ -96,6 +97,8 @@ public class LevelSelectSceneScript : Scene<TransitionData>
 
                     levelButtonIndex++;
                 }
+                levelButtons[0].GetComponent<RectTransform>().localScale = selectedButtonScale;
+
             }
         }
         else
@@ -133,7 +136,6 @@ public class LevelSelectSceneScript : Scene<TransitionData>
             }
         }
 
-        //levelButtons = levelButtonParent.GetComponentsInChildren<LevelButton>();
         levelButtonParent.SetActive(false);
         humanPlayers = new bool[2];
 
