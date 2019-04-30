@@ -361,7 +361,7 @@ public class Player : MonoBehaviour
     {
         if (!gameOver && Services.GameScene.gameInProgress)
         {
-            if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
+            if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit && Services.GameManager.mode != TitleSceneScript.GameMode.DungeonEdit)
             {
                 UpdateMeters();
             }

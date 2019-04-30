@@ -18,7 +18,8 @@ public class EditOptionsSceneScript : Scene<TransitionData>
 	void Start () {
         useExpansion = true;
         dimension = 10;
-        Services.GameManager.mode = TitleSceneScript.GameMode.Edit;
+        // Change this
+        //Services.GameManager.mode = TitleSceneScript.GameMode.Edit;
 	}
 
     internal override void OnEnter(TransitionData data)

@@ -11,7 +11,7 @@ public class TitleSceneScript : Scene<TransitionData>
     public enum GameMode {  NONE, TwoPlayers, Practice,
                             Demo, Tutorial, DungeonRun,
                             Challenge, HyperSOLO, HyperVS,
-                            Shop, Reference, Edit}
+                            Shop, Reference, Edit, DungeonEdit}
 
     public static GameMode[] unlockableModes = new GameMode[] {
         GameMode.Challenge, GameMode.DungeonRun, GameMode.HyperSOLO,
@@ -77,6 +77,7 @@ public class TitleSceneScript : Scene<TransitionData>
                 Services.Scenes.PushScene<ReferenceSceneScript>();
                 break;
             case GameMode.Edit:
+            case GameMode.DungeonEdit:
                 Services.Scenes.PushScene<LevelSelectSceneScript>();
                 break;
             case GameMode.NONE:

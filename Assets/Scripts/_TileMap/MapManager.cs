@@ -351,7 +351,8 @@ public class MapManager : MonoBehaviour
 
         List<BuildingType> structureTypes = InitStructureTypeList();
         GenerateTerrain();
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit && level == null) return;
+        if ((Services.GameManager.mode == TitleSceneScript.GameMode.Edit ||
+            Services.GameManager.mode == TitleSceneScript.GameMode.DungeonEdit) && level == null) return;
 
         if (level == null || level.cornerBases)
         {
@@ -414,7 +415,7 @@ public class MapManager : MonoBehaviour
             if (structureTypes.Count == 0)
                 structureTypes = new List<BuildingType>(level.availableStructures);
 
-            if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
+            if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit || Services.GameManager.mode != TitleSceneScript.GameMode.DungeonEdit)
             {
                 type = structureTypes[Random.Range(0, structureTypes.Count)];
                 structureTypes.Remove(type);

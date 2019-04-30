@@ -256,14 +256,27 @@ public class EditSceneScript : GameSceneScript {
                                 structCoords.ToArray(), indestructibleTerrainCoords.ToArray(), destructibleTerrainCoords.ToArray(),
                                 width, height, cornerBases, destructorsEnabled, blueprintsEnabled, generatorEnabled, factoryEnabled, barracksEnabled, 
                                 false, tooltips, overrideStrategy);
-
-        if (overwrite)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
         {
-            LevelManager.OverwriteLevel(level);
+            if (overwrite)
+            {
+                LevelManager.OverwriteLevel(level);
+            }
+            else
+            {
+                LevelManager.AddLevel(level.levelName, level, true);
+            }
         }
-        else
+        else if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonEdit)
         {
-            LevelManager.AddLevel(level.levelName, level, true);
+            if (overwrite)
+            {
+                LevelManager.OverwriteLevel(level);
+            }
+            else
+            {
+                LevelManager.AddLevel(level.levelName, level, false, true);
+            }
         }
     }
 

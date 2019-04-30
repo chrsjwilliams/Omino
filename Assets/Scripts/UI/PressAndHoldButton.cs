@@ -78,7 +78,14 @@ public class PressAndHoldButton : MonoBehaviour, IPointerDownHandler, IPointerUp
 
     private void DeleteMap()
     {
-        LevelManager.RemoveLevel(selectedLevel.levelName, true);
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonEdit)
+        {
+            LevelManager.RemoveLevel(selectedLevel.levelName, false, true);
+        }
+        else
+        {
+            LevelManager.RemoveLevel(selectedLevel.levelName, true);
+        }
         Services.GameEventManager.Fire(new RefreshLevelSelectSceneEvent());
     }
 }

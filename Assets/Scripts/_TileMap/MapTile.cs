@@ -59,7 +59,8 @@ public class MapTile : MonoBehaviour {
 
     public void SetOccupyingPiece(Polyomino piece)
     {
-        if(Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
+        if(Services.GameManager.mode == TitleSceneScript.GameMode.Edit ||
+            Services.GameManager.mode == TitleSceneScript.GameMode.DungeonEdit)
         {
             if(occupyingPiece != null && piece is Base && !((Base)piece).mainBase &&
                 ((EditSceneScript)Services.GameScene).editting)

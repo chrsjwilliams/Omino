@@ -247,6 +247,13 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        Level[] dungeonLevels = Resources.LoadAll<Level>("Levels/DungeonLevels");
+        foreach(Level level in dungeonLevels)
+        {
+            level.SetLevelData();
+            LevelManager.AddLevel(level.name, level.data, false, true);
+        }
+        Debug.Log(LevelManager.levelInfo.dungeonLevels.Count);
         LevelManager.PrintLevelNames();
 
         

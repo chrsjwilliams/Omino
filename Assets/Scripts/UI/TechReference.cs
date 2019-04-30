@@ -35,7 +35,7 @@ public class TechReference : MonoBehaviour
 
     public void ToggleTechAvailability()
     {
-        if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit) return;
+        if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit || Services.GameManager.mode != TitleSceneScript.GameMode.DungeonEdit) return;
 
         availableInEditMode = !availableInEditMode;
         if (availableInEditMode)

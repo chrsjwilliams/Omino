@@ -524,6 +524,7 @@ public class Polyomino : IVertex
     public virtual void PlaceTerrainAtCurrentLocation()
     {
         placed = true;
+        
         OnPlace();
 
         foreach (Tile tile in tiles)
@@ -1177,7 +1178,8 @@ public class Polyomino : IVertex
             {
                 DestroyThis();
             }
-            if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit && !isTerrain)
+            if((Services.GameManager.mode != TitleSceneScript.GameMode.Edit  || Services.GameManager.mode != TitleSceneScript.GameMode.DungeonEdit)
+                && !isTerrain)
                 Services.GameData.filledMapTiles[owner.playerNum - 1] -= tiles.Count;
             
         }
@@ -1191,8 +1193,9 @@ public class Polyomino : IVertex
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(null);
             Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingBlueprint(null);
             tile.OnRemove();
-            
+
         }
+        
         foreach(Polyomino piece in adjacentPieces)
         {
             piece.adjacentPieces.Remove(this);
@@ -1200,7 +1203,8 @@ public class Polyomino : IVertex
 
         
 
-        if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit && !isTerrain)
+        if((Services.GameManager.mode != TitleSceneScript.GameMode.Edit || Services.GameManager.mode != TitleSceneScript.GameMode.DungeonEdit) 
+            && !isTerrain)
             owner.OnPieceRemoved(this);
         dead = true;
     }

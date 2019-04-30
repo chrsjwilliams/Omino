@@ -50,6 +50,8 @@ public class PieceHolder : MonoBehaviour {
     private float claimTimeElapsed;
     private Color iconPrevColor;
 
+    private bool editModeBuilding;
+
     public void Init(Polyomino piece)
     {
         this.piece = piece;
@@ -57,6 +59,8 @@ public class PieceHolder : MonoBehaviour {
         icon.enabled = false;
         SetEnergyDisplayStatus(false);
         SetAttackDisplayStatus(false);
+        if (piece is EditModeBuilding) editModeBuilding = true;
+        else editModeBuilding = false;
     }
 
     public void Init(Blueprint piece)
@@ -91,9 +95,10 @@ public class PieceHolder : MonoBehaviour {
 
     private void OnDestroy()
     {
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit && piece is EditModeBuilding)
+        if ((Services.GameManager.mode == TitleSceneScript.GameMode.Edit || Services.GameManager.mode == TitleSceneScript.GameMode.DungeonEdit) 
+            && piece is EditModeBuilding)
         {
-            Services.GameEventManager.Fire(new EditModeBuildingRemoved());
+            Services.GameEventManager.Fire(new EditModeBuildingRemoved((EditModeBuilding)piece));
         }
         piece.DestroyThis();
     }

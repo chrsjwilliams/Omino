@@ -132,7 +132,8 @@ public class GameSceneScript : Scene<TransitionData>
         {
             Services.GameManager.InitPlayersEvoMode();
         }
-        else if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
+        else if(Services.GameManager.mode != TitleSceneScript.GameMode.Edit ||
+                Services.GameManager.mode != TitleSceneScript.GameMode.DungeonEdit)
         {
             Services.GameManager.InitPlayers(Services.GameManager.handicapValue);
         }

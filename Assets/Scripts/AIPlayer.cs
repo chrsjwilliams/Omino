@@ -76,7 +76,7 @@ public class AIPlayer : Player
         boardPieces = new List<Polyomino>();
 
         base.Init(playerNum_);
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit || Services.GameManager.mode == TitleSceneScript.GameMode.DungeonEdit)
         {
             resourceGainFactor = 0;
             drawRateFactor = 0;
@@ -171,7 +171,8 @@ public class AIPlayer : Player
             }
         }
         if(Services.GameScene.gameInProgress && !Services.GameScene.gameOver 
-            && !playingPiece && Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
+            && !playingPiece && 
+            (Services.GameManager.mode != TitleSceneScript.GameMode.Edit || Services.GameManager.mode != TitleSceneScript.GameMode.DungeonEdit))
         {
             if (canAffordAPiece && nextMove != null)
             {

@@ -53,8 +53,10 @@ public class PiecePlaced : GameEvent
 
 public class EditModeBuildingRemoved : GameEvent
 {
-    public EditModeBuildingRemoved()
+    public EditModeBuilding piece;
+    public EditModeBuildingRemoved(EditModeBuilding piece_)
     {
+        piece = piece_;
     }
 }
 

@@ -369,7 +369,7 @@ GameObject:
   - component: {fileID: 4178660095749402}
   - component: {fileID: 114289723917139226}
   m_Layer: 0
-  m_Name: EditMode
+  m_Name: DungeonRunMaps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -675,6 +675,22 @@ GameObject:
   - component: {fileID: 114352497725120730}
   m_Layer: 5
   m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1664264126767846
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4670795796056378}
+  - component: {fileID: 114152957110556412}
+  m_Layer: 0
+  m_Name: EditMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1046,6 +1062,7 @@ Transform:
   - {fileID: 4153826101004280}
   - {fileID: 4832221152788230}
   - {fileID: 4386886925297196}
+  - {fileID: 4670795796056378}
   - {fileID: 4178660095749402}
   m_Father: {fileID: 4080922031492906}
   m_RootOrder: 0
@@ -1100,7 +1117,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4109239156237696}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4185609960295240
 Transform:
@@ -1228,6 +1245,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4185609960295240}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4670795796056378
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1664264126767846}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4109239156237696}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4697404476285662
 Transform:
@@ -2061,6 +2091,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startGame: 32
   menuManager: {fileID: 114676602064942142}
+--- !u!114 &114152957110556412
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1664264126767846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0b9000e353b2642b0b980b3aded016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectPrefabToSpawn: {fileID: 0}
+  customOffset: {x: 0, y: 0}
+  onLoadActions:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  menuToLoad: {fileID: 0}
+  actionToPerform:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  modeToLoad: 11
+  buttonText: edit
+  toggled: 0
+  forceLock: 0
 --- !u!114 &114154587327525720
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2392,8 +2450,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  modeToLoad: 11
-  buttonText: edit
+  modeToLoad: 12
+  buttonText: dungeon run maps
   toggled: 0
   forceLock: 0
 --- !u!114 &114300213383926080
@@ -3709,6 +3767,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonPrefab: {fileID: 1961985001094494, guid: b25f69e4d454ba547894fd1c07db55a2,
     type: 2}
+  sliderPrefab: {fileID: 0}
   firstMenu: {fileID: 114364957816343142}
   buttonSpacing: -110
   menuHolder: {fileID: 224374290624420344}

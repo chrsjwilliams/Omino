@@ -27,7 +27,7 @@ public class ReferenceSceneScript : Scene<TransitionData> {
             techRef.GetComponent<RectTransform>().anchoredPosition =
                 new Vector2(referenceBaseX, 
                 referenceBaseY - i * referenceYSpacing);
-            if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
+            if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit || Services.GameManager.mode == TitleSceneScript.GameMode.DungeonEdit)
             {
                 techRef.TurnOnTech();
             }

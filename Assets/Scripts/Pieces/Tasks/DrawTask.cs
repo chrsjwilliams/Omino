@@ -17,7 +17,7 @@ public class DrawTask : Task
     {
         piece = piece_;
         startPos = startPos_;
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit || Services.GameManager.mode == TitleSceneScript.GameMode.DungeonEdit)
         {
             pieceInTransit[player.playerNum] = true;
         }
@@ -30,7 +30,7 @@ public class DrawTask : Task
     protected override void Init()
     {
         timeElapsed = 0;
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit || Services.GameManager.mode == TitleSceneScript.GameMode.DungeonEdit)
         {
             piece.MakePhysicalPiece();
             piece.Reposition(startPos);

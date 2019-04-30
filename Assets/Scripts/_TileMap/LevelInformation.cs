@@ -4,10 +4,12 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEditor;
 
 public static class LevelManager
 {
     public const string fileName = "levelManager";
+    public const string dungeonLevelFilePath = "Assets/Resources/Levels/DungeonLevels/";
     public const int TOTAL_NUM_OF_CUSTOM_MAPS = 5;
 
     public static LevelInfromation levelInfo { get; private set; }
@@ -84,94 +86,136 @@ public static class LevelManager
 
     }
 
-    public static void AddLevel(string levelName, LevelData level, bool customLevel = false)
+    public static void AddLevel(string levelName, LevelData level, bool customLevel = false, bool dungeonLevel = false)
     {
-        switch (customLevel)
+        if (customLevel)
         {
-            case true:
-                if (levelInfo.customLevels.Count < TOTAL_NUM_OF_CUSTOM_MAPS && !levelInfo.levelDictionary.ContainsKey(levelName))
-                {
-                    Debug.Log("Level " + levelName + " added");
-                    levelInfo.customLevels.Add(level);
-                    levelInfo.levelDictionary.Add(levelName, level);
-                }
-                else if (levelInfo.customLevels.Count > TOTAL_NUM_OF_CUSTOM_MAPS)
-                {
-                    Debug.Log("Cannot add " + levelName + ". All custom map slots have been used.");
-                }
-                else
-                {
-                    //Debug.Log("A Level with the name " + levelName + " has already been added");
-                }
-                break;
-            case false:
-                if (levelInfo.levelDictionary.ContainsKey(levelName))
-                {
-                    //Debug.Log("A Level with the name " + levelName + " has already been added");
-                }
-                else
-                {
-                    levelInfo.levelDictionary.Add(levelName, level);
-                }
-                break;
-            default:
-                break;
-        }    
+
+            if (levelInfo.customLevels.Count < TOTAL_NUM_OF_CUSTOM_MAPS && !levelInfo.levelDictionary.ContainsKey(levelName))
+            {
+                Debug.Log("Level " + levelName + " added");
+                levelInfo.customLevels.Add(level);
+                levelInfo.levelDictionary.Add(levelName, level);
+            }
+            else if (levelInfo.customLevels.Count > TOTAL_NUM_OF_CUSTOM_MAPS)
+            {
+                Debug.Log("Cannot add " + levelName + ". All custom map slots have been used.");
+            }
+            else
+            {
+                //Debug.Log("A Level with the name " + levelName + " has already been added");
+            }
+
+        }
+        else if(dungeonLevel)
+        {
+            if (levelInfo.dungeonLevels.ContainsKey(levelName))
+            {
+
+            }
+            else
+            {
+                levelInfo.dungeonLevels.Add(levelName, level);
+                Level newLevel = level.CreateLevel();
+           
+                newLevel.SetLevelData();
+                AssetDatabase.CreateAsset(newLevel, dungeonLevelFilePath + levelName +".asset");
+            }
+        }
+        else
+        {
+            if (levelInfo.levelDictionary.ContainsKey(levelName))
+            {
+                //Debug.Log("A Level with the name " + levelName + " has already been added");
+            }
+            else
+            {
+                levelInfo.levelDictionary.Add(levelName, level);
+            }
+
+        }  
         SaveData();
     }
 
-    public static void OverwriteLevel(LevelData levelData)
+    public static void OverwriteLevel(LevelData levelData, bool dungeonLevel = false)
     {
-        for(int i = 0; i < levelInfo.customLevels.Count; i++)
+        if (dungeonLevel)
         {
-            if(levelInfo.customLevels[i].levelName == levelData.levelName)
+            foreach (string levelName in levelInfo.dungeonLevels.Keys)
             {
-                levelInfo.customLevels[i] = levelData;
-                levelInfo.levelDictionary[levelData.levelName] = levelData;
-                break;
+                if (levelName == levelData.levelName)
+                {
+                    levelInfo.dungeonLevels[levelName] = levelData;
+                    //levelInfo.levelDictionary[levelData.levelName] = levelData;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < levelInfo.customLevels.Count; i++)
+            {
+                if (levelInfo.customLevels[i].levelName == levelData.levelName)
+                {
+                    levelInfo.customLevels[i] = levelData;
+                    levelInfo.levelDictionary[levelData.levelName] = levelData;
+                    break;
+                }
             }
         }
         Debug.Log("Overwrite");
         SaveData();
     }
 
-    public static void RemoveLevel(string levelName, bool customLevel = false)
+    public static void RemoveLevel(string levelName, bool customLevel = false, bool dungeonLevel = false)
     {
 
-        switch (customLevel)
+        if (customLevel)
+        { 
+            if (levelInfo.levelDictionary.Count > 0 && levelInfo.levelDictionary.ContainsKey(levelName))
+            {
+                levelInfo.customLevels.Remove(levelInfo.levelDictionary[levelName]);
+                levelInfo.levelDictionary.Remove(levelName);
+                Debug.Log("Removed level " + levelName);
+            }
+            else
+            {
+                Debug.Log("No level with the name " + levelName + " was found");
+            }
+        }
+        else if (dungeonLevel)
         {
-            case true:
-                if (levelInfo.levelDictionary.Count > 0 && levelInfo.levelDictionary.ContainsKey(levelName))
+
+            if (levelInfo.dungeonLevels.Count > 0 && levelInfo.dungeonLevels.ContainsKey(levelName))
+            {
+                levelInfo.dungeonLevels.Remove(levelName);
+                AssetDatabase.DeleteAsset(dungeonLevelFilePath + levelName + ".asset");
+                Debug.Log("Removed level " + levelName);
+            }
+            else
+            {
+                Debug.Log("No level with the name " + levelName + " was found");
+            }
+        }
+        else
+        {
+            if (!levelInfo.levelDictionary.ContainsKey(levelName))
+            {
+                Debug.Log("No level with the name " + levelName + " was found");
+                PrintLevelNames();
+            }
+            else
+            {
+                if (levelInfo.levelDictionary.Remove(levelName))
                 {
-                    levelInfo.customLevels.Remove(levelInfo.levelDictionary[levelName]);
-                    levelInfo.levelDictionary.Remove(levelName);
                     Debug.Log("Removed level " + levelName);
                 }
                 else
                 {
-                    Debug.Log("No level with the name " + levelName + " was found");
+                    Debug.Log("Could not remove " + levelName);
                 }
-                break;
-            case false:
-                if (!levelInfo.levelDictionary.ContainsKey(levelName))
-                {
-                    Debug.Log("No level with the name " + levelName + " was found");
-                    PrintLevelNames();
-                }
-                else
-                {
-                    if (levelInfo.levelDictionary.Remove(levelName))
-                    {
-                        Debug.Log("Removed level " + levelName);
-                    }
-                    else
-                    {
-                        Debug.Log("Could not remove " + levelName);
-                    }
-                }
-                break;
-            default:
-                break;
+            }
+             
         }       
         SaveData();
     }
@@ -231,17 +275,20 @@ public class LevelInfromation
 {
     public List<LevelData> customLevels;
     public Dictionary<string, LevelData> levelDictionary { get; private set; }
+    public Dictionary<string, LevelData> dungeonLevels { get; private set; }
 
-    public LevelInfromation(List<LevelData> customLevels_, Dictionary<string, LevelData> levelDictionary_)
+    public LevelInfromation(List<LevelData> customLevels_, Dictionary<string, LevelData> levelDictionary_, Dictionary<string, LevelData> dungeonLevels_)
     {
         customLevels = customLevels_;
         levelDictionary = levelDictionary_;
+        dungeonLevels = dungeonLevels_;
     }
 
     public LevelInfromation()
     {
         customLevels = new List<LevelData>();
         levelDictionary = new Dictionary<string, LevelData>();
+        dungeonLevels = new Dictionary<string, LevelData>();
     }
 
     public bool CustomLevelsContainName(string name)

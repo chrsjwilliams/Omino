@@ -36,6 +36,7 @@ public class LevelSelectSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+        Debug.Log(Services.GameManager.mode);
         if (levelsLoaded) return;
         levelsLoaded = true;
         Services.GameEventManager.Register<RefreshLevelSelectSceneEvent>(OnLevelSelectSceneRefresh);
@@ -101,6 +102,39 @@ public class LevelSelectSceneScript : Scene<TransitionData>
 
             }
         }
+        else if(Services.GameManager.mode == TitleSceneScript.GameMode.DungeonEdit)
+        {
+            levelButtons = new LevelButton[LevelManager.levelInfo.dungeonLevels.Count + 1];
+
+            levelButtons[0] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
+            levelButtons[0].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+            levelButtons[0].GetComponent<RectTransform>().localScale = selectedButtonScale;
+            levelButtons[0].name = "create new";
+            levelButtons[0].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[0].name);
+            foreach (TextMeshProUGUI text in levelButtons[0].GetComponentsInChildren<TextMeshProUGUI>())
+            {
+                text.text = levelButtons[0].name.ToLower();
+            }
+
+                int levelButtonIndex = 1;
+                foreach (LevelData levelData in LevelManager.levelInfo.dungeonLevels.Values)
+                {
+                    levelButtons[levelButtonIndex] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
+                    levelButtons[levelButtonIndex].level = levelData.CreateLevel();
+                    levelButtons[levelButtonIndex].GetComponent<RectTransform>().anchoredPosition = new Vector2(levelButtonSpacing * levelButtonIndex, 0);
+                    levelButtons[levelButtonIndex].GetComponent<RectTransform>().localScale = unselectedButtonScale;
+                    levelButtons[levelButtonIndex].name = levelData.levelName;
+                    levelButtons[levelButtonIndex].GetComponent<Image>().sprite = Services.LevelDataLibrary.GetLevelImage(levelButtons[levelButtonIndex].name);
+                    levelButtons[levelButtonIndex].GetComponent<Image>().color = new Color(160f / 256f, 160f / 256f, 160f / 256f);
+
+                    foreach (TextMeshProUGUI text in levelButtons[levelButtonIndex].GetComponentsInChildren<TextMeshProUGUI>())
+                    {
+                        text.text = levelButtons[levelButtonIndex].name.ToLower();
+                    }
+
+                    levelButtonIndex++;
+                }
+            }
         else
         {
             levelButtons = new LevelButton[LevelManager.levelInfo.levelDictionary.Count + 1];
@@ -230,7 +264,8 @@ public class LevelSelectSceneScript : Scene<TransitionData>
         //levelSelectionIndicator.gameObject.SetActive(true);
         levelSelected = levelButton.level;
         //levelSelectionIndicator.transform.position = levelButton.transform.position;
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit && levelSelected != null)
+        if ((Services.GameManager.mode == TitleSceneScript.GameMode.Edit || Services.GameManager.mode == TitleSceneScript.GameMode.DungeonEdit) && 
+            levelSelected != null)
         {
 
             deleteButton.SetSelectedLevel(levelSelected);
@@ -264,6 +299,7 @@ public class LevelSelectSceneScript : Scene<TransitionData>
         switch(Services.GameManager.mode)
         {
             case TitleSceneScript.GameMode.Edit:
+            case TitleSceneScript.GameMode.DungeonEdit:
                 if (levelSelected != null) Services.Scenes.Swap<EditSceneScript>();
                 else Services.Scenes.Swap<EditOptionsSceneScript>();
                 break;

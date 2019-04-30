@@ -6,31 +6,21 @@ public class EditModePlayer : Player {
 
     public EditModeBuilding editModeBuilding;
     public readonly int TOTAL_NUM_EDIT_BUILDINGS = Services.TechDataLibrary.dataArray.Length - 2;
-    private int numUsedEditBuildings;
-    public int numPlacedEditBuildings
-    {
-        get { return numUsedEditBuildings; }
-        set
-        {
-            
-            numUsedEditBuildings = value;
-            if(numUsedEditBuildings > TOTAL_NUM_EDIT_BUILDINGS)
-            {
-                numUsedEditBuildings = TOTAL_NUM_EDIT_BUILDINGS;
-            }
-            else if(numUsedEditBuildings < 0)
-            {
-                numUsedEditBuildings = 0;
-            }
-            ((EditSceneScript)Services.GameScene).usedTechCounter.text = numUsedEditBuildings + " / " + TOTAL_NUM_EDIT_BUILDINGS;
-        }
-    }
+    public List<TechBuilding> editModeBuildingList = new List<TechBuilding>();
+    
 
 
     public override void Init(int playerNum_)
     {
-        numPlacedEditBuildings = ((EditSceneScript)Services.GameScene).hasExpansions ?
-                                    Services.MapManager.structuresOnMap.Count - 2 : Services.MapManager.structuresOnMap.Count;
+        foreach(TechBuilding tech in Services.MapManager.structuresOnMap)
+        {
+            if(tech is EditModeBuilding && !editModeBuildingList.Contains(tech))
+            {
+                editModeBuildingList.Add(tech);
+            }
+        }
+        ((EditSceneScript)Services.GameScene).usedTechCounter.text = editModeBuildingList.Count + " / " + TOTAL_NUM_EDIT_BUILDINGS;
+
         boardPieces = new List<Polyomino>();
         hand = new List<Polyomino>();
         blueprints = new List<Blueprint>();
@@ -76,7 +66,10 @@ public class EditModePlayer : Player {
         editModeBuilding.holder.gameObject.SetActive(false);
         
         ((EditSceneScript)Services.GameScene).editModeBuilding = editModeBuilding;
-
+        if(editModeBuildingList.Count >= TOTAL_NUM_EDIT_BUILDINGS)
+        {
+            editModeBuilding = null;
+        }
         Generator mine = new Generator(this);
         AddBluePrint(mine);
         mine.Lock();
@@ -98,25 +91,30 @@ public class EditModePlayer : Player {
 
     }
 
-    //  TODO: Hold to delete
+    //  TODO: REMOVE max tech building without breaking everything!
 
     public void OnEditModeBuildingRemoved(EditModeBuildingRemoved e)
     {
-        numPlacedEditBuildings--;
-        UpdateEditModeBuildingUI(editModeBuilding);
+        editModeBuildingList.Remove(e.piece);
+        UpdateEditModeBuildingUI(e.piece);
     }
 
     public override void OnPiecePlaced(Polyomino piece, List<Polyomino> subpieces)
     {
+
         Services.GameEventManager.Fire(new PiecePlaced(piece));
         BuildingType blueprintType = piece.buildingType;
 
         if (piece is EditModeBuilding)
         {
-            numPlacedEditBuildings++;
+            if(!editModeBuildingList.Contains((EditModeBuilding)piece))
+            {
+                editModeBuildingList.Add((TechBuilding)piece);
+            }
+            editModeBuilding = null;
             UpdateEditModeBuildingUI(piece);
-        }
 
+        }
         selectedPiece = null;
         OrganizeHand(hand);
         piece.SetGlowState(false);
@@ -124,18 +122,20 @@ public class EditModePlayer : Player {
 
     public void UpdateEditModeBuildingUI(Polyomino piece)
     {
-        if (numPlacedEditBuildings < TOTAL_NUM_EDIT_BUILDINGS)
+        
+        if (editModeBuildingList.Count < TOTAL_NUM_EDIT_BUILDINGS)
         {
             AddEditModeBuilding(System.Activator.CreateInstance(
                 piece.GetType(), new Object[] { this }) as EditModeBuilding);
         }
+        ((EditSceneScript)Services.GameScene).usedTechCounter.text = editModeBuildingList.Count + " / " + TOTAL_NUM_EDIT_BUILDINGS;
     }
 
     public override void OnPieceSelected(Polyomino piece)
     {
         if (selectedPiece != null) CancelSelectedPiece();
         selectedPiece = piece;
-  
+        
         if (piece is EditModeBuilding)
         {
             ((EditSceneScript)Services.GameScene).TurnOffAllButtons();
@@ -147,14 +147,19 @@ public class EditModePlayer : Player {
     public override void CancelSelectedPiece()
     {
         if (selectedPiece == null) return;
-        if (selectedPiece is EditModeBuilding && !((EditModeBuilding)selectedPiece).wasPlaced)
+        Debug.Log("Cancelling");
+        if (selectedPiece is EditModeBuilding && !((EditModeBuilding)selectedPiece).wasPlaced && !((EditModeBuilding)selectedPiece).placed)
         {
             selectedPiece.Reposition(GetBlueprintPosition(blueprints[0]));
             selectedPiece.SetGlowState(false);
+            Debug.Log("Repo");
         }
-        else if(selectedPiece is EditModeBuilding && ((EditModeBuilding)selectedPiece).wasPlaced)
+        else if(selectedPiece is EditModeBuilding && ((EditModeBuilding)selectedPiece).wasPlaced && 
+                !selectedPiece.IsPlacementLegal())
         {
-            numPlacedEditBuildings--;
+            Debug.Log("Remove");
+            editModeBuilding = null;
+            ((EditModeBuilding)selectedPiece).Remove(false);
         }
         selectedPiece = null;
         OrganizeHand(hand);
@@ -162,10 +167,9 @@ public class EditModePlayer : Player {
 
     public void AddEditModeBuilding(EditModeBuilding techBuilding)
     {
-
+        editModeBuilding = techBuilding;
         techBuilding.MakePhysicalPiece();
-        techBuilding.Reposition(GetBlueprintPosition(techBuilding));
-        
+        techBuilding.Reposition(GetBlueprintPosition(techBuilding));   
     }
 
     public override Vector3 GetBlueprintPosition(Polyomino piece)
@@ -177,5 +181,13 @@ public class EditModePlayer : Player {
         Vector3 centerpoint = piece.GetCenterpoint() * Polyomino.UnselectedScale.x;
         rawWorldPos -= centerpoint;
         return new Vector3(rawWorldPos.x, rawWorldPos.y, 0);
+    }
+
+    protected override void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            Debug.Log(editModeBuilding);
+        }
     }
 }

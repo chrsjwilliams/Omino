@@ -509,7 +509,8 @@ public class Tile : MonoBehaviour, IVertex
     public void SetSprite()
     {
         
-        if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit && pieceParent.owner != null)
+        if ((Services.GameManager.mode != TitleSceneScript.GameMode.Edit || Services.GameManager.mode != TitleSceneScript.GameMode.DungeonEdit)&& 
+            pieceParent.owner != null)
         {
             
             int ownerIndex = pieceParent.owner.playerNum - 1;
@@ -520,7 +521,8 @@ public class Tile : MonoBehaviour, IVertex
             //fillOverlay.sprite = mainSr.sprite;
             //fillOverlayTop.sprite = topSr.sprite;
         }
-        else if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit && pieceParent.owner == null)
+        else if ((Services.GameManager.mode != TitleSceneScript.GameMode.Edit || Services.GameManager.mode != TitleSceneScript.GameMode.DungeonEdit)&& 
+            pieceParent.owner == null)
         {
             mainSr.sprite = pieceParent.destructible? destructibleTerrain : indestructibleTerrain;
         }

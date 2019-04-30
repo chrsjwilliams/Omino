@@ -34,6 +34,25 @@ public class EditModeBuilding : TechBuilding
         return "Location of Tech Building.";
     }
 
+    public override void PlaceAtLocation(Coord centerCoordLocation)
+    {
+        wasPlaced = true;
+        base.PlaceAtLocation(centerCoordLocation, false);
+    }
+    
+    protected override bool IsPointContainedWithinHolderArea(Vector3 point)
+    {
+        Debug.Assert(holder.holderSelectionArea != null);
+        Vector3 extents;
+        Vector3 centerPoint;
+
+        extents = holder.spriteBottom.bounds.extents;
+        centerPoint = holder.spriteBottom.transform.position;
+        
+        return point.x >= centerPoint.x - extents.x && point.x <= centerPoint.x + extents.x &&
+            point.y >= centerPoint.y - extents.y && point.y <= centerPoint.y + extents.y;
+    }
+    
     public override bool IsPlacementLegal(List<Polyomino> adjacentPieces, Coord hypotheticalCoord, bool pretendAttackResource = false)
     {
         List<Coord> hypotheticalTileCoords = new List<Coord>();
@@ -80,12 +99,10 @@ public class EditModeBuilding : TechBuilding
 
         if (isLegal)
         {
-            //SetGlow(Services.UIManager.legalGlowColor);
             holder.legalityOverlay.enabled = false;
         }
         else
         {
-            //SetGlow(new Color(1, 0.2f, 0.2f));
             if (!(this is Blueprint) && !connected)
             {
                 holder.legalityOverlay.enabled = false;
@@ -128,6 +145,21 @@ public class EditModeBuilding : TechBuilding
         
     }
 
+    public void Remove(bool onMap = true)
+    {
+        DestroyThis();
+        if (onMap)
+        {
+            foreach (Tile tile in tiles)
+            {
+                Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingPiece(null);
+                Services.MapManager.Map[tile.coord.x, tile.coord.y].SetOccupyingBlueprint(null);
+                tile.OnRemove();
+
+            }
+        }
+    }
+
     public override void OnInputUp(bool forceCancel = false)
     {
         DestroyTooltips();
@@ -142,12 +174,15 @@ public class EditModeBuilding : TechBuilding
                 piecePlaced = true;
                 placed = true;
                 wasPlaced = true;
+                Debug.Log("not moved and legal");
+
             }
             else
             {
-                editModePlayer.CancelSelectedPiece();
-                //EnterUnselectedState(false);
+                ((EditModePlayer)editModePlayer).CancelSelectedPiece();
                 piecePlaced = false;
+                Debug.Log("not moved and illegal");
+
             }
             CleanUpUI(piecePlaced);
         }
@@ -159,10 +194,14 @@ public class EditModeBuilding : TechBuilding
                 editModePlayer.OnPiecePlaced(this, null);
                 piecePlaced = true;
                 placed = true;
+                Debug.Log("Moved and Legal");
             }
             else
             {
-                GameObject.Destroy(holder.gameObject);
+                Debug.Log("Moved and illegal");
+
+                ((EditModePlayer)editModePlayer).CancelSelectedPiece();
+
             }
         }
         

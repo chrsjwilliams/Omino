@@ -21,7 +21,7 @@ public class HandPieceEntry : Task
     {
         piecesOn = new bool[hand.Count];
         pieceTargetPositions = new Vector3[hand.Count];
-        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit || Services.GameManager.mode == TitleSceneScript.GameMode.DungeonEdit)
         {
             startPos = Services.UIManager.UIMeters[0].GetBarPosition(false);
                 //Services.GameManager.MainCamera.ScreenToWorldPoint(
@@ -46,7 +46,7 @@ public class HandPieceEntry : Task
         {
             //hand[0].owner.queuedDestructor.holder.gameObject.SetActive(true);
         }
-        if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit)
+        if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit && Services.GameManager.mode != TitleSceneScript.GameMode.DungeonEdit)
         {
             hand[0].owner.queuedNormalPiece.holder.gameObject.SetActive(true);
         }
