@@ -119,6 +119,7 @@ public static class LevelManager
                 Level newLevel = level.CreateLevel();
            
                 newLevel.SetLevelData();
+
                 AssetDatabase.CreateAsset(newLevel, dungeonLevelFilePath + levelName +".asset");
             }
         }
@@ -163,7 +164,7 @@ public static class LevelManager
                 }
             }
         }
-        Debug.Log("Overwrite");
+
         SaveData();
     }
 
@@ -294,6 +295,17 @@ public class LevelInfromation
     public bool CustomLevelsContainName(string name)
     {
         foreach(LevelData level in customLevels)
+        {
+            if (level.levelName == name)
+                return true;
+        }
+
+        return false;
+    }
+
+    public bool DungeonLevelContainName(string name)
+    {
+        foreach (LevelData level in dungeonLevels.Values)
         {
             if (level.levelName == name)
                 return true;

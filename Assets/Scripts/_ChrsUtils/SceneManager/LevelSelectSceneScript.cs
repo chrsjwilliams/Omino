@@ -36,7 +36,6 @@ public class LevelSelectSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
-        Debug.Log(Services.GameManager.mode);
         if (levelsLoaded) return;
         levelsLoaded = true;
         Services.GameEventManager.Register<RefreshLevelSelectSceneEvent>(OnLevelSelectSceneRefresh);

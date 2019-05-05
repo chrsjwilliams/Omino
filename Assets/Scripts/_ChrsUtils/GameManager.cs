@@ -253,10 +253,7 @@ public class GameManager : MonoBehaviour
             level.SetLevelData();
             LevelManager.AddLevel(level.name, level.data, false, true);
         }
-        Debug.Log(LevelManager.levelInfo.dungeonLevels.Count);
-        LevelManager.PrintLevelNames();
-
-        
+        Services.MapManager.PopulateDungeonRunLevels();
        
         ELOManager.LoadData();
         DungeonRunManager.LoadData();

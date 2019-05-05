@@ -147,17 +147,15 @@ public class EditModePlayer : Player {
     public override void CancelSelectedPiece()
     {
         if (selectedPiece == null) return;
-        Debug.Log("Cancelling");
         if (selectedPiece is EditModeBuilding && !((EditModeBuilding)selectedPiece).wasPlaced && !((EditModeBuilding)selectedPiece).placed)
         {
             selectedPiece.Reposition(GetBlueprintPosition(blueprints[0]));
             selectedPiece.SetGlowState(false);
-            Debug.Log("Repo");
+
         }
         else if(selectedPiece is EditModeBuilding && ((EditModeBuilding)selectedPiece).wasPlaced && 
                 !selectedPiece.IsPlacementLegal())
         {
-            Debug.Log("Remove");
             editModeBuilding = null;
             ((EditModeBuilding)selectedPiece).Remove(false);
         }

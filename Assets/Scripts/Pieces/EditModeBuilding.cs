@@ -174,15 +174,11 @@ public class EditModeBuilding : TechBuilding
                 piecePlaced = true;
                 placed = true;
                 wasPlaced = true;
-                Debug.Log("not moved and legal");
-
             }
             else
             {
                 ((EditModePlayer)editModePlayer).CancelSelectedPiece();
                 piecePlaced = false;
-                Debug.Log("not moved and illegal");
-
             }
             CleanUpUI(piecePlaced);
         }
@@ -194,12 +190,9 @@ public class EditModeBuilding : TechBuilding
                 editModePlayer.OnPiecePlaced(this, null);
                 piecePlaced = true;
                 placed = true;
-                Debug.Log("Moved and Legal");
             }
             else
             {
-                Debug.Log("Moved and illegal");
-
                 ((EditModePlayer)editModePlayer).CancelSelectedPiece();
 
             }

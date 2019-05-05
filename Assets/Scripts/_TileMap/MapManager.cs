@@ -55,10 +55,26 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private Level[] eloLevelPool;
     [SerializeField]
-    private Level[] dungeonRunLevelPool;
+    private List<Level> dungeonRunLevelPool;
+
     public void Init()
     {
         _center = Services.MapManager.CenterIndexOfGrid();
+
+       
+    }
+
+    public void PopulateDungeonRunLevels()
+    {
+        dungeonRunLevelPool = new List<Level>();
+        foreach (LevelData data in LevelManager.levelInfo.dungeonLevels.Values)
+        {
+            Level level = data.CreateLevel();
+            if (!dungeonRunLevelPool.Contains(level))
+            {
+                dungeonRunLevelPool.Add(level);
+            }
+        }
     }
 
     public void GenerateMap(bool newEditLevel = false)
@@ -70,7 +86,7 @@ public class MapManager : MonoBehaviour
         }
         if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
         {
-            Level level = dungeonRunLevelPool[Random.Range(0, dungeonRunLevelPool.Length - 1)];
+            Level level = dungeonRunLevelPool[Random.Range(0, dungeonRunLevelPool.Count - 1)];
             Services.GameManager.SetCurrentLevel(level);
         }
         if (Services.GameManager.levelSelected != null)
@@ -415,7 +431,7 @@ public class MapManager : MonoBehaviour
             if (structureTypes.Count == 0)
                 structureTypes = new List<BuildingType>(level.availableStructures);
 
-            if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit || Services.GameManager.mode != TitleSceneScript.GameMode.DungeonEdit)
+            if (Services.GameManager.mode != TitleSceneScript.GameMode.Edit && Services.GameManager.mode != TitleSceneScript.GameMode.DungeonEdit)
             {
                 type = structureTypes[Random.Range(0, structureTypes.Count)];
                 structureTypes.Remove(type);

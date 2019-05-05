@@ -84,13 +84,21 @@ public class EditSceneScript : GameSceneScript {
 
     public string GenerateName()
     {
+        string levelName;
         int levelNum = 1;
-        string levelName = "custom " + levelNum;
-
-        while (LevelManager.levelInfo.CustomLevelsContainName(levelName))
+        if (Services.GameManager.mode == TitleSceneScript.GameMode.Edit)
         {
-            levelNum++;
             levelName = "custom " + levelNum;
+
+            while (LevelManager.levelInfo.CustomLevelsContainName(levelName))
+            {
+                levelNum++;
+            }
+            levelName = "custom " + levelNum;
+        }
+        else
+        {
+            levelName = "Dungeon Map " + (LevelManager.levelInfo.dungeonLevels.Count + 1);
         }
         return levelName;
     }
@@ -271,7 +279,7 @@ public class EditSceneScript : GameSceneScript {
         {
             if (overwrite)
             {
-                LevelManager.OverwriteLevel(level);
+                LevelManager.OverwriteLevel(level, true);
             }
             else
             {
