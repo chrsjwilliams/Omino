@@ -224,7 +224,6 @@ public class GameManager : MonoBehaviour
         Assert.raiseExceptions = true;
         SetDevice();
         InitializeServices();
-        Services.LeaderBoard.ShowLeaderBoardUI();
         Services.GlobalEventManager.Register<Reset>(Reset);
         Services.GlobalEventManager.Register<TouchDown>(ResetInactivity);
         Services.GlobalEventManager.Register<MouseDown>(ResetInactivity);
@@ -256,6 +255,7 @@ public class GameManager : MonoBehaviour
         Services.MapManager.PopulateDungeonRunLevels();
        
         ELOManager.LoadData();
+        ELOManager.eloData.ReportScore();
         DungeonRunManager.LoadData();
 
         if (!debug)
@@ -321,7 +321,8 @@ public class GameManager : MonoBehaviour
 		Services.CameraController = MainCamera.GetComponent<CameraController>();
 		Services.Clock = clock;
         Services.Clock.Init(levelBPM);
-        Services.LeaderBoard = new GameCenterLeaderBoard();
+        Services.LeaderBoard = GetComponent<GameCenterLeaderBoard>();
+        Services.LeaderBoard.Init();
 
         Services.Analytics = AnalyticsManager.Instance;
     }

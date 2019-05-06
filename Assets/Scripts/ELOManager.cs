@@ -100,6 +100,7 @@ public static class ELOManager
         Services.Analytics.ELOStreak(eloData.winStreakCount);
         Services.Analytics.ELOTotalWins(eloData.totalWins);
         Services.Analytics.ELORating(eloData.GetRating());
+
         SaveData();
     }
 
@@ -178,10 +179,18 @@ public class EloData
         handicapLevel = Mathf.Max(ELOManager.minHandicap, handicap);
         if (handicapLevel > highestHandicapAchieved)
         {
-            highestHandicapAchieved = handicapLevel;
-            Services.LeaderBoard.ReportScore((long)highestHandicapAchieved, "1");
+           highestHandicapAchieved = handicapLevel;
+
+            ReportScore();
         }
     }
+
+    public void ReportScore()
+    {
+        Services.LeaderBoard.ReportScore(highestHandicapAchieved, "1");
+
+    }
+
 
     public RankCategory GetRank()
     {

@@ -1071,7 +1071,8 @@ public class Polyomino : IVertex
             }
         }
 
-        if (piecesToRemove.Count > 0)
+        if (piecesToRemove.Count > 0 &&
+            (Services.GameManager.mode != TitleSceneScript.GameMode.Edit && Services.GameManager.mode != TitleSceneScript.GameMode.DungeonEdit))
             Services.AudioManager.RegisterSoundEffect(Services.Clips.PieceDestroyed);
         for (int i = piecesToRemove.Count - 1; i >= 0; i--)
         {

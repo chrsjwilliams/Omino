@@ -366,7 +366,7 @@ public class MapManager : MonoBehaviour
     {
 
         List<BuildingType> structureTypes = InitStructureTypeList();
-        GenerateTerrain();
+       //GenerateTerrain();
         if ((Services.GameManager.mode == TitleSceneScript.GameMode.Edit ||
             Services.GameManager.mode == TitleSceneScript.GameMode.DungeonEdit) && level == null) return;
 

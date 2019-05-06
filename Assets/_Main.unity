@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.3587269, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -300,6 +300,7 @@ GameObject:
   - component: {fileID: 1356268954}
   - component: {fileID: 1356268955}
   - component: {fileID: 1356268956}
+  - component: {fileID: 1356268953}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -320,6 +321,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1356268953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1356268951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 685f80d45051e674ab17600d4b532852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1356268954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -449,7 +461,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMainBehavior: 1
   showInnerGlowBehavior: 1
-  rtFormat: 2
+  rtFormat: 22
   blurShader: {fileID: 4800000, guid: 1855d9636fad3914bacc4a543165c974, type: 3}
   compositeShader: {fileID: 4800000, guid: e384de4389ba527479054baf0ddb1d3e, type: 3}
   selectiveRenderShader: {fileID: 4800000, guid: c04b7cae8accdfb4e9c2648823ff39d7,

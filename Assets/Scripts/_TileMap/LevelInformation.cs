@@ -4,8 +4,10 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using UnityEditor;
+#if (UNITY_EDITOR)
 
+using UnityEditor;
+#endif
 public static class LevelManager
 {
     public const string fileName = "levelManager";
@@ -109,6 +111,10 @@ public static class LevelManager
         }
         else if(dungeonLevel)
         {
+            if (levelInfo.dungeonLevels == null)
+            {
+                levelInfo.CreateDungeonLevelDictionary();
+            }
             if (levelInfo.dungeonLevels.ContainsKey(levelName))
             {
 
@@ -119,8 +125,10 @@ public static class LevelManager
                 Level newLevel = level.CreateLevel();
            
                 newLevel.SetLevelData();
+#if (UNITY_EDITOR)
 
                 AssetDatabase.CreateAsset(newLevel, dungeonLevelFilePath + levelName +".asset");
+#endif
             }
         }
         else
@@ -190,8 +198,11 @@ public static class LevelManager
             if (levelInfo.dungeonLevels.Count > 0 && levelInfo.dungeonLevels.ContainsKey(levelName))
             {
                 levelInfo.dungeonLevels.Remove(levelName);
+#if (UNITY_EDITOR)
+
                 AssetDatabase.DeleteAsset(dungeonLevelFilePath + levelName + ".asset");
                 Debug.Log("Removed level " + levelName);
+#endif
             }
             else
             {
@@ -290,6 +301,12 @@ public class LevelInfromation
         customLevels = new List<LevelData>();
         levelDictionary = new Dictionary<string, LevelData>();
         dungeonLevels = new Dictionary<string, LevelData>();
+    }
+
+    public void CreateDungeonLevelDictionary()
+    {
+        dungeonLevels = new Dictionary<string, LevelData>();
+
     }
 
     public bool CustomLevelsContainName(string name)
