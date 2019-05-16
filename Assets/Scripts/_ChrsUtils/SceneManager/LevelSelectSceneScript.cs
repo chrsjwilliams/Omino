@@ -136,9 +136,9 @@ public class LevelSelectSceneScript : Scene<TransitionData>
             }
         else
         {
-            levelButtons = new LevelButton[LevelManager.levelInfo.levelDictionary.Count + 1];
+            levelButtons = new LevelButton[LevelManager.levelInfo.levelDictionary.Count + 1 - LevelManager.levelInfo.dungeonLevels.Count];
 
-
+            Debug.Log(levelButtons.Length);
             levelButtons[0] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
             levelButtons[0].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
             levelButtons[0].GetComponent<RectTransform>().localScale = selectedButtonScale;
@@ -154,6 +154,7 @@ public class LevelSelectSceneScript : Scene<TransitionData>
             int levelButtonIndex = 1;
             foreach (KeyValuePair<string, LevelData> entry in LevelManager.levelInfo.levelDictionary)
             {
+                if (entry.Key.Contains("Dungeon")) continue;
                 levelButtons[levelButtonIndex] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
                 levelButtons[levelButtonIndex].level = entry.Value.CreateLevel();
                 levelButtons[levelButtonIndex].GetComponent<RectTransform>().anchoredPosition = new Vector2(levelButtonSpacing * levelButtonIndex, 0);

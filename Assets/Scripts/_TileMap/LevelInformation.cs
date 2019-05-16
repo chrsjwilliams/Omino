@@ -115,11 +115,7 @@ public static class LevelManager
             {
                 levelInfo.CreateDungeonLevelDictionary();
             }
-            if (levelInfo.dungeonLevels.ContainsKey(levelName))
-            {
-
-            }
-            else
+            if (!levelInfo.dungeonLevels.ContainsKey(levelName))
             {
                 levelInfo.dungeonLevels.Add(levelName, level);
                 Level newLevel = level.CreateLevel();
@@ -155,7 +151,6 @@ public static class LevelManager
                 if (levelName == levelData.levelName)
                 {
                     levelInfo.dungeonLevels[levelName] = levelData;
-                    //levelInfo.levelDictionary[levelData.levelName] = levelData;
                     break;
                 }
             }
@@ -278,7 +273,7 @@ public static class LevelManager
         }
 
         levelNames.Remove(levelNames.Length - 2);
-        //Debug.Log(levelNames);
+        Debug.Log(levelNames);
     }
 }
 

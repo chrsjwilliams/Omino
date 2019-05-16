@@ -19,13 +19,17 @@ public class GameCenterLeaderBoard : MonoBehaviour{
 
     public void ReportScore(float score, string leaderboardID)
     {
-        score = score * 1000;
+#if (!UNITY_EDITOR)
+        if(leaderboardID == "1"){
+            score = score * 1000;
+        }
         Debug.Log("Reporting score " + score + " on leaderbaord " + leaderboardID);
         Social.ReportScore((long)score, leaderboardID,
             success => {
                 Debug.Log(success ? "Reported score successfully" : "Failed to report score");
             }
         );
+#endif
     }
 
 

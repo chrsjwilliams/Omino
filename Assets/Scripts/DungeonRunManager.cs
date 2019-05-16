@@ -116,6 +116,7 @@ public static class DungeonRunManager
 
     public static void OnGameLoss()
     {
+        dungeonRunData.dungeonRunStreak = 0;
         Services.UIManager.UIMenu.dungeonRunChallenegeCompleteMenu.OnGameEnd(false);
 
         Services.Analytics.DungeonRunLoss(dungeonRunData.challengeNum);
@@ -125,9 +126,10 @@ public static class DungeonRunManager
 
     private static void OnCompleteDungeonRun()
     {
+        dungeonRunData.dungeonRunStreak++;
         dungeonRunData.completedRun = true;
         Services.Analytics.MatchEnded();
-        
+        Services.LeaderBoard.ReportScore(dungeonRunData.dungeonRunStreak, "2");
         ResetDungeonRunData();
     }
 
@@ -259,6 +261,7 @@ public class DungeonRunData
     public List<BuildingType> currentTech;
     public int challengeNum;
     public PlayerHandicap handicapLevel;
+    public int dungeonRunStreak;
 
     public DungeonRunData(List<BuildingType> ownedTech, List<BuildingType> techSelection, int challengeNumLevel, PlayerHandicap handicap, bool selecting, bool selected, bool generated)
     {
@@ -269,6 +272,7 @@ public class DungeonRunData
         selectingNewTech = selecting;
         completedRun = selected;
         techOptionsGenerated = generated;
+        dungeonRunStreak = 0;
     }
 
     public DungeonRunData()

@@ -5,19 +5,6 @@ using UnityEngine.UI;
 using TMPro;
 using System.IO;
 
-/*
- *      TODO: 
- *              Have an area for the reward
- *              Have tooltips for characters in dungeon run
- *              Endow ai with their own tech power-up?
- *              characters that taunt the play when the player loses/
- *                  whine when player wins
- *              
- *              
- *              Skins!?
- * 
- */ 
-
 public class DungeonRunSceneScript : Scene<TransitionData>
 {
     public bool[] humanPlayers { get; private set; }
@@ -38,6 +25,8 @@ public class DungeonRunSceneScript : Scene<TransitionData>
     private TextMeshProUGUI challengeLevelText;
     [SerializeField]
     private TextMeshProUGUI currentTechZone;
+    [SerializeField]
+    private TextMeshProUGUI streakCounter;
     private Button[][] currentTechMenu;
     [SerializeField]
     private Button startChallengeButton;
@@ -57,6 +46,7 @@ public class DungeonRunSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+        Services.CameraController.SetPosition(new Vector3(9.5f, 9.5f, -10));
         dungeonRunMenu.SetActive(false);
         backButton.SetActive(false);
         optionButton.SetActive(false);
@@ -69,6 +59,7 @@ public class DungeonRunSceneScript : Scene<TransitionData>
             int.TryParse(fileText, out dungeonRunProgress);
             int.TryParse(fileText, out completedDungeonRuns);
         }
+        streakCounter.text = "streak: " + DungeonRunManager.dungeonRunData.dungeonRunStreak;
         humanPlayers = new bool[2] { false, false };
         humanPlayers[0] = true;
         humanPlayers[1] = false;

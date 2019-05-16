@@ -569,7 +569,8 @@ public class Polyomino : IVertex
                 {
                     MapTile mapTile = Services.MapManager.Map[tile.coord.x, tile.coord.y];
                     if (mapTile.occupyingPiece != null &&
-                        (mapTile.occupyingPiece.owner == owner || mapTile.occupyingPiece.owner == null) &&
+                        (mapTile.occupyingPiece.owner == owner || 
+                        (mapTile.occupyingPiece.owner == null && (mapTile.occupyingPiece.isTerrain && !mapTile.occupyingPiece.destructible))) &&
                         !overlappingTilesToRemove.Contains(tile))
                     {
                         overlappingTilesToRemove.Add(tile);

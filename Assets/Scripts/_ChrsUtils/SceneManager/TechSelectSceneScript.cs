@@ -34,6 +34,7 @@ public class TechSelectSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+        Services.CameraController.SetPosition(new Vector3(9.5f, 9.5f, -10));
         techSelectMenu.SetActive(false);
         backButton.SetActive(false);
         optionButton.SetActive(false);
