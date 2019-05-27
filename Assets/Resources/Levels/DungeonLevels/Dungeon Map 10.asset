@@ -1,0 +1,423 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6e3d42f2220bb342a28180320c2b637, type: 3}
+  m_Name: Dungeon Map 10
+  m_EditorClassIdentifier: 
+  levelName: Dungeon Map 10
+  displayImage: {fileID: 21300000, guid: bc4bfad6bdf1afe449d174a724365943, type: 3}
+  campaignLevelNum: 0
+  objectives: []
+  availableStructures: 01000000020000000700000008000000090000000a0000000b00000003000000060000000c000000
+  p1HomeBasePos:
+    x: 1
+    y: 1
+  p2HomeBasePos:
+    x: 18
+    y: 18
+  preplacedP1Tiles: []
+  preplacedP2Tiles: []
+  structCoords:
+  - x: 5
+    y: 17
+  - x: 7
+    y: 3
+  - x: 9
+    y: 10
+  - x: 11
+    y: 17
+  - x: 13
+    y: 3
+  impassibleCoords: []
+  destructibleTerrainCoords:
+  - x: 0
+    y: 6
+  - x: 0
+    y: 8
+  - x: 0
+    y: 10
+  - x: 0
+    y: 12
+  - x: 1
+    y: 6
+  - x: 1
+    y: 8
+  - x: 1
+    y: 10
+  - x: 1
+    y: 12
+  - x: 2
+    y: 6
+  - x: 2
+    y: 8
+  - x: 2
+    y: 10
+  - x: 2
+    y: 12
+  - x: 3
+    y: 6
+  - x: 3
+    y: 8
+  - x: 3
+    y: 10
+  - x: 3
+    y: 12
+  - x: 4
+    y: 6
+  - x: 4
+    y: 8
+  - x: 4
+    y: 10
+  - x: 4
+    y: 12
+  - x: 5
+    y: 6
+  - x: 5
+    y: 8
+  - x: 5
+    y: 10
+  - x: 5
+    y: 12
+  - x: 6
+    y: 6
+  - x: 6
+    y: 8
+  - x: 6
+    y: 10
+  - x: 6
+    y: 12
+  - x: 7
+    y: 6
+  - x: 7
+    y: 8
+  - x: 7
+    y: 10
+  - x: 7
+    y: 12
+  - x: 8
+    y: 6
+  - x: 8
+    y: 8
+  - x: 8
+    y: 10
+  - x: 8
+    y: 12
+  - x: 9
+    y: 6
+  - x: 9
+    y: 8
+  - x: 9
+    y: 12
+  - x: 10
+    y: 6
+  - x: 10
+    y: 8
+  - x: 10
+    y: 12
+  - x: 11
+    y: 6
+  - x: 11
+    y: 8
+  - x: 11
+    y: 10
+  - x: 11
+    y: 12
+  - x: 12
+    y: 6
+  - x: 12
+    y: 8
+  - x: 12
+    y: 10
+  - x: 12
+    y: 12
+  - x: 13
+    y: 6
+  - x: 13
+    y: 8
+  - x: 13
+    y: 10
+  - x: 13
+    y: 12
+  - x: 14
+    y: 6
+  - x: 14
+    y: 8
+  - x: 14
+    y: 10
+  - x: 14
+    y: 12
+  - x: 15
+    y: 6
+  - x: 15
+    y: 8
+  - x: 15
+    y: 10
+  - x: 15
+    y: 12
+  - x: 16
+    y: 6
+  - x: 16
+    y: 8
+  - x: 16
+    y: 10
+  - x: 16
+    y: 12
+  - x: 17
+    y: 6
+  - x: 17
+    y: 8
+  - x: 17
+    y: 10
+  - x: 17
+    y: 12
+  - x: 18
+    y: 6
+  - x: 18
+    y: 8
+  - x: 18
+    y: 10
+  - x: 18
+    y: 12
+  - x: 19
+    y: 6
+  - x: 19
+    y: 8
+  - x: 19
+    y: 10
+  - x: 19
+    y: 12
+  width: 20
+  height: 20
+  cornerBases: 1
+  destructorsEnabled: 1
+  blueprintsEnabled: 1
+  generatorEnabled: 1
+  factoryEnabled: 1
+  barracksEnabled: 1
+  stackDestructorInOpeningHand: 0
+  tooltips: []
+  overrideStrategy:
+    winWeight: 0
+    structWeight: 0
+    blueprintWeight: 0
+    destructionWeight: 0
+    blueprintDestructionWeight: 0
+    disconnectionWeight: 0
+    destructorForBlueprintWeight: 0
+    dangerMod: 0
+    overrideDefault: 0
+    resourceGainFactor: 0
+    drawRateFactor: 0
+    dangerDistance: 0
+  data:
+    levelName: Dungeon Map 10
+    campaignLevelNum: 0
+    objectives: []
+    availableStructures: 01000000020000000700000008000000090000000a0000000b00000003000000060000000c000000
+    p1HomeBasePos:
+      x: 1
+      y: 1
+    p2HomeBasePos:
+      x: 18
+      y: 18
+    preplacedP1Tiles: []
+    preplacedP2Tiles: []
+    structCoords:
+    - x: 5
+      y: 17
+    - x: 7
+      y: 3
+    - x: 9
+      y: 10
+    - x: 11
+      y: 17
+    - x: 13
+      y: 3
+    impassibleCoords: []
+    destructibleTerrainCoords:
+    - x: 0
+      y: 6
+    - x: 0
+      y: 8
+    - x: 0
+      y: 10
+    - x: 0
+      y: 12
+    - x: 1
+      y: 6
+    - x: 1
+      y: 8
+    - x: 1
+      y: 10
+    - x: 1
+      y: 12
+    - x: 2
+      y: 6
+    - x: 2
+      y: 8
+    - x: 2
+      y: 10
+    - x: 2
+      y: 12
+    - x: 3
+      y: 6
+    - x: 3
+      y: 8
+    - x: 3
+      y: 10
+    - x: 3
+      y: 12
+    - x: 4
+      y: 6
+    - x: 4
+      y: 8
+    - x: 4
+      y: 10
+    - x: 4
+      y: 12
+    - x: 5
+      y: 6
+    - x: 5
+      y: 8
+    - x: 5
+      y: 10
+    - x: 5
+      y: 12
+    - x: 6
+      y: 6
+    - x: 6
+      y: 8
+    - x: 6
+      y: 10
+    - x: 6
+      y: 12
+    - x: 7
+      y: 6
+    - x: 7
+      y: 8
+    - x: 7
+      y: 10
+    - x: 7
+      y: 12
+    - x: 8
+      y: 6
+    - x: 8
+      y: 8
+    - x: 8
+      y: 10
+    - x: 8
+      y: 12
+    - x: 9
+      y: 6
+    - x: 9
+      y: 8
+    - x: 9
+      y: 12
+    - x: 10
+      y: 6
+    - x: 10
+      y: 8
+    - x: 10
+      y: 12
+    - x: 11
+      y: 6
+    - x: 11
+      y: 8
+    - x: 11
+      y: 10
+    - x: 11
+      y: 12
+    - x: 12
+      y: 6
+    - x: 12
+      y: 8
+    - x: 12
+      y: 10
+    - x: 12
+      y: 12
+    - x: 13
+      y: 6
+    - x: 13
+      y: 8
+    - x: 13
+      y: 10
+    - x: 13
+      y: 12
+    - x: 14
+      y: 6
+    - x: 14
+      y: 8
+    - x: 14
+      y: 10
+    - x: 14
+      y: 12
+    - x: 15
+      y: 6
+    - x: 15
+      y: 8
+    - x: 15
+      y: 10
+    - x: 15
+      y: 12
+    - x: 16
+      y: 6
+    - x: 16
+      y: 8
+    - x: 16
+      y: 10
+    - x: 16
+      y: 12
+    - x: 17
+      y: 6
+    - x: 17
+      y: 8
+    - x: 17
+      y: 10
+    - x: 17
+      y: 12
+    - x: 18
+      y: 6
+    - x: 18
+      y: 8
+    - x: 18
+      y: 10
+    - x: 18
+      y: 12
+    - x: 19
+      y: 6
+    - x: 19
+      y: 8
+    - x: 19
+      y: 10
+    - x: 19
+      y: 12
+    width: 20
+    height: 20
+    cornerBases: 1
+    destructorsEnabled: 1
+    blueprintsEnabled: 1
+    generatorEnabled: 1
+    factoryEnabled: 1
+    barracksEnabled: 1
+    stackDestructorInOpeningHand: 0
+    tooltips: []
+    overrideStrategy:
+      winWeight: 0
+      structWeight: 0
+      blueprintWeight: 0
+      destructionWeight: 0
+      blueprintDestructionWeight: 0
+      disconnectionWeight: 0
+      destructorForBlueprintWeight: 0
+      dangerMod: 0
+      overrideDefault: 0
+      resourceGainFactor: 0
+      drawRateFactor: 0
+      dangerDistance: 0

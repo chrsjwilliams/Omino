@@ -138,7 +138,6 @@ public class LevelSelectSceneScript : Scene<TransitionData>
         {
             levelButtons = new LevelButton[LevelManager.levelInfo.levelDictionary.Count + 1 - LevelManager.levelInfo.dungeonLevels.Count];
 
-            Debug.Log(levelButtons.Length);
             levelButtons[0] = Instantiate(levelButtonPrefaB, scrollPanel.transform).GetComponent<LevelButton>();
             levelButtons[0].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
             levelButtons[0].GetComponent<RectTransform>().localScale = selectedButtonScale;
