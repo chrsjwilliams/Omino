@@ -59,7 +59,7 @@ public class DungeonRunSceneScript : Scene<TransitionData>
             int.TryParse(fileText, out dungeonRunProgress);
             int.TryParse(fileText, out completedDungeonRuns);
         }
-        streakCounter.text = "streak: " + DungeonRunManager.dungeonRunData.dungeonRunStreak;
+        streakCounter.text = "streak: " + DungeonRunManager.dungeonRunStreak;
         humanPlayers = new bool[2] { false, false };
         humanPlayers[0] = true;
         humanPlayers[1] = false;

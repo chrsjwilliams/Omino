@@ -17,7 +17,9 @@ public static class DungeonRunManager
     public const float MAX_ENERGY_HANDICAP = 1.3f;
     private const float handicapIncrement = 0.15f;
     private const string fileName = "dungeonRunData";
-    
+    public static int dungeonRunStreak;
+
+
 
     private static readonly BuildingType[] availableTech =
     {
@@ -116,7 +118,7 @@ public static class DungeonRunManager
 
     public static void OnGameLoss()
     {
-        dungeonRunData.dungeonRunStreak = 0;
+        dungeonRunStreak = 0;
         Services.UIManager.UIMenu.dungeonRunChallenegeCompleteMenu.OnGameEnd(false);
 
         Services.Analytics.DungeonRunLoss(dungeonRunData.challengeNum);
@@ -126,10 +128,10 @@ public static class DungeonRunManager
 
     private static void OnCompleteDungeonRun()
     {
-        dungeonRunData.dungeonRunStreak++;
+        dungeonRunStreak++;
         dungeonRunData.completedRun = true;
         Services.Analytics.MatchEnded();
-        Services.LeaderBoard.ReportScore(dungeonRunData.dungeonRunStreak, "2");
+        Services.LeaderBoard.ReportScore(dungeonRunStreak, "2");
         ResetDungeonRunData();
     }
 
@@ -261,7 +263,6 @@ public class DungeonRunData
     public List<BuildingType> currentTech;
     public int challengeNum;
     public PlayerHandicap handicapLevel;
-    public int dungeonRunStreak;
 
     public DungeonRunData(List<BuildingType> ownedTech, List<BuildingType> techSelection, int challengeNumLevel, PlayerHandicap handicap, bool selecting, bool selected, bool generated)
     {
@@ -272,7 +273,6 @@ public class DungeonRunData
         selectingNewTech = selecting;
         completedRun = selected;
         techOptionsGenerated = generated;
-        dungeonRunStreak = 0;
     }
 
     public DungeonRunData()
