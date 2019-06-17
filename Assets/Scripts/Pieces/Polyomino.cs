@@ -1054,7 +1054,15 @@ public class Polyomino : IVertex
                     removedOpposingPiece = true;
                     positionOfDestruction = mapTile.transform.position;
                 }
+
+                if (mapTile.occupyingPiece.isTerrain && mapTile.occupyingPiece.destructible)
+                {
+                    removedOpposingPiece = true;
+                    positionOfDestruction = mapTile.transform.position;
+                }
             }
+
+            
 
             if(owner != null &&
                 owner.crossSection &&
@@ -1065,6 +1073,12 @@ public class Polyomino : IVertex
             {
                 piecesToRemove.Add(mapTile.occupyingPiece);
                 if (mapTile.occupyingPiece.owner != owner && mapTile.occupyingPiece.connected)
+                {
+                    removedOpposingPiece = true;
+                    positionOfDestruction = mapTile.transform.position;
+                }
+
+                if (mapTile.occupyingPiece.isTerrain && mapTile.occupyingPiece.destructible)
                 {
                     removedOpposingPiece = true;
                     positionOfDestruction = mapTile.transform.position;

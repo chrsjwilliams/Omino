@@ -8,13 +8,14 @@ public class InitialBuildingEntryAnimation : Task
     private TaskManager subtaskManager;
     private float baseStaggerTime;
     private float structStaggerTime;
+    private float terrainStaggerTime;
     private bool run_tasks = false;
 
     protected override void Init()
     {
         baseStaggerTime = Services.Clock.EighthLength();
         structStaggerTime = Services.Clock.SixteenthLength();
-        
+        terrainStaggerTime = Services.Clock.ThirtySecondLength();
         subtaskManager = new TaskManager();
         
         for (int i = 0; i < 2; i++)
@@ -32,7 +33,7 @@ public class InitialBuildingEntryAnimation : Task
 
         for (int i = 0; i < Services.MapManager.terrainOnMap.Count; i++)
         {
-            Task dropTask = new Wait((structStaggerTime * i) + (baseStaggerTime * 2));
+            Task dropTask = new Wait((terrainStaggerTime * i) + (baseStaggerTime * 2));
             dropTask.Then(new BuildingDropAnimation(Services.MapManager.terrainOnMap[i]));
             subtaskManager.Do(dropTask);
         }
