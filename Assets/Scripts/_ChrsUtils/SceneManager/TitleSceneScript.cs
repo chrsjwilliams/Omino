@@ -18,7 +18,7 @@ public class TitleSceneScript : Scene<TransitionData>
         GameMode.HyperVS, GameMode.Practice };
 
     private const float SECONDS_TO_WAIT = 0.01f;
-
+    public GameObject versusIphoneText;
     private TaskManager _tm = new TaskManager();
 
     internal override void Init()
@@ -28,6 +28,7 @@ public class TitleSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
+        versusIphoneText.SetActive(false);
         menuManager.OnReload();
     }
 

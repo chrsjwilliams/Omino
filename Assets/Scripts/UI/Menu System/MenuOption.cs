@@ -27,6 +27,7 @@ public class MenuOption : MenuObject
 
     public override void Load()
     {
+        
         objectPrefabToSpawn = Services.MenuManager.buttonPrefab;
         base.Load();
         uiText = associatedObject.GetComponentInChildren<TextMeshProUGUI>();

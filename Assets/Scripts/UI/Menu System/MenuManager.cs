@@ -58,6 +58,7 @@ public class MenuManager : MonoBehaviour
 
     public void PopMenu()
     {
+        titleScene.versusIphoneText.SetActive(false);
         if (menuStack.Count > 1 + menusToPop)
         {
             menusToPop += 1;
@@ -66,6 +67,12 @@ public class MenuManager : MonoBehaviour
 
     public void LoadScene(TitleSceneScript.GameMode mode)
     {
+        if ((Services.GameManager.CurrentDevice != DEVICE.IPAD || Services.GameManager.pretendIphone) &&
+            mode == TitleSceneScript.GameMode.TwoPlayers)
+        {
+            titleScene.versusIphoneText.SetActive(true);
+            return;
+        }
         titleScene.StartGame(mode);
     }
 

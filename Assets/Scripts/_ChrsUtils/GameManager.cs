@@ -294,6 +294,7 @@ public class GameManager : MonoBehaviour
                 CurrentDevice = DEVICE.IPAD;
                 break;
         }
+
     }
 
     private void InitializeServices()
