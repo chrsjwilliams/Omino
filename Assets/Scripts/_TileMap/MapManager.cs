@@ -227,6 +227,12 @@ public class MapManager : MonoBehaviour
                 case BuildingType.RETALIATE:
                     techBuilding = new Retaliate();
                     break;
+                case BuildingType.RECOUP:
+                    techBuilding = new Recoup();
+                    break;
+                case BuildingType.PLUNDER:
+                    techBuilding = new Plunder();
+                    break;
                 case BuildingType.EDITMODE:
                     techBuilding = new EditModeBuilding(Services.GameManager.Players[0]);
                     break;

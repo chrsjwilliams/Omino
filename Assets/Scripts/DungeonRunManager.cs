@@ -26,7 +26,7 @@ public static class DungeonRunManager
             BuildingType.DYNAMO,        BuildingType.SUPPLYBOOST,       BuildingType.UPSIZE,
             BuildingType.SHIELDEDPIECES,BuildingType.ARMORY,            BuildingType.FISSION,
             BuildingType.RECYCLING,     BuildingType.CROSSSECTION,      BuildingType.REPAINT,
-            BuildingType.RETALIATE
+            BuildingType.RETALIATE,     BuildingType.RECOUP,            BuildingType.PLUNDER
     };
 
     public static void LoadData()

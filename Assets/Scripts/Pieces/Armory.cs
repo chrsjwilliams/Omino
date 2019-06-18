@@ -40,6 +40,6 @@ public class Armory : TechBuilding
     public override string GetDescription()
     {
         return "+" + 100 * attackFactorModifier + "%" +
-            " Attack Recharge rate";
+            " Attack Recharge rate.";
     }
 }

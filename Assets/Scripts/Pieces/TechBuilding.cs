@@ -40,6 +40,12 @@ public abstract class TechBuilding : Polyomino
             case BuildingType.RETALIATE:
                 structure = new Retaliate();
                 break;
+            case BuildingType.RECOUP:
+                structure = new Recoup();
+                break;
+            case BuildingType.PLUNDER:
+                structure = new Plunder();
+                break;
             default:
                 return null;
         }
@@ -68,7 +74,9 @@ public abstract class TechBuilding : Polyomino
             BuildingType.REPAINT,
             BuildingType.UPSIZE,
             BuildingType.SHIELDEDPIECES,
-            BuildingType.RETALIATE
+            BuildingType.RETALIATE,
+            BuildingType.RECOUP,
+            BuildingType.PLUNDER
     };
 
     protected static int[,,] techBuilding = new int[3, 5, 5]

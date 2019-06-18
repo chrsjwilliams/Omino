@@ -1,23 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SupplyBoost : TechBuilding
+public class Recoup : TechBuilding
 {
-    private const float drawRateMultiplier = 0.15f;
-
-    public SupplyBoost() : base(1)
+    public const float energyReward = 0.5f;
+    public Recoup() : base(0)
     {
-        buildingType = BuildingType.SUPPLYBOOST;
+        buildingType = BuildingType.RECOUP;
     }
 
     public override void OnClaimEffect(Player player)
     {
-        player.AugmentDrawRateFactor(drawRateMultiplier);
+        player.ToggleRecoup(true);
     }
 
     public override void OnLostEffect()
     {
-        owner.AugmentDrawRateFactor(-drawRateMultiplier);
+        owner.ToggleRecoup(false);
     }
 
     public override void OnClaim(Player player)
@@ -34,12 +33,11 @@ public class SupplyBoost : TechBuilding
 
     public override string GetName()
     {
-        return "Supply Boost";
+        return "Recoup";
     }
 
     public override string GetDescription()
     {
-        return "+" + 100 * drawRateMultiplier + "%" + 
-            " piece production rate.";
+        return "Whenever one of your pieces is destroyed, gain " + energyReward + " energy.";
     }
 }

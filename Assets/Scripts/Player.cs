@@ -96,6 +96,8 @@ public class Player : MonoBehaviour
     public bool annex { get; protected set; }
     public bool bulldoze { get; protected set; }
     public bool retaliate { get; protected set; }
+    public bool recoup { get; protected set; }
+    public bool pillage { get; protected set; }
     // 
 
     
@@ -921,6 +923,12 @@ public class Player : MonoBehaviour
             //fissionAnim.AddComponent<StructureEffectAnimation>().Init(
             //    BuildingType.FISSION, opposingPieceLocation);
         }
+
+        if(pillage)
+        {
+            normalDrawMeterFillAmt += 1;
+            UpdateMeters();
+        }
     }
 
     public void OnDestructionOfPiece()
@@ -934,6 +942,12 @@ public class Player : MonoBehaviour
         if(retaliate)
         {
             destructorDrawMeterFillAmt += Retaliate.hammerReward;
+            UpdateMeters();
+        }
+
+        if(recoup)
+        {
+            resourceMeterFillAmt += Recoup.energyReward;
             UpdateMeters();
         }
     }
@@ -1133,6 +1147,17 @@ public class Player : MonoBehaviour
     public void ToggleBulldoze(bool status)
     {
         bulldoze = status;
+    }
+
+    public void ToggleRecoup(bool status)
+    {
+
+        recoup = status;
+    }
+
+    public void TogglePlunder(bool status)
+    {
+        pillage = status;
     }
 
     public void ToggleCombustion(bool status)

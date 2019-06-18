@@ -1,23 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SupplyBoost : TechBuilding
+public class Plunder : TechBuilding
 {
-    private const float drawRateMultiplier = 0.15f;
-
-    public SupplyBoost() : base(1)
+    public Plunder() : base(0)
     {
-        buildingType = BuildingType.SUPPLYBOOST;
+        buildingType = BuildingType.PLUNDER;
     }
 
     public override void OnClaimEffect(Player player)
     {
-        player.AugmentDrawRateFactor(drawRateMultiplier);
+        player.TogglePlunder(true);
     }
 
     public override void OnLostEffect()
     {
-        owner.AugmentDrawRateFactor(-drawRateMultiplier);
+        owner.TogglePlunder(false);
     }
 
     public override void OnClaim(Player player)
@@ -34,12 +32,11 @@ public class SupplyBoost : TechBuilding
 
     public override string GetName()
     {
-        return "Supply Boost";
+        return "Plunder";
     }
 
     public override string GetDescription()
     {
-        return "+" + 100 * drawRateMultiplier + "%" + 
-            " piece production rate.";
+        return "Whenever you destroy an opponent's piece, get a new piece.";
     }
 }
