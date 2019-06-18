@@ -255,7 +255,7 @@ public class GameManager : MonoBehaviour
         Services.MapManager.PopulateDungeonRunLevels();
        
         ELOManager.LoadData();
-        ELOManager.eloData.ReportScore();
+        ELOManager.eloData.ReportScore(ELOManager.eloData.GetRating());
         DungeonRunManager.LoadData();
 
         if (!debug)

@@ -10,7 +10,7 @@ public static class DungeonRunManager
 {
     public const int MAX_DUNGEON_CHALLENGES = 5;
     public static DungeonRunData dungeonRunData { get; private set; }
-
+    public static int totalCompletions = 0;
     private const int MAX_TECH_CHOICES = 3;
     private const int MAX_TECH_INVENTORY = MAX_DUNGEON_CHALLENGES - 1;
     public const float MIN_HANDICAP_LEVEL = 0.85f;
@@ -128,10 +128,13 @@ public static class DungeonRunManager
 
     private static void OnCompleteDungeonRun()
     {
+        totalCompletions += 1;
         dungeonRunStreak++;
         dungeonRunData.completedRun = true;
         Services.Analytics.MatchEnded();
         Services.LeaderBoard.ReportScore(dungeonRunStreak, "2");
+        Services.LeaderBoard.ReportScore(totalCompletions, "5");
+
         ResetDungeonRunData();
     }
 
@@ -259,12 +262,13 @@ public class DungeonRunData
     public bool selectingNewTech;
     public bool techOptionsGenerated;
     public bool completedRun;
+    public int totalWins;
     public List<BuildingType> techChoices;
     public List<BuildingType> currentTech;
     public int challengeNum;
     public PlayerHandicap handicapLevel;
 
-    public DungeonRunData(List<BuildingType> ownedTech, List<BuildingType> techSelection, int challengeNumLevel, PlayerHandicap handicap, bool selecting, bool selected, bool generated)
+    public DungeonRunData(List<BuildingType> ownedTech, List<BuildingType> techSelection, int challengeNumLevel, PlayerHandicap handicap, bool selecting, bool selected, bool generated, int winCount)
     {
         currentTech = ownedTech;
         techChoices = techSelection;
@@ -273,6 +277,7 @@ public class DungeonRunData
         selectingNewTech = selecting;
         completedRun = selected;
         techOptionsGenerated = generated;
+        totalWins = winCount;
     }
 
     public DungeonRunData()

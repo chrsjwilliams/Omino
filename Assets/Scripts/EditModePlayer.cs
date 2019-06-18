@@ -91,8 +91,6 @@ public class EditModePlayer : Player {
 
     }
 
-    //  TODO: REMOVE max tech building without breaking everything!
-
     public void OnEditModeBuildingRemoved(EditModeBuildingRemoved e)
     {
         editModeBuildingList.Remove(e.piece);

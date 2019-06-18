@@ -85,7 +85,10 @@ public static class ELOManager
         EloData prevElo = new EloData(eloData);
         eloData.totalWins += 1;
         eloData.winStreakCount += 1;
-        if(eloData.winStreakCount >= winStreakMinLength)
+        Services.LeaderBoard.ReportScore(eloData.winStreakCount, "3");
+        Services.LeaderBoard.ReportScore(eloData.totalWins, "4");
+
+        if (eloData.winStreakCount >= winStreakMinLength)
         {
             eloData.SetHandicap(eloData.handicapLevel + handicapIncrement +
                 ((eloData.winStreakCount - winStreakMinLength + 1)
@@ -177,18 +180,17 @@ public class EloData
     public void SetHandicap(float handicap)
     {
         handicapLevel = Mathf.Max(ELOManager.minHandicap, handicap);
+        ReportScore(GetRating());
         if (handicapLevel > highestHandicapAchieved)
         {
            highestHandicapAchieved = handicapLevel;
 
-            ReportScore();
         }
     }
 
-    public void ReportScore()
+    public void ReportScore(float score)
     {
-        Services.LeaderBoard.ReportScore(highestHandicapAchieved, "1");
-
+        Services.LeaderBoard.ReportScore(score, "0");
     }
 
 

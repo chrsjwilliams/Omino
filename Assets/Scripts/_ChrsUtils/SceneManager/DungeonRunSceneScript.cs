@@ -27,6 +27,8 @@ public class DungeonRunSceneScript : Scene<TransitionData>
     private TextMeshProUGUI currentTechZone;
     [SerializeField]
     private TextMeshProUGUI streakCounter;
+    [SerializeField]
+    private TextMeshProUGUI completeionCounter;
     private Button[][] currentTechMenu;
     [SerializeField]
     private Button startChallengeButton;
@@ -60,6 +62,7 @@ public class DungeonRunSceneScript : Scene<TransitionData>
             int.TryParse(fileText, out completedDungeonRuns);
         }
         streakCounter.text = "streak: " + DungeonRunManager.dungeonRunStreak;
+        completeionCounter.text = "completions: " + DungeonRunManager.totalCompletions;
         humanPlayers = new bool[2] { false, false };
         humanPlayers[0] = true;
         humanPlayers[1] = false;

@@ -2,7 +2,10 @@
 using UnityEngine.SocialPlatforms;
 
 public class GameCenterLeaderBoard : MonoBehaviour{
-
+    /*
+     *  TODO: make Neonimo universal app to sync scores
+     * 
+     */ 
 
     UnityEngine.SocialPlatforms.GameCenter.GameCenterPlatform GCPlatform = new UnityEngine.SocialPlatforms.GameCenter.GameCenterPlatform();
     // Use this for initialization
@@ -20,9 +23,6 @@ public class GameCenterLeaderBoard : MonoBehaviour{
     public void ReportScore(float score, string leaderboardID)
     {
 #if (!UNITY_EDITOR)
-        if(leaderboardID == "1"){
-            score = score * 1000;
-        }
         Debug.Log("Reporting score " + score + " on leaderbaord " + leaderboardID);
         Social.ReportScore((long)score, leaderboardID,
             success => {
