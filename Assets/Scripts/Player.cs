@@ -954,7 +954,7 @@ public class Player : MonoBehaviour
 
     public void OnPieceDisconnected(Polyomino piece)
     {
-        foreach(Tile tile in piece.tiles)
+        foreach (Tile tile in piece.tiles)
         {
             if (bpAssistHighlightedTiles.Contains(tile))
             {

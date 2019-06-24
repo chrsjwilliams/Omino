@@ -328,7 +328,11 @@ public class Tile : MonoBehaviour, IVertex
         if (pathHighlightDelay > 0) TickDownHighlightDelay();
         if (highlightingPath) PathHighlight();
         if (entranceDelayTime > 0) TickDownEntranceDelay();
-        if (entering) EntranceAnimation();
+        if (entering)
+        {
+            Debug.Log("Entering");
+            EntranceAnimation();
+        }
         if (blackEntering) BlackEntrance();
     }
 
@@ -423,7 +427,14 @@ public class Tile : MonoBehaviour, IVertex
             entering = false;
             mainSr.sprite = fullyPlacedSprite;
             mainSr.color = baseColor;
-            topSr.enabled = false;
+            if (pieceParent.connected)
+            {
+                topSr.enabled = false;
+            }
+            else
+            {
+                topSr.enabled = true;
+            }
             topSr.sprite = disconnectedSprites[0];
             topSr.color = new Color(baseColor.r, baseColor.g, baseColor.b, 0.8f);
         }
@@ -604,6 +615,7 @@ public class Tile : MonoBehaviour, IVertex
         }
         else
         {
+            mainSr.color = pieceParent.owner.ColorScheme[1];
             //mainSr.sprite = DisconnectedSprite;
             //crackSr.enabled = true;
             mainSr.enabled = false;
