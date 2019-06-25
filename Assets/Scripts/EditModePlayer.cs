@@ -65,8 +65,9 @@ public class EditModePlayer : Player {
         AddEditModeBuilding(editModeBuilding);
         editModeBuilding.holder.gameObject.SetActive(false);
         
-        ((EditSceneScript)Services.GameScene).editModeBuilding = editModeBuilding;
-        if(editModeBuildingList.Count >= TOTAL_NUM_EDIT_BUILDINGS)
+        //((EditSceneScript)Services.GameScene).editModeBuilding = editModeBuilding;
+
+        if (editModeBuildingList.Count >= TOTAL_NUM_EDIT_BUILDINGS)
         {
             editModeBuilding = null;
         }

@@ -23,7 +23,7 @@ public class EditModeUIEntryAnimation : Task
 
     public EditModeUIEntryAnimation(EditModeBuilding editModeBuilding_, List<Button> terrainButtons_, GameObject expansionToggle_)
     {
-        if (editModeBuilding != null)
+        if (editModeBuilding_ != null)
         {
             editModeBuilding = editModeBuilding_;
         }
@@ -34,7 +34,6 @@ public class EditModeUIEntryAnimation : Task
     protected override void Init()
     {
         timeElapsed = 0;
-
         buttonStartPositions = new Vector3[terrainButtons.Count];
         buttonTargetPositions = new Vector3[terrainButtons.Count];
         if (editModeBuilding != null)
