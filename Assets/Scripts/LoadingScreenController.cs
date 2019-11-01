@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.iOS;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering;
 
@@ -16,7 +15,7 @@ public class LoadingScreenController : MonoBehaviour
 
 	void Start() {
 		DontDestroyOnLoad(this.gameObject);
-		Handheld.SetActivityIndicatorStyle(ActivityIndicatorStyle.WhiteLarge);
+		Handheld.SetActivityIndicatorStyle(UnityEngine.iOS.ActivityIndicatorStyle.WhiteLarge);
 		Handheld.StartActivityIndicator();
 		SceneManager.sceneUnloaded += OnSceneUnloaded;
 	}

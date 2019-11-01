@@ -2,6 +2,9 @@
 using UnityEngine.Assertions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+#if UNITY_IOS
+using UnityEngine.iOS;
+#endif
 using BeatManagement;
 using Tinylytics;
 using System.IO;
@@ -118,7 +121,7 @@ public class GameManager : MonoBehaviour
         get { return _players; }
     }
 
-    #region TileSkin Items
+#region TileSkin Items
     public Dictionary<TileSkin, bool> ownedTileSkins = new Dictionary<TileSkin, bool>();
     public TileSkin[] currentTileSkins;
 
@@ -173,7 +176,7 @@ public class GameManager : MonoBehaviour
             return neutralColor;          
         }
     }
-    #endregion
+#endregion
 
 
     public Sprite proceduralDisplayImage;
@@ -270,31 +273,34 @@ public class GameManager : MonoBehaviour
 
     private void SetDevice()
     {
+        #if UNITY_IOS
         switch (UnityEngine.iOS.Device.generation)
         {
-            case UnityEngine.iOS.DeviceGeneration.iPhone5:
-            case UnityEngine.iOS.DeviceGeneration.iPhone5C:
-            case UnityEngine.iOS.DeviceGeneration.iPhone5S:
-            case UnityEngine.iOS.DeviceGeneration.iPhone6:
-            case UnityEngine.iOS.DeviceGeneration.iPhone6Plus:
-            case UnityEngine.iOS.DeviceGeneration.iPhone6S:
-            case UnityEngine.iOS.DeviceGeneration.iPhone6SPlus:
-            case UnityEngine.iOS.DeviceGeneration.iPhone7:
-            case UnityEngine.iOS.DeviceGeneration.iPhone7Plus:
-            case UnityEngine.iOS.DeviceGeneration.iPhone8:
-            case UnityEngine.iOS.DeviceGeneration.iPhone8Plus:           
-            case UnityEngine.iOS.DeviceGeneration.iPhoneUnknown:
-            case UnityEngine.iOS.DeviceGeneration.iPhoneSE1Gen:
+            case DeviceGeneration.iPhone5:
+            case DeviceGeneration.iPhone5C:
+            case DeviceGeneration.iPhone5S:
+            case DeviceGeneration.iPhone6:
+            case DeviceGeneration.iPhone6Plus:
+            case DeviceGeneration.iPhone6S:
+            case DeviceGeneration.iPhone6SPlus:
+            case DeviceGeneration.iPhone7:
+            case DeviceGeneration.iPhone7Plus:
+            case DeviceGeneration.iPhone8:
+            case DeviceGeneration.iPhone8Plus:           
+            case DeviceGeneration.iPhoneUnknown:
+            case DeviceGeneration.iPhoneSE1Gen:
                 CurrentDevice = DEVICE.IPHONE;
                 break;
-            case UnityEngine.iOS.DeviceGeneration.iPhoneX:
+            case DeviceGeneration.iPhoneX:
                 CurrentDevice = DEVICE.IPHONE_X;
                 break;
             default:
                 CurrentDevice = DEVICE.IPAD;
                 break;
         }
-
+        #else
+        CurrentDevice = DEVICE.IPAD;
+        #endif
     }
 
     private void InitializeServices()

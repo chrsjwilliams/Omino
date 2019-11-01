@@ -330,7 +330,7 @@ public class Tile : MonoBehaviour, IVertex
         if (entranceDelayTime > 0) TickDownEntranceDelay();
         if (entering)
         {
-            Debug.Log("Entering");
+
             EntranceAnimation();
         }
         if (blackEntering) BlackEntrance();

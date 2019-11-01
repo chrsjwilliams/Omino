@@ -29,7 +29,7 @@ namespace Tinylytics {
 			//data.Add("Player_processorType", SystemInfo.processorType.ToString());
 			data.Add("Player_SystemMemory", SystemInfo.systemMemorySize.ToString());
 			data.Add("Build_UniqueID", Application.buildGUID.ToString());
-			data.Add("Build_DateTime", Tinylytics_BuildtimeInfo.DateTimeString());
+			//data.Add("Build_DateTime", Tinylytics_BuildtimeInfo.DateTimeString());
 
 			//new data
 			data.Add("MetricName", metricname);

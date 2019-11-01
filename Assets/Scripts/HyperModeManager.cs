@@ -68,8 +68,9 @@ public static class HyperModeManager
 		Disco(new Measure(0));
 		Services.Clock.eventManager.Register<Beat>(Pulse);
 		Services.Clock.eventManager.Register<Measure>(Disco);
-		Services.Clock.eventManager.Register<Measure>((e) => { Handheld.Vibrate(); });
-		
+        #if UNITY_IOS
+        Services.Clock.eventManager.Register<Measure>((e) => { Handheld.Vibrate(); });
+        #endif
 		Services.GameManager.MainCamera.backgroundColor =
 			Color.Lerp(Color.black, Services.GameScene.backgroundColor,
 				Services.Clock.BeatLength() - (float) Services.Clock.AtNextBeat() / Services.Clock.BeatLength());

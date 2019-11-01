@@ -446,9 +446,6 @@ public class TutorialManager : MonoBehaviour
         {
             objectiveComplete[1] = true;
             UpdateObjectiveUI(objectiveUI[1], objectiveComplete[1]);
-            Debug.Log(tooltipInfos[currentIndex].label);
-            
-
         }
     }
 
