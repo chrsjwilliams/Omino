@@ -271,6 +271,11 @@ public class GameManager : MonoBehaviour
         
     }
 
+    private void Start()
+    {
+        Services.AudioManager.SetMainTrack(Services.Clips.MenuSong, 0.0f);
+    }
+
     private void SetDevice()
     {
         #if UNITY_IOS
@@ -365,6 +370,8 @@ public class GameManager : MonoBehaviour
 
         HandicapSystem.Init();
         LoadModeStatusData();
+
+
         //UnlockMode(TitleSceneScript.GameMode.Shop, false);
     }
 

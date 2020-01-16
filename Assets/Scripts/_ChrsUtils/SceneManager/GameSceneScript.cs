@@ -141,8 +141,7 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GameEventManager.Register<MouseDown>(OnMouseDownEvent);
         Services.GameEventManager.Register<TouchDown>(OnTouchDown);
 
-        Services.AudioManager.SetMainTrack(Services.Clips.MenuSong, 0.3f);
-
+        Services.AudioManager.FadeMainTrack(Services.Clock.HalfLength());
 
         Services.AudioManager.RegisterStartLevelMusic();
     }
@@ -155,6 +154,9 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GameManager.MainCamera.backgroundColor = backgroundColor;
         Time.timeScale = 1;
         Services.GameEventManager.Clear();
+        
+        Services.AudioManager.FadeMainTrack(2* Services.Clock.MeasureLength(), false);
+
         
         switch (Services.GameManager.mode)
         {

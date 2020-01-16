@@ -30,6 +30,7 @@ public class TitleSceneScript : Scene<TransitionData>
     {
         versusIphoneText.SetActive(false);
         menuManager.OnReload();
+        Services.AudioManager.FadeMainTrack(5.0f, false);
     }
 
     internal override void OnExit()

@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -16,18 +17,19 @@ MonoBehaviour:
   defeat: {fileID: 8300000, guid: 3c600227603f4ea4c9d78f7fcf74fcc7, type: 3}
   illegalPlay: {fileID: 8300000, guid: 31f6121d71b869943a2f1540c8552e2a, type: 3}
   levelTracks:
-  - {fileID: 8300000, guid: e21f35edfc2454f0084c3a89b26ed5ab, type: 3}
-  - {fileID: 8300000, guid: f134c0a9ccd4b4ba1b0e27824e7c77eb, type: 3}
-  - {fileID: 8300000, guid: e3f284efc50bf4c3c93acde4dca7a0e1, type: 3}
-  - {fileID: 8300000, guid: 3109fca34c0eb49989268080166a7a52, type: 3}
-  - {fileID: 8300000, guid: dcac7d76ae8f04e53a4356288425fb13, type: 3}
-  - {fileID: 8300000, guid: 74d95d97e462b4624b8a2b06abcb43e5, type: 3}
-  - {fileID: 8300000, guid: 4d8a0bd2b60934d668590f327e7c33e2, type: 3}
-  menuSong: {fileID: 8300000, guid: 4984b169fda401249b04162dd6cd67c2, type: 3}
+  - {fileID: 8300000, guid: a6344285b073d459fa30785c3e24f99b, type: 3}
+  - {fileID: 8300000, guid: 7a772a52e62bb4114b5554e27e0613dc, type: 3}
+  - {fileID: 8300000, guid: 4d8df2222c8c64cd38a97ee1a9130602, type: 3}
+  - {fileID: 8300000, guid: b60dfbb60903048198a660908618e648, type: 3}
+  - {fileID: 8300000, guid: 08703a44d7d254344960bf523889cacf, type: 3}
+  - {fileID: 8300000, guid: 86716859a376a4b12be0490542947dbf, type: 3}
+  - {fileID: 8300000, guid: 03f3d889d237645d5a33c2771dc3e890, type: 3}
+  menuSong: {fileID: 8300000, guid: 6b16316fa8e644c6bba9607f214b004b, type: 3}
   pieceDestroyed: {fileID: 8300000, guid: 43010e69aca46164795fb038a236f86a, type: 3}
   pieceDrawn: {fileID: 8300000, guid: 121bac5729106fe47b3c5c826af74a8c, type: 3}
   piecePicked: {fileID: 8300000, guid: e64e8cf22de657a40aba564fe6b6c279, type: 3}
   piecePlaced: {fileID: 8300000, guid: ad7ccfb4d9725a64aae2a01b3c13e7dc, type: 3}
+  individualPieceLighting: {fileID: 0}
   pieceRotated: {fileID: 8300000, guid: 9811ad85379a48b48b201867216d3218, type: 3}
   prodLevelUp: {fileID: 8300000, guid: 9211a40d6c15bb84bb316d1311282100, type: 3}
   resourceGained: {fileID: 8300000, guid: 260de19aefbddef4fa35e297b654fa0d, type: 3}

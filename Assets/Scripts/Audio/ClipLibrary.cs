@@ -6,34 +6,38 @@ using UnityEngine;
 public class ClipLibrary : ScriptableObject {
 
     [SerializeField] private AudioClip blueprintPlaced;
-    public AudioClip BlueprintPlaced { get { return blueprintPlaced; } }
-    
+    public AudioClip BlueprintPlaced => blueprintPlaced;
+
     [SerializeField] private AudioClip buildingFall;
-    public AudioClip BuildingFall { get { return buildingFall; } }
-    
+    public AudioClip BuildingFall => buildingFall;
+
     [SerializeField] private AudioClip defeat;
-    public AudioClip Defeat { get { return defeat; } }
-    
+    public AudioClip Defeat => defeat;
+
     [SerializeField] private AudioClip illegalPlay;
-    public AudioClip IllegalPlay { get { return illegalPlay; } }
-    
+    public AudioClip IllegalPlay => illegalPlay;
+
     [SerializeField] private AudioClip[] levelTracks;
-    public AudioClip[] LevelTracks { get { return levelTracks; } }
-    
+    public AudioClip[] LevelTracks => levelTracks;
+
     [SerializeField] private AudioClip menuSong;
-    public AudioClip MenuSong { get { return menuSong; } }
-    
+    public AudioClip MenuSong => menuSong;
+
     [SerializeField] private AudioClip pieceDestroyed;
-    public AudioClip PieceDestroyed { get { return pieceDestroyed; } }
-    
+    public AudioClip PieceDestroyed => pieceDestroyed;
+
     [SerializeField] private AudioClip pieceDrawn;
-    public AudioClip PieceDrawn { get { return pieceDrawn; } }
-    
+    public AudioClip PieceDrawn => pieceDrawn;
+
     [SerializeField] private AudioClip piecePicked;
-    public AudioClip PiecePicked { get { return piecePicked; } }
-    
+    public AudioClip PiecePicked => piecePicked;
+
     [SerializeField] private AudioClip piecePlaced;
-    public AudioClip PiecePlaced { get { return piecePlaced; } }
+    public AudioClip PiecePlaced => piecePlaced;
+    
+    [SerializeField] private AudioClip individualPieceLighting;
+    public AudioClip IndividualPieceLighting => individualPieceLighting;
+
     
     [SerializeField] private AudioClip pieceRotated;
     public AudioClip PieceRotated { get { return pieceRotated; } }

@@ -384,6 +384,20 @@ public class AudioManager : MonoBehaviour {
         StopAllCoroutines();
     }
 
+    public void FadeMainTrack(float duration, bool fadeOut = true)
+    {
+        if (mainTrack == null)
+            SetMainTrack(Services.Clips.MenuSong, 0.0f);
+        
+        var starting = fadeOut ? mainTrack.volume : 0;
+        var ending = fadeOut ? 0 : 1.0f;
+        StartCoroutine(Coroutines.DoOverEasedTime(duration/2, Easing.Linear,
+            t =>
+            {
+                mainTrack.volume = Mathf.Lerp(starting, ending, t);
+            }));
+    }
+    
     public void SetMainTrack(AudioClip clip, float volume)
     {
         if (mainTrack == null)

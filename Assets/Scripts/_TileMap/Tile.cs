@@ -177,9 +177,9 @@ public class Tile : MonoBehaviour, IVertex
 
     private float entranceTime;
     private float entranceDelayTime;
-    private float entranceTotalDuration = 0.4f;
-    private float blackEntranceTotalDuration = 0.8f;
-    public static float entranceStaggerTime = 0.1f;
+    private float entranceTotalDuration;
+    private float blackEntranceTotalDuration;
+    public static float entranceStaggerTime;
     private float entranceOuterDelay = 0f;
     private float entranceInnerDelay = 0.075f;
     private float entranceDimDuration;

@@ -681,7 +681,6 @@ public class Polyomino : IVertex
                     break;
             }
 
-            Services.AudioManager.RegisterSoundEffect(Services.Clips.PiecePlaced, 0.5f);
             List<Polyomino> shortestPath = AStarSearch.ShortestPath(
                 owner.mainBase, distanceLevels[lastDistanceLevelIndex][0]);
             shortestPath.Reverse();
@@ -715,8 +714,14 @@ public class Polyomino : IVertex
                 for (int j = 0; j < distanceLevels[i].Count; j++)
                 {
                     Tile tile = distanceLevels[i][j].tiles[0];
-                    tile.StartEntrance(Tile.entranceStaggerTime
-                        * entranceIndex + float.Epsilon);
+
+                    var index1 = entranceIndex;
+                    Services.Clock.SyncFunction(() =>
+                    {
+                        tile.StartEntrance(Services.Clock.SixteenthLength()
+                                           * index1 + float.Epsilon);
+                        Services.AudioManager.PlaySoundEffect(Services.Clips.IndividualPieceLighting);
+                    }, Clock.BeatValue.Sixteenth);
                     entranceIndex++;
 
                 }

@@ -39,24 +39,22 @@ public class BoardEntryAnimation : Task
     {
         timeElapsed += Time.deltaTime;
 
-        for (int i = 0; i < mapWidth; i++)
+        for (var i = 0; i < mapWidth; i++)
         {
-            for (int j = 0; j < mapHeight; j++)
+            for (var j = 0; j < mapHeight; j++)
             {
-                MapTile mapTile = map[i, j];
-                if (i + j <= currentIndex)
+                var mapTile = map[i, j];
+                if (i + j > currentIndex) continue;
+                if (!tilesOn[i, j])
                 {
-                    if (!tilesOn[i, j])
-                    {
-                        tilesOn[i, j] = true;
-                        mapTile.gameObject.SetActive(true);
-                    }
-                    float progress = Mathf.Min((timeElapsed - ((i + j) * staggerTime)) / animDuration, 1);
-                    //mapTile.SetAlpha(Mathf.Lerp(0, targetAlpha,
-                    //    EasingEquations.Easing.QuadEaseOut(progress)));
-                    mapTile.transform.position = Vector3.Lerp(basePositions[i, j] + offset,
-                        basePositions[i, j], EasingEquations.Easing.QuadEaseOut(progress));
+                    tilesOn[i, j] = true;
+                    mapTile.gameObject.SetActive(true);
                 }
+                var progress = Mathf.Min((timeElapsed - ((i + j) * staggerTime)) / animDuration, 1);
+                //mapTile.SetAlpha(Mathf.Lerp(0, targetAlpha,
+                //    EasingEquations.Easing.QuadEaseOut(progress)));
+                mapTile.transform.position = Vector3.Lerp(basePositions[i, j] + offset,
+                    basePositions[i, j], EasingEquations.Easing.QuadEaseOut(progress));
             }
         }
 
@@ -70,9 +68,9 @@ public class BoardEntryAnimation : Task
     protected override void OnSuccess()
     {
         base.OnSuccess();
-        for (int i = 0; i < mapWidth; i++)
+        for (var i = 0; i < mapWidth; i++)
         {
-            for (int j = 0; j < mapHeight; j++)
+            for (var j = 0; j < mapHeight; j++)
             {
                 map[i, j].gameObject.SetActive(true);
                 map[i, j].transform.position = basePositions[i, j];
