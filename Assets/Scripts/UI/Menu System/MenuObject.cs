@@ -5,7 +5,7 @@ public class MenuObject : MonoBehaviour
 {
     protected RectTransform rect;
     public const float movementTime = 0.3f;
-    public const float offset = 1000;
+    public const float offset = 1400;
     private ObjectLerper lerper;
     [SerializeField]
     protected GameObject objectPrefabToSpawn;
@@ -16,7 +16,7 @@ public class MenuObject : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
