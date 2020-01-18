@@ -192,7 +192,6 @@ public class Tile : MonoBehaviour, IVertex
 
     public void Init(Coord coord_)
     {
-        /// REMOVING MAGIC NUMBERS ///
         scaleUpDuration = Services.Clock.EighthLength();
         scaleUpStaggerTime = Services.Clock.SixteenthLength();
         pathHighlightUpDuration = Services.Clock.SixteenthLength();
@@ -426,7 +425,7 @@ public class Tile : MonoBehaviour, IVertex
             }
             mainSr.color = Color.Lerp(start, target, easingFunc(progress));
         }
-        if(entranceTime >= entranceInnerDelay)
+        if (entranceTime >= entranceInnerDelay)
         {
             Color start;
             Color target;

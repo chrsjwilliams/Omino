@@ -31,6 +31,9 @@ public class ClipLibrary : ScriptableObject {
 
     [SerializeField] private AudioClip piecePlaced;
     public AudioClip PiecePlaced => piecePlaced;
+
+    [SerializeField] private AudioClip terrainPop;
+    public AudioClip TerrainPop => terrainPop;
     
     [SerializeField] private AudioClip individualPieceLighting;
     public AudioClip IndividualPieceLighting => individualPieceLighting;

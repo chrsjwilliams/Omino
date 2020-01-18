@@ -10,6 +10,7 @@ public class InitialBuildingEntryAnimation : Task
     private float structStaggerTime;
     private float terrainStaggerTime;
     private bool run_tasks = false;
+    private Queue<BuildingDropAnimation> toDoAnimations = new Queue<BuildingDropAnimation>();
 
     protected override void Init()
     {
@@ -31,10 +32,16 @@ public class InitialBuildingEntryAnimation : Task
             subtaskManager.Do(dropTask);
         }
 
-        for (int i = 0; i < Services.MapManager.terrainOnMap.Count; i++)
+        if (Services.MapManager.terrainOnMap.Count > 0)
         {
-            Task dropTask = new Wait((terrainStaggerTime * i) + (baseStaggerTime * 2));
-            dropTask.Then(new BuildingDropAnimation(Services.MapManager.terrainOnMap[i]));
+            Task dropTask = new Wait( (baseStaggerTime * 2));
+            dropTask.Then(new ActionTask(() => Services.Clock.eventManager.Register<ThirtySecond>(_DropTile)));
+
+            for (int i = 0; i < Services.MapManager.terrainOnMap.Count; i++)
+            {
+                toDoAnimations.Enqueue(new BuildingDropAnimation(Services.MapManager.terrainOnMap[i]));
+            }
+            
             subtaskManager.Do(dropTask);
         }
 
@@ -45,13 +52,25 @@ public class InitialBuildingEntryAnimation : Task
 
         Services.Clock.SyncFunction(() => { run_tasks = true; }, Clock.BeatValue.Quarter);
     }
+
+    private void _DropTile(BeatEvent e)
+    {
+        if (toDoAnimations.Count == 0)
+        {
+            Services.Clock.eventManager.Unregister<ThirtySecond>(_DropTile);
+        }
+        else
+        {
+            subtaskManager.Do(toDoAnimations.Dequeue());
+        }
+    }
     
     internal override void Update()
     {
         if (run_tasks)
         {
             subtaskManager.Update();
-            if (subtaskManager.tasksInProcessCount == 0)
+            if (subtaskManager.tasksInProcessCount == 0 && toDoAnimations.Count == 0)
                 SetStatus(TaskStatus.Success);
         }
     }

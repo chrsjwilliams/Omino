@@ -42,6 +42,9 @@ public class BuildingDropAnimation : Task
 
     protected override void Init()
     {
+        if (building.tiles.Count == 1)
+            Services.AudioManager.PlaySoundEffect(Services.Clips.TerrainPop, 0.5f);
+
         duration = Services.Clock.QuarterLength();
         shakeStartTime = duration / 2;
         shakeDur = 3 * duration / 4;
