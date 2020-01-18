@@ -718,9 +718,7 @@ public class Polyomino : IVertex
                     var index1 = entranceIndex;
                     Services.Clock.SyncFunction(() =>
                     {
-                        tile.StartEntrance(Services.Clock.SixteenthLength()
-                                           * index1 + float.Epsilon);
-                        Services.AudioManager.PlaySoundEffect(Services.Clips.IndividualPieceLighting);
+                        tile.StartEntrance(Services.Clock.SixteenthLength() * index1 + float.Epsilon);
                     }, Clock.BeatValue.Sixteenth);
                     entranceIndex++;
 

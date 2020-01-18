@@ -339,7 +339,11 @@ public class Tile : MonoBehaviour, IVertex
     private void TickDownEntranceDelay()
     {
         entranceDelayTime -= Time.deltaTime;
-        if (entranceDelayTime <= 0) entering = true;
+        if (entranceDelayTime <= 0)
+        {
+            entering = true;
+            Services.AudioManager.PlaySoundEffect(Services.Clips.IndividualPieceLighting, 0.5f);
+        }
     }
 
     private void BlackEntrance()

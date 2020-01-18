@@ -12,26 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d679b194a83a31449bd9e084a5fa6813, type: 3}
   m_Name: ClipLibrary
   m_EditorClassIdentifier: 
-  blueprintPlaced: {fileID: 8300000, guid: 49be3abdedebbf44c8a1765e05d64d41, type: 3}
-  buildingFall: {fileID: 8300000, guid: 91403f99feb09a140b817a3b0b30fc9b, type: 3}
+  entranceSound: {fileID: 8300000, guid: 0018fb6687d024830ba9bb851e6673f2, type: 3}
   defeat: {fileID: 8300000, guid: 3c600227603f4ea4c9d78f7fcf74fcc7, type: 3}
   illegalPlay: {fileID: 8300000, guid: 31f6121d71b869943a2f1540c8552e2a, type: 3}
   levelTracks:
+  - {fileID: 8300000, guid: a62ccc9d0da3547abaf2720a8b27972c, type: 3}
   - {fileID: 8300000, guid: a6344285b073d459fa30785c3e24f99b, type: 3}
-  - {fileID: 8300000, guid: 7a772a52e62bb4114b5554e27e0613dc, type: 3}
   - {fileID: 8300000, guid: 4d8df2222c8c64cd38a97ee1a9130602, type: 3}
   - {fileID: 8300000, guid: b60dfbb60903048198a660908618e648, type: 3}
   - {fileID: 8300000, guid: 08703a44d7d254344960bf523889cacf, type: 3}
   - {fileID: 8300000, guid: 86716859a376a4b12be0490542947dbf, type: 3}
-  - {fileID: 8300000, guid: 03f3d889d237645d5a33c2771dc3e890, type: 3}
+  - {fileID: 8300000, guid: 7a772a52e62bb4114b5554e27e0613dc, type: 3}
   menuSong: {fileID: 8300000, guid: 6b16316fa8e644c6bba9607f214b004b, type: 3}
   pieceDestroyed: {fileID: 8300000, guid: 43010e69aca46164795fb038a236f86a, type: 3}
   pieceDrawn: {fileID: 8300000, guid: 121bac5729106fe47b3c5c826af74a8c, type: 3}
   piecePicked: {fileID: 8300000, guid: e64e8cf22de657a40aba564fe6b6c279, type: 3}
   piecePlaced: {fileID: 8300000, guid: ad7ccfb4d9725a64aae2a01b3c13e7dc, type: 3}
-  individualPieceLighting: {fileID: 0}
+  individualPieceLighting: {fileID: 8300000, guid: e2596189d2b2b46f49a030a5fe042bae,
+    type: 3}
   pieceRotated: {fileID: 8300000, guid: 9811ad85379a48b48b201867216d3218, type: 3}
-  prodLevelUp: {fileID: 8300000, guid: 9211a40d6c15bb84bb316d1311282100, type: 3}
+  prodLevelUp: {fileID: 8300000, guid: 49be3abdedebbf44c8a1765e05d64d41, type: 3}
   resourceGained: {fileID: 8300000, guid: 260de19aefbddef4fa35e297b654fa0d, type: 3}
   shieldHit: {fileID: 8300000, guid: 9410dfb25bbfbc84f8c4ab31d8d65599, type: 3}
   silence: {fileID: 8300000, guid: 4984b169fda401249b04162dd6cd67c2, type: 3}

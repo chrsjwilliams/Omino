@@ -5,11 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Clip Library")]
 public class ClipLibrary : ScriptableObject {
 
-    [SerializeField] private AudioClip blueprintPlaced;
-    public AudioClip BlueprintPlaced => blueprintPlaced;
-
-    [SerializeField] private AudioClip buildingFall;
-    public AudioClip BuildingFall => buildingFall;
+    [SerializeField] private AudioClip entranceSound;
+    public AudioClip EntranceSound => entranceSound;
 
     [SerializeField] private AudioClip defeat;
     public AudioClip Defeat => defeat;
@@ -38,7 +35,6 @@ public class ClipLibrary : ScriptableObject {
     [SerializeField] private AudioClip individualPieceLighting;
     public AudioClip IndividualPieceLighting => individualPieceLighting;
 
-    
     [SerializeField] private AudioClip pieceRotated;
     public AudioClip PieceRotated { get { return pieceRotated; } }
     

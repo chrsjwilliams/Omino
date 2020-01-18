@@ -30,8 +30,6 @@ public class GameSceneScript : Scene<TransitionData>
 
     internal override void OnEnter(TransitionData data)
     {
-
-        
         Time.timeScale = 1;
         Services.GameScene = this;
         tm = new TaskManager();
@@ -156,7 +154,6 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GameEventManager.Clear();
         
         Services.AudioManager.FadeMainTrack(2* Services.Clock.MeasureLength(), false);
-
         
         switch (Services.GameManager.mode)
         {
@@ -183,8 +180,7 @@ public class GameSceneScript : Scene<TransitionData>
             Services.GameManager.MainCamera.ScreenToWorldPoint(e.touch.position);
         OnInputDown(touchWorldPos);
     }
-
-
+    
     public virtual void OnInputDown(Vector3 position)
     {
         Vector3 effectPosition = new Vector3(position.x, position.y, 5);
@@ -205,7 +201,7 @@ public class GameSceneScript : Scene<TransitionData>
 
     }
         // Update is called once per frame
-        void Update ()
+    void Update ()
     {
         switch (Services.GameManager.mode)
         {
@@ -423,7 +419,7 @@ public class GameSceneScript : Scene<TransitionData>
         {
             foreach (BuildingType buildingType in DungeonRunManager.dungeonRunData.currentTech)
             {
-                TechBuilding techBuilding = TechBuilding.GetBuildingFromType(buildingType);
+                var techBuilding = TechBuilding.GetBuildingFromType(buildingType);
                 techBuilding.OnClaimEffect(Services.GameManager.Players[0]);
             }
         }
@@ -439,6 +435,8 @@ public class GameSceneScript : Scene<TransitionData>
 
     public virtual void StartGameSequence()
     {
+        Services.AudioManager.PlaySoundEffect(Services.Clips.EntranceSound);
+        
         TaskTree startSequence = new TaskTree(new ScrollReadyBanners(Services.UIManager.UIBannerManager.readyBanners, false));
         TaskTree uiEntry;
         TaskTree handEntry;
