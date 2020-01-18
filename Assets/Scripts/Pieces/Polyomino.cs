@@ -707,7 +707,7 @@ public class Polyomino : IVertex
             {
                 //pathToHighlight[i].PathHighlight(i * Player.pathHighlightTotalDuration / pathToHighlight.Count);
             }
-            int entranceIndex = 0;
+            int entranceIndex = 1;
             for (int i = 0; i < distanceLevels.Count; i++)
             {
                 distanceLevels[i].OrderBy(t => t.centerCoord.Distance(owner.mainBase.centerCoord));
@@ -718,7 +718,7 @@ public class Polyomino : IVertex
                     var index1 = entranceIndex;
                     Services.Clock.SyncFunction(() =>
                     {
-                        tile.StartEntrance(Services.Clock.SixteenthLength() * index1 + float.Epsilon);
+                        tile.StartEntrance(index1);
                     }, Clock.BeatValue.Sixteenth);
                     entranceIndex++;
 

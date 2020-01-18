@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using BeatManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -330,7 +331,6 @@ public class Tile : MonoBehaviour, IVertex
         if (entranceDelayTime > 0) TickDownEntranceDelay();
         if (entering)
         {
-
             EntranceAnimation();
         }
         if (blackEntering) BlackEntrance();
@@ -353,6 +353,31 @@ public class Tile : MonoBehaviour, IVertex
         MapTile mapTile = Services.MapManager.Map[coord.x, coord.y];
         mapTile.FadeToFull(Easing.SineEaseOut(rawDuration));
         if (blackEntranceTime >= blackEntranceTotalDuration) blackEntering = false;
+    }
+
+    private int _beatCount;
+    private void WaitForBeat(BeatEvent e)
+    {
+        _beatCount--;
+        if (_beatCount > 0) return;
+        
+        entering = true;
+        Services.AudioManager.PlaySoundEffect(Services.Clips.IndividualPieceLighting, 0.5f);
+        Services.Clock.eventManager.Unregister<Sixteenth>(WaitForBeat);
+    }
+
+    public void StartEntrance(int beats)
+    {
+        Services.Clock.eventManager.Register<Sixteenth>(WaitForBeat);
+        topSr.enabled = true;
+        entranceTime = 0;
+        Color zeroAlpha = new Color(baseColor.r, baseColor.g, baseColor.b, 0);
+        mainSr.color = zeroAlpha;
+        topSr.color = zeroAlpha;
+        Services.MapManager.Map[coord.x, coord.y].SetMapSprite(true);
+        blackEntranceTime = 0;
+        blackEntering = true;
+        _beatCount = beats;
     }
 
     public void StartEntrance(float delay)
