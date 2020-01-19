@@ -8,6 +8,9 @@ public class ClipLibrary : ScriptableObject {
     [SerializeField] private AudioClip entranceSound;
     public AudioClip EntranceSound => entranceSound;
 
+    [SerializeField] private AudioClip buildingEntrance;
+    public AudioClip BuildingEntrance => buildingEntrance;
+
     [SerializeField] private AudioClip defeat;
     public AudioClip Defeat => defeat;
 

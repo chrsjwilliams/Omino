@@ -44,6 +44,8 @@ public class BuildingDropAnimation : Task
     {
         if (building.tiles.Count == 1)
             Services.AudioManager.PlaySoundEffect(Services.Clips.TerrainPop, 0.5f);
+        else
+            Services.AudioManager.PlaySoundEffect(Services.Clips.BuildingEntrance, 0.5f);
 
         duration = Services.Clock.QuarterLength();
         shakeStartTime = duration / 2;
