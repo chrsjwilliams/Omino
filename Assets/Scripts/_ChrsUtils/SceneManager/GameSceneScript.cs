@@ -26,7 +26,7 @@ public class GameSceneScript : Scene<TransitionData>
         get { return gameStarted && !gamePaused && !gameOver; }
     }
 
-    private bool showDestructors;
+    private bool _showDestructors;
 
     internal override void OnEnter(TransitionData data)
     {
@@ -152,8 +152,8 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GameManager.MainCamera.backgroundColor = backgroundColor;
         Time.timeScale = 1;
         Services.GameEventManager.Clear();
-        
-        Services.AudioManager.FadeMainTrack(2* Services.Clock.MeasureLength(), false);
+
+        Services.AudioManager.FadeOutLevelMusic();
         
         switch (Services.GameManager.mode)
         {
@@ -443,11 +443,11 @@ public class GameSceneScript : Scene<TransitionData>
         if (Services.GameManager.mode == TitleSceneScript.GameMode.Tutorial
             && Services.GameManager.levelSelected.campaignLevelNum == 1)
         {
-            showDestructors = false;
+            _showDestructors = false;
             uiEntry =
                 new TaskTree(new EmptyTask(),
                     new TaskTree(
-                        new UIEntryAnimation(Services.UIManager.UIMeters[0].meters, Services.GameManager.Players[0].blueprints, showDestructors)));
+                        new UIEntryAnimation(Services.UIManager.UIMeters[0].meters, Services.GameManager.Players[0].blueprints, _showDestructors)));
 
             handEntry =
             new TaskTree(new EmptyTask(),
@@ -457,13 +457,13 @@ public class GameSceneScript : Scene<TransitionData>
         else
         {
 
-            showDestructors = true;
+            _showDestructors = true;
             uiEntry =
                 new TaskTree(new EmptyTask(),
                     new TaskTree(
-                        new UIEntryAnimation(Services.UIManager.UIMeters[0].meters, Services.GameManager.Players[0].blueprints, showDestructors)),
+                        new UIEntryAnimation(Services.UIManager.UIMeters[0].meters, Services.GameManager.Players[0].blueprints, _showDestructors)),
                     new TaskTree(
-                        new UIEntryAnimation(Services.UIManager.UIMeters[1].meters, Services.GameManager.Players[1].blueprints, showDestructors)));
+                        new UIEntryAnimation(Services.UIManager.UIMeters[1].meters, Services.GameManager.Players[1].blueprints, _showDestructors)));
 
             handEntry =
             new TaskTree(new EmptyTask(),

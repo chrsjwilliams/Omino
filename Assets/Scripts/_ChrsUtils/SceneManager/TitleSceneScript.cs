@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BeatManagement;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -30,7 +31,19 @@ public class TitleSceneScript : Scene<TransitionData>
     {
         versusIphoneText.SetActive(false);
         menuManager.OnReload();
-        Services.AudioManager.FadeMainTrack(5.0f, false);
+
+        var wait = new Wait(0.25f);
+        var startMenuMusic = new ActionTask(() =>
+        {
+            Services.Clock.SyncFunction(() =>
+            {
+                Services.AudioManager.FadeMainTrack(10.0f, false);
+            }, Clock.BeatValue.Half);
+        });
+
+        wait.Then(startMenuMusic);
+
+        _tm.Do(wait);
     }
 
     internal override void OnExit()

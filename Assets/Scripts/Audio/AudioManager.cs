@@ -21,6 +21,9 @@ public class AudioManager : MonoBehaviour {
     private Dictionary<string, AudioClip> materialClips;
     private bool silent = false;
     private TaskManager _tm = new TaskManager();
+
+    private Coroutine mainTrackFade;
+    private Coroutine[] levelTracksFade;
     
     public void Awake()
     {
@@ -58,6 +61,8 @@ public class AudioManager : MonoBehaviour {
 
         for (var i = 1; i < _levelMusicSources.Count; i++)
         {
+            if (_levelMusicSources[i] == null) continue;
+
             _levelMusicSources[i].timeSamples = _levelMusicSources[0].timeSamples;
         }
     }
@@ -232,13 +237,19 @@ public class AudioManager : MonoBehaviour {
             }
         }
 
-        for (int i = 0; i < _levelMusicSources.Count; i++)
+        if (levelTracksFade != null)
+            foreach (var fade in levelTracksFade)
+               StopCoroutine(fade);
+
+        levelTracksFade = new Coroutine[_levelMusicSources.Count];
+
+        for (var i = 0; i < _levelMusicSources.Count; i++)
         {
             var toChange = _levelMusicSources[i];
             var startingValue = _previousVolumes[i];
             var newValue = _levelMusicVolumes[i];
             
-            StartCoroutine(Coroutines.DoOverEasedTime(Services.Clock.HalfLength() + Services.Clock.QuarterLength(), Easing.Linear,
+            levelTracksFade[i] = StartCoroutine(Coroutines.DoOverEasedTime(Services.Clock.HalfLength() + Services.Clock.QuarterLength(), Easing.Linear,
                 t =>
                 {
                     var newVolume = Mathf.Lerp(startingValue, newValue, t);
@@ -342,31 +353,36 @@ public class AudioManager : MonoBehaviour {
     public void FadeOutLevelMusic()
     {
         Services.Clock.eventManager.Unregister<Measure>(DynamicLevelMusicVolumes);
+        
+        if (levelTracksFade != null)
+            foreach (var fade in levelTracksFade)
+                StopCoroutine(fade);
+        
         _previousVolumes = new List<float>();
-        var to_destroy = levelMusicHolder;
+        var toDestroy = levelMusicHolder;
 
-        foreach (AudioSource source in _levelMusicSources)
+        foreach (var source in _levelMusicSources)
         {
             _previousVolumes.Add(source.volume);
         }
         
-        for (int i = 0; i < _levelMusicSources.Count; i++)
+        for (var i = 0; i < _levelMusicSources.Count; i++)
         {
-            AudioSource to_change = _levelMusicSources[i];
-            float starting_value = _previousVolumes[i];
-            float new_value = 0.0f;
+            var toChange = _levelMusicSources[i];
+            var startingValue = _previousVolumes[i];
+            var newValue = 0.0f;
             
-            StartCoroutine(Coroutines.DoOverEasedTime(Services.Clock.MeasureLength(), Easing.Linear,
+            StartCoroutine(Coroutines.DoOverEasedTime(Services.Clock.HalfLength(), Easing.Linear,
                 t =>
                 {
-                    float new_volume = Mathf.Lerp(starting_value, new_value, t);
-                    to_change.volume = new_volume;
+                    var newVolume = Mathf.Lerp(startingValue, newValue, t);
+                    toChange.volume = newVolume;
                 }));
         }
         
         Delay(() =>
-            {
-                Destroy(to_destroy);
+        {
+            Destroy(toDestroy);
         }, Services.Clock.MeasureLength() * 2);
         
     }
@@ -416,9 +432,12 @@ public class AudioManager : MonoBehaviour {
         if (mainTrack == null)
             SetMainTrack(Services.Clips.MenuSong, 0.0f);
         
+        if (mainTrackFade != null)
+            StopCoroutine(mainTrackFade);
+        
         var starting = fadeOut ? mainTrack.volume : 0;
         var ending = fadeOut ? 0 : BaseMusicVolume;
-        StartCoroutine(Coroutines.DoOverEasedTime(duration/2, Easing.Linear,
+        mainTrackFade = StartCoroutine(Coroutines.DoOverEasedTime(duration/2, Easing.Linear,
             t =>
             {
                 mainTrack.volume = Mathf.Lerp(starting, ending, t);
