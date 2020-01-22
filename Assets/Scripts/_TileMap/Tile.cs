@@ -341,7 +341,7 @@ public class Tile : MonoBehaviour, IVertex
         if (entranceDelayTime <= 0)
         {
             entering = true;
-            Services.AudioManager.PlaySoundEffect(Services.Clips.IndividualPieceLighting, 0.5f);
+            Services.AudioManager.PlaySoundEffect(Services.Clips.IndividualPieceLighting);
         }
     }
 
@@ -361,7 +361,7 @@ public class Tile : MonoBehaviour, IVertex
         if (_beatCount > 0) return;
         
         entering = true;
-        Services.AudioManager.PlaySoundEffect(Services.Clips.IndividualPieceLighting, 0.5f);
+        Services.AudioManager.PlaySoundEffect(Services.Clips.IndividualPieceLighting);
         Services.Clock.eventManager.Unregister<Sixteenth>(WaitForBeat);
     }
 
