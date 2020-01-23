@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -74,9 +75,9 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -1000, y: -990}
-    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXToolTipSize: {x: 700, y: 250}
     iPhoneXArrowScale: {x: 0, y: 0}
-    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXLocation: {x: 50, y: 50}
     iPhoneXArrowLocation: {x: 0, y: 0}
     iPhoneXWindowLocation: {x: 0, y: 0}
     iPhoneXSecondWindowLocation: {x: 0, y: 0}
@@ -124,20 +125,20 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -834, y: -1659}
-    iPhoneXToolTipSize: {x: 0, y: 0}
-    iPhoneXArrowScale: {x: 0, y: 0}
-    iPhoneXLocation: {x: 0, y: 0}
-    iPhoneXArrowLocation: {x: 0, y: 0}
-    iPhoneXWindowLocation: {x: 0, y: 0}
+    iPhoneXToolTipSize: {x: 700, y: 250}
+    iPhoneXArrowScale: {x: 1, y: 1}
+    iPhoneXLocation: {x: 266, y: -759}
+    iPhoneXArrowLocation: {x: 0, y: -232}
+    iPhoneXWindowLocation: {x: 225, y: -1237}
     iPhoneXSecondWindowLocation: {x: 0, y: 0}
-    iPhoneXWindowSize: {x: 0, y: 0}
+    iPhoneXWindowSize: {x: 180, y: 180}
     iPhoneXSecondWindowSize: {x: 0, y: 0}
-    iPhoneXArrowRotation: 0
+    iPhoneXArrowRotation: -90
     iPhoneXImageLocation: {x: 0, y: 0}
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: 0, y: 0}
+    skipButtonLocationiPhoneX: {x: -774, y: -2235}
   - label: Show Me
     text: To create a <color=#6CAE75>Building</color>, you must first form the appropriate
       shape on the board, then place the <color=#6CAE75>Building</color> on top.
@@ -174,9 +175,9 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -1000, y: -9000}
-    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXToolTipSize: {x: 700, y: 300}
     iPhoneXArrowScale: {x: 0, y: 0}
-    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXLocation: {x: 50, y: 50}
     iPhoneXArrowLocation: {x: 0, y: 0}
     iPhoneXWindowLocation: {x: 0, y: 0}
     iPhoneXSecondWindowLocation: {x: 0, y: 0}
@@ -187,7 +188,7 @@ MonoBehaviour:
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: 0, y: 0}
+    skipButtonLocationiPhoneX: {x: -997, y: -1443}
   - label: Make Building
     text: 
     displayObjective: 1
@@ -223,9 +224,9 @@ MonoBehaviour:
     iPhoneImageScale: {x: 1.2, y: 1.2}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -1000, y: -900}
-    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXToolTipSize: {x: 700, y: 500}
     iPhoneXArrowScale: {x: 0, y: 0}
-    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXLocation: {x: 50, y: 50}
     iPhoneXArrowLocation: {x: 0, y: 0}
     iPhoneXWindowLocation: {x: 0, y: 0}
     iPhoneXSecondWindowLocation: {x: 0, y: 0}
@@ -234,12 +235,12 @@ MonoBehaviour:
     iPhoneXArrowRotation: 0
     iPhoneXImageLocation: {x: 0, y: 0}
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
-    iPhoneXImageScale: {x: 0, y: 0}
+    iPhoneXImageScale: {x: 1.2, y: 1.2}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: 0, y: 0}
+    skipButtonLocationiPhoneX: {x: -997, y: -1286}
   - label: Anytime
-    text: <color=#6CAE75>Buildings</color> can be placed at any time and you can <color=#6CAE75>ROTATE</color>
-      them too!
+    text: <color=#6CAE75>Buildings</color> can be placed at any time and you can
+      <color=#6CAE75>ROTATE</color> them too!
     displayObjective: 0
     objectiveIndex: 0
     location: {x: 50, y: 50}
@@ -273,9 +274,9 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -1000, y: -990}
-    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXToolTipSize: {x: 700, y: 300}
     iPhoneXArrowScale: {x: 0, y: 0}
-    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXLocation: {x: 50, y: 50}
     iPhoneXArrowLocation: {x: 0, y: 0}
     iPhoneXWindowLocation: {x: 0, y: 0}
     iPhoneXSecondWindowLocation: {x: 0, y: 0}
@@ -286,7 +287,7 @@ MonoBehaviour:
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: 0, y: 0}
+    skipButtonLocationiPhoneX: {x: -997, y: -1443}
   - label: Do Not Display
     text: 
     displayObjective: 0
@@ -372,7 +373,7 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: 500, y: 500}
-    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXToolTipSize: {x: 700, y: 250}
     iPhoneXArrowScale: {x: 0, y: 0}
     iPhoneXLocation: {x: 0, y: 0}
     iPhoneXArrowLocation: {x: 0, y: 0}

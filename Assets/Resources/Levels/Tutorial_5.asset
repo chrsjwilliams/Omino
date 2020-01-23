@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -91,7 +92,7 @@ MonoBehaviour:
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: 0, y: 0}
+    skipButtonLocationiPhoneX: {x: -997, y: -1443}
   - label: Tech Structures
     text: To mix things up, there are special <color=#6CAE75>Tech Structures</color>
       spread across the map!
@@ -128,11 +129,11 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -812, y: -741}
-    iPhoneXToolTipSize: {x: 700, y: 450}
+    iPhoneXToolTipSize: {x: 700, y: 250}
     iPhoneXArrowScale: {x: 1, y: 1}
     iPhoneXLocation: {x: 244, y: 300}
-    iPhoneXArrowLocation: {x: 75, y: -330}
-    iPhoneXWindowLocation: {x: 271, y: -276}
+    iPhoneXArrowLocation: {x: 75, y: -250}
+    iPhoneXWindowLocation: {x: 255, y: -255}
     iPhoneXSecondWindowLocation: {x: 0, y: 0}
     iPhoneXWindowSize: {x: 170, y: 170}
     iPhoneXSecondWindowSize: {x: 0, y: 0}
@@ -141,7 +142,7 @@ MonoBehaviour:
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: -812, y: -741}
+    skipButtonLocationiPhoneX: {x: -804, y: -1073}
   - label: Claim
     text: To claim a <color=#6CAE75>Tech Structure</color>, simply connect to it.
     displayObjective: 0
@@ -190,7 +191,7 @@ MonoBehaviour:
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: -547, y: -1113}
+    skipButtonLocationiPhoneX: {x: -997, y: -1443}
   - label: Not Destroyed
     text: <color=#6CAE75>Tech Structures</color> cannot be destroyed, but you can
       reclaim them from your opponent if you cut them off!
@@ -240,10 +241,10 @@ MonoBehaviour:
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: -529, y: -925}
+    skipButtonLocationiPhoneX: {x: -997, y: -1443}
   - label: Tap
-    text: Each <color=#6CAE75>Tech Structure</color> grants a unique technology. Tap
-      and hold on a structure to read about its effect.
+    text: Each <color=#6CAE75>Tech Structure</color> grants a unique technology.
+      Tap and hold on a structure to read about its effect.
     displayObjective: 0
     objectiveIndex: 0
     location: {x: 440, y: 320}
@@ -277,12 +278,12 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -1218, y: -1459}
-    iPhoneXToolTipSize: {x: -600, y: -475}
-    iPhoneXArrowScale: {x: 1, y: 1}
-    iPhoneXLocation: {x: -165, y: -436}
-    iPhoneXArrowLocation: {x: -66, y: 515}
-    iPhoneXWindowLocation: {x: -269, y: 269}
-    iPhoneXSecondWindowLocation: {x: 271, y: -276}
+    iPhoneXToolTipSize: {x: 700, y: 300}
+    iPhoneXArrowScale: {x: 0, y: 0}
+    iPhoneXLocation: {x: -116, y: -682}
+    iPhoneXArrowLocation: {x: 0, y: 0}
+    iPhoneXWindowLocation: {x: -255, y: 255}
+    iPhoneXSecondWindowLocation: {x: 255, y: -255}
     iPhoneXWindowSize: {x: 170, y: 170}
     iPhoneXSecondWindowSize: {x: 170, y: 170}
     iPhoneXArrowRotation: 90
@@ -290,7 +291,7 @@ MonoBehaviour:
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: -1218, y: -1459}
+    skipButtonLocationiPhoneX: {x: -1152, y: -1059}
   - label: Remember Blueprints
     text: You decide what to prioritize! And don't forget about <color=#6CAE75>Buildings</color>!
     displayObjective: 1
@@ -326,7 +327,7 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -400, y: -725}
-    iPhoneXToolTipSize: {x: 700, y: 400}
+    iPhoneXToolTipSize: {x: 700, y: 250}
     iPhoneXArrowScale: {x: 0, y: 0}
     iPhoneXLocation: {x: 50, y: 50}
     iPhoneXArrowLocation: {x: 0, y: 0}
@@ -339,7 +340,7 @@ MonoBehaviour:
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: -400, y: -725}
+    skipButtonLocationiPhoneX: {x: -997, y: -1443}
   - label: Do Not Display
     text: 
     displayObjective: 0

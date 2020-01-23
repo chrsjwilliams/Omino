@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -74,9 +75,9 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -1000, y: -1000}
-    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXToolTipSize: {x: 700, y: 250}
     iPhoneXArrowScale: {x: 0, y: 0}
-    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXLocation: {x: 50, y: 50}
     iPhoneXArrowLocation: {x: 0, y: 0}
     iPhoneXWindowLocation: {x: 0, y: 0}
     iPhoneXSecondWindowLocation: {x: 0, y: 0}
@@ -87,7 +88,7 @@ MonoBehaviour:
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: 0, y: 0}
+    skipButtonLocationiPhoneX: {x: -1010, y: -1436}
   - label: Do Not Display
     text: 
     displayObjective: 0
@@ -172,20 +173,20 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -728, y: -697}
-    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXToolTipSize: {x: 700, y: 250}
     iPhoneXArrowScale: {x: 0, y: 0}
-    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXLocation: {x: 166, y: -300}
     iPhoneXArrowLocation: {x: 0, y: 0}
-    iPhoneXWindowLocation: {x: 0, y: 0}
+    iPhoneXWindowLocation: {x: 230, y: 237}
     iPhoneXSecondWindowLocation: {x: 0, y: 0}
-    iPhoneXWindowSize: {x: 0, y: 0}
+    iPhoneXWindowSize: {x: 600, y: 600}
     iPhoneXSecondWindowSize: {x: 0, y: 0}
     iPhoneXArrowRotation: 0
     iPhoneXImageLocation: {x: 0, y: 0}
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: 0, y: 0}
+    skipButtonLocationiPhoneX: {x: -876, y: -2240}
   - label: Attack Piece
     text: 
     displayObjective: 0
@@ -221,9 +222,9 @@ MonoBehaviour:
     iPhoneImageScale: {x: 1.2, y: 1.2}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -974, y: -900}
-    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXToolTipSize: {x: 700, y: 250}
     iPhoneXArrowScale: {x: 0, y: 0}
-    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXLocation: {x: 50, y: 50}
     iPhoneXArrowLocation: {x: 0, y: 0}
     iPhoneXWindowLocation: {x: 0, y: 0}
     iPhoneXSecondWindowLocation: {x: 0, y: 0}
@@ -232,12 +233,12 @@ MonoBehaviour:
     iPhoneXArrowRotation: 0
     iPhoneXImageLocation: {x: 0, y: 0}
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
-    iPhoneXImageScale: {x: 0, y: 0}
+    iPhoneXImageScale: {x: 1.2, y: 1.2}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: 0, y: 0}
+    skipButtonLocationiPhoneX: {x: -962, y: -1199}
   - label: Hammer
-    text: If you have a full <color=#E56575FF>Sword</color> and hover your piece over
-      your opponent's pieces, you can build over them.
+    text: If you have a full <color=#E56575FF>Sword</color> and hover your piece
+      over your opponent's pieces, you can build over them.
     displayObjective: 1
     objectiveIndex: 1
     location: {x: 450, y: -300}
@@ -271,20 +272,20 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -612, y: -1415}
-    iPhoneXToolTipSize: {x: 0, y: 0}
-    iPhoneXArrowScale: {x: 0, y: 0}
-    iPhoneXLocation: {x: 0, y: 0}
-    iPhoneXArrowLocation: {x: 0, y: 0}
-    iPhoneXWindowLocation: {x: 0, y: 0}
+    iPhoneXToolTipSize: {x: 700, y: 300}
+    iPhoneXArrowScale: {x: 1, y: 1}
+    iPhoneXLocation: {x: 440, y: -550}
+    iPhoneXArrowLocation: {x: 235, y: -235}
+    iPhoneXWindowLocation: {x: 656, y: -1080}
     iPhoneXSecondWindowLocation: {x: 0, y: 0}
-    iPhoneXWindowSize: {x: 0, y: 0}
+    iPhoneXWindowSize: {x: 180, y: 180}
     iPhoneXSecondWindowSize: {x: 0, y: 0}
-    iPhoneXArrowRotation: 0
+    iPhoneXArrowRotation: -90
     iPhoneXImageLocation: {x: 0, y: 0}
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: 0, y: 0}
+    skipButtonLocationiPhoneX: {x: -609, y: -1993}
   - label: Hammer Time
     text: You recharge <color=#E56575FF>swords</color> over time.
     displayObjective: 0
@@ -320,20 +321,20 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -594, y: -1750}
-    iPhoneXToolTipSize: {x: 0, y: 0}
-    iPhoneXArrowScale: {x: 0, y: 0}
-    iPhoneXLocation: {x: 0, y: 0}
-    iPhoneXArrowLocation: {x: 0, y: 0}
-    iPhoneXWindowLocation: {x: 0, y: 0}
+    iPhoneXToolTipSize: {x: 700, y: 250}
+    iPhoneXArrowScale: {x: 1, y: 1}
+    iPhoneXLocation: {x: 440, y: -550}
+    iPhoneXArrowLocation: {x: 235, y: -235}
+    iPhoneXWindowLocation: {x: 656, y: -1080}
     iPhoneXSecondWindowLocation: {x: 0, y: 0}
-    iPhoneXWindowSize: {x: 0, y: 0}
+    iPhoneXWindowSize: {x: 180, y: 180}
     iPhoneXSecondWindowSize: {x: 0, y: 0}
-    iPhoneXArrowRotation: 0
+    iPhoneXArrowRotation: -90
     iPhoneXImageLocation: {x: 0, y: 0}
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: 0, y: 0}
+    skipButtonLocationiPhoneX: {x: -609, y: -1993}
   - label: No Waiting
     text: No need to wait your turn - you can play as soon as you have enough energy!
     displayObjective: 0
@@ -369,9 +370,9 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -1000, y: -1000}
-    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXToolTipSize: {x: 700, y: 250}
     iPhoneXArrowScale: {x: 0, y: 0}
-    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXLocation: {x: 50, y: 50}
     iPhoneXArrowLocation: {x: 0, y: 0}
     iPhoneXWindowLocation: {x: 0, y: 0}
     iPhoneXSecondWindowLocation: {x: 0, y: 0}
@@ -382,7 +383,7 @@ MonoBehaviour:
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: 0, y: 0}
+    skipButtonLocationiPhoneX: {x: -1010, y: -1436}
   - label: Touch Base
     text: Remember, all your pieces must connect back to your base. Now, touch theirs
       before they touch yours!
@@ -419,9 +420,9 @@ MonoBehaviour:
     iPhoneImageScale: {x: 0, y: 0}
     iPhoneImageRotation: 0
     skipButtonLocationiPhone: {x: -1000, y: -900}
-    iPhoneXToolTipSize: {x: 0, y: 0}
+    iPhoneXToolTipSize: {x: 700, y: 250}
     iPhoneXArrowScale: {x: 0, y: 0}
-    iPhoneXLocation: {x: 0, y: 0}
+    iPhoneXLocation: {x: 50, y: 50}
     iPhoneXArrowLocation: {x: 0, y: 0}
     iPhoneXWindowLocation: {x: 0, y: 0}
     iPhoneXSecondWindowLocation: {x: 0, y: 0}
@@ -432,7 +433,7 @@ MonoBehaviour:
     iPhoneXSecondaryImageLocation: {x: 0, y: 0}
     iPhoneXImageScale: {x: 0, y: 0}
     iPhoneXImageRotation: 0
-    skipButtonLocationiPhoneX: {x: 0, y: 0}
+    skipButtonLocationiPhoneX: {x: -1010, y: -1436}
   - label: Do Not Display
     text: 
     displayObjective: 0
