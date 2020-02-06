@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine.Assertions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,10 +6,10 @@ using UnityEngine.SceneManagement;
 using UnityEngine.iOS;
 #endif
 using BeatManagement;
-using Tinylytics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
+using UnityEngine.iOS;
 
 public enum DEVICE { IPAD, IPHONE, IPHONE_X, IPHONE_SE}
 
@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            return CurrentDevice == DEVICE.IPHONE || pretendIphone;
+            return CurrentDevice == DEVICE.IPHONE || CurrentDevice == DEVICE.IPHONE_X ||pretendIphone;
         }
     }
 
@@ -292,10 +292,13 @@ public class GameManager : MonoBehaviour
             case DeviceGeneration.iPhone7Plus:
             case DeviceGeneration.iPhone8:
             case DeviceGeneration.iPhone8Plus:           
-            case DeviceGeneration.iPhoneUnknown:
             case DeviceGeneration.iPhoneSE1Gen:
                 CurrentDevice = DEVICE.IPHONE;
                 break;
+            case DeviceGeneration.iPhoneUnknown:
+            case DeviceGeneration.iPhone11:
+            case DeviceGeneration.iPhone11Pro:
+            case DeviceGeneration.iPhone11ProMax:
             case DeviceGeneration.iPhoneX:
                 CurrentDevice = DEVICE.IPHONE_X;
                 break;
@@ -336,7 +339,6 @@ public class GameManager : MonoBehaviour
         Services.LeaderBoard = GetComponent<GameCenterLeaderBoard>();
         Services.LeaderBoard.Init();
 
-        Services.Analytics = AnalyticsManager.Instance;
     }
 
     public void SetCurrentLevel(Level level, bool loaded = false)

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Blueprint : Polyomino
@@ -382,8 +381,7 @@ public Blueprint(int _units, int _index, Player _player) : base(_units, _index, 
             if (IsPlacementLegal() && !owner.gameOver && !forceCancel)
             {
                 PlaceAtCurrentLocation();
-                Services.Analytics.PlayedBlueprint();
-                //ListenForInput();
+               //ListenForInput();
                 //IncrementSortingOrder(-20000);
                 piecePlaced = true;
             }

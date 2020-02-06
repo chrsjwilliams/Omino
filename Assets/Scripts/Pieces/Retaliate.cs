@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿
 public class Retaliate : TechBuilding
 {
     public const float hammerReward = 0.5f;

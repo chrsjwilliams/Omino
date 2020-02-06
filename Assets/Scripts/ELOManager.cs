@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -99,10 +98,7 @@ public static class ELOManager
             eloData.SetHandicap(eloData.handicapLevel + handicapIncrement);
         }
         Services.UIManager.UIMenu.eloUIManager.OnGameEnd(true, prevElo, eloData);
-        Services.Analytics.ELOWin(true);
-        Services.Analytics.ELOStreak(eloData.winStreakCount);
-        Services.Analytics.ELOTotalWins(eloData.totalWins);
-        Services.Analytics.ELORating(eloData.GetRating());
+
 
         SaveData();
     }
@@ -113,7 +109,6 @@ public static class ELOManager
         eloData.winStreakCount = 0;
         eloData.SetHandicap(eloData.handicapLevel - handicapIncrement);
         Services.UIManager.UIMenu.eloUIManager.OnGameEnd(false, prevElo, eloData);
-        Services.Analytics.ELOWin(false);
         SaveData();
     }
 

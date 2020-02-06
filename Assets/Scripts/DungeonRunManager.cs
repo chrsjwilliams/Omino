@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public static class DungeonRunManager
@@ -103,7 +101,6 @@ public static class DungeonRunManager
 
         if (dungeonRunData.challengeNum > MAX_DUNGEON_CHALLENGES)
         {
-            Services.Analytics.DungeonRunWin(dungeonRunData.currentTech);
             OnCompleteDungeonRun();
         }
         else
@@ -121,7 +118,6 @@ public static class DungeonRunManager
         dungeonRunStreak = 0;
         Services.UIManager.UIMenu.dungeonRunChallenegeCompleteMenu.OnGameEnd(false);
 
-        Services.Analytics.DungeonRunLoss(dungeonRunData.challengeNum);
         
         ResetDungeonRunData();
     }
@@ -131,7 +127,6 @@ public static class DungeonRunManager
         totalCompletions += 1;
         dungeonRunStreak++;
         dungeonRunData.completedRun = true;
-        Services.Analytics.MatchEnded();
         Services.LeaderBoard.ReportScore(dungeonRunStreak, "2");
         Services.LeaderBoard.ReportScore(totalCompletions, "5");
 
@@ -214,7 +209,6 @@ public static class DungeonRunManager
         if (dungeonRunData.currentTech.Count < MAX_TECH_INVENTORY)
         {
             dungeonRunData.currentTech.Add(tech);
-            Services.Analytics.TechSelected(tech, dungeonRunData.techChoices);
             dungeonRunData.selectingNewTech = false;
             dungeonRunData.techOptionsGenerated = false;
         }

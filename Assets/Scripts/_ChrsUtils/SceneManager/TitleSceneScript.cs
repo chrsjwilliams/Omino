@@ -1,7 +1,5 @@
 ﻿using BeatManagement;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class TitleSceneScript : Scene<TransitionData>
 {
@@ -54,7 +52,6 @@ public class TitleSceneScript : Scene<TransitionData>
     public void StartGame(GameMode mode)
     {
         Services.GameManager.mode = mode;
-        Services.Analytics.MatchStarted(mode);
         //Task start;
         switch (mode)
         {

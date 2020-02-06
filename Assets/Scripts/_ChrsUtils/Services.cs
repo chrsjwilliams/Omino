@@ -1,6 +1,5 @@
 ﻿
 using BeatManagement;
-using Tinylytics;
 
 public class Services
 {
@@ -29,8 +28,6 @@ public class Services
 
     public static TechDataLibrary TechDataLibrary { get; set; }
     public static LevelDataLibrary LevelDataLibrary { get; set; }
-
-    public static AnalyticsManager Analytics { get; set; }
 
     public static MenuManager MenuManager { get; set; }
     public static GameCenterLeaderBoard LeaderBoard { get; set; }

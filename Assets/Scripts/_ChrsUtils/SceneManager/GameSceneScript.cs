@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -219,19 +217,16 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void GameWin(Player winner)
     {
-        Services.Analytics.MatchEnded();
         gameOver = true;
         Services.GameEventManager.Fire(new GameEndEvent(winner));
         Services.UIManager.UIBannerManager.StartBannerScroll(winner);
 
         if (winner is AIPlayer)
         {
-            Services.Analytics.PlayerWin(false);
             Services.AudioManager.RegisterSoundEffect(Services.Clips.Defeat, 0.6f);
         }
         else
         {
-            Services.Analytics.PlayerWin();
             Services.AudioManager.RegisterSoundEffect(Services.Clips.Victory, 0.5f);
         }
 
@@ -284,7 +279,6 @@ public class GameSceneScript : Scene<TransitionData>
                         File.WriteAllText(GameOptionsSceneScript.progressFileName,
                             levelBeaten.ToString());
                         
-                        Services.Analytics.TutorialLevelBeaten(levelBeaten);
                     }
                 }
                 break;
@@ -315,7 +309,6 @@ public class GameSceneScript : Scene<TransitionData>
 
     public void Replay()
     {
-        Services.Analytics.MatchEnded();
         Services.AudioManager.ResetLevelMusic();
         
         if (Services.GameManager.mode == TitleSceneScript.GameMode.Challenge &&
@@ -340,7 +333,6 @@ public class GameSceneScript : Scene<TransitionData>
 
     void Reload()
     {
-        Services.Analytics.MatchEnded();
         Services.GameData.Reset();
         Services.AudioManager.ResetLevelMusic();
         Services.Scenes.Swap<GameSceneScript>();
@@ -348,7 +340,6 @@ public class GameSceneScript : Scene<TransitionData>
 
     public virtual void ReturnToLevelSelect()
     {
-        Services.Analytics.MatchEnded();
         Task returnToLevelSelect = new WaitUnscaled(0.01f);
         returnToLevelSelect.Then(new ActionTask(LoadLevelSelect));
         Services.GeneralTaskManager.Do(returnToLevelSelect);
@@ -398,7 +389,6 @@ public class GameSceneScript : Scene<TransitionData>
 
     public virtual void Reset()
     {
-        Services.Analytics.MatchEnded();
         Services.AudioManager.FadeOutLevelMusicMainMenuCall();
         Services.GameManager.Reset(new Reset());
     }
@@ -412,7 +402,6 @@ public class GameSceneScript : Scene<TransitionData>
             Services.MapManager.currentLevel.tooltips.Length > 0)
         {
             Services.TutorialManager.Init();
-            Services.Analytics.PlayedTutorial();
         }
 
         if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)

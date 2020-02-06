@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System;
 
 public class PauseButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
     private const float pauseTime = 0.5f;

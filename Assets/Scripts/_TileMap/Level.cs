@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
 
 [CreateAssetMenu(menuName = "Level")]
 public class Level : ScriptableObject

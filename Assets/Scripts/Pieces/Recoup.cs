@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
+﻿
 public class Recoup : TechBuilding
 {
     public const float energyReward = 0.5f;

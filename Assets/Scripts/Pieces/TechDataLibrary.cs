@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Tech Data")]
 public class TechDataLibrary : ScriptableObject

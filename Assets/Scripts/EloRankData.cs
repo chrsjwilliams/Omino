@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 [CreateAssetMenu(menuName = "Elo Rank Data")]
 public class EloRankData : ScriptableObject

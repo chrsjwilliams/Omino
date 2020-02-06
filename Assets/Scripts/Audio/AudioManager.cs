@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using BeatManagement;
 using UnityEngine;
-using EasingEquations;
 
 public class AudioManager : MonoBehaviour {
 

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using BeatManagement;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Linq;
 
 public enum BuildingType

@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using BeatManagement;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
+
 using UnityEngine.Rendering;
 
 public class Tile : MonoBehaviour, IVertex

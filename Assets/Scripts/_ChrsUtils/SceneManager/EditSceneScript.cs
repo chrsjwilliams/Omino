@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -183,7 +182,6 @@ public class EditSceneScript : GameSceneScript {
         {
             SaveMap(GenerateName());
         }
-        Services.Analytics.MatchEnded();
         Services.AudioManager.FadeOutLevelMusicMainMenuCall();
         Services.GameManager.Reset(new Reset());
     }

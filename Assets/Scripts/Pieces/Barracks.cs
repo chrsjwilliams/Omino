@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
-
+﻿
 public class Barracks : Blueprint
 {
     public const float drawRateBonus = 0.02f;
