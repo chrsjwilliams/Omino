@@ -222,6 +222,10 @@ public class GameManager : MonoBehaviour
     private const string autoUnlockFileName = "autounlock.txt";
     private const bool defaultAutoUnlockStatus = true;
 
+    private double IPHONE_ASPECT_RATIO = Math.Round(9 / 16f, 2);
+    private double IPHONEX_ASPECT_RATIO = Math.Round(9 / 19.5f, 2);
+    private double aspectRatio;
+
     private void Awake()
     {
         Assert.raiseExceptions = true;
@@ -281,43 +285,20 @@ public class GameManager : MonoBehaviour
 
     private void SetDevice()
     {
-        switch (UnityEngine.iOS.Device.generation)
+        
+        aspectRatio =  Math.Round(Screen.width / (float) Screen.height, 2);
+
+        if(aspectRatio == IPHONE_ASPECT_RATIO)
         {
-            case DeviceGeneration.iPhone5:
-            case DeviceGeneration.iPhone5C:
-            case DeviceGeneration.iPhone5S:
-            case DeviceGeneration.iPhone6:
-            case DeviceGeneration.iPhone6Plus:
-            case DeviceGeneration.iPhone6S:
-            case DeviceGeneration.iPhone6SPlus:
-            case DeviceGeneration.iPhone7:
-            case DeviceGeneration.iPhone7Plus:
-            case DeviceGeneration.iPhone8:
-            case DeviceGeneration.iPhone8Plus:           
-            case DeviceGeneration.iPhoneSE1Gen:
-                CurrentDevice = DEVICE.IPHONE;
-                break;
-            case DeviceGeneration.iPhoneUnknown:
-            case DeviceGeneration.iPhoneX:
-                CurrentDevice = DEVICE.IPHONE_X;
-                break;
-            case DeviceGeneration.iPad1Gen:
-            case DeviceGeneration.iPad2Gen:
-            case DeviceGeneration.iPad3Gen:
-            case DeviceGeneration.iPad4Gen:
-            case DeviceGeneration.iPad5Gen:
-            case DeviceGeneration.iPad6Gen:
-            case DeviceGeneration.iPadAir1:
-            case DeviceGeneration.iPadAir2:
-            case DeviceGeneration.iPadMini1Gen:
-            case DeviceGeneration.iPadMini2Gen:
-            case DeviceGeneration.iPadMini3Gen:
-            case DeviceGeneration.iPadMini4Gen:
-                CurrentDevice = DEVICE.IPAD;
-                break;
-            default:
-                CurrentDevice = DEVICE.IPAD_PRO;
-                break;
+            CurrentDevice = DEVICE.IPHONE;
+        }
+        else if (aspectRatio == IPHONEX_ASPECT_RATIO)
+        {
+            CurrentDevice = DEVICE.IPHONE_X;
+        }
+        else
+        {
+            CurrentDevice = DEVICE.IPAD_PRO;
         }
         
     }
