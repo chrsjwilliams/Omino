@@ -222,7 +222,8 @@ public class UIMeters : MonoBehaviour
 
         // pigeon:  to fix the dragging issue on iPadPRos i flipped the position of buildings and
         //          their meters
-        if (Services.GameManager.CurrentDevice == DEVICE.IPAD_PRO)
+        if (Services.GameManager.CurrentDevice == DEVICE.IPAD_PRO ||
+            Services.GameManager.CurrentDevice == DEVICE.IPAD_11INCH)
         {
             resourceSlotZone.GetComponent<RectTransform>().localScale = new Vector2(0.5f, 0.5f);
             attackResourceSlotZone.GetComponent<RectTransform>().localScale = new Vector2(0.5f, 0.5f);

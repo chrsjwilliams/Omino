@@ -52,7 +52,7 @@ public class GameSceneScript : Scene<TransitionData>
                 Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localScale = new Vector2(0.75f, 0.75f);
                 break;
             case DEVICE.IPAD_PRO:
-
+            case DEVICE.IPAD_11INCH:
                 Services.UIManager.UIMeters[0].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -125, 0);
                 Services.UIManager.UIMeters[1].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 125, 0);
                 Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localPosition = new Vector2(-500, 170);

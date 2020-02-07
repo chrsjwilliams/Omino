@@ -246,6 +246,35 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.iPadProImageRotation);
             image.rectTransform.localScale = info.iPadProImageScale;
         }
+        else if(Services.GameManager.CurrentDevice == DEVICE.IPAD_11INCH)
+        {
+            // TOOLTIP
+            tooltipTransform.anchoredPosition = info.iPad11InchLocation;
+            tooltipTransform.sizeDelta = info.iPad11InchToolTipSize;
+
+            // ARROW
+            if (info.arrowLocation == Vector2.zero) arrow.enabled = false;
+            else
+            {
+                arrow.GetComponent<RectTransform>().anchoredPosition = info.iPad11InchArrowLocation;
+                arrow.transform.localRotation = Quaternion.Euler(0, 0, info.iPad11InchArrowRotation);
+                arrow.transform.localScale = info.iPad11InchArrowScale;
+            }
+
+            // WINDOW
+            windowRect.anchoredPosition = info.iPad11InchWindowLocation;
+            windowRect.sizeDelta = info.iPad11InchWindowSize;
+            secondWindow.anchoredPosition = info.iPad11InchSecondWindowLocation;
+            secondWindow.sizeDelta = info.iPad11InchSecondWindowSize;
+
+            // IMAGE
+            imagePrimaryPosition = info.iPad11InchImageLocation;
+            image.rectTransform.localPosition = imagePrimaryPosition;
+            imageSecondaryPosition = info.iPad11InchSecondaryImageLocation;
+            imageSecondaryTempPosition = info.iPad11InchSecondaryImageLocation;
+            image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.iPad11InchImageRotation);
+            image.rectTransform.localScale = info.iPad11InchImageScale;
+        }
         else
         {
             // TOOLTIP

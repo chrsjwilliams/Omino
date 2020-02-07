@@ -203,6 +203,7 @@ public class Player : MonoBehaviour
                 handOffset = new Vector3(-9.25f, 11, 0);
                 break;
             case DEVICE.IPAD_PRO:
+            case DEVICE.IPAD_11INCH:
                 handSpacing = new Vector3(2.5f, -2.35f, 0);
                 handOffset = new Vector3(-9.25f, 3.5f, 0);
                 break;

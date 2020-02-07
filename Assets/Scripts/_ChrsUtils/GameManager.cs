@@ -11,7 +11,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using UnityEngine.iOS;
 
-public enum DEVICE { IPAD, IPHONE, IPHONE_X, IPHONE_SE, IPAD_PRO}
+public enum DEVICE { IPAD, IPHONE, IPHONE_X, IPHONE_SE, IPAD_PRO, IPAD_11INCH}
 
 public class GameManager : MonoBehaviour
 {
@@ -222,6 +222,8 @@ public class GameManager : MonoBehaviour
     private const string autoUnlockFileName = "autounlock.txt";
     private const bool defaultAutoUnlockStatus = true;
 
+
+    
     private double IPHONE_ASPECT_RATIO = Math.Round(9 / 16f, 2);
     private double IPHONEX_ASPECT_RATIO = Math.Round(9 / 19.5f, 2);
     private double aspectRatio;
@@ -288,19 +290,60 @@ public class GameManager : MonoBehaviour
         
         aspectRatio =  Math.Round(Screen.width / (float) Screen.height, 2);
 
-        if(aspectRatio == IPHONE_ASPECT_RATIO)
+        if(IsiPhone())
         {
             CurrentDevice = DEVICE.IPHONE;
         }
-        else if (aspectRatio == IPHONEX_ASPECT_RATIO)
+        else if (IsiPhoneX())
         {
             CurrentDevice = DEVICE.IPHONE_X;
+        }
+        else if(IsiPadSkinny())
+        {
+            CurrentDevice = DEVICE.IPAD_11INCH;
         }
         else
         {
             CurrentDevice = DEVICE.IPAD_PRO;
         }
         
+    }
+    public static bool IsiPhone()
+    {
+        if ((Mathf.Abs((float)Screen.width / Screen.height - 750f / 1334f) < 0.01) || (Mathf.Abs((float)Screen.height / Screen.width - 750f / 1334f) < 0.01))
+            return true;
+
+        return false;
+    }
+    public static bool IsiPhoneX()
+    {
+        if ((Mathf.Abs((float)Screen.width / Screen.height - 1125f / 2436f) < 0.01) || (Mathf.Abs((float)Screen.height / Screen.width - 1125f / 2436f) < 0.01))
+            return true;
+
+        return false;
+    }
+    public static bool IsiPad()
+    {
+        if ((Mathf.Abs((float)Screen.width / Screen.height - 1536f / 2048f) < 0.01) || (Mathf.Abs((float)Screen.height / Screen.width - 1536f / 2048f) < 0.01))//ipad
+            return true;
+
+        if ((Mathf.Abs((float)Screen.width / Screen.height - 1668f / 2224f) < 0.01) || (Mathf.Abs((float)Screen.height / Screen.width - 1668f / 2224f) < 0.01)) //ipad 10.5
+            return true;
+
+        if ((Mathf.Abs((float)Screen.width / Screen.height - 2048f / 2732f) < 0.01) || (Mathf.Abs((float)Screen.height / Screen.width - 2048f / 2732f) < 0.01))//ipad 12.9
+            return true;
+
+        if (IsiPadSkinny())
+            return true;
+
+        return false;
+    }
+    public static bool IsiPadSkinny()
+    {
+        if ((Mathf.Abs((float)Screen.width / Screen.height - 1668f / 2388f) < 0.01) || (Mathf.Abs((float)Screen.height / Screen.width - 1668f / 2388f) < 0.01))//ipad 10.9 NEW
+            return true;
+
+        return false;
     }
 
     private void InitializeServices()

@@ -66,7 +66,9 @@ public class MenuManager : MonoBehaviour
     public void LoadScene(TitleSceneScript.GameMode mode)
     {
         // pigeon: allowed iPad Pro to access local multiplayer
-        if (((Services.GameManager.CurrentDevice != DEVICE.IPAD && Services.GameManager.CurrentDevice != DEVICE.IPAD_PRO)|| Services.GameManager.pretendIphone) &&
+        if (((  Services.GameManager.CurrentDevice != DEVICE.IPAD &&
+                Services.GameManager.CurrentDevice != DEVICE.IPAD_PRO &&
+                Services.GameManager.CurrentDevice != DEVICE.IPAD_11INCH)|| Services.GameManager.pretendIphone) &&
             mode == TitleSceneScript.GameMode.TwoPlayers)
         {
             titleScene.versusIphoneText.SetActive(true);
