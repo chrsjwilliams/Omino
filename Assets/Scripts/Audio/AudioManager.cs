@@ -369,12 +369,14 @@ public class AudioManager : MonoBehaviour {
             var toChange = _levelMusicSources[i];
             var startingValue = _previousVolumes[i];
             var newValue = 0.0f;
-            
             StartCoroutine(Coroutines.DoOverEasedTime(Services.Clock.HalfLength(), Easing.Linear,
                 t =>
                 {
                     var newVolume = Mathf.Lerp(startingValue, newValue, t);
-                    toChange.volume = newVolume;
+                    if (toChange != null)
+                    {
+                        toChange.volume = newVolume;
+                    }
                 }));
         }
         

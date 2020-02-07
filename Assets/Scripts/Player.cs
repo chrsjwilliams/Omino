@@ -190,11 +190,27 @@ public class Player : MonoBehaviour
     // Use this for initialization
     public virtual void Init(int playerNum_)
     {
-        if(Services.GameManager.onIPhone)
+        // pigeon: new hand spacing for pieces at different screen sizes
+        switch (Services.GameManager.CurrentDevice)
         {
-            handSpacing = new Vector3(2.5f, -2.35f, 0);
-            handOffset = new Vector3(-9.25f, 7, 0);
+            case DEVICE.IPHONE:
+            case DEVICE.IPHONE_SE:
+                handSpacing = new Vector3(2.5f, -2.35f, 0);
+                handOffset = new Vector3(-9.25f, 7, 0);
+                break;
+            case DEVICE.IPHONE_X:
+                handSpacing = new Vector3(2.5f, -2.35f, 0);
+                handOffset = new Vector3(-9.25f, 11, 0);
+                break;
+            case DEVICE.IPAD_PRO:
+                handSpacing = new Vector3(2.5f, -2.35f, 0);
+                handOffset = new Vector3(-9.25f, 3.5f, 0);
+                break;
+            default:
+                break;
+
         }
+    
         playerNum = playerNum_;
 
         colorScheme = Services.GameManager.colorSchemes[playerNum - 1];

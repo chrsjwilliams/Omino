@@ -217,6 +217,35 @@ public class TutorialTooltip : MonoBehaviour, IPointerDownHandler
             image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.iPhoneXImageRotation);
             image.rectTransform.localScale = info.iPhoneXImageScale;
         }
+        else if(Services.GameManager.CurrentDevice == DEVICE.IPAD_PRO)
+        {
+            // TOOLTIP
+            tooltipTransform.anchoredPosition = info.iPadProLocation;
+            tooltipTransform.sizeDelta = info.iPadProToolTipSize;
+
+            // ARROW
+            if (info.arrowLocation == Vector2.zero) arrow.enabled = false;
+            else
+            {
+                arrow.GetComponent<RectTransform>().anchoredPosition = info.iPadProArrowLocation;
+                arrow.transform.localRotation = Quaternion.Euler(0, 0, info.iPadProArrowRotation);
+                arrow.transform.localScale = info.iPadProArrowScale;
+            }
+
+            // WINDOW
+            windowRect.anchoredPosition = info.iPadProWindowLocation;
+            windowRect.sizeDelta = info.iPadProWindowSize;
+            secondWindow.anchoredPosition = info.iPadProSecondWindowLocation;
+            secondWindow.sizeDelta = info.iPadProSecondWindowSize;
+
+            // IMAGE
+            imagePrimaryPosition = info.iPadProImageLocation;
+            image.rectTransform.localPosition = imagePrimaryPosition;
+            imageSecondaryPosition = info.iPadProSecondaryImageLocation;
+            imageSecondaryTempPosition = info.iPadProSecondaryImageLocation;
+            image.rectTransform.localRotation = Quaternion.Euler(0, 0, info.iPadProImageRotation);
+            image.rectTransform.localScale = info.iPadProImageScale;
+        }
         else
         {
             // TOOLTIP

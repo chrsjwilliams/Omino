@@ -565,4 +565,19 @@ public class TooltipInfo
     public Vector2 iPhoneXImageScale;
     public float iPhoneXImageRotation;
     public Vector2 skipButtonLocationiPhoneX;
+
+    public Vector2 iPadProToolTipSize;
+    public Vector2 iPadProArrowScale;
+    public Vector2 iPadProLocation;
+    public Vector2 iPadProArrowLocation;
+    public Vector2 iPadProWindowLocation;
+    public Vector2 iPadProSecondWindowLocation;
+    public Vector2 iPadProWindowSize;
+    public Vector2 iPadProSecondWindowSize;
+    public float iPadProArrowRotation;
+    public Vector2 iPadProImageLocation;
+    public Vector2 iPadProSecondaryImageLocation;
+    public Vector2 iPadProImageScale;
+    public float iPadProImageRotation;
+    public Vector2 skipButtonLocationiPadPro;
 }

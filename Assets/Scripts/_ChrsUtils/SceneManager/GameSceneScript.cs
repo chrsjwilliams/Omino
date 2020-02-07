@@ -34,11 +34,38 @@ public class GameSceneScript : Scene<TransitionData>
         Services.GameEventManager = new GameEventsManager();
         Services.UIManager = GetComponentInChildren<UIManager>();
         Services.TutorialManager = GetComponentInChildren<TutorialManager>();
-        if (Services.GameManager.onIPhone)
+
+        // pigeon: new position for UI meters based on screen size and tech upgrade slots
+        switch (Services.GameManager.CurrentDevice)
         {
-            Services.UIManager.UIMeters[0].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 350, 0);
-            Services.UIManager.UIMeters[1].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -350, 0);
+            case DEVICE.IPHONE:
+            case DEVICE.IPHONE_SE:
+                Services.UIManager.UIMeters[0].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 350, 0);
+                Services.UIManager.UIMeters[1].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -350, 0);
+                Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localPosition = new Vector2(-500, 100);
+                Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localScale = new Vector2(0.75f, 0.75f);
+                break;
+            case DEVICE.IPHONE_X:
+                Services.UIManager.UIMeters[0].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 625, 0);
+                Services.UIManager.UIMeters[1].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -625, 0);
+                Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localPosition = new Vector2(-500, 100);
+                Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localScale = new Vector2(0.75f, 0.75f);
+                break;
+            case DEVICE.IPAD_PRO:
+
+                Services.UIManager.UIMeters[0].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -125, 0);
+                Services.UIManager.UIMeters[1].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 125, 0);
+                Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localPosition = new Vector2(-500, 170);
+                Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localScale = new Vector2(0.75f, 0.75f);
+                for (int i = 0; i < 2; i++)
+                {
+                    Services.UIManager.UIMeters[i].blueprintUIZone.GetComponent<RectTransform>().localPosition = new Vector2(760, 325);
+                }
+                break;
+            default:
+                break;
         }
+
         if (Services.GameManager.levelSelected == null)
         {
             Services.MapManager.GenerateMap();
@@ -91,13 +118,7 @@ public class GameSceneScript : Scene<TransitionData>
                     techBuildingIcon.sprite = Services.TechDataLibrary.GetIcon(techBuilding);
                     techBuildingIcon.color = Services.GameManager.Player1ColorScheme[0];
                 }
-
-                if (Services.GameManager.CurrentDevice == DEVICE.IPHONE ||
-                    Services.GameManager.CurrentDevice == DEVICE.IPHONE_X)
-                {
-                    Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localPosition = new Vector2(-600, 0);
-                    Services.UIManager.UIMeters[0].techPowerUpIconArray.GetComponent<RectTransform>().localScale = new Vector2(0.75f, 0.75f);
-                }
+              
 
                 break;
 

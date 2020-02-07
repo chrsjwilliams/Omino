@@ -11,7 +11,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using UnityEngine.iOS;
 
-public enum DEVICE { IPAD, IPHONE, IPHONE_X, IPHONE_SE}
+public enum DEVICE { IPAD, IPHONE, IPHONE_X, IPHONE_SE, IPAD_PRO}
 
 public class GameManager : MonoBehaviour
 {
@@ -276,9 +276,11 @@ public class GameManager : MonoBehaviour
         Services.AudioManager.SetMainTrack(Services.Clips.MenuSong, 0.0f);
     }
 
+//pigeon : 	I made some changes to Set Device anticipating Apple will continue to
+//		only make iphones with notches and ipads without home buttons
+
     private void SetDevice()
     {
-        #if UNITY_IOS
         switch (UnityEngine.iOS.Device.generation)
         {
             case DeviceGeneration.iPhone5:
@@ -296,19 +298,28 @@ public class GameManager : MonoBehaviour
                 CurrentDevice = DEVICE.IPHONE;
                 break;
             case DeviceGeneration.iPhoneUnknown:
-            case DeviceGeneration.iPhone11:
-            case DeviceGeneration.iPhone11Pro:
-            case DeviceGeneration.iPhone11ProMax:
             case DeviceGeneration.iPhoneX:
                 CurrentDevice = DEVICE.IPHONE_X;
                 break;
-            default:
+            case DeviceGeneration.iPad1Gen:
+            case DeviceGeneration.iPad2Gen:
+            case DeviceGeneration.iPad3Gen:
+            case DeviceGeneration.iPad4Gen:
+            case DeviceGeneration.iPad5Gen:
+            case DeviceGeneration.iPad6Gen:
+            case DeviceGeneration.iPadAir1:
+            case DeviceGeneration.iPadAir2:
+            case DeviceGeneration.iPadMini1Gen:
+            case DeviceGeneration.iPadMini2Gen:
+            case DeviceGeneration.iPadMini3Gen:
+            case DeviceGeneration.iPadMini4Gen:
                 CurrentDevice = DEVICE.IPAD;
                 break;
+            default:
+                CurrentDevice = DEVICE.IPAD_PRO;
+                break;
         }
-        #else
-        CurrentDevice = DEVICE.IPAD;
-        #endif
+        
     }
 
     private void InitializeServices()

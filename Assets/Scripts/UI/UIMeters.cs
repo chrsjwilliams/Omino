@@ -217,7 +217,20 @@ public class UIMeters : MonoBehaviour
             normLevelText.enabled = false;
             resourceLevelText.enabled = false;
             resourceSlotZone.gameObject.SetActive(false);
-            
+
+        }
+
+        // pigeon:  to fix the dragging issue on iPadPRos i flipped the position of buildings and
+        //          their meters
+        if (Services.GameManager.CurrentDevice == DEVICE.IPAD_PRO)
+        {
+            resourceSlotZone.GetComponent<RectTransform>().localScale = new Vector2(0.5f, 0.5f);
+            attackResourceSlotZone.GetComponent<RectTransform>().localScale = new Vector2(0.5f, 0.5f);
+
+            normLevelText.GetComponent<RectTransform>().localScale = new Vector2(0.75f, 0.75f);
+            resourceLevelText.GetComponent<RectTransform>().localScale = new Vector2(0.75f, 0.75f);
+            destLevelText.GetComponent<RectTransform>().localScale = new Vector2(0.75f, 0.75f);
+
         }
     }
 
