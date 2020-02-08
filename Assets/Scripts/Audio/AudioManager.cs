@@ -472,7 +472,9 @@ public class AudioManager : MonoBehaviour {
     }
 
     public void MuteMusicChannels()
-    {        
+    {
+        mainTrack.mute = !Services.GameManager.MusicEnabled;
+        
         foreach (var source in _levelMusicSources)
         {
             source.mute = !Services.GameManager.MusicEnabled;
