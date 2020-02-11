@@ -7,7 +7,10 @@ public class GameEndBanner : MonoBehaviour
     [SerializeField]
     private RectTransform banner;
 
-
+    private void Awake()
+    {
+   
+    }
 
     public void OnGameEndBannerTouch()
     {

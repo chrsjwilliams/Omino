@@ -15,9 +15,12 @@ public class CameraController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        theCamera = GetComponent<Camera>();
-        theCamera.orthographicSize *= 
-            ((float)Screen.height / Screen.width) / (4f / 3);
+       theCamera = GetComponent<Camera>();
+       theCamera.orthographicSize *=
+                ((float)Screen.height / Screen.width) / (4f / 3);
+        
+        
+        
     }
 
     public void SetScreenEdges()

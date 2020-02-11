@@ -35,8 +35,15 @@ public class ScrollReadyBanners : Task
                 banners[i].Init();
             }
         }
+        if(Services.GameManager.CurrentDevice == DEVICE.IPHONE_X)
+        {
 
-        if(editMode)
+            startPositions[1] = new Vector3(startPositions[1].x, startPositions[1].y - 150, 0);
+            targetPositions[1] = new Vector3(targetPositions[1].x, targetPositions[1].y + 150, 0);
+
+        }
+
+        if (editMode || Services.GameManager.Players[1] is AIPlayer)
         {
             startPositions[1] = targetPositions[1];
             banners[1].transform.localPosition = startPositions[1];

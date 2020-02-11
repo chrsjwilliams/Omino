@@ -91,77 +91,17 @@ public class UIMeters : MonoBehaviour
     // Use this for initialization
     void Awake ()
     {
+        
+
         energyIcons = resourceSlotZone.GetComponentsInChildren<ResourceIcon>();
         attackIcons = attackResourceSlotZone.GetComponentsInChildren<ResourceIcon>();
         foreach (ResourceIcon icon in energyIcons) icon.Init(playerNum);
         foreach (ResourceIcon icon in attackIcons) icon.Init(playerNum);
 
-        //Image[] slots = resourceSlotZone.GetComponentsInChildren<Image>();
-        //Image[] slotTops = new Image[slots.Length / 3];
-        //Image[] slotBacks = new Image[slots.Length / 3];
-        //Image[] attackSlots = attackResourceSlotZone.GetComponentsInChildren<Image>();
-        //Image[] attackSlotTops = new Image[attackSlots.Length / 3];
-        //Image[] attackSlotBacks = new Image[attackSlots.Length / 3];
-        //Image[] missingIndicators = new Image[slots.Length / 3];
-        //Image[] attackMissingIndicators = new Image[attackSlots.Length / 3];
-
-        //Color[][] colorScheme = Services.GameManager.GetColorScheme();
-
-        //for (int attackTrue = 0; attackTrue < 2; attackTrue++)
-        //{
-        //    Image[] slotArray = attackTrue == 0 ? attackSlots : slots;
-        //    Image[] slotTopArray = attackTrue == 0 ? attackSlotTops : slotTops;
-        //    Image[] slotBackArray = attackTrue == 0 ? attackSlotBacks : slotBacks;
-        //    Image[] missingIndicatorArray = attackTrue == 0 ?
-        //        attackMissingIndicators : missingIndicators;
-
-        //    for (int i = 0; i < slotArray.Length; i++)
-        //    {
-        //        if (i % 3 == 0)
-        //        {
-        //            slotTopArray[i / 3] = slotArray[i];
-        //            slotTopArray[i / 3].color = colorScheme[playerNum - 1][0];
-        //        }
-        //        else if (i % 3 == 1)
-        //        {
-        //            slotBackArray[i / 3] = slotArray[i];
-        //            slotArray[i].color = colorScheme[playerNum - 1][0];
-        //        }
-        //        else if (i % 3 == 2)
-        //        {
-        //            missingIndicatorArray[i / 3] = slotArray[i];
-        //            Color indicatorColor = missingIndicatorArray[i / 3].color;
-        //            missingIndicatorArray[i / 3].color = new Color(indicatorColor.r,
-        //                indicatorColor.g, indicatorColor.b, 0);
-        //        }
-        //    }
-
-        //}
-
-        //resourceSlots = new Image[][] { slotTops };
-        //resourceSlotBacks = new Image[][] { slotBacks};
-        //attackResourceSlots = new Image[][] { attackSlotTops};
-        //attackResourceSlotBacks = new Image[][] { attackSlotBacks};
-        //resourceMissingIndicators = new Image[][] { missingIndicators };
-        //attackResourceMissingIndicators = new Image[][] { attackMissingIndicators};
-        //resourceGainHighlightIndices = new int[] { 0 };
-        //attackResourceGainHighlightIndices = new int[] { 0 };
-        //resourceGainHighlightTimeElapsed = new float[] {  0 };
-        //attackResourceGainHighlightTimeElapsed = new float[] {0 };
-        //resourceGainHighlightActive = new bool[] {false };
-        //attackResourceGainHighlightActive = new bool[] {false };
-        //resourceGainHighlightIncreasing = new bool[] {true };
-        //attackResourceGainHighlightIncreasing = new bool[] { true };
+        
         lastResourceCount = 0;
         lastAttackResourceCount = 0;
-        //resourceMissingAnimActive = new bool[] { false };
-        //attackResourceMissingAnimActive = new bool[] {false };
-        //resourceMissingAnimIncreasing = new bool[] { true };
-        //attackResourceMissingAnimIncreasing = new bool[] { true };
-        //resourceMissingTimeElapsed = new float[] { 0 };
-        //attackResourceMissingTimeElapsed = new float[] { 0 };
-        //numResourcesMissing = new int[] { 0 };
-        //numAttackResourcesMissing = new int[] { 1 };
+        
 
 
         meters = new GameObject[]

@@ -166,6 +166,11 @@ public class LevelSelectTextEntrance: Task
             levelSelectText.transform.localPosition += initialOffset * Vector3.down;
         }
         startPos = levelSelectText.transform.localPosition;
+        if (Services.GameManager.CurrentDevice == DEVICE.IPHONE_X && levelSelectText.name.Contains("Objectives"))
+        {
+
+            targetPos = new Vector3(targetPos.x, targetPos.y - 150, 0);
+        }
         timeElapsed = 0;
         if (!exit) levelSelectText.transform.localPosition = startPos;
     }

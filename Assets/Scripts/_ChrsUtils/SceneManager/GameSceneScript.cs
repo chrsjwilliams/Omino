@@ -75,6 +75,8 @@ public class GameSceneScript : Scene<TransitionData>
             Services.MapManager.GenerateMap(Services.GameManager.levelSelected.isNewEditLevel());
         }
         Services.CameraController.SetScreenEdges();
+        
+
         GameObject.Find("Canvas").transform.position = new Vector3(Services.GameManager.MainCamera.transform.position.x,
                                                                     Services.GameManager.MainCamera.transform.position.y,
                                                                     0);

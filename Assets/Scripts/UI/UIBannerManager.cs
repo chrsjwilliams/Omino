@@ -72,6 +72,12 @@ public class UIBannerManager : MonoBehaviour {
             banner.localPosition += offset;
             gameEndBannerStartPositions[i] = banner.localPosition;
         }
+
+        if (Services.GameManager.CurrentDevice == DEVICE.IPHONE_X)
+        {
+
+            gameEndBannerTargetPositions[1] = new Vector3(gameEndBannerTargetPositions[1].x, gameEndBannerTargetPositions[1].y - 150, 0);
+        }
         bannerScrollTimeElapsed = 0;
     }
 
