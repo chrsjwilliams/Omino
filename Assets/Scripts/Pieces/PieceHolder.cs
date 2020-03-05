@@ -116,14 +116,27 @@ public class PieceHolder : MonoBehaviour {
         claimTimeElapsed += Time.deltaTime;
         if (claimTimeElapsed <= claimAnimDuration)
         {
+       
             float progress = Easing.SineEaseIn(Mathf.Min(1, claimTimeElapsed / claimAnimDuration));
             spriteBottom.material.SetFloat("_Cutoff", 1 - progress);
         }
         else
         {
+            
             spriteBottom.material.SetFloat("_Cutoff", 0);
-            icon.color = Color.Lerp(iconPrevColor, piece.owner.ColorScheme[0],
-                Easing.QuadEaseOut(Mathf.Min(1, 
+
+            Color newColor;
+            if(piece.owner == null)
+            {
+                newColor = Services.GameManager.NeutralColor;
+            }
+            else
+            {
+                newColor = piece.owner.ColorScheme[0];
+            }
+
+            icon.color = Color.Lerp(iconPrevColor, newColor,
+                Easing.QuadEaseOut(Mathf.Min(1,
                 (claimTimeElapsed - claimAnimDuration) /
                 claimIconChangeDuration)));
         }

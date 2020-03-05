@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 
 
@@ -111,6 +111,7 @@ public class Graph
         EdgeDict = new Dictionary<Polyomino, List<Edge<Polyomino>>>();
     }
 
+    // Adding edges error
     public Graph(Graph graphToCopy)
     {
         Edges = new List<Edge<Polyomino>>(graphToCopy.Edges);
@@ -168,7 +169,18 @@ public class Graph
         {
             //  choose a random edge and extract its two verticies
             var randomIndex = random.Next(0, Edges.Count);
-            Edge<Polyomino> randomEdge = Edges[randomIndex];
+            Edge<Polyomino> randomEdge;
+
+            try
+            {
+                randomEdge = Edges[randomIndex];
+            }catch (ArgumentOutOfRangeException outOfRange)
+            {
+                UnityEngine.Debug.Log("Exception caught");
+                UnityEngine.Debug.Log("Edge Count: " + Edges.Count);
+                UnityEngine.Debug.Log("Rand Index: " + randomIndex);
+                return 0;
+            }
             Polyomino firstVertex = randomEdge.curFirstVertex;
             Polyomino secondVertex = randomEdge.curSecondVertex;
             collapsedSizes[firstVertex] += collapsedSizes[secondVertex];

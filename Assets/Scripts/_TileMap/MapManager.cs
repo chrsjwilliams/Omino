@@ -85,7 +85,7 @@ public class MapManager : MonoBehaviour
         }
         if (Services.GameManager.mode == TitleSceneScript.GameMode.DungeonRun)
         {
-            Level level = dungeonRunLevelPool[Random.Range(0, dungeonRunLevelPool.Count - 1)];
+            Level level = dungeonRunLevelPool[Random.Range(0, dungeonRunLevelPool.Count)];
             Services.GameManager.SetCurrentLevel(level);
         }
         if (Services.GameManager.levelSelected != null)

@@ -679,7 +679,7 @@ public class Polyomino : IVertex
                     HyperModeManager.Placement(owner.ColorScheme[0], holder.transform.position);
                     break;
             }
-
+            /*
             List<Polyomino> shortestPath = AStarSearch.ShortestPath(
                 owner.mainBase, distanceLevels[lastDistanceLevelIndex][0]);
             shortestPath.Reverse();
@@ -706,6 +706,7 @@ public class Polyomino : IVertex
             {
                 //pathToHighlight[i].PathHighlight(i * Player.pathHighlightTotalDuration / pathToHighlight.Count);
             }
+            */
             int entranceIndex = 1;
             for (int i = 0; i < distanceLevels.Count; i++)
             {

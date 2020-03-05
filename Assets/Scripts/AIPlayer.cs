@@ -549,7 +549,8 @@ public class AIPlayer : Player
                                 if (
                                     //!playableCoords.Contains(candidateCoord) &&
                                     containedInMap &&
-                                    mapTile.occupyingPiece == null)
+                                    (mapTile.occupyingPiece == null ||
+                                    (mapTile.occupyingPiece != null && mapTile.occupyingPiece.owner != this && attackResources >= 1)))
                                 {
                                     playableCoords.Add(candidateCoord);
                                 }
@@ -718,7 +719,6 @@ public class AIPlayer : Player
                                                         winWeight, structWeight, destructionWeight, 
                                                         mineWeight, factoryWeight, bombFactoryWeight,
                                                         usePredictiveSmith, usePredictiveBrickworks, usePredictiveBarracks, dangerWeight);
-
                                 if (HasAttackPiece(currentHand) && 
                                     inDanger && 
                                     !(newMove.isWinningMove || (newMove.piece is Destructor)))
@@ -729,7 +729,8 @@ public class AIPlayer : Player
                                 {
                                     movesToConsider = InsertMoveIntoSortedList(
                                     newMove, movesToConsider);
-                                    if(movesToConsider.Count > bestMovesCount)
+
+                                    if (movesToConsider.Count > bestMovesCount)
                                     {
                                         movesToConsider.RemoveAt(0);
                                     }   
@@ -737,7 +738,6 @@ public class AIPlayer : Player
                             }
                         }
                     }
-
                     if (useAIThinkingShortcut &&
                         movesToConsider.Count > 1 &&
                         ((resources >= 1 && resourceMeterFillAmt > 0.6f) ||
@@ -766,7 +766,8 @@ public class AIPlayer : Player
         else if (nextPlay != null && nextPlay.score > 0)
         {
             //MakePlay(nextPlay);
-            if(nextMove == null || nextPlay.score > nextMove.score)
+
+            if(nextMove == null )//|| nextPlay.score > nextMove.score)
                 nextMove = nextPlay;
         }
 
